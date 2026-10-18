@@ -1,0 +1,61 @@
+{
+  "schema": "sirius-native-constant-Windows-producer-source-v1",
+  "source_only": true,
+  "admitted": false,
+  "author": "/root/divide_contract_review",
+  "canonical_CXX_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "origins": {
+    "matched-producer.cmake": {
+      "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-windows-source/matched-producer.cmake",
+      "bytes": 5665,
+      "sha256": "5f101166bbc0c3e2bfd338f7f0616473af4560e86c438a8f1e085f52d14337c9"
+    },
+    "build-and-stage.ps1": {
+      "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-windows-source/build-and-stage.ps1",
+      "bytes": 19986,
+      "sha256": "68191b1cf58a6abe7fa1ef945201dc480f2d502091c7a055642bb740285f0636"
+    },
+    "native-packed-diagnostic.yml": {
+      "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-windows-source/native-packed-diagnostic.yml",
+      "bytes": 1317,
+      "sha256": "44978a893118af48ccc18f2384d48a6c9cd5460c57a28270c3df6e8f1a88264e"
+    }
+  },
+  "origin_archive_commit": "06376a05a74af6f3d410bac142a0771372054f40",
+  "exact_namespace_inverse": {
+    "matched-producer.cmake": {
+      "input_namespace_occurrences": 1,
+      "source_namespace_occurrences": 0,
+      "inverse_exact": true,
+      "all_other_bytes_exact": true
+    },
+    "build-and-stage.ps1": {
+      "input_namespace_occurrences": 1,
+      "source_namespace_occurrences": 2,
+      "inverse_exact": true,
+      "all_other_bytes_exact": true
+    },
+    "native-packed-diagnostic.yml": {
+      "input_namespace_occurrences": 0,
+      "source_namespace_occurrences": 1,
+      "inverse_exact": true,
+      "all_other_bytes_exact": true
+    }
+  },
+  "candidate": "Ordinary nativeFP32 RTConstant direct constructor only. Scratch remains canonical unpacked; no packing/SoA/layout/lane/cache/math-mode change.",
+  "unchanged_recipe": "Same successful five private objects/two PE/MSVC targets and output names,full current retained_compute.cpp perarm,c948 audited observer perarm,shared canonical retained_dopri_test.cpp and same canonical libs/fixtures. Strict CONTRACT_MODE2/Werror/C++latest/Mandatory+requiredVulkan/fail_on_skip/Release:STRING; scalar Get-Command fix and source/tool/config/beforeafter/command/map/device/CRT/SDK export logic unchanged.",
+  "future_inputs": {
+    "root": "out/native-constant-producer-inputs",
+    "each_arm": [
+      "retained_kernels.h",
+      "retained_owner_kernels.h",
+      "retained_owner_layout.h"
+    ],
+    "observer": "observer/audited-observer.cpp c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601",
+    "actual_HEAD_inputs_M_result_CI_artifact_and_products": "ROOT_PENDING; no invented current artifact or copied header."
+  },
+  "required_delta": "Only five ordinary native T/E/Dense/Initialize/Dopri SPVs/array declarations may differ;35othermain arrays including7tables/publicconstants,30excludedSPVs,2ownerproducts/layout exact. Baseline remains canonical unpacked5b2.",
+  "workflow": "Same one Windows2022/30min job, pinned checkout/SDK/upload, branch development/native-fp32-packed-scratch-diagnostic-2026-10-18 and custom .github/workflows/native-packed-diagnostic.yml destination/artifact/target identifiers. Only run-script source path changes; canonical ci.yml untouched.",
+  "compatibility_names": "Existing packed labels/schemas/targets are compatibility identifiers only, not reuse or promotion of rejected packing/SoA data.",
+  "holds": "SOURCE only. ROOT must supply actual admitted fiveSPV/header proof before privateCI; actual source/API/tool/CRT/SDK/object/map/42array/device/CLI eligibility and ownership/provider/originalcontrols+22gates are separate. No compiler/configure/helper/provider/test/CI/network/Git mutation; no original or canonical edits."
+}

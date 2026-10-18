@@ -1,0 +1,46 @@
+{
+  "schema": "sirius-native-RTConstant-source-contract-v1",
+  "created_utc": "2026-10-18T08:31:21.781731+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "candidate": {
+    "path": "out/native-constant-source-candidate/retained_triple.slang",
+    "bytes": 15525,
+    "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+  },
+  "original": {
+    "path": "out/native-constant-source-candidate/original-retained_triple.slang",
+    "bytes": 15360,
+    "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+  },
+  "patch": {
+    "path": "out/native-constant-source-candidate/source.patch",
+    "bytes": 948,
+    "sha256": "4963e8c082114a9108cd9d5bc55285799b50430bbb2c9eca8fe60077650017b1"
+  },
+  "independent_reviews": [
+    {
+      "path": "out/native-constant-source-review/semantic-refinement-review.json",
+      "bytes": 7615,
+      "sha256": "cabfc17d2920ba220cffa2a5deeb301d1312b9841c1dc12e6fdca57e6b4faa2b"
+    },
+    {
+      "path": "out/native-constant-source-review/independent-source-contract-review.json",
+      "bytes": 9786,
+      "sha256": "7b8eedf0ef10e84ffcdebf6261788b298cfa64fc313b8e4ab591649f32154e33"
+    }
+  ],
+  "ROOT_full_source_and_primary_spec_review_passed": true,
+  "decision": "SOURCE_REFINEMENT_ACCEPTED_FOR_BOUNDED_COMPILER_SCREEN",
+  "proof": "For scalar bits with absolute magnitude <=0x7b800000 (inclusive2^120), old five ordered zero-tail sums have numerical value pairs (0,0),(x,0),(0,0),(x,0),(0,0), no rounding residual/overflow, radius+0 and valid1. Direct native constructor retains nonzero x exactly (including subnormals under unchangedDenormPreserve32/RTE32), chooses positive zeros permitted by existing nativeNSZ, and maps either inputzero to positivezero. Other bits, including allnonfinite and out-of-bound finite values, still return exactRTInvalid. No reassociation of nonexact operations is used.",
+  "quantifier": "Permissible refinement of existing declared native semantics; no universal identity to every permitted baseline lowering or current hardware word equality is asserted. Original actual same-provider raw-word comparisons and all scientific/refusal/recovery tests remain exact. Any actual zero-bit mismatch fails this candidate.",
+  "scope": "Only RTConstant guard/comment changes. Existing portable constructor unchanged; admittednativeFP64/FMA/native-owner stay originalRTPack. Only ordinarynativeFP32 Transport/Endpoint/Dense/Initialize/Dopri may change. Canonical scratch, rest of arithmetic helpers,allDAG/program/root/output/status/barrier/all40field/7RHS/3RK/4quartic/ABI and all modes/fallbacks/tests/gates stay unchanged. Other30retainedSPVs/tables/twoownerproducts require byte-exact composition; no baseline or excluded shader recompilation.",
+  "primary_specification": {
+    "url": "https://docs.vulkan.org/spec/latest/appendices/spirvenv.html",
+    "section": "Precision and Operation of SPIR-V Instructions",
+    "verified_UTC_date": "2026-10-18",
+    "interpretation": "Native implicit NSZ without matching SignedZeroInfNanPreserve is separate from NoContraction. This is existing mode semantics, not addition of a relaxed flag."
+  },
+  "cost_hypothesis": "Remove source-level scalar-constant normalization; actual driver may already fold it. No source-call-count speed/ISA claim. Actual emitted5module review then originalnative correctness/sole22benefit/remaining7ifpass required before adoption.",
+  "compiler_or_runtime_or_benefit_or_adoption_admitted": false
+}

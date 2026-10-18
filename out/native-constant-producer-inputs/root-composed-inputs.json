@@ -1,0 +1,435 @@
+{
+  "schema": "sirius-native-constant-diagnostic-input-composition-v1",
+  "passed": true,
+  "created_utc": "2026-10-18T08:49:37.743035+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "prior_baseline_authority": {
+    "bytes": 30848,
+    "sha256": "5d4062652bcad0e10807c8195b6279d05f9fd5a2a9dbad592424d1f977da5922"
+  },
+  "emitted_admission": {
+    "path": "out/native-constant-publication/root-emitted-admission.json",
+    "bytes": 3521,
+    "sha256": "81ff45608b4ad178b4c89d6a28fc10e2e2e675bcea9ef428357f351b3b6b0775"
+  },
+  "compiler_owner": {
+    "bytes": 2360,
+    "sha256": "6e3299bd4fb12339d484d40340c25eb2a24353c50cbde5544c9657b2c8fcc8a3"
+  },
+  "compiler_products": {
+    "bytes": 7236,
+    "sha256": "209ff90ad79d95966e7815ffe043f28c26d0397190db1cc5ad2ba3e57b9fc3b7"
+  },
+  "command_results": {
+    "bytes": 26397,
+    "sha256": "c78b91c033343048147f8cca903c656dbd9f488c38646139b32c5c683b650a41"
+  },
+  "target_array_names": {
+    "retained_transport.spv": "kTransportShader",
+    "retained_endpoint.spv": "kEndpointShader",
+    "retained_dense.spv": "kDenseShader",
+    "retained_initialize.spv": "kInitializeShader",
+    "retained_dopri_phase.spv": "kDopriPhaseShader"
+  },
+  "main_arrays": {
+    "changed": 5,
+    "exact": 35,
+    "seven_tables_and_other_text_exact": true
+  },
+  "excluded_SPVs_exact": 30,
+  "both_owner_headers_exact": true,
+  "observer_exact": true,
+  "observer_original_cases": 27,
+  "observer_ordered_assertions": 1492,
+  "files": {
+    "baseline/retained_kernels.h": {
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc",
+      "mode": "0o644"
+    },
+    "baseline/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": "0o644"
+    },
+    "baseline/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dense.spv": {
+      "bytes": 77952,
+      "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dopri_phase.spv": {
+      "bytes": 58740,
+      "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint.spv": {
+      "bytes": 99300,
+      "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_initialize.spv": {
+      "bytes": 57108,
+      "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport.spv": {
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "mode": "0o644"
+    },
+    "baseline/shaders/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": "0o644"
+    },
+    "candidate/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+      "mode": "0o644"
+    },
+    "candidate/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": "0o644"
+    },
+    "candidate/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dense.spv": {
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dopri_phase.spv": {
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint.spv": {
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_initialize.spv": {
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport.spv": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "mode": "0o644"
+    },
+    "candidate/shaders/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": "0o644"
+    },
+    "observer/audited-observer.cpp": {
+      "bytes": 342470,
+      "sha256": "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601",
+      "mode": "0o644"
+    }
+  },
+  "cpp_producer_compiled": false,
+  "runtime_released": false,
+  "adoption_admitted": false,
+  "scope": "Five new compiler/emitted-reviewed ordinary nativeFP32 RTConstant SPVs composed with current5b2 canonical unpacked baseline. Diagnostic input composition only; no provider/science/benefit/fullqualification authority."
+}

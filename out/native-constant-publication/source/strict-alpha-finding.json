@@ -1,0 +1,13 @@
+{
+  "schema": "sirius-native-constant-strict-alpha-source-finding-v1",
+  "strict_reader": {
+    "path": "out/native-constant-publication/source/review_emitted.strict-alpha.py",
+    "bytes": 19412,
+    "sha256": "be0641916098df0cf503c10ccf9782df58da5471242d45a7e8580e14aefe47b1"
+  },
+  "strict_attempt_passed": false,
+  "failure": "Transport ComputeMain has1179 baseline rows vs1178 candidate; baseline duplicate RTConstant(+0) call %970 removed, uses prior %902 (candidate%903). Strict alpha criterion is false; typed globals/static/header comparisons passed before this assertion.",
+  "passive_attempt_history": "Initial historical before-map lookup used absolute key but original saved key was ROOT-relative; corrected without evidence changes. Subsequent strict runs reached real CSE difference. Root separately observed same assertion in session47157.",
+  "product_failure_or_recompile": false,
+  "instruction_difference_was_not_silently_normalized": true
+}
