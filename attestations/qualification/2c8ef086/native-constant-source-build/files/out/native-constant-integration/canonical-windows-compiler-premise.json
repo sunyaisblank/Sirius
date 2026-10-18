@@ -1,0 +1,291 @@
+{
+  "schema": "sirius-native-constant-canonical-Windows-compiler-premise-v1",
+  "created_utc": "2026-10-18T09:47:43.048773+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "passed": true,
+  "canonical_object_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "producer_revision": "d2e1a265106a8b27e976ccb47cef6303aaa51746",
+  "decision": "ALL40_BASELINE_ARRAYS_FULL_BYTE_PRESENT_IN_CANONICAL_WINDOWS_OBJECT",
+  "finding": "The actual SDK-generated canonical retained_compute.obj from successful matchedCI embeds complete exact admitted baseline byte strings for all40main arrays (including every5ordinarynativeSPV and7programtables). Its own CL/read records name canonical retained source and generated retained/retained_kernels.h, with no shadow producer-input path. This is stronger finite old-output evidence than guessing parity from the compiler package label.",
+  "canonical_object_array_offsets": {
+    "kCameraProgram": [
+      34339
+    ],
+    "kCameraShader": [
+      727044
+    ],
+    "kCameraFp64Shader": [
+      774764
+    ],
+    "kCameraPortableShader": [
+      835812,
+      1348136
+    ],
+    "kCameraPortableFp64Shader": [
+      835812,
+      1348136
+    ],
+    "kTransportProgram": [
+      141703
+    ],
+    "kTransportShader": [
+      1860460
+    ],
+    "kTransportFp64Shader": [
+      1945824
+    ],
+    "kTransportPortableShader": [
+      2043832,
+      2143572
+    ],
+    "kTransportPortableFp64Shader": [
+      2043832,
+      2143572
+    ],
+    "kTransportPortableNormalSumShader": [
+      2243312
+    ],
+    "kTransportFmaShader": [
+      2347352
+    ],
+    "kEndpointProgram": [
+      205571
+    ],
+    "kEndpointShader": [
+      2430884
+    ],
+    "kEndpointFp64Shader": [
+      2530184
+    ],
+    "kEndpointPortableShader": [
+      2642144,
+      2787488
+    ],
+    "kEndpointPortableFp64Shader": [
+      2642144,
+      2787488
+    ],
+    "kEndpointPortableNormalSumShader": [
+      2932832
+    ],
+    "kEndpointFmaShader": [
+      3084232
+    ],
+    "kDenseProgram": [
+      290143
+    ],
+    "kDenseShader": [
+      3181700
+    ],
+    "kDenseFp64Shader": [
+      3259652
+    ],
+    "kDensePortableShader": [
+      3350280,
+      3466484
+    ],
+    "kDensePortableFp64Shader": [
+      3350280,
+      3466484
+    ],
+    "kInitializeProgram": [
+      417871
+    ],
+    "kInitializeShader": [
+      3582688
+    ],
+    "kInitializeFp64Shader": [
+      3639796
+    ],
+    "kInitializePortableShader": [
+      3710264,
+      3787708
+    ],
+    "kInitializePortableFp64Shader": [
+      3710264,
+      3787708
+    ],
+    "kRayCameraProgram": [
+      457559
+    ],
+    "kRayCameraShader": [
+      3865152
+    ],
+    "kRayCameraFp64Shader": [
+      3910520
+    ],
+    "kRayCameraPortableShader": [
+      3969248,
+      4444504
+    ],
+    "kRayCameraPortableFp64Shader": [
+      3969248,
+      4444504
+    ],
+    "kDopriPhaseProgram": [
+      581407
+    ],
+    "kDopriPhaseShader": [
+      4919760
+    ],
+    "kDopriPhaseFp64Shader": [
+      4978500
+    ],
+    "kDopriPhasePortableShader": [
+      5050600,
+      5143444
+    ],
+    "kDopriPhasePortableFp64Shader": [
+      5050600,
+      5143444
+    ],
+    "kDopriPhasePortableNormalSumShader": [
+      5236288
+    ]
+  },
+  "native5": [
+    {
+      "name": "kTransportShader",
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1",
+      "COFF_byte_offsets": [
+        1860460
+      ],
+      "SPIRV_magic": true
+    },
+    {
+      "name": "kEndpointShader",
+      "bytes": 99300,
+      "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559",
+      "COFF_byte_offsets": [
+        2430884
+      ],
+      "SPIRV_magic": true
+    },
+    {
+      "name": "kDenseShader",
+      "bytes": 77952,
+      "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab",
+      "COFF_byte_offsets": [
+        3181700
+      ],
+      "SPIRV_magic": true
+    },
+    {
+      "name": "kInitializeShader",
+      "bytes": 57108,
+      "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a",
+      "COFF_byte_offsets": [
+        3582688
+      ],
+      "SPIRV_magic": true
+    },
+    {
+      "name": "kDopriPhaseShader",
+      "bytes": 58740,
+      "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895",
+      "COFF_byte_offsets": [
+        4919760
+      ],
+      "SPIRV_magic": true
+    }
+  ],
+  "compiler_provenance": {
+    "Windows_configured_SIRIUS_SLANGC": "C:/VulkanSDK/1.4.357.0/Bin/slangc.exe",
+    "Windows_captured_compiler": {
+      "path": "C:\\VulkanSDK\\1.4.357.0\\Bin\\slangc.exe",
+      "bytes": 179640,
+      "readable_stream_bytes": 179640,
+      "sha256": "d97a4dab06c98a3a4b6d63ea694c2ad253c210453635ff5d15fda3536fc7d1a0",
+      "windows_attributes": "Archive",
+      "link_type": "",
+      "link_target": [
+        null
+      ],
+      "configured_alias_metadata": false,
+      "mode_scope": "FileInfo length/attributes and readable stream hash recorded separately; alias metadata is not a backed interpreter or substitution authority"
+    },
+    "Windows_captured_slang_compiler_DLL": {
+      "path": "C:\\VulkanSDK\\1.4.357.0\\Bin\\slang-compiler.dll",
+      "bytes": 26432440,
+      "readable_stream_bytes": 26432440,
+      "sha256": "8ec05af1e76d8a92a3e7635be0d98a77a3104d9543649eb3fd1414dfb1105e6e",
+      "windows_attributes": "Archive",
+      "link_type": "",
+      "link_target": [
+        null
+      ],
+      "configured_alias_metadata": false,
+      "mode_scope": "FileInfo length/attributes and readable stream hash recorded separately; alias metadata is not a backed interpreter or substitution authority"
+    },
+    "Linux_prior_selected_compiler": {
+      "path": "/opt/slang/bin/slangc",
+      "resolved_path": "/opt/slang/bin/slangc",
+      "bytes": 60464,
+      "sha256": "26d7fd442248bc702dd07c07757d628e5bf20c17a95359aa54191ab19da4ff7b"
+    },
+    "standalone_Slang_version_string_in_selected_captured_records": null,
+    "same_compiler_build_or_version_established": false,
+    "scope": "SDK1.4.357.0 path and actual selected compiler/adjacentDLL hashes are captured and stable in3054before/after rows. These are Windows binaries versus Linux/opt/slang; package path alone does not prove identical Slang build/version. No new version query was run."
+  },
+  "limits": "Full-byte occurrence scan of actual COFF data, not a new COFF symbol/selector/relocation proof. Some equal portable payloads legitimately occur multiple times. This establishes canonical baseline output equality for saved5b2inputs only; it does not prove arbitrary compiler equivalence or new2c8output. Actual new canonical PE/main40+owner2 payloads, source/header/tool/selector joins must still be checked against admitted candidate. No runtime, performance, scientific or release admission.",
+  "new_canonical_candidate_PE_equality_admitted": false,
+  "operations": "Passive scoped stdlib/hash/JSON/text/byte reads only; no projecthelper/import/tool/compiler/provider/test/version/network execution or mutation of held roots.",
+  "critical_pins": {
+    "canonical_object": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/metadata/canonical-backend/src/sirius/backend/sirius_backend.dir/Release/retained_compute.obj",
+      "bytes": 5816607,
+      "sha256": "2ce934676888ffc270f95a6655f2b01fb7c6652c6df7a7e12bd0e50b3d382aa2"
+    },
+    "baseline_header": {
+      "path": "out/native-constant-producer-inputs/baseline/retained_kernels.h",
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+    },
+    "canonical_CL": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/metadata/canonical-backend/src/sirius/backend/sirius_backend.dir/Release/sirius_backend.tlog/CL.command.1.tlog",
+      "bytes": 6218,
+      "sha256": "0abd04918e2f32861998a0cc65f6ab8e721c2c645e9e2ad68f72fea29a170640"
+    },
+    "canonical_read_dependencies": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/metadata/canonical-backend/src/sirius/backend/sirius_backend.dir/Release/sirius_backend.tlog/CL.read.1.tlog",
+      "bytes": 138582,
+      "sha256": "58e825d39f770085168bc41ba66bd1d408e8cb266a4144aa85296f3b93f5086e"
+    },
+    "producer": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/producer-result.json",
+      "bytes": 2572,
+      "sha256": "fa04d860b2c8fcae2cc475f70d44691accd68b3b1bd9a0302777fb7c64b6ced5"
+    },
+    "manifest": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/manifest.json",
+      "bytes": 89262,
+      "sha256": "601519d7bb77013959a090a7f8860a903fc79f023f42eae8ec037a7bc03a8898"
+    },
+    "captured_tool_paths": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/selected-tools.json",
+      "bytes": 1196,
+      "sha256": "b9de04ee5af8f055445d727e09df762ae0ea402f1f9cd3526669f4569fa5c0e0"
+    },
+    "Windows_tool_before": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/build-inputs-before.json",
+      "bytes": 2002173,
+      "sha256": "d5c504169ca6219592e2932eab0d3da718a1eb1a2b7ca45c856d0f2e1ba7db37"
+    },
+    "Windows_tool_after": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/build-inputs-after.json",
+      "bytes": 2002173,
+      "sha256": "d5c504169ca6219592e2932eab0d3da718a1eb1a2b7ca45c856d0f2e1ba7db37"
+    },
+    "canonical_cache": {
+      "path": "bin/windows-msvc/native-constant-matched-d2e1a265/metadata/config/CMakeCache.txt",
+      "bytes": 28836,
+      "sha256": "d5fe851ff39ac49763cd72a930cbfeafbc97bbd43cc8a320d1fec72195e23bde"
+    },
+    "Linux_tool_reuse": {
+      "path": "out/native-constant-compiler-source/tool-observation-reuse.json",
+      "bytes": 2655,
+      "sha256": "624d8a58414f9d232e5c6c2de494f34888151701f14e1f6578d731af9ab12aa0"
+    }
+  }
+}

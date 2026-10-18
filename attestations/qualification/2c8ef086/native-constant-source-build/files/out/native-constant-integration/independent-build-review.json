@@ -1,0 +1,257 @@
+{
+  "schema": "sirius-native-constant-independent-canonical-build-review-v1",
+  "passed": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "reviewer": "/root/divide_contract_review",
+  "scope": "Saved canonical integration/build data only. Earlier candidate authorship disclosed; independent check of ROOT execution/data composing accepted shader proofs. No project helper, compiler, provider or test executed by reviewer.",
+  "source": {
+    "parent": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "retained_triple": {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+    },
+    "only_other_change": "docs/ARCHITECTURE.md: five stages -> six stages",
+    "branch": "development/native-constant-constructor-2026-10-18",
+    "clean_tracked_tree": true,
+    "local_tracking_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1
+  },
+  "runs": {
+    "strict-build": {
+      "passed": false,
+      "exit": 1,
+      "wall_seconds": 0.8012551199935842,
+      "peak_sampled_rss_kib": 54068,
+      "minimum_sampled_available_kib": 19517444,
+      "frozen_selectors": 4383,
+      "equal_before_after_rows": 4924,
+      "samples": 3,
+      "owned_births": 4,
+      "owner": {
+        "path": "out/native-constant-integration/strict-build/owner.json",
+        "bytes": 2016,
+        "sha256": "e6c54f5ee8828fa34824e0f95caff8e145657f44e977609d494d562bf5979b73"
+      },
+      "before": {
+        "path": "out/native-constant-integration/strict-build/inputs-before.json",
+        "bytes": 1574341,
+        "sha256": "679ae40841318519f6d731d1274655c8ccc41e98897b097d0c11b70292cebfe4"
+      },
+      "after": {
+        "path": "out/native-constant-integration/strict-build/inputs-after.json",
+        "bytes": 1574341,
+        "sha256": "679ae40841318519f6d731d1274655c8ccc41e98897b097d0c11b70292cebfe4"
+      },
+      "stdout": {
+        "path": "out/native-constant-integration/strict-build/stdout.log",
+        "bytes": 831,
+        "sha256": "8b5ade091472c6e3b350b450f2fdd4a77b71f41fc5288f9f37323400524071c7"
+      },
+      "stderr_bytes": 0
+    },
+    "configure-current": {
+      "passed": true,
+      "exit": 0,
+      "wall_seconds": 7.264205112995114,
+      "peak_sampled_rss_kib": 89572,
+      "minimum_sampled_available_kib": 17867492,
+      "frozen_selectors": 4312,
+      "equal_before_after_rows": 4853,
+      "samples": 27,
+      "owned_births": 13,
+      "owner": {
+        "path": "out/native-constant-integration/configure-current/owner.json",
+        "bytes": 3052,
+        "sha256": "d2dbd50ad8d3d8a77ddb3ca35ad355c9b4504068f38d07971cef0bf1c7b71327"
+      },
+      "before": {
+        "path": "out/native-constant-integration/configure-current/inputs-before.json",
+        "bytes": 1552198,
+        "sha256": "d89cfaff5f083c3cecfe0d4dfb530b773a11e8aaae9a74cf2506dc2b94a7a60b"
+      },
+      "after": {
+        "path": "out/native-constant-integration/configure-current/inputs-after.json",
+        "bytes": 1552198,
+        "sha256": "d89cfaff5f083c3cecfe0d4dfb530b773a11e8aaae9a74cf2506dc2b94a7a60b"
+      },
+      "stdout": {
+        "path": "out/native-constant-integration/configure-current/stdout.log",
+        "bytes": 1277,
+        "sha256": "f751cd59e6619cb27b7301c456decb1cfea496979faacdfff600e56da9b340c7"
+      },
+      "stderr_bytes": 0
+    },
+    "strict-build-current": {
+      "passed": true,
+      "exit": 0,
+      "wall_seconds": 96.46998967402033,
+      "peak_sampled_rss_kib": 1643848,
+      "minimum_sampled_available_kib": 15187884,
+      "frozen_selectors": 4383,
+      "equal_before_after_rows": 4924,
+      "samples": 367,
+      "owned_births": 105,
+      "owner": {
+        "path": "out/native-constant-integration/strict-build-current/owner.json",
+        "bytes": 15275,
+        "sha256": "ff224547a4d3f39fa8c979df0ee9033d5fbbc2beecda95a333ddd37c3e63dca3"
+      },
+      "before": {
+        "path": "out/native-constant-integration/strict-build-current/inputs-before.json",
+        "bytes": 1574342,
+        "sha256": "fe3342f6eb32d9601bf68dd2a4c5dfa90b746359ba078534840f2e550929a073"
+      },
+      "after": {
+        "path": "out/native-constant-integration/strict-build-current/inputs-after.json",
+        "bytes": 1574342,
+        "sha256": "fe3342f6eb32d9601bf68dd2a4c5dfa90b746359ba078534840f2e550929a073"
+      },
+      "stdout": {
+        "path": "out/native-constant-integration/strict-build-current/stdout.log",
+        "bytes": 2878,
+        "sha256": "20826d4ed0cdcd00867c4c47cb57f1730368bf692420f3dbca3e8467964321dd"
+      },
+      "stderr_bytes": 0
+    }
+  },
+  "sequence": {
+    "failed_first": "Stale configured 5b2 revision correctly refused before retained shader generation. Failed owner/maps/log remain preserved.",
+    "correction": "Existing linux-gcc configure --alignment qualification --require Vulkan refreshed the genuine configured revision; then strict build passed.",
+    "build_argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "--preset",
+      "linux-gcc",
+      "--parallel",
+      "2",
+      "--target",
+      "sirius",
+      "sirius_base_tests",
+      "sirius_backend_tests",
+      "sirius_core_tests",
+      "sirius_oracle_tests",
+      "sirius_app_tests",
+      "sirius_render_tests",
+      "SiriusSourceGovernance"
+    ],
+    "fresh_saved_births_checked": 125,
+    "all_saved_owner_and_controller_births_absent_or_reused": true,
+    "birth_scope": "Same boot, explicit saved PID/start-tick identities only; no global absence claim."
+  },
+  "shader_reproduction": {
+    "record": {
+      "path": "out/native-constant-integration/shader-reproduction.json",
+      "bytes": 5933,
+      "sha256": "adccc3112b205a6d6c299427ccaed6ba66c759b517566bcd890cff829e4e0bb2"
+    },
+    "archive_commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+    "candidate_Git_prefix": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-producer-inputs/candidate/",
+    "actual_SPV_bytes_equal_named_Git": 35,
+    "changed_native_modules": [
+      "retained_dense.spv",
+      "retained_dopri_phase.spv",
+      "retained_endpoint.spv",
+      "retained_initialize.spv",
+      "retained_transport.spv"
+    ],
+    "other_SPVs_unchanged_from_previous_products": 30,
+    "headers": {
+      "retained_kernels.h": {
+        "path": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+        "bytes": 7955767,
+        "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+      },
+      "retained_owner_kernels.h": {
+        "path": "bin/linux-gcc/src/sirius/backend/retained/retained_owner_kernels.h",
+        "bytes": 432942,
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+      },
+      "retained_owner_layout.h": {
+        "path": "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.h",
+        "bytes": 88895,
+        "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+      }
+    },
+    "whole_main_header_equal_named_Git_candidate": true,
+    "owner_headers_equal_candidate_and_baseline": true,
+    "seven_tables_directly_equal_baseline": [
+      "kCameraProgram",
+      "kDenseProgram",
+      "kDopriPhaseProgram",
+      "kEndpointProgram",
+      "kInitializeProgram",
+      "kRayCameraProgram",
+      "kTransportProgram"
+    ],
+    "public_constants_layout": "Whole generated main and owner headers equal the reviewed immutable candidate byte for byte."
+  },
+  "strict_CPP": {
+    "cache": {
+      "path": "bin/linux-gcc/CMakeCache.txt",
+      "bytes": 60324,
+      "sha256": "e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f"
+    },
+    "compile_commands": {
+      "path": "bin/linux-gcc/compile_commands.json",
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    },
+    "logged_rebuilt_translation_units": [
+      "src/sirius/backend/retained_compute.cpp",
+      "src/sirius/app/alignment_authority.cpp",
+      "src/sirius/app/cli/info_command.cpp",
+      "tests/backend/retained_compute_test.cpp"
+    ],
+    "flags": "Current generated recipes for all four logged compiles use g++-14, Release O3/NDEBUG, C++26 (c++2c), CONTRACT_MODE=2, release resource locking, Wall/Wextra/Wpedantic/Werror; backend-test recipe includes fail_on_skip. Nonverbose build log does not independently contain full executed argv.",
+    "warnings_in_saved_final_stdout": 0,
+    "stderr_bytes": 0,
+    "source_governance": "Saved successful target includes labels/operating model/repository policy, strict weakened-product/configuration fixtures, escaping-copy and build-gate negative controls.",
+    "targets": "Seven requested application/test binaries plus SiriusSourceGovernance; unchanged up-to-date targets need no relink."
+  },
+  "qualification": {
+    "alignment_receipt": {
+      "path": "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "bytes": 1240,
+      "sha256": "916cfb39f915ede6c023cfb35014aa9af0c205aca7b24ccd9b2c72ad9d0a0348"
+    },
+    "admitted_domains": 0,
+    "required_domains": 8,
+    "full_science": false,
+    "release": false,
+    "native_frame_rerun_claimed": false,
+    "platform_CI_run": 39116392750,
+    "platform_CI_completion_claimed": false
+  },
+  "limits": [
+    "Complete saved before/after maps compared; no exhaustive fresh host-tool rehash. Mature explicit 4383 build selectors expand to 4924 actual rows. ROOT selected-tool augmentation assertion prevented write; no new complete selected-tool-beforepin claim.",
+    "Process RSS/reserve sampled; explicit saved owned births only. No GPU-memory, unobserved peak, full-process or release qualification claim.",
+    "Accepted native controls/benefit proof reused from fd530d9; compilation does not independently establish numerical acceptance."
+  ],
+  "inputs": {
+    "actions": {
+      "path": "out/native-constant-integration/actions.json",
+      "bytes": 1385460,
+      "sha256": "4c10b7b485e01345050da9ac086dce27a5e54df1e5ce825a302afeae6194daa2"
+    },
+    "source_integration": {
+      "path": "out/native-constant-integration/source-integration.json",
+      "bytes": 491,
+      "sha256": "ccef8fe22e461af42ea1088d70bc9df191824c294d490cf30a19471554b94992"
+    },
+    "previous_products": {
+      "path": "out/native-constant-integration/previous-products.json",
+      "bytes": 8925,
+      "sha256": "fbf518926c52bb7b26167f325043ccf6dac20a921b0bbb959b90a1185e103886"
+    },
+    "changed_products": {
+      "path": "out/native-constant-integration/changed-products.json",
+      "bytes": 4698,
+      "sha256": "b98cf07ffed4d15864efdfa8231866fbbfc6aaa103a771aa5acf65a1687c493e"
+    }
+  },
+  "reviewed_at_UTC": "2026-10-18T09:49:23.854860+00:00"
+}

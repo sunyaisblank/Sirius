@@ -1,0 +1,131 @@
+{
+  "schema": "sirius-native-constant-source-build-root-decision-v1",
+  "created_utc": "2026-10-18T09:50:32.667693+00:00",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "passed": true,
+  "strict_build_seconds": 96.46998967402033,
+  "all35_retained_SPVs_and_3headers_exact_reviewed_candidate": true,
+  "only5_expected_ordinary_native_SPVs_changed": true,
+  "all19_other_generated_products_unchanged": true,
+  "products": {
+    "bin/linux-gcc/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc/kernels/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "bin/linux-gcc/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+    },
+    "bin/linux-gcc/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+    },
+    "bin/linux-gcc/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+    },
+    "bin/linux-gcc/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+    },
+    "bin/linux-gcc/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+    },
+    "bin/linux-gcc/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    "bin/linux-gcc/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "bin/linux-gcc/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    }
+  },
+  "executables": {
+    "tests/backend/sirius_backend_tests": {
+      "bytes": 13506176,
+      "sha256": "b41cd90a4409783b89150cfc772f8995ec8e91aa95d8b53ec0e094cf0871d3d8"
+    },
+    "tests/core/sirius_core_tests": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "tests/oracle/sirius_oracle_tests": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "src/sirius/app/sirius": {
+      "bytes": 9725048,
+      "sha256": "5db84ebcc2c115a12d9d982758bf4dfee628926a219ac5b6bd36630b40a6d6b8"
+    },
+    "src/sirius/app/sirius_app_tests": {
+      "bytes": 11401096,
+      "sha256": "b0f1ce785d3b81cbef8a69018254eeb2bd9d786a6a17ef605dd9ba00f781b8b2"
+    },
+    "src/sirius/app/sirius_render_tests": {
+      "bytes": 12212608,
+      "sha256": "6ad333d45a5fbc4595b75def9c1fd571b2839d5290e2a6d83c26a856ffcb607c"
+    },
+    "tests/sirius_base_tests": {
+      "bytes": 783520,
+      "sha256": "de4d48ae280b210c07feebd700894364d3fd2bf12061edc20918aa84177042e3"
+    }
+  },
+  "admitted_native_gate_evidence_commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+  "original8_controls_and_sole22_benefit_reused_for_exact_shader_bytes": true,
+  "private_experiment_cleaned_only_after_complete_pushed_independent_conservation": true,
+  "CI_run": 39116392750,
+  "CI_current_status": "Linux and macOS build jobs success; Windows still running at saved observation; no overall completion claim",
+  "initial_alignment_refusal_preserved": true,
+  "genuine_reconfigure_then_build_passed": true,
+  "attempted_selected_tool_supplement_precheck_failed_before_writing_action": "Compiler cache may name executable without an absolute path; no supplementary beforepin claim. Existing4383buildselectors/4924actual rows remained unchanged.",
+  "software_path": "Portable retained SPVs and legacy/coupled generated products unchanged. This native-only patch is not a new software cold-frame performance premise; do not repeat that unchanged failed software frame on this premise alone.",
+  "native_next_step": "Actual new Windows canonical PE/payload/currentsource verification, then one original native frame under unchanged guards.",
+  "full_scientific_Mandatory_external_runtime_installed_release_qualified": false,
+  "alignment_admitted_domains": 0,
+  "alignment_pending_domains": 8
+}

@@ -1,0 +1,84 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/cmake",
+    "--build",
+    "--preset",
+    "linux-gcc",
+    "--parallel",
+    "2",
+    "--target",
+    "sirius",
+    "sirius_base_tests",
+    "sirius_backend_tests",
+    "sirius_core_tests",
+    "sirius_oracle_tests",
+    "sirius_app_tests",
+    "sirius_render_tests",
+    "SiriusSourceGovernance"
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "strict-build",
+  "child_exit": 1,
+  "child_pid": 87168,
+  "child_start_ticks": "18874845",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 87148,
+    "pid": 87148,
+    "ppid": 8849,
+    "rss_kib": 26816,
+    "session": 87148,
+    "start_ticks": "18874761",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 1800
+  },
+  "minimum_sampled_available_kib": 19517444,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87168,
+      "saved_start_ticks": "18874845"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87171,
+      "saved_start_ticks": "18874846"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87210,
+      "saved_start_ticks": "18874850"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87237,
+      "saved_start_ticks": "18874870"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 54068,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Strict GCC Release canonical native constant constructor integration; application and six test executables compiled, source governance. Build-only, no scientific/runtime/release qualification.",
+  "source": {
+    "revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.8012551199935842,
+  "whole_inputs_unchanged": true
+}
