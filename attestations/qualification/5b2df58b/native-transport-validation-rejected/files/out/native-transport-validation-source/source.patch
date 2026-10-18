@@ -1,0 +1,24 @@
+--- a/src/sirius/kernels/retained_transport.slang
++++ b/src/sirius/kernels/retained_transport.slang
+@@ -494,6 +494,9 @@
+     S7ResetTransport(row, rows, lane);
+ #endif
+     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
++#if !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)
++    if (lane == 0) retainedStatus = 0;
++#endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+     AllMemoryBarrierWithGroupSync();
+ #endif
+@@ -510,6 +513,11 @@
+         if (original.valid == 0) return;
+         if (lane == 0 && (i < 4 || i == 44)) S7Key(i, original);
+     }
++#elif !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)
++    for (uint i = lane; i < 46; i += SIRIUS_RETAINED_EXECUTION_LANES)
++        if (ReadOriginal(i, row).valid == 0) RejectRetainedProgram();
++    GroupMemoryBarrierWithGroupSync();
++    if (retainedStatus != 0) return;
+ #else
+     for (uint i = 0; i < 46; ++i)
+         if (ReadOriginal(i, row).valid == 0) return;

@@ -1,0 +1,91 @@
+{
+  "schema": "sirius-native-transport-validation-independent-runtime-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "canonical_CXX_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "blockers": [],
+  "critical_pins": {
+    "reader_freeze": {
+      "path": "out/native-transport-validation-runtime-source/source-freeze.json",
+      "bytes": 2484,
+      "sha256": "8455b0f2ab5fdd6c9ada8dd93e97c84b2729e15567f21574719539a6d6788dfe"
+    },
+    "authority_freeze": {
+      "path": "out/native-transport-validation-runtime-authority-source/source-freeze.json",
+      "bytes": 2478,
+      "sha256": "280fc7924339a37405dc96db454dfa42d89cc923d4a0c853cd7dc8af596716ed"
+    },
+    "reader_contract": {
+      "path": "out/native-transport-validation-runtime-source/source-contracts.json",
+      "bytes": 3087,
+      "sha256": "a25eb0e474d78d7af135a3a23d92faf0ffc6eeb195237df429561724ba558a79"
+    },
+    "authority_contract": {
+      "path": "out/native-transport-validation-runtime-authority-source/source-contracts.json",
+      "bytes": 3948,
+      "sha256": "81bc534f9b94a319cc01ce8a162e2686ade64f934befb74febe12c002e23a383"
+    },
+    "materialize_reader_context": {
+      "path": "out/native-transport-validation-runtime-authority-source/materialize_reader_context.py",
+      "bytes": 13830,
+      "sha256": "fad4e92a9f611b9b405bba03f386212708a7d61fbac4e28a05633f25f143ec55"
+    },
+    "materialize_phase": {
+      "path": "out/native-transport-validation-runtime-authority-source/materialize_phase.py",
+      "bytes": 12974,
+      "sha256": "6da1c31ca5bcfc1e8f6bdef0849838c77d75a89fb0e545ebe34f5a86b25a0677"
+    },
+    "native_evidence": {
+      "path": "out/native-transport-validation-runtime-source/native_evidence.py",
+      "bytes": 29429,
+      "sha256": "0116b87ac2bc300fec368ec9ade67e1c004132a8f160d59a523a9288e2300e95"
+    },
+    "numeric_gates": {
+      "path": "out/native-transport-validation-runtime-source/numeric_gates.py",
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1"
+    },
+    "reader_patch": {
+      "path": "out/native-transport-validation-runtime-source/source.patch",
+      "bytes": 2749,
+      "sha256": "3fcf8eada2066f38e7c48b9b8e8b83bd402a5d10e2941676d296d498f2ee099e"
+    },
+    "authority_patch": {
+      "path": "out/native-transport-validation-runtime-authority-source/source.patch",
+      "bytes": 19843,
+      "sha256": "fdbe0ea34ed00dbd518ea58ad1ac88484fa835f9b82ce75dd3368abe27d69256"
+    }
+  },
+  "exact_source_checks": {
+    "all_freeze_rows_current": {
+      "native-transport-validation-runtime-source": 16,
+      "native-transport-validation-runtime-authority-source": 16
+    },
+    "all14_preimages_equal_preserved_accepted_source": true,
+    "numeric_gates_compare_controls_layout_byte_exact": true,
+    "native_evidence_only_one_literal_changed_set": true,
+    "threePowerShell_helpers_byte_exact": true,
+    "system_terminal_only_CMakehook_namespace_change": true,
+    "phase_materializer_only3namespace_replacements": true,
+    "all_patch_blocks_exact_reconstructed": true,
+    "allPython_AST_parse_only": true,
+    "alloriginal8filters_ABBAorder_3repeats_limits_cache_numericpredicates_preserved": true
+  },
+  "context_writer_review": [
+    "Full13830B source read. Producer/runner derive from current admitted plan/binding and actual manifest/result; bothPEs hash against current manifest/authority.40arrays exactname set with onlyTransport changed;lowercaseFMA typed booleans equalbotharms.",
+    "Requires exactphase/priorproofsets:timestamp{control8},ABBA{control8,a1,b1,b2,a2},all8{control1..8};all8 requiresactual22/22benefit and timestamp predecessor. Prior schema/source/runner/phase/admission seals exact;complete prior context files must already be frozen in current phase bindings and freshly hash-equal.",
+    "Currentacceptedrecords fullwhole_inputs,allraw/terminal/XML/modules and binding/prior closures rehashed before exclusive outputcreation. Adds readercode/self/actualarrayauthority;output livesoutside scannedwork roots and is absent first,so no ownoutput hashcycle.",
+    "Actualfirstcontrol raw row reused in ABBA/all8 rather than a repeatedlaunch. Same-child loaderpath/hash bindscurrentstagearm andAMD expectedrecord;hardwarefields read from completedcontrol8/ABBA XML. BaselineSDK at timestamp is explicitly expectedfromidenticalstagedbytes;all8baseline comes from sealedactualABBApredecessor.",
+    "FP64/RTE64 true are clearly scoped expected capabilities,not timestampwideexecution. Originalall8Factoredreader remains byte-exact and provesactual2native routes/28readbacks. Unchanged timestampreader requires32fullreadbacks/51orderedmarkers/54actualmodulejoins;22comparison expressions/order unchanged."
+  ],
+  "limitations": [
+    "SOURCE PASS only; no actualfutureproducer/artifact/stage/PE/array/provider/phaseinput/runtime admission or launch. ROOT must separately fullread/freeze/concretely admit actualmaterialization.",
+    "Materialize_phase legitimately runs read-only Git metadata when ROOT later invokes it; no invocation/import by reviewer. Its admitted:true JSON is ROOT preparation metadata,not standalone scientific or execution authority.",
+    "Hash/provenance checks compose trusted explicitROOT admission,not untrusteddataauthentication or completeWindows/SDK/DSO backup. Externalhost/provider changes mustrefuse/receiveconcretefreshreview.",
+    "Nativeguard remains300schild/4GiBsampledchildWorkingSet plus2GiBsampledWSLreserve,1380sbridge/60sterminal;notWindowsaggregate/GPU accounting or coldframe authority.",
+    "No reviewed/project code or helper imported/executed, and no compiler/provider/tests/Git/network/processqueries or source/packetmutation by reviewer; only passive stdlib audit and this receipt. Reviewer authored older authority/compiler sources; current adapter authorforensic, numericreaders distinctauthor and ROOT solefutureoperator."
+  ],
+  "method": "Passive stdlib file/hash/JSON/AST/text/difflib reads only. No reviewed source or project helper was imported, invoked or tested; no external Git/tool/provider/network/process operation."
+}

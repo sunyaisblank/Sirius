@@ -1,0 +1,227 @@
+{
+  "schema": "sirius-native-transport-validation-independent-ABBA-rejection-review-v1",
+  "created_utc": "2026-10-18T08:15:39.858937+00:00",
+  "passed": true,
+  "audit_completed": true,
+  "benefit_passed": false,
+  "candidate_rejected": true,
+  "source_adoption_admitted": false,
+  "further_controls_or_retry_admitted": false,
+  "producer_revision": "ac6559d7e2910b4a8f11fedadc320f3e4d1bf8f4",
+  "runner_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "out/native-transport-validation-ABBA-evidence/original22-decision.json": {
+      "bytes": 231580,
+      "sha256": "c9499b7bd24f26d3cc3eb1bcae4243a0e885a75621282bfbb05ecc6a092a00e2"
+    },
+    "out/native-transport-validation-ABBA-evidence/reader-bindings.json": {
+      "bytes": 185028,
+      "sha256": "1f18d51fc0ec14032e5bae1a901fa807924dbdad3f9eda2fe30e3544dbf3b75c"
+    },
+    "out/native-transport-validation-ABBA-evidence/root-admission.json": {
+      "bytes": 373,
+      "sha256": "52a88930ab1f60911503429539be6331b4fea54cc801f179ab1bdb6f490853e5"
+    },
+    "out/native-transport-validation-ci-publication/independent-actual-producer-review.json": {
+      "bytes": 6221,
+      "sha256": "04e4981e22325276f971842d9a21c8d3673ec58585b0375435f106a99d746d1b"
+    },
+    "out/native-transport-validation-publication/independent-runtime-source-review.json": {
+      "bytes": 6213,
+      "sha256": "67669e4f3d5f2284bf933429b13d2c9f77833508d7bc8140d59ca77c9b380650"
+    },
+    "out/native-transport-validation-publication/independent-control8-completion.json": {
+      "bytes": 6757,
+      "sha256": "861f749a2964125873ab7d96008054177818c0f318699a75f4e929e8ecc88380"
+    }
+  },
+  "ABBA_raw_pins": {
+    "a1": {
+      "accepted": {
+        "bytes": 9007,
+        "sha256": "0a77e6b2f25da4866103c340e9f23a64e97eb6aff8d847389296efb776e05b0c"
+      },
+      "XML": {
+        "bytes": 40920,
+        "sha256": "a2823e4d196409b546928b8c535d481a889277eab50c438567b03df56e05bd0b"
+      }
+    },
+    "b1": {
+      "accepted": {
+        "bytes": 11455,
+        "sha256": "75ac893b6c5d7d52c437178e9d2ef1ef02421b01cf185471dc03a84cdf9bce89"
+      },
+      "XML": {
+        "bytes": 40888,
+        "sha256": "c3ccb15f48a0b348c0700f0c96de3ac01f2862fcf35a1d23fc2db3c5d2a2680b"
+      }
+    },
+    "b2": {
+      "accepted": {
+        "bytes": 13895,
+        "sha256": "ff47cdcc327ddf829fa80070e60a3d9c1a06a13f754d6c6f57762c7a9cb7bda3"
+      },
+      "XML": {
+        "bytes": 40756,
+        "sha256": "670e8630c9e838d9172ef3973ba96b07fd83df84012b4bb92db09b2af89220e7"
+      }
+    },
+    "a2": {
+      "accepted": {
+        "bytes": 16315,
+        "sha256": "aa35a4940b293f9b7967cc8216ee0ba1033f5847bd1eab7a9927cb58defe38d9"
+      },
+      "XML": {
+        "bytes": 40784,
+        "sha256": "a0385ad88a1f5e118ccfb48140409734488ad6c7b2f987bd4d3f709ccff79dd7"
+      }
+    }
+  },
+  "independent_recomputation": {
+    "method": "Parsed saved XML directly with stdlib, reconstructed all four records including exact raw readbacks/markers/modules/inclusive durations. Each three-value median is its sorted middle value; improvement=100*(baseline-candidate)/baseline. All reconstructed records and all22 samples/medians/thresholds/booleans equal the sealed decision; no project reader/import or workload executed.",
+    "total": 22,
+    "passed": 16,
+    "failed": 6,
+    "whole_call_gates": [
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "baseline_median_ms": 33.1228,
+        "candidate_median_ms": 27.1437,
+        "gain_percent": 18.05131208714239,
+        "minimum_percent": 5,
+        "passed": true
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "baseline_median_ms": 28.374499999999998,
+        "candidate_median_ms": 17.146,
+        "gain_percent": 39.57250348023753,
+        "minimum_percent": 5,
+        "passed": true
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "baseline_median_ms": 27.5499,
+        "candidate_median_ms": 27.1934,
+        "gain_percent": 1.2940155862634728,
+        "minimum_percent": 5,
+        "passed": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "baseline_median_ms": 16.697400000000002,
+        "candidate_median_ms": 18.0047,
+        "gain_percent": -7.82936265526368,
+        "minimum_percent": 5,
+        "passed": false
+      }
+    ],
+    "other_failed_direction": "reverse modern",
+    "other_failed_gates": [
+      {
+        "scope": "dopri_phase:rows=12 inclusive Dispatch",
+        "gain_percent": -11.787988298055414,
+        "minimum_percent": -5
+      },
+      {
+        "scope": "dopri_phase:rows=24 inclusive Dispatch",
+        "gain_percent": -5.5841851820562685,
+        "minimum_percent": -5
+      },
+      {
+        "scope": "endpoint:rows=12 inclusive Dispatch",
+        "gain_percent": -12.303907917942979,
+        "minimum_percent": -5
+      },
+      {
+        "scope": "endpoint:rows=24 inclusive Dispatch",
+        "gain_percent": -8.473761677330216,
+        "minimum_percent": -5
+      }
+    ],
+    "API_gates": [
+      {
+        "direction": "forward",
+        "gain_percent": 90.17114964602166,
+        "minimum_percent": 0,
+        "passed": true
+      },
+      {
+        "direction": "reverse",
+        "gain_percent": 0.11345215768040212,
+        "minimum_percent": 0,
+        "passed": true
+      }
+    ]
+  },
+  "actual_closure": {
+    "current_context_files_rehashed": 1018,
+    "cases": [
+      "control-8",
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "ABBA_order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "instances_per_slot": 1,
+    "internal_repeats": 3,
+    "outer_repeats_or_warmups": 0,
+    "ancestry_case_beforeafter_rows_prior_raw_paths": [
+      [
+        "a1",
+        946,
+        0
+      ],
+      [
+        "b1",
+        958,
+        12
+      ],
+      [
+        "b2",
+        970,
+        24
+      ],
+      [
+        "a2",
+        982,
+        36
+      ]
+    ],
+    "before_after_current_equal": true,
+    "accepted_raw_and_terminal_pins_rechecked": true,
+    "all_five_single_XML_zero_FESD_completed": true,
+    "per_case_complete_readbacks": 32,
+    "all_five_readbacks_identical": true,
+    "per_case_ordered_timestamp_markers": 51,
+    "per_case_executed_module_joins": 54,
+    "all_modules_join_actual_arm_PE_array_authority": true,
+    "separate_provisioning_ms": 0
+  },
+  "ownership_and_guards": "Distinct saved Windows test births; predecessor owner end precedes next test start. All owners normal exit0/no stop or cleanup errors. Original300s/4GiB sampled child WorkingSet and2GiB sampled WSL reserve retained; saved samples match owner peaks. Same-child exact stagedSDK cd862 and AMD5c0569 recorded. Saved terminal birth absence, module/executable post-seals and accessible consumer/compiler-empty checks pass. System/terminal bridges exit0 and saved child-birth absence pass. No new process query/global Windows absence claim; hidden-field limits retained.",
+  "limits": [
+    "Audit PASS accepts a valid rejection, not benefit. Both reverse whole gates and four reverse-modern endpoint/Dopri inclusive gates fail original thresholds; no pooling, subtraction, retry or threshold change.",
+    "Unchanged endpoint/Dopri differences establish no cause. No ISA, GPU-only, compilation, cache-cold or performance attribution.",
+    "Original control8 passed; remaining seven controls not launched. No fullscience, Mandatory, release or canonical adoption. Private producer/manifest authority is not a native-build gate."
+  ],
+  "review_scope_correction": "A review-only exact-set assertion initially omitted the separately frozen plan/preparation paths; corrected base is binding.files plus binding/plan/preparation, with exact12 accepted paths per ancestor. No workload or frozen metadata changed.",
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "canonical_source_clean_committed_pushed": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "review_sidecar_pending_ROOT_preservation": true
+  },
+  "blockers": []
+}

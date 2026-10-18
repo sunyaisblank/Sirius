@@ -1,0 +1,51 @@
+--- a/audit_export_windows_paths.py
++++ b/audit_export_windows_paths.py
+@@ -14,7 +14,7 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-INPUTS = ROOT / "out/native-fp32-packed-soa-producer-inputs"
++INPUTS = ROOT / "out/native-transport-validation-producer-inputs"
+ NS = {"m": "http://schemas.microsoft.com/developer/msbuild/2003"}
+ 
+ 
+@@ -186,18 +186,18 @@
+     source = document(export / "source-before-configure.json")
+     for arm in ("baseline", "candidate"):
+         for header in ("retained_kernels.h", "retained_owner_kernels.h", "retained_owner_layout.h"):
+-            suffix = "out/native-fp32-packed-soa-producer-inputs/" + arm + "/" + header
++            suffix = "out/native-transport-validation-producer-inputs/" + arm + "/" + header
+             selected_row(source, suffix, identity(INPUTS / arm / header))
+             selected_row(before, suffix, identity(INPUTS / arm / header))
+     for relative in ("src/sirius/backend/retained_compute.cpp", "tests/backend/retained_dopri_test.cpp",
+                      "src/sirius/backend/vulkan/vulkan_device.cpp", "cmake/sirius_toolchain.cmake"):
+         selected_row(source, relative, identity(ROOT / relative))
+-    selected_row(source, "out/native-fp32-packed-soa-producer-inputs/observer/audited-observer.cpp",
++    selected_row(source, "out/native-transport-validation-producer-inputs/observer/audited-observer.cpp",
+                  identity(INPUTS / "observer/audited-observer.cpp"))
+     expected = {arm: arrays(INPUTS / arm / "retained_kernels.h") for arm in ("baseline", "candidate")}
+     require(all(len(v) == 40 for v in expected.values()), "Expected40 main arrays")
+     changed = [name for name in expected["baseline"] if expected["baseline"][name] != expected["candidate"][name]]
+-    require(set(changed) == {"kTransportShader", "kEndpointShader", "kDenseShader", "kInitializeShader", "kDopriPhaseShader"},
++    require(set(changed) == {"kTransportShader"},
+             "Unexpected arm payload delta")
+     owner_arrays = arrays(INPUTS / "baseline/retained_owner_kernels.h")
+     require(len(owner_arrays) == 2 and owner_arrays == arrays(INPUTS / "candidate/retained_owner_kernels.h"),
+@@ -239,7 +239,7 @@
+             other = "candidate" if arm == "baseline" else "baseline"
+             for header in (("retained_kernels.h", "retained_owner_layout.h", "retained_owner_kernels.h")
+                            if target.endswith("compute") else ("retained_kernels.h", "retained_owner_layout.h")):
+-                suffix = "out/native-fp32-packed-soa-producer-inputs/" + arm + "/" + header
++                suffix = "out/native-transport-validation-producer-inputs/" + arm + "/" + header
+                 require(suffix in dependencies, "Private dependency missing: " + suffix)
+             require("/" + other + "/retained_kernels.h" not in dependencies, "Other arm header consumed")
+         if not target.endswith("compute"):
+@@ -249,7 +249,7 @@
+         require(len(sources) == 1, "Private target source count differs")
+         expected_source = ("tests/backend/retained_dopri_test.cpp" if target == "native_packed_dopri"
+                            else "src/sirius/backend/retained_compute.cpp" if target.endswith("compute")
+-                           else "out/native-fp32-packed-soa-producer-inputs/observer/audited-observer.cpp")
++                           else "out/native-transport-validation-producer-inputs/observer/audited-observer.cpp")
+         require(norm(sources[0]).endswith(expected_source), "Wrong private source: " + target)
+         tlogs[target] = {"object": identity(objects[0]), "source": sources[0],
+                          "command_tlogs": [str(p.relative_to(export)) for p in commands],

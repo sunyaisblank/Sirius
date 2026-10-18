@@ -1,0 +1,43 @@
+{
+  "source_revision": "ac6559d7e2910b4a8f11fedadc320f3e4d1bf8f4",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "kind": "control-8",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-transport-validation-runtime-timestamp\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-transport-validation-matched-ac6559d7\\payload\\candidate' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-transport-validation-runtime-timestamp\\native\\control-8' -Filter 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-transport-validation-runtime-timestamp\\control-8' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-transport-validation-matched-ac6559d7' -ExpectedManifestSha256 '25c8d8a5082a16f2ca60e42cbefec0628064ee11df4513b8d150f708ea01b2a7' -ExpectedProducerSha256 '48b058751796df97dcdedf82a05d1e33b3010c6f8d8acbfa305218073c668e96' -Arm 'candidate' -LiveRevision '5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e' -ExecutableName 'original_candidate_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+  ],
+  "binding_sha256": "024b5a90b61edbc87e9aa5ccd57be0f87508dfb51388757d2d39514cd2baeb3c",
+  "linux_controller_pid": 62791,
+  "linux_controller_birth": "18324108",
+  "predecessor_inputs": {},
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 300,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 18465580,
+  "linux_child_pid": 62795,
+  "linux_child_birth": "18324286",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "original_control_identity": {
+    "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "arm": "candidate"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 66.37401237600716,
+  "signals": []
+}

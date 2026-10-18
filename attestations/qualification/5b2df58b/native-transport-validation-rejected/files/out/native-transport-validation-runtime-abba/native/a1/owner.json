@@ -1,0 +1,61 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-18T08:08:15.5222071Z",
+    "owner_pid":  3080,
+    "owner_start_time_utc":  "2026-10-18T08:08:06.6032559Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-transport-validation-matched-ac6559d7\\payload\\baseline\\original_baseline_controls.exe",
+    "test_executable_sha256":  "b5159cf3e22d0d77c06f739a228ff4f8d7f8387cce60127483351c67d494e8e3",
+    "arguments":  [
+                      "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-transport-validation-runtime-abba\\native\\a1\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-transport-validation-matched-ac6559d7\\payload\\baseline",
+    "outer_guard_seconds":  300,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  true,
+    "expected_cases":  [
+                           "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "private_producer_authority_kind":  "private-ci-producer-result-and-manifest",
+    "native_build_gate_authority_used":  false,
+    "private_producer_arm":  "baseline",
+    "source_private_manifest_sha256":  "25c8d8a5082a16f2ca60e42cbefec0628064ee11df4513b8d150f708ea01b2a7",
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-transport-validation-runtime-abba\\a1",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-transport-validation-runtime-abba\\a1",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  3724,
+    "test_start_time_utc":  "2026-10-18T08:08:16.7564263Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-18T08:09:15.1309163Z",
+    "elapsed_seconds":  59.5977324,
+    "peak_sampled_rss_bytes":  469078016,
+    "source_revision":  "ac6559d7e2910b4a8f11fedadc320f3e4d1bf8f4",
+    "live_source_revision":  "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "source_build_gate_sha256":  "48b058751796df97dcdedf82a05d1e33b3010c6f8d8acbfa305218073c668e96",
+    "source_build_gate_unchanged":  true,
+    "source_private_manifest_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

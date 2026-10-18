@@ -1,0 +1,139 @@
+{
+  "schema": "sirius-native-transport-validation-independent-control8-completion-v1",
+  "created_utc": "2026-10-18T08:09:51.096367+00:00",
+  "passed": true,
+  "control8_passed": true,
+  "original_controls_passed": 1,
+  "producer_source_revision": "ac6559d7e2910b4a8f11fedadc320f3e4d1bf8f4",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "reviewer": "/root/divide_contract_review",
+  "pins": {
+    "control8_acceptance": {
+      "path": "out/native-transport-validation-timestamp-evidence/control8-acceptance.json",
+      "bytes": 53092,
+      "sha256": "650f5638865eca18c96d484bce76dabe6ff6955efa6104b6863d0742208cea4b"
+    },
+    "reader_bindings": {
+      "path": "out/native-transport-validation-timestamp-evidence/reader-bindings.json",
+      "bytes": 168296,
+      "sha256": "cde3f13d62d150bed5111a8d8c2510e08927c029f626196eef374bae9f914759"
+    },
+    "reader_root_admission": {
+      "path": "out/native-transport-validation-timestamp-evidence/root-admission.json",
+      "bytes": 378,
+      "sha256": "38d5852218ab355f17b91c0107d711a03b964a0f0def2a37bcbc2140fa29e3b7"
+    },
+    "XML": {
+      "path": "out/native-transport-validation-runtime-timestamp/native/control-8/gtest.xml",
+      "bytes": 40992,
+      "sha256": "cd359f341f40311469d080a6261d33152331c0a46edfe73108a0305af3e55662"
+    },
+    "owner": {
+      "path": "out/native-transport-validation-runtime-timestamp/native/control-8/owner.json",
+      "bytes": 3665,
+      "sha256": "8c1cc8f26770e944115cd8ab7e87af4ed4eaaf4d2e225473b3c89496202a1749"
+    },
+    "bridge": {
+      "path": "out/native-transport-validation-runtime-timestamp/control-8-bridge.json",
+      "bytes": 2914,
+      "sha256": "3ace54483b0343b26305cfdd1f4d6bf21e3b4339e6b21ca9c1c1704c4836c95b"
+    },
+    "terminal": {
+      "path": "out/native-transport-validation-runtime-timestamp/terminal-control-8.json",
+      "bytes": 4100,
+      "sha256": "59756956c8f5a2dd23deee00f18cff2a01cbe5b4d38ee35e4decc3b7164381cb"
+    },
+    "terminal_accepted": {
+      "path": "out/native-transport-validation-runtime-timestamp/terminal-control-8-accepted.json",
+      "bytes": 9188,
+      "sha256": "a597e2005b38375bb29bd974391497546407acaab5204faece58ee1fceb5be91"
+    },
+    "array_authority": {
+      "path": "out/native-transport-validation-pe-audit/matched-array-authority-ac6559d7.json",
+      "bytes": 14523,
+      "sha256": "7217eede4fc99fbeb6238b6c95afe5a5335f5b753c2b4827c6da291ac37a9465"
+    }
+  },
+  "original_execution": {
+    "case": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "processes": 1,
+    "arm": "candidate",
+    "zero_failure_error_skip_disabled_XML": true,
+    "default_native_binary32": true,
+    "coupled_rows": 12,
+    "projection_budget": 24,
+    "physical_assertions_and_original_body_unchanged_source_proof_reused": true,
+    "no_wide_or_FMA_array_execution_inferred_from_capabilities": true
+  },
+  "raw_recomputation": {
+    "complete_buffer_records": 32,
+    "all_declared_stage_and_byte_lengths_match_original_layout": true,
+    "all_legacy_three_repeat_hashes_equal": true,
+    "ordered_device_markers": 51,
+    "timestamp_tick_conversion_availability_and_host_sum_checks": true,
+    "executed_module_joins": 54,
+    "selected_modules": 7,
+    "actual_executed_roles": [
+      "transport",
+      "endpoint",
+      "dense",
+      "dopri_phase"
+    ],
+    "actual_Transport_SPV_sha256": "e16a015c1b4d81faa61a06becd63c9c121e84d85e88c126924c6656abfa438f6",
+    "all_acceptance_timestamp_records_sums_modules_and_readbacks_match_rawXML": true,
+    "raw_buffer_bytes_not_saved": "XML reports hashes of complete buffers under the unchanged audited observer assertions; no independent recovery of unsaved buffer words or cross-arm equality is claimed yet."
+  },
+  "ownership_and_guards": {
+    "Windows_child_birth": [
+      19336,
+      "2026-10-18T08:05:12.4371460Z"
+    ],
+    "Windows_owner_birth": [
+      12864,
+      "2026-10-18T08:05:02.1969025Z"
+    ],
+    "Windows_owner_and_test_births_terminal_absent": true,
+    "Linux_bridge_and_terminal_child_births_recorded_absent": true,
+    "cleanup_errors": [],
+    "remaining_accessible_consumers": [],
+    "owner_seconds": 57.713660499999996,
+    "owner_guard_seconds": 300,
+    "peak_sampled_child_WorkingSet_bytes": 512802816,
+    "child_WorkingSet_guard_bytes": 4294967296,
+    "memory_samples": 57,
+    "bridge_seconds": 66.37401237600716,
+    "terminal_seconds": 1.4683183429879136,
+    "WSL_minimum_sampled_available_kib": 18465580
+  },
+  "provider_and_provenance": {
+    "device": "AMD Radeon 780M Graphics",
+    "driver": "AMD proprietary driver: 26.8.1 (LLPC)",
+    "actual_samechild_modules": [
+      {
+        "name": "vulkan-1.dll",
+        "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-transport-validation-matched-ac6559d7\\payload\\candidate\\vulkan-1.dll",
+        "bytes": 1685432,
+        "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+        "version": "1.4.357.0"
+      },
+      {
+        "name": "amdvlk64.dll",
+        "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+        "bytes": 103213064,
+        "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+        "version": "9.2.10.395"
+      }
+    ],
+    "SDK_AMD_and_executable_post_seals_match": true,
+    "manifest_producer_PE_selected_module_and_current_array_authority_joins_pass": true,
+    "producer_result_is_explicit_legacy_source_build_gate_field_alias": true,
+    "native_build_gate_authority_used": false,
+    "original_before_after_rows": 916,
+    "before_after_exact_and_all_rows_in_reader_context": true,
+    "reader_context_pins": 934,
+    "original_readers_all934_current_scans_reused": true,
+    "current_small_reader_identity_pins_independently_rechecked": true
+  },
+  "limits": "One timestamp control only. ABBA/all22 benefit, remaining seven controls, wide routes/full science/Mandatory/release/adoption remain unproved. Sampled Windows child WorkingSet is not Windows aggregate or GPU memory; terminal scan covers accessible consumers only. Installed loader input is not mapped-provider evidence. No performance comparison or cold-cache claim.",
+  "method": "Passive small raw JSON/XML/source-reader/manifest/identity analysis only; no reader/project helper import or rerun, no compiler/provider/test/network/process query or Git mutation. Reused accepted producer/source/emitted proofs; did not repeat927/1103/full934/PE/tool closure hashing during ABBA timing. Reviewer authored prior composer and protocol reader adaptation; raw completion computations here are independent of reader execution. Only this receipt written."
+}

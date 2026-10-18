@@ -1,0 +1,200 @@
+{
+  "schema": "sirius-native-transport-validation-root-rejection-v1",
+  "created_utc": "2026-10-18T08:13:25.442314+00:00",
+  "audit_passed": true,
+  "benefit_passed": false,
+  "checks_passed": 16,
+  "checks_total": 22,
+  "decision_identity": {
+    "path": "out/native-transport-validation-ABBA-evidence/original22-decision.json",
+    "bytes": 231580,
+    "sha256": "c9499b7bd24f26d3cc3eb1bcae4243a0e885a75621282bfbb05ecc6a092a00e2"
+  },
+  "actual_sole_ABBA_session": 61248,
+  "actual_comparator_session": 28190,
+  "both_actual_tool_exits": 0,
+  "all22_medians_and_original_thresholds_ROOT_recomputed": true,
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 18.05131208714239,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "improvement_percent": 18.152537076653132,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "improvement_percent": 13.043827474498675,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "improvement_percent": 18.890210810238198,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "improvement_percent": 39.57250348023753,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "improvement_percent": 44.247393280456286,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "improvement_percent": 39.500827089617594,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "improvement_percent": 41.5924276169265,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "improvement_percent": 42.241126430038136,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "improvement_percent": 46.742836361432275,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 1.2940155862634728,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "improvement_percent": 2.419376638823565,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "improvement_percent": -0.5322060701903799,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "improvement_percent": 0.9944501644860773,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "improvement_percent": -7.82936265526368,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "improvement_percent": -11.787988298055414,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "improvement_percent": -5.5841851820562685,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "improvement_percent": -12.303907917942979,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "improvement_percent": -8.473761677330216,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "improvement_percent": -3.0212371481543854,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": null,
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "improvement_percent": 90.17114964602166,
+      "minimum_percent": 0,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": null,
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "improvement_percent": 0.11345215768040212,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "remaining7_not_executed": true,
+  "candidate_not_adopted": true,
+  "unchanged_retries": 0,
+  "no_causal_claim_from_unmodified_stage_regressions": true,
+  "scope": "First original control8 and all4ABBA raw/correctness/owner checks passed. Original reverse whole gains below5 and4reverse unchanged endpoint/Dopri stage gains below-5 reject candidate. No fullscience/frame/Mandatory/release closure; original wire decision string retains packed label only for compatibility, actual candidate is validation-only with unchanged5word scratch."
+}

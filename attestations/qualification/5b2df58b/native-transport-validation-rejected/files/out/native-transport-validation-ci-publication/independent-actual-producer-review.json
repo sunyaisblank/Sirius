@@ -1,0 +1,103 @@
+{
+  "schema": "sirius-native-transport-validation-independent-actual-producer-review-v1",
+  "created_utc": "2026-10-18T08:04:18.693347+00:00",
+  "passed": true,
+  "audit_completed": true,
+  "diagnostic_producer_eligibility_passed": true,
+  "runtime_execution_admitted": false,
+  "producer_revision": "ac6559d7e2910b4a8f11fedadc320f3e4d1bf8f4",
+  "canonical_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "actual_CI": {
+    "run_id": "39109116124",
+    "job_id": "117621220895",
+    "attempt": 1,
+    "conclusion": "success",
+    "artifact_id": "12130345108",
+    "ZIP_bytes": 25922003,
+    "ZIP_sha256": "e2785575371c9051b1bce8810b19b706ba031b9ba8c16b8037c3ded69f95c421",
+    "safe_regular_members": 122,
+    "all_member_CRC_and_current_bytes_equal": true,
+    "manifest_payload_members": 121
+  },
+  "release_pins": [
+    {
+      "path": "bin/windows-msvc/native-transport-validation-matched-ac6559d7/manifest.json",
+      "bytes": 89262,
+      "sha256": "25c8d8a5082a16f2ca60e42cbefec0628064ee11df4513b8d150f708ea01b2a7"
+    },
+    {
+      "path": "bin/windows-msvc/native-transport-validation-matched-ac6559d7/producer-result.json",
+      "bytes": 2584,
+      "sha256": "48b058751796df97dcdedf82a05d1e33b3010c6f8d8acbfa305218073c668e96"
+    },
+    {
+      "path": "out/native-transport-validation-pe-audit/actual-ac6559d7-audit.json",
+      "bytes": 41610,
+      "sha256": "11ae9e36d12f34387787160cd84b6a0617f0944be2d9028c4cf4548eed32f6b7"
+    },
+    {
+      "path": "out/native-transport-validation-pe-audit/matched-array-authority-ac6559d7.json",
+      "bytes": 14523,
+      "sha256": "7217eede4fc99fbeb6238b6c95afe5a5335f5b753c2b4827c6da291ac37a9465"
+    },
+    {
+      "path": "out/native-transport-validation-pe-audit/root-actual-producer-eligibility.json",
+      "bytes": 2148,
+      "sha256": "855b5bc21d52112ef04da9ed8ba994a46e39787e44935891f49d693041113225"
+    },
+    {
+      "path": "out/native-transport-validation-ci-publication/root-actual-download.json",
+      "bytes": 25214,
+      "sha256": "71c6568d4414549947ae095b6d167b01e57a5eb136a030dc07cea79c3226fbe0"
+    },
+    {
+      "path": "out/native-transport-validation-ci-publication/root-actual-CI-source-check.json",
+      "bytes": 1515,
+      "sha256": "5aee39365eefe38b3975f4b0ba3b25209bfaeaa4befcb72cb872759d03f2ac6b"
+    },
+    {
+      "path": "out/native-transport-validation-ci-publication/root-actual-PE-imports.json",
+      "bytes": 1424,
+      "sha256": "9681e6bbf89466e3934db7fc26d360be5cb09ba9a85a6f24264ce8f40d38290a"
+    }
+  ],
+  "verified": {
+    "source": "All 1103 actual CI source rows joined to full bytes of the actual ac6559 Git blobs; all 538 canonical blobs and modes equal 5b2. Three producer-source files and workflow preserve the reviewed 45d namespace inverse. All 3331 before/after rows equal, with selected-tool and configured-alias distinctions retained.",
+    "strict_build": "Actual configure/build exit 0. Release STRING configuration, qualification alignment, contracts2, Mandatory ON and required Vulkan retained; five private CL commands have W4/WX/O2/MD/C++latest/contracts2. Forced fail_on_skip belongs to the three test TUs, not the two retained_compute library TUs. Two LINK commands consume the correct arm objects and shared original Dopri object.",
+    "embedded_products": "Both actual PE/MAP identities, all 84 embedded array payloads and MAP symbol addresses verified. Exactly kTransportShader differs; the other 39 main arrays, seven program tables/public constants and two owner payloads remain equal. Actual canonical device object matches its archive member; canonical retained_compute archive extraction is excluded by the recorded links/maps.",
+    "selectors": "The unchanged c948 observer retains 27 original test bodies and 1492 ordered assertions. Actual source, private header precedence, compiled objects and embedded payloads join the selected PEs. Lowercase transport/endpoint FMA authority keys match the reader interface.",
+    "runtime_packaging": "MSVC19.44.35229.0 and selected release CRT14.44.35112 origins recorded; both arm DLL copies equal those origin records. SDK loader is cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696. Both 16-entry PE import tables match; packaged non-OS imports are furnished. OS/UCRT/AMD host dependencies remain runtime prerequisites."
+  },
+  "PEs": {
+    "baseline": {
+      "bytes": 9275392,
+      "sha256": "b5159cf3e22d0d77c06f739a228ff4f8d7f8387cce60127483351c67d494e8e3"
+    },
+    "candidate": {
+      "bytes": 9275392,
+      "sha256": "33ac84907094f5baed40ea482dba561a77c0879d84b82a39a5e58e1f41b1e83b"
+    }
+  },
+  "candidate_Transport": {
+    "bytes": 85600,
+    "sha256": "e16a015c1b4d81faa61a06becd63c9c121e84d85e88c126924c6656abfa438f6"
+  },
+  "scope_limits": [
+    "The static reader full_producer_eligibility_passed=false is its explicit manual-review boundary; this review composes that array/compile PASS with the actual API, source, tool, DLL and import evidence.",
+    "Selected tools, adjacent DLLs and fetched inputs are bounded producer evidence, not a complete host, SDK-header or transitive-DSO backup. The configured Python zero-byte alias is metadata; no executable-closure claim is made for that alias.",
+    "Two canonical renderer D9025 warnings (also repeated in the summary) override W4 with /w; no blanket warning-free or all-canonical-object strict-W4 claim.",
+    "No PE/provider/test execution, native-build gate, Mandatory completion, science, performance, release or source adoption follows from this producer audit. ROOT must separately admit concrete runtime inputs and release the original guarded control."
+  ],
+  "review_corrections": "An overbroad review-only forced-header assertion and a passive-check syntax typo were corrected without producer, compiler or workload rerun; artifact/source bytes were untouched.",
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "HEAD": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "tracked_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "canonical_committed_and_pushed": true,
+    "review_sidecar_untracked_ignored_pending_ROOT_preservation": true
+  },
+  "blockers": []
+}
