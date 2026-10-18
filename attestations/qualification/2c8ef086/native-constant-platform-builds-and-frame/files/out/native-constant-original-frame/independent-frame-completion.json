@@ -1,0 +1,127 @@
+{
+  "schema": "sirius-native-constant-independent-frame-completion-v1",
+  "passed": false,
+  "original_frame_passed": false,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "created_utc": "2026-10-18T10:19:22.088769+00:00",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "decision": "ORIGINAL_NATIVE_FRAME_INCOMPLETE_AT_300_SECOND_DEADLINE",
+  "actual": {
+    "Windows_status": "invalidated",
+    "Windows_guard_trigger": "elapsed",
+    "Windows_owner_seconds": 300.057996,
+    "Windows_owner_returncode": 4294967295,
+    "WSL_bridge_returncode": 1,
+    "WSL_bridge_distinct_clock_seconds": 286.2827191569959,
+    "peak_sampled_child_WorkingSet_bytes": 563802112,
+    "RSS_samples": 297,
+    "null_RSS_samples": 0,
+    "minimum_sampled_WSL_available_KiB": 16676172,
+    "last_reported_tile": 1536,
+    "total_work_tiles": 16384,
+    "completed_GTest_XML_present": false,
+    "expected_completed_PPM_present": false,
+    "whole_before_after_rows": 863,
+    "bound_files": 860,
+    "extra_wholeinput_paths": [
+      "out/native-constant-original-frame/execution-bindings.json",
+      "out/native-constant-original-frame/plan.json",
+      "out/native-constant-original-frame/preparation.json"
+    ]
+  },
+  "ownership": {
+    "Windows_owner_birth": [
+      10748,
+      "2026-10-18T10:10:57.4358513Z"
+    ],
+    "Windows_test_birth": [
+      8920,
+      "2026-10-18T10:11:00.1488748Z"
+    ],
+    "saved_owned_births_absent": true,
+    "bridge_and_auditor_Linux_child_births_recorded_absent": true,
+    "actual_same_child_SDK_and_AMD_postseals_equal": true,
+    "cleanup_errors": [],
+    "negative_audit_returncode": 0,
+    "negative_audit_seconds": 1.5043411719962023,
+    "negative_audit_accepted_for_shutdown_only": true,
+    "accessible_processes": 275,
+    "hidden_field_records": 188,
+    "global_absence_claimed": false
+  },
+  "interpretation": "One actual original128x128/1SPP Kerr native attempt exceeded its unchanged300s Windowschild deadline and was invalidated. Lastprinted1536tiles is an incomplete prefix, not a completed image or scientific verdict. Distinct Windowsowner and WSLbridge clocks are retained without throughput/speed comparison. Stderr cumulative successful-stage snapshots are preserved raw, not a complete-frame total or allocating/JIT/driver cause proof.",
+  "audit_scope": "Original filter/limits/cache/source/PE/provider binding compose pinned concrete+run-ID-correction reviews. All863before/after entries equal and contain860boundrows; no fullhost rehash by reviewer. Source/gate/PE stable, actual mapped SDK/AMD and exact birth/postseals checked. Negative observer only ran bound60s terminal/cleanup vectors after closednonpass; its0 is teardown acceptance, never framePASS. Positive observer/collector not run.",
+  "prior_evidence": "Previously accepted private original8controls+sole22native benefit pass remains separate and unchanged; this full-frame incompletion does not convert those results to failure or provide fullscience/Mandatory/release qualification.",
+  "unchanged_retry_or_guard_raise_authorized": false,
+  "provider_test_helper_or_negative_auditor_executed_by_reviewer": false,
+  "method": "Passive scoped saved-source/JSON/hash/text and exact expected-file absence reads only; no provider/test/tool/helper execution, process query, network or input mutation.",
+  "critical_pins": {
+    "owner": {
+      "path": "out/native-constant-original-frame/native/native-frame/owner.json",
+      "bytes": 3312,
+      "sha256": "0e24ac8692f90ee4490eaae633a39f39653c531b59c814653930914786024add"
+    },
+    "stdout": {
+      "path": "out/native-constant-original-frame/native/native-frame/stdout.log",
+      "bytes": 277716,
+      "sha256": "005924a1afa5c480112d16a4303cb8c3d06b32526143e4be3008050c47a6db84"
+    },
+    "stderr": {
+      "path": "out/native-constant-original-frame/native/native-frame/stderr.log",
+      "bytes": 62476,
+      "sha256": "fbc771379ed90338d7e162fbe54ecbb5cfe6779cb47d33db900d259dfa2c9a41"
+    },
+    "memory": {
+      "path": "out/native-constant-original-frame/native/native-frame/memory.json",
+      "bytes": 40849,
+      "sha256": "3f7af16f32fadc874ba111f766bd81a1a331656f1699b061ad15582fae50dd32"
+    },
+    "provider": {
+      "path": "out/native-constant-original-frame/native/native-frame/driver-modules.json",
+      "bytes": 700,
+      "sha256": "993d6f864cda0970dc80ad17b3a4ca80d52fa2b1b26bfedb0a7e8b8eb1e25d6f"
+    },
+    "bridge": {
+      "path": "out/native-constant-original-frame/native-frame-bridge.json",
+      "bytes": 2717,
+      "sha256": "9b64b25f04573233cd11b1c46550d91939fbc08123ea3f472ed0c2dfcd40ffef"
+    },
+    "before": {
+      "path": "out/native-constant-original-frame/native-frame-inputs-before.json",
+      "bytes": 144298,
+      "sha256": "f8692791ca189e3bd8d57aec6a32fe4be5e5bcf69074fbe868f56b25844bb953"
+    },
+    "after": {
+      "path": "out/native-constant-original-frame/native-frame-inputs-after.json",
+      "bytes": 144298,
+      "sha256": "f8692791ca189e3bd8d57aec6a32fe4be5e5bcf69074fbe868f56b25844bb953"
+    },
+    "terminal": {
+      "path": "out/native-constant-original-frame/terminal-native-frame.json",
+      "bytes": 4084,
+      "sha256": "bb9522bd2a6188d5ab2e6da923b7f7a833678ee46c99988b7df47b56c09f347a"
+    },
+    "failure_audit": {
+      "path": "out/native-constant-original-frame/terminal-native-frame-failure-audit-bridge.json",
+      "bytes": 3033,
+      "sha256": "e3d437e8bfae8a424f94e9de58fa306429366152871021d65e2a63123db9d483"
+    },
+    "failure_auditor_source": {
+      "path": "out/native-constant-original-frame/negative_terminal_audit.py",
+      "bytes": 9899,
+      "sha256": "101b8ec0d836b1e73392a65fbb765a020965bb8a7f0af71155a8e52ac31b526e"
+    },
+    "binding": {
+      "path": "out/native-constant-original-frame/execution-bindings.json",
+      "bytes": 157602,
+      "sha256": "9abddde008c5cb4101d2d7610c8ca53a28742154135fd6f3886e198a2c4c5c95"
+    },
+    "CI_run_fix_review": {
+      "path": "out/native-constant-original-frame/independent-CI-run-retarget-review.json",
+      "bytes": 3629,
+      "sha256": "2a1e55ca931d3f33e3609842378d60262fa4f224479e7e7377f1bfc438c202f9"
+    }
+  }
+}

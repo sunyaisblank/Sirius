@@ -1,0 +1,36 @@
+{
+  "schema": "sirius-native-windows-current-retained-frame-plan-v1",
+  "admitted": false,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "control_profile": "original-retained-frame",
+  "stage": "bin/windows-msvc/constant-original-frame-2c8ef086",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "native-frame"
+  ],
+  "actions": {
+    "native-frame": {
+      "kind": "Control",
+      "test": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "child_environment": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "TEMP": "renders/constant-original-frame-2c8ef086/native-frame",
+    "TMP": "renders/constant-original-frame-2c8ef086/native-frame"
+  },
+  "resource_semantics": "Original 300s case child working-set stop at4GiB; WSL sampled available reserve2GiB; fixed outer bridge1380s and terminal60s. Neither Windows process-tree aggregate nor GPU2GiB qualification. Original renderer dispatch/governor/default scene, precision scoped fp32 in original test and output assertions unchanged. No LVP_JIT_OPTIMIZATION_LEVEL override.",
+  "prospective_commands": [
+    "python3 -B out/native-constant-original-frame/run_system.py native-frame",
+    "python3 -B out/native-constant-original-frame/run_terminal.py native-frame"
+  ],
+  "stop_on_first_nonpass": true,
+  "scope": "Exactly one original native AMD128x128/1SPP Kerr GTest on new2c8 canonical source after actualWindowsproducer+fullstage/input bindings admitted. Original300s/4GiB-child/2GiB-WSL unchanged. SOURCE-only pending actualCI; no launch authority/runtime/frame/fullscience/release claim."
+}

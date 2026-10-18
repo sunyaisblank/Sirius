@@ -1,0 +1,60 @@
+{
+  "schema": "sirius-native-constant-frame-nonpass-readonly-terminal-audit-v1",
+  "mode": "native-frame-negative-terminal-audit",
+  "label": "native-frame",
+  "case": "native-frame",
+  "numerical_admitted": false,
+  "numerical_passed": false,
+  "failure_audit_only": true,
+  "read_case_pass": false,
+  "observer_sha256": "101b8ec0d836b1e73392a65fbb765a020965bb8a7f0af71155a8e52ac31b526e",
+  "positive_observer_source": {
+    "bytes": 23918,
+    "sha256": "33f42e87b28794e16b12927455fcf1f946b24df87446146d1f621989bae0ccaf"
+  },
+  "audit_script_sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-constant-original-frame\\temp\\terminal-native-frame\\bootstrap.json' -Encoding UTF8;& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-constant-original-frame\\terminal-audit.ps1' -Workspace '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-constant-original-frame' -RunName 'native/native-frame' -Receipt 'terminal-native-frame.json' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\constant-original-frame-2c8ef086'"
+  ],
+  "deadline_seconds": 60,
+  "outer_stop": false,
+  "errors": [],
+  "started_epoch": 1792318580.8111134,
+  "controller_pid": 18474,
+  "controller_birth": "19069544",
+  "binding": {
+    "bytes": 157602,
+    "sha256": "9abddde008c5cb4101d2d7610c8ca53a28742154135fd6f3886e198a2c4c5c95"
+  },
+  "closed_nonpass_bridge": {
+    "bytes": 2717,
+    "sha256": "9b64b25f04573233cd11b1c46550d91939fbc08123ea3f472ed0c2dfcd40ffef"
+  },
+  "qualification_claimed": false,
+  "linux_child_pid": 18505,
+  "linux_child_birth": "19069733",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 1.5043411719962023,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "terminal_receipt": {
+    "bytes": 4084,
+    "sha256": "bb9522bd2a6188d5ab2e6da923b7f7a833678ee46c99988b7df47b56c09f347a"
+  },
+  "bootstrap": {
+    "owner_start_time_utc": "2026-10-18T10:16:20.9049065Z",
+    "scope": "Read-only terminal auditor bootstrap, no Add-Type or scientific launch",
+    "owner_pid": 19500,
+    "expected_test_executable": ""
+  },
+  "source_binding_owner_bridge_action_post_sealed": true,
+  "accepted_failure_shutdown_audit": true,
+  "scope": "Closed original nonpass teardown only;exactbound60sPS audit/emergency/birth/module/input postseals and accessible-census scope. No numerical success,renderer launch,retry,source cleanup or qualification authority."
+}

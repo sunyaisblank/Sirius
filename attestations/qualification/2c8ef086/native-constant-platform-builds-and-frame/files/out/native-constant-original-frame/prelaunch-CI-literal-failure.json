@@ -1,0 +1,38 @@
+{
+  "schema": "sirius-native-constant-frame-prelaunch-CI-retarget-v1",
+  "created_utc": "2026-10-18T10:09:05.613651+00:00",
+  "actual_prelaunch_helper_closed_exit": 1,
+  "actual_failure": "run_system.py:64 verify_manifest exact old run_id39089567447 differs actual current manifest39116392750",
+  "scientific_case_started": false,
+  "PowerShell_provider_renderer_executed": false,
+  "no_runtime_or_bridge_or_native_directory_created": true,
+  "preserved_before": "out/native-constant-original-frame/before-CI-run-retarget",
+  "changed_helpers": {
+    "run_system.py": {
+      "before": {
+        "bytes": 25362,
+        "sha256": "daf5728167c32e420b9407f92aef7a33c34d21ad8a3baed65e71a94503400f3b"
+      },
+      "after": {
+        "bytes": 25362,
+        "sha256": "2ee2f3bd6444ed945923eed680f088b72c68365c02a1d5b1061ff658b568f5bb"
+      },
+      "exact_single_literal_inverse": true
+    },
+    "run_terminal.py": {
+      "before": {
+        "bytes": 23918,
+        "sha256": "17459b0df01df8fbbf8ad32075c8dd2dc3a4dc6c3c638d06d0420ee7494cfe99"
+      },
+      "after": {
+        "bytes": 23918,
+        "sha256": "33f42e87b28794e16b12927455fcf1f946b24df87446146d1f621989bae0ccaf"
+      },
+      "exact_single_literal_inverse": true
+    }
+  },
+  "binding_changes": "two helper pins+source-adaptation pin, same860entries; bothflagsheldfalse",
+  "original_guards_case_argv_stage_PE_provider_cache_unchanged": true,
+  "runtime_admitted": false,
+  "full_qualification_or_release": false
+}

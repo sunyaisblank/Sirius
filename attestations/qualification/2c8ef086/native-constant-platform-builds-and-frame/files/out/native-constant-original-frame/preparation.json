@@ -1,0 +1,35 @@
+{
+  "schema": "sirius-native-constant-original-frame-materialization-v1",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "materialized": true,
+  "runtime_admitted": false,
+  "CI_admission": {
+    "path": "out/native-constant-current-ci/root-frame-CI-admission.json",
+    "bytes": 4548,
+    "sha256": "c0747e8f0d4f45c53d7cc7959605c311b758b8f173f2b66a8f04d19f4eaaedbd"
+  },
+  "historical_binding": {
+    "path": "attestations/qualification/5b2df58b/native-original-frame-current/files/out/native-current-retained-frame-corrected/execution-bindings.json",
+    "bytes": 231079,
+    "sha256": "2794a88e6c2a29a468e48a8d45627920287a53ab91941290c770f29e603b35d6"
+  },
+  "source_files": 538,
+  "matched_historical_external_host_inputs": 148,
+  "stage_files": 141,
+  "bound_files": 860,
+  "materializer": {
+    "bytes": 13803,
+    "sha256": "71bd2e6085c4c95d5175ef86ea5910969ff616b2b9a94f6e1ac7cc675b7c08c9"
+  },
+  "binding": {
+    "bytes": 157603,
+    "sha256": "e81b5964893eb46a204b9fceaf4eed4e28545dc28e5d2c0555ca40fd13bfa5a2"
+  },
+  "plan": {
+    "bytes": 1926,
+    "sha256": "bfa2d6ce26ba6ea8fcce629d8dde7414f50c855831ecdcac6f716c4c15dd74c4"
+  },
+  "failure_policy": "Firstnonpass stops;positive-only Python terminal reader not run. ROOT uses unchanged bounded PS terminal audit directly for failure teardown. No retry.",
+  "activation": "Held plan.admitted=false and binding.admitted=false;ROOT+independent concrete review before activation. No owner/terminal/temp/native/render directory created.",
+  "prelaunch_CI_literal_fix": "39089567447 -> 39116392750 in two mature helpers only; initial validator refusal preserved; no renderer/provider started."
+}

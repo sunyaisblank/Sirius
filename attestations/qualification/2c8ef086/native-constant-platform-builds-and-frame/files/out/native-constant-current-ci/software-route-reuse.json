@@ -1,0 +1,56 @@
+{
+  "schema": "sirius-native-constant-existing-software-route-reuse-v1",
+  "passed": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "prior_XML": {
+    "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/benefit/a1/gtest.xml",
+    "bytes": 40838,
+    "sha256": "769e3b32f88a77bc3567b43f7a6fd5c95128ead8e13e9193556c0b798e9c5786"
+  },
+  "actual_saved_Lavapipe_baseline_selected7_portable_payloads_still_exact": [
+    {
+      "stage": "camera",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    {
+      "stage": "transport",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv",
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    {
+      "stage": "endpoint",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    {
+      "stage": "dense",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv",
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    {
+      "stage": "initialize",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv",
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    {
+      "stage": "ray_camera",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    {
+      "stage": "dopri_phase",
+      "current_matching_SPV": "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    }
+  ],
+  "decision": "No changed software-renderer payload or selector premise from this native-only constructor patch; do not repeat original failed software cold frame on this premise.",
+  "scope": "Bounded saved selected-payload identity reuse, not current software runtime/frame/scientific qualification."
+}
