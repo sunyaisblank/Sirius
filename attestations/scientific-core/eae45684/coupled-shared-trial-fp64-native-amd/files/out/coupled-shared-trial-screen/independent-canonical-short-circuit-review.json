@@ -1,0 +1,35 @@
+{
+  "schema": "sirius-coupled-canonical-short-circuit-independent-review-v1",
+  "created_utc": "2026-10-18T01:30:50.898216+00:00",
+  "passed": true,
+  "source_contract_mismatch": false,
+  "candidate_emitted_match_pending": true,
+  "runtime_admitted": false,
+  "pins": {
+    "canonical-coupled.spvasm": {
+      "bytes": 3571734,
+      "sha256": "17417282b417d039889778d7071115f9d28599ee3d1a3a5237f108b88e8a5414"
+    },
+    "bin/linux-gcc/kernels/coupled_probe_fp64.spv": {
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "private_candidate_source": {
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+    },
+    "private_source_review": {
+      "bytes": 2945,
+      "sha256": "1c823d6878e711cc2d75c8b2e4515d3516937da5ba740b06fb519932b9383c90"
+    }
+  },
+  "verdict": "Pinned canonical FP64 module implements short-circuit three-trial evaluation;it is not eager. Evidence is actual emitted CFG,not latest language documentation or C++ syntax.",
+  "evidence": [
+    "One OpFunction/zero OpFunctionCall:three source RK4 calls are inline regions. Full output copyout20133-20150 and counter20151-20152 precede !success18590. Branch20155:failure18041 writes true17950 and bypasses second region;success18030 enters it.",
+    "Midpoint copyout31886-31903/counter31904-31905 precede !success38908. Merge18042 loads17950;branch31915 sends accumulated failure18056,bypassing third region;only prior success enters18044.",
+    "Fine copyout43662-43679/counter43680-43681 precede !success59226. Failure chain18056/18057/18059 writes status2 and latest count43719-43720,then joins18174;success continues18061. Thus early full/midpoint failures cannot execute later trial stages.",
+    "Counter locals17953/17956/17960 each initialize from200872 and contain four +1 sites;copyback to200872 follows each actual region. Failure returns currentcount;three successful regions give12. Returned200767 loads at53198,converts/stores to results[rb+1] at53215-53218."
+  ],
+  "limits": "Candidate source copyback-before-false remains reviewed;new candidate must independently match failure edges,observable outputs/stagecounts and12stage semantics. This narrow emitted check does not certify dead/unobservable increment fields or full ABI/math/body reduction. No compiler/provider/test/tool/network/process/Git operation,driver-cause/performance inference or runtime authorization;ROOT disassembly provenance and existing producer proofs reused.",
+  "repository": "Canonical source untouched;new uncommitted review awaits ROOT preservation."
+}

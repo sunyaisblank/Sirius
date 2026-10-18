@@ -1,0 +1,139 @@
+{
+  "schema": "sirius-coupled-shared-trial-compiler-pending-readiness-v1",
+  "source_only": true,
+  "admitted": false,
+  "source_revision_expected_from_root": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "source_status": "Root reports current clean eae; this author performed no Git/source-status operation. Mature owner independently requires exact revision and empty status at actual entry.",
+  "recipe": {
+    "build_ninja": {
+      "path": "bin/linux-gcc/build.ninja",
+      "bytes": 488456,
+      "sha256": "f9a58eff72b2417bfac1cfa70e531c251e47e6bfeae0857b1b021cdd241429be"
+    },
+    "line": 1861,
+    "exact_command": "cd /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend && /opt/slang/bin/slangc /home/astra/.project/Sirius/src/sirius/backend/../kernels/coupled_probe.slang -DSIRIUS_FP64 -target spirv -profile spirv_1_5 -entry ComputeMain -stage compute -I /home/astra/.project/Sirius/src/sirius/backend/../kernels -warnings-disable 30082 -o /home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv && /home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val /home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+    "original_cwd": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "original_compiler_argv": [
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/src/sirius/backend/../kernels/coupled_probe.slang",
+      "-DSIRIUS_FP64",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+      "-warnings-disable",
+      "30082",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv"
+    ],
+    "candidate_owner_argv": [
+      "/usr/bin/env",
+      "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+      "/opt/slang/bin/slangc",
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang",
+      "-DSIRIUS_FP64",
+      "-target",
+      "spirv",
+      "-profile",
+      "spirv_1_5",
+      "-entry",
+      "ComputeMain",
+      "-stage",
+      "compute",
+      "-I",
+      "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+      "-warnings-disable",
+      "30082",
+      "-o",
+      "{folder}/coupled_probe_fp64.spv"
+    ],
+    "only_source_output_delta": true,
+    "additional_include_flags": false,
+    "original_validator_not_in_compiler_owner": true
+  },
+  "reused_control": {
+    "role": "Current canonical FP64 product, not newly compiled control",
+    "compiled": {
+      "path": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "backend_staged": {
+      "path": "bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "current_equality_observed_as_bytes": true,
+    "not_runtime_or_native_acceptance": true
+  },
+  "tool_metadata_reuse": {
+    "complete_prior_observation": {
+      "path": "out/trace-riemann-stencil-import-order/root-compiler-tool-observation.json",
+      "bytes": 1363199,
+      "sha256": "1c30b82bb2eb62f1de4a771eb49d791e199ad10b996aaee8afed5ff9e003e330"
+    },
+    "latest_matching_observation": {
+      "path": "out/trace-jacobi-shared-segment-rhs-screen/root-compiler-tool-observation.json",
+      "bytes": 11691,
+      "sha256": "aa77c9a5b5a5063217a366cee8f3d2052cff50c17b0c23ed46d58b181bbd7d93"
+    },
+    "prior_observation_scope": "Historical actual tool/resource/DT_NEEDED/version observations only; no old trace controls/owners/products/maps are replayed or inherited as coupled producer results.",
+    "selected_paths": {
+      "installed_slang_resources": 3692,
+      "resolved_DSO_union": 15,
+      "python_runtime_paths": 130,
+      "operation_tool_paths": 9
+    },
+    "new_metadata_queries": 0,
+    "root_must_match_all_current_pins_and_environment_before_reuse": true
+  },
+  "helper_origins": {
+    "run_owned.py": {
+      "path": "out/trace-jacobi-shared-segment-rhs-screen/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/trace-jacobi-shared-segment-rhs-screen/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    }
+  },
+  "private_source_pins": {
+    "coupled_probe.slang": {
+      "path": "out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang",
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    "gr_coupled.slang": {
+      "path": "out/coupled-shared-trial-screen/inputs/candidate/gr_coupled.slang",
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+    }
+  },
+  "candidate_source_review": {
+    "path": "out/coupled-shared-trial-body/independent-source-review.json",
+    "bytes": 2945,
+    "sha256": "1c823d6878e711cc2d75c8b2e4515d3516937da5ba740b06fb519932b9383c90"
+  },
+  "selection_counts": {
+    "external_unique": 3845,
+    "ninja_declared_source_prerequisites": 13,
+    "candidate_source_proof_files": 6,
+    "prospective_frozen_selectors": 3885,
+    "future_root_materialization_selectors": [
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/actions.json",
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/root-preflight.json",
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/independent-source-review.json",
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/root-source-admission.json"
+    ]
+  },
+  "runtime_released": false,
+  "compiler_released": false
+}

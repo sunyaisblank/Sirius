@@ -1,0 +1,87 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-s",
+    "4096",
+    "-yy",
+    "-e",
+    "trace=execve,openat,chdir,clone,clone3",
+    "-o",
+    "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/compiler-file-process.trace",
+    "/usr/bin/env",
+    "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "/opt/slang/bin/slangc",
+    "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang",
+    "-DSIRIUS_FP64",
+    "-target",
+    "spirv",
+    "-profile",
+    "spirv_1_5",
+    "-entry",
+    "ComputeMain",
+    "-stage",
+    "compute",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+    "-warnings-disable",
+    "30082",
+    "-o",
+    "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv"
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "candidate-fp64",
+  "child_exit": 0,
+  "child_pid": 86493,
+  "child_start_ticks": "16069500",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 86489,
+    "pid": 86489,
+    "ppid": 8849,
+    "rss_kib": 25544,
+    "session": 86489,
+    "start_ticks": "16069425",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "One private FP64 compile with exact original inner Slang recipe/CWD/flags apart from private entry and output. Prebound strace observes source opens; aggregate time/RSS include observer overhead and are diagnostic only. Canonical control reused. No provider/runtime/numerical/adoption or performance result.",
+  "minimum_sampled_available_kib": 19848048,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 86493,
+      "saved_start_ticks": "16069500"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 86496,
+      "saved_start_ticks": "16069500"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 346756,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "One private FP64 compile with exact original inner Slang recipe/CWD/flags apart from private entry and output. Prebound strace observes source opens; aggregate time/RSS include observer overhead and are diagnostic only. Canonical control reused. No provider/runtime/numerical/adoption or performance result.",
+  "source": {
+    "revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 2.570092228008434,
+  "whole_inputs_unchanged": true
+}

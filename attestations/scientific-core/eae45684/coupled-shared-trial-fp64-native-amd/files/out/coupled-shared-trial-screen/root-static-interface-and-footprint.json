@@ -1,0 +1,473 @@
+{
+  "schema": "sirius-coupled-shared-trial-root-static-interface-and-footprint-v1",
+  "created_utc": "2026-10-18T01:33:11.208665+00:00",
+  "interface_passed": true,
+  "recursive_storage_ABI_layout_descriptor_builtin_entry_modes_caps_widths_equal": true,
+  "interface": {
+    "entry_model": "GLCompute",
+    "entry_export": "main",
+    "interfaces": [
+      {
+        "name": "%gl_GlobalInvocationID",
+        "storage": "Input",
+        "type": {
+          "op": "OpTypePointer",
+          "args": [
+            "Input",
+            {
+              "op": "OpTypeVector",
+              "args": [
+                {
+                  "op": "OpTypeInt",
+                  "args": [
+                    "32",
+                    "0"
+                  ],
+                  "decorations": [],
+                  "member_decorations": []
+                },
+                "3"
+              ],
+              "decorations": [],
+              "member_decorations": []
+            }
+          ],
+          "decorations": [],
+          "member_decorations": []
+        },
+        "decorations": [
+          [
+            "BuiltIn",
+            "GlobalInvocationId"
+          ]
+        ]
+      },
+      {
+        "name": "%params",
+        "storage": "StorageBuffer",
+        "type": {
+          "op": "OpTypePointer",
+          "args": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "args": [
+                {
+                  "op": "OpTypeRuntimeArray",
+                  "args": [
+                    {
+                      "op": "OpTypeFloat",
+                      "args": [
+                        "32"
+                      ],
+                      "decorations": [],
+                      "member_decorations": []
+                    }
+                  ],
+                  "decorations": [
+                    [
+                      "ArrayStride",
+                      "4"
+                    ]
+                  ],
+                  "member_decorations": []
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ],
+              "member_decorations": [
+                [
+                  "0",
+                  "Offset",
+                  "0"
+                ]
+              ]
+            }
+          ],
+          "decorations": [],
+          "member_decorations": []
+        },
+        "decorations": [
+          [
+            "Binding",
+            "2"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      },
+      {
+        "name": "%results",
+        "storage": "StorageBuffer",
+        "type": {
+          "op": "OpTypePointer",
+          "args": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "args": [
+                {
+                  "op": "OpTypeRuntimeArray",
+                  "args": [
+                    {
+                      "op": "OpTypeFloat",
+                      "args": [
+                        "32"
+                      ],
+                      "decorations": [],
+                      "member_decorations": []
+                    }
+                  ],
+                  "decorations": [
+                    [
+                      "ArrayStride",
+                      "4"
+                    ]
+                  ],
+                  "member_decorations": []
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ],
+              "member_decorations": [
+                [
+                  "0",
+                  "Offset",
+                  "0"
+                ]
+              ]
+            }
+          ],
+          "decorations": [],
+          "member_decorations": []
+        },
+        "decorations": [
+          [
+            "Binding",
+            "1"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ]
+        ]
+      },
+      {
+        "name": "%samples",
+        "storage": "StorageBuffer",
+        "type": {
+          "op": "OpTypePointer",
+          "args": [
+            "StorageBuffer",
+            {
+              "op": "OpTypeStruct",
+              "args": [
+                {
+                  "op": "OpTypeRuntimeArray",
+                  "args": [
+                    {
+                      "op": "OpTypeFloat",
+                      "args": [
+                        "32"
+                      ],
+                      "decorations": [],
+                      "member_decorations": []
+                    }
+                  ],
+                  "decorations": [
+                    [
+                      "ArrayStride",
+                      "4"
+                    ]
+                  ],
+                  "member_decorations": []
+                }
+              ],
+              "decorations": [
+                [
+                  "Block"
+                ]
+              ],
+              "member_decorations": [
+                [
+                  "0",
+                  "Offset",
+                  "0"
+                ]
+              ]
+            }
+          ],
+          "decorations": [],
+          "member_decorations": []
+        },
+        "decorations": [
+          [
+            "Binding",
+            "0"
+          ],
+          [
+            "DescriptorSet",
+            "0"
+          ],
+          [
+            "NonWritable"
+          ]
+        ]
+      }
+    ],
+    "execution_modes": [
+      [
+        "LocalSize",
+        "64",
+        "1",
+        "1"
+      ]
+    ],
+    "capabilities": [
+      [
+        "Float64"
+      ],
+      [
+        "Shader"
+      ]
+    ],
+    "extensions": [
+      [
+        "SPV_KHR_storage_buffer_storage_class"
+      ]
+    ],
+    "memory_models": [
+      [
+        "Logical",
+        "GLSL450"
+      ]
+    ],
+    "float_widths": [
+      [
+        "32"
+      ],
+      [
+        "64"
+      ]
+    ],
+    "integer_types": [
+      [
+        "32",
+        "0"
+      ],
+      [
+        "32",
+        "1"
+      ]
+    ]
+  },
+  "interface_signature_sha256": "8fe73d1c197f4109e78eaeda1447fde1406a3f5eda7c4ae309e73e7de93bee65",
+  "canonical": {
+    "product": {
+      "path": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "disassembly": {
+      "path": "out/coupled-shared-trial-screen/canonical-coupled.spvasm",
+      "bytes": 3571734,
+      "sha256": "17417282b417d039889778d7071115f9d28599ee3d1a3a5237f108b88e8a5414"
+    },
+    "histogram": {
+      "OpCapability": 2,
+      "OpExtension": 1,
+      "OpExtInstImport": 1,
+      "OpMemoryModel": 1,
+      "OpEntryPoint": 1,
+      "OpExecutionMode": 1,
+      "OpSource": 1,
+      "OpName": 67,
+      "OpMemberName": 10,
+      "OpDecorate": 25,
+      "OpMemberDecorate": 2,
+      "OpTypeVoid": 1,
+      "OpTypeFunction": 1,
+      "OpTypeFloat": 2,
+      "OpTypeVector": 4,
+      "OpTypeInt": 2,
+      "OpConstant": 59,
+      "OpTypeArray": 11,
+      "OpTypePointer": 24,
+      "OpTypeBool": 1,
+      "OpTypeStruct": 5,
+      "OpTypeRuntimeArray": 1,
+      "OpConstantComposite": 11,
+      "OpConstantTrue": 1,
+      "OpConstantFalse": 1,
+      "OpVariable": 3769,
+      "OpFunction": 1,
+      "OpLabel": 17203,
+      "OpSelectionMerge": 4456,
+      "OpSwitch": 289,
+      "OpAccessChain": 2589,
+      "OpLoad": 10238,
+      "OpConvertFToU": 4,
+      "OpCompositeExtract": 1660,
+      "OpUGreaterThanEqual": 1,
+      "OpBranchConditional": 4167,
+      "OpStore": 11269,
+      "OpBranch": 12746,
+      "OpIMul": 4,
+      "OpIAdd": 798,
+      "OpIEqual": 140,
+      "OpFConvert": 219,
+      "OpCompositeConstruct": 1087,
+      "OpLoopMerge": 734,
+      "OpULessThan": 1,
+      "OpSLessThan": 715,
+      "OpIsInf": 1066,
+      "OpIsNan": 1066,
+      "OpLogicalOr": 227,
+      "OpLogicalNot": 2135,
+      "OpAll": 227,
+      "OpFOrdEqual": 398,
+      "OpExtInst": 717,
+      "OpFDiv": 1409,
+      "OpFMul": 2922,
+      "OpFAdd": 2760,
+      "OpFSub": 1237,
+      "OpFOrdGreaterThanEqual": 57,
+      "OpFUnordNotEqual": 192,
+      "OpFOrdGreaterThan": 89,
+      "OpFUnordLessThanEqual": 66,
+      "OpVectorTimesScalar": 2872,
+      "OpFNegate": 167,
+      "OpSLessThanEqual": 18,
+      "OpSGreaterThan": 6,
+      "OpFOrdLessThan": 6,
+      "OpSGreaterThanEqual": 6,
+      "OpFOrdLessThanEqual": 9,
+      "OpINotEqual": 6,
+      "OpConvertSToF": 3,
+      "OpVectorShuffle": 1,
+      "OpConvertUToF": 2,
+      "OpBitcast": 4,
+      "OpReturn": 1,
+      "OpFunctionEnd": 1
+    },
+    "instructions": 89996,
+    "NoContraction_targets": {
+      "OpFAdd": 6,
+      "OpFMul": 6
+    }
+  },
+  "candidate": {
+    "product": {
+      "path": "out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv",
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "disassembly": {
+      "path": "out/coupled-shared-trial-screen/candidate-coupled.spvasm",
+      "bytes": 2554336,
+      "sha256": "9e82513f387f63d40cbf1e7c0dfd6b9b34713a7f5a691ab2be3eaf8a1cac89cc"
+    },
+    "histogram": {
+      "OpCapability": 2,
+      "OpExtension": 1,
+      "OpExtInstImport": 1,
+      "OpMemoryModel": 1,
+      "OpEntryPoint": 1,
+      "OpExecutionMode": 1,
+      "OpSource": 1,
+      "OpName": 67,
+      "OpMemberName": 10,
+      "OpDecorate": 17,
+      "OpMemberDecorate": 2,
+      "OpTypeVoid": 1,
+      "OpTypeFunction": 1,
+      "OpTypeFloat": 2,
+      "OpTypeVector": 4,
+      "OpTypeInt": 2,
+      "OpConstant": 59,
+      "OpTypeArray": 11,
+      "OpTypePointer": 24,
+      "OpTypeBool": 1,
+      "OpTypeStruct": 5,
+      "OpTypeRuntimeArray": 1,
+      "OpConstantComposite": 11,
+      "OpConstantTrue": 1,
+      "OpConstantFalse": 1,
+      "OpVariable": 2990,
+      "OpFunction": 1,
+      "OpLabel": 13004,
+      "OpSelectionMerge": 3376,
+      "OpSwitch": 225,
+      "OpAccessChain": 1821,
+      "OpLoad": 7888,
+      "OpConvertFToU": 4,
+      "OpCompositeExtract": 900,
+      "OpUGreaterThanEqual": 1,
+      "OpBranchConditional": 3151,
+      "OpStore": 8802,
+      "OpBranch": 9627,
+      "OpIMul": 4,
+      "OpIAdd": 597,
+      "OpIEqual": 103,
+      "OpFConvert": 177,
+      "OpCompositeConstruct": 581,
+      "OpLoopMerge": 541,
+      "OpULessThan": 2,
+      "OpSLessThan": 529,
+      "OpIsInf": 814,
+      "OpIsNan": 814,
+      "OpLogicalOr": 115,
+      "OpLogicalNot": 1639,
+      "OpAll": 115,
+      "OpFOrdEqual": 250,
+      "OpExtInst": 511,
+      "OpFDiv": 831,
+      "OpFMul": 1989,
+      "OpFAdd": 1688,
+      "OpFSub": 697,
+      "OpFOrdGreaterThanEqual": 39,
+      "OpFUnordNotEqual": 116,
+      "OpFOrdGreaterThan": 79,
+      "OpFUnordLessThanEqual": 40,
+      "OpVectorTimesScalar": 1412,
+      "OpFNegate": 103,
+      "OpSLessThanEqual": 10,
+      "OpSGreaterThan": 6,
+      "OpFOrdLessThan": 6,
+      "OpSGreaterThanEqual": 6,
+      "OpFOrdLessThanEqual": 9,
+      "OpINotEqual": 7,
+      "OpConvertSToF": 3,
+      "OpVectorShuffle": 1,
+      "OpConvertUToF": 2,
+      "OpBitcast": 4,
+      "OpReturn": 1,
+      "OpFunctionEnd": 1
+    },
+    "instructions": 65860,
+    "NoContraction_targets": {
+      "OpFAdd": 2,
+      "OpFMul": 2
+    }
+  },
+  "static_module_bytes_reduction_percent": 28.32134746404239,
+  "static_instruction_reduction_percent": 26.818969731988084,
+  "static_loop_count_before_after": [
+    734,
+    541
+  ],
+  "NoContraction_scope": "Three static RK4 callsites become one repeated body; six multiply/six add protected sites become two/two static sites. Independent CFG/body review must establish corresponding three actual executions and unchanged source arithmetic. Counts alone do not prove dynamic preservation.",
+  "runtime_released": false,
+  "scope": "Actual recursive interface and static footprint comparison. Source selection separately proved by actual compiler exec/CWD/five opens. Does not identify native driver failure cause or establish numerical/JIT/memory/performance/adoption; independent emitted semantic review remains pending."
+}

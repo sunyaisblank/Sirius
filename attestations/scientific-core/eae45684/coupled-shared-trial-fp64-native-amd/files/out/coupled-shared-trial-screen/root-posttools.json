@@ -1,0 +1,65 @@
+{
+  "schema": "sirius-coupled-shared-trial-actual-posttools-v1",
+  "operations": [
+    {
+      "label": "validate",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv"
+      ],
+      "actual_exit": 0,
+      "tool_before_after": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "bytes": 2405584,
+        "sha256": "7915625ba38ab684aedca680f785614f61f30fe4656f7e4c999717f224a9a442"
+      },
+      "product_before_after": {
+        "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv",
+        "bytes": 878700,
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      },
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/validate.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/validate.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "disassemble",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-coupled.spvasm"
+      ],
+      "actual_exit": 0,
+      "tool_before_after": {
+        "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "bytes": 792008,
+        "sha256": "ba9f6efbf025471a37c5d44abd350e4af7f085854bfa76cca9126f0cad0db466"
+      },
+      "product_before_after": {
+        "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv",
+        "bytes": 878700,
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      },
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/disassemble.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/disassemble.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "all_exits_zero": true,
+  "runtime_released": false
+}

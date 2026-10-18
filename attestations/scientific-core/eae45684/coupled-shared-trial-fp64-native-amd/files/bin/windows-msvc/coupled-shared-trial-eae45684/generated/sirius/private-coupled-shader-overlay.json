@@ -1,0 +1,90 @@
+{
+  "schema": "sirius-private-coupled-shader-overlay-v1",
+  "private_shader_experiment": true,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "stage": "bin/windows-msvc/coupled-shared-trial-eae45684",
+  "base_manifest_identity": {
+    "bytes": 32517,
+    "sha256": "e0d045edae417568ab4acb918e40c53af07bbc30592fe8d109092fca292b7b5e"
+  },
+  "base_native_gate_identity": {
+    "bytes": 10013,
+    "sha256": "92023a61cd5dd78e516594a4a4e7df48c3304aa6404bc0f5e5d892cf119fc93b"
+  },
+  "override": {
+    "key": "bin/windows-msvc/tests/backend/Release/resources/kernels/coupled_probe_fp64.spv",
+    "old": {
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "new": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    }
+  },
+  "provenance": {
+    "candidate_entry": {
+      "path": "out/coupled-shared-trial-body/coupled_probe.slang",
+      "identity": {
+        "bytes": 6259,
+        "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+      }
+    },
+    "candidate_module": {
+      "path": "out/coupled-shared-trial-body/gr_coupled.slang",
+      "identity": {
+        "bytes": 13076,
+        "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+      }
+    },
+    "source_contract": {
+      "path": "out/coupled-shared-trial-body/source-contracts.json",
+      "identity": {
+        "bytes": 8603,
+        "sha256": "edd3eca938ccd1520ff99728d117a939bb2c595c11c73c1cf64d01d80929b56f"
+      }
+    },
+    "source_review": {
+      "path": "out/coupled-shared-trial-body/independent-source-review.json",
+      "identity": {
+        "bytes": 2945,
+        "sha256": "1c823d6878e711cc2d75c8b2e4515d3516937da5ba740b06fb519932b9383c90"
+      }
+    },
+    "compiler_product": {
+      "path": "out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv",
+      "identity": {
+        "bytes": 878700,
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      }
+    },
+    "compiler_selection": {
+      "path": "out/coupled-shared-trial-screen/root-owner-and-source-selection.json",
+      "identity": {
+        "bytes": 3623,
+        "sha256": "91266700ac91291fbcb4230d494ce4673965166dfb1e87371eee81c262f4d9ff"
+      }
+    },
+    "compiler_posttools": {
+      "path": "out/coupled-shared-trial-screen/root-posttools.json",
+      "identity": {
+        "bytes": 2943,
+        "sha256": "67bb3a176ba409d6ecc5ef84492bb1a49be2cf20f221130a427cef2b916b43f4"
+      }
+    },
+    "compiler_static": {
+      "path": "out/coupled-shared-trial-screen/root-static-interface-and-footprint.json",
+      "identity": {
+        "bytes": 12090,
+        "sha256": "81457f017fb147655482ae5f92b2e17c19e3398bb33a07b2098a7f548dcdd8a8"
+      }
+    },
+    "independent_emitted_review": {
+      "path": "out/coupled-shared-trial-screen/independent-emitted-review.json",
+      "identity": {
+        "bytes": 3080,
+        "sha256": "eeea716d78e5704121f44dbbcf79a04fdaaaabc111f1da1f8477d14eb6a77589"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+Running main() from D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\src\gtest_main.cc
+Note: Google Test filter = KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+[CoupledDevice] index=0 name=AMD Radeon 780M Graphics kind=integrated vendor_id=4098 device_id=6400 driver_id=1 driver_name=AMD proprietary driver driver_info=26.8.1 (LLPC) supports_fp64=1
+[DispatchPhases] coupled_0_actual pipeline_setup_ms=14298.8 command_setup_ms=0.5041 submit_wait_ms=19.0473 cleanup_ms=0.0007 total_ms=14318.4 pipeline_created=1
+[CoupledStep] coupled_0_actual submit_wait_ms=19.0473 dispatch_wall_ms=14318.4
+[CoupledAllocation] coupled_0 requested_bytes=336 peak_allocated_bytes=336 readback_resident_bytes=336
+[DispatchPhases] coupled_1_actual pipeline_setup_ms=0.001 command_setup_ms=0.0262 submit_wait_ms=17.2068 cleanup_ms=0.0003 total_ms=17.2343 pipeline_created=0
+[CoupledStep] coupled_1_actual submit_wait_ms=17.2068 dispatch_wall_ms=17.2346
+[CoupledAllocation] coupled_1 requested_bytes=336 peak_allocated_bytes=672 readback_resident_bytes=672
+[DispatchPhases] coupled_2_actual pipeline_setup_ms=0.0004 command_setup_ms=0.0086 submit_wait_ms=16.9521 cleanup_ms=0.001 total_ms=16.9621 pipeline_created=0
+[CoupledStep] coupled_2_actual submit_wait_ms=16.9521 dispatch_wall_ms=16.9625
+[CoupledAllocation] coupled_2 requested_bytes=336 peak_allocated_bytes=1008 readback_resident_bytes=1008
+[DispatchPhases] coupled_3_actual pipeline_setup_ms=0.0005 command_setup_ms=0.0168 submit_wait_ms=14.2104 cleanup_ms=0.0003 total_ms=14.228 pipeline_created=0
+[CoupledStep] coupled_3_actual submit_wait_ms=14.2104 dispatch_wall_ms=14.2282
+[CoupledAllocation] coupled_3 requested_bytes=336 peak_allocated_bytes=1344 readback_resident_bytes=1344
+[DispatchPhases] coupled_4_actual pipeline_setup_ms=0.0004 command_setup_ms=0.008 submit_wait_ms=11.9201 cleanup_ms=0.0007 total_ms=11.9292 pipeline_created=0
+[CoupledStep] coupled_4_actual submit_wait_ms=11.9201 dispatch_wall_ms=11.9294
+[CoupledAllocation] coupled_4 requested_bytes=336 peak_allocated_bytes=1680 readback_resident_bytes=1680
+[DispatchPhases] coupled_5_actual pipeline_setup_ms=0.0005 command_setup_ms=0.0173 submit_wait_ms=10.9236 cleanup_ms=0.0003 total_ms=10.9417 pipeline_created=0
+[CoupledStep] coupled_5_actual submit_wait_ms=10.9236 dispatch_wall_ms=10.9421
+[CoupledAllocation] coupled_5 requested_bytes=336 peak_allocated_bytes=2016 readback_resident_bytes=2016
+[DispatchPhases] coupled_6_actual pipeline_setup_ms=0.0003 command_setup_ms=0.0089 submit_wait_ms=10.0274 cleanup_ms=0.0007 total_ms=10.0373 pipeline_created=0
+[CoupledStep] coupled_6_actual submit_wait_ms=10.0274 dispatch_wall_ms=10.0375
+[CoupledAllocation] coupled_6 requested_bytes=336 peak_allocated_bytes=2352 readback_resident_bytes=2352
+[DispatchPhases] coupled_7_actual pipeline_setup_ms=0.0004 command_setup_ms=0.011 submit_wait_ms=0.1106 cleanup_ms=0.0002 total_ms=0.1222 pipeline_created=0
+[CoupledStep] coupled_7_actual submit_wait_ms=0.1106 dispatch_wall_ms=0.1225
+[CoupledAllocation] coupled_7 requested_bytes=336 peak_allocated_bytes=2688 readback_resident_bytes=2688
+[DispatchPhases] coupled_8_actual pipeline_setup_ms=0.0004 command_setup_ms=0.0081 submit_wait_ms=9.3744 cleanup_ms=0.0005 total_ms=9.3834 pipeline_created=0
+[CoupledStep] coupled_8_actual submit_wait_ms=9.3744 dispatch_wall_ms=9.3836
+[CoupledAllocation] coupled_8 requested_bytes=336 peak_allocated_bytes=3024 readback_resident_bytes=3024
+[       OK ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64 (15392 ms)
+[----------] 1 test from KernelParity (15393 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (15395 ms total)
+[  PASSED  ] 1 test.

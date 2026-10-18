@@ -1,0 +1,127 @@
+{
+  "schema": "sirius-coupled-shared-trial-root-offline-source-admission-v1",
+  "created_utc": "2026-10-18T01:31:30.777241+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "source_status": "",
+  "offline_compile_released": true,
+  "runtime_released": false,
+  "canonical_source_applied": false,
+  "root_fullread_source_diff_contracts_and_independent_reviews": true,
+  "canonical_actual_short_circuit_confirmed": true,
+  "source_prefix_suffix_and_private_entry_exact": true,
+  "canonical_control_reused_no_recompile": {
+    "role": "Current canonical FP64 product, not newly compiled control",
+    "compiled": {
+      "path": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "backend_staged": {
+      "path": "bin/linux-gcc/tests/backend/resources/kernels/coupled_probe_fp64.spv",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    "current_equality_observed_as_bytes": true,
+    "not_runtime_or_native_acceptance": true
+  },
+  "source_reviews": {
+    "out/coupled-shared-trial-body/independent-source-review.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-body/independent-source-review.json",
+      "bytes": 2945,
+      "sha256": "1c823d6878e711cc2d75c8b2e4515d3516937da5ba740b06fb519932b9383c90"
+    },
+    "out/coupled-shared-trial-screen/independent-source-review.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/independent-source-review.json",
+      "bytes": 2945,
+      "sha256": "1c823d6878e711cc2d75c8b2e4515d3516937da5ba740b06fb519932b9383c90"
+    },
+    "out/coupled-shared-trial-screen/independent-canonical-short-circuit-review.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/independent-canonical-short-circuit-review.json",
+      "bytes": 2643,
+      "sha256": "a8ba717a5f0385ed6fd71e3fe22bea3257fa5565d2c44c14aef1305280232ee2"
+    }
+  },
+  "exact_inner_compiler_argv": [
+    "/usr/bin/env",
+    "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "/opt/slang/bin/slangc",
+    "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang",
+    "-DSIRIUS_FP64",
+    "-target",
+    "spirv",
+    "-profile",
+    "spirv_1_5",
+    "-entry",
+    "ComputeMain",
+    "-stage",
+    "compute",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+    "-warnings-disable",
+    "30082",
+    "-o",
+    "{folder}/coupled_probe_fp64.spv"
+  ],
+  "actual_owned_argv_template": [
+    "/usr/bin/strace",
+    "-f",
+    "-qq",
+    "-s",
+    "4096",
+    "-yy",
+    "-e",
+    "trace=execve,openat,chdir,clone,clone3",
+    "-o",
+    "{folder}/compiler-file-process.trace",
+    "/usr/bin/env",
+    "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "/opt/slang/bin/slangc",
+    "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang",
+    "-DSIRIUS_FP64",
+    "-target",
+    "spirv",
+    "-profile",
+    "spirv_1_5",
+    "-entry",
+    "ComputeMain",
+    "-stage",
+    "compute",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+    "-warnings-disable",
+    "30082",
+    "-o",
+    "{folder}/coupled_probe_fp64.spv"
+  ],
+  "actions": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/actions.json",
+    "bytes": 439822,
+    "sha256": "22b5e0567387eb4fac5487e2f9ecf03e31545bf9225fbd33851a2d9e74e998a1"
+  },
+  "current_matching_tools": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/root-current-tool-match.json",
+    "bytes": 1362329,
+    "sha256": "33414ff28a9f4a6bf2fe9697bf9748291c020d1356566e64dfd98bf15517ecc9"
+  },
+  "new_source_open_observer": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/root-source-open-observer.json",
+    "bytes": 2542,
+    "sha256": "bb2fde5d203e517fc40a79f990d42048c39f827ed60391b2dc13756d2434c269"
+  },
+  "unchanged_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "canonical_disassembly_provenance": {
+    "actual_root_prior_operation_closed_exit": 0,
+    "actual_tool": "/usr/bin/spirv-dis",
+    "tool_identity_late_current_only": {
+      "resolved_path": "/usr/bin/spirv-dis",
+      "bytes": 839888,
+      "sha256": "7e69bcb69d0bad2dc46556a7959fa5c2f0334b3b016712657d70ac5c67902a90"
+    },
+    "not_claimed_prebound_before_disassembly": true
+  },
+  "postcompile_required": "Original validator0; saved ordinary disassembly; observed private source opens; exact ABI/modes/FP64; one three-trial body with equivalent copyout/failure/stages/arithmetic; substantive static reduction and independent/root review before any new runtime. Driver failure cause remains unknown."
+}

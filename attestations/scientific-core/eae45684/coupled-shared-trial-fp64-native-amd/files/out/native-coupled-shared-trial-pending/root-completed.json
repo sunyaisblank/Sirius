@@ -1,0 +1,384 @@
+{
+  "schema": "sirius-native-private-coupled-root-completed-v1",
+  "created_utc": "2026-10-18T01:44:13.690097+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "passed": true,
+  "audit_completed": true,
+  "numerical_passed": true,
+  "private_shader_experiment": true,
+  "CI_shader_qualification_claimed": false,
+  "actual_root_sessions_closed_exit": {
+    "owner_helper": 0,
+    "terminal_helper": 0
+  },
+  "original_test": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+  "XML": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0,
+    "status": "run/completed",
+    "test_seconds": 15.392,
+    "fp64_evidence": "actual_four_column_joint_rk4_and_independent_scalar_neighbours",
+    "coupled_supports_fp64": "true"
+  },
+  "original_seven_positives_and_two_refusals_completed": true,
+  "original_exact_assertions_unchanged": "12jointstages/nominalscalar1e-12/32neighbourresiduals1e-10flat-or3e-8/4nonzeroXK/4nullratios1e-12/flat-root assertions/originstatus2/overbudgetstatus4+error>1. No raw result vectors invented; original completed assertions plus final singleton property establish this selected case.",
+  "packets": [
+    {
+      "ordinal": 0,
+      "submit_wait_ms": 19.0473,
+      "pipeline_setup_ms": 14298.8394,
+      "dispatch_wall_ms": 14318.3924,
+      "pipeline_created": true,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 336
+    },
+    {
+      "ordinal": 1,
+      "submit_wait_ms": 17.2068,
+      "pipeline_setup_ms": 0.001,
+      "dispatch_wall_ms": 17.2346,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 672
+    },
+    {
+      "ordinal": 2,
+      "submit_wait_ms": 16.9521,
+      "pipeline_setup_ms": 0.0004,
+      "dispatch_wall_ms": 16.9625,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 1008
+    },
+    {
+      "ordinal": 3,
+      "submit_wait_ms": 14.2104,
+      "pipeline_setup_ms": 0.0005,
+      "dispatch_wall_ms": 14.2282,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 1344
+    },
+    {
+      "ordinal": 4,
+      "submit_wait_ms": 11.9201,
+      "pipeline_setup_ms": 0.0004,
+      "dispatch_wall_ms": 11.9294,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 1680
+    },
+    {
+      "ordinal": 5,
+      "submit_wait_ms": 10.9236,
+      "pipeline_setup_ms": 0.0005,
+      "dispatch_wall_ms": 10.9421,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 2016
+    },
+    {
+      "ordinal": 6,
+      "submit_wait_ms": 10.0274,
+      "pipeline_setup_ms": 0.0003,
+      "dispatch_wall_ms": 10.0375,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 2352
+    },
+    {
+      "ordinal": 7,
+      "submit_wait_ms": 0.1106,
+      "pipeline_setup_ms": 0.0004,
+      "dispatch_wall_ms": 0.1225,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 2688
+    },
+    {
+      "ordinal": 8,
+      "submit_wait_ms": 9.3744,
+      "pipeline_setup_ms": 0.0004,
+      "dispatch_wall_ms": 9.3836,
+      "pipeline_created": false,
+      "requested_bytes": 336,
+      "peak_allocated_bytes": 3024
+    }
+  ],
+  "whole_beforeafter_current_rows": 1159,
+  "all_selected_inputs_unchanged": true,
+  "all_saved_Linux_births_fresh_absent": true,
+  "saved_Linux_births": [
+    {
+      "scope": "owner bridge controller",
+      "pid": 89940,
+      "saved_start_ticks": "16132167",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "scope": "owner PowerShell interop",
+      "pid": 89990,
+      "saved_start_ticks": "16132427",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "scope": "terminal PowerShell interop",
+      "pid": 97996,
+      "saved_start_ticks": "16135318",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "Windows_owned_births": [
+    {
+      "kind": "owner",
+      "pid": 8772,
+      "recorded_start_utc": "2026-10-18T01:42:31.1307922Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "kind": "test",
+      "pid": 15780,
+      "recorded_start_utc": "2026-10-18T01:42:32.9546276Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    }
+  ],
+  "same_child_modules": [
+    {
+      "name": "vulkan-1.dll",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\coupled-shared-trial-eae45684\\tests\\backend\\Release\\vulkan-1.dll",
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "version": "1.4.357.0"
+    },
+    {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    }
+  ],
+  "terminal_accessible_scan": {
+    "processes": 279,
+    "hidden_field_records": 192,
+    "matches": [],
+    "accessible_compilers": []
+  },
+  "Windows_owner_seconds": 16.1056067,
+  "WSL_bridge_seconds": 21.376990848977584,
+  "clock_domains": "Windowsowner/WSLbridge/GTest/internaldispatch clocks are distinct and uncalibrated;no joinedtimeline or baseline/ABBA/performance gain claim.",
+  "peak_sampled_child_working_set_bytes": 257482752,
+  "samples": 17,
+  "minimum_WSL_available_KiB": 20165964,
+  "resource_scope": "Original1000ms actualsubmit/1GiBdeviceallocation assertions unchanged; prospective900/1380/60 and4GiBchildWorkingSet/2GiBWSLreserve observed. Not aggregateWindows/GPU2048MiB or originalwholeCTestdeadline.",
+  "source_clean_committed_pushed0_0": true,
+  "raw_files": {
+    "terminal-coupled-fp64-bridge.json": {
+      "bytes": 2503,
+      "sha256": "078192fab73f944a33a80273114c5f2a6de7f6dcf64d0ecbdc3c8092b21253bd"
+    },
+    "run_terminal.py": {
+      "bytes": 22015,
+      "sha256": "3dd476e3dcd842da068f19984dccabc7a525242da44608aa943810b100f31128"
+    },
+    "native-private-shader-adaptation.patch": {
+      "bytes": 19370,
+      "sha256": "8941bc1253816f17a9fe85257211d390d07bc5008fc502bc8cec8f4b47250961"
+    },
+    "independent-source-review.json": {
+      "bytes": 2889,
+      "sha256": "7ef34b71993077218408bd692e5659434f3e489390b62d2719a6e3030ea58a7a"
+    },
+    "coupled-fp64-bridge.stdout": {
+      "bytes": 131,
+      "sha256": "e91401b0a5fc3a741c867230a918f51bd465e6ca5ae2811db88146de165f7405"
+    },
+    "root-materialization.json": {
+      "bytes": 3140,
+      "sha256": "35c1b073867fd814100b5637293064ee77a31c252e33b806c5e2fd736783e6e5"
+    },
+    "plan.pending.json": {
+      "bytes": 1942,
+      "sha256": "555e6bf21f6e5011d5443b3e9a52641ab36f52048bc6c5ae033bcadcc1217899"
+    },
+    "terminal-coupled-fp64-accepted.json": {
+      "bytes": 9323,
+      "sha256": "2a34d970348a213504be1b175bea24a584289bb8c7d7eee64cbb79f3d83379a7"
+    },
+    "canonical-source-freeze.json": {
+      "bytes": 85085,
+      "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+    },
+    "reviewed-held-execution-bindings.json": {
+      "bytes": 229924,
+      "sha256": "67a7b619d0d25173430fad27e9d3489e1e0682ecbd6bb654f491e1a62cc76d6d"
+    },
+    "terminal-coupled-fp64.stdout": {
+      "bytes": 175,
+      "sha256": "db9de8ccdeb204be66c2aeb3f54ed3af9a32e251f8e1153f1243e74ffcda81e0"
+    },
+    "terminal-coupled-fp64.json": {
+      "bytes": 4075,
+      "sha256": "c99d780adf0ce5bbd0d6cddfc93d5fbb0190bc1737033b18a29cac26dafc98c5"
+    },
+    "coupled-fp64-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "plan.json": {
+      "bytes": 1997,
+      "sha256": "3308a870a1d26ee7b3a24f342665cdf39a58438ce75f3ebd0c97180bd16f1a7b"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "execution-bindings.pending.json": {
+      "bytes": 4315,
+      "sha256": "63b2f42dfc5b478cf1478eb8fa94b91479f0a002fb4655c740129feaaf79ca54"
+    },
+    "coupled-fp64-bridge.json": {
+      "bytes": 3296,
+      "sha256": "787507f9bd457373911b84d085f55e4f59d3b96caa3ad8779d2f9d6faca46d2a"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "run_system.py": {
+      "bytes": 22928,
+      "sha256": "604e1759efe627145af02504a66f1ac3fe81633d83d65fd28af6696d0906b693"
+    },
+    "independent-runtime-review.json": {
+      "bytes": 2984,
+      "sha256": "93ef04ca8daa08d49368d8453e8b0b5a5697873adfa1412f3af64d52f0c36308"
+    },
+    "terminal-coupled-fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "execution-bindings.json": {
+      "bytes": 229923,
+      "sha256": "f5b6d5f20aa63d04c53ecb89e0a88af382f2a31c7a52b8c37c3bd68b6148e6df"
+    },
+    "helper.stdout": {
+      "bytes": 159,
+      "sha256": "d251b7cf5a704d499474e62107dba9f41e753486d16198fe63f49fb3d4e13056"
+    },
+    "terminal-helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "coupled-fp64-inputs-before.json": {
+      "bytes": 211999,
+      "sha256": "a21a5058d96bff59d3ecf596a78f63d7a6c955d06a2c39153218b3bdccb89bb8"
+    },
+    "source-freeze.json": {
+      "bytes": 2780,
+      "sha256": "b4578c802a18b213d150049a511b4e0f2820fe26153933e27dbd9d410389e819"
+    },
+    "terminal-helper.stdout": {
+      "bytes": 171,
+      "sha256": "8893194eaa5c16b97031efcef06b5560bb06e731a3d69b3bfaffe7b01be02430"
+    },
+    "private-coupled-shader-overlay.pending.json": {
+      "bytes": 2997,
+      "sha256": "7ad2b6479708337a095f1aca0ae3707f6a8b22c36c259f39e2b11de6d08fe90b"
+    },
+    "preparation.json": {
+      "bytes": 1122,
+      "sha256": "43b6bdf370aa7750b8aeb431bc1af59500359e1b62ca31fdc812ece08955a108"
+    },
+    "helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-contracts.json": {
+      "bytes": 11489,
+      "sha256": "4495d997757314dd38b81cf0d76d4fd028064863e524f60ca4f0fc20375fc7d4"
+    },
+    "root-runtime-release.json": {
+      "bytes": 1363,
+      "sha256": "7b287e94451746d42fffd232cce6122ea40d83417e8e5002404ef761b5dcebfa"
+    },
+    "coupled-fp64-inputs-after.json": {
+      "bytes": 211999,
+      "sha256": "a21a5058d96bff59d3ecf596a78f63d7a6c955d06a2c39153218b3bdccb89bb8"
+    },
+    "originals/run_terminal.py": {
+      "bytes": 17963,
+      "sha256": "48ac4f379b4d561d7562ea082b5be82c7da75f810cbcc640eb1b03013258aa99"
+    },
+    "originals/plan.pending.json": {
+      "bytes": 1755,
+      "sha256": "20342b9bd4734196780935ee22e9b87bac5158d02ef73eb5ed9d13a72b9eeaaa"
+    },
+    "originals/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    "originals/execution-bindings.pending.json": {
+      "bytes": 2247,
+      "sha256": "b2b2cfd4916e3ca52bc05f0a89c0ec930bf37fae652d9a35d96345b848e0c856"
+    },
+    "originals/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "originals/run_system.py": {
+      "bytes": 18952,
+      "sha256": "cde29a5f3421f07ece1ff4079a3c8dd63e617e262f76415582fab50dc05b55f4"
+    },
+    "originals/run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "native/coupled-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "native/coupled-fp64/driver-modules.json": {
+      "bytes": 695,
+      "sha256": "abbcb36a198e7cddddbbaa03c7b8b4bb07bac7d37cbcbc81463b62015c68da77"
+    },
+    "native/coupled-fp64/stdout.log": {
+      "bytes": 3979,
+      "sha256": "1757b153554c5b503184593bb17aad2df245d57ccd68efa92c3c109210881476"
+    },
+    "native/coupled-fp64/memory.json": {
+      "bytes": 2360,
+      "sha256": "afaa403ff5d034cadba637e84a4520d23274ee83f433b696e917685f3e36e353"
+    },
+    "native/coupled-fp64/owner.json": {
+      "bytes": 3267,
+      "sha256": "fb7918913aa47adbecbdaa360ad6282c7016bca35245a1508e8f5c6dc1c0bfb8"
+    },
+    "native/coupled-fp64/gtest.xml": {
+      "bytes": 9567,
+      "sha256": "9fe03434ae1b858696e1b854ecfb8caac5f11945af7e8139e8640503da20d433"
+    },
+    "temp/coupled-fp64/bootstrap.json": {
+      "bytes": 868,
+      "sha256": "07f9488369327d7714d3a71d13d365646caf910693e7f281c74964b3a5b65407"
+    },
+    "temp/terminal-coupled-fp64/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "67d7de0191bfae712bb74e920fd52739d5386b6480279169e9ab8245f51cc7c5"
+    }
+  },
+  "canonical_source_applied": false,
+  "source_build_or_cleanup_hold_released": false,
+  "scope": "One PRIVATE FP64 changed-program native AMD780M original9packet witness PASS and terminal ownership audit. Same host/provider/defaultcache, smaller equivalent emitted body. No proof that source size caused earlierVkResult-3, no performance/otherprecision/fulltrace/denseevent/science/Mandatory/sourceadoption/release acceptance."
+}

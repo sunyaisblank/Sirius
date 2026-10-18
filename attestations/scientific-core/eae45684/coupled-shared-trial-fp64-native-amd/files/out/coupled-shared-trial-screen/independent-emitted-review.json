@@ -1,0 +1,56 @@
+{
+  "schema": "sirius-coupled-shared-trial-independent-emitted-review-v1",
+  "created_utc": "2026-10-18T01:37:04.211947+00:00",
+  "passed": true,
+  "runtime_admitted": false,
+  "emitted_mode": "FP64 only",
+  "pins": {
+    "canonical-coupled.spvasm": {
+      "bytes": 3571734,
+      "sha256": "17417282b417d039889778d7071115f9d28599ee3d1a3a5237f108b88e8a5414"
+    },
+    "candidate-coupled.spvasm": {
+      "bytes": 2554336,
+      "sha256": "9e82513f387f63d40cbf1e7c0dfd6b9b34713a7f5a691ab2be3eaf8a1cac89cc"
+    },
+    "candidate-fp64/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "root-owner-and-source-selection.json": {
+      "bytes": 3623,
+      "sha256": "91266700ac91291fbcb4230d494ce4673965166dfb1e87371eee81c262f4d9ff"
+    },
+    "root-posttools.json": {
+      "bytes": 2943,
+      "sha256": "67bb3a176ba409d6ecc5ef84492bb1a49be2cf20f221130a427cef2b916b43f4"
+    },
+    "independent-canonical-short-circuit-review.json": {
+      "bytes": 2643,
+      "sha256": "a8ba717a5f0385ed6fd71e3fe22bea3257fa5565d2c44c14aef1305280232ee2"
+    }
+  },
+  "selection": "PID86496 exec/CWD+5ordered source opens match:private entry/coupled,canonical types/metrics/integrator;canonical coupled absent. Validator/disassembler0 receipt/tool/product/output pins current.",
+  "semantic_checks": [
+    "Shared7743-19446 all11704instructions alpha-bijective with canonical8425-20128/20178-31881/31954-43657;447external declarations/constants/types checked each. Complete4stageRK/tableau/refusal/order retained;all4protected targets map exactly to candidate2FMul+2FAdd.",
+    "Entry/control3965instructions and complete post-trial/caller46276instructions match;only4extra stores to17965 occur after its sole read19583 and cannot affect outputs.",
+    "DontUnroll loop7623 retains uint0..<3/++ success-only:originalstart/fullstep,originalstart/independenthalf,midpoint/independenthalf. Each pass copies full/mid/fine before falsebranch19535. Earlyfine finish=midpoint retained;false exits before latch/status2.",
+    "Counter126324 starts0,passes through17975/four+1 sites/copyback19448;failure returns actualcount,three successful passes give12. No eager later trial or discarded false-call copyout.",
+    "Same caps/entry/main/local64,descriptors/builtin layouts,float32/64,int32signedness/I-O;ROOT recursive signature8fe73d1c197f4109e78eaeda1447fde1406a3f5eda7c4ae309e73e7de93bee65 reused. Both1function/0calls;trialloop actually emitted."
+  ],
+  "static_counts": {
+    "instructions": [
+      89996,
+      65860
+    ],
+    "loops": [
+      734,
+      541
+    ],
+    "SPV_bytes": [
+      1225888,
+      878700
+    ]
+  },
+  "limits": "DCE/unobservable increment fields rely on reviewed source preservation;FP64 emission only. No numeric/driver-cause/RSS/JIT/performance/adoption claim. Private/canonical distinct;ROOT concrete runtime review/release still required. Passive reads only,no compiler/provider/test/tools/network/process/Git operation or canonical mutation;review awaits preservation."
+}

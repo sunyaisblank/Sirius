@@ -1,0 +1,111 @@
+{
+  "schema": "sirius-coupled-shared-trial-source-candidate-v1",
+  "created_utc": "2026-10-18T01:14:23.794414+00:00",
+  "source_only": true,
+  "runtime_admitted": false,
+  "tracked_source_applied": false,
+  "source_context": "Current eae45684ee6f2d1b1baf9673a53ec9c349f936e1 held canonical source. No Git operation performed; source files copied/read only.",
+  "files": [
+    {
+      "path": "out/coupled-shared-trial-body/original-gr_coupled.slang",
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    {
+      "path": "out/coupled-shared-trial-body/gr_coupled.slang",
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+    },
+    {
+      "path": "out/coupled-shared-trial-body/coupled_probe.slang",
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    {
+      "path": "out/coupled-shared-trial-body/patch.diff",
+      "bytes": 1778,
+      "sha256": "dd6b45004099f8f298c1dbf383c39c04de114827f66c268b8a026ac9ba34e101"
+    }
+  ],
+  "delta": "Only the three short-circuit TryCoupledRK4 callsites/failure block inside AttemptCoupledGeodesicStep become fixed[loop]uint0..<3/+1 with one textual call. The complete internal four-stage TryCoupledRK4, all earlier source, result defaults/preconditions and subsequent error/projection/control/commit suffix are byte-identical. Private probe is exact current source.",
+  "ordered_transitions": [
+    {
+      "trial": 0,
+      "input": "start",
+      "h": "step (no multiplication)",
+      "out": "full/fullIncrement",
+      "counter": "same result.stages"
+    },
+    {
+      "trial": 1,
+      "input": "start",
+      "h": "step*Real(0.5)",
+      "out": "midpoint/midpointIncrement",
+      "counter": "same result.stages"
+    },
+    {
+      "trial": 2,
+      "input": "result.midpoint after successful trial1",
+      "h": "step*Real(0.5), independently evaluated again",
+      "out": "fine/fineIncrement",
+      "counter": "same result.stages"
+    }
+  ],
+  "Hoare": {
+    "preconditions": "Original CoupledControlRepresented/startFinite/stepfinite-positive check retained verbatim. No new domain, null, precision, alias or nonzero-half assumption. Half-step may underflow or become unrepresented; unchanged TryCoupledRK4 handles it.",
+    "invariant": "Before trial0 result defaults match original. Before trial1 only full/fullIncrement and stages reflect completed trial0; midpoint/fine remain original start and increments zero from original result initialization. Before trial2 full/fullIncrement and midpoint/midpointIncrement reflect the first two successful calls; fine remains original start and fineIncrement zero until its call completes. No trial runs after any returned false.",
+    "partial_output_rule": "TryCoupledRK4 initializes finish to its actual argument start and increment to0 before its own h check, counts each attempted derivative and may leave later computed finish/increment even when its final finite/event predicate fails. Each loop iteration copies BOTH local outputs into its designated result fields BEFORE testing represented. Thus every failure retains the exact original partial-output record, not an invented initialized carry.",
+    "failure_cases": [
+      "Outer invalid input returns unchanged original initialized result without entering loop.",
+      "Failed full: copy actual full/fullIncrement; midpoint/fine remain original start, their increments zero; no midpoint/fine call; set derivative-domain exactly as before.",
+      "Failed midpoint: preserve successful full fields; copy actual midpoint/midpointIncrement; fine remains original start, fineIncrement zero; no fine call; same accumulated stages/status.",
+      "Failed fine: copy actual fine/fineIncrement first. An early fine refusal has finish=result.midpoint, not originalstart; a late refusal may have computed finish/increment. Both are retained exactly; successful previous fields remain."
+    ],
+    "arithmetic_and_counter": "Same start/step input bit patterns, metric values and order. Trials1/2 each use literal step*Real(0.5); no cached-half or multiply-by1. Internal4RHS order, parentheses, retained product/add NoContraction, tableau, outputincrements and result.stages updates remain exact. Three successful calls still count12; early failure counter is unchanged, including zero derivative increments for invalid half h. Error ratios/null/projected state/stepFactor/default status calculations are entirely outside the edit.",
+    "local_outputs_alias_lifetime": "trialFinish and trialIncrement are uninitialized locals passed as out; the unchanged callee fully defines them before returning. No zero-init or fabricated state masks failures. They are distinct from trialStart and persistent result fields; corresponding results are assigned immediately before bool failure branch. One temporary start/finish/increment may affect compiler SSA/private memory, liveness and copies; no reduction is claimed before emitted evidence.",
+    "ABI_and_acceptance": "Public signatures/structures/fields, floatbuffer bindings0/1/2, opcode25, local64x1x1, all precision modes, same rootcontrol/refusals/cancellation/physical1000ms/9packet assertions remain. This changes no public release or scientific policy; original FP64 positive property and unsupported-decline discrimination unchanged."
+  },
+  "private_import_closure": {
+    "entry": "coupled_probe.slang with exact canonical basename/bytes, sibling candidate gr_coupled.slang also exact module basename; no canonical module aliases or edits.",
+    "order": "Probe imports gr_types,gr_metrics,gr_integrator,gr_coupled in original order. Those three canonical modules do not import gr_coupled, so they do not prepopulate its module name as gr_camera previously did with gr_deviation. Candidate gr_coupled imports only the same canonical3.",
+    "logical_expected_files": [
+      "out/coupled-shared-trial-body/coupled_probe.slang",
+      "out/coupled-shared-trial-body/gr_coupled.slang",
+      "src/sirius/kernels/gr_types.slang",
+      "src/sirius/kernels/gr_metrics.slang",
+      "src/sirius/kernels/gr_integrator.slang"
+    ],
+    "canonical_inputs": [
+      {
+        "path": "src/sirius/kernels/gr_types.slang",
+        "bytes": 5519,
+        "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+      },
+      {
+        "path": "src/sirius/kernels/gr_metrics.slang",
+        "bytes": 30379,
+        "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+      },
+      {
+        "path": "src/sirius/kernels/gr_integrator.slang",
+        "bytes": 27452,
+        "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+      }
+    ],
+    "refusal_gate": "This is expected source lookup, not actual compiler selection proof. ROOT must bind exact source/CWD/include recipe and prove actual private gr_coupled selection (source-open evidence or equally grounded emitted-source/body join) and matching unchanged canonical imports. If canonical gr_coupled is selected, stop/refuse; no hidden include/path changes or unchanged known-refusal retry. Compiler standard-library/tool resources remain separate whole-input closure."
+  },
+  "mechanical_source_checks": {
+    "outside_single_replacement_region_byte_exact": true,
+    "internal_TryCoupledRK4_byte_exact": true,
+    "result_initialization_and_preconditions_byte_exact": true,
+    "posttrial_error_projection_budget_suffix_byte_exact": true,
+    "probe_source_byte_exact": true,
+    "textual_TryRK4_calls_before_after": [
+      3,
+      1
+    ],
+    "all_three_output_copy_blocks_precede_bool_failure_check": true
+  },
+  "context_and_limits": "Actual original native FP64 coupled pipeline creation returned VkResult-3 before packet0, about34.7s/childpeak396337152B, no outer guard. Existing trace-sharing success motivates a static-cloning hypothesis, not proof of this driver error cause. ROOT will compare once to its held canonical1225888B/ee60ee\u2026 baseline; actual private selection/three-trial CFG/partial-output stores/stagecounter/body equality/ABI/mode/code-size screen and independent/root admission required before any new workload. No compiler/provider/test retry or runtime adoption authorized; original numerical/physical/resource gates unchanged.",
+  "authoring": "Only these owned source copies/patch/contracts written. No canonical/stage/CI/current packet or compiled product mutation; no helper/import/project parser/compiler/provider/test/network/process/cache/Git operation."
+}

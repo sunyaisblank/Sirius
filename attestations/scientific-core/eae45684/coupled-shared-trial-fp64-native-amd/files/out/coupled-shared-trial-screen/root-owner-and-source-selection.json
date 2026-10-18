@@ -1,0 +1,84 @@
+{
+  "schema": "sirius-coupled-shared-trial-root-owner-and-selection-v1",
+  "created_utc": "2026-10-18T01:32:09.875078+00:00",
+  "passed": true,
+  "actual_root_helper_closed_exit": 0,
+  "whole_input_rows_before_after_current": 4426,
+  "preflight_nonself_files_matching": 4425,
+  "owner": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/owner.json",
+    "bytes": 2740,
+    "sha256": "cc51177a1c249e4de5dcb02382272a7beb43b32b0c906493ae5de3672ef5dc0e"
+  },
+  "sample_count": 10,
+  "owner_wall_seconds": 2.570092228008434,
+  "peak_sampled_aggregate_rss_kib": 346756,
+  "minimum_sampled_available_kib": 19848048,
+  "fresh_owned_births_absent": [
+    {
+      "pid": 86489,
+      "saved_start_ticks": "16069425",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 86493,
+      "saved_start_ticks": "16069500",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 86496,
+      "saved_start_ticks": "16069500",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "source_open_trace": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/compiler-file-process.trace",
+    "bytes": 16594,
+    "sha256": "83747b4200f5d1fa428fd79f933210c5586d98259ca5beabd8f4496c752de609"
+  },
+  "compiler_actual_exec_pid": 86496,
+  "ordered_actual_project_source_opens": {
+    "out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/inputs/candidate/coupled_probe.slang",
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    "src/sirius/kernels/gr_types.slang": {
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_types.slang",
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d"
+    },
+    "src/sirius/kernels/gr_metrics.slang": {
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_metrics.slang",
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b"
+    },
+    "src/sirius/kernels/gr_integrator.slang": {
+      "resolved_path": "/home/astra/.project/Sirius/src/sirius/kernels/gr_integrator.slang",
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22"
+    },
+    "out/coupled-shared-trial-screen/inputs/candidate/gr_coupled.slang": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/inputs/candidate/gr_coupled.slang",
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+    }
+  },
+  "canonical_gr_coupled_not_opened": true,
+  "actual_inner_recipe_and_CWD_match": true,
+  "product": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv",
+    "bytes": 878700,
+    "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+  },
+  "canonical_reused_product": {
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+    "bytes": 1225888,
+    "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+  },
+  "runtime_released": false,
+  "scope": "One actual new private compiler operation and source selection only. Aggregate includes trace observer. No mathematical/driver-cause/performance/adoption claim; ordinary emitted gate follows."
+}

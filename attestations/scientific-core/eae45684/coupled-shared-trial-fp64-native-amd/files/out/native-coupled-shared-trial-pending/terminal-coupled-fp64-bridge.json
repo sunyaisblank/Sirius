@@ -1,0 +1,41 @@
+{
+  "private_shader_experiment": true,
+  "CI_shader_qualification_claimed": false,
+  "mode": "native-private-coupled-shared-trial",
+  "label": "coupled-fp64",
+  "case": "coupled-fp64",
+  "read_case_pass": true,
+  "observer_sha256": "3dd476e3dcd842da068f19984dccabc7a525242da44608aa943810b100f31128",
+  "audit_script_sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\temp\\terminal-coupled-fp64\\bootstrap.json' -Encoding UTF8;& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\terminal-audit.ps1' -Workspace '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending' -RunName 'native/coupled-fp64' -Receipt 'terminal-coupled-fp64.json' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\coupled-shared-trial-eae45684'"
+  ],
+  "deadline_seconds": 60,
+  "outer_stop": false,
+  "errors": [],
+  "started_epoch": 1792287781.1755066,
+  "qualification_claimed": false,
+  "scope": "PRIVATE SHADER EXPERIMENT with unchanged original native-AMD fp64 joint-map assertions and eae host; bounded Windows birth/provider/accessible-consumer audit. No hidden/global/unconditional compiler-descendant absence or full qualification claim.",
+  "linux_child_pid": 97996,
+  "linux_child_birth": "16135318",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 1.5683962990005966,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "loaded_provider_evidence_complete": true,
+  "terminal_receipt_sha256": "c99d780adf0ce5bbd0d6cddfc93d5fbb0190bc1737033b18a29cac26dafc98c5",
+  "bootstrap": {
+    "owner_start_time_utc": "2026-10-18T01:43:01.1941049Z",
+    "scope": "Read-only terminal auditor bootstrap, no Add-Type or scientific launch",
+    "owner_pid": 17396,
+    "expected_test_executable": ""
+  },
+  "source_binding_owner_bridge_action_post_sealed": true
+}

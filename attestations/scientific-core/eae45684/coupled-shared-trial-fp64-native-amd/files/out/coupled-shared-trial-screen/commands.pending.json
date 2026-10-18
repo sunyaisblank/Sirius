@@ -1,0 +1,20 @@
+{
+  "schema": "sirius-coupled-shared-trial-compiler-pending-commands-v1",
+  "admitted": false,
+  "root_only_after_concrete_release": [
+    [
+      "/usr/bin/python3",
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/run_owned.py",
+      "candidate-fp64"
+    ]
+  ],
+  "posttools_separate_from_owned_slang_action": {
+    "validator_argv": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+      "/home/astra/.project/Sirius/out/coupled-shared-trial-screen/candidate-fp64/coupled_probe_fp64.spv"
+    ],
+    "disassembly_required": true,
+    "not_executed": true
+  },
+  "no_provider_or_test_command": true
+}

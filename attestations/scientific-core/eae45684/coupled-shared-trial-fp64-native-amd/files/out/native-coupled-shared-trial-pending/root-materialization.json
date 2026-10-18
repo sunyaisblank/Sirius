@@ -1,0 +1,73 @@
+{
+  "schema": "sirius-native-private-coupled-root-materialization-v1",
+  "created_utc": "2026-10-18T01:38:36.868358+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "materialized": true,
+  "runtime_released": false,
+  "plan_fixed_true_binding_held_false": true,
+  "source_clean_pushed_tracking0_0": true,
+  "base_stage_files_fresh_matched_and_unchanged": 140,
+  "private_stage_regular_files": 141,
+  "only_backend_shader_replaced": "tests/backend/Release/resources/kernels/coupled_probe_fp64.spv",
+  "new_input_count": 1158,
+  "whole_previous_binding_files_fresh_matched": 1108,
+  "base_manifest_and_gate_exact": true,
+  "app_duplicate_unchanged": true,
+  "private_overlay": {
+    "path": "bin/windows-msvc/coupled-shared-trial-eae45684/generated/sirius/private-coupled-shader-overlay.json",
+    "identity": {
+      "bytes": 3110,
+      "sha256": "1a4f43a19f53bb75af1c5dc138d091f49974eba09291ba469aba434ee56741ea"
+    }
+  },
+  "canonical538_source_freeze_reused_separate": {
+    "bytes": 85085,
+    "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+  },
+  "source_adapter18_pin_freeze_preserved": {
+    "bytes": 2780,
+    "sha256": "b4578c802a18b213d150049a511b4e0f2820fe26153933e27dbd9d410389e819"
+  },
+  "source_review": {
+    "bytes": 2889,
+    "sha256": "7ef34b71993077218408bd692e5659434f3e489390b62d2719a6e3030ea58a7a"
+  },
+  "emitted_review": {
+    "bytes": 3080,
+    "sha256": "eeea716d78e5704121f44dbbcf79a04fdaaaabc111f1da1f8477d14eb6a77589"
+  },
+  "offline_root_completed": {
+    "bytes": 1770,
+    "sha256": "9bf7c945d4aab3097ead1ef0c7c9dd62aa48d2767b8018c18a47827db48a0d57"
+  },
+  "preceding_failure_audit": {
+    "audit": {
+      "bytes": 9019,
+      "sha256": "4ca6c112a61e3ae31d024c5313e9243d8017610220faa1811e0f99c78d7c2bcd"
+    },
+    "independent_review": {
+      "bytes": 2973,
+      "sha256": "50cabac913075418a8e92bd7db277286613335bb68ca2ed25477fbceee82bb9f"
+    },
+    "numerical_passed": false,
+    "ownership_audit_passed": true
+  },
+  "files": {
+    "out/native-coupled-shared-trial-pending/plan.json": {
+      "bytes": 1997,
+      "sha256": "3308a870a1d26ee7b3a24f342665cdf39a58438ce75f3ebd0c97180bd16f1a7b"
+    },
+    "out/native-coupled-shared-trial-pending/execution-bindings.json": {
+      "bytes": 229924,
+      "sha256": "67a7b619d0d25173430fad27e9d3489e1e0682ecbd6bb654f491e1a62cc76d6d"
+    },
+    "out/native-coupled-shared-trial-pending/canonical-source-freeze.json": {
+      "bytes": 85085,
+      "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+    }
+  },
+  "private_shader_experiment": true,
+  "CI_shader_qualification_claimed": false,
+  "only_allowed_activation": "Only binding.admittedfalse\u2192true after independent concrete review/root release; no other source/helper/plan/argv/input/stage bytes may change.",
+  "scope": "Concrete single changed-program original native FP64 coupled case only. Same original numerical/physical/resource/defaultcache/provider/ownership policy. New program was never native executed; no original failed program replay or driver cause/performance/adoption/fullqualification claim."
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "sirius-coupled-shared-trial-independent-source-review-v1",
+  "created_utc": "2026-10-18T01:19:26.248894+00:00",
+  "source_context": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "passed": true,
+  "runtime_admitted": false,
+  "tracked_source_applied": false,
+  "pins": {
+    "original-gr_coupled.slang": {
+      "bytes": 12632,
+      "sha256": "04ad113197382182dd822341afce78c7a37c6187e228efe6709e332adb022cd7"
+    },
+    "gr_coupled.slang": {
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce"
+    },
+    "coupled_probe.slang": {
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc"
+    },
+    "patch.diff": {
+      "bytes": 1778,
+      "sha256": "dd6b45004099f8f298c1dbf383c39c04de114827f66c268b8a026ac9ba34e101"
+    },
+    "source-contracts.json": {
+      "bytes": 8603,
+      "sha256": "edd3eca938ccd1520ff99728d117a939bb2c595c11c73c1cf64d01d80929b56f"
+    }
+  },
+  "checks": [
+    "All declared/current canonical/import pins and regeneratedpatch exact. Outside one trial region unchanged:internal4stageRK4,defaults,preconditions,projection/error/controller suffix.",
+    "Bounded uint0..<3:full(start,step),mid(start,step*Real(0.5)),fine(mid,independently evaluated samehalf). Same arguments/stagecounter;12RHS on success,no work reduction.",
+    "Callee initializes finish=trialStart/increment=0 before h refusal. BOTH outputs copied before falsecheck:earlyfine retains midpoint,latefalse retains computed outputs;later trials never run. Same partial stagecounts/status/defaults/shortcircuit.",
+    "Distinct input/output locals,fully defined callee outputs,no alias or projection between halves. Same arithmetic/parentheses/NoContraction/precision types;halfunderflow remains original refusal.",
+    "Exact publicABI/structs/bindings/opcode25/local64/privateentry;original9packet/1000ms/1GiB assertions and positive/refusal policy unchanged."
+  ],
+  "import_gate": "Expected5project files:private entry+gr_coupled and canonical types/metrics/integrator. Their imports do not precache canonical gr_coupled. This is source topology only:ROOT must prove actual private module selection and matching complete compiler/tool closure;reject canonical selection without silent recipe changes.",
+  "next_gate": "Offline only:actual selection,loop/earlyfalse output-store and stagecounter CFG,ABI/semantic preservation and static body/footprint comparison to matching canonical ee60ee baseline,then independent/root admission before any runtime. Source3-to-1callsite count is not emitted body reduction.",
+  "limits": "Loop may unroll;temporary copies/SSA/liveness/register or private-memory costs may rise. No compiler/bitwise-numerical equivalence,driver-cause,JIT/RSS/performance or adoption claim. No helper/compiler/provider/test/tool/process/network/Git operation or canonical write;new review awaits ROOT preservation."
+}

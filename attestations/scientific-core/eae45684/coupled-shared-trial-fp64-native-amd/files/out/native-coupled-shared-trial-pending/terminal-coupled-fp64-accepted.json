@@ -1,0 +1,181 @@
+{
+  "pass": true,
+  "case": "coupled-fp64",
+  "mode": "native-private-coupled-shared-trial",
+  "label": "coupled-fp64",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-18T01:42:32.5094936Z",
+      "owner_pid": 8772,
+      "owner_start_time_utc": "2026-10-18T01:42:31.1307922Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\coupled-shared-trial-eae45684\\tests\\backend\\Release\\sirius_backend_tests.exe",
+      "test_executable_sha256": "28411691c78bb94dd811015cb2fab6f566bb5bf5b9b99f8fb917496eba8cdbc9",
+      "arguments": [
+        "--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\native\\coupled-fp64\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\coupled-shared-trial-eae45684\\tests\\backend\\Release",
+      "outer_guard_seconds": 900,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\temp\\coupled-fp64",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\temp\\coupled-fp64",
+        "TMPDIR": null
+      },
+      "test_pid": 15780,
+      "test_start_time_utc": "2026-10-18T01:42:32.9546276Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-18T01:42:48.6249202Z",
+      "elapsed_seconds": 16.1056067,
+      "peak_sampled_rss_bytes": 257482752,
+      "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "live_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "source_build_gate_sha256": "92023a61cd5dd78e516594a4a4e7df48c3304aa6404bc0f5e5d892cf119fc93b",
+      "source_build_gate_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "runner_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "kind": "coupled-fp64",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\coupled-shared-trial-eae45684\\tests\\backend\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\native\\coupled-fp64",
+        "-Filter",
+        "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+        "-Seconds",
+        "900",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coupled-shared-trial-pending\\temp\\coupled-fp64",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\coupled-shared-trial-eae45684",
+        "-ExpectedGateSha256",
+        "92023a61cd5dd78e516594a4a4e7df48c3304aa6404bc0f5e5d892cf119fc93b",
+        "-LiveRevision",
+        "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+        "-ExecutableName",
+        "sirius_backend_tests.exe",
+        "-InvocationKind",
+        "Control"
+      ],
+      "binding_sha256": "f5b6d5f20aa63d04c53ecb89e0a88af382f2a31c7a52b8c37c3bd68b6148e6df",
+      "private_shader_experiment": true,
+      "CI_shader_qualification_claimed": false,
+      "linux_controller_pid": 89940,
+      "linux_controller_birth": "16132167",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 1380,
+      "windows_owner_seconds": 900,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Exact mature native held-handle Windows owner samples child WorkingSet64 with4GiB stop and records private bytes; WSL sampled available-memory reserve2GiB; bridge owner+480s; terminal60s. 900s is prospective external native diagnostic cap, reusing the existing first-five control ceiling, not an original registered test deadline or aggregate Windows process-tree bound. Original physical1000ms dispatch and scientific assertions unchanged. Default native cache; inherited override refusal unchanged.",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 20165964,
+      "linux_child_pid": 89990,
+      "linux_child_birth": "16132427",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": true,
+      "native_gate_authority_scope": "Unchanged CI host and BASE manifest only; overlaid coupled shader is a private experiment.",
+      "mandatory_or_full_runtime_admitted": false,
+      "required_evidence_property": {
+        "fp64_evidence": "actual_four_column_joint_rk4_and_independent_scalar_neighbours"
+      },
+      "required_original_coupled_evidence": {
+        "fp64_evidence": "actual_four_column_joint_rk4_and_independent_scalar_neighbours",
+        "coupled_supports_fp64": "true"
+      },
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 21.376990848977584,
+      "signals": []
+    },
+    "stdout_sha256": "1757b153554c5b503184593bb17aad2df245d57ccd68efa92c3c109210881476",
+    "whole_inputs": {
+      "coupled-fp64-bridge.json": {
+        "bytes": 3296,
+        "sha256": "787507f9bd457373911b84d085f55e4f59d3b96caa3ad8779d2f9d6faca46d2a"
+      },
+      "native/coupled-fp64/owner.json": {
+        "bytes": 3267,
+        "sha256": "fb7918913aa47adbecbdaa360ad6282c7016bca35245a1508e8f5c6dc1c0bfb8"
+      },
+      "native/coupled-fp64/stdout.log": {
+        "bytes": 3979,
+        "sha256": "1757b153554c5b503184593bb17aad2df245d57ccd68efa92c3c109210881476"
+      },
+      "native/coupled-fp64/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/coupled-fp64/memory.json": {
+        "bytes": 2360,
+        "sha256": "afaa403ff5d034cadba637e84a4520d23274ee83f433b696e917685f3e36e353"
+      },
+      "coupled-fp64-inputs-before.json": {
+        "bytes": 211999,
+        "sha256": "a21a5058d96bff59d3ecf596a78f63d7a6c955d06a2c39153218b3bdccb89bb8"
+      },
+      "coupled-fp64-inputs-after.json": {
+        "bytes": 211999,
+        "sha256": "a21a5058d96bff59d3ecf596a78f63d7a6c955d06a2c39153218b3bdccb89bb8"
+      },
+      "native/coupled-fp64/gtest.xml": {
+        "bytes": 9567,
+        "sha256": "9fe03434ae1b858696e1b854ecfb8caac5f11945af7e8139e8640503da20d433"
+      },
+      "native/coupled-fp64/driver-modules.json": {
+        "bytes": 695,
+        "sha256": "abbcb36a198e7cddddbbaa03c7b8b4bb07bac7d37cbcbc81463b62015c68da77"
+      }
+    }
+  },
+  "terminal_receipt": "out/native-coupled-shared-trial-pending/terminal-coupled-fp64.json",
+  "terminal_receipt_sha256": "c99d780adf0ce5bbd0d6cddfc93d5fbb0190bc1737033b18a29cac26dafc98c5",
+  "terminal_bridge_sha256": "078192fab73f944a33a80273114c5f2a6de7f6dcf64d0ecbdc3c8092b21253bd",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "native_build_gate_authority_used": true,
+  "native_gate_authority_scope": "Unchanged CI host and BASE manifest only; private coupled shader excluded.",
+  "private_shader_experiment": true,
+  "CI_shader_qualification_claimed": false,
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "PRIVATE SHADER EXPERIMENT running one unchanged original native-AMD fp64 joint-map control: actual_four_column_joint_rk4_and_independent_scalar_neighbours and coupled_supports_fp64=true, stagedSDKloader+AMD, complete zero-FESD XML and original assertions. Unsupported FP64 decline is rejected. Limited accessible census; no full trace/source-map/fullscience/Mandatory/performance/release claim."
+}
