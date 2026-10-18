@@ -1,0 +1,57 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-18T03:05:27.7804517Z",
+    "owner_pid":  8576,
+    "owner_start_time_utc":  "2026-10-18T03:05:26.4017073Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release\\sirius_render_tests.exe",
+    "test_executable_sha256":  "ce742e64c14b54f5a25e0762b3ee7ab21892d563e4dfa9e5fd99e1750950946f",
+    "arguments":  [
+                      "--gtest_filter=RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-corrected\\native\\native-frame\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release",
+    "outer_guard_seconds":  300,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  true,
+    "status":  "invalidated",
+    "numerical_control_passed":  false,
+    "expected_cases":  [
+                           "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  14744,
+    "test_start_time_utc":  "2026-10-18T03:05:29.3787185Z",
+    "guard_trigger":  "elapsed",
+    "returncode":  4294967295,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-18T03:10:28.1676176Z",
+    "elapsed_seconds":  300.3770884,
+    "peak_sampled_rss_bytes":  635146240,
+    "source_revision":  "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "live_source_revision":  "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "source_build_gate_sha256":  "433cbd3eb02148b0a9db90f15b33392b010e5593a547e1ec98996f34a5f6f110",
+    "source_build_gate_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

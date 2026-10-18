@@ -1,0 +1,87 @@
+{
+  "schema": "sirius-native-current-retained-frame-source-preparation-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_origin": "out/native-p2-coupled-original-pending",
+  "mature_originals": {
+    "run_system.py": {
+      "bytes": 18952,
+      "sha256": "cde29a5f3421f07ece1ff4079a3c8dd63e617e262f76415582fab50dc05b55f4"
+    },
+    "run_terminal.py": {
+      "bytes": 17963,
+      "sha256": "48ac4f379b4d561d7562ea082b5be82c7da75f810cbcc640eb1b03013258aa99"
+    },
+    "run_native_control.ps1": {
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    "terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    "emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    }
+  },
+  "unchanged_helpers": [
+    "run_native_control.ps1",
+    "terminal-audit.ps1",
+    "emergency_native_cleanup.ps1",
+    "run_owned.py",
+    "owned_guard.py"
+  ],
+  "commands": [
+    "python3 -B out/native-current-retained-frame-corrected/run_system.py native-frame",
+    "python3 -B out/native-current-retained-frame-corrected/run_terminal.py native-frame"
+  ],
+  "materialization": "ROOT only: exact CI/stage/additional-PE/input/host provenance -> fresh concrete plan+bindings+source freeze -> independent/root admission -> one original owned case then terminal. Pending templates are not launch authority.",
+  "prelaunch_schema_correction": {
+    "field": "retained_stage_dispatches",
+    "actual_type": "array",
+    "rule": "exact list length7; each exactint>=0; sum>0",
+    "earlier_incorrect_scalar_reader_executed": false,
+    "current_reader_pins": {
+      "run_system.py": {
+        "bytes": 25359,
+        "sha256": "23549e53bbf57e639eea9e1b2b09e8fa9553224a715866468fef79cacc63ccc2"
+      },
+      "run_terminal.py": {
+        "bytes": 23916,
+        "sha256": "657a3175887b72163b6da63a85e9fbef50e6f45fc9d454247b787f9bcc03d9bb"
+      }
+    },
+    "current_patch": {
+      "bytes": 30636,
+      "sha256": "219293a72e04904136cfdc2436256c377381aed23f71f0740ff92f4dd88221ac"
+    },
+    "current_contracts": {
+      "bytes": 14835,
+      "sha256": "6206f52c6acd30223749af6e144b9aa0c916040f26b592ebd1c6037e191bc58e"
+    }
+  },
+  "source_namespace": "out/native-current-retained-frame-corrected",
+  "prelaunch_parameter_binding_repair": {
+    "prior_work": "out/native-current-retained-frame-source",
+    "prior_source_freeze": {
+      "bytes": 2569,
+      "sha256": "3365cf76de1e8dcb02e9125086cba5f96899484a21a0115d2fd80075ce556fd2"
+    },
+    "prior_command_executed_before_owner_body_only": true,
+    "bare_option_names_quoted_values": true,
+    "run_system": {
+      "bytes": 25359,
+      "sha256": "23549e53bbf57e639eea9e1b2b09e8fa9553224a715866468fef79cacc63ccc2"
+    },
+    "adapter_patch": {
+      "bytes": 30636,
+      "sha256": "219293a72e04904136cfdc2436256c377381aed23f71f0740ff92f4dd88221ac"
+    },
+    "source_contracts": {
+      "bytes": 14835,
+      "sha256": "6206f52c6acd30223749af6e144b9aa0c916040f26b592ebd1c6037e191bc58e"
+    }
+  }
+}

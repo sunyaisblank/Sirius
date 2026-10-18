@@ -1,0 +1,939 @@
+{
+  "schema": "sirius-current-original-native-frame-root-completed-v1",
+  "created_utc": "2026-10-18T03:12:21.262150+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "audit_completed": true,
+  "passed": false,
+  "shutdown_audit_passed": true,
+  "original_case": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+  "actual_system_helper_tool_session": 63155,
+  "actual_system_helper_closed_exit": 1,
+  "actual_failure_terminal_tool_session": 73244,
+  "actual_failure_terminal_closed_exit": 0,
+  "no_positive_only_terminal_reader_invoked": true,
+  "original_case_runs": 1,
+  "prelaunch_parameter_binding_failure_scientific_runs": 0,
+  "owner": {
+    "schema_version": 1,
+    "kind": "bounded-native-Windows-control",
+    "start_utc": "2026-10-18T03:05:27.7804517Z",
+    "owner_pid": 8576,
+    "owner_start_time_utc": "2026-10-18T03:05:26.4017073Z",
+    "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release\\sirius_render_tests.exe",
+    "test_executable_sha256": "ce742e64c14b54f5a25e0762b3ee7ab21892d563e4dfa9e5fd99e1750950946f",
+    "arguments": [
+      "--gtest_filter=RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+      "--gtest_color=no",
+      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-corrected\\native\\native-frame\\gtest.xml\""
+    ],
+    "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release",
+    "outer_guard_seconds": 300,
+    "rss_guard_bytes": 4294967296,
+    "outer_stop": true,
+    "status": "invalidated",
+    "numerical_control_passed": false,
+    "expected_cases": [
+      "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent"
+    ],
+    "qualification_claimed": false,
+    "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind": "Control",
+    "system_inventory_passed": false,
+    "environment": {
+      "VK_DRIVER_FILES": null,
+      "VK_ICD_FILENAMES": null,
+      "VK_ADD_DRIVER_FILES": null,
+      "SIRIUS_VULKAN_DEVICE": null,
+      "SIRIUS_PRECISION": null,
+      "SIRIUS_MEMORY_BUDGET_MB": null,
+      "SIRIUS_DISPATCH_TARGET_MS": null,
+      "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame",
+      "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame",
+      "TMPDIR": null
+    },
+    "test_pid": 14744,
+    "test_start_time_utc": "2026-10-18T03:05:29.3787185Z",
+    "guard_trigger": "elapsed",
+    "returncode": 4294967295,
+    "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent": true,
+    "end_utc": "2026-10-18T03:10:28.1676176Z",
+    "elapsed_seconds": 300.3770884,
+    "peak_sampled_rss_bytes": 635146240,
+    "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "live_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "source_build_gate_sha256": "433cbd3eb02148b0a9db90f15b33392b010e5593a547e1ec98996f34a5f6f110",
+    "source_build_gate_unchanged": true,
+    "loaded_driver_modules_recorded": true,
+    "test_executable_unchanged": true,
+    "cleanup_errors": []
+  },
+  "bridge_clock_elapsed_seconds": 291.3214624749962,
+  "clock_scope": "Windows owner stopwatch300.3770884s and WSL bridge291.3214624749962s are distinct observed clocks; do not equate/subtract as phases.",
+  "final_reported_work_tiles": 1374,
+  "required_work_tiles": 16384,
+  "last_snapshot_work_tiles": 1255,
+  "last_snapshot_accepted_intervals": 239212,
+  "last_snapshot_rejected_intervals": 5425,
+  "last_snapshot_batch_execution_seconds": "272.61",
+  "progress_snapshots": [
+    {
+      "ordinal": 1,
+      "progress": "0 work tiles of 1px, 1 camera batches, 0 accepted intervals, 0 rejected intervals, 3 phase initializations, 0 phase reuses, 0 batch subdivisions, 0 safety reductions, 2.08e-05s coalescing, 1.11017s batch execution, 0s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 1,
+          "individual_submit_wait_ms": "3.353200",
+          "individual_pipeline_setup_ms": "1106.313100",
+          "individual_command_setup_ms": "0.326000",
+          "individual_cleanup_ms": "0.001100",
+          "individual_dispatch_total_ms_inclusive": "1109.993400",
+          "write_buffer_ms": "0.102800",
+          "read_buffer_ms": "0.010700"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 2,
+      "progress": "65 work tiles of 1px, 15 camera batches, 10946 accepted intervals, 1425 rejected intervals, 128 phase initializations, 12303 phase reuses, 0 batch subdivisions, 0 safety reductions, 0.0713898s coalescing, 59.1643s batch execution, 0.212287s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 603,
+          "individual_submit_wait_ms": "2206.690200",
+          "individual_pipeline_setup_ms": "8657.436500",
+          "individual_command_setup_ms": "16.544000",
+          "individual_cleanup_ms": "0.266100",
+          "individual_dispatch_total_ms_inclusive": "10880.936800",
+          "write_buffer_ms": "5.907300",
+          "read_buffer_ms": "43.352600"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 842,
+          "individual_submit_wait_ms": "3213.634100",
+          "individual_pipeline_setup_ms": "38008.856000",
+          "individual_command_setup_ms": "21.309700",
+          "individual_cleanup_ms": "0.363600",
+          "individual_dispatch_total_ms_inclusive": "41244.163400",
+          "write_buffer_ms": "7.567500",
+          "read_buffer_ms": "72.243800"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 15,
+          "individual_submit_wait_ms": "13.859700",
+          "individual_pipeline_setup_ms": "1522.986300",
+          "individual_command_setup_ms": "0.296800",
+          "individual_cleanup_ms": "0.002400",
+          "individual_dispatch_total_ms_inclusive": "1537.145200",
+          "write_buffer_ms": "0.114800",
+          "read_buffer_ms": "0.396000"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 15,
+          "individual_submit_wait_ms": "34.980600",
+          "individual_pipeline_setup_ms": "1106.324400",
+          "individual_command_setup_ms": "0.688600",
+          "individual_cleanup_ms": "0.008300",
+          "individual_dispatch_total_ms_inclusive": "1142.001900",
+          "write_buffer_ms": "0.251300",
+          "read_buffer_ms": "0.194100"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 417,
+          "individual_submit_wait_ms": "777.759500",
+          "individual_pipeline_setup_ms": "1300.487500",
+          "individual_command_setup_ms": "11.056200",
+          "individual_cleanup_ms": "0.134700",
+          "individual_dispatch_total_ms_inclusive": "2089.437900",
+          "write_buffer_ms": "15.618200",
+          "read_buffer_ms": "41.163500"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 3,
+      "progress": "311 work tiles of 1px, 187 camera batches, 50998 accepted intervals, 2665 rejected intervals, 374 phase initializations, 53352 phase reuses, 0 batch subdivisions, 0 safety reductions, 0.296385s coalescing, 88.7487s batch execution, 0.981749s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 2601,
+          "individual_submit_wait_ms": "9467.583500",
+          "individual_pipeline_setup_ms": "8659.122000",
+          "individual_command_setup_ms": "69.914900",
+          "individual_cleanup_ms": "1.287300",
+          "individual_dispatch_total_ms_inclusive": "18197.907700",
+          "write_buffer_ms": "23.509800",
+          "read_buffer_ms": "191.674700"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 4012,
+          "individual_submit_wait_ms": "14150.673700",
+          "individual_pipeline_setup_ms": "38012.218800",
+          "individual_command_setup_ms": "99.842200",
+          "individual_cleanup_ms": "1.960400",
+          "individual_dispatch_total_ms_inclusive": "52264.695100",
+          "write_buffer_ms": "35.913300",
+          "read_buffer_ms": "325.569500"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 187,
+          "individual_submit_wait_ms": "180.495900",
+          "individual_pipeline_setup_ms": "1523.067000",
+          "individual_command_setup_ms": "2.930800",
+          "individual_cleanup_ms": "0.044900",
+          "individual_dispatch_total_ms_inclusive": "1706.538600",
+          "write_buffer_ms": "1.374500",
+          "read_buffer_ms": "6.113300"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 187,
+          "individual_submit_wait_ms": "455.731900",
+          "individual_pipeline_setup_ms": "1106.474900",
+          "individual_command_setup_ms": "5.825600",
+          "individual_cleanup_ms": "0.127600",
+          "individual_dispatch_total_ms_inclusive": "1568.160000",
+          "write_buffer_ms": "2.386400",
+          "read_buffer_ms": "1.698400"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 2083,
+          "individual_submit_wait_ms": "3637.721000",
+          "individual_pipeline_setup_ms": "1302.664900",
+          "individual_command_setup_ms": "57.319800",
+          "individual_cleanup_ms": "0.776300",
+          "individual_dispatch_total_ms_inclusive": "4998.482000",
+          "write_buffer_ms": "70.783500",
+          "read_buffer_ms": "182.552100"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 4,
+      "progress": "393 work tiles of 1px, 262 camera batches, 83322 accepted intervals, 3810 rejected intervals, 457 phase initializations, 86736 phase reuses, 0 batch subdivisions, 0 safety reductions, 0.480758s coalescing, 118.552s batch execution, 1.60582s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 4197,
+          "individual_submit_wait_ms": "15089.140200",
+          "individual_pipeline_setup_ms": "8660.407700",
+          "individual_command_setup_ms": "111.639300",
+          "individual_cleanup_ms": "2.019000",
+          "individual_dispatch_total_ms_inclusive": "23863.206200",
+          "write_buffer_ms": "37.530400",
+          "read_buffer_ms": "309.785400"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 6452,
+          "individual_submit_wait_ms": "22569.128800",
+          "individual_pipeline_setup_ms": "38014.680900",
+          "individual_command_setup_ms": "157.944400",
+          "individual_cleanup_ms": "3.114300",
+          "individual_dispatch_total_ms_inclusive": "60744.868400",
+          "write_buffer_ms": "57.785600",
+          "read_buffer_ms": "525.114200"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 198,
+          "individual_submit_wait_ms": "400.138900",
+          "individual_pipeline_setup_ms": "6643.961700",
+          "individual_command_setup_ms": "1.144400",
+          "individual_cleanup_ms": "0.049300",
+          "individual_dispatch_total_ms_inclusive": "7045.294300",
+          "write_buffer_ms": "0.606100",
+          "read_buffer_ms": "1.052000"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 261,
+          "individual_submit_wait_ms": "252.236300",
+          "individual_pipeline_setup_ms": "1523.104600",
+          "individual_command_setup_ms": "4.151400",
+          "individual_cleanup_ms": "0.060500",
+          "individual_dispatch_total_ms_inclusive": "1779.552800",
+          "write_buffer_ms": "2.061600",
+          "read_buffer_ms": "8.609100"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 262,
+          "individual_submit_wait_ms": "633.793400",
+          "individual_pipeline_setup_ms": "1106.537200",
+          "individual_command_setup_ms": "7.855900",
+          "individual_cleanup_ms": "0.164700",
+          "individual_dispatch_total_ms_inclusive": "1748.351200",
+          "write_buffer_ms": "3.213300",
+          "read_buffer_ms": "2.250400"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 3385,
+          "individual_submit_wait_ms": "5833.096900",
+          "individual_pipeline_setup_ms": "1304.348900",
+          "individual_command_setup_ms": "93.009700",
+          "individual_cleanup_ms": "1.235300",
+          "individual_dispatch_total_ms_inclusive": "7231.690800",
+          "write_buffer_ms": "115.178900",
+          "read_buffer_ms": "295.241600"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 5,
+      "progress": "502 work tiles of 1px, 360 camera batches, 119153 accepted intervals, 4380 rejected intervals, 565 phase initializations, 123029 phase reuses, 0 batch subdivisions, 0 safety reductions, 0.694722s coalescing, 148.278s batch execution, 2.25285s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 5943,
+          "individual_submit_wait_ms": "21836.921800",
+          "individual_pipeline_setup_ms": "8663.079300",
+          "individual_command_setup_ms": "174.823200",
+          "individual_cleanup_ms": "4.105100",
+          "individual_dispatch_total_ms_inclusive": "30678.929400",
+          "write_buffer_ms": "59.885500",
+          "read_buffer_ms": "464.162400"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 9163,
+          "individual_submit_wait_ms": "33020.351100",
+          "individual_pipeline_setup_ms": "38020.069000",
+          "individual_command_setup_ms": "251.784700",
+          "individual_cleanup_ms": "6.509000",
+          "individual_dispatch_total_ms_inclusive": "71298.713800",
+          "write_buffer_ms": "96.727500",
+          "read_buffer_ms": "778.538200"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 772,
+          "individual_submit_wait_ms": "1823.617500",
+          "individual_pipeline_setup_ms": "6644.608700",
+          "individual_command_setup_ms": "13.594200",
+          "individual_cleanup_ms": "0.663800",
+          "individual_dispatch_total_ms_inclusive": "8482.484200",
+          "write_buffer_ms": "2.850400",
+          "read_buffer_ms": "8.226200"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 357,
+          "individual_submit_wait_ms": "369.676300",
+          "individual_pipeline_setup_ms": "1523.214300",
+          "individual_command_setup_ms": "7.226800",
+          "individual_cleanup_ms": "0.142800",
+          "individual_dispatch_total_ms_inclusive": "1900.260200",
+          "write_buffer_ms": "3.160800",
+          "read_buffer_ms": "12.705000"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 360,
+          "individual_submit_wait_ms": "903.468600",
+          "individual_pipeline_setup_ms": "1106.652300",
+          "individual_command_setup_ms": "11.710100",
+          "individual_cleanup_ms": "0.306700",
+          "individual_dispatch_total_ms_inclusive": "2022.137700",
+          "write_buffer_ms": "4.852100",
+          "read_buffer_ms": "3.709200"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 4835,
+          "individual_submit_wait_ms": "8600.625300",
+          "individual_pipeline_setup_ms": "1307.295300",
+          "individual_command_setup_ms": "148.612700",
+          "individual_cleanup_ms": "2.727400",
+          "individual_dispatch_total_ms_inclusive": "10059.260700",
+          "write_buffer_ms": "177.158300",
+          "read_buffer_ms": "436.111500"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 6,
+      "progress": "655 work tiles of 1px, 497 camera batches, 148805 accepted intervals, 4735 rejected intervals, 719 phase initializations, 152878 phase reuses, 0 batch subdivisions, 0 safety reductions, 0.898253s coalescing, 179.161s batch execution, 2.73972s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 7440,
+          "individual_submit_wait_ms": "28498.863900",
+          "individual_pipeline_setup_ms": "8666.381200",
+          "individual_command_setup_ms": "245.181800",
+          "individual_cleanup_ms": "7.346600",
+          "individual_dispatch_total_ms_inclusive": "37417.773500",
+          "write_buffer_ms": "84.889200",
+          "read_buffer_ms": "620.141600"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 11739,
+          "individual_submit_wait_ms": "42872.428700",
+          "individual_pipeline_setup_ms": "38027.426800",
+          "individual_command_setup_ms": "370.273900",
+          "individual_cleanup_ms": "11.757400",
+          "individual_dispatch_total_ms_inclusive": "81281.886800",
+          "write_buffer_ms": "147.488500",
+          "read_buffer_ms": "1030.639100"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 1658,
+          "individual_submit_wait_ms": "4502.315800",
+          "individual_pipeline_setup_ms": "6646.480400",
+          "individual_command_setup_ms": "48.917800",
+          "individual_cleanup_ms": "2.472200",
+          "individual_dispatch_total_ms_inclusive": "11200.186200",
+          "write_buffer_ms": "7.930200",
+          "read_buffer_ms": "27.924300"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 494,
+          "individual_submit_wait_ms": "578.148000",
+          "individual_pipeline_setup_ms": "1523.462600",
+          "individual_command_setup_ms": "12.619300",
+          "individual_cleanup_ms": "0.338800",
+          "individual_dispatch_total_ms_inclusive": "2114.568700",
+          "write_buffer_ms": "4.536200",
+          "read_buffer_ms": "19.574400"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 497,
+          "individual_submit_wait_ms": "1320.777300",
+          "individual_pipeline_setup_ms": "1106.840100",
+          "individual_command_setup_ms": "18.334400",
+          "individual_cleanup_ms": "0.609700",
+          "individual_dispatch_total_ms_inclusive": "2446.561500",
+          "write_buffer_ms": "7.680000",
+          "read_buffer_ms": "6.373300"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 6276,
+          "individual_submit_wait_ms": "11733.569200",
+          "individual_pipeline_setup_ms": "1311.052600",
+          "individual_command_setup_ms": "220.432100",
+          "individual_cleanup_ms": "5.360800",
+          "individual_dispatch_total_ms_inclusive": "13270.414700",
+          "write_buffer_ms": "248.629900",
+          "read_buffer_ms": "581.504900"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 7,
+      "progress": "864 work tiles of 1px, 664 camera batches, 179454 accepted intervals, 5068 rejected intervals, 927 phase initializations, 183650 phase reuses, 0 batch subdivisions, 0 safety reductions, 1.09114s coalescing, 209.538s batch execution, 3.25625s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 9039,
+          "individual_submit_wait_ms": "35271.926800",
+          "individual_pipeline_setup_ms": "8669.515500",
+          "individual_command_setup_ms": "312.653000",
+          "individual_cleanup_ms": "10.211800",
+          "individual_dispatch_total_ms_inclusive": "44264.307100",
+          "write_buffer_ms": "107.270900",
+          "read_buffer_ms": "773.611100"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 14564,
+          "individual_submit_wait_ms": "51869.730100",
+          "individual_pipeline_setup_ms": "38034.415600",
+          "individual_command_setup_ms": "486.861500",
+          "individual_cleanup_ms": "16.338000",
+          "individual_dispatch_total_ms_inclusive": "90407.345200",
+          "write_buffer_ms": "193.385400",
+          "read_buffer_ms": "1276.708500"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 2712,
+          "individual_submit_wait_ms": "7402.006300",
+          "individual_pipeline_setup_ms": "6648.282500",
+          "individual_command_setup_ms": "82.412300",
+          "individual_cleanup_ms": "4.333200",
+          "individual_dispatch_total_ms_inclusive": "14137.034300",
+          "write_buffer_ms": "13.598600",
+          "read_buffer_ms": "48.781400"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 660,
+          "individual_submit_wait_ms": "805.403900",
+          "individual_pipeline_setup_ms": "1523.712900",
+          "individual_command_setup_ms": "18.494400",
+          "individual_cleanup_ms": "0.519100",
+          "individual_dispatch_total_ms_inclusive": "2348.130300",
+          "write_buffer_ms": "5.946600",
+          "read_buffer_ms": "27.076800"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 664,
+          "individual_submit_wait_ms": "1808.377800",
+          "individual_pipeline_setup_ms": "1107.047300",
+          "individual_command_setup_ms": "25.756600",
+          "individual_cleanup_ms": "0.905400",
+          "individual_dispatch_total_ms_inclusive": "2942.087100",
+          "write_buffer_ms": "10.721200",
+          "read_buffer_ms": "9.170700"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 7867,
+          "individual_submit_wait_ms": "14841.453000",
+          "individual_pipeline_setup_ms": "1314.744000",
+          "individual_command_setup_ms": "290.524400",
+          "individual_cleanup_ms": "7.660900",
+          "individual_dispatch_total_ms_inclusive": "16454.382300",
+          "write_buffer_ms": "316.979400",
+          "read_buffer_ms": "721.771900"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 8,
+      "progress": "1070 work tiles of 1px, 828 camera batches, 207635 accepted intervals, 5260 rejected intervals, 1133 phase initializations, 211819 phase reuses, 0 batch subdivisions, 0 safety reductions, 1.28391s coalescing, 239.341s batch execution, 3.72304s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 10536,
+          "individual_submit_wait_ms": "41933.732600",
+          "individual_pipeline_setup_ms": "8672.737500",
+          "individual_command_setup_ms": "381.385700",
+          "individual_cleanup_ms": "13.235800",
+          "individual_dispatch_total_ms_inclusive": "51001.091600",
+          "write_buffer_ms": "135.172800",
+          "read_buffer_ms": "916.105900"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 17224,
+          "individual_submit_wait_ms": "60622.595000",
+          "individual_pipeline_setup_ms": "38041.996700",
+          "individual_command_setup_ms": "607.196100",
+          "individual_cleanup_ms": "21.290100",
+          "individual_dispatch_total_ms_inclusive": "99293.077900",
+          "write_buffer_ms": "242.506900",
+          "read_buffer_ms": "1518.390700"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 3706,
+          "individual_submit_wait_ms": "10394.209000",
+          "individual_pipeline_setup_ms": "6650.286900",
+          "individual_command_setup_ms": "120.651300",
+          "individual_cleanup_ms": "6.074000",
+          "individual_dispatch_total_ms_inclusive": "17171.221200",
+          "write_buffer_ms": "19.548400",
+          "read_buffer_ms": "72.258800"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 827,
+          "individual_submit_wait_ms": "1062.884500",
+          "individual_pipeline_setup_ms": "1523.996100",
+          "individual_command_setup_ms": "25.011700",
+          "individual_cleanup_ms": "0.736500",
+          "individual_dispatch_total_ms_inclusive": "2612.628800",
+          "write_buffer_ms": "7.430900",
+          "read_buffer_ms": "34.654300"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 828,
+          "individual_submit_wait_ms": "2309.791000",
+          "individual_pipeline_setup_ms": "1107.271400",
+          "individual_command_setup_ms": "33.556600",
+          "individual_cleanup_ms": "1.223100",
+          "individual_dispatch_total_ms_inclusive": "3451.842100",
+          "write_buffer_ms": "13.926500",
+          "read_buffer_ms": "12.322600"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 9359,
+          "individual_submit_wait_ms": "17958.643500",
+          "individual_pipeline_setup_ms": "1318.581500",
+          "individual_command_setup_ms": "362.145000",
+          "individual_cleanup_ms": "10.679600",
+          "individual_dispatch_total_ms_inclusive": "19650.049600",
+          "write_buffer_ms": "388.195200",
+          "read_buffer_ms": "858.078500"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    },
+    {
+      "ordinal": 9,
+      "progress": "1255 work tiles of 1px, 987 camera batches, 239212 accepted intervals, 5425 rejected intervals, 1318 phase initializations, 243381 phase reuses, 0 batch subdivisions, 0 safety reductions, 1.48913s coalescing, 272.61s batch execution, 4.2513s summed worker acceleration",
+      "stages": {
+        "camera": {
+          "kernel_commands_including_shared": 0,
+          "individual_submit_wait_ms": "0.000000",
+          "individual_pipeline_setup_ms": "0.000000",
+          "individual_command_setup_ms": "0.000000",
+          "individual_cleanup_ms": "0.000000",
+          "individual_dispatch_total_ms_inclusive": "0.000000",
+          "write_buffer_ms": "0.000000",
+          "read_buffer_ms": "0.000000"
+        },
+        "transport": {
+          "kernel_commands_including_shared": 12156,
+          "individual_submit_wait_ms": "49208.133700",
+          "individual_pipeline_setup_ms": "8676.295400",
+          "individual_command_setup_ms": "457.172000",
+          "individual_cleanup_ms": "16.596900",
+          "individual_dispatch_total_ms_inclusive": "58358.198000",
+          "write_buffer_ms": "161.739900",
+          "read_buffer_ms": "1080.337700"
+        },
+        "endpoint": {
+          "kernel_commands_including_shared": 20045,
+          "individual_submit_wait_ms": "70750.437500",
+          "individual_pipeline_setup_ms": "38050.066300",
+          "individual_command_setup_ms": "740.173100",
+          "individual_cleanup_ms": "26.772900",
+          "individual_dispatch_total_ms_inclusive": "109567.449800",
+          "write_buffer_ms": "296.424900",
+          "read_buffer_ms": "1792.933700"
+        },
+        "dense": {
+          "kernel_commands_including_shared": 4710,
+          "individual_submit_wait_ms": "13475.478800",
+          "individual_pipeline_setup_ms": "6652.436400",
+          "individual_command_setup_ms": "161.131200",
+          "individual_cleanup_ms": "8.009400",
+          "individual_dispatch_total_ms_inclusive": "20297.055800",
+          "write_buffer_ms": "25.635000",
+          "read_buffer_ms": "96.458300"
+        },
+        "initialize": {
+          "kernel_commands_including_shared": 986,
+          "individual_submit_wait_ms": "1343.180400",
+          "individual_pipeline_setup_ms": "1524.303400",
+          "individual_command_setup_ms": "32.081900",
+          "individual_cleanup_ms": "0.976500",
+          "individual_dispatch_total_ms_inclusive": "2900.542200",
+          "write_buffer_ms": "8.997000",
+          "read_buffer_ms": "42.579000"
+        },
+        "ray_camera": {
+          "kernel_commands_including_shared": 987,
+          "individual_submit_wait_ms": "2809.453900",
+          "individual_pipeline_setup_ms": "1107.498900",
+          "individual_command_setup_ms": "41.465500",
+          "individual_cleanup_ms": "1.565600",
+          "individual_dispatch_total_ms_inclusive": "3959.983900",
+          "write_buffer_ms": "17.227900",
+          "read_buffer_ms": "15.598500"
+        },
+        "dopri_phase": {
+          "kernel_commands_including_shared": 10941,
+          "individual_submit_wait_ms": "21471.340300",
+          "individual_pipeline_setup_ms": "1322.623600",
+          "individual_command_setup_ms": "446.308000",
+          "individual_cleanup_ms": "14.564300",
+          "individual_dispatch_total_ms_inclusive": "23254.836200",
+          "write_buffer_ms": "462.845700",
+          "read_buffer_ms": "1010.769900"
+        }
+      },
+      "shared_endpoint_dense": "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000"
+    }
+  ],
+  "latest_stage_sums_decimal_ms": {
+    "individual_submit_wait_ms": "159058.024600",
+    "individual_pipeline_setup_ms": "57333.224000",
+    "individual_command_setup_ms": "1878.331700",
+    "individual_cleanup_ms": "68.485600",
+    "individual_dispatch_total_ms_inclusive": "218338.065900",
+    "write_buffer_ms": "972.870400",
+    "read_buffer_ms": "4038.677100"
+  },
+  "latest_transport_plus_endpoint_submit_wait_ms": "119958.571200",
+  "latest_transport_plus_endpoint_share_of_individual_submit_wait_percent": "75.41811958351204117745594082",
+  "phase_limits": "Cumulative host-observed dispatch phases include driver/runtime/synchronization and may overlap other activity. No pure GPU/kernel/JIT attribution, CPU gap attribution, extrapolated finish time, controlled historical performance gain or scientific correctness acceptance. SharedEndpointDense is zero in saved snapshots.",
+  "same_child_actual_provider_modules": [
+    {
+      "name": "vulkan-1.dll",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release\\vulkan-1.dll",
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "version": "1.4.357.0"
+    },
+    {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    }
+  ],
+  "before_after_and_current_input_rows": 1182,
+  "immutable_binding_rows": 1181,
+  "memory_samples": 296,
+  "peak_native_child_working_set_bytes": 635146240,
+  "minimum_sampled_wsl_available_kib": 15469276,
+  "guard_trigger": "elapsed",
+  "gtest_XML_present": false,
+  "PPM_present": false,
+  "completed_renderer_record_present": false,
+  "source_gate_stage_and_inputs_unchanged": true,
+  "owned_Windows_births_absent": true,
+  "accessible_consumer_scan": {
+    "processes": 280,
+    "hidden_field_records": 193,
+    "matches": [],
+    "accessible_compilers": []
+  },
+  "original_scene": {
+    "schema": "sirius-render-scene-v1",
+    "backend": "Vulkan",
+    "metric": "Kerr",
+    "spin": 0,
+    "width": 128,
+    "height": 128,
+    "samples_per_pixel": 1,
+    "field_of_view": 60,
+    "disk_enabled": true,
+    "ray_bundles": false,
+    "point_starfield": false,
+    "point_star_count": 0,
+    "point_brightness_scale": 100,
+    "point_seed": 42,
+    "point_min_distance_pc": 1,
+    "point_max_distance_pc": 10000,
+    "camera_beta": [
+      0,
+      0,
+      0
+    ],
+    "lens": "Pinhole",
+    "focal_length": 50,
+    "aperture": 2.799999952316284,
+    "focus_distance": 50
+  },
+  "changed_producer_premise_preserved": "Latest named original native128x128 failure3d62e2f predates c57cc9c7 homogeneous opcode scheduling and9dad1105/d929d95f exactzero-spin Schwarzschild tables; current original test spin0/M1 consumes these. Later7260586 failure used Dozen, not native AMD. No guarantee, retries or guard raises. Coupled repair itself does not affect this frame.",
+  "root_S7_hypothesis_source_rejected_without_trial": true,
+  "source_clean_committed_pushed0_0_sole_worktree": true,
+  "all_scientific_external_domains_admitted": 0,
+  "full_Mandatory_or_runtime_ready_or_release_qualification": false,
+  "source_build_or_cleanup_hold_released": false,
+  "files": {
+    "out/native-current-retained-frame-corrected/canonical-source-freeze.json": {
+      "bytes": 85107,
+      "sha256": "04f5ac87ef7119e35b037b5336530849efbcb1af575be2c775c5a36793e55166"
+    },
+    "out/native-current-retained-frame-corrected/execution-bindings.json": {
+      "bytes": 231079,
+      "sha256": "2794a88e6c2a29a468e48a8d45627920287a53ab91941290c770f29e603b35d6"
+    },
+    "out/native-current-retained-frame-corrected/independent-concrete-review.json": {
+      "bytes": 5932,
+      "sha256": "2b51a7db7720001d0c05812a04cece2aad26a26ebbbc3f60158d8d95627e480c"
+    },
+    "out/native-current-retained-frame-corrected/independent-source-review.json": {
+      "bytes": 3272,
+      "sha256": "15e6fe305744ffc1e0f24a66bc9f18647da62afc01fe14264aaf1d1dca18fd90"
+    },
+    "out/native-current-retained-frame-corrected/native/native-frame/driver-modules.json": {
+      "bytes": 699,
+      "sha256": "c8a03470bc0a9db7bbc54cc42525f25cfa721870d4ab71a8dc7b092f806db16c"
+    },
+    "out/native-current-retained-frame-corrected/native/native-frame/memory.json": {
+      "bytes": 40780,
+      "sha256": "0c8ad598933ce608acd1fd30eda9a6aba36a48099a1814238a1bd59686b9f96b"
+    },
+    "out/native-current-retained-frame-corrected/native/native-frame/owner.json": {
+      "bytes": 3318,
+      "sha256": "30e8145dcb71440006006667fb0a9138d136587cabc3ee4720603c7b35a372e2"
+    },
+    "out/native-current-retained-frame-corrected/native/native-frame/stderr.log": {
+      "bytes": 62452,
+      "sha256": "a351f0a525a69bfd14ff8186a80219e582ca76e5caf2db26c14e6cc5e4225cd8"
+    },
+    "out/native-current-retained-frame-corrected/native/native-frame/stdout.log": {
+      "bytes": 248717,
+      "sha256": "578d8e003e403b2cbb8857bf94283dff87d13b3825d6962cedc2de5d7333e30c"
+    },
+    "out/native-current-retained-frame-corrected/native-frame-bridge.json": {
+      "bytes": 2732,
+      "sha256": "2f3630612b8b9e796b343adfde999c3c481edfdad3e8c1b359546dd2c66a1672"
+    },
+    "out/native-current-retained-frame-corrected/native-frame-inputs-after.json": {
+      "bytes": 214544,
+      "sha256": "8a3c3bed3997e3922d0ee08a5d724719e8c6147ddc74d5579839b22abb927d51"
+    },
+    "out/native-current-retained-frame-corrected/native-frame-inputs-before.json": {
+      "bytes": 214544,
+      "sha256": "8a3c3bed3997e3922d0ee08a5d724719e8c6147ddc74d5579839b22abb927d51"
+    },
+    "out/native-current-retained-frame-corrected/plan.json": {
+      "bytes": 1946,
+      "sha256": "cbe098f2723443fa47fc8be318c7a4442df19fec1f3fa151ab8728b321c81d8a"
+    },
+    "out/native-current-retained-frame-corrected/reviewed-held-execution-bindings.json": {
+      "bytes": 231080,
+      "sha256": "4680f7553d4b10e514a1015591d7899bb950726ca5b7d476ebfc99b454c5644b"
+    },
+    "out/native-current-retained-frame-corrected/root-S7-source-disposition.json": {
+      "bytes": 2029,
+      "sha256": "fcdb5dddbfdc8dd558c1ca962b22829934ba54ce8642219d1883b9227e481758"
+    },
+    "out/native-current-retained-frame-corrected/root-correction-review.json": {
+      "bytes": 1164,
+      "sha256": "10a0ac1d1136ade9b5364ac9102ff63f927e5d2dcf26b1d77724c7d8d7507353"
+    },
+    "out/native-current-retained-frame-corrected/root-materialization.json": {
+      "bytes": 2978,
+      "sha256": "bfe2d2e4f4afffbab24a66829d31f7724c292bae1b3bb25a6eb3380a47f85227"
+    },
+    "out/native-current-retained-frame-corrected/root-runtime-release.json": {
+      "bytes": 1526,
+      "sha256": "18e8762c370bd72801fad72a4de32f0640a211bfc92f629cca2924a8f6c42f26"
+    },
+    "out/native-current-retained-frame-corrected/source-freeze.json": {
+      "bytes": 2569,
+      "sha256": "e491bff93b91c140c569825cda81b5baa88aa4e805d29aab7d89950d227ffe55"
+    },
+    "out/native-current-retained-frame-corrected/terminal-native-frame-failure-audit-bridge.json": {
+      "bytes": 2220,
+      "sha256": "8f3c6979d50a6e073e78910ab257e823a4274d8967a9a64f69d4f1c5fd47d651"
+    },
+    "out/native-current-retained-frame-corrected/terminal-native-frame.json": {
+      "bytes": 4082,
+      "sha256": "0fe8aadd9154e2f4e89997f4ffbc156a3ae26c28a3af89d5228ad0b5ae95f754"
+    }
+  },
+  "scope": "First actual original current native AMD128x128/1SPP Kerr frame failed unchanged300s diagnostic deadline. Physical partial work and saved timing discriminator only; no test numerical pass, software cold/UI/fullscene/fullscience/performance/Mandatory/release claim. No repeat or guardraise authorized by this failure."
+}

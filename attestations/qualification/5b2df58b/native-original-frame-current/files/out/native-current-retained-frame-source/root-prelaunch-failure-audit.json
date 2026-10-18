@@ -1,0 +1,54 @@
+{
+  "schema": "sirius-native-current-original-frame-prelaunch-root-audit-v1",
+  "created_utc": "2026-10-18T02:58:50.785335+00:00",
+  "scientific_case_started": false,
+  "original_helper_tool_session": 9719,
+  "original_helper_actual_closed_exit": 1,
+  "original_bridge": {
+    "bytes": 2748,
+    "sha256": "e411c76afce8708350077e01ed424ecd7f0906e6dd37055e5b78959609214465"
+  },
+  "original_error": {
+    "bytes": 776,
+    "sha256": "85c502ce809717a9122bec04b0a6fbcb22be403144b3afe9ba8d502fba3fbfee"
+  },
+  "unchanged_input_rows": 1144,
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$self=Get-Process -Id $PID;$handle=$self.Handle;@{owner_pid=$PID;owner_start_time_utc=$self.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only parameter-binding and accessible-consumer audit; no owner-body/compiler/provider/test launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-source\\temp\\prelaunch-audit\\bootstrap.json' -Encoding UTF8;$bad=$null;try{& {param([Parameter(Mandatory=$true)][string]$Stage,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$Filter,[int]$Seconds=320,[long]$RssBytes=4294967296,[string]$Expected=$Filter,[string]$ExecutableName='sirius_backend_tests.exe',[string]$TemporaryDirectory='',[Parameter(Mandatory=$true)][string]$BuildRoot,[Parameter(Mandatory=$true)][string]$ExpectedGateSha256,[Parameter(Mandatory=$true)][string]$LiveRevision,[string]$RenderDirectory='',[ValidateSet('Control','SystemInventory')][string]$InvocationKind='Control');throw 'UNEXPECTED_BODY_REACHED'} '-Stage' '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release' '-Output' '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-source\\native\\native-frame' '-Filter' 'RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent' '-Seconds' '300' '-RssBytes' '4294967296' '-TemporaryDirectory' '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame' '-BuildRoot' '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b' '-ExpectedGateSha256' '433cbd3eb02148b0a9db90f15b33392b010e5593a547e1ec98996f34a5f6f110' '-LiveRevision' '5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e' '-ExecutableName' 'sirius_render_tests.exe' '-InvocationKind' 'Control'}catch{$bad=$_.Exception.Message};if(!$bad -or $bad -eq 'UNEXPECTED_BODY_REACHED'){throw 'Bad spelling unexpectedly entered body'};$bound=& {param([Parameter(Mandatory=$true)][string]$Stage,[Parameter(Mandatory=$true)][string]$Output,[Parameter(Mandatory=$true)][string]$Filter,[int]$Seconds=320,[long]$RssBytes=4294967296,[string]$Expected=$Filter,[string]$ExecutableName='sirius_backend_tests.exe',[string]$TemporaryDirectory='',[Parameter(Mandatory=$true)][string]$BuildRoot,[Parameter(Mandatory=$true)][string]$ExpectedGateSha256,[Parameter(Mandatory=$true)][string]$LiveRevision,[string]$RenderDirectory='',[ValidateSet('Control','SystemInventory')][string]$InvocationKind='Control');[pscustomobject]$PSBoundParameters} -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-source\\native\\native-frame' -Filter 'RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b' -ExpectedGateSha256 '433cbd3eb02148b0a9db90f15b33392b010e5593a547e1ec98996f34a5f6f110' -LiveRevision '5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e' -ExecutableName 'sirius_render_tests.exe' -InvocationKind 'Control';$all=@(Get-CimInstance Win32_Process -OperationTimeoutSec 20);$matches=@();$hidden=0;foreach($p in $all){if([int]$p.ProcessId -eq $PID){continue};if(!$p.CommandLine -or !$p.ExecutablePath){$hidden++};if($p.Name -match '^sirius|^csc[.]exe$' -or ($p.CommandLine -and ($p.CommandLine.Contains('\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-source') -or $p.CommandLine.Contains('\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b'))) -or ($p.ExecutablePath -and $p.ExecutablePath.Contains('\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b'))){$matches+=@{pid=$p.ProcessId;name=$p.Name;executable=$p.ExecutablePath;command=$p.CommandLine}}};if($matches.Count){throw 'Accessible native consumer/compiler remains live'};@{schema='sirius-native-prelaunch-parameter-binding-and-accessible-census-v1';owner_pid=$PID;owner_start_time_utc=$self.StartTime.ToUniversalTime().ToString('o');old_rejected_before_body=$true;old_error=$bad;corrected_bound=$bound;accessible_processes=$all.Count;hidden_field_records=$hidden;matches=$matches;scope='Actual typed parameter declaration only; no actual owner body, Add-Type, native executable, Vulkan/provider query or scientific launch. Accessible census only; failed first-shell Windows birth unavailable because parameterbinding prevented bootstrap.'}|ConvertTo-Json -Depth 8"
+  ],
+  "deadline_seconds": 60,
+  "passed": true,
+  "actual_audit_exit": 0,
+  "elapsed_seconds": 0.8681276529969182,
+  "actual_typed_parameter_binding_corrected_values": {
+    "old_rejected_before_body": true,
+    "matches": [],
+    "corrected_bound": {
+      "Stage": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b\\src\\sirius\\app\\Release",
+      "Output": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-source\\native\\native-frame",
+      "Filter": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+      "Seconds": 300,
+      "RssBytes": 4294967296,
+      "TemporaryDirectory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\current-original-frame-5b2df58b\\native-frame",
+      "BuildRoot": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\current-original-frame-5b2df58b",
+      "ExpectedGateSha256": "433cbd3eb02148b0a9db90f15b33392b010e5593a547e1ec98996f34a5f6f110",
+      "LiveRevision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "ExecutableName": "sirius_render_tests.exe",
+      "InvocationKind": "Control"
+    },
+    "owner_pid": 9888,
+    "old_error": "Cannot process argument transformation on parameter 'Seconds'. Cannot convert value \"\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-current-retained-frame-source\\native\\native-frame\" to type \"System.Int32\". Error: \"Input string was not in a correct format.\"",
+    "scope": "Actual typed parameter declaration only; no actual owner body, Add-Type, native executable, Vulkan/provider query or scientific launch. Accessible census only; failed first-shell Windows birth unavailable because parameterbinding prevented bootstrap.",
+    "accessible_processes": 275,
+    "schema": "sirius-native-prelaunch-parameter-binding-and-accessible-census-v1",
+    "hidden_field_records": 188,
+    "owner_start_time_utc": "2026-10-18T02:58:50.3208089Z"
+  },
+  "scope": "Prelaunch wrapper defect only, corrected by bare literal parameter names plus separately escaped values. Original negative wrapper and corrected binding evaluated against byte-exact actual typed declaration without running owner body. No scientific/native renderer retry or changed acceptance. First failed shell exited before bootstrap; Windows birth unavailable, accessible post census only. Whole original packet frozen."
+}

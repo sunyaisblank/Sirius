@@ -1,0 +1,36 @@
+{
+  "schema": "sirius-native-windows-current-retained-frame-plan-v1",
+  "admitted": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "control_profile": "original-retained-frame",
+  "stage": "bin/windows-msvc/current-original-frame-5b2df58b",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "native-frame"
+  ],
+  "actions": {
+    "native-frame": {
+      "kind": "Control",
+      "test": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "child_environment": {
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "TEMP": "renders/current-original-frame-5b2df58b/native-frame",
+    "TMP": "renders/current-original-frame-5b2df58b/native-frame"
+  },
+  "resource_semantics": "Original 300s case child working-set stop at4GiB; WSL sampled available reserve2GiB; fixed outer bridge1380s and terminal60s. Neither Windows process-tree aggregate nor GPU2GiB qualification. Original renderer dispatch/governor/default scene, precision scoped fp32 in original test and output assertions unchanged. No LVP_JIT_OPTIMIZATION_LEVEL override.",
+  "prospective_commands": [
+    "python3 -B out/native-current-retained-frame-source/run_system.py native-frame",
+    "python3 -B out/native-current-retained-frame-source/run_terminal.py native-frame"
+  ],
+  "stop_on_first_nonpass": true,
+  "scope": "Exactly one original current native AMD retained128x128/1SPP Kerr GTest under original300s/4GiB-child/2GiB-WSL with original output assertions. Concrete binding remains held false pending independent/root review. No shader override/software-cold/UI/fullscience/Mandatory/release claim."
+}

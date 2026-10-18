@@ -1,0 +1,204 @@
+{
+  "schema": "sirius-native-current-retained-frame-source-contract-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "original_case": {
+    "name": "RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent",
+    "source": "tests/render/app_render_execution_test.cpp:31-68",
+    "argv_body": [
+      "--gpu",
+      "-m",
+      "Kerr",
+      "-w",
+      "128",
+      "-h",
+      "128",
+      "-s",
+      "1",
+      "-o",
+      "<std::filesystem::temp_directory_path>/sirius_gpu_parse.ppm"
+    ],
+    "assertions": [
+      "Original Vulkan device resolution and compile-time retained admission branches untouched.",
+      "Original ScopedEnvironmentVariable SIRIUS_PRECISION=fp32 remains inside the test; no wrapper precision override.",
+      "Expected rc==0 when admitted, config.backend.preferred==vulkan, PPM exists and bytes>1024, then original removes PPM.",
+      "A passing unavailable-device branch is insufficient: both readers additionally demand one completed retained renderer JSON record on actual AMD780M, matching scene128x128/1SPP/Kerr, real same-child SDK+AMD maps, one completed XML/zeroFESD and no fp64_evidence property NAME."
+    ]
+  },
+  "actual_current_source_pins": {
+    "tests/render/app_render_execution_test.cpp": {
+      "bytes": 22037,
+      "sha256": "ff65fbb09fcddca268c086ae9df13f72238eecfce70dc89dd69cc231a595399e"
+    },
+    "src/sirius/app/cli/render_command.cpp": {
+      "bytes": 30565,
+      "sha256": "b53c3a4493a96559436ed4476c5934e69559b084fb96d7444d451a46ef943fab"
+    },
+    "src/sirius/render/render_evidence.cpp": {
+      "bytes": 11699,
+      "sha256": "50f8dfaffc28ad8d70bf1c84cb282e65f25f8a4e11700c18d4ed7271fca6806c"
+    },
+    "src/sirius/render/render_evidence.h": {
+      "bytes": 941,
+      "sha256": "c141930a2239c4fff0f238d527fdef88d9e9c7409d672db51449c0b0ed84d613"
+    },
+    "src/sirius/render/session/render_session.cpp": {
+      "bytes": 53666,
+      "sha256": "75fb4ac58f2e0ddb89a5f4053ed5372af2753f8592f0fa7eb76e15522530af1e"
+    },
+    "src/sirius/render/vulkan_renderer.cpp": {
+      "bytes": 74538,
+      "sha256": "f4a7b2e9e702369e1f740957485f1e5bc6ba8cf18ae4fa068dccb7876bf669e5"
+    },
+    "tests/support/test_resource.h": {
+      "bytes": 796,
+      "sha256": "07a0969bd839745369b3fa71fea27642d6ac20b04e7f90c45f735d8f36c3ade3"
+    }
+  },
+  "source_adapter": {
+    "origin": "out/native-p2-coupled-original-pending",
+    "changes": [
+      "Distinct current-retained-frame schemas/profile/case and exact5b2 source/39089567447/stage identities.",
+      "One extra renderPE authority: originalM138 rows unchanged; separate native windows-build.json artifact identity + exact typed Gate sirius_render_tests role. No shader override.",
+      "Owner300s, fixed bridge1380s, terminal60s; same held handle, WorkingSet64 guard/2GiB WSL reserve/cleanup/source maps/zeroFESD/birth/module seals.",
+      "Both Python readers replace coupled-specific properties with original-frame completion/source-scene JSON and strict fp64_evidence NAME absence.",
+      "PowerShell -Command explicitly binds MESA_SHADER_CACHE_DISABLE=true then calls the byte-exact owner; rejects inherited LVP_/SLANG_/otherMESA overrides. Default native driver/JIT settings otherwise unchanged.",
+      "TemporaryDirectory is renders/current-original-frame-5b2df58b/native-frame; unchanged owner assigns TEMP/TMP and Start-Process inherits them. Its bootstrap/Add-Type temporary files are also task-local there; terminal observer temporary files remain under out. No child-environment snapshot is fabricated.",
+      "Prelaunch independent review corrected retained_stage_dispatches validation from an erroneous scalar assumption to the actual seven-element per-stage array. No test/provider was executed with the earlier reader.",
+      "Causal prelaunch parameter-binding repair: fixed owner option names are bare PowerShell syntax; only corresponding values are single-quoted with apostrophe escaping. Native owner body/threePS/terminal reader/guards/originalcase remain byte-identical to the failed source packet."
+    ],
+    "unchanged_ps": {
+      "run_native_control.ps1": {
+        "bytes": 12691,
+        "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+      },
+      "terminal-audit.ps1": {
+        "bytes": 4813,
+        "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+      },
+      "emergency_native_cleanup.ps1": {
+        "bytes": 5855,
+        "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+      }
+    },
+    "unchanged_linux_optional_owner_guard": {
+      "run_owned.py": {
+        "bytes": 12518,
+        "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+      },
+      "owned_guard.py": {
+        "bytes": 20791,
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+      }
+    }
+  },
+  "current_ci_build_authority": {
+    "run_id": "39089567447",
+    "run_attempt": "1",
+    "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "diagnostic_manifest": {
+      "path": "out/coupled-current-ci/files/sirius-windows-diagnostic-build-products/generated/sirius/windows-diagnostic-build-products.json",
+      "bytes": 32515,
+      "sha256": "2d559b19063d1fd107e114b81e04ccbfeac7583be0107d62c50e55bed12dc16a",
+      "payload_rows": 138,
+      "app_resource_rows": 28
+    },
+    "native_gate": {
+      "path": "out/coupled-current-ci/files/sirius-windows-native-attestation/native_build_gate.json",
+      "bytes": 10012,
+      "sha256": "433cbd3eb02148b0a9db90f15b33392b010e5593a547e1ec98996f34a5f6f110"
+    },
+    "native_artifact_manifest": {
+      "path": "out/coupled-current-ci/files/sirius-windows-native-attestation/windows-build.json",
+      "bytes": 9130,
+      "sha256": "30f7af5461bbfa70a4e46d59e334d94022006c2788df270d2a6750c9a4238477"
+    },
+    "render_pe_source": {
+      "path": "out/coupled-current-ci/files/sirius-windows-native-attestation/native-build-tested-sirius_render_tests",
+      "bytes": 9195520,
+      "sha256": "ce742e64c14b54f5a25e0762b3ee7ab21892d563e4dfa9e5fd99e1750950946f",
+      "typed_role": "sirius_render_tests",
+      "stage_relative_path": "src/sirius/app/Release/sirius_render_tests.exe"
+    },
+    "scope": "Build-only nine native authority cases; not actual render/runtime or Mandatory. Current CI artifact API identities and root admission must be physically pinned in final bindings."
+  },
+  "stage_contract": {
+    "future_root": "bin/windows-msvc/current-original-frame-5b2df58b",
+    "creator": "ROOT only after independent/root source review, actual current CI proof and current host/module provenance; no stage has been created by this source preparation.",
+    "exact_files": "All138 originalM rows + unchangedM itself + unchanged nativeGate + exactlyone renderPE at Gate build path =141 regular nonsymlink files. No extra shader/resource replacement or staged second manifest.",
+    "native_artifact_identity": "Raw current native windows-build.json and its exact native_build_gate.json and native-build-tested-sirius_render_tests members all in immutable bindingfiles; Gate product row, native artifact member row, addedstagePE actualbytes/SHA equal.",
+    "consumer_layout": "Render PE resides in src/sirius/app/Release beside original app Vulkan loader/CRT and complete original app/resources. Exact originalM all138 rows must remain current; no backend-only directory alias.",
+    "all_input_rows": "ROOT derives actual complete regular stage/tool/host/provider/CI/protocol/source/plan/preparation/freeze/input map; binding itself self-excluded and wholebytehash pinned at both reader entry. No guessed DLLs or old host/source aliases."
+  },
+  "acceptance": {
+    "same_child_provider": "Exactly two saved modules SDK vulkan-1.dll at addedPE sibling path/hash pinned by originalM and expected actual AMD module exact path/hash/version; no installed/staged-only mapping claim.",
+    "renderer": "Unique existing [Vulkan] Render evidence JSON schema sirius-vulkan-render-v1, retained/host, AMD Radeon780M, Kerr128x128 fp32 and positive actual work/accepted intervals/stage dispatches; unique existing [Session] Scene evidence VulkanKerr128x128 1SPP. Original source emits completion record only after successful full frame. retained_stage_dispatches is the original seven-element per-stage array: exact list length7, all exact integer counts>=0 and positive sum; work_items and accepted_intervals remain positive integer scalars.",
+    "xml": "Exact one original case, statusrun/resultcompleted/zero failures/errors/skips/disabled; fp64_evidence property NAME absent. No invented positive GTest property.",
+    "output": "Original tempPPM creation,size>1024 and remove verified by unchanged test assertions. Readers also demand PPM absent after successful completion under boundrenders directory; no retained rawframebuffer or pixel-quality assertion invented.",
+    "terminal": "Passing reader requires all mature accessible Windows birth/consumer/loadedmodule seals, Linux child birth and wholebefore/after input equality; limited accessible census is explicit."
+  },
+  "failure_terminal_audit": {
+    "passing_reader_is_not_failure_admission": true,
+    "root_mandatory_action": "On owner failure/timeout, do not retry or run passing reader expecting acceptance. ROOT invokes the SAME byte-exact terminal-audit.ps1 under existing bounded outer observation, and emergency cleanup if needed, preserving actual failed bridge/owner/XML(ifany)/memory/provider/logs. The audit accepts owner records irrespective numericalstatus and checks recorded births and accessible consumers/module seals; ROOT publishes failure/audit outcome separately, never a passing test receipt.",
+    "argv_recipe": [
+      "powershell.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "<ROOT/newWORK/terminal-audit.ps1>",
+      "-Workspace",
+      "<ROOT/newWORK>",
+      "-RunName",
+      "native/native-frame",
+      "-Receipt",
+      "terminal-failure-native-frame.json",
+      "-BuildRoot",
+      "<ROOT/newstage>"
+    ],
+    "root_observer_seconds": 60,
+    "cleanup": "Existing emergency_native_cleanup.ps1 gets actual boundrenders TemporaryDirectory and WORK/native/native-frame Output; root records cleanup60 and exact births. Failure rawPPM, if present, stays under renders and is preserved or removed explicitly after evidence review. No falsely completed XML is synthesized."
+  },
+  "historical_premise": {
+    "prior_native_source": "a603099 and later8ab673/b940692/3d62 original native AMD128x128 Kerr300s attempts failed before completion; same AMD780M driver26.8.1/module5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650. No unchangedretry authorized.",
+    "material_adopted_path_changes": [
+      "Opcode-cohort transport scheduling c57cc9c7 and zero-spin Schwarzschild transport9dad1105 +endpointd929d95f reach current original default zero-spin Kerr FP32 retained path; DP acceptance73e67b23 also adopted later than original AMD failures.",
+      "Coefficient cache f6 predates later native failures and alone is not a newretry premise. Current gr_coupled trial-sharing5b2 is unrelated to retained-frame latency.",
+      "Later original7260586 frame also failed300s but used WSLDozen/Mesa26.2.3/D3D12, not same nativeAMD provider; it does not establish current nativeAMD outcome."
+    ],
+    "scope_and_limits": "Current nativeAMD FP32 uses denormal/RTE-supported native arithmetic, not portable PB32/FP64-FMA/focusedJacobiJIT0 variants. This is a changed-producer native counterpart, not original software cold300 acceptance, visibleUI1024x768 witness, fullCTest/Mandatory/release or performance adoption. No guarantee of300s completion. Existing softwarecold d240b82 log completed all6prep43.1s and had transport+endpoint82.28% of cumulative stage submit; it does not isolate current native driver allocations or current frame outcome.",
+    "historical_evidence_context": "These decisive findings were passively derived earlier from named immutable source/result receipts by this source author and sent ROOT; no old retired rawinput maps are replayed by these wrappers."
+  },
+  "hoare": {
+    "precondition": "Independent/root SOURCE admission; ROOT exact141file regular stage creation from current138M+nativeGate+one gatedPE, actual complete input/host/provider maps, actual plan/schema/argv/freeze matching source and clean5b2, root release and all outputs/renders temp absent.",
+    "command": "One original unchanged GTest under explicit MESA_SHADER_CACHE_DISABLE=true and original300s child guard; no concurrent native consumer or altered scene/tolerance/precision/governor/cache/JIT/memory budget.",
+    "postcondition": "Only completezeroFESD+actualretainedrenderer/provider+originaloutputassertions+stableinputs+terminal ownership permits finite native framePASS. Otherwise preserve failure/guardstop and audit ownership without numericalPASS."
+  },
+  "nonadmission": [
+    "No actual plan.json/execution-bindings.json/sourcefreeze/runtime/native/temp/renders directory has been materialized.",
+    "No helper/PowerShell/compiler/provider/test or projectparser executed by source author.",
+    "ROOT alone materializes/releases/runs; this source-only packet does not authorize workload."
+  ],
+  "prelaunch_history": {
+    "classification": "POWERSHELL_PARAMETER_BINDING_STOP_BEFORE_OWNER_BODY",
+    "failed_source_work": "out/native-current-retained-frame-source",
+    "failed_source_freeze": {
+      "bytes": 2569,
+      "sha256": "3365cf76de1e8dcb02e9125086cba5f96899484a21a0115d2fd80075ce556fd2"
+    },
+    "failed_system_reader": {
+      "bytes": 25314,
+      "sha256": "93de95b18847bffaebdf735d99cf73a8763210863c5923708cbd5b657ea930ea"
+    },
+    "stderr": {
+      "path": "out/native-current-retained-frame-source/native-frame-bridge.stderr",
+      "bytes": 776,
+      "sha256": "85c502ce809717a9122bec04b0a6fbcb22be403144b3afe9ba8d502fba3fbfee"
+    },
+    "observed_failure": "Quoted -Stage/-Output/etc option tokens were parsed positionally; an output UNC argument was converted toward int Seconds before owner body. ROOT reports no renderer/native owner body/provider launched.",
+    "scope": "Original failed raw packet remains immutable. Corrected packet is source-only; original141file current stage is reused only after ROOT current-byte join/review/release. No source rebuild or unchanged failed command retry.",
+    "corrected_grammar": "Each even owner_args index is one fixed -Parameter token emitted bare. Each odd index is a value emitted by quote(word), which single-quotes and doubles apostrophes. The unchanged owner is invoked with PowerShell call operator & and quoted script path."
+  }
+}
