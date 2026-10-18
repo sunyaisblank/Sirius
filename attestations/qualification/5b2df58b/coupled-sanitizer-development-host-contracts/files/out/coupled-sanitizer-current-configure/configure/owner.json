@@ -1,0 +1,57 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/cmake",
+    "--preset",
+    "linux-gcc-sanitize",
+    "-DSIRIUS_ALIGNMENT_MODE=qualification",
+    "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+    "-DSIRIUS_ATTESTATION_ROOT="
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "configure",
+  "child_exit": 1,
+  "child_pid": 11147,
+  "child_start_ticks": "17166429",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 11114,
+    "pid": 11114,
+    "ppid": 8849,
+    "rss_kib": 29092,
+    "session": 11114,
+    "start_ticks": "17166293",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "minimum_sampled_available_kib": 20140780,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 11147,
+      "saved_start_ticks": "17166429"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 45604,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Sole fresh strict sanitizer CONFIGURE ONLY;existing preset/requiredVulkan/qualification/empty attestation root. No build/provider/test/science/release execution.",
+  "source": {
+    "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.2828237990033813,
+  "whole_inputs_unchanged": true
+}

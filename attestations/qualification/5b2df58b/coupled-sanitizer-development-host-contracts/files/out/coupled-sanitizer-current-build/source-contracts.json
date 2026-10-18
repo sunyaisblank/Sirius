@@ -1,0 +1,118 @@
+{
+  "schema": "sirius-sanitizer-current-build-source-contracts-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "admitted": false,
+  "build_execution_authorized_by_packet": false,
+  "preset": "linux-gcc-sanitize",
+  "build_targets": [
+    "SiriusSourceGovernance",
+    "sirius",
+    "sirius_base_tests",
+    "sirius_backend_tests"
+  ],
+  "minimality": "Reuses the original 46a focused build target set. sirius_base_tests carries the five original host contract cases; sirius_backend_tests refreshes the changed kernel dependency/codegen/staging path; sirius preserves the original focused CLI/install producer; SiriusSourceGovernance enforces current source policy. No six-suite expansion or RunMandatoryTests ALL target. Installation and those five tests are not executed by this packet.",
+  "prior_scope": {
+    "findings": {
+      "path": "out/coupled-clang-preflight/findings.json",
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-clang-preflight/findings.json",
+      "bytes": 10228,
+      "sha256": "827b9be8694744756826e11a27a3d7dd5db9cd821446af8b0130739f35f94eb5"
+    },
+    "historical_sanitizer_alignment_revision": "46a9599a0cb30b0667e09838eac7a87690e982e4",
+    "current_cached_mode": "development",
+    "cache": {
+      "path": "bin/linux-gcc-sanitize/CMakeCache.txt",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/CMakeCache.txt",
+      "bytes": 57743,
+      "sha256": "f73a43a0957c891d82b777019016553c1f232ea7217dc0d7285fe88553fb3741"
+    },
+    "alignment": {
+      "path": "bin/linux-gcc-sanitize/generated/sirius/alignment_receipt.json",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/generated/sirius/alignment_receipt.json",
+      "bytes": 1238,
+      "sha256": "1ebc44025a66f6fc99cad4a2b945a4f465e2bf76ebbb922d17da68c60a15e95c"
+    },
+    "compile_commands": {
+      "path": "bin/linux-gcc-sanitize/compile_commands.json",
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/compile_commands.json",
+      "bytes": 231262,
+      "sha256": "4f9e0fdb29534bba8cdff7f50be47aed49d18e77ae603b49903709fba601ddfa"
+    },
+    "old_contract_compile_recipe": {
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize",
+      "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_RELEASE_RESOURCE_LOCKED=0 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc-sanitize/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc-sanitize/_deps/googletest-src/googletest -g -O1 -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all -o tests/CMakeFiles/sirius_base_tests.dir/base/contracts_test.cpp.o -c /home/astra/.project/Sirius/tests/base/contracts_test.cpp",
+      "file": "/home/astra/.project/Sirius/tests/base/contracts_test.cpp",
+      "output": "tests/CMakeFiles/sirius_base_tests.dir/base/contracts_test.cpp.o"
+    },
+    "note": "Old 46a configuration/build/runtime remains historical; object mtimes are not provenance and current Release ELF bytes cannot replace instrumented Debug outputs."
+  },
+  "required_configure_cache": {
+    "CMAKE_BUILD_TYPE": "Debug",
+    "CMAKE_C_FLAGS_DEBUG": "-g -O1",
+    "CMAKE_CXX_FLAGS_DEBUG": "-g -O1",
+    "CMAKE_C_COMPILER": "gcc-14",
+    "CMAKE_CXX_COMPILER": "g++-14",
+    "SIRIUS_SANITIZERS": "address-undefined",
+    "SIRIUS_CONTRACT_MODE": "2",
+    "SIRIUS_WERROR": "ON",
+    "SIRIUS_MANDATORY_TESTS": "ON",
+    "BUILD_TESTS": "ON",
+    "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+    "SIRIUS_ALIGNMENT_MODE": "qualification",
+    "SIRIUS_ATTESTATION_ROOT": ""
+  },
+  "required_first_party_flags": [
+    "-std=c++2c",
+    "-Werror",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-fno-sanitize-recover=all",
+    "-g",
+    "-O1"
+  ],
+  "forbidden_compile_policy": [
+    "NDEBUG in first-party Debug commands",
+    "weakened contracts or sanitizer recovery"
+  ],
+  "mature_owner_limits": {
+    "seconds": 1800,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "limit_provenance": "Requested existing strict-build 1800s/4GiB/2GiB policy; not a claim that the historical 46a build used 4GiB (its build used 8GiB).",
+  "reuse": {
+    "external_tool_DSO_header_installation_selectors": 4299,
+    "matching_sanitizer_FetchContent_headers": 66,
+    "old_products_are_not_accepted_current": true,
+    "normal_incremental_Ninja_reuse_allowed": "Only through actual fresh current configuration and matching source/recipe/dependency joins; do not clean, copy Release host products, or manufacture fresh compile claims for reused objects."
+  },
+  "final_materialization_conditions": [
+    "Fresh configure must be actual exit0 with current clean revision, strict cache above, current alignment receipt 0/8 external domains admitted and release disabled.",
+    "Replace no helper or numerical source. Materialize actions.json from this pending action with only additional actual configure/tool/header/object proof selectors where needed; preserve exact argv, expected_exit integer0, software_provider false, cache false and limits.",
+    "Freshly bind selected current external tools/DSOs, sanitizer-specific FetchContent headers, actual generated cache/Ninja/compile_commands/embedded operating model, complete selected compile/link input/dependency records and source. Do not replay historical GCC/46a whole maps as current.",
+    "ROOT must check declared frozen consumers before mutating bin/linux-gcc-sanitize. Final root-preflight files excludes itself/actions output directories; owner includes preflight and its own actions.json automatically. No self-hash cycle.",
+    "At completion require owned exit0, stable whole inputs/current source, closure/cleanup, actual build log and current first-party compiler flags; separately join generated/staged kernel products and genuine sanitized ELFs. Compile completion is not sanitizer runtime or scientific qualification."
+  ],
+  "final_runtime_metadata_pending": [
+    "actions.json",
+    "root-preflight.json",
+    "root-configure-observation.json",
+    "configure.log",
+    "fresh generated configuration pins",
+    "actual selected sanitizer compile/link dependency joins"
+  ],
+  "outside_inputs": [
+    "independent-source-review.json",
+    "independent-runtime-review.json",
+    "independent-completion-review.json",
+    "root-runtime-release.json"
+  ],
+  "untouched_test_preset_environment": {
+    "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+    "LSAN_OPTIONS": "suppressions=${sourceDir}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+    "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+  },
+  "limits": "No provider query, CTest, numerical test, install or Mandatory execution. No new test/fixture, compiler flags, sanitizer tolerance, source, framework or toolchain. Final build admission remains ROOT/independent review pending."
+}

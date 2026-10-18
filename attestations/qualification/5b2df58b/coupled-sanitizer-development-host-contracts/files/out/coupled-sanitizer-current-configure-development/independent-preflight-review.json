@@ -1,0 +1,43 @@
+{
+  "schema": "sirius-sanitizer-development-configure-independent-preflight-review-v1",
+  "passed": true,
+  "configure_metadata_admitted": true,
+  "execution_released_by_reviewer": false,
+  "build_or_runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "out/coupled-sanitizer-current-configure-development/actions.json": [
+      705977,
+      "3717db2d71ef549c1f36cab487495a98d853ac9ee87e65914236bdea539fcb2d"
+    ],
+    "out/coupled-sanitizer-current-configure-development/root-preflight.json": [
+      2278784,
+      "7f1bf302fb14d63bd777aca0f8dc86ed2089938a634d1244ee8064d17be6d747"
+    ],
+    "out/coupled-sanitizer-current-configure/root-failure-audit.json": [
+      1985,
+      "59ffbba0ddf7bbef156b4fcb04eb0789ebcdf32a73910e721a0f9fef8ead937c"
+    ],
+    "out/coupled-sanitizer-current-configure/independent-failure-review.json": [
+      3683,
+      "06e1219b5ab89201fb61f202ca5204723f18003d825994e772468c4ac7bc3763"
+    ]
+  },
+  "checks": {
+    "current_rich_pins": 6776,
+    "expected_owner_rows": 6777,
+    "all_prior6759_rows_retained_exact": true,
+    "additional_rows": 17,
+    "normalized_owner_set_exact": true,
+    "duplicate_selectors": 0,
+    "helpers": "Byte-exact original e573fd19/747fe1e.",
+    "postfailure_configuration_copies": 4,
+    "configure_output_absent": true
+  },
+  "only_configuration_premise_delta": "Six-element argv changes only index3 from qualification to development. Scope now diagnostic. Source/preset, -g -O1 Debug, address+undefined, contracts2, Werror, Mandatory registration, requiredVulkan and empty attestation root remain requested; expected_exit is integer0, software_provider/cache injection false and 300s/4GiB/2GiB guards unchanged.",
+  "policy": "Matches the existing linux-sanitizers CI Debug/development intent. Qualification/Release policy and source are unchanged; this is no Release override or qualification result. Prior qualification failure is retained as failed evidence, not promoted.",
+  "exclusions": "No live sanitizer configuration/build output is frozen: only the unchanged three dependency source trees appear under that preset. Four new previous-config regular copies preserve postfailure bytes independently. All original source/helper/tool/protected canonical inputs retain their current pins.",
+  "composition": "Reuses the completed original failure and prior source/tool/closure review; original failed outputs/proofs are frozen as historical data. The later independent-failure-review is bound by this sidecar only, not retroactively inserted into the configure input map. No frozen file or failed receipt was edited.",
+  "release_conditions": "ROOT separate sole-corrected-configure release after full-read. Keep preflight configure_released=false as its materialization state; observe actual exit/cache/alignment/input+source+ownership closure before separate four-target build admission.",
+  "limits": "Passive data/hash review only; no configure, build, provider, test, process query or policy mutation. No sanitizer execution, external/scientific/full Mandatory/release qualification or cleanup authority."
+}

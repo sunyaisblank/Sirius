@@ -1,0 +1,117 @@
+{
+  "schema": "sirius-sanitizer-source-configure-preflight-review-v1",
+  "passed": true,
+  "source_preparation_reusable": true,
+  "configure_or_build_executed_by_reviewer": false,
+  "runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "authorship": "Reviewer prepared the initial pending packet; this is a narrow composition review of ROOT actual tool evidence, not a claim of a second independent author for that packet.",
+  "release_pins": {
+    "source-freeze.json": {
+      "path": "out/coupled-sanitizer-current-build/source-freeze.json",
+      "bytes": 2395,
+      "sha256": "291cdafd54faeeff622ebb23710d2d4b6d4bc1b7f324ee7c5436a6d73550ccf1"
+    },
+    "actions.pending.json": {
+      "path": "out/coupled-sanitizer-current-build/actions.pending.json",
+      "bytes": 464219,
+      "sha256": "7e64f6a265c749665dd2783d504e93721612e7dae386cc99903e185a03e429be"
+    },
+    "commands.pending.json": {
+      "path": "out/coupled-sanitizer-current-build/commands.pending.json",
+      "bytes": 1234,
+      "sha256": "236976e196ecdcb9aa66d7c3b366883b71c716e8ed5b263a12d26f9e28a5eed7"
+    },
+    "root-compiler-tool-closure.json": {
+      "path": "out/packed-retained-scratch-producer/root-compiler-tool-closure.json",
+      "bytes": 59933,
+      "sha256": "d3efa091e5ea4648cd9336f49835ec9415ef0eec2b516015fffcd6f51cb77dde"
+    }
+  },
+  "existing_build_proofs": [
+    {
+      "path": "out/coupled-shared-trial-strict-build/root-completed.json",
+      "bytes": 18777,
+      "sha256": "1994613ad1827d80bbba621db48f6651a9331cba6bf78b221f3c428a4e9fcd45"
+    },
+    {
+      "path": "out/coupled-shared-trial-strict-build/independent-integration-review.json",
+      "bytes": 2906,
+      "sha256": "0da961c871ccc404d08531828a1523b32055e179da29d3f09be850daeb53601a"
+    },
+    {
+      "path": "out/coupled-clang-strict-build/root-completed.json",
+      "bytes": 27649,
+      "sha256": "018af11836f952db9ad26a0e5a3d5f4300eef7864ca39944ec4159dd27c1267a"
+    }
+  ],
+  "current_checks": {
+    "original_seven_member_source_freeze_matches": true,
+    "helpers": "Exact e573fd19 owner/747fe1e guard; reads own actions.json, requires clean expected revision and ROOT cwd. kind=build/software_provider=false, no provider/cache injection or runtime-test command.",
+    "actual_GCC_tool_resources_matched": 232,
+    "already_pending": 9,
+    "additional_actual_selectors_required": 223,
+    "selected_new_children": [
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1",
+      "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2",
+      "/usr/bin/as",
+      "/usr/bin/ld"
+    ],
+    "sanitizer_resources": "Actual232 map also contains libsanitizer.spec, ASan/UBSan/LSan libraries, startfiles and link resources. Reuse its complete current map; no new compiler-search/ldd/version study is necessary."
+  },
+  "configure_argv": [
+    "/usr/bin/cmake",
+    "--preset",
+    "linux-gcc-sanitize",
+    "-DSIRIUS_ALIGNMENT_MODE=qualification",
+    "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+    "-DSIRIUS_ATTESTATION_ROOT="
+  ],
+  "configure_context": {
+    "preset": "linux-gcc-sanitize",
+    "prospective_limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "before_freezing": "ROOT must bind current tracked source, exact mature helpers/current action, stable matching tool/dependency inputs plus the actual232 GCC map. Use a separate configure action/context, not the pending build action.",
+    "exclude_from_configure_frozen_inputs": [
+      "bin/linux-gcc-sanitize/CMakeCache.txt",
+      "bin/linux-gcc-sanitize/build.ninja",
+      "bin/linux-gcc-sanitize/compile_commands.json",
+      "bin/linux-gcc-sanitize/CMakeFiles/",
+      "bin/linux-gcc-sanitize/generated/",
+      "bin/linux-gcc-sanitize/_deps/*-build/",
+      "bin/linux-gcc-sanitize/_deps/*-subbuild/",
+      "configure stdout/stderr/receipt and owner output folder"
+    ],
+    "exclusion_reason": "These are configure/build outputs or mutable configuration state. Old pins remain historical provenance in immutable receipts, not current before/after input requirements."
+  },
+  "build_after_configure": {
+    "argv": [
+      "/usr/bin/cmake",
+      "--build",
+      "--preset",
+      "linux-gcc-sanitize",
+      "--parallel",
+      "2",
+      "--target",
+      "SiriusSourceGovernance",
+      "sirius",
+      "sirius_base_tests",
+      "sirius_backend_tests"
+    ],
+    "limits": {
+      "seconds": 1800,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "required_delta": "Union all232 actual tool paths into final frozen_inputs (223 currently new), along with actual fresh sanitizer configuration/selected compile+link dependency evidence. Pending argv/settings/targets remain exact; do not edit the sealed pending source packet.",
+    "strict_policy": "Qualification/empty attestation root/current5b2; Debug -g -O1, contracts2, Werror, C++26, address+undefined, frame pointers/no recovery, Mandatory registration/requiredVulkan. Fresh0of8 is build-only; old development/46a config is not current proof.",
+    "four_targets_only": true,
+    "postcondition": "Owned exit0 and stable source/input closure plus current instrumented ELF and shader/staging producer joins. GCC/Clang Release builds support source/tool composition, not sanitizer execution or interchangeable host products."
+  },
+  "decision": "No source blocker to ROOT separate configure admission, then concrete build-input admission. No configure/build/test/provider execution or blanket all-input/runtime release is granted by this sidecar.",
+  "scope_limits": "Current source-build gap only; no CTest, installation, provider query, full Mandatory/science/release result, July followup, or repeat of packed-scratch experiments. This new review is outside the original seven-member freeze."
+}

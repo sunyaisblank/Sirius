@@ -1,0 +1,68 @@
+{
+  "schema": "sirius-sanitizer-configure-independent-preflight-review-v1",
+  "passed": true,
+  "configure_metadata_admitted": true,
+  "configure_execution_released_by_reviewer": false,
+  "build_or_runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "out/coupled-sanitizer-current-configure/actions.json": [
+      704055,
+      "a7d4cbd748b03b5ff84690ec565e95bbabfb7515432a706ac6f02126c6d86d0f"
+    ],
+    "out/coupled-sanitizer-current-configure/root-preflight.json": [
+      2272834,
+      "802a850cec23bdb5651c3c59e07812206905eb304e1723734a6a05ab5099d388"
+    ],
+    "out/coupled-sanitizer-current-build/source-configure-preflight-review.json": [
+      5843,
+      "636fd750aa5a3ef150cd16a9e44850e36bd00ca6d729228488629361d300dac3"
+    ],
+    "out/coupled-sanitizer-current-build/source-freeze.json": [
+      2395,
+      "291cdafd54faeeff622ebb23710d2d4b6d4bc1b7f324ee7c5436a6d73550ccf1"
+    ]
+  },
+  "checks": {
+    "rich_current_pins": 6759,
+    "expected_owner_rows": 6760,
+    "tracked_source_paths": 538,
+    "duplicate_frozen_selectors": 0,
+    "implicit_owner_plus_declared_set_exact": true,
+    "helpers": "Exact previously reviewed e573fd19/747fe1e copies.",
+    "actual_GCC_tool_resource_rows_included": 232,
+    "dependency_sources_excluding_dotgit": {
+      "ftxui-src": 273,
+      "googletest-src": 245,
+      "json-src": 1090
+    },
+    "canonical_linux_gcc_protected_current_pins": 72,
+    "old_configuration_regular_copies_match_live_preconfigure_bytes": 4,
+    "original_build_source_freeze_members_unchanged": 7,
+    "configure_output_folder_absent": true
+  },
+  "configure": {
+    "argv": [
+      "/usr/bin/cmake",
+      "--preset",
+      "linux-gcc-sanitize",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification",
+      "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+      "-DSIRIUS_ATTESTATION_ROOT="
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "kind": "build",
+    "software_provider": false,
+    "disable_software_shader_cache": false,
+    "expected_exit_integer": 0,
+    "cwd": "/home/astra/.project/Sirius"
+  },
+  "closure": "Only the three dependency *-src trees beneath bin/linux-gcc-sanitize are frozen. No live sanitizer Cache/Ninja/compile_commands/CMakeFiles/generated or dependency build/subbuild output is a configure input. The four old config copies are distinct immutable previous-config inputs. All72 selected ordinary GCC canonical file pins currently match; no canonical mutation is authorized.",
+  "selfcycle": "Preflight file excludes itself. Action declares it; helper automatically includes actions.json. Whole normalized lexical key set is exact, without requiring lexical JSON key order or forbidding distinct symlink aliases.",
+  "release_conditions": "ROOT may separately release this sole configure after reviewing this receipt; preserve the materialized configure_released=false observation unchanged. Actual exit0/current strict cache+alignment/source/input+ownership observations remain required before the original four-target build receives separate concrete admission.",
+  "limits_scope": "Passive source/data/hash/read-only Git only; no configure/compiler/build/provider/test/process query executed. No sanitizer runtime, science, full Mandatory, release, packed-scratch retry or July search admission. Prior source/configure guidance reused; this receipt is outside frozen6759."
+}

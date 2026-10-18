@@ -1,0 +1,44 @@
+{
+  "schema": "sirius-current-sanitizer-configure-root-failure-audit-v1",
+  "created_utc": "2026-10-18T04:43:36.945469+00:00",
+  "audit_passed": true,
+  "configure_passed": false,
+  "actual_tool_session": 86538,
+  "actual_tool_exit": 1,
+  "owner": {
+    "path": "out/coupled-sanitizer-current-configure/configure/owner.json",
+    "bytes": 1469,
+    "sha256": "452100d7c98ec706a82c24dfdaefebabff631634865111411351317c28aaabf0"
+  },
+  "stdout": {
+    "path": "out/coupled-sanitizer-current-configure/configure/stdout.log",
+    "bytes": 393,
+    "sha256": "70cd728764534031800b3328969d599814a75791cfbd51458d15d895f310669e"
+  },
+  "stderr": {
+    "path": "out/coupled-sanitizer-current-configure/configure/stderr.log",
+    "bytes": 267,
+    "sha256": "8dd910b1ebadfe080c364f77cdf93e2332a059cd5c9c798e8e7b89f8dd932990"
+  },
+  "policy": {
+    "path": "scripts/verify-build-policy.py",
+    "bytes": 7945,
+    "sha256": "83fb2b27255a60713cc3a689bb667fd0ca2341e263c41d36a909310da1e0448b"
+  },
+  "CI": {
+    "path": ".github/workflows/ci.yml",
+    "bytes": 44892,
+    "sha256": "c770c1d427cb24bd15051ab121d9ea08389a592cbcd1a7c36d048c0b790280f8"
+  },
+  "failure": "Our proposed qualification override contradicts existing sanitize Debug preset and Release-only qualification policy. This was missed in source/concrete review. Policy refusal is correct.",
+  "whole6760inputs_stable_and_current": true,
+  "child_and_controller_births_retired": true,
+  "no_stop_cleanup_errors_or_remainers": true,
+  "wall_seconds": 0.2828237990033813,
+  "peak_sampled_rss_kib": 45604,
+  "generated_configuration_accepted": false,
+  "build_runtime_executed": false,
+  "required_distinct_correction": "Use original Debug sanitize preset with explicit development alignment as canonicalCI does;allsanitizers/contracts2/Werror/Mandatory/requiredVulkan/gO1 retained. No production policy/source change,Release override or external/release acceptance.",
+  "unchanged_retry_admitted": false,
+  "cleanup_released": false
+}

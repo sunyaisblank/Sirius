@@ -1,0 +1,130 @@
+{
+  "schema": "sirius-current-sanitizer-original-five-host-contracts-independent-completion-review-v1",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "reviewer": "/root/divide_contract_review",
+  "created_utc": "2026-10-18T05:13:20.543881+00:00",
+  "decision": "ORIGINAL_FIVE_INSTRUMENTED_HOST_CONTRACT_CASES_PASS",
+  "inputs": {
+    "out/coupled-sanitizer-current-host-contracts/actions.json": {
+      "path": "out/coupled-sanitizer-current-host-contracts/actions.json",
+      "bytes": 716835,
+      "sha256": "b6d7d2d68ce4ea804f4a01543026bffc6f2eee51ce1501c1d1ecc0680815ace4"
+    },
+    "out/coupled-sanitizer-current-host-contracts/root-preflight.json": {
+      "path": "out/coupled-sanitizer-current-host-contracts/root-preflight.json",
+      "bytes": 2320508,
+      "sha256": "9c30e70bc4680a60b6e3db3112c1d1fc4df32e8cba25930124340ad26cf9431f"
+    },
+    "out/coupled-sanitizer-current-host-contracts/root-runtime-tool-closure.json": {
+      "path": "out/coupled-sanitizer-current-host-contracts/root-runtime-tool-closure.json",
+      "bytes": 12323,
+      "sha256": "da4453064f1745f1e0c5a853b3fc9c6630afc901d9ed294ea03ca374e8f6220d"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/owner.json": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/owner.json",
+      "bytes": 2395,
+      "sha256": "4aa04f8b07edc0b5ecbc133a5dc871501ffc39b2374d4138682bd1f68ef301fe"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-before.json": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-before.json",
+      "bytes": 2182576,
+      "sha256": "948b6b2e648796d1d81c123ce9c90cc4fc2226f8d08786faeed23eaf1372bacd"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-after.json": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-after.json",
+      "bytes": 2182576,
+      "sha256": "948b6b2e648796d1d81c123ce9c90cc4fc2226f8d08786faeed23eaf1372bacd"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/stdout.log": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/stdout.log",
+      "bytes": 1121,
+      "sha256": "5c1fce60b852da51539dc4acea8da88670728dd28d8041b37a8cb553b263c3a3"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/stderr.log": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/junit.xml": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/junit.xml",
+      "bytes": 4925,
+      "sha256": "390286bfbf8a2f477c64da5b0ea533e8e0c5d6aab05e52df2763f0cb66c30a62"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/gtest.xml": {
+      "path": "out/coupled-sanitizer-current-host-contracts/host-contracts/gtest.xml",
+      "bytes": 586,
+      "sha256": "cc2c574764f51d95859bcd5855d087df7a73a9f4e884be203842b3ecfadbe589"
+    },
+    "out/coupled-sanitizer-current-development-build/independent-completion-review.json": {
+      "path": "out/coupled-sanitizer-current-development-build/independent-completion-review.json",
+      "bytes": 7200,
+      "sha256": "2fa1665e9a959d71c48c657c59d5fbe76db2b5dbd55a0d9fd50e59da2a068e33"
+    }
+  },
+  "actual_case_names": [
+    "ContractsDeathTest.EnforcedPreconditionViolationTerminates",
+    "ContractsDeathTest.EnforcedAssertionViolationTerminates",
+    "Contracts.SatisfiedContractsPassSilently",
+    "Contracts.AxiomIsNeverEvaluated",
+    "Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes"
+  ],
+  "checks": {
+    "exact_original_filter_and_ctest_preset": true,
+    "actual_owner_resolved_argv_exact": true,
+    "typed_integer_expected_exit_zero_and_software_cache_false": true,
+    "limits": {
+      "seconds": 60,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "owner_terminal_pass_child_zero": true,
+    "source_clean_unchanged": true,
+    "whole_before_after_current_rows_hashed": 6913,
+    "physical_content_identities": 6890,
+    "JUnit_completed_cases_exact": 5,
+    "failure_elements": 0,
+    "error_elements": 0,
+    "skipped_elements": 0,
+    "disabled_cases": 0,
+    "all_case_system_out_original_filter_RUN_OK_PASSED": true,
+    "raw_ctest_log_five_passes_and_empty_stderr": true,
+    "runtime_tool_DSO_and_instrumented_ELF_pins_current": true,
+    "original_registration_base_ELF_filter_join": true,
+    "saved_observed_births_retired": 3,
+    "cleanup_errors_and_remaining_owned_processes_empty": true
+  },
+  "timing": {
+    "owner_wall_seconds": 0.5280447610130068,
+    "peak_sampled_aggregate_RSS_KiB": 68992,
+    "minimum_sampled_available_KiB": 20195744,
+    "actual_root_session": 6172,
+    "actual_root_session_closed_exit": 0
+  },
+  "environment_limit": {
+    "configured_preset_environment_exact": {
+      "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+      "LSAN_OPTIONS": "suppressions=${sourceDir}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    },
+    "live_child_environment_readback_captured": false,
+    "scope": "CTest configured preset environment is sealed and unchanged; owner declares GTEST_OUTPUT only. No independently observed same-child ASAN_OPTIONS/LSAN_OPTIONS/UBSAN_OPTIONS snapshot is claimed."
+  },
+  "XML_authority": "CTest JUnit is authoritative for all five distinct completed original cases and includes each raw GoogleTest pass. Per-case GTEST_OUTPUT reused one path; saved gtest.xml contains only the final case and is NOT treated as five-case evidence. JUnit omits an errors attribute; zero errors is established by zero error elements,all-run successful case outputs and actual exit0.",
+  "ownership_limit": "Saved owner reports all3 sampled observed births absent,normalizes string ticks,child exit0,no cleanup errors/remainers; ROOT actual6172session closed0 covers controller completion. No fresh reviewer process query or global/no-unobserved-process absence claim.",
+  "composition": "Reuses independently accepted current instrumented Debug ASan/UBSan build and strict preflight. Original tests enforce violated precondition/assert termination,silent satisfied contracts,non-evaluated axiom,and explicit native-vs-substitute language capabilities. No source,fixture,sanitizer/contract flags or test assertions changed.",
+  "full_sanitizer_Mandatory_science_external_release_qualification": false,
+  "additional_execution_or_cleanup_authorized": false,
+  "method": "Passive source/JSON/XML/log/hash and read-only Git only. No build,test,project-helper/import,provider/tool/version or process query rerun. Only this outside-input review written.",
+  "workspace": {
+    "tracked_tree_clean": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "HEAD": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "committed_pushed_tracking_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "this_receipt": "Ignored out evidence; not committed or pushed by reviewer."
+  }
+}

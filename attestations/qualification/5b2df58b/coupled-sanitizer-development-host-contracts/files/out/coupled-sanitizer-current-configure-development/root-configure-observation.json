@@ -1,0 +1,92 @@
+{
+  "schema": "sirius-current-development-sanitizer-root-configure-completion-v1",
+  "created_utc": "2026-10-18T04:47:21.233450+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "owner": {
+    "path": "out/coupled-sanitizer-current-configure-development/configure/owner.json",
+    "bytes": 3225,
+    "sha256": "e43a8b4d73c1a11ea4979ec94df47a3589a3f52dd0578b4909f2c143b28bbbc2"
+  },
+  "release": {
+    "path": "out/coupled-sanitizer-current-configure-development/root-configure-release.json",
+    "bytes": 1072,
+    "sha256": "ecb2ee525f96b6c12f34f3f60281396aa1e119238fadae318601aaf891c943c7"
+  },
+  "independent_preflight": {
+    "path": "out/coupled-sanitizer-current-configure-development/independent-preflight-review.json",
+    "bytes": 3146,
+    "sha256": "ad7c5991fa290644fdc2db6ed4aca3c990f3db3314e54758c066d87d4b1ec301"
+  },
+  "before_after_current_rows": 6777,
+  "all_observed_and_controller_births_retired": true,
+  "strict_compile_settings_retained": {
+    "CMAKE_BUILD_TYPE": "Debug",
+    "CMAKE_C_FLAGS_DEBUG": "-g -O1",
+    "CMAKE_CXX_FLAGS_DEBUG": "-g -O1",
+    "CMAKE_C_COMPILER": "gcc-14",
+    "CMAKE_CXX_COMPILER": "g++-14",
+    "SIRIUS_SANITIZERS": "address-undefined",
+    "SIRIUS_CONTRACT_MODE": "2",
+    "SIRIUS_WERROR": "ON",
+    "SIRIUS_MANDATORY_TESTS": "ON",
+    "BUILD_TESTS": "ON",
+    "SIRIUS_REQUIRE_VULKAN_RUNTIME": "ON",
+    "SIRIUS_ALIGNMENT_MODE": "development",
+    "SIRIUS_ATTESTATION_ROOT": ""
+  },
+  "first_party_compile_commands": 148,
+  "all_first_party_flags_match": [
+    "-std=c++2c",
+    "-Werror",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-fno-sanitize-recover=all",
+    "-g",
+    "-O1"
+  ],
+  "first_party_NDEBUG_absent": true,
+  "generated_configuration": [
+    {
+      "path": "bin/linux-gcc-sanitize/CMakeCache.txt",
+      "bytes": 57743,
+      "sha256": "f73a43a0957c891d82b777019016553c1f232ea7217dc0d7285fe88553fb3741"
+    },
+    {
+      "path": "bin/linux-gcc-sanitize/build.ninja",
+      "bytes": 487715,
+      "sha256": "6f48c2b26aecc7a2513e1cb220d61c4f74f999a97d359758721884a205f718f4"
+    },
+    {
+      "path": "bin/linux-gcc-sanitize/compile_commands.json",
+      "bytes": 231262,
+      "sha256": "4f9e0fdb29534bba8cdff7f50be47aed49d18e77ae603b49903709fba601ddfa"
+    },
+    {
+      "path": "bin/linux-gcc-sanitize/generated/sirius/alignment_receipt.json",
+      "bytes": 1238,
+      "sha256": "f41cbe76270692f3cffbb381085c088df54b08ee8a7e4e9bd17174b19282d2f1"
+    },
+    {
+      "path": "bin/linux-gcc-sanitize/generated/sirius/base/operating_model_embedded.h",
+      "bytes": 134001,
+      "sha256": "fcacf43e655e91a2a35f86b9f601c2b8f7fb8f48231771cd2c8f1a4c5b1d3193"
+    }
+  ],
+  "alignment_mode": "development",
+  "admitted_external_domains": 0,
+  "pending_external_domains": 8,
+  "release_packaging_enabled": false,
+  "wall_seconds": 5.379272023012163,
+  "peak_sampled_rss_kib": 89408,
+  "four_target_build_metadata_preparation_admitted": true,
+  "actual_build_runtime_executed": false,
+  "sanitizer_runtime_science_external_Mandatory_release_qualification": false,
+  "prior_failure_preserved": {
+    "path": "out/coupled-sanitizer-current-configure/root-failure-audit.json",
+    "bytes": 1985,
+    "sha256": "59ffbba0ddf7bbef156b4fcb04eb0789ebcdf32a73910e721a0f9fef8ead937c"
+  },
+  "scope": "Actual current source Debug ASan/UBSan configuration only. Original four-target diagnostic build requires separately sealed concrete inputs;no external/release promotion."
+}

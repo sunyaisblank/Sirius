@@ -1,0 +1,5 @@
+if(EXISTS "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/app/sirius_app_tests[1]_tests.cmake")
+  include("/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/app/sirius_app_tests[1]_tests.cmake")
+else()
+  add_test(sirius_app_tests_NOT_BUILT sirius_app_tests_NOT_BUILT)
+endif()

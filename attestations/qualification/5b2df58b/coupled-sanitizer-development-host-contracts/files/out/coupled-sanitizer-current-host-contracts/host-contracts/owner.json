@@ -1,0 +1,73 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/ctest",
+    "--preset",
+    "linux-gcc-sanitize",
+    "--output-on-failure",
+    "--no-tests=error",
+    "--output-junit",
+    "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/junit.xml",
+    "-R",
+    "^(ContractsDeathTest\\.(EnforcedPreconditionViolationTerminates|EnforcedAssertionViolationTerminates)|Contracts\\.(SatisfiedContractsPassSilently|AxiomIsNeverEvaluated|LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes))$"
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "host-contracts",
+  "child_exit": 0,
+  "child_pid": 16233,
+  "child_start_ticks": "17309967",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 16229,
+    "pid": 16229,
+    "ppid": 8849,
+    "rss_kib": 29652,
+    "session": 16229,
+    "start_ticks": "17309819",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/gtest.xml"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 60
+  },
+  "meaning": "Exactly original5 host contract tests on current genuine sanitized base-test ELF via unchanged sanitizer testpreset/environment. Diagnosticonly;no provider/science/fullMandatory/external/release result.",
+  "minimum_sampled_available_kib": 20195744,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 16233,
+      "saved_start_ticks": "17309967"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 16240,
+      "saved_start_ticks": "17309989"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 16241,
+      "saved_start_ticks": "17309990"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 68992,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "Exactly original5 host contract tests on current genuine sanitized base-test ELF via unchanged sanitizer testpreset/environment. Diagnosticonly;no provider/science/fullMandatory/external/release result.",
+  "source": {
+    "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 0.5280447610130068,
+  "whole_inputs_unchanged": true
+}

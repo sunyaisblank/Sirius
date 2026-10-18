@@ -1,0 +1,99 @@
+{
+  "schema": "sirius-current-sanitizer-actual-instrumented-product-metadata-v1",
+  "created_utc": "2026-10-18T04:58:59.132882+00:00",
+  "actual_argv": [
+    "/usr/bin/readelf",
+    "-W",
+    "--dynamic",
+    "--dyn-syms",
+    "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/src/sirius/app/sirius",
+    "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/sirius_base_tests",
+    "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests"
+  ],
+  "actual_exit": 0,
+  "wall_seconds": 0.014944651979021728,
+  "tool_DSO_pins_reused_from_actual_prior_GNU_ldd": {
+    "/lib/x86_64-linux-gnu/libbfd-2.42-system.so": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libbfd-2.42-system.so",
+      "bytes": 1479888,
+      "sha256": "edbfd18bfc133c0d77bab7470601e83bd88ed3e578bedce368042f888034e68e"
+    },
+    "/lib/x86_64-linux-gnu/libc.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/lib/x86_64-linux-gnu/libctf-nobfd.so.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libctf-nobfd.so.0.0.0",
+      "bytes": 216096,
+      "sha256": "586a020b55a53a8f8029a300c6e9d2d83b33c69c493baa4a9e9f102c30779b13"
+    },
+    "/lib/x86_64-linux-gnu/libctf.so.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libctf.so.0.0.0",
+      "bytes": 220384,
+      "sha256": "5708839db0b080ef4dafc44c4adaa6976b55de5078aeed35c81d55ab4d0c7841"
+    },
+    "/lib/x86_64-linux-gnu/libopcodes-2.42-system.so": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libopcodes-2.42-system.so",
+      "bytes": 911656,
+      "sha256": "52c144f23d2b73385ead759e6c2d4b29bb2fa1be29764d3131490b37e1a6b432"
+    },
+    "/lib/x86_64-linux-gnu/libsframe.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libsframe.so.1.0.0",
+      "bytes": 35168,
+      "sha256": "d2e00d05f3713bb0d5eb9f1a212cca2b34cd789a0c4cc0c529ee77827237383f"
+    },
+    "/lib/x86_64-linux-gnu/libz.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/lib/x86_64-linux-gnu/libzstd.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    },
+    "/lib64/ld-linux-x86-64.so.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/bin/readelf": {
+      "resolved_path": "/usr/bin/x86_64-linux-gnu-readelf",
+      "bytes": 789280,
+      "sha256": "871be389739ecf9924b052c2fde4d2a2068a54e882201b9c34897337a5a0a130"
+    }
+  },
+  "prior_ldd_source": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-producer/posttools/tools-ldd.stdout",
+  "prior_evidence_commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+  "products": {
+    "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/src/sirius/app/sirius": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/src/sirius/app/sirius",
+      "bytes": 127056680,
+      "sha256": "2cc0295537dcd9bda38d7c91f360a304837bfae08587648c2b39d4ebcf7126d2"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/sirius_base_tests": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/sirius_base_tests",
+      "bytes": 9543880,
+      "sha256": "5fa283be99595c9e94998a397ac34bd112f1f57986a1f45c7dc531a6f50fac23"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests": {
+      "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests",
+      "bytes": 162113536,
+      "sha256": "1d319df3283026d9498380288961d172e009a40523957ca1a4519e88bd0fa234"
+    }
+  },
+  "all3_dynamic_need_ASan_and_UBSan_and_instrumentation_symbols": true,
+  "before_after_all_current": true,
+  "stdout": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-development-build/posttools/instrumented-ELFs.stdout",
+    "bytes": 141897,
+    "sha256": "749c257dca7ebeaec6f7557d70aa381b8d907841aad98465d62d30e5bf7b1d92"
+  },
+  "stderr": {
+    "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-development-build/posttools/instrumented-ELFs.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Bounded read-only GNU metadata only;no target execution or sanitizer-test result."
+}

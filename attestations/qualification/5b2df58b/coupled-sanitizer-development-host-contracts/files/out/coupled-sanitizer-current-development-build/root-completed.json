@@ -1,0 +1,314 @@
+{
+  "schema": "sirius-current-source-sanitizer-focused-build-completion-v1",
+  "created_utc": "2026-10-18T05:02:25.363029+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "actual_helper_session": 57654,
+  "actual_helper_exit": 0,
+  "owner": {
+    "bytes": 13886,
+    "sha256": "1bc76ed306572563d1cae3257bf59896d31cced754bc6d6259bab2388b299334"
+  },
+  "release": {
+    "bytes": 852,
+    "sha256": "79d26e8ea01ff9b69df7d78d4b6d2503c3438c725e65dc731b2a6d44a895dcaa"
+  },
+  "independent_preflight": {
+    "bytes": 6137,
+    "sha256": "aaad9ce42a75438edae15bcb533f2833bf49bd436267e931219a3fe3d5e5b336"
+  },
+  "whole_before_after_current_rows": 6860,
+  "all_observed_and_controller_births_retired": true,
+  "observed_births": 93,
+  "owner_seconds": 92.3711595729983,
+  "peak_sampled_aggregate_RSS_KiB": 1573608,
+  "minimum_sampled_available_KiB": 17087680,
+  "actual_incremental_build_steps": 31,
+  "selected_prospective_first_party_commands": 56,
+  "configured_first_party_commands": 148,
+  "all19_generated_shader_products_equal_current_GCC_and_backend_staging": {
+    "bin/linux-gcc-sanitize/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc-sanitize/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc-sanitize/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc-sanitize/kernels/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "bin/linux-gcc-sanitize/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc-sanitize/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc-sanitize/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc-sanitize/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc-sanitize/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc-sanitize/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc-sanitize/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+    },
+    "bin/linux-gcc-sanitize/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+    },
+    "bin/linux-gcc-sanitize/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+    },
+    "bin/linux-gcc-sanitize/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+    },
+    "bin/linux-gcc-sanitize/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+    },
+    "bin/linux-gcc-sanitize/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc-sanitize/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    "bin/linux-gcc-sanitize/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "bin/linux-gcc-sanitize/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    }
+  },
+  "three_declared_app_trace_SPV_staging_equal": true,
+  "all33_retained_SPV_and2_owner_headers_equal_current_GCC": {
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense.spv": {
+      "bytes": 77952,
+      "sha256": "425a8b255f0f70772bad67096cd253792a518514091509561a3c026e602407ab"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase.spv": {
+      "bytes": 58740,
+      "sha256": "a7ae75c4cc75ff86860378c0c24a1c2bdd02fc828ef33ebe76fb038b22964895"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint.spv": {
+      "bytes": 99300,
+      "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize.spv": {
+      "bytes": 57108,
+      "sha256": "3ff5d6443044a76ce8f0f1219e96185f321c68526886bbeaa56c54314c99328a"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport.spv": {
+      "bytes": 85364,
+      "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+    }
+  },
+  "retained_header_existing_optional_FMA_fallback_profile": {
+    "current": {
+      "bytes": 7670764,
+      "sha256": "ce8e2d4bed835bc7c96f4a66f646d2da3c042aa56c5be5f2bdb6a0b060af3768"
+    },
+    "ordinary38_explicit_arrays_and_all7tables_exact": true,
+    "all_public_size_constants_exact": true,
+    "two_FMA_available_flags_false_with_existing_source_aliases": true,
+    "FMA_fallbacks": {
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_fma.spv": {
+        "actual": {
+          "bytes": 111960,
+          "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+        },
+        "declared_existing_fallback": "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+        "canonical_FMA_differs": true
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_fma.spv": {
+        "actual": {
+          "bytes": 98008,
+          "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+        },
+        "declared_existing_fallback": "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_fp64.spv",
+        "canonical_FMA_differs": true
+      }
+    },
+    "builder_source_basis": "scripts/build-retained-kernels.py:437-438,530-542 capability probe plus existing fp64 alias fallback;no tool query or regeneration repeated."
+  },
+  "instrumented_ELFs": {
+    "bin/linux-gcc-sanitize/src/sirius/app/sirius": {
+      "bytes": 127056680,
+      "sha256": "2cc0295537dcd9bda38d7c91f360a304837bfae08587648c2b39d4ebcf7126d2"
+    },
+    "bin/linux-gcc-sanitize/tests/sirius_base_tests": {
+      "bytes": 9543880,
+      "sha256": "5fa283be99595c9e94998a397ac34bd112f1f57986a1f45c7dc531a6f50fac23"
+    },
+    "bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests": {
+      "bytes": 162113536,
+      "sha256": "1d319df3283026d9498380288961d172e009a40523957ca1a4519e88bd0fa234"
+    }
+  },
+  "instrumentation_metadata": {
+    "bytes": 4747,
+    "sha256": "cdf3abb5125d084b39748fcbf550107de6c6a94b6b3168ccf517b5df4678297b"
+  },
+  "all3_need_ASAN_UBSAN_and_instrumentation_symbols": true,
+  "warning_histogram": {
+    "E41035": 25,
+    "E41018": 3
+  },
+  "warnings_scope": "Existing Slang E41035 conditional Gamma/R assignments retained;no C++Werror or compiler flags weakened.",
+  "mode": "development Debug -g -O1",
+  "sanitizers": "address-undefined",
+  "contracts2_Werror_CXX26_Mandatory_requiredVulkan": true,
+  "admitted_external_domains": 0,
+  "pending_external_domains": 8,
+  "source_build_only": true,
+  "numerical_CTest_or_fullMandatory_executed": false,
+  "external_scientific_release_qualification": false,
+  "focused_original5_host_contract_runtime_metadata_preparation_admitted": true,
+  "cleanup_released": false,
+  "postreader_scope_correction": "Two pure-reader scope assertions corrected before completion,no workload reruns: minimal4target appstaging declares only3traceSPVs (broader19belong to unselected testvolumes); configured sanitizer SPIRVtools use existing optional FMA fallback (33otherSPV/2ownerheaders/38ordinaryarrays/all7tables/publicconstants exact). Required declared-profile checks retained;no stronger GCC-FMA equivalence claimed.",
+  "scope": "Original four-target current incremental sanitizer diagnostic build,31steps;not clean/full155compile execution nor sanitizer runtime/fullscience/Mandatory/external/release qualification. Exactshader/codegen payloads reusecurrentGCC proof without numerical replay."
+}

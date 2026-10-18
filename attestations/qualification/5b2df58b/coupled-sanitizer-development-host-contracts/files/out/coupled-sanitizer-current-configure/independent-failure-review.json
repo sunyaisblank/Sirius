@@ -1,0 +1,72 @@
+{
+  "schema": "sirius-sanitizer-configure-independent-failure-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "configure_passed": false,
+  "build_or_runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "configure/owner.json": [
+      1469,
+      "452100d7c98ec706a82c24dfdaefebabff631634865111411351317c28aaabf0"
+    ],
+    "configure/inputs-before.json": [
+      2141707,
+      "d0b1a8d324733c295b32e98ebf33bb5259107b007f16ada4e527ebb7f2bed411"
+    ],
+    "configure/inputs-after.json": [
+      2141707,
+      "d0b1a8d324733c295b32e98ebf33bb5259107b007f16ada4e527ebb7f2bed411"
+    ],
+    "configure/stdout.log": [
+      393,
+      "70cd728764534031800b3328969d599814a75791cfbd51458d15d895f310669e"
+    ],
+    "configure/stderr.log": [
+      267,
+      "8dd910b1ebadfe080c364f77cdf93e2332a059cd5c9c798e8e7b89f8dd932990"
+    ],
+    "configure/samples.jsonl": [
+      221,
+      "fe8f54485af21eca3eab8ff22b2fc30016662497e611c796a2117261fd7fbef1"
+    ],
+    "root-preflight.json": [
+      2272834,
+      "802a850cec23bdb5651c3c59e07812206905eb304e1723734a6a05ab5099d388"
+    ],
+    "root-configure-release.json": [
+      678,
+      "65b3ea55ced4c62fa2192937ada6d45f9135c34df55094994346b5efa531e74e"
+    ],
+    "independent-preflight-review.json": [
+      3446,
+      "8564728510f10e54ba770248278e25faa90b19570082294abb74305c9077cba2"
+    ],
+    "out/coupled-sanitizer-current-build/source-configure-preflight-review.json": [
+      5843,
+      "636fd750aa5a3ef150cd16a9e44850e36bd00ca6d729228488629361d300dac3"
+    ]
+  },
+  "actual": {
+    "child_exit": 1,
+    "stop_reason": null,
+    "owner_seconds": 0.2828237990033813,
+    "peak_sampled_rss_kib": 45604,
+    "sample_count": 1,
+    "stable_before_after_current_rows": 6760,
+    "source_unchanged": true,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "saved_child_birth": "11147/17166429",
+    "saved_postcheck_birth_absent": true,
+    "fresh_process_query_by_reviewer": false
+  },
+  "failure": "Debug plus alignment_mode=qualification is rejected by the existing configure policy. Actual stderr reaches cmake/sirius_build_policy.cmake:39; scripts/verify-build-policy.py configure_errors requires configurations exactly (Release,) for qualification/release. This is a normal nonzero configure return, not a sampled guard or scientific/numerical verdict.",
+  "review_correction": "My prior source/configure-preflight and concrete preflight reviews missed this policy intersection. Those sealed receipts and the original seven-member wrong-qualification packet remain unchanged; current failure review withdraws their qualification+Debug feasibility conclusion.",
+  "corrected_premise": {
+    "CI_authority": ".github/workflows/ci.yml:440-443 uses the original linux-gcc-sanitize Debug preset with requiredVulkan and no qualification override. CMakeLists defaults development.",
+    "distinct_next_context": "Explicit SIRIUS_ALIGNMENT_MODE=development in a separate namespace resets any retained cache value; retain original Debug -g -O1, address+undefined, contracts2/Werror/Mandatory/requiredVulkan, four targets, -j2 and guards. No policy or Release gate weakening is needed.",
+    "not_authorized_here": "No corrected configure/build/test/provider execution; ROOT separate metadata/review/release required."
+  },
+  "limits": "Mutable configure outputs were intentionally outside the owner freeze; stable6760 input rows do not assert that every configure output stayed unchanged. Saved birth evidence only, no independent process query. Development sanitizer diagnostic build is not external/release qualification or a sanitizer runtime result."
+}

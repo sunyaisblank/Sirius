@@ -1,0 +1,137 @@
+{
+  "schema": "sirius-current-sanitizer-original5-host-contracts-completion-v1",
+  "created_utc": "2026-10-18T05:12:51.920694+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "branch": "development/minimum-step-floor-2026-10-15",
+  "source_clean": true,
+  "tracking": "0\t0",
+  "owner": {
+    "wall_seconds": 0.5280447610130068,
+    "peak_sampled_rss_kib": 68992,
+    "minimum_sampled_available_kib": 20195744,
+    "child_exit": 0,
+    "stop_reason": null
+  },
+  "frozen_inputs": {
+    "before_after_current_exact": true,
+    "owner_rows": 6913,
+    "rich_preflight_rows": 6912
+  },
+  "cases": [
+    {
+      "name": "ContractsDeathTest.EnforcedPreconditionViolationTerminates",
+      "seconds": "0.192485",
+      "passed": true
+    },
+    {
+      "name": "ContractsDeathTest.EnforcedAssertionViolationTerminates",
+      "seconds": "0.188785",
+      "passed": true
+    },
+    {
+      "name": "Contracts.SatisfiedContractsPassSilently",
+      "seconds": "0.0167223",
+      "passed": true
+    },
+    {
+      "name": "Contracts.AxiomIsNeverEvaluated",
+      "seconds": "0.0127926",
+      "passed": true
+    },
+    {
+      "name": "Contracts.LanguageCapabilitiesDistinguishNativeFeaturesFromSubstitutes",
+      "seconds": "0.0158196",
+      "passed": true
+    }
+  ],
+  "junit_totals": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "disabled": 0
+  },
+  "configured_preset_environment": {
+    "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+    "LSAN_OPTIONS": "suppressions=${sourceDir}/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+    "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+  },
+  "environment_evidence_limit": "Unchanged CTest preset invocation/configuration and sealed binaries/inputs; no direct live-child environment readback. GTest XML is overwritten per test; combined CTest JUnit is authoritative for all five.",
+  "observed_births_retired": [
+    {
+      "pid": 16233,
+      "saved_start_ticks": "17309967",
+      "current_start_ticks": null,
+      "saved_birth_retired": true
+    },
+    {
+      "pid": 16240,
+      "saved_start_ticks": "17309989",
+      "current_start_ticks": null,
+      "saved_birth_retired": true
+    },
+    {
+      "pid": 16241,
+      "saved_start_ticks": "17309990",
+      "current_start_ticks": null,
+      "saved_birth_retired": true
+    },
+    {
+      "pid": 16229,
+      "saved_start_ticks": "17309819",
+      "current_start_ticks": null,
+      "saved_birth_retired": true
+    }
+  ],
+  "provider_query_or_runtime": false,
+  "logs_without_sanitizer_error": true,
+  "records": {
+    "out/coupled-sanitizer-current-host-contracts/actions.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/actions.json",
+      "bytes": 716835,
+      "sha256": "b6d7d2d68ce4ea804f4a01543026bffc6f2eee51ce1501c1d1ecc0680815ace4"
+    },
+    "out/coupled-sanitizer-current-host-contracts/root-preflight.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/root-preflight.json",
+      "bytes": 2320508,
+      "sha256": "9c30e70bc4680a60b6e3db3112c1d1fc4df32e8cba25930124340ad26cf9431f"
+    },
+    "out/coupled-sanitizer-current-host-contracts/root-runtime-tool-closure.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/root-runtime-tool-closure.json",
+      "bytes": 12323,
+      "sha256": "da4453064f1745f1e0c5a853b3fc9c6630afc901d9ed294ea03ca374e8f6220d"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/owner.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/owner.json",
+      "bytes": 2395,
+      "sha256": "4aa04f8b07edc0b5ecbc133a5dc871501ffc39b2374d4138682bd1f68ef301fe"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-before.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-before.json",
+      "bytes": 2182576,
+      "sha256": "948b6b2e648796d1d81c123ce9c90cc4fc2226f8d08786faeed23eaf1372bacd"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-after.json": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/inputs-after.json",
+      "bytes": 2182576,
+      "sha256": "948b6b2e648796d1d81c123ce9c90cc4fc2226f8d08786faeed23eaf1372bacd"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/stdout.log": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/stdout.log",
+      "bytes": 1121,
+      "sha256": "5c1fce60b852da51539dc4acea8da88670728dd28d8041b37a8cb553b263c3a3"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/stderr.log": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/coupled-sanitizer-current-host-contracts/host-contracts/junit.xml": {
+      "resolved_path": "/home/astra/.project/Sirius/out/coupled-sanitizer-current-host-contracts/host-contracts/junit.xml",
+      "bytes": 4925,
+      "sha256": "390286bfbf8a2f477c64da5b0ea533e8e0c5d6aab05e52df2763f0cb66c30a62"
+    }
+  },
+  "admission": "Current Debug/development sanitized build and these five original host contract tests only. Full live-registration Mandatory, numerical/render/provider/external-domain and scientific/release qualification remain open. No canonical edit or changed acceptance."
+}

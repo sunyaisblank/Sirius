@@ -1,0 +1,44 @@
+{
+  "schema": "sirius-sanitizer-current-build-pending-commands-v1",
+  "admitted": false,
+  "configure_argv": [
+    "/usr/bin/cmake",
+    "--preset",
+    "linux-gcc-sanitize",
+    "-DSIRIUS_ALIGNMENT_MODE=qualification",
+    "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+    "-DSIRIUS_ATTESTATION_ROOT="
+  ],
+  "configure_required_before_final_input_freeze": true,
+  "configure_prospective_root_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "build_argv": [
+    "/usr/bin/cmake",
+    "--build",
+    "--preset",
+    "linux-gcc-sanitize",
+    "--parallel",
+    "2",
+    "--target",
+    "SiriusSourceGovernance",
+    "sirius",
+    "sirius_base_tests",
+    "sirius_backend_tests"
+  ],
+  "owned_build_argv": [
+    "/usr/bin/python3",
+    "-B",
+    "out/coupled-sanitizer-current-build/run_owned.py",
+    "strict-build"
+  ],
+  "sequence": [
+    "ROOT review and separate configure admission",
+    "ROOT sole fresh configure with saved actual output and cache/alignment observation",
+    "ROOT final matching-input materialization, actions.json and root-preflight.json plus independent concrete admission",
+    "ROOT sole owned strict-build once; no test command in this packet"
+  ],
+  "runtime_tests": []
+}
