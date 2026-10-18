@@ -1,0 +1,175 @@
+{
+  "schema": "sirius-native-rounded-product-error-source-v1",
+  "source_only": true,
+  "compiler_or_runtime_admitted": false,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "decision": "DISTINCT_NATIVE_SOURCE_CANDIDATE_ONLY",
+  "files": {
+    "original-retained_triple.slang": {
+      "path": "out/native-rounded-error-source/original-retained_triple.slang",
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+    },
+    "retained_triple.slang": {
+      "path": "out/native-rounded-error-source/retained_triple.slang",
+      "bytes": 15684,
+      "sha256": "a7ce249702bf35f4370b9d836640f88c59789f551292cddaeae51570eea88e9f"
+    },
+    "source.patch": {
+      "path": "out/native-rounded-error-source/source.patch",
+      "bytes": 892,
+      "sha256": "1c7a5ddb293423041c6bd8819a8dc5cdd8665910fd5f603d3ede6eeb2bae0687"
+    }
+  },
+  "exact_change": "Only RTAccumulateRoundedProduct preprocessor condition. Existing portable-normal-Endpoint arm unchanged; add ordinary native32 excluding PORTABLE/FP64/FMA32/STAGE7_OWNER. Guard/body/fallback/math/literals remain byteexact. Reverse replacement reproduces canonical c035 original. No wave32/packing/lanes/cache changes.",
+  "history": {
+    "scope": "Targeted saved229issue44comments, exact current/source locus,93ca450pilot preparation and decision, and99a4a6d native bound-selector diff. No universal absence proof.",
+    "finding": "No actual native execution of this exact range shortcut found in bounded reviewed history. Portable Transport/DP expansion was actually rejected; it remains closed. Generic native upward-bound selection was separately rejected and is not this shortcut.",
+    "comments": [
+      {
+        "id": 6066967093,
+        "url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6066967093"
+      },
+      {
+        "id": 6067495640,
+        "url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6067495640"
+      },
+      {
+        "id": 6114679908,
+        "url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6114679908"
+      },
+      {
+        "id": 6111620766,
+        "url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6111620766"
+      },
+      {
+        "id": 6112344795,
+        "url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6112344795"
+      }
+    ],
+    "portable_pilot": {
+      "preparation": {
+        "path": "attestations/software-vulkan/93ca450/product-radius-expansion-pilot/diagnostic/preparation.json",
+        "bytes": 2160,
+        "sha256": "1ee9e82522367ad619ba305856a7ed7e91c3e9d4fd436d92805e819307f43cb3"
+      },
+      "decision": {
+        "path": "attestations/software-vulkan/93ca450/product-radius-expansion-pilot/diagnostic/root-timing-decision.json",
+        "bytes": 853,
+        "sha256": "ae035a0431f9fb437855ca914b7edd199161bc6d06b8584716bf0440ae24c9c8"
+      },
+      "candidate_guard": "#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && (defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE))",
+      "rejected": "Portable normal Transport/DP only; native/FMA/integer arrays stayed unchanged. All overlapping-range/ordering caveats retained."
+    },
+    "generic_native_rejection_commit": "99a4a6d3a6bff69d9f20c995383a5f2e6b8cb901",
+    "history_pins": [
+      {
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/native-frame-issue-followup/issue44-comments-before.json",
+        "bytes": 520425,
+        "sha256": "9c340edd3b0608fb140e1fd756345789f4f08609596df598d037cfcccf907ad9"
+      },
+      {
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/native-frame-issue-followup/issue44-comments-middle.json",
+        "bytes": 506184,
+        "sha256": "aa550a90b8eb11b774442ba84927669535bcc1f4dc3cec43d0bea38e49d9f123"
+      },
+      {
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/native-frame-issue-followup/issue44-comments-latest.json",
+        "bytes": 119107,
+        "sha256": "23dfd240f1e5128d8b07fb8e64f2234ab0ed861557273e86006354c401f87e47"
+      }
+    ]
+  },
+  "word_proof": {
+    "precondition": "Magnitude m=RPBits(RPAbs(product)) in inclusive0x0e000000..0x5e800000; existing nativeRTE32+DenormPreserve32 and ordered NoContraction owners. Not a tolerance/NSZ approximation.",
+    "scaling": "These positive normal values lie in[2^-99,2^62]. Multiplication by exact2^-23 produces normal y in[2^-122,2^39] exactly, with identical significand and word m-0x0b800000. RPUpMultiply accepts both nonzero inputs within original2^62 bound and returns yword+1.",
+    "tiny_add": "For z=nextUp(y), ULP(z)>=2^-145=16minimum-subnormal units, including binade transitions. 5minimum-subnormal units is strictly below halfULP(z), so original ordered nearest-even z+5tiny rounds to z. RPUpAdd original2^124 bounds and nonzero tests all pass, then its original+1 yields m-0x0b800000+2 exactly.",
+    "integer_safety": "Guard makes subtraction nonnegative and +2 finite/within uint32; no exponent/mantissa overflow. No original nonzero product arithmetic or summation is changed.",
+    "outside_guard": "Original RPUpAdd(RPUpMultiply(abs(product),2^-23),5tiny) expression byteexact, including zero/negativezero/underflow product, larger magnitudes and any invalid/nonfinite future operand. Existing input/sum checks precede shortcut; original RTAccumulateTerm, radius addition, invalid result/refusal and output publication follow unchanged.",
+    "proof_limit": "Analytic bounded IEEE32 source-level argument composed with existing arithmetic admission; no new arithmetic evaluator, exhaustive test, shader compiler or native workload executed."
+  },
+  "cost_premise": {
+    "source": "Canonical rounded-product error has sole0x34000000 constant locus in retained_triple; source inlines it through RTMultiply.",
+    "actual_saved_native_shader": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "provider": "AMD Radeon 780M Graphics",
+      "no_dispatches": true
+    },
+    "records": [
+      {
+        "commit": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+        "Git_path": "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/result.json",
+        "bytes": 5216,
+        "sha256": "74c91275c1cb00b8786e8379689bdf4cecf525dd89b890d5ac615c5336e33e22"
+      },
+      {
+        "commit": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+        "Git_path": "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/decoded-driver-object.json",
+        "bytes": 3996,
+        "sha256": "bc0d7ace75e90c7029dcce12673fd97d309a246e543ccb54364c8cfca5da87b2"
+      },
+      {
+        "commit": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+        "Git_path": "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/shader/shader-info-1.bin",
+        "bytes": 2763344,
+        "sha256": "bf080bebf607b73c8e6b0de1c2b882cc7779feca8751e882032cce2435664ad3"
+      },
+      {
+        "commit": "1cb6e6aaff04ddd54ff7ee133b773257338f2c52",
+        "Git_path": "attestations/qualification/2c8ef086/native-wave32-driver-insight/files/out/native-shader-driver-introspection/transport-default-query/shader/shader-info-2.isa.txt",
+        "bytes": 2651958,
+        "sha256": "8ccba4dbe9219a3abad7d475a415717e3465c6d7492fd1df88bee97fc3776c21"
+      }
+    ],
+    "LLVMIR": {
+      "section": ".AMDGPU.comment.llvmir",
+      "offset": 234528,
+      "bytes": 2526533,
+      "line2075": "fmul float abs(product),2^-23; following original integer+1",
+      "line2094": "fadd float upwardProduct,5tiny; following original integer+1",
+      "literal_scale_fmul_sites": 51
+    },
+    "ISA": {
+      "line2840": "v_mul_f32_e64 v9,0x34000000,|v13| followed by integer+1",
+      "literal_scale_vmul_sites": 51
+    },
+    "interpretation": "This saved default native driver output has not already replaced the scale by the proposed word subtraction. This is static repeated-work evidence, not dynamic path/guard-hit frequency, exclusive cost, speedup, occupancy, whole-frame or benefit proof. New range checks/divergence/register effects can outweigh removed work."
+  },
+  "scope_preservation": {
+    "expected_eligible_native_modules": [
+      "retained_transport.spv",
+      "retained_endpoint.spv",
+      "retained_dense.spv",
+      "retained_initialize.spv",
+      "retained_dopri_phase.spv"
+    ],
+    "FP64_FMA_portable_owner_branches_unchanged": true,
+    "Camera_RayCamera_pair_arithmetic_unchanged": true,
+    "compiled_changed_set": "ROOT must verify actual5native modules only and all30other SPVs/35other mainarrays/7tables/2owner headers/payloads exact; no output exists here.",
+    "invariants": "Central/40fields/7RHS/3trials/4quartics, status/refusal/rollback, bounds/precision/gov/ABI/all original settings unchanged. Same-provider32raw buffers,51markers54joins,original8controls and soleoriginal22whole/inclusiveStage/inclusiveAPI gates remain mandatory; no old positive or rejected scope transfers."
+  },
+  "source_pins": [
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    {
+      "path": "scripts/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    }
+  ],
+  "created_UTC": "2026-10-18T11:22:14.195625+00:00"
+}

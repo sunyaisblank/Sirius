@@ -1,0 +1,80 @@
+{
+  "schema": "sirius-native-rounded-product-error-independent-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "compiler_or_runtime_admitted": false,
+  "adoption_admitted": false,
+  "blockers": [],
+  "pins": {
+    "original-retained_triple.slang": {
+      "path": "out/native-rounded-error-source/original-retained_triple.slang",
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+    },
+    "retained_triple.slang": {
+      "path": "out/native-rounded-error-source/retained_triple.slang",
+      "bytes": 15684,
+      "sha256": "a7ce249702bf35f4370b9d836640f88c59789f551292cddaeae51570eea88e9f"
+    },
+    "source.patch": {
+      "path": "out/native-rounded-error-source/source.patch",
+      "bytes": 892,
+      "sha256": "1c7a5ddb293423041c6bd8819a8dc5cdd8665910fd5f603d3ede6eeb2bae0687"
+    },
+    "source-contracts.json": {
+      "path": "out/native-rounded-error-source/source-contracts.json",
+      "bytes": 10188,
+      "sha256": "bd5e014df565b1d257f5089cc7ecb1da49362ab0e9d0114483b3dcf7fcc13aa1"
+    }
+  },
+  "source_boundary": "Exact one-condition replacement/inverse verified against canonical2c8. Entire guarded word body, fallback, preceding product/validity/bounds/zero checks, following RTAccumulateTerm/error accumulation, and all other functions remain byte-identical. 64 Boolean mode combinations checked: only nonportable/non-FP64/non-FMA32/non-owner profiles gain the existing branch; portable behavior and excluded profiles remain unchanged.",
+  "independent_word_argument": {
+    "domain": "Let m be the already-rounded product magnitude word in inclusive0x0e000000..0x5e800000. Both endpoints are positive normal:2^-99..2^62. This proof does not change or approximate OrderedMultiply32(a,b).",
+    "scale": "Exact normal binary32 scaling by2^-23 preserves every fraction bit and subtracts23 exponent units, so yword=m-0x0b800000, with y in2^-122..2^39. Neither RPUpMultiply operand is zero or outside its original2^62 bound. Its original upward increment returns zword=yword+1.",
+    "tiny_add": "z is positive normal and its upward spacing is at least2^-145=16minimum-subnormal units. Adding5units is strictly below half that spacing, including z crossing to a new binade. Under admitted nearest-even/gradual-underflow semantics OrderedAdd32(z,5tiny) therefore returns exactly z. Both RPUpAdd inputs are nonzero and inside2^124, so its second original increment gives yword+2 exactly.",
+    "integer_and_sign": "Subtraction cannot underflow and +2 cannot reach exponent255 anywhere in the guard. Both increments correctly cross fraction/exponent boundaries as positive IEEE32 words. All guarded values are strictly positive, so this equivalence needs no signed-zero/NSZ refinement.",
+    "outside": "Zero or negative-zero/underflowed product has magnitude0 and retains the original fallback; notably its zero fast paths are not replaced by an assumed two-increment formula. Larger/smaller magnitudes and nonfinite raw words also retain identical fallback/refusal logic. No malformed sum/operand acceptance or error-bound relaxation is introduced."
+  },
+  "arithmetic_preconditions": {
+    "sources": [
+      {
+        "path": "src/sirius/kernels/retained_pair.slang",
+        "bytes": 18139,
+        "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+      },
+      {
+        "path": "src/sirius/kernels/retained_scalar.slang",
+        "bytes": 3102,
+        "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+      },
+      {
+        "path": "src/sirius/backend/device.h",
+        "bytes": 9669,
+        "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+      },
+      {
+        "path": "scripts/build-retained-kernels.py",
+        "bytes": 35006,
+        "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+      }
+    ],
+    "join": "RPAbs masks only the sign. RPUpMultiply/RPUpAdd original zero and bound precedence checked. OrderedAdd32/Multiply32 are explicit NoContraction. Existing native_controls rejects relaxed/wide arithmetic and requires DenormPreserve32, then adds RTE32. RetainedUsesPortableArithmetic routes missing-denorm or missing-RTE devices to portable modules. Actual new emissions must still pass those existing controls; no new device capability is presumed."
+  },
+  "bounded_history": {
+    "selected_saved_issue44_comments": [
+      6066967093,
+      6067495640,
+      6114679908,
+      6111620766,
+      6112344795
+    ],
+    "scope": "Read only these selected comments in three pinned saved snapshots, exact small93ca450 preparation/negative decision, and99a4a6d retained_pair source diff. No global history-absence claim.",
+    "distinction": "93ca450 expands the same algebra only to portable-normal Transport/DP and was rejected;6114679908 closes that portable lead.99a4a6d changes generic native RPUpAdd/RPUpMultiply selection, was rejected, and is different source. These records neither prove current native benefit nor show an actual native run of this exact rounded-product-error shortcut in the reviewed scope."
+  },
+  "required_next_scope": "Separate ROOT admission/emitted review must establish actual ordinary-native five-module change,30 other SPVs/35 other arrays/seven tables/two owner payloads unchanged, ABI/float modes and fallback preservation. Original same-provider word/numerical/refusal/recovery controls and original22 benefit gates remain unchanged. No result transfers from portable or earlier rejected candidates.",
+  "limits": [
+    "No compiler, provider, helper, test, arithmetic evaluator, workload, network or canonical-source mutation executed. Only passive source/hash/Git/history and Boolean condition checks.",
+    "Analytic source equivalence is conditional on existing binary32 arithmetic admission; it is not actual emitted-code, same-provider-word, performance, frame, adoption or full qualification evidence.",
+    "Saved driver static repeated-work/51-site claims were not independently recounted here and are not dynamic guard-hit/cost/benefit proof."
+  ]
+}

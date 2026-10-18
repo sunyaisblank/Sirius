@@ -1,0 +1,189 @@
+--- originals/build-and-stage.ps1
++++ build-and-stage.ps1
+@@ -5,13 +5,16 @@
+ $Root = [IO.Path]::GetFullPath($env:GITHUB_WORKSPACE)
+ Set-Location -LiteralPath $Root
+ $Build = Join-Path $Root 'bin/windows-msvc'
+-$Export = Join-Path $Build 'private-native-packed-export'
++$Export = Join-Path $Build 'private-native-rounded-error-export'
+ if (Test-Path -LiteralPath $Export) { throw 'Refuse an existing export; no stale products may be reused' }
+ New-Item -ItemType Directory -Path $Export | Out-Null
+ $Commands = [Collections.Generic.List[object]]::new()
+ $AllowedToolAliases = @{}
+ $Result = [ordered]@{
+     schema = 'sirius-native-packed-matched-ci-producer-v1'
++    producer_profile = 'native-rounded-error-five-shader-only'
++    canonical_CXX_source_revision = '2c8ef08693d46f57d5dea14efdbddd4874dac684'
++    expected_private_compile_objects = 5
+     passed = $false; configure_passed = $false; build_passed = $false
+     source_unchanged = $false; frozen_build_inputs_unchanged = $false
+     repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID
+@@ -74,8 +77,8 @@
+     $Names = ((@(& $Git -c core.quotepath=false ls-files -z) -join "`n") -split "`0") | Where-Object { $_ -ne '' }
+     if ($LASTEXITCODE -ne 0) { throw 'Cannot enumerate tracked source' }
+     $Paths = @($Names | ForEach-Object { Join-Path $Root $_ })
+-    foreach ($Relative in @('out/native-constant-producer-inputs',
+-                           'out/native-constant-windows-source')) {
++    foreach ($Relative in @('out/native-rounded-error-producer-inputs',
++                           'out/native-rounded-error-windows-source')) {
+         $Directory = Join-Path $Root $Relative
+         if (-not (Test-Path -LiteralPath $Directory -PathType Container)) { throw "Missing private input tree: $Relative" }
+         $Paths += @(Get-ChildItem -LiteralPath $Directory -Recurse -File -Force | ForEach-Object FullName)
+@@ -106,9 +109,9 @@
+         selection = 'First normal PATH Application entry as an explicit scalar string; PATH unchanged'
+     }) 'command-resolution.json'
+     $CTest = Join-Path (Split-Path -Parent $CMake) 'ctest.exe'
+-    $Fragment = Join-Path $Root 'out/native-constant-windows-source/matched-producer.cmake'
++    $Fragment = Join-Path $Root 'out/native-rounded-error-windows-source/matched-producer.cmake'
+     $Result.source_revision = Clean-Revision
+-    if ($env:GITHUB_REF -cne 'refs/heads/development/native-fp32-packed-scratch-diagnostic-2026-10-18') { throw 'Wrong private diagnostic branch' }
++    if ($env:GITHUB_REF -cne 'refs/heads/development/native-rounded-error-diagnostic-2026-10-18') { throw 'Wrong private diagnostic branch' }
+     $SourceBeforeConfigure = Snapshot (Source-Paths)
+     Write-Json $SourceBeforeConfigure 'source-before-configure.json'
+     $Configure = @('--preset', 'windows-msvc', '-DSIRIUS_ALIGNMENT_MODE=qualification',
+@@ -182,7 +185,7 @@
+         if (Test-Path -LiteralPath (Join-Path $Build "generated/sirius/$Gate")) { throw "Unexpected promotion receipt: $Gate" }
+     }
+     $BuildArgs = @('--build', '--preset', 'windows-msvc', '--config', 'Release',
+-        '--target', 'SiriusNativePackedMatchedProducer', '--parallel', '2', '--',
++        '--target', 'SiriusNativeRoundedErrorMatchedProducer', '--parallel', '2', '--',
+         '/verbosity:normal', "/bl:$(Join-Path $Export 'build.binlog')")
+     $BuildCode = Invoke-Recorded 'build' $CMake $BuildArgs
+     $After = Snapshot (Build-Input-Paths)
+@@ -202,8 +205,8 @@
+     $VersionDirectory = [IO.Path]::GetRelativePath($Build, $CompilerFile.Directory.FullName)
+     $Config += @("$VersionDirectory/CMakeCXXCompiler.cmake", "$VersionDirectory/CMakeCCompiler.cmake", "$VersionDirectory/CMakeSystem.cmake")
+     foreach ($Relative in $Config) { Copy-Evidence (Join-Path $Build $Relative) "metadata/config/$Relative" }
+-    $Targets = @('native_packed_dopri','native_packed_baseline_compute','native_packed_candidate_compute',
+-        'native_packed_baseline_controls','native_packed_candidate_controls')
++    $Targets = @('native_rounded_error_dopri','native_rounded_error_baseline_compute','native_rounded_error_candidate_compute',
++        'native_rounded_error_baseline_controls','native_rounded_error_candidate_controls')
+     foreach ($Target in $Targets) {
+         Copy-Evidence (Join-Path $Build "$Target.vcxproj") "metadata/projects/$Target.vcxproj"
+         $ObjectRoot = Join-Path $Build "$Target.dir/Release"
+@@ -249,7 +252,7 @@
+     Write-Json ([ordered]@{ msvc_version = $CompilerVersion.Groups[1].Value; release_crt_version = $RedistVersion
+         redist_version_file = (File-Pin $RedistVersionFile); runtime_origins = $Origins }) 'runtime-packaging.json'
+     foreach ($Arm in @('baseline','candidate')) {
+-        $Output = Join-Path $Build "private-native-packed/$Arm/Release"
++        $Output = Join-Path $Build "private-native-rounded-error/$Arm/Release"
+         foreach ($Extension in @('exe','map')) {
+             $Path = Join-Path $Output "original_${Arm}_controls.$Extension"
+             Copy-Evidence $Path "payload/$Arm/original_${Arm}_controls.$Extension"
+--- originals/matched-producer.cmake
++++ matched-producer.cmake
+@@ -2,7 +2,7 @@
+ # Defer until canonical libraries, fixtures, policies and tests exist.
+ include_guard(GLOBAL)
+ 
+-function(_sirius_native_packed_matched_producer)
++function(_sirius_native_rounded_error_matched_producer)
+     if(NOT WIN32 OR NOT MSVC OR NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+         message(FATAL_ERROR "Private matched producer requires canonical Windows MSVC x64")
+     endif()
+@@ -17,7 +17,7 @@
+             message(FATAL_ERROR "Missing canonical producer dependency: ${required}")
+         endif()
+     endforeach()
+-    set(inputs "${CMAKE_SOURCE_DIR}/out/native-constant-producer-inputs")
++    set(inputs "${CMAKE_SOURCE_DIR}/out/native-rounded-error-producer-inputs")
+     set(observer "${inputs}/observer/audited-observer.cpp")
+     if(NOT EXISTS "${observer}")
+         message(FATAL_ERROR "ROOT must first materialize the admitted unchanged observer")
+@@ -44,24 +44,24 @@
+     set(canonical_retained "${CMAKE_BINARY_DIR}/src/sirius/backend/retained")
+ 
+     # Common DP source does not include retained_kernels.h: compile it once.
+-    add_library(native_packed_dopri OBJECT
++    add_library(native_rounded_error_dopri OBJECT
+         "${CMAKE_SOURCE_DIR}/tests/backend/retained_dopri_test.cpp")
+-    sirius_configure_target(native_packed_dopri CONTRACT_MODE 2)
+-    target_link_libraries(native_packed_dopri PRIVATE
++    sirius_configure_target(native_rounded_error_dopri CONTRACT_MODE 2)
++    target_link_libraries(native_rounded_error_dopri PRIVATE
+         sirius_backend_cpu sirius_backend sirius_render GTest::gtest_main)
+-    target_include_directories(native_packed_dopri PRIVATE
++    target_include_directories(native_rounded_error_dopri PRIVATE
+         "${CMAKE_SOURCE_DIR}/tests" "${canonical_retained}" "${fixture}")
+-    target_compile_definitions(native_packed_dopri PRIVATE
++    target_compile_definitions(native_rounded_error_dopri PRIVATE
+         SIRIUS_TEST_HAS_KERNELS=1 SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1
+         SIRIUS_TEST_HAS_RETAINED_CAMERA=1)
+-    target_compile_options(native_packed_dopri PRIVATE
++    target_compile_options(native_rounded_error_dopri PRIVATE
+         "/FI${CMAKE_SOURCE_DIR}/tests/support/fail_on_skip.h")
+-    add_dependencies(native_packed_dopri SiriusSourceGovernance
++    add_dependencies(native_rounded_error_dopri SiriusSourceGovernance
+         sirius_portable_binary32_test_inputs sirius_retained_camera_test_inputs)
+ 
+     foreach(arm baseline candidate)
+         # Keep compute's compile usage requirements at canonical backend scope.
+-        set(compute native_packed_${arm}_compute)
++        set(compute native_rounded_error_${arm}_compute)
+         add_library(${compute} OBJECT
+             "${CMAKE_SOURCE_DIR}/src/sirius/backend/retained_compute.cpp")
+         sirius_configure_target(${compute} CONTRACT_MODE 2)
+@@ -70,9 +70,9 @@
+             "${inputs}/${arm}" "${canonical_retained}")
+         add_dependencies(${compute} SiriusSourceGovernance)
+ 
+-        set(exe native_packed_${arm}_controls)
++        set(exe native_rounded_error_${arm}_controls)
+         add_executable(${exe} "${observer}"
+-            $<TARGET_OBJECTS:${compute}> $<TARGET_OBJECTS:native_packed_dopri>)
++            $<TARGET_OBJECTS:${compute}> $<TARGET_OBJECTS:native_rounded_error_dopri>)
+         sirius_configure_target(${exe} CONTRACT_MODE 2)
+         target_link_libraries(${exe} PRIVATE
+             sirius_backend_cpu sirius_backend sirius_render GTest::gtest_main)
+@@ -84,7 +84,7 @@
+             SIRIUS_TEST_HAS_RETAINED_CAMERA=1)
+         target_compile_options(${exe} PRIVATE
+             "/FI${CMAKE_SOURCE_DIR}/tests/support/fail_on_skip.h")
+-        set(output "${CMAKE_BINARY_DIR}/private-native-packed/${arm}/$<CONFIG>")
++        set(output "${CMAKE_BINARY_DIR}/private-native-rounded-error/${arm}/$<CONFIG>")
+         set_target_properties(${exe} PROPERTIES
+             OUTPUT_NAME original_${arm}_controls
+             RUNTIME_OUTPUT_DIRECTORY "${output}" PDB_OUTPUT_DIRECTORY "${output}")
+@@ -94,9 +94,9 @@
+             sirius_portable_binary32_test_inputs sirius_retained_camera_test_inputs)
+     endforeach()
+     # No ALL, gtest_discover_tests, add_test, provider query or runtime command.
+-    add_custom_target(SiriusNativePackedMatchedProducer DEPENDS
+-        native_packed_baseline_controls native_packed_candidate_controls)
++    add_custom_target(SiriusNativeRoundedErrorMatchedProducer DEPENDS
++        native_rounded_error_baseline_controls native_rounded_error_candidate_controls)
+ endfunction()
+ 
+ cmake_language(DEFER DIRECTORY "${CMAKE_SOURCE_DIR}"
+-    CALL _sirius_native_packed_matched_producer)
++    CALL _sirius_native_rounded_error_matched_producer)
+--- originals/native-packed-diagnostic.yml
++++ native-rounded-error-diagnostic.yml
+@@ -1,9 +1,9 @@
+-name: Native packed matched producer
++name: Native rounded-error matched producer
+ 
+ on:
+   push:
+     branches:
+-      - development/native-fp32-packed-scratch-diagnostic-2026-10-18
++      - development/native-rounded-error-diagnostic-2026-10-18
+ 
+ permissions:
+   contents: read
+@@ -28,12 +28,12 @@
+           github_token: ${{ secrets.GITHUB_TOKEN }}
+       - name: Compile and stage the two matched private producers
+         shell: pwsh
+-        run: ./out/native-constant-windows-source/build-and-stage.ps1
++        run: ./out/native-rounded-error-windows-source/build-and-stage.ps1
+       - name: Preserve producer products and failure diagnostics
+         if: always()
+         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+         with:
+-          name: sirius-native-packed-matched-producer
+-          path: bin/windows-msvc/private-native-packed-export
++          name: sirius-native-rounded-error-matched-producer
++          path: bin/windows-msvc/private-native-rounded-error-export
+           include-hidden-files: true
+           if-no-files-found: error
