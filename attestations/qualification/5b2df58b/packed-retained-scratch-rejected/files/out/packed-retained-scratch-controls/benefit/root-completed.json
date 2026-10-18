@@ -1,0 +1,168 @@
+{
+  "schema": "sirius-packed-scratch-root-sole-ABBA-completion-v1",
+  "created_utc": "2026-10-18T04:34:06.856379+00:00",
+  "audit_passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "benefit_passed": false,
+  "decision": "RETIRE_PRIVATE_PACKED_SCRATCH_NO_UNCHANGED_RETRY",
+  "comparison": {
+    "path": "out/packed-retained-scratch-controls/benefit/software-comparison.json",
+    "bytes": 12929,
+    "sha256": "67d3182a43964a676ac24d8001932246c58df82ad339a32bddec3f2c79a01ed4"
+  },
+  "sequence": {
+    "path": "out/packed-retained-scratch-controls/benefit/software-sequence.json",
+    "bytes": 837,
+    "sha256": "745faf5025fcb8f0293e3572cd7fc7ab68aaa2f4cd96d35c8223030e5fe4a445"
+  },
+  "release": {
+    "path": "out/packed-retained-scratch-controls/benefit/root-benefit-release.json",
+    "bytes": 1065,
+    "sha256": "32db8c911ddb0f56f8f252535fcef341c5ce5a6c24baee5bb1b7cea08ccf0ad7"
+  },
+  "independent_preflight": {
+    "path": "out/packed-retained-scratch-controls/benefit/independent-benefit-preflight-review.json",
+    "bytes": 3309,
+    "sha256": "6b3462982767f2ddad0163c5c8560538b1297ee3cdce54dab8052f5bfb38b9cb"
+  },
+  "original22_gates": {
+    "passed": 17,
+    "required": 22,
+    "whole_passed": 2,
+    "whole_required": 4,
+    "stages_passed": 14,
+    "stages_required": 16,
+    "inclusive_API_passed": 1,
+    "inclusive_API_required": 2
+  },
+  "complete_call_improvements_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "percent": 6.145398952961928
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "percent": 9.17325671850112
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "percent": -3.3562978618449244
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "percent": 1.7432035561408923
+    }
+  ],
+  "inclusive_API_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 10216.518727,
+      "candidate_ms": 10346.134302999999,
+      "improvement_percent": -1.2686863251907228,
+      "minimum_percent": 0,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 10689.313269,
+      "candidate_ms": 10291.893665000001,
+      "improvement_percent": 3.7179152111909053,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "owners": [
+    {
+      "label": "a1",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/a1/owner.json",
+        "bytes": 2626,
+        "sha256": "25d05a0daeff1edf832e443cbb20394365c9d3680876f6114dc2b26c733a323b"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/a1/gtest.xml",
+        "bytes": 40838,
+        "sha256": "769e3b32f88a77bc3567b43f7a6fd5c95128ead8e13e9193556c0b798e9c5786"
+      },
+      "wall_seconds": 63.901255020988174,
+      "peak_sampled_rss_kib": 2328932,
+      "minimum_sampled_available_kib": 15992144,
+      "input_rows": 932,
+      "all_births_retired": true,
+      "actual_same_child_LVP": true
+    },
+    {
+      "label": "b1",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/b1/owner.json",
+        "bytes": 2626,
+        "sha256": "458e06888d1fa61d398742ea34a4f3c8c338bd5b21bd0219611296dd1557ed6d"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/b1/gtest.xml",
+        "bytes": 41063,
+        "sha256": "bd12f1e7d8c4df7cfad33bd98fd633812bd21cfaea1f31d6a262025a4aa708ab"
+      },
+      "wall_seconds": 63.88366145800683,
+      "peak_sampled_rss_kib": 2329224,
+      "minimum_sampled_available_kib": 16240416,
+      "input_rows": 932,
+      "all_births_retired": true,
+      "actual_same_child_LVP": true
+    },
+    {
+      "label": "b2",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/b2/owner.json",
+        "bytes": 2627,
+        "sha256": "0c7f08918549cfd001b0df830e21d347865f707572dd6859a3653920458799a0"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/b2/gtest.xml",
+        "bytes": 40970,
+        "sha256": "0e34a6a6abfd6dc370b1cd4e87c12ee9782ba01b1a0055fcab6312ecb0c2cc79"
+      },
+      "wall_seconds": 61.275661085004685,
+      "peak_sampled_rss_kib": 2329464,
+      "minimum_sampled_available_kib": 16600092,
+      "input_rows": 932,
+      "all_births_retired": true,
+      "actual_same_child_LVP": true
+    },
+    {
+      "label": "a2",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/a2/owner.json",
+        "bytes": 2498,
+        "sha256": "daf005fa69695ef97e9d6bfbc6261d1c7005aaada2a7a3f0c97e71f59e62f707"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/a2/gtest.xml",
+        "bytes": 40784,
+        "sha256": "3d06b4b3b16b361d91f23ee9c3db9535b043f767a6be8dd76fe84582064af46b"
+      },
+      "wall_seconds": 66.81905571199604,
+      "peak_sampled_rss_kib": 2328468,
+      "minimum_sampled_available_kib": 16881592,
+      "input_rows": 932,
+      "all_births_retired": true,
+      "actual_same_child_LVP": true
+    }
+  ],
+  "all4_same932rows_before_after_and_current": true,
+  "same_child_actual_LVP_and_all_births_retired": true,
+  "all32_full_readbacks_identical_across4slots": true,
+  "all51_markers_and54_actual_module_joins_accepted_per_slot": true,
+  "protected72_unchanged": true,
+  "no_pooling_subtraction_resampling_retry": true,
+  "remaining_seven_controls_executed": false,
+  "production_adopted": false,
+  "frame_fullscience_Mandatory_release_accepted": false,
+  "cleanup_released": false
+}

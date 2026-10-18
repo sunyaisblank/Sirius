@@ -1,0 +1,35 @@
+{
+  "schema": "sirius-july-snapshot-desktop-root-completed-v1",
+  "created_utc": "2026-10-18T04:17:04.888584+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "review": {
+    "bytes": 4622,
+    "sha256": "8170376732669f587987aa5eb93158a4c1a748af2619718f8bc1f803a60fce6f"
+  },
+  "source_author_and_completion_auditor": "forensic_obligations; ROOT independently reviewed source/concrete and solely operated Windowsquery",
+  "selected_paths": [
+    "\\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy1\\Users\\alarisadmin\\Desktop\\Sirius",
+    "\\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy2\\Users\\alarisadmin\\Desktop\\Sirius",
+    "\\\\?\\GLOBALROOT\\Device\\HarddiskVolumeShadowCopy3\\Users\\alarisadmin\\Desktop\\Sirius"
+  ],
+  "all_three_readable_and_empty": true,
+  "actual_query_exit": 0,
+  "actual_terminal_exit": 0,
+  "outer_owner_exit": 0,
+  "Windows_owner": {
+    "pid": 15800,
+    "start_utc": "2026-10-18T04:12:30.8068620Z",
+    "retired": true,
+    "stopped": false
+  },
+  "actual_entries": 45,
+  "actual_find_calls": 51,
+  "inner_seconds": 0.4149078,
+  "bridge_seconds": 2.087083922000602,
+  "selected_path_coverage_gap_closed": true,
+  "original_July_identity_recovered": false,
+  "new_query_authorized": false,
+  "decision": "STOP this route: all three newly observed snapshot Desktop/Sirius directories empty; existing saved metadata has no further concrete original path. Preserve results; no unchanged search or generic widened scan.",
+  "scope": "Scoped metadata finding only. Not absence across all snapshots/Windows/history, no snapshotcreationdate, tape/comparator/manifestidentity or scientificqualification."
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "sirius-packed-retained-scratch-independent-source-review-v1",
+  "passed": true,
+  "source_screen_admitted": true,
+  "runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "review_method": "Passive source, hash and read-only Git review; no project helper, compiler, provider or test execution.",
+  "source_pins": [
+    {
+      "path": "out/packed-retained-scratch-source/original-retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    {
+      "path": "out/packed-retained-scratch-source/candidate-retained_scratch.slang",
+      "bytes": 2097,
+      "sha256": "560765bdacb0c0b1d37f24e21de0d34204fe8a6d5ccf632c5e4b2831f53096b9"
+    },
+    {
+      "path": "out/packed-retained-scratch-source/source.patch",
+      "bytes": 2113,
+      "sha256": "6c2afa9c52101cc870535f1d8f85d0afd536b2742cec2fe211d1a95b822c799c"
+    },
+    {
+      "path": "out/packed-retained-scratch-source/source-contracts.json",
+      "bytes": 5488,
+      "sha256": "7c80ff6d904ab6eec5e17440b8c0a647109a1004d82918956877b784a8f856c1"
+    }
+  ],
+  "scope": "One offline compile/emitted-code screen of TERMS==5 scratch packing, excluding SIRIUS_RETAINED_STAGE7_OWNER. Public five-word records, other TERMS, status and synchronization remain outside the proposed representation change.",
+  "findings": [
+    {
+      "claim": "S7 must retain the original scratch representation.",
+      "evidence": "retained_owner.slang:139-164 validates cached validity==1 but replays raw numeric/error words without RTPack. Changing only a cached error sign bit can preserve existing cache admission while an unguarded packed write loses that bit. Both revised preprocessor guards exclude this route."
+    },
+    {
+      "claim": "Defined default producers preserve error sign zero and validity in {0,1}.",
+      "evidence": "All five-stage WriteValue wrappers write components 0 through 4 in the same invocation. Original row values are normalized with RTPack and exact raw-valid==1 admission before evaluation. RTInvalid, RTFinishAccumulation, nonnegative error accumulation, negation and selection preserve the invariant; ReadStored/coefficient/projection values arise from those internal producers."
+    },
+    {
+      "claim": "Invalid producers do not immediately abort bytecode evaluation.",
+      "evidence": "EvaluateOne writes the result and can return true for a numerically invalid value. Such defined values remain invalid; required-root validity checks precede their publication. This review does not rely on immediate invalid-producer rejection."
+    },
+    {
+      "claim": "Register reuse is safe for the canonical generated plans.",
+      "evidence": "retained_program.py compile_parallel_program establishes existing dependency ownership, distinct layer destinations disjoint from inputs and barrier-delayed release. Serial allocation loads operands before destination write. Sharing error/valid storage introduces no separate component writers in these plans."
+    },
+    {
+      "claim": "Transport validity initialization does not assume zero error payload.",
+      "evidence": "Its component-four clear masks the stored word and forces the validity bit zero for any underlying bit value. Never-assigned numeric payload remains unspecified; validity-zero propagation and final root rejection do not publish it as a valid record."
+    }
+  ],
+  "limitations": [
+    "No bit-exact promise for arbitrary malformed tables that read undefined slots or race destinations; the original interpreter does not establish defined payloads for those cases.",
+    "The initialization RMW reads unspecified payload. The argument is validity-bit clearing and nonpublication, not zero initialization or exact preservation of undefined internal words.",
+    "Emitted review must confirm packed final stores/read masks, unchanged publication barriers and public five-word ABI, and unchanged pair/S7 programs before any runtime decision.",
+    "No emitted size, LDS-load, occupancy, numerical, latency or performance result is established. Runtime remains unadmitted."
+  ],
+  "workspace_observation": {
+    "tracked_tree_clean": true,
+    "source_committed_and_pushed": true,
+    "sole_worktree": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "basis": "Completed read-only Git observation during this source review; no canonical writes."
+  }
+}

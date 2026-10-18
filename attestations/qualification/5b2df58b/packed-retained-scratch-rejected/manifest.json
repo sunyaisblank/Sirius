@@ -1,0 +1,2813 @@
+{
+  "schema": "sirius-packed-retained-scratch-rejection-preservation-v1",
+  "decision": "REJECT_PRIVATE_CANDIDATE_NO_UNCHANGED_RETRY",
+  "acceptance": {
+    "passed": 17,
+    "required": 22,
+    "whole_passed": 2,
+    "whole_required": 4,
+    "stages_passed": 14,
+    "stages_required": 16,
+    "inclusive_API_passed": 1,
+    "inclusive_API_required": 2
+  },
+  "complete_call_improvements_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "percent": 6.145398952961928
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "percent": 9.17325671850112
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "percent": -3.3562978618449244
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "percent": 1.7432035561408923
+    }
+  ],
+  "findings": [
+    "A distinct private candidate packs valid into the sign bit of nonnegative retained error, reducing only TERMS5 non-owner shared storage from five words to four. Public five-word values, arithmetic, tables, status, governors and both optional owner products stay exact. No canonical source/product adoption.",
+    "Source/ordinary emitted proof passed:35 SPVs=33main+2owner;25 changed main shaders,10excluded SPVs byteexact. All seven program tables/public constants/owner products unchanged. All2052 non-Scratch helper bodies alphaexact. Scratch Address/Read/Write add real branch/mask/shift/RMW costs; no occupancy/driver-cost claim.",
+    "One matched C++ producer used six commands under one300s aggregate guard:91.939956236s/peak1285644KiB,5522 stable inputs. Two current ELFs bind all40main arrays plus2owner arrays;GNU actual selector proof joins33main+2owner shaders/T-E tables and28 device-object GLOBAL functions. Extra18class/10helper distinction and pure-reader setup corrections retained.",
+    "Original timestamp control8 PASS65.332771680s/peak2330668KiB,919stable inputs,zeroFESD/32complete-buffer digest readbacks/51markers/54actual module joins/actualsamechildLVP. No other seven controls executed.",
+    "One unchanged original A1/B1/B2/A2,three repeats per slot,all four terminal0/birth closure. All4x932 inputs before/after/current stable;actual same-child sealed LVP9d69/LLVM20;MESA_SHADER_CACHE_DISABLE=true/default unsetJIT.32readback digests identical across allslots;all51markers/54modulejoins per slot.",
+    "Original conjunctive benefit gate REJECT17/22:2of4whole,14of16stage,1of2Create+all11 originalAPIwindow gates. Whole +6.1454/+9.1733/-3.3563/+1.7432%;reverseTransport-7.0038%,reverseEndpoint12-7.8879%,forwardinclusiveAPI-1.2687%. No pooling,subtraction,resampling,retry,threshold relaxation or frame run.",
+    "Independent completion audit PASS validates rejection/ownership/evidence, not benefit acceptance. Remaining7 held and skipped after failure. All72 canonical protected products unchanged.",
+    "Separate narrow SOURCE check rejected unconditional first-node per-layer opcode: mixed-layer positive fixture intentionally accepts input and constant producers in one layer and demands exact full-output equality. Generator homogeneity is not public accepted-program validation. No compile/workload or source change followed that false premise.",
+    "Source5b2 remains clean committed/pushed development branch;no main integration/fullscience/Mandatory/softwarecold/nativeframe/UI/highresolution/release closure. Current pending sanitizer preparation is deliberately outside this bundle and has not executed."
+  ],
+  "prior_evidence": {
+    "native_frame_failure_commit": "8df961c4abda67a018f3f2b53163e136511f5db1",
+    "native_frame_tag": "evidence/issue-44-native-original-frame-5b2df58b",
+    "native_frame_issue_comment": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6245146733"
+  },
+  "scope": "Private optimization rejection and exact current/source/build/runtime evidence. No scientific-release or cleanup admission.",
+  "created_utc": "2026-10-18T04:36:50.791189+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_branch": "development/minimum-step-floor-2026-10-15",
+  "source_clean_committed_pushed": true,
+  "files": {
+    "files/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.d": {
+      "bytes": 678,
+      "sha256": "66bb49ec7d4359ef22cf7cfacead4c5f4096e60c63ce981fcf0dbc50a433cf97",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o": {
+      "bytes": 5680664,
+      "sha256": "3f78022e204afdfb6f73499bb499eaf954fa40e46a021e27456b1906c69b974c",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.d": {
+      "bytes": 4832,
+      "sha256": "a067c35fda928b548dd2aecd5893db425fc8977dcda68356ad3ffb3f671cb375",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o": {
+      "bytes": 9329744,
+      "sha256": "7ebbbed72fb587b80e2dd1fc8ab9a59ec2c505ff1a86f1c35b5bb9674406a20a",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/baseline.map": {
+      "bytes": 1157003,
+      "sha256": "31b4b7a4ff3c2f481ef773cf2c9d97ad74f645f7856f7a685206112f582af079",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.d": {
+      "bytes": 680,
+      "sha256": "39d2845518517e0da081d1cdc21e8c97de1c3be22a2985c3e760e628de880a61",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o": {
+      "bytes": 5698520,
+      "sha256": "e2cc95dd16e96ced7dde838bbed5f9029016c78b49fd88765ecfc035e58b2fc7",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.d": {
+      "bytes": 4834,
+      "sha256": "6a66184cc16c10323dfad9769863b831d635643a1a76ed2d893aab8ddf76be1d",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o": {
+      "bytes": 9347600,
+      "sha256": "b26ae63e321cdd029bc40b815c0f80e5f59ef6f9a76f17f8b38610167f14a99d",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/candidate.map": {
+      "bytes": 1158082,
+      "sha256": "5b221bc028feeae6c21c69a8d904b8ef04c368ae599dc91a3bcc9500ec5c89f5",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls": {
+      "bytes": 10791864,
+      "sha256": "d0d6ea975310fc1946bceaa75fdc503cbbcac6e8384214256a1172bac2f2da43",
+      "mode": "0o755"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls": {
+      "bytes": 10812344,
+      "sha256": "b5a560a2f66e832ad60f222b79f268d7f51eb6ec645bc53f08cf350f5af90f55",
+      "mode": "0o755"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/producer-command-results.json": {
+      "bytes": 16328,
+      "sha256": "ce206864260ade1c35d37149b9136752552a56cc85fe1d2d4b6a8653a464d556",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+      "mode": "0o600"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1",
+      "mode": "0o644"
+    },
+    "files/bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-before.json": {
+      "bytes": 7174,
+      "sha256": "79da19e63ee40d0053b81279e925c2e57a9dd77461d219405af962a03fbffa72",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-before.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comment-after.json": {
+      "bytes": 4325,
+      "sha256": "7bef7e7276470eddcbf06a623eead60a1ef0030d68216eb2c92cdb610e02831e",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comment-after.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comment-request.json": {
+      "bytes": 2645,
+      "sha256": "064dcb166b302ce4221afa5affd2a4d455037f2d9201525140d94b953b0ce178",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comments-before.json": {
+      "bytes": 520425,
+      "sha256": "9c340edd3b0608fb140e1fd756345789f4f08609596df598d037cfcccf907ad9",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comments-before.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comments-latest.json": {
+      "bytes": 119107,
+      "sha256": "23dfd240f1e5128d8b07fb8e64f2234ab0ed861557273e86006354c401f87e47",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comments-latest.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comments-middle.json": {
+      "bytes": 506184,
+      "sha256": "aa550a90b8eb11b774442ba84927669535bcc1f4dc3cec43d0bea38e49d9f123",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-comments-middle.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-format-after.json": {
+      "bytes": 4299,
+      "sha256": "fdd96378ccf5373b30db7ff02e3b4f3d708711024027109db13b39539692f274",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-format-after.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/issue44-format-request.json": {
+      "bytes": 2662,
+      "sha256": "f4605b4770d995af42b8da7ed2b414a2e49778bd920a49b1fd5d1e013d7b7190",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/root-actual-issue-update.json": {
+      "bytes": 793,
+      "sha256": "f00310eefb58399884e2120428db0f575af47d9aee07f39057288bdf0ff6752b",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-issue-followup/root-comment-read.json": {
+      "bytes": 115,
+      "sha256": "1b7847eb8b95418e967b310c243ed95367e8e909971093580598fda05ed007a7",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-preservation/remote.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-preservation/remote.stdout": {
+      "bytes": 194,
+      "sha256": "eb742910132007a27a45f58141f9917b63c0f6a198daa0ffa07be3cbd6d08b26",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-preservation/root-Git-publication.json": {
+      "bytes": 1262,
+      "sha256": "655f196d635c28ea976aee32d731d8752bee65babcde90a81eb619aa49e92d33",
+      "mode": "0o644"
+    },
+    "files/out/native-frame-preservation/root-preservation-check.json": {
+      "bytes": 850,
+      "sha256": "a0586553a35713e3feb812aeec18ddc65489c9898ab33d4a6188a8521567635c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/actions.json": {
+      "bytes": 553056,
+      "sha256": "5f57b34d566972033f7ac7677cadb6bc9256716627a409f0eb39c69b22fe90ac",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/audited-observer.cpp": {
+      "bytes": 342470,
+      "sha256": "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit-wrapper.patch": {
+      "bytes": 579,
+      "sha256": "ce9c42a2985b72e7ddd63805e2babea1f3422dcc658f7f4bfe68fb76013351c4",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/gtest.xml": {
+      "bytes": 40838,
+      "sha256": "769e3b32f88a77bc3567b43f7a6fd5c95128ead8e13e9193556c0b798e9c5786",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/inputs-after.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/inputs-before.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/owner.json": {
+      "bytes": 2626,
+      "sha256": "25d05a0daeff1edf832e443cbb20394365c9d3680876f6114dc2b26c733a323b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/samples.jsonl": {
+      "bytes": 555884,
+      "sha256": "247617b244ec1d60f235c16c68dfeed5c8cc7d974221280bebc35af27c305ab2",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a1/stdout.log": {
+      "bytes": 708,
+      "sha256": "5d6e39f823a8963210a1762ea48d7fa0e55f2e187f3a0781411d9111dd752211",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/gtest.xml": {
+      "bytes": 40784,
+      "sha256": "3d06b4b3b16b361d91f23ee9c3db9535b043f767a6be8dd76fe84582064af46b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/inputs-after.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/inputs-before.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/owner.json": {
+      "bytes": 2498,
+      "sha256": "daf005fa69695ef97e9d6bfbc6261d1c7005aaada2a7a3f0c97e71f59e62f707",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/samples.jsonl": {
+      "bytes": 578471,
+      "sha256": "34af9bb837d0f17c6992f33e5b7fb143f5f233e107a2a98d20c2b7ecfb662a4d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "67000b7961cc6175c331f0f75376bd483d76d02f9f9f3b798707c19865b94b91",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/actions.json": {
+      "bytes": 282557,
+      "sha256": "06c945f1b4dc36fde4749f276e6238ffe40e887ef362ab230340d0d5ec0a4109",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/gtest.xml": {
+      "bytes": 41063,
+      "sha256": "bd12f1e7d8c4df7cfad33bd98fd633812bd21cfaea1f31d6a262025a4aa708ab",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/inputs-after.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/inputs-before.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/owner.json": {
+      "bytes": 2626,
+      "sha256": "458e06888d1fa61d398742ea34a4f3c8c338bd5b21bd0219611296dd1557ed6d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/samples.jsonl": {
+      "bytes": 554786,
+      "sha256": "de122ad6da80784bb5dd3a530d3a0af005bb3a3f1f72fc3f0f24816aa9f63b01",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b1/stdout.log": {
+      "bytes": 708,
+      "sha256": "eae47bb47ea995743e9e05b18b6aabfc1da596e712d28ec2bf0c37affe0d473d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/gtest.xml": {
+      "bytes": 40970,
+      "sha256": "0e34a6a6abfd6dc370b1cd4e87c12ee9782ba01b1a0055fcab6312ecb0c2cc79",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/inputs-after.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/inputs-before.json": {
+      "bytes": 230563,
+      "sha256": "2756fd36b73c81c50aa2f9a430d0ddca80f7bac2be9b35dcebd3766c020fc3fa",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/owner.json": {
+      "bytes": 2627,
+      "sha256": "0c7f08918549cfd001b0df830e21d347865f707572dd6859a3653920458799a0",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/samples.jsonl": {
+      "bytes": 534758,
+      "sha256": "9d77a4277cc728bcdfd64874b654359041158a0d7ced3b5e682fde3a91f03791",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "3bb918f1eda0e6d54d713b986faa2d361583665f929f94aa5154316a46213d51",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/baseline.json": {
+      "bytes": 7636,
+      "sha256": "99fbb2e55b1ec12df481c2b019178668feec1c1e1512e1cddb3c3130e765266e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/build-and-arrays.json": {
+      "bytes": 7639,
+      "sha256": "e5b39af6038cb2af7db95bfc7ed26ae64aa2f3a039844b7c0905b53f11303792",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/independent-benefit-preflight-review.json": {
+      "bytes": 3309,
+      "sha256": "6b3462982767f2ddad0163c5c8560538b1297ee3cdce54dab8052f5bfb38b9cb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/independent-completion-review.json": {
+      "bytes": 7222,
+      "sha256": "42df68ac0dc7ca5b2faf4f0e8c2cbcbf7d55d5570fcbe7dc999f0ba71a5a65d7",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/retention-gate-frozen.json": {
+      "bytes": 1803,
+      "sha256": "861c2e89cfb6df9d8fe1d7c41c04187a39bb9ff8163382d2632bdd379f0ac883",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/retention-gate-frozen.pending.json": {
+      "bytes": 1721,
+      "sha256": "f07a94158a029e709b22aa6e40a0348789bf78cde50ceb9183fed39c97f988cf",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/root-benefit-preflight.json": {
+      "bytes": 261019,
+      "sha256": "561ca200b4abd00f5a941a17cfe115441bfa9868136cff6e6b9ae05ab2c82d9c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/root-benefit-release.json": {
+      "bytes": 1065,
+      "sha256": "32db8c911ddb0f56f8f252535fcef341c5ce5a6c24baee5bb1b7cea08ccf0ad7",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/root-completed.json": {
+      "bytes": 5706,
+      "sha256": "a2ac71867400fb5baf99180b494280dabc8bb1d54b3e47cc704aff3b9aa156e5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py": {
+      "bytes": 669,
+      "sha256": "635e579cdd22bce7783c7b8c13ede0b5b348a242cafbbceae25300e425312d7d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/software-comparison.json": {
+      "bytes": 12929,
+      "sha256": "67d3182a43964a676ac24d8001932246c58df82ad339a32bddec3f2c79a01ed4",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/software-sequence.json": {
+      "bytes": 837,
+      "sha256": "745faf5025fcb8f0293e3572cd7fc7ab68aaa2f4cd96d35c8223030e5fe4a445",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/benefit/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/check_controls.py": {
+      "bytes": 4168,
+      "sha256": "53b055d8f8d24aef8c4e2592e4f51300b5254c96324690ac7efe5f4837866659",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/compile_matched.py": {
+      "bytes": 2706,
+      "sha256": "a283e8f07ff43486adbb0ad86257fbd8390fb134603961687da1662247ee840a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/contract/baseline.json": {
+      "bytes": 7636,
+      "sha256": "99fbb2e55b1ec12df481c2b019178668feec1c1e1512e1cddb3c3130e765266e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/contract/build-and-arrays.json": {
+      "bytes": 7639,
+      "sha256": "e5b39af6038cb2af7db95bfc7ed26ae64aa2f3a039844b7c0905b53f11303792",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/contract/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/contract/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/gtest.xml": {
+      "bytes": 40913,
+      "sha256": "0cb2ea56a9988e35f3e8ace6e6b7940d9dc437e157d98fae5c7f278bbb753f4f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/inputs-after.json": {
+      "bytes": 226712,
+      "sha256": "c3c1a6b63f60bffd348e643e261afda334aa5cf289a0421c20211e004aa797ba",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/inputs-before.json": {
+      "bytes": 226712,
+      "sha256": "c3c1a6b63f60bffd348e643e261afda334aa5cf289a0421c20211e004aa797ba",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/owner.json": {
+      "bytes": 2426,
+      "sha256": "e79d40cb377f80a2f4808e7b3e3ed246abde990e32d8d91bb39047a645670c98",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/samples.jsonl": {
+      "bytes": 560620,
+      "sha256": "a5c128a5f4d8c8cde7eed0cd0e56af65a287fcfb6c35b221223318c7bfe50871",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/control-8/stdout.log": {
+      "bytes": 708,
+      "sha256": "290ec82d6b9e77f711353020212a091184f6c577e66bd2f908e86c6e9f87ebbb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/headers/baseline/retained_kernels.h": {
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/headers/candidate/retained_kernels.h": {
+      "bytes": 7980747,
+      "sha256": "7b24169745177b6a18bacb4d464716c7b2ff1acd3266f041db27f08df314457f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/independent-runtime-preflight-review.json": {
+      "bytes": 5184,
+      "sha256": "eae03cfada1ef260533e3cae8ca50f824ba16630bdf95d6c8fe653916ff78636",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/independent-source-review.json": {
+      "bytes": 7587,
+      "sha256": "84f4b0e9a64b6700c54f77c8cf68f692d4d7105f0d1672d71e116cd9e45bc0e1",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/observer-instrumentation.patch": {
+      "bytes": 7032,
+      "sha256": "5698fd86970d30abc94d91ee057b103cc1db7486cc601d65efc7796d4ec9a700",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/audited-observer.cpp": {
+      "bytes": 335033,
+      "sha256": "399cd52cc6d9fc89e4b97ff63b06a54b06b4f80128f5a99c2c6d1278c62f3dc3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/benefit-prepare.py": {
+      "bytes": 10793,
+      "sha256": "07b338ebbfaa24861933c608f8b73be5df6e5ea4a82d6565cc9a7c1b2028cfc8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/canonical-retained_compute_test.cpp": {
+      "bytes": 339892,
+      "sha256": "abdc5cef56aa3a4409209797b37794553400b855b534204af6cabe583c4fdee1",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/controls-check_controls.py": {
+      "bytes": 4168,
+      "sha256": "53b055d8f8d24aef8c4e2592e4f51300b5254c96324690ac7efe5f4837866659",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/controls-prepare.py": {
+      "bytes": 9134,
+      "sha256": "10cd34051ecbfa503b88feaa9eff3b251cc8fb0bae7cc975b29a67803370ce5f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/controls-prepare_runtime.py": {
+      "bytes": 3669,
+      "sha256": "5d64290a69e5a3fc5147cb3969f30791ab416dd46d9803e76a0528a1b57bdacd",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/controls-run_controls.py": {
+      "bytes": 495,
+      "sha256": "bb555e535555ec2802636901019b3d8e3b5425fb7ce83dbbd1170b7a86a39244",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/controls-verify_control_routes.py": {
+      "bytes": 5215,
+      "sha256": "dd982b35e293f40ec0500e1052becb087aeb22890f1cb59835715e7ad0d7e884",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/controls-verify_producer.py": {
+      "bytes": 8695,
+      "sha256": "f5a13ef031247e311d9524a3962f26787286bb5ecf402e861efb748a7f7d9807",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/legacy-observer.patch": {
+      "bytes": 18481,
+      "sha256": "2d5e9bef85b23fb987033698806ea6df9fef391d2208c8dc6f030003ec0e3776",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/originals/run_limb_benefit_slot.py": {
+      "bytes": 661,
+      "sha256": "94e159187cb357e55b5767342e246ecfa116b9c05e444b29c4a2453f14e621a5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/origins.json": {
+      "bytes": 16244,
+      "sha256": "96ac279bc0419851d6e0ada9271ba0ffecd581fd2dab89ba7d55baf16e845744",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/protected-before.json": {
+      "bytes": 12595,
+      "sha256": "a73269d5ecb4001e3e771d13cc7a8fc0cf8d2c8677c2cf6935f276f03c49e4d8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/recipes.pending.json": {
+      "bytes": 27387,
+      "sha256": "93a9559ca66177838dbcedc3c0f847cabf679ef6b84ae7e50287292ce505d987",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/root-control-8-completed.json": {
+      "bytes": 4737,
+      "sha256": "233ea678b4af4c53d953d672774ac1e36f4ec1be5a731d7cca67590efca95845",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/root-runtime-preflight.json": {
+      "bytes": 256655,
+      "sha256": "64efdb3ad5edd1852ac5987a09efec23283d54cab13759531d6f5a0c7815a102",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/root-runtime-release.json": {
+      "bytes": 1406,
+      "sha256": "61ea765fe27d8289ab83b002a35224641376ccb94e9d4fbf767737b95f0aca7c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/runtime-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/runtime-ldd.stdout": {
+      "bytes": 3523,
+      "sha256": "84737c09e91cde926f14857cdd4fca65bb0f1b06e2b31b831f64493219b795c0",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/source-contracts.json": {
+      "bytes": 8629,
+      "sha256": "37876821408772cd7c510977cf3de7959b7602d94e83993c3694fd6a8a1fd6de",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/source-freeze.json": {
+      "bytes": 5079,
+      "sha256": "36fc8b1de77b2b9d4f69b448a75ae488490822f3302e2dc2f6737d5307786d55",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-controls/verify_control_routes.py": {
+      "bytes": 5215,
+      "sha256": "dd982b35e293f40ec0500e1052becb087aeb22890f1cb59835715e7ad0d7e884",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/actions.json": {
+      "bytes": 564114,
+      "sha256": "4870e6356a8d4ee71db0ad5888964062b92c0131385c82cd5d2091b2799966ff",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/compiler-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/compiler-ldd.stdout": {
+      "bytes": 2174,
+      "sha256": "cd9793fa9c5b4295922755b8b55986504aec5299f1c747f176f694afce66b37d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/independent-completion-review.json": {
+      "bytes": 7148,
+      "sha256": "0562f24f1389dc8ffaa6d0f71c1251002e88893cb06c49a2d26070d4def0b290",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/independent-concrete-review.json": {
+      "bytes": 3857,
+      "sha256": "5b407410ea8d262dd7f6483bae180774c312679dda044fea1a9efca9e15c8a93",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools.pending.json": {
+      "bytes": 1840,
+      "sha256": "8388a894ac77eb0cd1bf2080ed4dade436b80be662ef777b2311115a220c5f5d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/actions.json": {
+      "bytes": 570499,
+      "sha256": "c08a9c03b1bbdebd10d789cb132ee18c9e84d3d132c75fc877d7146a3f86d5f8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/commands.json": {
+      "bytes": 1461,
+      "sha256": "5189388c463df7e51fa7f8b744b5a22d17787cb4b4bcb30eb7ecb6c84294db77",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect.py": {
+      "bytes": 707,
+      "sha256": "085cba434faf18d0fede3f2c04ef21726ea9886aa1dc9d76f80c1f14306ce5b9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/baseline-create.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/baseline-create.stdout": {
+      "bytes": 221160,
+      "sha256": "289d39279616df8fb3934c4f726ad34a8c5c506ff7a10140950f4360c1f715a1",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/baseline-readelf.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/baseline-readelf.stdout": {
+      "bytes": 704159,
+      "sha256": "a41fa935e932da56f23ab05385e9a0f62a5f38e82b8ddcb4f19870fdad07238e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/baseline-symbols.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/baseline-symbols.stdout": {
+      "bytes": 701251,
+      "sha256": "752fa7d6fdddc931a696c3c97d72ece3a159e18847748169cdfd99eaef59ada4",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/candidate-create.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/candidate-create.stdout": {
+      "bytes": 221161,
+      "sha256": "c05e4f859c87df9cae918fafd7ef4e10372a1111b0298f0f12b8e31ccd50d0b3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/candidate-readelf.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/candidate-readelf.stdout": {
+      "bytes": 704165,
+      "sha256": "f068a09b8785d59ed4897c1df96ba1ee6efe547db70a2925f934b055f087e743",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/candidate-symbols.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/candidate-symbols.stdout": {
+      "bytes": 701251,
+      "sha256": "8b3a0d30725401bdcfe43d450b232fd04201e6b52ceb905345e834c5d977d0a0",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/inputs-after.json": {
+      "bytes": 1769575,
+      "sha256": "a5db988be0b7a9be936c28528cc210c868f5c6238ab6ac83a7647e60d2baf482",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/inputs-before.json": {
+      "bytes": 1769575,
+      "sha256": "a5db988be0b7a9be936c28528cc210c868f5c6238ab6ac83a7647e60d2baf482",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/owner.json": {
+      "bytes": 1777,
+      "sha256": "58239387c49821060a3a05ed879f8069c6aede910e72dda84198b8b0a9463a43",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/results.json": {
+      "bytes": 1587,
+      "sha256": "319ec01f7cf869f6ad53a57f88ad14e71e27a890e060f27115e687dff581fa8f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/samples.jsonl": {
+      "bytes": 219,
+      "sha256": "b6115deb4806962bb5c36f0b19e2bd5b3ef12af76b2f4666f02cbeb143043b40",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/inspect/stdout.log": {
+      "bytes": 56,
+      "sha256": "f64a4c604e307531af081529b4c9b656c75e8b48ea42144b08ccc5222a22ab9e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/root-preflight.json": {
+      "bytes": 1854999,
+      "sha256": "fd6f1beb2b6462a7d01d591c4a74b0e18e9d6af71881d3947451117a31eacad5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/tools-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/posttools/tools-ldd.stdout": {
+      "bytes": 1600,
+      "sha256": "79924b404ec9159353d067e156f27cc772b29d5ceb445072650e6f923c462dce",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer-postproof.json": {
+      "bytes": 31558,
+      "sha256": "d8ff74c1771c5880ef752c44fd969740f45707455f2367a987cbe130fcdd7ba1",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer/inputs-after.json": {
+      "bytes": 1751132,
+      "sha256": "86c84a23375acd2535e84406d0d389f7ee861ef949bb048d64c96ff75f329d11",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer/inputs-before.json": {
+      "bytes": 1751132,
+      "sha256": "86c84a23375acd2535e84406d0d389f7ee861ef949bb048d64c96ff75f329d11",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer/owner.json": {
+      "bytes": 3735,
+      "sha256": "6dbdb7df74139852fde8b49f63d6298852f48474c4035b1430fd5d2b92e2c87a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer/samples.jsonl": {
+      "bytes": 167808,
+      "sha256": "68ffe6530a40d8586cd06aae6efefe3e8a52d353f5734f79e19712da71cd0d06",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/producer/stdout.log": {
+      "bytes": 7298,
+      "sha256": "0ed152a2a31bdfb5c2072a9f0ef2b48a7e45b8808de18c5f734134ea1bb6aeae",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/read_postproof.py": {
+      "bytes": 15266,
+      "sha256": "8acc4a79725e8ed0c6ed43d975c7e35973c04e31bb7fb5cb9ab21dc8bef1efe8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/root-compiler-tool-closure.json": {
+      "bytes": 59933,
+      "sha256": "d3efa091e5ea4648cd9336f49835ec9415ef0eec2b516015fffcd6f51cb77dde",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/root-preflight.json": {
+      "bytes": 1835241,
+      "sha256": "ba14575058eff329f286da8b2a020df6af927d06c56c7ae46d46c3f2caad197f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/root-release.json": {
+      "bytes": 1134,
+      "sha256": "30774f5c76da42731531ce74d9fb2baefaa3bf0502d4d9f80447ea39377792c6",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/root-selector-postproof.json": {
+      "bytes": 25733,
+      "sha256": "df738d13b8c23e562e1039db6ad56d3e3553c31b731650f85e7c6f37f865bea9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/root-source-admission.json": {
+      "bytes": 920,
+      "sha256": "81ccda21915ecad2728500baf6a47d7abb91a36c780c78a34b182054ee0e9830",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-producer/run_owned.py": {
+      "bytes": 12451,
+      "sha256": "b47e4bb22e63c16244802a5d121160a63b942f5c37614d26ded319fe4aaea57d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/actions.json": {
+      "bytes": 467491,
+      "sha256": "ad129af80eac489187f6b008ff15ecba81ad3116dc61e1fb50aa3bb9007e89f2",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/inputs-after.json": {
+      "bytes": 1576470,
+      "sha256": "8b0d3e949ca7fbebc8f1961cb4516f14559f47d8b4c7b6e72a0cef6a7891a88f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/inputs-before.json": {
+      "bytes": 1576470,
+      "sha256": "8b0d3e949ca7fbebc8f1961cb4516f14559f47d8b4c7b6e72a0cef6a7891a88f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/owner.json": {
+      "bytes": 8930,
+      "sha256": "c7b0b8d4c72cc81ee625bca49a2ab6447594eec158ee69544ff7629ee1ed009d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dense.spv": {
+      "bytes": 78684,
+      "sha256": "370697d19d3e6b55a497eba23c7eabf78e467b2a3375c381ceb5bde656071a45",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dense_fp64.spv": {
+      "bytes": 91360,
+      "sha256": "f7c85cc6ac17aaa3061f7acea73c1307111462bc273ceeb25a94a7bac27d338b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dense_portable.spv": {
+      "bytes": 116908,
+      "sha256": "cc83ef989a3241115f010b67e8d497c0147047fe6996400409e5d0d00872e50a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dense_portable_fp64.spv": {
+      "bytes": 116908,
+      "sha256": "cc83ef989a3241115f010b67e8d497c0147047fe6996400409e5d0d00872e50a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dopri_phase.spv": {
+      "bytes": 59472,
+      "sha256": "3d7dade451c06b3be91854248698d949fb5f6adb425481b0457dc4c2f3b77b3b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dopri_phase_fp64.spv": {
+      "bytes": 72832,
+      "sha256": "e3d31cffe967fce2245d37dd0a44f89de3b259ab3c6621bf720fc33ff32e9bdd",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dopri_phase_portable.spv": {
+      "bytes": 93548,
+      "sha256": "32ad1724adb904d9c525d6515226b3aa373fa49bd05af349f0bf089a89419ee3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 93548,
+      "sha256": "32ad1724adb904d9c525d6515226b3aa373fa49bd05af349f0bf089a89419ee3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 97456,
+      "sha256": "d0b847a874f304967573a993456b48f82f8d86157d54522ba5ca30b1e6dba210",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint.spv": {
+      "bytes": 100032,
+      "sha256": "d54548aa08ec5ac457a158aada9cec1eacd8b9bce853fd622b5dd80d6dab678c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint_fma.spv": {
+      "bytes": 98200,
+      "sha256": "ddfbeb1d2da6dfb9cc12b0c14b880d0d93c98c99c1b913cd4477cf9ae9826ec3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint_fp64.spv": {
+      "bytes": 112692,
+      "sha256": "15c2aaac341f11570b9f75c10ba810793d33a3fd4bba8779bd8251ce6521d773",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint_portable.spv": {
+      "bytes": 146048,
+      "sha256": "aafbce96e7ff69e9c807ff212f6f2f5d7e24d26a74989ade66bffc5dcee6a433",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint_portable_fp64.spv": {
+      "bytes": 146048,
+      "sha256": "aafbce96e7ff69e9c807ff212f6f2f5d7e24d26a74989ade66bffc5dcee6a433",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 152104,
+      "sha256": "99067b8c4047e25947c4417ec699865abf05ecec70ba310d3c2a7b23721b1882",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_initialize.spv": {
+      "bytes": 57840,
+      "sha256": "0c5a1d958cbe8575236972f1290070124262dc46de48dc28e9f6e8a993847c48",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_initialize_fp64.spv": {
+      "bytes": 71200,
+      "sha256": "cb7e9c179bc7b39a9560ad8601c46f344a86bdb4798d8bfa54b1c5b6496fb180",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_initialize_portable.spv": {
+      "bytes": 78148,
+      "sha256": "70d48f55a73f8efc0c7caabee6206210aaa2ce2e6103f51b3cb76804a3d173c9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_initialize_portable_fp64.spv": {
+      "bytes": 78148,
+      "sha256": "70d48f55a73f8efc0c7caabee6206210aaa2ce2e6103f51b3cb76804a3d173c9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_kernels.h": {
+      "bytes": 7980747,
+      "sha256": "7b24169745177b6a18bacb4d464716c7b2ff1acd3266f041db27f08df314457f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_owner_layout.slang": {
+      "bytes": 1679,
+      "sha256": "b5c0941d5bbbade6a6ab2893b7f26fbf9eb274c2ab8afa730f1c4f7f054ab997",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport.spv": {
+      "bytes": 86096,
+      "sha256": "afebb1111fcdb542c2d8c57f21ab1bac44ee71bf94f332a04533e27d4bb4cd4a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport_fma.spv": {
+      "bytes": 84264,
+      "sha256": "a3f0ab39b69f2574fa2b63fe36d77d157cc7ea9c313f5863ca5989b4f0d4a867",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport_fp64.spv": {
+      "bytes": 98740,
+      "sha256": "d55c20d2de69c742c95ccc90e2ed7257f2e32e418d3f2673f1d7842c9675807d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport_portable.spv": {
+      "bytes": 100444,
+      "sha256": "f727c2e9c89abfb570af59565f283269625f2c7ae134f45aad27facf190845a5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport_portable_fp64.spv": {
+      "bytes": 100444,
+      "sha256": "f727c2e9c89abfb570af59565f283269625f2c7ae134f45aad27facf190845a5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104744,
+      "sha256": "2a9acb72448f566b2f6b5d13ec1ceb9fd83636d07eaa24202702d00520c67c4d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/samples.jsonl": {
+      "bytes": 36969,
+      "sha256": "e90f3650899c6189baf62de1205881ba9af0ecd063ac6def422f04ea4884641b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/candidate/stdout.log": {
+      "bytes": 973,
+      "sha256": "6db2adc6cbe5e6295584442d4182f2960beb214d7c5422f58fda6c3b25ac10eb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/emitted_compare.py": {
+      "bytes": 15426,
+      "sha256": "00527d840801b00a27bed127b284f1aaedd8a5296bf4d2d2c615e85dd6ba3385",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/independent-concrete-review.json": {
+      "bytes": 5002,
+      "sha256": "0b4a314f40301e201ab52e6a9d42cda2001f06774bfbd0045994a760a1c223a8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/independent-emitted-review.json": {
+      "bytes": 37764,
+      "sha256": "a2e277dc023faaeb4471d766e0a869ea5a05b14b38d15aac035c74c2103c3c1d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/actions.json": {
+      "bytes": 512479,
+      "sha256": "b7ca5d340ac61368a91b82947321c6bc96d0b05d2e5f9a221928bd61d0865bb3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/commands.json": {
+      "bytes": 18928,
+      "sha256": "4d00f07dec9b640d9c2ec15251a329b97cb718538a9d5548a4f696059a19de26",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble.py": {
+      "bytes": 714,
+      "sha256": "ad68a8d9e8d4987e9c21f8f8e500668c15919aae6f2f1d0d3546096d3466802c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense.spvasm": {
+      "bytes": 226687,
+      "sha256": "655b3763b3eab22bd02c5e68bfa5605e56364f92262f13a7dcbc064af98ee475",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_fp64.spvasm": {
+      "bytes": 263363,
+      "sha256": "09f469bed0d8590367ec51ad1f3f92fa0f3b706ef0a0aea47f55086a21ebe26c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable.spvasm": {
+      "bytes": 324376,
+      "sha256": "774e7093be0ab09b0a56a4132f91c242109008a5c45c6470ac8e559bb4be4060",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable_fp64.spvasm": {
+      "bytes": 324376,
+      "sha256": "774e7093be0ab09b0a56a4132f91c242109008a5c45c6470ac8e559bb4be4060",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase.spvasm": {
+      "bytes": 169798,
+      "sha256": "09564717904d8113c9ecc446c03bfe9eb1d2b181db75f46748ed92f4f67d0ee3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_fp64.spvasm": {
+      "bytes": 208219,
+      "sha256": "a3ceaf1a0f7c49ddd2a3ee4d1bd7d9a5b0d044bcf11255127c3e79358f3f88bf",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable.spvasm": {
+      "bytes": 262481,
+      "sha256": "da08751c8623d024cf13cfc00372b388b88920d91f2c638c9849b13edbf1b2d7",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_fp64.spvasm": {
+      "bytes": 262481,
+      "sha256": "da08751c8623d024cf13cfc00372b388b88920d91f2c638c9849b13edbf1b2d7",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_normal_sum.spvasm": {
+      "bytes": 273771,
+      "sha256": "4114b5293faae5ed30291f84384ba1f64c35e2d52797c2d1b90fb785b9fd5095",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_normal_sum.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_normal_sum.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.spvasm": {
+      "bytes": 288928,
+      "sha256": "d4d16c8d3385f7b7f9b64a52a34594c8b3144e9606c1f1bb57061c9106951043",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fma.spvasm": {
+      "bytes": 284065,
+      "sha256": "3104e47dbadade6d42fdec4a5c109a9607af1d00251037a8144eb8c87404361a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fma.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fma.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fp64.spvasm": {
+      "bytes": 325572,
+      "sha256": "7a06778385cba96beaa285a71a20dba701cd21bc6f491fad45c0449c3dcd57dc",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable.spvasm": {
+      "bytes": 406452,
+      "sha256": "47be473f1ca29b4b9ed75abab9298964ccc1267b89516abbee01c5c5a6b85e40",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_fp64.spvasm": {
+      "bytes": 406452,
+      "sha256": "47be473f1ca29b4b9ed75abab9298964ccc1267b89516abbee01c5c5a6b85e40",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_normal_sum.spvasm": {
+      "bytes": 422552,
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_normal_sum.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_normal_sum.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize.spvasm": {
+      "bytes": 164884,
+      "sha256": "eb8527d719cce07359d7976ef5ca512314163cb07db63dde2b6aeb612c77ba86",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_fp64.spvasm": {
+      "bytes": 203324,
+      "sha256": "a47ba4b1bb72c666e2ff7b330396e297ce8f0f056123dfbabd83befa98564d62",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable.spvasm": {
+      "bytes": 218009,
+      "sha256": "127828b105527f7b5b9440d1d2a0defcc3163499acd73b02f7a7c52ccbf193de",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable_fp64.spvasm": {
+      "bytes": 218009,
+      "sha256": "127828b105527f7b5b9440d1d2a0defcc3163499acd73b02f7a7c52ccbf193de",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.spvasm": {
+      "bytes": 246554,
+      "sha256": "cb9003c48a19654f734f653a92e9adec9d67f44006fe4300ad574028c75ba413",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fma.spvasm": {
+      "bytes": 241686,
+      "sha256": "3b2709cd0fa6f0c225fe3688349f2ac965de8e732972519b29fac516c29e6818",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fma.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fma.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fp64.spvasm": {
+      "bytes": 283164,
+      "sha256": "6970c045160ddec96516485b0edd21d7bb5f2eb7f1f6293610ac437082eb8588",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable.spvasm": {
+      "bytes": 284164,
+      "sha256": "7ff541e30e62c9b7399732886362cbab17e2c43d82ab2c4ebb5932bc2035b200",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_fp64.spvasm": {
+      "bytes": 284164,
+      "sha256": "7ff541e30e62c9b7399732886362cbab17e2c43d82ab2c4ebb5932bc2035b200",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_normal_sum.spvasm": {
+      "bytes": 296907,
+      "sha256": "30cc0aa0e85bb0d943e332637b0073059bf77f33d29f1290f9514e3b760eaddb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_normal_sum.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_normal_sum.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense.spvasm": {
+      "bytes": 228890,
+      "sha256": "3668cf2fb491c9150e243f166ab2a664f78408be9b1f56f67d9782cec67e9dea",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_fp64.spvasm": {
+      "bytes": 265567,
+      "sha256": "88eee930b0b73e129bc4d9f5a29c11613edf9d9549e29186f10f6f79aeafb40a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable.spvasm": {
+      "bytes": 326472,
+      "sha256": "6c830b6c574888bfde4c4794f547fb0462eef3528d1929f8659b22cf79157086",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable_fp64.spvasm": {
+      "bytes": 326472,
+      "sha256": "6c830b6c574888bfde4c4794f547fb0462eef3528d1929f8659b22cf79157086",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase.spvasm": {
+      "bytes": 172001,
+      "sha256": "49cd347b3ab8d5ad21736ffb76572e544fe6a7da5ee3bdb76f6499733692b60f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_fp64.spvasm": {
+      "bytes": 210422,
+      "sha256": "bb97f790233fd4226342d7aa886d835bb3a9fd7f2c356548552ea9368f8b4e92",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable.spvasm": {
+      "bytes": 264573,
+      "sha256": "c4e68eded46ee4346e48f5718b83fdffdcc615a1579c006f75ca12946c4fb4d6",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_fp64.spvasm": {
+      "bytes": 264573,
+      "sha256": "c4e68eded46ee4346e48f5718b83fdffdcc615a1579c006f75ca12946c4fb4d6",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_normal_sum.spvasm": {
+      "bytes": 275870,
+      "sha256": "73270a94197199ed617587542892b437eab529c382594710a3e154ecbec498f5",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_normal_sum.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_normal_sum.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint.spvasm": {
+      "bytes": 291135,
+      "sha256": "f0ffe8b90712661983e7a5901b8298c88323de1c3f276d481743f5cc313a09fd",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fma.spvasm": {
+      "bytes": 286273,
+      "sha256": "2af04612a84d174520ec1bb9d9e06f44c2676349be34843b3e179442d6429b68",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fma.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fma.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fp64.spvasm": {
+      "bytes": 327781,
+      "sha256": "f85b54853f1620504643234206a2b4cca32be1e1792564d3c72eed36f025ddcc",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable.spvasm": {
+      "bytes": 408578,
+      "sha256": "0f62a35f5eac10290963e1199525a4507fe38a5841cb8b6f7185e9b2f4479a67",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_fp64.spvasm": {
+      "bytes": 408578,
+      "sha256": "0f62a35f5eac10290963e1199525a4507fe38a5841cb8b6f7185e9b2f4479a67",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_normal_sum.spvasm": {
+      "bytes": 424653,
+      "sha256": "e2f748610e8a19bee7ba16a339cf606dea31cbb4b5c322784240f7b64d7c7346",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_normal_sum.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_normal_sum.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize.spvasm": {
+      "bytes": 167087,
+      "sha256": "4536a15703c772d688b999eb455f66ff5f9dba37b0b36124c35b28ccf489a41d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_fp64.spvasm": {
+      "bytes": 205527,
+      "sha256": "13bc7bdab18ce49da062aec7c83bff574ec0c21f5df400647f87710bf0bf8c1c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable.spvasm": {
+      "bytes": 220101,
+      "sha256": "1f8a77d4d368559ae5140538fd73626e83ffa28f1f6f6276989376639e00bb85",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable_fp64.spvasm": {
+      "bytes": 220101,
+      "sha256": "1f8a77d4d368559ae5140538fd73626e83ffa28f1f6f6276989376639e00bb85",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport.spvasm": {
+      "bytes": 248763,
+      "sha256": "8a4ec15082255044faa2985ac27180a2473f89c3ea9b6391928c9bf970fb7586",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fma.spvasm": {
+      "bytes": 243894,
+      "sha256": "f466fbc25e9988de3db4e88f5d2143f0fef4a5554a1491acb90ce8723aa75cfc",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fma.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fma.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fp64.spvasm": {
+      "bytes": 285373,
+      "sha256": "a1aa5b9e0ddc515a8de2d1f7e81807ca9d71f0214ebe9f8b8bc71ce155c9de5f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable.spvasm": {
+      "bytes": 286260,
+      "sha256": "ce4c7ca6156edba2017c00699c94cc73646f0c6f23b5f0439061971e03adacaf",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_fp64.spvasm": {
+      "bytes": 286260,
+      "sha256": "ce4c7ca6156edba2017c00699c94cc73646f0c6f23b5f0439061971e03adacaf",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_fp64.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_fp64.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_normal_sum.spvasm": {
+      "bytes": 299007,
+      "sha256": "aafce8187a4ed24c462269558796cbb6308ebbc1789421d869a925f4808c0727",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_normal_sum.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_normal_sum.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/inputs-after.json": {
+      "bytes": 1593084,
+      "sha256": "02df52ca8270ef58a64c37c468f9af1f49926e257340782c4c58bbbd1c03ca3b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/inputs-before.json": {
+      "bytes": 1593084,
+      "sha256": "02df52ca8270ef58a64c37c468f9af1f49926e257340782c4c58bbbd1c03ca3b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/owner.json": {
+      "bytes": 1940,
+      "sha256": "7b95e46d2ba82b46ddd6f1b72431d510b78fb4184b978e84e5ccb7a6d91b5b78",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/results.json": {
+      "bytes": 23778,
+      "sha256": "8140d14bb815e190ab03a49de14589f819976442dfdda3de0f898b024648bc77",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/samples.jsonl": {
+      "bytes": 565,
+      "sha256": "738097b7ef3777e7c6c66361084c8b802a08b3e841f22ffd2ec22b9e9638184c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/disassemble/stdout.log": {
+      "bytes": 63,
+      "sha256": "026480ef724805357e477dc23e3bb85acb8ec5618a1b0f768318a49240bc506f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/root-preflight.json": {
+      "bytes": 1662076,
+      "sha256": "1a473bacfbe53be2c489b623ba4033fd5a6bad7a0ee748f867d80504eac62a4a",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/posttools/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/root-compiler-products.json": {
+      "bytes": 15812,
+      "sha256": "2be6e9e799531dd19cf040829f4320c726e1e41c6f80ab9fec9629b2faafa114",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/root-completed.json": {
+      "bytes": 1626,
+      "sha256": "d966cd2f4b8c151cc13c14e54654787ef97f6350a24d39bd2d9a7586b92f0fce",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/root-native-countercost.json": {
+      "bytes": 11254,
+      "sha256": "9463a0b50403853ab0fa89106d3b2eb1c643e8e6fb9aac01ac0e94509c85bdfb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/root-preflight.json": {
+      "bytes": 1648106,
+      "sha256": "2f6360e48cbd473e52e21445beefb0c6587f0b17517845f9d4fb0fd860f801d1",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/root-release.json": {
+      "bytes": 1389,
+      "sha256": "6df4c9143f9bd7f206615d19c1a89f793eff0f6e649e8a39181b9a6f5d11c6e3",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/scripts/build-retained-kernels.py": {
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/camera_frame_probe.slang": {
+      "bytes": 2470,
+      "sha256": "00120f5858efb20ba53ffa9cb3942860ed5474c012f5db75a2b79c3e9448105c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/coupled_probe.slang": {
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_camera.slang": {
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_coupled.slang": {
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 18835,
+      "sha256": "9737e7ad54d06c9cb584c14504d574f88551833b3c602ed8335157c100a6a38b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_disk.slang": {
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_ellis_topology.slang": {
+      "bytes": 9393,
+      "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_kerr_infinity.slang": {
+      "bytes": 23616,
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_point_star.slang": {
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_trace_event.slang": {
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/infinity_probe.slang": {
+      "bytes": 3057,
+      "sha256": "dcddb120fe9cf4306df9e18ded240e629fea31012352e540f275f77955700888",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/metric_consistency_probe.slang": {
+      "bytes": 2352,
+      "sha256": "d21dd5305080cbee5c13aa0e435bb47e45117e35de4aafece4cd94224f64739e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/parity_probe.slang": {
+      "bytes": 44089,
+      "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_camera.slang": {
+      "bytes": 9716,
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_dense.slang": {
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_initialize.slang": {
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_owner.slang": {
+      "bytes": 8042,
+      "sha256": "7d70e581acedccd688dadff476629de52c304d25657389179923b6fb32f8db62",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_program.py": {
+      "bytes": 38341,
+      "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_ray_camera.slang": {
+      "bytes": 9201,
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 2097,
+      "sha256": "560765bdacb0c0b1d37f24e21de0d34204fe8a6d5ccf632c5e4b2831f53096b9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/smoke.slang": {
+      "bytes": 1002,
+      "sha256": "674183f4aef31db29e7a78985ba616c7e5cd401fd21161c798b3028b2142c27e",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/source/src/sirius/kernels/trace.slang": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/tool-ldd.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-screen/tool-ldd.stdout": {
+      "bytes": 872,
+      "sha256": "b6e32ac68931ae760abd9bc6cedbdb391f6b437fe37f5f61800784331951321d",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-source/candidate-retained_scratch.slang": {
+      "bytes": 2097,
+      "sha256": "560765bdacb0c0b1d37f24e21de0d34204fe8a6d5ccf632c5e4b2831f53096b9",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-source/independent-source-review.json": {
+      "bytes": 4452,
+      "sha256": "02d461cc433d9f952b683e54669946c73331b91f26070b627d6ccdf48c77f2eb",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-source/original-retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-source/source-contracts.json": {
+      "bytes": 5488,
+      "sha256": "7c80ff6d904ab6eec5e17440b8c0a647109a1004d82918956877b784a8f856c1",
+      "mode": "0o644"
+    },
+    "files/out/packed-retained-scratch-source/source.patch": {
+      "bytes": 2113,
+      "sha256": "6c2afa9c52101cc870535f1d8f85d0afd536b2742cec2fe211d1a95b822c799c",
+      "mode": "0o644"
+    }
+  },
+  "captured_source_inventories": {
+    "out/packed-retained-scratch-source": [
+      "out/packed-retained-scratch-source/candidate-retained_scratch.slang",
+      "out/packed-retained-scratch-source/independent-source-review.json",
+      "out/packed-retained-scratch-source/original-retained_scratch.slang",
+      "out/packed-retained-scratch-source/source-contracts.json",
+      "out/packed-retained-scratch-source/source.patch"
+    ],
+    "out/packed-retained-scratch-screen": [
+      "out/packed-retained-scratch-screen/actions.json",
+      "out/packed-retained-scratch-screen/candidate/inputs-after.json",
+      "out/packed-retained-scratch-screen/candidate/inputs-before.json",
+      "out/packed-retained-scratch-screen/candidate/owner.json",
+      "out/packed-retained-scratch-screen/candidate/retained_camera.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_camera_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_camera_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_camera_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dense.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dense_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dense_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dense_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dopri_phase.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dopri_phase_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dopri_phase_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dopri_phase_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_dopri_phase_portable_normal_sum.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint_fma.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint_portable_normal_sum.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_endpoint_portable_stage7_owner.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_initialize.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_initialize_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_initialize_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_initialize_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_kernels.h",
+      "out/packed-retained-scratch-screen/candidate/retained_owner_kernels.h",
+      "out/packed-retained-scratch-screen/candidate/retained_owner_layout.h",
+      "out/packed-retained-scratch-screen/candidate/retained_owner_layout.slang",
+      "out/packed-retained-scratch-screen/candidate/retained_ray_camera.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_ray_camera_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_ray_camera_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_ray_camera_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport_fma.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport_portable.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport_portable_fp64.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport_portable_normal_sum.spv",
+      "out/packed-retained-scratch-screen/candidate/retained_transport_portable_stage7_owner.spv",
+      "out/packed-retained-scratch-screen/candidate/samples.jsonl",
+      "out/packed-retained-scratch-screen/candidate/stderr.log",
+      "out/packed-retained-scratch-screen/candidate/stdout.log",
+      "out/packed-retained-scratch-screen/emitted_compare.py",
+      "out/packed-retained-scratch-screen/independent-concrete-review.json",
+      "out/packed-retained-scratch-screen/independent-emitted-review.json",
+      "out/packed-retained-scratch-screen/owned_guard.py",
+      "out/packed-retained-scratch-screen/posttools/actions.json",
+      "out/packed-retained-scratch-screen/posttools/commands.json",
+      "out/packed-retained-scratch-screen/posttools/disassemble.py",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dense_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_normal_sum.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_normal_sum.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_dopri_phase_portable_normal_sum.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fma.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fma.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fma.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_normal_sum.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_normal_sum.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint_portable_normal_sum.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_initialize_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fma.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fma.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fma.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_normal_sum.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_normal_sum.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport_portable_normal_sum.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dense_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_normal_sum.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_normal_sum.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_dopri_phase_portable_normal_sum.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fma.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fma.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fma.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_normal_sum.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_normal_sum.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_endpoint_portable_normal_sum.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_initialize_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fma.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fma.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fma.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_fp64.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_fp64.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_fp64.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_normal_sum.spvasm",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_normal_sum.stderr",
+      "out/packed-retained-scratch-screen/posttools/disassemble/candidate-retained_transport_portable_normal_sum.stdout",
+      "out/packed-retained-scratch-screen/posttools/disassemble/inputs-after.json",
+      "out/packed-retained-scratch-screen/posttools/disassemble/inputs-before.json",
+      "out/packed-retained-scratch-screen/posttools/disassemble/owner.json",
+      "out/packed-retained-scratch-screen/posttools/disassemble/results.json",
+      "out/packed-retained-scratch-screen/posttools/disassemble/samples.jsonl",
+      "out/packed-retained-scratch-screen/posttools/disassemble/stderr.log",
+      "out/packed-retained-scratch-screen/posttools/disassemble/stdout.log",
+      "out/packed-retained-scratch-screen/posttools/owned_guard.py",
+      "out/packed-retained-scratch-screen/posttools/root-preflight.json",
+      "out/packed-retained-scratch-screen/posttools/run_owned.py",
+      "out/packed-retained-scratch-screen/root-compiler-products.json",
+      "out/packed-retained-scratch-screen/root-completed.json",
+      "out/packed-retained-scratch-screen/root-native-countercost.json",
+      "out/packed-retained-scratch-screen/root-preflight.json",
+      "out/packed-retained-scratch-screen/root-release.json",
+      "out/packed-retained-scratch-screen/run_owned.py",
+      "out/packed-retained-scratch-screen/source/scripts/build-retained-kernels.py",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/camera_frame_probe.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/coupled_probe.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_camera.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_coupled.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_deviation.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_disk.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_ellis_topology.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_integrator.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_kerr_infinity.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_metrics.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_point_star.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_trace_continuation.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_trace_event.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/gr_types.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/infinity_probe.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/metric_consistency_probe.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/parity_probe.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/portable_binary32.h",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_camera.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_dense.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_dopri_phase.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_endpoint.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_initialize.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_owner.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_pair.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_program.py",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_ray_camera.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_scalar.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_scratch.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_transport.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/retained_triple.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/smoke.slang",
+      "out/packed-retained-scratch-screen/source/src/sirius/kernels/trace.slang",
+      "out/packed-retained-scratch-screen/tool-ldd.stderr",
+      "out/packed-retained-scratch-screen/tool-ldd.stdout"
+    ],
+    "out/packed-retained-scratch-controls": [
+      "out/packed-retained-scratch-controls/actions.json",
+      "out/packed-retained-scratch-controls/audited-observer.cpp",
+      "out/packed-retained-scratch-controls/benefit-wrapper.patch",
+      "out/packed-retained-scratch-controls/benefit/a1/gtest.xml",
+      "out/packed-retained-scratch-controls/benefit/a1/inputs-after.json",
+      "out/packed-retained-scratch-controls/benefit/a1/inputs-before.json",
+      "out/packed-retained-scratch-controls/benefit/a1/owner.json",
+      "out/packed-retained-scratch-controls/benefit/a1/samples.jsonl",
+      "out/packed-retained-scratch-controls/benefit/a1/stderr.log",
+      "out/packed-retained-scratch-controls/benefit/a1/stdout.log",
+      "out/packed-retained-scratch-controls/benefit/a2/gtest.xml",
+      "out/packed-retained-scratch-controls/benefit/a2/inputs-after.json",
+      "out/packed-retained-scratch-controls/benefit/a2/inputs-before.json",
+      "out/packed-retained-scratch-controls/benefit/a2/owner.json",
+      "out/packed-retained-scratch-controls/benefit/a2/samples.jsonl",
+      "out/packed-retained-scratch-controls/benefit/a2/stderr.log",
+      "out/packed-retained-scratch-controls/benefit/a2/stdout.log",
+      "out/packed-retained-scratch-controls/benefit/actions.json",
+      "out/packed-retained-scratch-controls/benefit/b1/gtest.xml",
+      "out/packed-retained-scratch-controls/benefit/b1/inputs-after.json",
+      "out/packed-retained-scratch-controls/benefit/b1/inputs-before.json",
+      "out/packed-retained-scratch-controls/benefit/b1/owner.json",
+      "out/packed-retained-scratch-controls/benefit/b1/samples.jsonl",
+      "out/packed-retained-scratch-controls/benefit/b1/stderr.log",
+      "out/packed-retained-scratch-controls/benefit/b1/stdout.log",
+      "out/packed-retained-scratch-controls/benefit/b2/gtest.xml",
+      "out/packed-retained-scratch-controls/benefit/b2/inputs-after.json",
+      "out/packed-retained-scratch-controls/benefit/b2/inputs-before.json",
+      "out/packed-retained-scratch-controls/benefit/b2/owner.json",
+      "out/packed-retained-scratch-controls/benefit/b2/samples.jsonl",
+      "out/packed-retained-scratch-controls/benefit/b2/stderr.log",
+      "out/packed-retained-scratch-controls/benefit/b2/stdout.log",
+      "out/packed-retained-scratch-controls/benefit/baseline.json",
+      "out/packed-retained-scratch-controls/benefit/build-and-arrays.json",
+      "out/packed-retained-scratch-controls/benefit/compare_software.py",
+      "out/packed-retained-scratch-controls/benefit/expected-readback-layout.json",
+      "out/packed-retained-scratch-controls/benefit/independent-benefit-preflight-review.json",
+      "out/packed-retained-scratch-controls/benefit/independent-completion-review.json",
+      "out/packed-retained-scratch-controls/benefit/owned_guard.py",
+      "out/packed-retained-scratch-controls/benefit/retention-gate-frozen.json",
+      "out/packed-retained-scratch-controls/benefit/retention-gate-frozen.pending.json",
+      "out/packed-retained-scratch-controls/benefit/root-benefit-preflight.json",
+      "out/packed-retained-scratch-controls/benefit/root-benefit-release.json",
+      "out/packed-retained-scratch-controls/benefit/root-completed.json",
+      "out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py",
+      "out/packed-retained-scratch-controls/benefit/run_owned.py",
+      "out/packed-retained-scratch-controls/benefit/run_sequence.py",
+      "out/packed-retained-scratch-controls/benefit/software-comparison.json",
+      "out/packed-retained-scratch-controls/benefit/software-sequence.json",
+      "out/packed-retained-scratch-controls/benefit/software_contracts.py",
+      "out/packed-retained-scratch-controls/check_controls.py",
+      "out/packed-retained-scratch-controls/compile_matched.py",
+      "out/packed-retained-scratch-controls/contract/baseline.json",
+      "out/packed-retained-scratch-controls/contract/build-and-arrays.json",
+      "out/packed-retained-scratch-controls/contract/expected-readback-layout.json",
+      "out/packed-retained-scratch-controls/contract/software_contracts.py",
+      "out/packed-retained-scratch-controls/control-8/gtest.xml",
+      "out/packed-retained-scratch-controls/control-8/inputs-after.json",
+      "out/packed-retained-scratch-controls/control-8/inputs-before.json",
+      "out/packed-retained-scratch-controls/control-8/owner.json",
+      "out/packed-retained-scratch-controls/control-8/samples.jsonl",
+      "out/packed-retained-scratch-controls/control-8/stderr.log",
+      "out/packed-retained-scratch-controls/control-8/stdout.log",
+      "out/packed-retained-scratch-controls/headers/baseline/retained_kernels.h",
+      "out/packed-retained-scratch-controls/headers/candidate/retained_kernels.h",
+      "out/packed-retained-scratch-controls/independent-runtime-preflight-review.json",
+      "out/packed-retained-scratch-controls/independent-source-review.json",
+      "out/packed-retained-scratch-controls/observer-instrumentation.patch",
+      "out/packed-retained-scratch-controls/originals/audited-observer.cpp",
+      "out/packed-retained-scratch-controls/originals/benefit-prepare.py",
+      "out/packed-retained-scratch-controls/originals/canonical-retained_compute_test.cpp",
+      "out/packed-retained-scratch-controls/originals/controls-check_controls.py",
+      "out/packed-retained-scratch-controls/originals/controls-prepare.py",
+      "out/packed-retained-scratch-controls/originals/controls-prepare_runtime.py",
+      "out/packed-retained-scratch-controls/originals/controls-run_controls.py",
+      "out/packed-retained-scratch-controls/originals/controls-verify_control_routes.py",
+      "out/packed-retained-scratch-controls/originals/controls-verify_producer.py",
+      "out/packed-retained-scratch-controls/originals/legacy-observer.patch",
+      "out/packed-retained-scratch-controls/originals/run_limb_benefit_slot.py",
+      "out/packed-retained-scratch-controls/origins.json",
+      "out/packed-retained-scratch-controls/owned_guard.py",
+      "out/packed-retained-scratch-controls/protected-before.json",
+      "out/packed-retained-scratch-controls/recipes.pending.json",
+      "out/packed-retained-scratch-controls/root-control-8-completed.json",
+      "out/packed-retained-scratch-controls/root-runtime-preflight.json",
+      "out/packed-retained-scratch-controls/root-runtime-release.json",
+      "out/packed-retained-scratch-controls/run_owned.py",
+      "out/packed-retained-scratch-controls/runtime-ldd.stderr",
+      "out/packed-retained-scratch-controls/runtime-ldd.stdout",
+      "out/packed-retained-scratch-controls/source-contracts.json",
+      "out/packed-retained-scratch-controls/source-freeze.json",
+      "out/packed-retained-scratch-controls/verify_control_routes.py"
+    ],
+    "out/packed-retained-scratch-producer": [
+      "out/packed-retained-scratch-producer/actions.json",
+      "out/packed-retained-scratch-producer/compiler-ldd.stderr",
+      "out/packed-retained-scratch-producer/compiler-ldd.stdout",
+      "out/packed-retained-scratch-producer/independent-completion-review.json",
+      "out/packed-retained-scratch-producer/independent-concrete-review.json",
+      "out/packed-retained-scratch-producer/owned_guard.py",
+      "out/packed-retained-scratch-producer/posttools.pending.json",
+      "out/packed-retained-scratch-producer/posttools/actions.json",
+      "out/packed-retained-scratch-producer/posttools/commands.json",
+      "out/packed-retained-scratch-producer/posttools/inspect.py",
+      "out/packed-retained-scratch-producer/posttools/inspect/baseline-create.stderr",
+      "out/packed-retained-scratch-producer/posttools/inspect/baseline-create.stdout",
+      "out/packed-retained-scratch-producer/posttools/inspect/baseline-readelf.stderr",
+      "out/packed-retained-scratch-producer/posttools/inspect/baseline-readelf.stdout",
+      "out/packed-retained-scratch-producer/posttools/inspect/baseline-symbols.stderr",
+      "out/packed-retained-scratch-producer/posttools/inspect/baseline-symbols.stdout",
+      "out/packed-retained-scratch-producer/posttools/inspect/candidate-create.stderr",
+      "out/packed-retained-scratch-producer/posttools/inspect/candidate-create.stdout",
+      "out/packed-retained-scratch-producer/posttools/inspect/candidate-readelf.stderr",
+      "out/packed-retained-scratch-producer/posttools/inspect/candidate-readelf.stdout",
+      "out/packed-retained-scratch-producer/posttools/inspect/candidate-symbols.stderr",
+      "out/packed-retained-scratch-producer/posttools/inspect/candidate-symbols.stdout",
+      "out/packed-retained-scratch-producer/posttools/inspect/inputs-after.json",
+      "out/packed-retained-scratch-producer/posttools/inspect/inputs-before.json",
+      "out/packed-retained-scratch-producer/posttools/inspect/owner.json",
+      "out/packed-retained-scratch-producer/posttools/inspect/results.json",
+      "out/packed-retained-scratch-producer/posttools/inspect/samples.jsonl",
+      "out/packed-retained-scratch-producer/posttools/inspect/stderr.log",
+      "out/packed-retained-scratch-producer/posttools/inspect/stdout.log",
+      "out/packed-retained-scratch-producer/posttools/owned_guard.py",
+      "out/packed-retained-scratch-producer/posttools/root-preflight.json",
+      "out/packed-retained-scratch-producer/posttools/run_owned.py",
+      "out/packed-retained-scratch-producer/posttools/tools-ldd.stderr",
+      "out/packed-retained-scratch-producer/posttools/tools-ldd.stdout",
+      "out/packed-retained-scratch-producer/producer-postproof.json",
+      "out/packed-retained-scratch-producer/producer/inputs-after.json",
+      "out/packed-retained-scratch-producer/producer/inputs-before.json",
+      "out/packed-retained-scratch-producer/producer/owner.json",
+      "out/packed-retained-scratch-producer/producer/samples.jsonl",
+      "out/packed-retained-scratch-producer/producer/stderr.log",
+      "out/packed-retained-scratch-producer/producer/stdout.log",
+      "out/packed-retained-scratch-producer/read_postproof.py",
+      "out/packed-retained-scratch-producer/root-compiler-tool-closure.json",
+      "out/packed-retained-scratch-producer/root-preflight.json",
+      "out/packed-retained-scratch-producer/root-release.json",
+      "out/packed-retained-scratch-producer/root-selector-postproof.json",
+      "out/packed-retained-scratch-producer/root-source-admission.json",
+      "out/packed-retained-scratch-producer/run_owned.py"
+    ],
+    "bin/linux-gcc/packed-retained-scratch-controls": [
+      "bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.d",
+      "bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o",
+      "bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.d",
+      "bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o",
+      "bin/linux-gcc/packed-retained-scratch-controls/baseline.map",
+      "bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.d",
+      "bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o",
+      "bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.d",
+      "bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o",
+      "bin/linux-gcc/packed-retained-scratch-controls/candidate.map",
+      "bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls",
+      "bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+      "bin/linux-gcc/packed-retained-scratch-controls/producer-command-results.json",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe_fp32comp.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe_fp64.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/coupled_probe_fp64.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe_fp32comp.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe_fp64.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe_fp32comp.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe_fp64.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe_fp32comp.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe_fp64.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/portability/trace.cu",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/portability/trace.metal",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/smoke.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace_fp32comp.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace_fp64.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/portable_binary32_reference.bin",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+      "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_fixture.h"
+    ],
+    "out/native-frame-preservation": [
+      "out/native-frame-preservation/remote.stderr",
+      "out/native-frame-preservation/remote.stdout",
+      "out/native-frame-preservation/root-Git-publication.json",
+      "out/native-frame-preservation/root-preservation-check.json"
+    ],
+    "out/native-frame-issue-followup": [
+      "out/native-frame-issue-followup/issue44-before.json",
+      "out/native-frame-issue-followup/issue44-before.stderr",
+      "out/native-frame-issue-followup/issue44-comment-after.json",
+      "out/native-frame-issue-followup/issue44-comment-after.stderr",
+      "out/native-frame-issue-followup/issue44-comment-request.json",
+      "out/native-frame-issue-followup/issue44-comments-before.json",
+      "out/native-frame-issue-followup/issue44-comments-before.stderr",
+      "out/native-frame-issue-followup/issue44-comments-latest.json",
+      "out/native-frame-issue-followup/issue44-comments-latest.stderr",
+      "out/native-frame-issue-followup/issue44-comments-middle.json",
+      "out/native-frame-issue-followup/issue44-comments-middle.stderr",
+      "out/native-frame-issue-followup/issue44-format-after.json",
+      "out/native-frame-issue-followup/issue44-format-after.stderr",
+      "out/native-frame-issue-followup/issue44-format-request.json",
+      "out/native-frame-issue-followup/root-actual-issue-update.json",
+      "out/native-frame-issue-followup/root-comment-read.json"
+    ]
+  },
+  "input_scope": "Whole actual owned input maps/source and tool selectors are preserved provenance;host installations are not transported platform closure. Original538tracked source files remain bound to clean pushed5b2. Private executables/resources and generatedproducts are retained exactly.",
+  "cleanup_released": false
+}

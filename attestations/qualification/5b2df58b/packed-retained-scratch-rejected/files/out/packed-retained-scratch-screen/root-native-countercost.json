@@ -1,0 +1,429 @@
+{
+  "schema": "sirius-packed-scratch-root-representative-native-countercost-v1",
+  "scope": "Five native-default emitted helpers only. Full25pair semantic/interface correspondence owned independently. Static counts do not predict driverfinal instructions or dynamic traffic, occupancy or speed.",
+  "representatives": [
+    {
+      "stage": "transport",
+      "expected_private_words": [
+        2295,
+        1836
+      ],
+      "baseline": {
+        "ScratchAddress": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 0,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchWrite": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 1,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        }
+      },
+      "candidate": {
+        "ScratchAddress": {
+          "OpLabel": 4,
+          "OpBranchConditional": 1,
+          "OpLoad": 1,
+          "OpStore": 2,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 5,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 1,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 1
+        },
+        "ScratchWrite": {
+          "OpLabel": 7,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 3,
+          "OpAccessChain": 3,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 3,
+          "OpBitwiseOr": 1,
+          "OpShiftLeftLogical": 1,
+          "OpShiftRightLogical": 0
+        }
+      }
+    },
+    {
+      "stage": "endpoint",
+      "expected_private_words": [
+        3060,
+        2448
+      ],
+      "baseline": {
+        "ScratchAddress": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 0,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchWrite": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 1,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        }
+      },
+      "candidate": {
+        "ScratchAddress": {
+          "OpLabel": 4,
+          "OpBranchConditional": 1,
+          "OpLoad": 1,
+          "OpStore": 2,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 5,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 1,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 1
+        },
+        "ScratchWrite": {
+          "OpLabel": 7,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 3,
+          "OpAccessChain": 3,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 3,
+          "OpBitwiseOr": 1,
+          "OpShiftLeftLogical": 1,
+          "OpShiftRightLogical": 0
+        }
+      }
+    },
+    {
+      "stage": "dense",
+      "expected_private_words": [
+        4075,
+        3260
+      ],
+      "baseline": {
+        "ScratchAddress": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 0,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchWrite": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 1,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        }
+      },
+      "candidate": {
+        "ScratchAddress": {
+          "OpLabel": 4,
+          "OpBranchConditional": 1,
+          "OpLoad": 1,
+          "OpStore": 2,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 5,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 1,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 1
+        },
+        "ScratchWrite": {
+          "OpLabel": 7,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 3,
+          "OpAccessChain": 3,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 3,
+          "OpBitwiseOr": 1,
+          "OpShiftLeftLogical": 1,
+          "OpShiftRightLogical": 0
+        }
+      }
+    },
+    {
+      "stage": "initialize",
+      "expected_private_words": [
+        1810,
+        1448
+      ],
+      "baseline": {
+        "ScratchAddress": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 0,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchWrite": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 1,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        }
+      },
+      "candidate": {
+        "ScratchAddress": {
+          "OpLabel": 4,
+          "OpBranchConditional": 1,
+          "OpLoad": 1,
+          "OpStore": 2,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 5,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 1,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 1
+        },
+        "ScratchWrite": {
+          "OpLabel": 7,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 3,
+          "OpAccessChain": 3,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 3,
+          "OpBitwiseOr": 1,
+          "OpShiftLeftLogical": 1,
+          "OpShiftRightLogical": 0
+        }
+      }
+    },
+    {
+      "stage": "dopri_phase",
+      "expected_private_words": [
+        3145,
+        2516
+      ],
+      "baseline": {
+        "ScratchAddress": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 0,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchWrite": {
+          "OpLabel": 1,
+          "OpBranchConditional": 0,
+          "OpLoad": 0,
+          "OpStore": 1,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        }
+      },
+      "candidate": {
+        "ScratchAddress": {
+          "OpLabel": 4,
+          "OpBranchConditional": 1,
+          "OpLoad": 1,
+          "OpStore": 2,
+          "OpAccessChain": 0,
+          "OpFunctionCall": 0,
+          "OpBitwiseAnd": 0,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 0
+        },
+        "ScratchRead": {
+          "OpLabel": 5,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 0,
+          "OpAccessChain": 1,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 1,
+          "OpBitwiseOr": 0,
+          "OpShiftLeftLogical": 0,
+          "OpShiftRightLogical": 1
+        },
+        "ScratchWrite": {
+          "OpLabel": 7,
+          "OpBranchConditional": 2,
+          "OpLoad": 1,
+          "OpStore": 3,
+          "OpAccessChain": 3,
+          "OpFunctionCall": 1,
+          "OpBitwiseAnd": 3,
+          "OpBitwiseOr": 1,
+          "OpShiftLeftLogical": 1,
+          "OpShiftRightLogical": 0
+        }
+      }
+    }
+  ],
+  "unchanged_native_T_WriteValue_component_order": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "no_provider_or_runtime": true
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "label": "baseline-create",
+    "argv": [
+      "/usr/bin/objdump",
+      "-d",
+      "-C",
+      "--start-address=1581808",
+      "--stop-address=1596439",
+      "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "baseline-symbols",
+    "argv": [
+      "/usr/bin/nm",
+      "-C",
+      "--defined-only",
+      "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "baseline-readelf",
+    "argv": [
+      "/usr/bin/readelf",
+      "-Ws",
+      "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "candidate-create",
+    "argv": [
+      "/usr/bin/objdump",
+      "-d",
+      "-C",
+      "--start-address=1581808",
+      "--stop-address=1596439",
+      "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "candidate-symbols",
+    "argv": [
+      "/usr/bin/nm",
+      "-C",
+      "--defined-only",
+      "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+    ],
+    "returncode": 0
+  },
+  {
+    "label": "candidate-readelf",
+    "argv": [
+      "/usr/bin/readelf",
+      "-Ws",
+      "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+    ],
+    "returncode": 0
+  }
+]

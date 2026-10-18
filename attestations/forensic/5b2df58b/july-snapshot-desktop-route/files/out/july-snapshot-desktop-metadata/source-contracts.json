@@ -1,0 +1,67 @@
+{
+  "schema": "sirius-july-snapshot-desktop-metadata-source-contracts-v1",
+  "source_only": true,
+  "admitted": false,
+  "executed": false,
+  "query": {
+    "path": "out/july-snapshot-desktop-metadata/query.ps1",
+    "bytes": 11817,
+    "sha256": "62caac30f311120f5e551a2156a899436a4942284194894b7a0961254263863c"
+  },
+  "actual_predecessor": [
+    {
+      "path": "out/july-nt-snapshot-name-route/owner/query/query.stdout",
+      "bytes": 1416,
+      "sha256": "f9036e781d830f6c7dfc0436584c92e1cb29c9de6bb204e3806f267253c64c11"
+    },
+    {
+      "path": "out/july-nt-snapshot-name-route/root-observation.json",
+      "bytes": 3141,
+      "sha256": "05ff7579536ecf2cc046c5099dc4ba345d25054accb1bd344f329df032961b57"
+    }
+  ],
+  "fixed_snapshots": [
+    "HarddiskVolumeShadowCopy1",
+    "HarddiskVolumeShadowCopy2",
+    "HarddiskVolumeShadowCopy3"
+  ],
+  "fixed_scope": {
+    "root_prefix": "\\\\?\\GLOBALROOT\\Device\\",
+    "ancestor_metadata": [
+      "Users",
+      "Users\\alarisadmin",
+      "Users\\alarisadmin\\Desktop"
+    ],
+    "enumerate_one_level": "Users\\alarisadmin\\Desktop",
+    "only_optional_next_levels": [
+      "Sirius",
+      "Remediation"
+    ],
+    "output": "Desktop relevant-name metadata; directly listed Sirius/Remediation directory names and matching metadata/manifest/tape/comparator names. Never open file contents or descend any other directory.",
+    "reparse_policy": "Check each fixed ancestor in order using its own WIN32_FIND_DATAW attributes; stop below any reparse or non-directory/access failure. Desktop Sirius/Remediation must be direct non-reparse directories and are rechecked before their one-level listing. Child reparse points are reported as metadata only, never descended."
+  },
+  "interop": "Existing x64 Windows PowerShell Desktop only. One in-memory Reflection.Emit type exposes exact FindFirstFileW/FindNextFileW/FindClose with SetLastError and PreserveSig. Fixed 592-byte WIN32_FIND_DATAW layout, UTF-16 buffers, INVALID_HANDLE_VALUE and error18 completion handled. No Add-Type, external compiler/child executable, filesystem provider path-normalization dependency, admin, mount, restore or privilege change.",
+  "bounds": {
+    "soft_seconds": 30,
+    "ROOT_outer_seconds": 60,
+    "total_entry_cap": 4096,
+    "total_output_entry_cap": 256,
+    "native_data_buffer_bytes": 592,
+    "synchronous_call_limit": "Soft limits checked between calls; ROOT existing query.py/terminal adapters enforce outer lifetime/ownership. No new driver helper is supplied."
+  },
+  "output_contract": {
+    "bootstrap": "query-bootstrap.json: sirius-july-snapshot-desktop-bootstrap-v1 with held own-process handle PID/start UTC",
+    "result": "sirius-july-snapshot-desktop-metadata-v1",
+    "exit0": "All three Desktop walks and any selected direct Sirius/Remediation walks ended with complete enumeration, without bounds/gaps/close errors. Missing optional direct directories are not enumerated.",
+    "exit2": "Access-denied, missing/non-directory/reparse ancestor, partial native enumeration, unsupported API/runtime, cap/deadline or cleanup gap. Preserve per-target status/Win32 errors/partial records; do not turn these into no-snapshot or no-July conclusions.",
+    "metadata_errors": "FindFirst errors2/3 are reported path-not-found; error5 access-denied; only FindNext error18 completes enumeration. Wildcard error2 on a just-validated directory is recorded as empty, with the non-atomic caveat below."
+  },
+  "ownership": "Held own process handle and bootstrap precede API setup; each find handle closes in finally. Path allocations/native data buffer are freed. ROOT existing 60s driver and terminal remain mandatory; source packet itself does not authorize execution.",
+  "limits": [
+    "Name and directory timestamps do not identify original July tapes, comparator/manifest contents or VSS creation time.",
+    "Readability is unknown until ROOT runs this distinct operation; observed names do not establish ACL access.",
+    "The walk is non-atomic. Ancestor reparse checks prevent intentional link traversal but cannot eliminate concurrent namespace replacement/TOCTOU; snapshot deletion/rebinding or path changes must not be silently treated as original historical identity.",
+    "No recursive Users/drive/image search, file content read, restore, mounting, source/build mutation, hydration request, admin/UAC, network or new toolchain.",
+    "The preceding completed NT-name route is unchanged. Only this query source/contracts are frozen; ROOT owns later adapter copying/admission/execution and must preserve actual results before further scope."
+  ]
+}

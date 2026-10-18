@@ -1,0 +1,170 @@
+{
+  "schema": "sirius-packed-scratch-independent-sole-benefit-completion-v1",
+  "created_utc": "2026-10-18T04:35:43.677717+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "authorship": "Prior source/data-reader author; independent of ROOT trial operator. Composes unchanged immutable reader/comparator source review; neither was rerun.",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "audit_completed": true,
+  "benefit_passed": false,
+  "decision": "RETIRE_PRIVATE_PACKED_SCRATCH_NO_UNCHANGED_RETRY",
+  "critical_pins": {
+    "root-completed.json": {
+      "path": "out/packed-retained-scratch-controls/benefit/root-completed.json",
+      "bytes": 5706,
+      "sha256": "a2ac71867400fb5baf99180b494280dabc8bb1d54b3e47cc704aff3b9aa156e5"
+    },
+    "software-comparison.json": {
+      "path": "out/packed-retained-scratch-controls/benefit/software-comparison.json",
+      "bytes": 12929,
+      "sha256": "67d3182a43964a676ac24d8001932246c58df82ad339a32bddec3f2c79a01ed4"
+    },
+    "software-sequence.json": {
+      "path": "out/packed-retained-scratch-controls/benefit/software-sequence.json",
+      "bytes": 837,
+      "sha256": "745faf5025fcb8f0293e3572cd7fc7ab68aaa2f4cd96d35c8223030e5fe4a445"
+    },
+    "retention-gate-frozen.json": {
+      "path": "out/packed-retained-scratch-controls/benefit/retention-gate-frozen.json",
+      "bytes": 1803,
+      "sha256": "861c2e89cfb6df9d8fe1d7c41c04187a39bb9ff8163382d2632bdd379f0ac883"
+    },
+    "actions.json": {
+      "path": "out/packed-retained-scratch-controls/benefit/actions.json",
+      "bytes": 282557,
+      "sha256": "06c945f1b4dc36fde4749f276e6238ffe40e887ef362ab230340d0d5ec0a4109"
+    },
+    "root-benefit-preflight.json": {
+      "path": "out/packed-retained-scratch-controls/benefit/root-benefit-preflight.json",
+      "bytes": 261019,
+      "sha256": "561ca200b4abd00f5a941a17cfe115441bfa9868136cff6e6b9ae05ab2c82d9c"
+    }
+  },
+  "slots": [
+    {
+      "label": "a1",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/a1/owner.json",
+        "bytes": 2626,
+        "sha256": "25d05a0daeff1edf832e443cbb20394365c9d3680876f6114dc2b26c733a323b"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/a1/gtest.xml",
+        "bytes": 40838,
+        "sha256": "769e3b32f88a77bc3567b43f7a6fd5c95128ead8e13e9193556c0b798e9c5786"
+      },
+      "wall_seconds": 63.901255020988174,
+      "peak_sampled_rss_kib": 2328932,
+      "minimum_sampled_available_kib": 15992144
+    },
+    {
+      "label": "b1",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/b1/owner.json",
+        "bytes": 2626,
+        "sha256": "458e06888d1fa61d398742ea34a4f3c8c338bd5b21bd0219611296dd1557ed6d"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/b1/gtest.xml",
+        "bytes": 41063,
+        "sha256": "bd12f1e7d8c4df7cfad33bd98fd633812bd21cfaea1f31d6a262025a4aa708ab"
+      },
+      "wall_seconds": 63.88366145800683,
+      "peak_sampled_rss_kib": 2329224,
+      "minimum_sampled_available_kib": 16240416
+    },
+    {
+      "label": "b2",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/b2/owner.json",
+        "bytes": 2627,
+        "sha256": "0c7f08918549cfd001b0df830e21d347865f707572dd6859a3653920458799a0"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/b2/gtest.xml",
+        "bytes": 40970,
+        "sha256": "0e34a6a6abfd6dc370b1cd4e87c12ee9782ba01b1a0055fcab6312ecb0c2cc79"
+      },
+      "wall_seconds": 61.275661085004685,
+      "peak_sampled_rss_kib": 2329464,
+      "minimum_sampled_available_kib": 16600092
+    },
+    {
+      "label": "a2",
+      "owner": {
+        "path": "out/packed-retained-scratch-controls/benefit/a2/owner.json",
+        "bytes": 2498,
+        "sha256": "daf005fa69695ef97e9d6bfbc6261d1c7005aaada2a7a3f0c97e71f59e62f707"
+      },
+      "xml": {
+        "path": "out/packed-retained-scratch-controls/benefit/a2/gtest.xml",
+        "bytes": 40784,
+        "sha256": "3d06b4b3b16b361d91f23ee9c3db9535b043f767a6be8dd76fe84582064af46b"
+      },
+      "wall_seconds": 66.81905571199604,
+      "peak_sampled_rss_kib": 2328468,
+      "minimum_sampled_available_kib": 16881592
+    }
+  ],
+  "checks": {
+    "ownership": "Four terminalpassed/child0/no stop,cleanup errors or remaining owned processes;recorded saved birth retirement composed with ROOT proof,no reviewer process query. Same-child LVPmaps match PID/start/session/current device+inode.",
+    "inputs": {
+      "before_after_rows_total": 7456,
+      "unique_current_rows": 932,
+      "fixed_rich_rows": 931,
+      "all_before_after_and_current_equal": true,
+      "protected_canonical_unchanged": 72,
+      "raw_sample_rows": 9926,
+      "recorded_child_and_controller_births": 8
+    },
+    "numeric_data": "All4XML one executed completed original test/zeroFESD;32complete-buffer readback digests/stage/sizes identical across4slots,7selected actual array authorities/51markers/54module-command joins per slot. Original immutable reader/comparator acceptance composed; no rawbuffer artifact/fullscene claim.",
+    "decision_arithmetic": "Every saved comparison sample array joined rawXML calls/markers. All20 medians/percentages/threshold booleans plus2inclusive11APIwindow sums independently checked as data.17/22=2/4whole+14/16stage+1/2API;fixedREJECT retained.",
+    "protocol": "ExactlyA1/B1/B2/A2 once,3repeats/family;same originalcacheOFF/300s4GiBaggregate2GiBreserve. Remaining7folders absent/unrun; no pooling/subtraction/resampling/retry or cleanup release."
+  },
+  "whole_improvement_percent": [
+    6.145398952961928,
+    9.17325671850112,
+    -3.3562978618449244,
+    1.7432035561408923
+  ],
+  "failed_gates": [
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": -3.3562978618449244,
+      "minimum_percent": 5
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "improvement_percent": -7.003771826541514,
+      "minimum_percent": -5
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "improvement_percent": 1.7432035561408923,
+      "minimum_percent": 5
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "improvement_percent": -7.887901752165053,
+      "minimum_percent": -5
+    },
+    {
+      "direction": "forward",
+      "family": null,
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "improvement_percent": -1.2686863251907228,
+      "minimum_percent": 0
+    }
+  ],
+  "production_adopted": false,
+  "cleanup_authorized": false,
+  "limits": "Audit PASS validates finite record/disposition, not performance acceptance. One original timestamp prerequisite and original ABBA numerical/readback conditions passed; other7 original controls remain unrun. No nativeframe/fullscience/Mandatory/release/cost-cause conclusion. Reviewer executed no helper,project import,comparator,tool,provider,test or process query."
+}

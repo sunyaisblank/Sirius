@@ -1,0 +1,68 @@
+{
+  "schema": "sirius-packed-retained-scratch-independent-concrete-review-v1",
+  "created_utc": "2026-10-18T03:41:55.792310+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "concrete_offline_metadata_admitted": true,
+  "offline_compile_released": false,
+  "runtime_admitted": false,
+  "blockers": [],
+  "critical_pins": {
+    "root-preflight.json": {
+      "path": "out/packed-retained-scratch-screen/root-preflight.json",
+      "bytes": 1648107,
+      "sha256": "7419b517a5d3cfb3e9f8720a1f062c72eb2520d30dbf575e7378f21ea9d9f849"
+    },
+    "actions.json": {
+      "path": "out/packed-retained-scratch-screen/actions.json",
+      "bytes": 467491,
+      "sha256": "ad129af80eac489187f6b008ff15ecba81ad3116dc61e1fb50aa3bb9007e89f2"
+    },
+    "run_owned.py": {
+      "path": "out/packed-retained-scratch-screen/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "owned_guard.py": {
+      "path": "out/packed-retained-scratch-screen/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "tool-ldd.stdout": {
+      "path": "out/packed-retained-scratch-screen/tool-ldd.stdout",
+      "bytes": 872,
+      "sha256": "b6e32ac68931ae760abd9bc6cedbdb391f6b437fe37f5f61800784331951321d"
+    },
+    "tool-ldd.stderr": {
+      "path": "out/packed-retained-scratch-screen/tool-ldd.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "source_admission": {
+    "path": "out/packed-retained-scratch-source/independent-source-review.json",
+    "bytes": 4452,
+    "sha256": "02d461cc433d9f952b683e54669946c73331b91f26070b627d6ccdf48c77f2eb"
+  },
+  "checks": {
+    "whole_closure": "All 4930 rich preflight file identities matched current bytes, SHA256 and resolved paths (4921 resolved identities). Action has 4392 unique explicit inputs; adding 538 tracked sources and mature implicit apparatus yields exactly the 4930 preflight paths plus preflight itself:4931 actual prospective inputs. Own review is excluded.",
+    "private_source": "34 regular private files: canonical builder plus all33 kernel source files. Builder and32 kernel files are byte-exact canonical; sole difference retained_scratch.slang equals independently admitted2097-byte candidate560765bdacb0c0b1d37f24e21de0d34204fe8a6d5ccf632c5e4b2831f53096b9. Canonical original equals892-byte preimage. No source mutation.",
+    "command_and_destinations": "Exact /usr/bin/python3 -B private canonical builder; explicit pinned slangc/spirv-as/spirv-dis/spirv-val/spirv-opt. Only --output {folder}/retained_kernels.h. Builder derives imports from its private tree and writes generated probes/layout/headers/modules beneath candidate owner folder. Existing35 canonical SPVs are read-only baseline pins, never rebuilt or overwritten.",
+    "tool_closure": "All3692 installed Slang paths and current interpreter/resources/libraries are frozen. Newly bound assembler+optimizer and five resolved shared libraries match saved successful root ldd output and preflight identities. Compiler/disassembler/validator reuse annotations remain scoped; assembler/optimizer are explicitly not claimed previous matches.",
+    "owner_and_guards": "Byte-exact mature e573fd run_owned/747fe1 guard. One fresh candidate compile action, expected_exit0, software_providerfalse, cache-disableflagfalse; aggregate sampled owned-session RSS4194304KiB, available reserve2097152KiB, deadline300s. Existing session birth identity/cleanup/input-stability semantics retained. Candidate folder absent, source clean; no compiler/provider executed in this review.",
+    "setup_history": "Preflight candidly records initial missing assembler prior-pin assertion before actions/preflight or candidate execution; corrected by current assembler/optimizer identities and one root metadata ldd closure. No old record or failed compiler result is invented."
+  },
+  "required_before_root_operation": "ROOT alone may release and invoke one candidate builder owner from checkout. Preserve source/tool/input hashes and empty output folder; stop on any nonpass. Current preflight offline_compile_released and runtime_released remain false; this receipt does not activate either.",
+  "scope": "Concrete offline compiler-producer metadata only. Canonical builder retains its ordinary optional FMA capability probes and policies; all35 final product identities and emitted packed stores/masks/barriers/public ABI/excluded pair+S7 equivalence remain future checks. No numerical/provider/frame/JIT/RSS-benefit/performance/adoption/full Mandatory or release acceptance.",
+  "workspace": {
+    "source_clean": true,
+    "source_committed_and_pushed": true,
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "sole_worktree": true,
+    "review_sidecar_ignored_uncommitted": true
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "schema": "sirius-packed-scratch-matched-command-results-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "commands": [
+    {
+      "label": "compile-baseline-compute",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/baseline",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o",
+        "-c",
+        "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.d"
+      ],
+      "started": true,
+      "exit": 0
+    },
+    {
+      "label": "compile-baseline-observer",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/baseline",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-DSIRIUS_TEST_HAS_KERNELS=1",
+        "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+        "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+        "-I/home/astra/.project/Sirius/tests",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+        "-O3",
+        "-DNDEBUG",
+        "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o",
+        "-c",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/audited-observer.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.d"
+      ],
+      "started": true,
+      "exit": 0
+    },
+    {
+      "label": "link-baseline",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-pthread",
+        "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline.map",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+      ],
+      "started": true,
+      "exit": 0
+    },
+    {
+      "label": "compile-candidate-compute",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/candidate",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o",
+        "-c",
+        "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.d"
+      ],
+      "started": true,
+      "exit": 0
+    },
+    {
+      "label": "compile-candidate-observer",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/candidate",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-DSIRIUS_TEST_HAS_KERNELS=1",
+        "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+        "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+        "-I/home/astra/.project/Sirius/tests",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+        "-O3",
+        "-DNDEBUG",
+        "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o",
+        "-c",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/audited-observer.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.d"
+      ],
+      "started": true,
+      "exit": 0
+    },
+    {
+      "label": "link-candidate",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-pthread",
+        "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate.map",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+      ],
+      "started": true,
+      "exit": 0
+    }
+  ],
+  "scope": "C++ producer only; no acceptance or runtime.",
+  "products": {
+    "bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o": {
+      "bytes": 5680664,
+      "sha256": "3f78022e204afdfb6f73499bb499eaf954fa40e46a021e27456b1906c69b974c"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.d": {
+      "bytes": 678,
+      "sha256": "66bb49ec7d4359ef22cf7cfacead4c5f4096e60c63ce981fcf0dbc50a433cf97"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o": {
+      "bytes": 9329744,
+      "sha256": "7ebbbed72fb587b80e2dd1fc8ab9a59ec2c505ff1a86f1c35b5bb9674406a20a"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.d": {
+      "bytes": 4832,
+      "sha256": "a067c35fda928b548dd2aecd5893db425fc8977dcda68356ad3ffb3f671cb375"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o": {
+      "bytes": 5698520,
+      "sha256": "e2cc95dd16e96ced7dde838bbed5f9029016c78b49fd88765ecfc035e58b2fc7"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.d": {
+      "bytes": 680,
+      "sha256": "39d2845518517e0da081d1cdc21e8c97de1c3be22a2985c3e760e628de880a61"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o": {
+      "bytes": 9347600,
+      "sha256": "b26ae63e321cdd029bc40b815c0f80e5f59ef6f9a76f17f8b38610167f14a99d"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.d": {
+      "bytes": 4834,
+      "sha256": "6a66184cc16c10323dfad9769863b831d635643a1a76ed2d893aab8ddf76be1d"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/baseline.map": {
+      "bytes": 1157003,
+      "sha256": "31b4b7a4ff3c2f481ef773cf2c9d97ad74f645f7856f7a685206112f582af079"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/candidate.map": {
+      "bytes": 1158082,
+      "sha256": "5b221bc028feeae6c21c69a8d904b8ef04c368ae599dc91a3bcc9500ec5c89f5"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls": {
+      "bytes": 10791864,
+      "sha256": "d0d6ea975310fc1946bceaa75fdc503cbbcac6e8384214256a1172bac2f2da43"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls": {
+      "bytes": 10812344,
+      "sha256": "b5a560a2f66e832ad60f222b79f268d7f51eb6ec645bc53f08cf350f5af90f55"
+    }
+  },
+  "resources": {
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+    },
+    "bin/linux-gcc/packed-retained-scratch-controls/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+    }
+  }
+}

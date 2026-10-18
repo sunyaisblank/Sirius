@@ -1,0 +1,352 @@
+--- a/tests/backend/retained_compute_test.cpp
++++ b/audited-observer.cpp
+@@ -29,7 +29,6 @@
+ 
+ #ifdef SIRIUS_HAS_RETAINED_COMPUTE
+ #include "retained_kernels.h"
+-#include "retained_owner_layout.h"
+ #endif
+ 
+ #if defined(SIRIUS_HAS_RETAINED_COMPUTE) && defined(SIRIUS_TEST_HAS_RETAINED_CAMERA)
+@@ -84,6 +83,7 @@
+ 
+ namespace {
+ using namespace sirius::backend;
++inline constexpr bool kDiagnosticOwner = false;
+ 
+ // Arithmetic admission must finish before any external shader or buffer work.
+ // The sentinel gives that boundary an observable positive path without a device.
+@@ -259,8 +259,6 @@
+                                .pipeline_created = true};
+     bool fail_dispatch = false;
+     bool independent_pair = false;
+-    std::size_t expected_bindings = 2;
+-    std::function<void(std::span<const BufferHandle>)> model_output;
+     std::uint32_t expected_groups_x = 1;
+     unsigned loads = 0, reads = 0;
+     const DeviceInfo& Info() const noexcept override { return info; }
+@@ -304,7 +302,7 @@
+                                           std::span<const BufferHandle> bindings, std::uint32_t x,
+                                           std::uint32_t y, std::uint32_t z,
+                                           DispatchTiming* timing) override {
+-        EXPECT_EQ(bindings.size(), expected_bindings);
++        EXPECT_EQ(bindings.size(), 2U);
+         EXPECT_EQ(x, expected_groups_x);
+         EXPECT_EQ(y, 1U);
+         EXPECT_EQ(z, 1U);
+@@ -317,7 +315,6 @@
+         // A physical control returns a declined, zero-stage row; only its
+         // actual submission/feedback ownership is tested against this model.
+         if (rows != 0) std::ranges::fill(buffers[bindings[1].value], std::byte{0});
+-        if (model_output) model_output(bindings);
+         return {};
+     }
+     sirius::base::Expected<void> SetBufferAllocationLimit(std::uint64_t) override { return {}; }
+@@ -378,164 +375,6 @@
+ #endif
+ 
+ #ifdef SIRIUS_HAS_RETAINED_COMPUTE
+-// Only the host/device seam is modeled here. Shader replay and numerical
+-// equivalence require separate executions through the real Vulkan provider.
+-TEST(RetainedComputeAdmission, StageSevenGrantsPreservePayloadAndConsumeTokens) {
+-    PreparationProbeDevice device;
+-    device.info.rounds_fp32_to_nearest = true;
+-    device.expected_bindings = 3;
+-    device.expected_groups_x = 2;
+-    auto created = RetainedCompute::Create(device, 2, false, 250, true);
+-    ASSERT_TRUE(created);
+-    auto& compute = **created;
+-    ASSERT_TRUE(compute.StageSevenOwnershipEnabled());
+-    ASSERT_EQ(device.buffers.size(), 15U);
+-    EXPECT_EQ(device.loads, 9U);
+-    const auto extra = RetainedCompute::RequiredStageSevenOwnerAllocationBytes(device, 2);
+-    ASSERT_TRUE(extra);
+-    EXPECT_EQ(*extra, device.buffers.back().size());
+-    EXPECT_EQ(device.BufferAllocationBytes(), RetainedCompute::RequiredBufferBytes(2) + *extra);
+-    device.model_output = [&](std::span<const BufferHandle> bindings) {
+-        if (bindings[0].value != 2) return;
+-        auto& bytes = device.buffers[bindings[1].value];
+-        std::vector<std::uint32_t> words(bytes.size() / 4);
+-        for (std::size_t row = 0; row < 2; ++row) {
+-            auto* out = words.data() + row * retained_program::kTransportRowWords;
+-            out[0] = 1;
+-            out[1] = 7;
+-            out[2] = 1;
+-            for (std::size_t group = 0; group < 4; ++group)
+-                for (std::size_t i = 0; i < 40; ++i) out[4 + group * 200 + i * 5 + 4] = 1;
+-            for (std::size_t stage = 0; stage < 7; ++stage)
+-                for (std::size_t i = 0; i < 40; ++i) out[1004 + stage * 200 + i * 5 + 4] = 1;
+-        }
+-        std::memcpy(bytes.data(), words.data(), bytes.size());
+-    };
+-    std::array<RetainedStepInput, 2> packets;
+-    for (auto& packet : packets) {
+-        packet.values.fill(RetainedValue::FromDouble(0));
+-        packet.values[0] = RetainedValue::FromDouble(1);
+-        packet.values[44] = RetainedValue::FromDouble(1);
+-        packet.values[45] = RetainedValue::FromDouble(0.01);
+-    }
+-    auto step = compute.Step(packets);
+-    ASSERT_TRUE(step);
+-    std::array<RetainedEndpointInput, 2> upper;
+-    for (std::size_t row = 0; row < 2; ++row) {
+-        std::copy_n(packets[row].values.begin(), 4, upper[row].values.begin());
+-        std::copy((*step)[row].fifth.begin(), (*step)[row].fifth.end(),
+-                  upper[row].values.begin() + 4);
+-        upper[row].values[44] = packets[row].values[44];
+-    }
+-    std::array<StageSevenToken, 2> tokens{compute.LastStepOwner(0), {}};
+-    const auto sidecar_before = device.buffers.back();
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 8U);
+-    std::uint32_t grants = 0;
+-    std::memcpy(&grants, device.buffers.back().data() + 16 * 4, 4);
+-    EXPECT_EQ(grants, 1U);
+-    EXPECT_TRUE(std::equal(sidecar_before.begin() + 17 * 4, sidecar_before.end(),
+-                           device.buffers.back().begin() + 17 * 4));
+-    device.expected_bindings = 2;
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 2U);
+-
+-    // A changed momentum leaves all nine reusable geometry keys unchanged.
+-    // The full high-packet contract must still decline this token.
+-    device.expected_bindings = 3;
+-    ASSERT_TRUE(compute.Step(packets));
+-    tokens = {compute.LastStepOwner(0), {}};
+-    upper[0].values[8] = RetainedValue::FromDouble(1);
+-    device.expected_bindings = 2;
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 2U);
+-    upper[0].values[8] = RetainedValue::FromDouble(0);
+-
+-    // Identical packets cannot turn a token for physical row one into row zero.
+-    device.expected_bindings = 3;
+-    ASSERT_TRUE(compute.Step(packets));
+-    tokens = {compute.LastStepOwner(1), {}};
+-    device.expected_bindings = 2;
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 2U);
+-}
+-
+-TEST(RetainedComputeAdmission, StageSevenFailureCannotPublishPartialOrOldIssuance) {
+-    PreparationProbeDevice device;
+-    device.info.rounds_fp32_to_nearest = true;
+-    device.expected_bindings = 3;
+-    device.expected_groups_x = 2;
+-    auto created = RetainedCompute::Create(device, 2, false, 250, true);
+-    ASSERT_TRUE(created);
+-    auto& compute = **created;
+-    bool malformed_second = false;
+-    device.model_output = [&](std::span<const BufferHandle> bindings) {
+-        if (bindings[0].value != 2) return;
+-        auto& bytes = device.buffers[bindings[1].value];
+-        std::vector<std::uint32_t> words(bytes.size() / 4);
+-        for (std::size_t row = 0; row < 2; ++row) {
+-            auto* out = words.data() + row * retained_program::kTransportRowWords;
+-            out[0] = 1;
+-            out[1] = malformed_second && row == 1 ? 6 : 7;
+-            out[2] = 1;
+-            for (std::size_t group = 0; group < 4; ++group)
+-                for (std::size_t i = 0; i < 40; ++i) out[4 + group * 200 + i * 5 + 4] = 1;
+-            for (std::size_t stage = 0; stage < 7; ++stage)
+-                for (std::size_t i = 0; i < 40; ++i) out[1004 + stage * 200 + i * 5 + 4] = 1;
+-        }
+-        std::memcpy(bytes.data(), words.data(), bytes.size());
+-    };
+-    std::array<RetainedStepInput, 2> packets;
+-    for (auto& packet : packets) packet.values.fill(RetainedValue::FromDouble(0));
+-    auto stepped = compute.Step(packets);
+-    ASSERT_TRUE(stepped);
+-    const auto old = compute.LastStepOwner(0);
+-    malformed_second = true;
+-    EXPECT_FALSE(compute.Step(packets));
+-    std::array<RetainedEndpointInput, 2> upper;
+-    for (auto& row : upper) row.values.fill(RetainedValue::FromDouble(0));
+-    std::array<StageSevenToken, 2> tokens{compute.LastStepOwner(0), {}};
+-    device.expected_bindings = 2;
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 2U);
+-    tokens = {old, {}};
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 2U);
+-
+-    malformed_second = false;
+-    device.expected_bindings = 3;
+-    ASSERT_TRUE(compute.Step(packets));
+-    tokens = {compute.LastStepOwner(0), {}};
+-    device.failed_writes.push_back(device.writes.size() + 1);
+-    DispatchTiming timing = device.observation;
+-    EXPECT_FALSE(compute.Endpoint(upper, &timing, tokens));
+-    EXPECT_EQ(timing.total_ms, 0);
+-    device.expected_bindings = 2;
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 2U);
+-    device.expected_bindings = 3;
+-    ASSERT_TRUE(compute.Step(packets));
+-    tokens = {compute.LastStepOwner(0), {}};
+-    ASSERT_TRUE(compute.Endpoint(upper, nullptr, tokens));
+-    EXPECT_EQ(device.kernels.back(), 8U);
+-}
+-
+-TEST(RetainedComputeAdmission, StageSevenRequestKeepsStockUnsupportedArithmetic) {
+-    for (const bool rte : {false, true}) {
+-        PreparationProbeDevice device;
+-        device.info.rounds_fp32_to_nearest = rte;
+-        device.info.preserves_fp32_denormals = rte;
+-        auto created = RetainedCompute::Create(device, 2, false, 250, true);
+-        ASSERT_TRUE(created);
+-        EXPECT_FALSE((*created)->StageSevenOwnershipEnabled());
+-        EXPECT_EQ(device.buffers.size(), 14U);
+-        EXPECT_EQ(device.loads, 7U);
+-        auto extra = RetainedCompute::RequiredStageSevenOwnerAllocationBytes(device, 2);
+-        ASSERT_TRUE(extra);
+-        EXPECT_EQ(*extra, 0U);
+-    }
+-}
+-
+ TEST(RetainedComputeAdmission, FmaSelectsOnlyNativeWideProductsAndPreservesAllocation) {
+     using namespace sirius::backend::retained_program;
+     for (unsigned mask = 0; mask < 16; ++mask) {
+@@ -974,6 +813,11 @@
+             info_->rounds_fp32_to_nearest = false;
+         }
+     }
++    std::vector<KernelHandle> loaded_handles;
++    KernelHandle last_kernel{};
++    std::array<KernelHandle, 2> last_pair{};
++    std::size_t last_bindings = 0;
++    std::array<std::size_t, 2> pair_bindings{};
+     Failure fail_next = Failure::None;
+     std::vector<Allocation> allocations;
+     std::vector<Transfer> writes, reads;
+@@ -998,6 +842,7 @@
+     const DeviceInfo& Info() const noexcept override { return info_ ? *info_ : device_.Info(); }
+     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+         auto loaded = device_.LoadKernel(code);
++        if (loaded) loaded_handles.push_back(*loaded);
+         if (loaded && after_load) after_load(code);
+         return loaded;
+     }
+@@ -1036,6 +881,8 @@
+     }
+     sirius::base::Expected<void> DispatchIndependentPair(
+         const std::array<ComputeDispatch, 2>& commands, IndependentPairTiming* timing) override {
++        last_pair = {commands[0].kernel, commands[1].kernel};
++        pair_bindings = {commands[0].buffers.size(), commands[1].buffers.size()};
+         ++pair_calls;
+         if (fail_next == Failure::Dispatch) return Inject("pair dispatch");
+         auto status = device_.DispatchIndependentPair(commands, timing);
+@@ -1053,6 +900,7 @@
+                                           std::span<const BufferHandle> buffers, std::uint32_t x,
+                                           std::uint32_t y, std::uint32_t z,
+                                           DispatchTiming* timing) override {
++        last_kernel = kernel; last_bindings = buffers.size();
+         ++dispatch_calls;
+         submissions.push_back({{buffers.empty() ? BufferHandle{} : buffers[0],
+                                 buffers.size() < 2 ? BufferHandle{} : buffers[1]},
+@@ -3730,26 +3578,42 @@
+     TransferProbeDevice probe(*device);
+     probe.independent_pairs = true;
+     std::size_t modules = 0;
++    std::vector<std::string> module_descriptions;
+     probe.after_load = [&](std::span<const std::uint32_t> code) {
+-        ASSERT_LT(modules, RetainedCompute::kStageCount);
++        ASSERT_LT(modules, RetainedCompute::kStageCount + (kDiagnosticOwner ? 2 : 0));
+         const auto digest = sirius::base::Sha256Hex(
+             std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+         ASSERT_TRUE(digest) << digest.error();
+-        RecordProperty("selected_module_" + std::to_string(modules),
+-                       std::format("stage={};bytes={};sha256={}",
+-                                   RetainedCompute::StageName(
+-                                       static_cast<RetainedCompute::KernelStage>(modules)),
+-                                   code.size_bytes(), *digest));
++        const auto role = modules < RetainedCompute::kStageCount
++            ? RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(modules))
++            : (modules == RetainedCompute::kStageCount ? "transport" : "endpoint");
++        const auto description = std::format("stage={};bytes={};sha256={}", role, code.size_bytes(), *digest);
++        module_descriptions.push_back(description);
++        RecordProperty((modules < RetainedCompute::kStageCount ? "selected_module_" : "optional_module_")
++                       + std::to_string(modules), description);
+         ++modules;
+     };
++    const auto create_started = std::chrono::steady_clock::now();
+     auto observed = RetainedCompute::Create(probe, 24, fp64_products);
++    const auto create_finished = std::chrono::steady_clock::now();
++    RecordProperty("observed_create_ms", std::format("{:.17g}", std::chrono::duration<double, std::milli>(create_finished - create_started).count()));
+     ASSERT_TRUE(observed) << observed.error().Description();
+-    ASSERT_EQ(modules, RetainedCompute::kStageCount);
+-    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
++    RecordProperty("owner_provisioning_ms", "0");
++    ASSERT_EQ(modules, RetainedCompute::kStageCount + (kDiagnosticOwner ? 2 : 0));
++    ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount + (kDiagnosticOwner ? 1 : 0));
+     const auto resident = device->BufferAllocationBytes();
+     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
+     std::size_t samples = 0;
+     std::string phase;
++    const auto execution = [&](std::size_t marker, std::size_t command, KernelHandle kernel, std::size_t bindings) {
++        const auto found = std::find_if(probe.loaded_handles.begin(), probe.loaded_handles.end(),
++            [&](KernelHandle loaded) { return loaded.value == kernel.value; });
++        ASSERT_NE(found, probe.loaded_handles.end());
++        const auto index = static_cast<std::size_t>(found - probe.loaded_handles.begin());
++        ASSERT_LT(index, module_descriptions.size());
++        RecordProperty("executed_module_" + std::to_string(marker) + "_" + std::to_string(command),
++            module_descriptions[index] + std::format(";loaded_index={};handle={};bindings={}", index, kernel.value, bindings));
++    };
+     const auto capture = [&](const std::string& stage, const DispatchTiming* host) {
+         ASSERT_LT(samples, 64U);
+         ASSERT_NE(host, nullptr);
+@@ -3774,10 +3638,14 @@
+                         *timestamp->device_span_ms, timestamp->host_submit_ms,
+                         timestamp->host_wait_ms, host->submit_wait_ms, host->pipeline_setup_ms,
+                         host->command_setup_ms, host->cleanup_ms, host->total_ms));
++        if (stage == "endpoint+dense") {
++            execution(samples - 1, 0, probe.last_pair[0], probe.pair_bindings[0]);
++            execution(samples - 1, 1, probe.last_pair[1], probe.pair_bindings[1]);
++        } else execution(samples - 1, 0, probe.last_kernel, probe.last_bindings);
+     };
+     probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+         ASSERT_FALSE(bound.empty());
+-        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
++        for (std::size_t i = 0; i < 2 * RetainedCompute::kStageCount; i += 2)
+             if (bound[0].value == probe.allocations[i].handle.value) {
+                 capture(
+                     RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(i / 2)),
+@@ -3797,7 +3665,7 @@
+     using Readback = std::pair<RetainedCompute::KernelStage, std::vector<std::byte>>;
+     std::vector<Readback> readbacks;
+     probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+-        for (std::size_t i = 1; i < probe.allocations.size(); i += 2)
++        for (std::size_t i = 1; i < 2 * RetainedCompute::kStageCount; i += 2)
+             if (buffer.value == probe.allocations[i].handle.value) {
+                 readbacks.emplace_back(static_cast<RetainedCompute::KernelStage>(i / 2),
+                                        std::vector<std::byte>(bytes.begin(), bytes.end()));
+@@ -3893,14 +3761,20 @@
+         return result;
+     };
+     readbacks.clear();
++    const auto disabled_attempt_started = Clock::now();
+     const auto coupled_baseline = AttemptRetainedDopriIntervals(**observed, coupled, 24);
++    const auto disabled_attempt_finished = Clock::now();
++    RecordProperty("disabled_attempt_ms", std::format("{:.17g}", milliseconds(disabled_attempt_started, disabled_attempt_finished)));
+     ASSERT_TRUE(coupled_baseline) << coupled_baseline.error().Description();
+     for (const auto& interval : *coupled_baseline) {
+         ASSERT_TRUE(interval.admissible);
+         ASSERT_TRUE(interval.dopri);
+     }
++    const auto disabled_sample_started = Clock::now();
+     const auto sample_baseline =
+         SampleRetainedDopriIntervals(**observed, sample_inputs(*coupled_baseline), 24);
++    const auto disabled_sample_finished = Clock::now();
++    RecordProperty("disabled_sample_ms", std::format("{:.17g}", milliseconds(disabled_sample_started, disabled_sample_finished)));
+     ASSERT_TRUE(sample_baseline) << sample_baseline.error().Description();
+     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+     const auto baseline_readbacks = std::move(readbacks);
+@@ -3953,7 +3827,7 @@
+     probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+         ASSERT_FALSE(bound.empty());
+         ASSERT_FALSE(probe.writes.empty());
+-        for (std::size_t i = 0; i < probe.allocations.size(); i += 2)
++        for (std::size_t i = 0; i < 2 * RetainedCompute::kStageCount; i += 2)
+             if (bound[0].value == probe.allocations[i].handle.value) {
+                 const auto stage = static_cast<RetainedCompute::KernelStage>(i / 2);
+                 // The header is immutable allocation capacity. After the disabled

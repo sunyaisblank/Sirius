@@ -1,0 +1,568 @@
+{
+  "schema": "sirius-packed-scratch-matched-current-producer-recipes-source-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "producer_actions": {
+    "compile-baseline-compute": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "diagnostic",
+      "expected_exit": 0,
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/baseline",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o",
+        "-c",
+        "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.d"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": false,
+      "frozen_inputs": "ROOT_PENDING_COMPLETE_CURRENT_COMPILE_CLOSURE",
+      "scope": "Fresh matched current strict observer/retained implementation; private header arm only; original source/flags unchanged."
+    },
+    "compile-baseline-observer": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "diagnostic",
+      "expected_exit": 0,
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/baseline",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-DSIRIUS_TEST_HAS_KERNELS=1",
+        "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+        "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+        "-I/home/astra/.project/Sirius/tests",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+        "-O3",
+        "-DNDEBUG",
+        "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o",
+        "-c",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/audited-observer.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.d"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": false,
+      "frozen_inputs": "ROOT_PENDING_COMPLETE_CURRENT_COMPILE_CLOSURE",
+      "scope": "Fresh matched current strict observer/retained implementation; private header arm only; original source/flags unchanged."
+    },
+    "compile-candidate-compute": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "diagnostic",
+      "expected_exit": 0,
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/candidate",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o",
+        "-c",
+        "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.d"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": false,
+      "frozen_inputs": "ROOT_PENDING_COMPLETE_CURRENT_COMPILE_CLOSURE",
+      "scope": "Fresh matched current strict observer/retained implementation; private header arm only; original source/flags unchanged."
+    },
+    "compile-candidate-observer": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "diagnostic",
+      "expected_exit": 0,
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/packed-retained-scratch-controls/headers/candidate",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_HAS_VULKAN_BACKEND=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-DSIRIUS_TEST_HAS_KERNELS=1",
+        "-DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1",
+        "-DSIRIUS_TEST_HAS_RETAINED_CAMERA=1",
+        "-I/home/astra/.project/Sirius/tests",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest",
+        "-O3",
+        "-DNDEBUG",
+        "-include/home/astra/.project/Sirius/tests/support/fail_on_skip.h",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o",
+        "-c",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/audited-observer.cpp",
+        "-MMD",
+        "-MF",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.d"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": false,
+      "frozen_inputs": "ROOT_PENDING_COMPLETE_CURRENT_COMPILE_CLOSURE",
+      "scope": "Fresh matched current strict observer/retained implementation; private header arm only; original source/flags unchanged."
+    },
+    "link-baseline": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "diagnostic",
+      "expected_exit": 0,
+      "argv": [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-observer.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline-compute.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-pthread",
+        "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/baseline.map",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": false,
+      "frozen_inputs": "ROOT_PENDING_CURRENT_LINK_INPUTS_AND_PRIOR_OWNER_SEALS",
+      "scope": "Current canonical DP test/device/libraries, explicit current observer+compute objects before default static archives. No historical executable/device override."
+    },
+    "link-candidate": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "diagnostic",
+      "expected_exit": 0,
+      "argv": [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-observer.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate-compute.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/render/libsirius_render.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/lib/libgtest.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+        "-pthread",
+        "-Wl,-Map=/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/candidate.map",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": false,
+      "frozen_inputs": "ROOT_PENDING_CURRENT_LINK_INPUTS_AND_PRIOR_OWNER_SEALS",
+      "scope": "Current canonical DP test/device/libraries, explicit current observer+compute objects before default static archives. No historical executable/device override."
+    }
+  },
+  "original_controls": {
+    "control-1": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-2": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-3": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-4": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-5": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-6": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-7": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    },
+    "control-8": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_MATCHED_PRODUCER_RUNTIME_CLOSURE",
+      "scope": "Original current case/body/assertions; original LVPdevice0/cacheOFF and physical deadlines. No original gate waiver."
+    }
+  },
+  "benefit_actions": {
+    "a1": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_ORIGINAL_PROTOCOL_MATCHED_SOURCE_PRODUCT_INPUTS",
+      "scope": "Sole original ABBA slot,3repeats, all original22gates, no pooling/subtraction/retry/cache-policy change."
+    },
+    "b1": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_ORIGINAL_PROTOCOL_MATCHED_SOURCE_PRODUCT_INPUTS",
+      "scope": "Sole original ABBA slot,3repeats, all original22gates, no pooling/subtraction/retry/cache-policy change."
+    },
+    "b2": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_ORIGINAL_PROTOCOL_MATCHED_SOURCE_PRODUCT_INPUTS",
+      "scope": "Sole original ABBA slot,3repeats, all original22gates, no pooling/subtraction/retry/cache-policy change."
+    },
+    "a2": {
+      "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+      "kind": "test",
+      "expected_exit": 0,
+      "argv": [
+        "python3",
+        "-B",
+        "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py",
+        "bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls",
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "software_provider": true,
+      "frozen_inputs": "ROOT_PENDING_ORIGINAL_PROTOCOL_MATCHED_SOURCE_PRODUCT_INPUTS",
+      "scope": "Sole original ABBA slot,3repeats, all original22gates, no pooling/subtraction/retry/cache-policy change."
+    }
+  },
+  "owner_cwd": "/home/astra/.project/Sirius",
+  "future_product_directory": "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls",
+  "requires_root_stage_creation": true,
+  "execution_order": [
+    "single-producer",
+    "ROOT_MATCHED_PRODUCER_DEPENDENCY_AND_ELF_ACCEPTANCE",
+    "control-8",
+    "SOLE_ORIGINAL_ABBA_A1_B1_B2_A2",
+    "ORIGINAL_COMPARATOR_ALL22",
+    "control-1..control-7 ONLY IF ALL22 PASS",
+    "BOTH_ORIGINAL_CONTROL_READERS"
+  ],
+  "compile_command_derivation": {
+    "compile-baseline-compute": {
+      "compile_commands_row": {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/src/sirius/.. -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o -c /home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "file": "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "output": "src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o"
+      },
+      "permitted_delta": [
+        "prepend one private header -I",
+        "same current implementation source",
+        "private absolute -o",
+        "-MMD -MF private actual dependency output"
+      ]
+    },
+    "compile-baseline-observer": {
+      "compile_commands_row": {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 -DSIRIUS_TEST_HAS_RETAINED_CAMERA=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o -c /home/astra/.project/Sirius/tests/backend/retained_compute_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/backend/retained_compute_test.cpp",
+        "output": "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o"
+      },
+      "permitted_delta": [
+        "prepend one private header -I",
+        "observer source substitution with admitted observation-only patch",
+        "private absolute -o",
+        "-MMD -MF private actual dependency output"
+      ]
+    },
+    "compile-candidate-compute": {
+      "compile_commands_row": {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/src/sirius/.. -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o -c /home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "file": "/home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+        "output": "src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o"
+      },
+      "permitted_delta": [
+        "prepend one private header -I",
+        "same current implementation source",
+        "private absolute -o",
+        "-MMD -MF private actual dependency output"
+      ]
+    },
+    "compile-candidate-observer": {
+      "compile_commands_row": {
+        "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+        "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE=1 -DSIRIUS_TEST_HAS_RETAINED_CAMERA=1 -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/retained_camera -I/home/astra/.project/Sirius/src/sirius/.. -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o -c /home/astra/.project/Sirius/tests/backend/retained_compute_test.cpp",
+        "file": "/home/astra/.project/Sirius/tests/backend/retained_compute_test.cpp",
+        "output": "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o"
+      },
+      "permitted_delta": [
+        "prepend one private header -I",
+        "observer source substitution with admitted observation-only patch",
+        "private absolute -o",
+        "-MMD -MF private actual dependency output"
+      ]
+    }
+  },
+  "single_producer_action": {
+    "revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "kind": "diagnostic",
+    "expected_exit": 0,
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/packed-retained-scratch-controls/compile_matched.py"
+    ],
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": false,
+    "frozen_inputs": "ROOT_PENDING_COMPLETE_INITIAL_SOURCE_TOOL_HEADER_ARCHIVE_RESOURCE_CLOSURE",
+    "scope": "One owned300s transaction for exact six commands; inputs immutable, private outputs born inside owner. Root afterward checks actual .d/map/ELF/seals before runtime."
+  },
+  "producer_operation_order": [
+    "compile-baseline-compute",
+    "compile-baseline-observer",
+    "link-baseline",
+    "compile-candidate-compute",
+    "compile-candidate-observer",
+    "link-candidate"
+  ],
+  "producer_actions_are_subcommands_not_separate_owners": true
+}

@@ -1,0 +1,11 @@
+--- a/run_limb_benefit_slot.py
++++ b/run_limb_benefit_slot.py
+@@ -10,7 +10,7 @@
+ root=Path.cwd()
+ assert len(sys.argv)==3
+ executable=root/sys.argv[1]
+-assert executable in [root/('bin/linux-gcc/power-two-divide-benefit/original_'+mode+'_controls')
++assert executable in [root/('bin/linux-gcc/packed-retained-scratch-controls/original_'+mode+'_controls')
+                       for mode in ('baseline','candidate')]
+ assert sys.argv[2]=='--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults'
+ os.execv(str(executable),[str(executable),sys.argv[2]])

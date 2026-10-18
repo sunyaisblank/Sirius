@@ -1,0 +1,104 @@
+{
+  "schema": "sirius-july-snapshot-desktop-independent-completion-review-v1",
+  "passed": true,
+  "audit_completed": true,
+  "original_july_identity_recovered": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "owner/root-preflight.json": [
+      4973,
+      "484a82c24373e467295c429babb414ca473f240a886e351a29bbceeeb1276a13"
+    ],
+    "source-freeze.json": [
+      600,
+      "4ab23fa4bb26b529e1eb5b04792e63a2f25d545ec5b7fe92502efabee3b196eb"
+    ],
+    "owner/query/owner.json": [
+      2216,
+      "630397ca54f392ba5279b61801ef26d2023bfa0632f6688c5336f3f6898c4658"
+    ],
+    "owner/query/inputs-before.json": [
+      132165,
+      "f09b03b0d21861b62ab72d1924051722d407c6c450cfaadb7c36b2a3278033ac"
+    ],
+    "owner/query/inputs-after.json": [
+      132165,
+      "f09b03b0d21861b62ab72d1924051722d407c6c450cfaadb7c36b2a3278033ac"
+    ],
+    "owner/query/operations.json": [
+      819,
+      "e6e2972fe1a19034a4c86125a8cdaee23f9672edccf8942cec79b0e9c4a6c092"
+    ],
+    "owner/query/query.stdout": [
+      6110,
+      "4e36d12b45bcc739206bb8192c58f0c60aa4e6b0e3c0130e06119750da44bb37"
+    ],
+    "owner/query/query.stderr": [
+      0,
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ],
+    "owner/query/terminal.stdout": [
+      294,
+      "63065b7fe9e8c43d2de56a502704c7f77e6cf6a83f35b368ea1ab7a069e0a590"
+    ],
+    "owner/query/terminal.stderr": [
+      0,
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    ],
+    "owner/query/samples.jsonl": [
+      2625,
+      "10f89fe0e554a9eac5318d16ed81945cc3dedc9836acefd972736476f082a0e2"
+    ],
+    "query-bootstrap.json": [
+      203,
+      "6f792af3be47f03b324ac2c737423ac2785af655861cf277f62e3bd3727f8af8"
+    ]
+  },
+  "checks": {
+    "current_before_after_equal_rows": 553,
+    "current_preflight_files": 14,
+    "source_freeze_members": 2,
+    "query_exit": 0,
+    "terminal_exit": 0,
+    "outer_owner_exit": 0,
+    "stop_reason": null,
+    "bridge_seconds": 2.087083922000602,
+    "query_seconds": 0.4149078,
+    "sample_count": 8,
+    "peak_sampled_rss_kib": 34812,
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 60
+    },
+    "no_cleanup_errors_or_remaining_owned_processes": true,
+    "saved_Linux_birth_absence_records": 3,
+    "Windows_exact_birth_retired": true,
+    "fresh_process_query_by_reviewer": false
+  },
+  "coverage": "All three observed HarddiskVolumeShadowCopy1/2/3 Users/alarisadmin/Desktop directories and their direct Sirius directories were readable and fully enumerated. Ancestors and Sirius had non-reparse directory attributes; source requires a fresh non-reparse check before child descent. 45 records/51 Find calls; no cap, gap or close failure.",
+  "negative_finding": "Each selected snapshot Desktop/Sirius listing completed with Win32 ERROR_NO_MORE_FILES after exactly two entries (the source excludes dot/dot-dot), and no other entry. Thus these three specific Sirius directories were empty at observation, not merely lacking matching filenames. No Remediation directory was discovered in these Desktop walks.",
+  "existing_hint_review": {
+    "pins": {
+      "root-observation.json": [
+        3194,
+        "0c2204fcd4dbd7a78e131dc9c68d39608109494345813e7ab15ad0446937a1af"
+      ],
+      "recycle-top-level.json": [
+        844,
+        "22817e56f2b488c54ff44f843833cc97cda46fdaa48840d2dc73b1410e3ecc54"
+      ],
+      "search-index.stdout": [
+        874,
+        "94bb9c719db8f087a25e27a8601eae688e56e6b20fba367defa062188c0f4975"
+      ]
+    },
+    "finding": "Saved Recent metadata has zero links; FileHistory config paths were absent; Search index returned no rows. The sole concrete recycled original path is C:/Users/alarisadmin/Desktop/Sirius, now inspected in these snapshots. Generic Search query scopes are not discovered original locations. No further concrete original-path hint in these saved metadata receipts justifies another selected snapshot query."
+  },
+  "decision": "Stop this metadata route. The direct NT-name/VSS-privilege coverage gap is closed for these three readable selected Desktop/Sirius paths; Goal 2 remains unresolved.",
+  "limits": [
+    "No all-VSS/all-Windows/no-originals absence conclusion, snapshot creation-date claim, content recovery or original tape/manifest/comparator identity.",
+    "Non-atomic path metadata, no snapshot identity/timestamp attestation; no restore, mount, recursive scan, file contents or fresh query by reviewer.",
+    "Saved exact-birth closure evidence only; reviewer did not query processes or execute helpers/programs."
+  ]
+}

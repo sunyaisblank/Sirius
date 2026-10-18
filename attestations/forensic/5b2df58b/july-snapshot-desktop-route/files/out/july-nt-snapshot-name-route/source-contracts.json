@@ -1,0 +1,95 @@
+{
+  "schema": "sirius-july-nt-snapshot-name-route-source-contracts-v1",
+  "source_only": true,
+  "admitted": false,
+  "query_executed": false,
+  "query_source": {
+    "path": "out/july-nt-snapshot-name-route/query.ps1",
+    "bytes": 9640,
+    "sha256": "68a0f99dc6c1348c51d39ab6fd0b84810c7ddf1148144fc3975388b4da9c74db"
+  },
+  "prior_distinct_route": {
+    "published_commit": "44985de0",
+    "bundle": "attestations/scientific-core/eae45684/shared-jacobi-integration-native-amd/files/out/july-recovery-metadata-route",
+    "selected_pins": [
+      {
+        "path": "out/july-recovery-metadata-route/root-observation.json",
+        "bytes": 3194,
+        "sha256": "0c2204fcd4dbd7a78e131dc9c68d39608109494345813e7ab15ad0446937a1af"
+      },
+      {
+        "path": "out/july-recovery-metadata-route/root-alternate-shadow-observation.json",
+        "bytes": 445,
+        "sha256": "932146b37b28b9de7a0693d0f16f597c8ece5e71cc16c0801feedc26dd4504a0"
+      },
+      {
+        "path": "out/july-recovery-metadata-route/root-search-index-observation.json",
+        "bytes": 527,
+        "sha256": "b3a38b45759320fc35e4f7caac46fdb2849b38783750fe701adbf5d339280b59"
+      },
+      {
+        "path": "out/july-recovery-metadata-route/query-fixed.ps1",
+        "bytes": 3864,
+        "sha256": "11293cf605bbe0fae3095666cd0d7cc49f068e66771b973d686333b2c690d70b"
+      },
+      {
+        "path": "out/july-recovery-metadata-route/search-index-metadata.ps1",
+        "bytes": 2112,
+        "sha256": "67d3881f0dd68b0bf2a781c0d794ed3911599e580814c0ecd0b847bb9daa984a"
+      },
+      {
+        "path": "out/july-recovery-metadata-route/vssadmin.stdout",
+        "bytes": 282,
+        "sha256": "d7a817a49f898af1a717ffbcabd46d7a6aa034f4c26a0aba49994ab2a93b8077"
+      }
+    ],
+    "saved_route_file_count_checked": 16,
+    "direct_NT_directory_enumeration_tokens_found": false,
+    "actual_prior_results": "CIM Win32_ShadowCopy initialization failure; vssadmin exit2 explicitly required elevated administrator permission; Windows Search unavailable/limited index does not establish snapshot absence. Recent/Recycle/FileHistory routes also ran. No direct NT object-directory walk appears in this saved route."
+  },
+  "local_API_metadata": {
+    "ntdll": {
+      "path": "/mnt/c/Windows/System32/ntdll.dll",
+      "bytes": 2558392,
+      "sha256": "651ac9041af8e6b5ebd331d53163244c0a27d36d1433f0f15cac1f28c5f2e82c"
+    },
+    "PE_machine": "AMD64 (0x8664)",
+    "PE_optional_header": "PE32+ (0x020b)",
+    "exact_exports_present": [
+      "NtOpenDirectoryObject",
+      "NtQueryDirectoryObject",
+      "NtClose"
+    ],
+    "method": "Passive file/export-table read only; no module loading, native query, compiler or program execution. Export presence does not prove current directory access permission or Reflection.Emit availability."
+  },
+  "proposed_operation": {
+    "platform": "Existing 64-bit Windows PowerShell Desktop (.NET Framework); fail closed otherwise",
+    "namespace": "\\Device",
+    "access": 1,
+    "access_name": "DIRECTORY_QUERY",
+    "recursive": false,
+    "name_filter": "^HarddiskVolumeShadowCopy[0-9]+$",
+    "payload": "Matching object name/type and enumerator coverage counters/status only. Does not open matching device objects, snapshot volumes, files, tapes or images.",
+    "in_memory_interop": "Reflection.Emit P/Invoke stubs; no Add-Type, C# compiler, external csc, child program, admin/UAC, installation or network."
+  },
+  "bounds": {
+    "soft_seconds": 30,
+    "ROOT_external_seconds_required": 60,
+    "maximum_NT_query_calls": 4096,
+    "native_buffer_bytes": 65536,
+    "maximum_matching_names": 128,
+    "deadline_limit": "Soft bound is checked between synchronous native calls; ROOT must enforce the external 60-second process deadline and verify held owner birth/cleanup if interrupted."
+  },
+  "result_contract": {
+    "exit0": "Observed STATUS_NO_MORE_ENTRIES, no gaps, directory handle closed; covers this visible non-atomic directory walk only. Matches may be empty or nonempty.",
+    "exit2": "Access denial, unsupported runtime/API, partial enumeration, time/call/output/buffer limit, invalid native layout or cleanup gap. Never interpret as snapshot absence.",
+    "status_values": "Raw signed NTSTATUS formatted as eight hex digits; open/last-query/close retained. STATUS_MORE_ENTRIES allowed while parsing a single returned record; STATUS_NO_MORE_ENTRIES alone establishes end-of-directory.",
+    "ownership": "Own PID/start UTC/held self-process handle bootstrap before native setup. ROOT external owner/timeout and actual process closure remain required. Allocated buffers and NT directory handle released in finally."
+  },
+  "interpretation_limits": [
+    "Directory access depends on its ACL; using a metadata query instead of CIM/VSS does not imply permission will be granted.",
+    "Even a complete visible walk with zero matching names does not exclude inaccessible/unexposed/nonpersistent/removed snapshots, alternate namespaces or historical July media. Enumeration is not an atomic snapshot.",
+    "A matching name is a candidate location only, not proof of readable contents, useful July data, original tape/manifest/comparator identity or recovery.",
+    "No live query, syntax/runtime binding probe, privileges change or original pathname search has been executed by this source-author task. ROOT independent source review and separate execution decision remain required."
+  ]
+}

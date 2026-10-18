@@ -1,0 +1,79 @@
+{
+  "schema": "sirius-july-direct-NT-name-root-observation-v1",
+  "created_utc": "2026-10-18T04:08:39.761702+00:00",
+  "passed": true,
+  "query_exit": 0,
+  "terminal_exit": 0,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "fixed_directory": "\\Device",
+  "visible_directory_walk_completed": true,
+  "query_calls": 409,
+  "entries": 408,
+  "matching_names": [
+    {
+      "nt_object_path": "\\Device\\HarddiskVolumeShadowCopy1",
+      "name": "HarddiskVolumeShadowCopy1",
+      "object_type": "Device"
+    },
+    {
+      "nt_object_path": "\\Device\\HarddiskVolumeShadowCopy2",
+      "name": "HarddiskVolumeShadowCopy2",
+      "object_type": "Device"
+    },
+    {
+      "nt_object_path": "\\Device\\HarddiskVolumeShadowCopy3",
+      "name": "HarddiskVolumeShadowCopy3",
+      "object_type": "Device"
+    }
+  ],
+  "query_elapsed_seconds": 0.2760185,
+  "bridge_elapsed_seconds": 1.3073917909932788,
+  "Windows_owner": {
+    "pid": 9260,
+    "start_utc": "2026-10-18T04:05:58.2894157Z",
+    "birth_absent": true,
+    "stopped": false
+  },
+  "input_rows": 548,
+  "whole_inputs_held": true,
+  "raw": {
+    "out/july-nt-snapshot-name-route/owner/query/owner.json": {
+      "bytes": 2149,
+      "sha256": "93e55241c9d91ce54490f75d5b49311680e5ef1d0e551ce41d9c2cfed4029bc4"
+    },
+    "out/july-nt-snapshot-name-route/owner/query/operations.json": {
+      "bytes": 810,
+      "sha256": "f5131ec96337fa0cff66a6912265cfff8e72bd14ca4e9de96912735ce31f31a8"
+    },
+    "out/july-nt-snapshot-name-route/owner/query/query.stdout": {
+      "bytes": 1416,
+      "sha256": "f9036e781d830f6c7dfc0436584c92e1cb29c9de6bb204e3806f267253c64c11"
+    },
+    "out/july-nt-snapshot-name-route/owner/query/query.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/july-nt-snapshot-name-route/owner/query/terminal.stdout": {
+      "bytes": 293,
+      "sha256": "f61c69c7c31daea09c987e90d6db4e7674e4da2f490f972044b469d5105d53ee"
+    },
+    "out/july-nt-snapshot-name-route/owner/query/terminal.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/july-nt-snapshot-name-route/query-bootstrap.json": {
+      "bytes": 202,
+      "sha256": "953455527f415502670751a89914eaceeb8dd1b078884c1a81ee7b9870e242c4"
+    },
+    "out/july-nt-snapshot-name-route/query.ps1": {
+      "bytes": 9640,
+      "sha256": "68a0f99dc6c1348c51d39ab6fd0b84810c7ddf1148144fc3975388b4da9c74db"
+    },
+    "out/july-nt-snapshot-name-route/source-contracts.json": {
+      "bytes": 5429,
+      "sha256": "7829742110ecb14419b4d08772ef3b38a4c4fb29f4fbcd5bb64403deae947e79"
+    }
+  },
+  "next_scope": "Prepare bounded read-only directory metadata for these3actualnames. No broad drive/image search, elevation, mount, restore or volume mutation.",
+  "limits": "Visible object names only, non-atomic walk; no snapshot creation date/readability, July tape/manifest/comparator identity, recovery or scientific/runtime qualification established. Existing CIM/VSS privilege failure is not negative coverage for these newly observed names."
+}

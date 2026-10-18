@@ -1,0 +1,64 @@
+{
+  "schema": "sirius-packed-scratch-posttools-pending-v1",
+  "executed": false,
+  "root_pin_and_owned_batch_required": true,
+  "commands": [
+    {
+      "label": "baseline-create",
+      "argv": [
+        "/usr/bin/objdump",
+        "-d",
+        "-C",
+        "--start-address=1581808",
+        "--stop-address=1596439",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+      ]
+    },
+    {
+      "label": "baseline-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-C",
+        "--defined-only",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+      ]
+    },
+    {
+      "label": "baseline-readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "-Ws",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_baseline_controls"
+      ]
+    },
+    {
+      "label": "candidate-create",
+      "argv": [
+        "/usr/bin/objdump",
+        "-d",
+        "-C",
+        "--start-address=1581808",
+        "--stop-address=1596439",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+      ]
+    },
+    {
+      "label": "candidate-symbols",
+      "argv": [
+        "/usr/bin/nm",
+        "-C",
+        "--defined-only",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+      ]
+    },
+    {
+      "label": "candidate-readelf",
+      "argv": [
+        "/usr/bin/readelf",
+        "-Ws",
+        "/home/astra/.project/Sirius/bin/linux-gcc/packed-retained-scratch-controls/original_candidate_controls"
+      ]
+    }
+  ],
+  "required_check": "Actual Create selector references to respective ELF array addresses; tool output not yet available."
+}

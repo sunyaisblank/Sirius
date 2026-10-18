@@ -1,0 +1,119 @@
+--- a/tests/backend/retained_compute_test.cpp
++++ b/tests/backend/retained_compute_test.cpp
+@@ -974,6 +974,11 @@
+             info_->rounds_fp32_to_nearest = false;
+         }
+     }
++    std::vector<KernelHandle> loaded_handles;
++    KernelHandle last_kernel{};
++    std::array<KernelHandle, 2> last_pair{};
++    std::size_t last_bindings = 0;
++    std::array<std::size_t, 2> pair_bindings{};
+     Failure fail_next = Failure::None;
+     std::vector<Allocation> allocations;
+     std::vector<Transfer> writes, reads;
+@@ -998,6 +1003,7 @@
+     const DeviceInfo& Info() const noexcept override { return info_ ? *info_ : device_.Info(); }
+     sirius::base::Expected<KernelHandle> LoadKernel(std::span<const std::uint32_t> code) override {
+         auto loaded = device_.LoadKernel(code);
++        if (loaded) loaded_handles.push_back(*loaded);
+         if (loaded && after_load) after_load(code);
+         return loaded;
+     }
+@@ -1036,6 +1042,8 @@
+     }
+     sirius::base::Expected<void> DispatchIndependentPair(
+         const std::array<ComputeDispatch, 2>& commands, IndependentPairTiming* timing) override {
++        last_pair = {commands[0].kernel, commands[1].kernel};
++        pair_bindings = {commands[0].buffers.size(), commands[1].buffers.size()};
+         ++pair_calls;
+         if (fail_next == Failure::Dispatch) return Inject("pair dispatch");
+         auto status = device_.DispatchIndependentPair(commands, timing);
+@@ -1053,6 +1061,7 @@
+                                           std::span<const BufferHandle> buffers, std::uint32_t x,
+                                           std::uint32_t y, std::uint32_t z,
+                                           DispatchTiming* timing) override {
++        last_kernel = kernel; last_bindings = buffers.size();
+         ++dispatch_calls;
+         submissions.push_back({{buffers.empty() ? BufferHandle{} : buffers[0],
+                                 buffers.size() < 2 ? BufferHandle{} : buffers[1]},
+@@ -3730,26 +3739,42 @@
+     TransferProbeDevice probe(*device);
+     probe.independent_pairs = true;
+     std::size_t modules = 0;
++    std::vector<std::string> module_descriptions;
+     probe.after_load = [&](std::span<const std::uint32_t> code) {
+         ASSERT_LT(modules, RetainedCompute::kStageCount);
+         const auto digest = sirius::base::Sha256Hex(
+             std::span(reinterpret_cast<const std::uint8_t*>(code.data()), code.size_bytes()));
+         ASSERT_TRUE(digest) << digest.error();
+-        RecordProperty("selected_module_" + std::to_string(modules),
+-                       std::format("stage={};bytes={};sha256={}",
+-                                   RetainedCompute::StageName(
+-                                       static_cast<RetainedCompute::KernelStage>(modules)),
+-                                   code.size_bytes(), *digest));
++        const auto role = modules < RetainedCompute::kStageCount
++            ? RetainedCompute::StageName(static_cast<RetainedCompute::KernelStage>(modules))
++            : (modules == RetainedCompute::kStageCount ? "transport" : "endpoint");
++        const auto description = std::format("stage={};bytes={};sha256={}", role, code.size_bytes(), *digest);
++        module_descriptions.push_back(description);
++        RecordProperty((modules < RetainedCompute::kStageCount ? "selected_module_" : "optional_module_")
++                       + std::to_string(modules), description);
+         ++modules;
+     };
++    const auto create_started = std::chrono::steady_clock::now();
+     auto observed = RetainedCompute::Create(probe, 24, fp64_products);
++    const auto create_finished = std::chrono::steady_clock::now();
++    RecordProperty("observed_create_ms", std::format("{:.17g}", std::chrono::duration<double, std::milli>(create_finished - create_started).count()));
+     ASSERT_TRUE(observed) << observed.error().Description();
++    RecordProperty("owner_provisioning_ms", "0");
+     ASSERT_EQ(modules, RetainedCompute::kStageCount);
+     ASSERT_EQ(probe.allocations.size(), 2 * RetainedCompute::kStageCount);
+     const auto resident = device->BufferAllocationBytes();
+     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(true));
+     std::size_t samples = 0;
+     std::string phase;
++    const auto execution = [&](std::size_t marker, std::size_t command, KernelHandle kernel, std::size_t bindings) {
++        const auto found = std::find_if(probe.loaded_handles.begin(), probe.loaded_handles.end(),
++            [&](KernelHandle loaded) { return loaded.value == kernel.value; });
++        ASSERT_NE(found, probe.loaded_handles.end());
++        const auto index = static_cast<std::size_t>(found - probe.loaded_handles.begin());
++        ASSERT_LT(index, module_descriptions.size());
++        RecordProperty("executed_module_" + std::to_string(marker) + "_" + std::to_string(command),
++            module_descriptions[index] + std::format(";loaded_index={};handle={};bindings={}", index, kernel.value, bindings));
++    };
+     const auto capture = [&](const std::string& stage, const DispatchTiming* host) {
+         ASSERT_LT(samples, 64U);
+         ASSERT_NE(host, nullptr);
+@@ -3774,6 +3799,10 @@
+                         *timestamp->device_span_ms, timestamp->host_submit_ms,
+                         timestamp->host_wait_ms, host->submit_wait_ms, host->pipeline_setup_ms,
+                         host->command_setup_ms, host->cleanup_ms, host->total_ms));
++        if (stage == "endpoint+dense") {
++            execution(samples - 1, 0, probe.last_pair[0], probe.pair_bindings[0]);
++            execution(samples - 1, 1, probe.last_pair[1], probe.pair_bindings[1]);
++        } else execution(samples - 1, 0, probe.last_kernel, probe.last_bindings);
+     };
+     probe.after_dispatch = [&](std::span<const BufferHandle> bound, const DispatchTiming* host) {
+         ASSERT_FALSE(bound.empty());
+@@ -3893,14 +3922,20 @@
+         return result;
+     };
+     readbacks.clear();
++    const auto disabled_attempt_started = Clock::now();
+     const auto coupled_baseline = AttemptRetainedDopriIntervals(**observed, coupled, 24);
++    const auto disabled_attempt_finished = Clock::now();
++    RecordProperty("disabled_attempt_ms", std::format("{:.17g}", milliseconds(disabled_attempt_started, disabled_attempt_finished)));
+     ASSERT_TRUE(coupled_baseline) << coupled_baseline.error().Description();
+     for (const auto& interval : *coupled_baseline) {
+         ASSERT_TRUE(interval.admissible);
+         ASSERT_TRUE(interval.dopri);
+     }
++    const auto disabled_sample_started = Clock::now();
+     const auto sample_baseline =
+         SampleRetainedDopriIntervals(**observed, sample_inputs(*coupled_baseline), 24);
++    const auto disabled_sample_finished = Clock::now();
++    RecordProperty("disabled_sample_ms", std::format("{:.17g}", milliseconds(disabled_sample_started, disabled_sample_finished)));
+     ASSERT_TRUE(sample_baseline) << sample_baseline.error().Description();
+     EXPECT_FALSE(vulkan->LastDispatchTimestamp());
+     const auto baseline_readbacks = std::move(readbacks);

@@ -1,0 +1,109 @@
+{
+  "schema": "sirius-packed-scratch-independent-current-producer-completion-review-v1",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "reviewer": "/root/divide_contract_review",
+  "created_utc": "2026-10-18T04:20:14.991077+00:00",
+  "decision": "MATCHED_CPP_PRODUCER_AND_GNU_SELECTOR_PROOF_PASS_RUNTIME_UNADMITTED",
+  "inputs": {
+    "out/packed-retained-scratch-producer/read_postproof.py": {
+      "path": "out/packed-retained-scratch-producer/read_postproof.py",
+      "bytes": 15266,
+      "sha256": "8acc4a79725e8ed0c6ed43d975c7e35973c04e31bb7fb5cb9ab21dc8bef1efe8"
+    },
+    "out/packed-retained-scratch-producer/producer-postproof.json": {
+      "path": "out/packed-retained-scratch-producer/producer-postproof.json",
+      "bytes": 31558,
+      "sha256": "d8ff74c1771c5880ef752c44fd969740f45707455f2367a987cbe130fcdd7ba1"
+    },
+    "out/packed-retained-scratch-producer/root-selector-postproof.json": {
+      "path": "out/packed-retained-scratch-producer/root-selector-postproof.json",
+      "bytes": 25733,
+      "sha256": "df738d13b8c23e562e1039db6ad56d3e3553c31b731650f85e7c6f37f865bea9"
+    },
+    "out/packed-retained-scratch-producer/producer/owner.json": {
+      "path": "out/packed-retained-scratch-producer/producer/owner.json",
+      "bytes": 3735,
+      "sha256": "6dbdb7df74139852fde8b49f63d6298852f48474c4035b1430fd5d2b92e2c87a"
+    },
+    "out/packed-retained-scratch-producer/posttools/inspect/owner.json": {
+      "path": "out/packed-retained-scratch-producer/posttools/inspect/owner.json",
+      "bytes": 1777,
+      "sha256": "58239387c49821060a3a05ed879f8069c6aede910e72dda84198b8b0a9463a43"
+    },
+    "out/packed-retained-scratch-producer/posttools/inspect/results.json": {
+      "path": "out/packed-retained-scratch-producer/posttools/inspect/results.json",
+      "bytes": 1587,
+      "sha256": "319ec01f7cf869f6ad53a57f88ad14e71e27a890e060f27115e687dff581fa8f"
+    },
+    "out/packed-retained-scratch-controls/independent-source-review.json": {
+      "path": "out/packed-retained-scratch-controls/independent-source-review.json",
+      "bytes": 7587,
+      "sha256": "84f4b0e9a64b6700c54f77c8cf68f692d4d7105f0d1672d71e116cd9e45bc0e1"
+    },
+    "out/packed-retained-scratch-screen/independent-emitted-review.json": {
+      "path": "out/packed-retained-scratch-screen/independent-emitted-review.json",
+      "bytes": 37764,
+      "sha256": "a2e277dc023faaeb4471d766e0a869ea5a05b14b38d15aac035c74c2103c3c1d"
+    }
+  },
+  "method": "Full source review of the other author data reader, passive independent stdlib checks on actual saved producer and six GNU outputs. No project-reader import/execution, tool/executable/provider/test launch or process query by reviewer. ROOT produced all execution records.",
+  "authorship_disclosure": "Reviewer authored the scratch prototype and its offline emitted comparison, and previously independently reviewed the other author matched-C++ source packet. Independent of current C++ producer execution/data-reader author and ROOT GNU execution; not independent raw production or formal whole-program proof.",
+  "reader_review": {
+    "parser_scope": "Bounded ELF64 little-endian x86-64 section/SYMTAB parsing, depfile and input/command joins reviewed. Per-path identity cache applies to held snapshot only; actual before/after and owner evidence establishes execution stability.",
+    "producer": "All six actual command argv/exits exactly match reviewed recipes; all 5522 before/after rows identical; owner terminal/pass/zero, no stop/errors/remainers, 91.9399562359904 seconds, sampled aggregate peak1285644 KiB.",
+    "data_independent_checks": "12 product hashes, 23 resource copies, four depfiles (7 compute/60 observer dependencies per arm), correct arm headers and no other-arm header, unmixed maps/explicit canonical device object/no whole-archive. All 84 shader/table/owner payloads across both ELFs independently verified by PT_LOAD address translation rather than reader section translation.",
+    "composition": "Prior accepted source proof establishes all 27 original TEST bodies/assertions unchanged. Prior emitted proof establishes 25 changed/15 unchanged main arrays, two unchanged owner arrays and seven unchanged program tables. Actual ELF payloads join those exact headers.",
+    "birth_scope": "Producer saved observed17 plus controller18 retirement proof and posttools saved closed-birth evidence reused; no fresh reviewer process query."
+  },
+  "GNU_review": {
+    "actual_six_commands": {
+      "all_exact_pending_argv": true,
+      "all_returncodes_int_zero": true,
+      "all_stderr_empty": true,
+      "raw_stdout_stderr_pins_joined": 12
+    },
+    "tool_owner": {
+      "passed": true,
+      "wall_seconds": 0.27855532499961555,
+      "peak_sampled_rss_kib": 37708,
+      "input_rows_before_after_identical": 5582,
+      "source_inputs_stable": true,
+      "no_stop_cleanup_errors_or_remainers": true
+    },
+    "selectors_both_arms": {
+      "main_shader_exact_base_references": 33,
+      "main_program_exact_base_references": [
+        "kTransportProgram",
+        "kEndpointProgram"
+      ],
+      "owner_shader_exact_base_references": 2,
+      "Create_address": 1581808,
+      "Create_size": 14631,
+      "all_exact_addresses_join_actual_ELF_payloads": true
+    },
+    "device_both_arms": "All 28 exact GLOBAL FUNC names independently derived from current Vulkan object; each defined nonzero-size ELF symbol equals actual readelf name/size/address and has its address in nm T output. Eighteen VulkanDevice members plus ten nonmember helpers, not 28 class members.",
+    "owner_extra_maps": "Create also references General/Schwarzschild Transport/Endpoint maps; these legitimate extra owner references are not mistaken for shader payload requirements.",
+    "reader_setup_corrections": "ROOT candidly records two pure-reader assertions corrected before receipt: extra owner maps and object-vs-class function scope. No producer/GNU rerun, required-symbol removal or relaxed gate."
+  },
+  "limits": [
+    "Create code references all33 main shaders, two owner shaders and T/E tables. Other five program tables have exact source/ELF payload proof, not claimed direct recovered code references.",
+    "Public constexpr declarations are exact; not every folded machine-code literal was independently recovered.",
+    "Source/producer/selector completion only. No original control, timestamp witness, ABBA, numerical, driver cost, speed/occupancy, adoption, full science or release result."
+  ],
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "performance_acceptance": false,
+  "next_gate": "ROOT full-read/admission may advance runtime preparation; timestamp FIRST then sole unchanged ABBA and all original benefit/adoption gates remain mandatory.",
+  "workspace": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "HEAD": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "committed_and_pushed_tracking_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "this_receipt": "Ignored out evidence only; not committed or pushed by reviewer."
+  }
+}

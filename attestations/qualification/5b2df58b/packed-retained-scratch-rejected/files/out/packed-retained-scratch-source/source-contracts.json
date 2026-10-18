@@ -1,0 +1,76 @@
+{
+  "schema": "sirius-packed-retained-scratch-source-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "canonical_source_changed": false,
+  "source_context": "Current ROOT source5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e; no builder/compiler/provider executed by author.",
+  "private_files": {
+    "original-retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "candidate-retained_scratch.slang": {
+      "bytes": 2097,
+      "sha256": "560765bdacb0c0b1d37f24e21de0d34204fe8a6d5ccf632c5e4b2831f53096b9"
+    },
+    "source.patch": {
+      "bytes": 2113,
+      "sha256": "6c2afa9c52101cc870535f1d8f85d0afd536b2742cec2fe211d1a95b822c799c"
+    }
+  },
+  "change": "Only TERMS==5 && !defined(SIRIUS_RETAINED_STAGE7_OWNER) scratch storage/read/write addressing:4uint words per generated register instead of5. This is groupshared workgroup scratch, not public device-buffer ABI or a claim about compiler registers. retainedStatus stays separate and exact.",
+  "representation": {
+    "components0to2": "Original raw words at4*index+component, unchanged.",
+    "components3and4": "Share word4*index+3: low31 bits original nonnegative error payload, highbit validity0or1. Read3 masks0x7fffffff, Read4 shifts31.",
+    "write3": "Store rawerror&0x7fffffff, deliberately clearing previous validity. Original WriteValue then writes component4 in the same invocation before its original synchronization point.",
+    "write4": "Preserve low31 bits and insert(value&1)<<31. Relies on complete source proof that only validity0/1 reaches scratch; arbitrary >1 values are NOT supported by this prototype.",
+    "initial_validity_clear": "Write4=0 leaves low31 bits opaque, potentially uninitialized/stale. Neither zero payload nor equality of old uninitialized error slots is asserted. Required defined-value/read-lifecycle semantics remain an independent review obligation."
+  },
+  "preconditions_pending_independent_review": [
+    "Every complete eligible non-S7 five-term WriteValue error has signbit0, including invalid results; RTFinishAccumulation rejects error signbit1 and RTInvalid supplies zero, but ALL eligible constructors/input/select/other direct sources must be closed independently before generation.",
+    "All scratch validity writes are0/1. No narrowing of an arbitrary uint validity input is admitted.",
+    "Each initialized generated destination belongs to one invocation in the layer; components3then4 finish before any original reader/barrier publication. Packed-word read-modify-write must not race with another component writer.",
+    "Never-initialized payload is not semantically consumed merely because a packed validity clear loaded/preserved its opaque low31 bits. Language/emitted handling must not strengthen any uninitialized payload claim."
+  ],
+  "exact_preservations": [
+    "TERMS!=5 OR defined(SIRIUS_RETAINED_STAGE7_OWNER) retains byte-exact original array/address/read/write blocks in #else. Both optional owner modules and TERMS4 pair-camera paths remain unmodified.",
+    "retainedStatus and RejectRetainedProgram tail exact. All existing workgroup barriers, mode selectors, arithmetic bodies, inputs, outputs, program tables, 40field/7RHS/3trial/quartic controls and rollback untouched.",
+    "No source calls or builder/product files are altered; physical operation/order and original guard/caps unchanged."
+  ],
+  "actual_source_pins": {
+    "src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    "src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+    },
+    "src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+    },
+    "src/sirius/kernels/retained_dense.slang": {
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c"
+    },
+    "src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+    },
+    "src/sirius/kernels/retained_initialize.slang": {
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6"
+    }
+  },
+  "cost_limits": [
+    "Only the source declaration4R versus5R uint scratch words is established. No20%load/store, time, occupancy, allocatedLDS, register-pressure or overall-memory claim.",
+    "Write4 adds a packed-word read-modify-write; Write3/Write4 store forwarding is not established atO0. Bit extraction/masking, driver lowering and synchronization/code-size tradeoffs need actual controlled emitted inspection after independent/root SOURCE admission.",
+    "Source invariant failure may reject this prototype before generation. No runtime/adoption/qualification or new trial is authorized."
+  ],
+  "excluded_owner_reason": "S7Replay reads an externally stored five-word candidate with valid1 without RTPack/error-sign admission. Both optional owner modules are excluded from packing until a separate invariant is justified; no new owner payload acceptance is claimed."
+}

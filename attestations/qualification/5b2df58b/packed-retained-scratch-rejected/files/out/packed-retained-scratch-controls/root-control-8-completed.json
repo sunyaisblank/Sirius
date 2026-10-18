@@ -1,0 +1,105 @@
+{
+  "schema": "sirius-packed-scratch-root-first-control-completion-v1",
+  "created_utc": "2026-10-18T04:27:33.866036+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "original_control": "control-8",
+  "owner": {
+    "path": "out/packed-retained-scratch-controls/control-8/owner.json",
+    "bytes": 2426,
+    "sha256": "e79d40cb377f80a2f4808e7b3e3ed246abde990e32d8d91bb39047a645670c98"
+  },
+  "xml": {
+    "path": "out/packed-retained-scratch-controls/control-8/gtest.xml",
+    "bytes": 40913,
+    "sha256": "0cb2ea56a9988e35f3e8ace6e6b7940d9dc437e157d98fae5c7f278bbb753f4f"
+  },
+  "reader": {
+    "path": "out/packed-retained-scratch-controls/contract/software_contracts.py",
+    "bytes": 11264,
+    "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+  },
+  "release": {
+    "path": "out/packed-retained-scratch-controls/root-runtime-release.json",
+    "bytes": 1406,
+    "sha256": "61ea765fe27d8289ab83b002a35224641376ccb94e9d4fbf767737b95f0aca7c"
+  },
+  "input_rows_before_after_current": 919,
+  "all_observed_and_controller_births_retired": true,
+  "actual_same_child_provider_mapping": true,
+  "protected_canonical_products_unchanged": 72,
+  "zero_failures_errors_skips_disabled": true,
+  "ordered_markers": 51,
+  "complete_readbacks": 32,
+  "actual_module_command_joins": 54,
+  "selected_modules": {
+    "camera": {
+      "array": "kCameraPortableShader",
+      "stage": "camera",
+      "bytes": "512324",
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "transport": {
+      "array": "kTransportPortableNormalSumShader",
+      "stage": "transport",
+      "bytes": "104744",
+      "sha256": "2a9acb72448f566b2f6b5d13ec1ceb9fd83636d07eaa24202702d00520c67c4d"
+    },
+    "endpoint": {
+      "array": "kEndpointPortableNormalSumShader",
+      "stage": "endpoint",
+      "bytes": "152104",
+      "sha256": "99067b8c4047e25947c4417ec699865abf05ecec70ba310d3c2a7b23721b1882"
+    },
+    "dense": {
+      "array": "kDensePortableShader",
+      "stage": "dense",
+      "bytes": "116908",
+      "sha256": "cc83ef989a3241115f010b67e8d497c0147047fe6996400409e5d0d00872e50a"
+    },
+    "initialize": {
+      "array": "kInitializePortableShader",
+      "stage": "initialize",
+      "bytes": "78148",
+      "sha256": "70d48f55a73f8efc0c7caabee6206210aaa2ce2e6103f51b3cb76804a3d173c9"
+    },
+    "ray_camera": {
+      "array": "kRayCameraPortableShader",
+      "stage": "ray_camera",
+      "bytes": "475256",
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "dopri_phase": {
+      "array": "kDopriPhasePortableNormalSumShader",
+      "stage": "dopri_phase",
+      "bytes": "97456",
+      "sha256": "d0b847a874f304967573a993456b48f82f8d86157d54522ba5ca30b1e6dba210"
+    }
+  },
+  "identity": {
+    "selected_device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "selected_driver": "llvmpipe: Mesa 25.2.8-0ubuntu0.24.04.2 (LLVM 20.1.2)",
+    "retained_scalar_route": "portable with guarded normal sums",
+    "product_mode": "default",
+    "timestamp_valid_bits": "64",
+    "timestamp_period_ns": "1",
+    "coupled_rows": "12",
+    "coupled_projection_budget": "24",
+    "timestamp_scope": "opt-in device marker span includes original barriers and scheduling; not isolated shader time or calibrated host/driver overhead; existing host governor unchanged; finite original critical0/critical1/flat intervals, plus current 12-row Schwarzschild DP/sample cohorts; not frame, cold, full-science or release qualification",
+    "legacy_call_timing_scope": "original synchronous interval call including allocation, packing, decoding and existing marker/readback observers; excludes SetUp, assertions, digest serialization and result disposal; unchanged general-Kerr/flat inputs and projection budget; no cold, frame or release claim",
+    "coupled_call_timing_scope": "sum of synchronous construction and interior sampling calls, including allocation, packing, decoding and existing marker/readback observers; excludes SetUp, assertions between calls and result disposal; unchanged 12-row inputs and projection budget; no cold, frame or release claim"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "wall_seconds": 65.33277167999768,
+  "peak_sampled_rss_kib": 2330668,
+  "minimum_sampled_available_kib": 14122924,
+  "readback_schema_and_module_joins_passed": true,
+  "sole_ABBA_metadata_preparation_admitted": true,
+  "remaining_seven_controls_held_until_all22_benefit_pass": true,
+  "production_adopted": false,
+  "scope": "One original current timestamp control only. No benefit, other7 controls, frame, fullscience, Mandatory or release conclusion."
+}

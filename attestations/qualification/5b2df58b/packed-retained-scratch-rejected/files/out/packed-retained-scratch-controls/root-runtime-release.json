@@ -1,0 +1,39 @@
+{
+  "schema": "sirius-packed-scratch-root-first-runtime-release-v1",
+  "created_utc": "2026-10-18T04:26:10.636590+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "held_preflight": {
+    "path": "out/packed-retained-scratch-controls/root-runtime-preflight.json",
+    "bytes": 256655,
+    "sha256": "8efb672d233871ff5ca26fe17601c2cd689050e38a0ed9d900d11dbc267288e7"
+  },
+  "released_preflight": {
+    "path": "out/packed-retained-scratch-controls/root-runtime-preflight.json",
+    "bytes": 256655,
+    "sha256": "64efdb3ad5edd1852ac5987a09efec23283d54cab13759531d6f5a0c7815a102"
+  },
+  "review": {
+    "path": "out/packed-retained-scratch-controls/independent-runtime-preflight-review.json",
+    "bytes": 5184,
+    "sha256": "eae03cfada1ef260533e3cae8ca50f824ba16630bdf95d6c8fe653916ff78636"
+  },
+  "producer_completion": {
+    "path": "out/packed-retained-scratch-producer/independent-completion-review.json",
+    "bytes": 7148,
+    "sha256": "0562f24f1389dc8ffaa6d0f71c1251002e88893cb06c49a2d26070d4def0b290"
+  },
+  "root_full_read_and_current_pin_checks_passed": true,
+  "only_released_action": "control-8",
+  "all_other_controls_and_ABBA_held": true,
+  "preflight_delta": {
+    "first_timestamp_released": [
+      false,
+      true
+    ],
+    "independent_producer_completion_still_required_before_release": [
+      true,
+      false
+    ]
+  },
+  "production_adopted": false
+}
