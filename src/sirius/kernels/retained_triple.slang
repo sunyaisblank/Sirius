@@ -45,9 +45,11 @@ RetainedTriple RTPack(RPScalar hi,RPScalar lo,RPScalar tail,RPScalar error) {
     return RTFinishAccumulation(hi,lo,tail,error);
 }
 RetainedTriple RTConstant(RPScalar x) {
-#ifdef SIRIUS_RETAINED_PORTABLE
-    // Five zero-tail TwoSum calls preserve every bounded nonzero x and map
-    // either zero sign to +0. Construct those same limbs after the same bound.
+#if defined(SIRIUS_RETAINED_PORTABLE) || \
+    (!defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER))
+    // A bounded scalar has no discarded part. Native RTE32/DenormPreserve32
+    // keeps nonzero x exact; canonical zero limbs refine its existing NSZ
+    // allowance. Portable arithmetic retains the same canonical construction.
     if(!RPBounded(x,0x7b800000u)) return RTInvalid();
     RetainedTriple r;r.hi=(RPBits(x)&0x7fffffffu)==0u?RPZero():x;
     r.lo=RPZero();r.tail=RPZero();r.error=RPZero();r.valid=1;return r;

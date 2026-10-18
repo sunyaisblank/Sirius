@@ -374,7 +374,7 @@ layout. Projection evaluates only the metric/tangent prefix before selecting a
 null root; its second pass evaluates all physical columns. These controls bound work;
 they cannot preempt a submitted interval or establish native-driver qualification.
 Before retained render workers start, software devices explicitly initialise
-the five stages used by the renderer with one workgroup and a zero-row header.
+the six stages used by the renderer with one workgroup and a zero-row header.
 Each entry point returns before program evaluation or output writes; the
 capacity header is restored and the first physical submission still uploads its
 complete input and immutable program. Preparation has a separate per-stage
