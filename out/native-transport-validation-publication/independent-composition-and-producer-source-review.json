@@ -1,0 +1,107 @@
+{
+  "schema": "sirius-native-transport-validation-composition-and-producer-source-review-v1",
+  "created_utc": "2026-10-18T07:50:07.520896+00:00",
+  "reviewer": "/root/divide_contract_review",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "authorship_disclosure": "Reviewer authored the composer/Windows namespace adapter/PE predicate adapter. This is an independent raw-data recomputation of ROOT composition plus explicit mechanical source-delta verification, not independent source authorship. Separate emitted review is by /root/sanitizer_gate_contract; ROOT full-read source/admission is reused.",
+  "pins": {
+    "composition_report": {
+      "path": "out/native-transport-validation-producer-inputs/root-composed-inputs.json",
+      "bytes": 16399,
+      "sha256": "9ba343cb47c5071436d551145e7b7afdbc9abf58ff390bd04574f742fb6b7bc1"
+    },
+    "emitted_admission": {
+      "path": "out/native-transport-validation-publication/root-emitted-admission.json",
+      "bytes": 2532,
+      "sha256": "c889c6dda04273238fd4dd895b02a3a0b8c304ac79e3c637b71f3ce8d1a39347"
+    },
+    "separate_emitted_review": {
+      "path": "out/native-transport-validation-publication/independent-emitted-and-compiler-review.json",
+      "bytes": 25320,
+      "sha256": "5bf1a730f7c28cfe9d11ad0400c91d91debc8ce946c1d53e1540111995c0c4a2"
+    },
+    "composer": {
+      "path": "out/native-transport-validation-producer-source/compose_inputs.py",
+      "bytes": 12217,
+      "sha256": "53856ab85131559e9a79591041d028e6c31215151699c348da90b3f2c251547f"
+    },
+    "producer_source_freeze": {
+      "path": "out/native-transport-validation-windows-source/source-freeze.json",
+      "bytes": 1319,
+      "sha256": "f0b665c6c44ff075e2bb28c4492201bc4cb4215928b8fff019ca571d3b295d78"
+    },
+    "PE_audit_source_freeze": {
+      "path": "out/native-transport-validation-pe-audit/source-freeze.json",
+      "bytes": 727,
+      "sha256": "f9c37b90e0f3c63986cf5d53e2163dc161eb025ab1351e828c73598c832cd1ef"
+    },
+    "composer_source_freeze": {
+      "path": "out/native-transport-validation-producer-source/source-freeze.json",
+      "bytes": 702,
+      "sha256": "41d06d129514318774a7a8f8e44b9efd1eb26d8ab989afbcb5be2293dbeb2ab3"
+    },
+    "candidate_Transport_SPV": {
+      "path": "out/native-transport-validation-compiler-source/candidate/retained_transport.spv",
+      "bytes": 85600,
+      "sha256": "e16a015c1b4d81faa61a06becd63c9c121e84d85e88c126924c6656abfa438f6"
+    },
+    "canonical_ci": {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 44892,
+      "sha256": "c770c1d427cb24bd15051ab121d9ea08389a592cbcd1a7c36d048c0b790280f8"
+    }
+  },
+  "composition": {
+    "regular_files_total": 78,
+    "payloads": 77,
+    "baseline_files": 38,
+    "candidate_files": 38,
+    "observer_files": 1,
+    "composition_reports": 1,
+    "all_payload_hashes_current_and_mode_0644": true,
+    "exact_inventory_no_extra_or_missing_or_symlinks": true,
+    "all38_baseline_files_current_canonical_equal": true,
+    "baseline_authority_sha256": "5d4062652bcad0e10807c8195b6279d05f9fd5a2a9dbad592424d1f977da5922",
+    "changed_candidate_files": [
+      "retained_kernels.h",
+      "shaders/retained_transport.spv"
+    ],
+    "changed_main_arrays": [
+      "kTransportShader"
+    ],
+    "other_main_arrays_byte_exact": 39,
+    "seven_program_tables_byte_exact": [
+      "kCameraProgram",
+      "kDenseProgram",
+      "kDopriPhaseProgram",
+      "kEndpointProgram",
+      "kInitializeProgram",
+      "kRayCameraProgram",
+      "kTransportProgram"
+    ],
+    "restore_single_Transport_declaration_recovers_full_original_header_text": true,
+    "all35_header_SPV_payload_pairs_recomputed": true,
+    "excluded_SPVs_byte_exact": 34,
+    "owner_payloads": 2,
+    "both_owner_headers_and_layout_byte_exact": true,
+    "observer_exact_c948_27cases_1492asserts_source_reused": true,
+    "actual_admitted_new_SPV_matches_composed_header_and_shader_file": true,
+    "report_and_all_payload_readback_stable": true
+  },
+  "producer_and_PE_source": {
+    "frozen_source_members": {
+      "native-transport-validation-windows-source": 8,
+      "native-transport-validation-pe-audit": 4,
+      "native-transport-validation-producer-source": 4
+    },
+    "four_preimages_exact_named_Git": "06376a05a74af6f3d410bac142a0771372054f40",
+    "Windows_delta": "Only exact input/source namespace substitutions. Same five private objects/two PEs, canonical dependencies/targets/fixtures, strict flags, early configure evidence, staged CRT/SDK and full M/result/Git/whole-input guards; complete inverse and regenerated patch exact.",
+    "PE_delta": "Only five producer-input path substitutions and the exact changed set narrowed from five names to {kTransportShader}. Complete inverse and regenerated patch exact. All42 perarm arrays/map joins, foreign changed-arm exclusion, Windows case-normalization, object/LINK/device/archive/current CLI/artifact/error checks retained.",
+    "Release_STRING_and_scalar_GetCommand_successful_fixes_present": true,
+    "canonical_ci_yml_exact_5b2": true,
+    "compatibility_labels": "Packed names remain existing schema/target/artifact identifiers only. Actual scratch is unchanged canonical unpacked892B; no rejected packing/SoA payload is carried into the new candidate."
+  },
+  "scope_and_holds": "Composition and producer SOURCE only. New Windows CI/tool/CRT/SDK/API/manifest/object/map/PE actual eligibility, samechild native provider/ownership, control8, sole original22 ABBA and remaining7ifbenefitpasses still require fresh actual proof. No C++ producer, provider, numerical/scientific/performance/Mandatory/release/adoption acceptance inferred.",
+  "method": "Passive stdlib read/hash/JSON/header-word/byte/mode verification and read-only four namedGit blobs plus canonical ci.yml; did not import or execute composer/audit/project helpers, compiler, provider, tests, network, CI, process queries or Git mutation. Only this receipt written."
+}
