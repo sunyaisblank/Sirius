@@ -1,0 +1,456 @@
+{
+  "baseline_revision": "3045067d4c29da744059798e175b97942a319f84",
+  "source_patch_adopted": false,
+  "scope": "Finite native-default Transport screen. Original complete same-provider words and independent enclosure/component controls; stage clocks do not establish complete coupled or frame improvement.",
+  "dispatches": 528,
+  "frozen_packet_rows": 206,
+  "independent_final_fields": 32960,
+  "all_16_matched_blocks_improved_in_both_clocks": false,
+  "screen_disposition": "reject-stage-screen",
+  "results": [
+    {
+      "name": "fp32-1",
+      "rows": 1,
+      "independent_original_checks": {
+        "fields": 160,
+        "maximum_scaled_difference": "8.41904088366079523282169075030066574392054716855588906445532524676389186916730262517750080437443850155591295746676062662E-22",
+        "validity_stage_rows": 1
+      },
+      "admitted_rhs_rows": 1,
+      "complete_word_mismatches": 0,
+      "blocks": [
+        {
+          "block": 0,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 4.68872,
+              "candidate": 4.60422
+            },
+            "candidate_change_percent": -1.8021976147008179,
+            "improved": true
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 5.13135,
+              "candidate": 4.93525
+            },
+            "candidate_change_percent": -3.821606399875288,
+            "improved": true
+          }
+        },
+        {
+          "block": 1,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 2.80778,
+              "candidate": 3.1032200000000003
+            },
+            "candidate_change_percent": 10.522191909622558,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 3.0596,
+              "candidate": 3.35835
+            },
+            "candidate_change_percent": 9.764348280821022,
+            "improved": false
+          }
+        },
+        {
+          "block": 2,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 2.80854,
+              "candidate": 3.10332
+            },
+            "candidate_change_percent": 10.495844816167832,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 3.07335,
+              "candidate": 3.33375
+            },
+            "candidate_change_percent": 8.472839084386742,
+            "improved": false
+          }
+        },
+        {
+          "block": 3,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 2.8080800000000004,
+              "candidate": 3.1038
+            },
+            "candidate_change_percent": 10.531039001737842,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 3.09165,
+              "candidate": 3.4125
+            },
+            "candidate_change_percent": 10.377953519965066,
+            "improved": false
+          }
+        }
+      ],
+      "device": {
+        "name": "AMD Radeon 780M Graphics",
+        "driver_name": "AMD proprietary driver",
+        "driver_info": "26.8.1 (LLPC)",
+        "driver_id": 1,
+        "api_version": 4211037,
+        "driver_version": 8389003,
+        "vendor_id": 4098,
+        "device_id": 6400
+      },
+      "loaded_modules": [
+        {
+          "path": "C:\\Windows\\System32\\vulkan-1.dll",
+          "bytes": 1719408,
+          "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+        },
+        {
+          "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+          "bytes": 103213064,
+          "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650"
+        }
+      ]
+    },
+    {
+      "name": "fp32-13",
+      "rows": 13,
+      "independent_original_checks": {
+        "fields": 2080,
+        "maximum_scaled_difference": "5.24003453029532117199717284905694419482738139893554780127908421405929814337273174076519425743683477195228732201240147940E-21",
+        "validity_stage_rows": 13
+      },
+      "admitted_rhs_rows": 13,
+      "complete_word_mismatches": 0,
+      "blocks": [
+        {
+          "block": 0,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 6.53584,
+              "candidate": 6.339700000000001
+            },
+            "candidate_change_percent": -3.000991456339197,
+            "improved": true
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 6.86505,
+              "candidate": 6.68585
+            },
+            "candidate_change_percent": -2.610323304273088,
+            "improved": true
+          }
+        },
+        {
+          "block": 1,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 4.925140000000001,
+              "candidate": 5.31304
+            },
+            "candidate_change_percent": 7.875918248009173,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 5.2673000000000005,
+              "candidate": 5.684850000000001
+            },
+            "candidate_change_percent": 7.927211284718938,
+            "improved": false
+          }
+        },
+        {
+          "block": 2,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 4.422219999999999,
+              "candidate": 5.1174
+            },
+            "candidate_change_percent": 15.720158653346061,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 4.7644,
+              "candidate": 5.47405
+            },
+            "candidate_change_percent": 14.894845101166986,
+            "improved": false
+          }
+        },
+        {
+          "block": 3,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 4.0611,
+              "candidate": 5.12172
+            },
+            "candidate_change_percent": 26.116569402378676,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 4.3627,
+              "candidate": 5.4901
+            },
+            "candidate_change_percent": 25.841795218557316,
+            "improved": false
+          }
+        }
+      ],
+      "device": {
+        "name": "AMD Radeon 780M Graphics",
+        "driver_name": "AMD proprietary driver",
+        "driver_info": "26.8.1 (LLPC)",
+        "driver_id": 1,
+        "api_version": 4211037,
+        "driver_version": 8389003,
+        "vendor_id": 4098,
+        "device_id": 6400
+      },
+      "loaded_modules": [
+        {
+          "path": "C:\\Windows\\System32\\vulkan-1.dll",
+          "bytes": 1719408,
+          "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+        },
+        {
+          "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+          "bytes": 103213064,
+          "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650"
+        }
+      ]
+    },
+    {
+      "name": "fp32-64",
+      "rows": 64,
+      "independent_original_checks": {
+        "fields": 10240,
+        "maximum_scaled_difference": "5.24003453029532117199717284905694419482738139893554780127908421405929814337273174076519425743683477195228732201240147940E-21",
+        "validity_stage_rows": 64
+      },
+      "admitted_rhs_rows": 64,
+      "complete_word_mismatches": 0,
+      "blocks": [
+        {
+          "block": 0,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 10.66864,
+              "candidate": 11.11238
+            },
+            "candidate_change_percent": 4.159293030789302,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 11.091800000000001,
+              "candidate": 11.53735
+            },
+            "candidate_change_percent": 4.016931426819803,
+            "improved": false
+          }
+        },
+        {
+          "block": 1,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 10.68566,
+              "candidate": 11.1234
+            },
+            "candidate_change_percent": 4.096518137391603,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 11.137599999999999,
+              "candidate": 11.556750000000001
+            },
+            "candidate_change_percent": 3.7633781065939065,
+            "improved": false
+          }
+        },
+        {
+          "block": 2,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 10.66738,
+              "candidate": 11.116859999999999
+            },
+            "candidate_change_percent": 4.21359321595367,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 11.09075,
+              "candidate": 11.5318
+            },
+            "candidate_change_percent": 3.976737371232786,
+            "improved": false
+          }
+        },
+        {
+          "block": 3,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 10.70406,
+              "candidate": 11.11392
+            },
+            "candidate_change_percent": 3.8290144113541924,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 11.122399999999999,
+              "candidate": 11.51895
+            },
+            "candidate_change_percent": 3.565327627130843,
+            "improved": false
+          }
+        }
+      ],
+      "device": {
+        "name": "AMD Radeon 780M Graphics",
+        "driver_name": "AMD proprietary driver",
+        "driver_info": "26.8.1 (LLPC)",
+        "driver_id": 1,
+        "api_version": 4211037,
+        "driver_version": 8389003,
+        "vendor_id": 4098,
+        "device_id": 6400
+      },
+      "loaded_modules": [
+        {
+          "path": "C:\\Windows\\System32\\vulkan-1.dll",
+          "bytes": 1719408,
+          "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+        },
+        {
+          "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+          "bytes": 103213064,
+          "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650"
+        }
+      ]
+    },
+    {
+      "name": "fp32-128",
+      "rows": 128,
+      "independent_original_checks": {
+        "fields": 20480,
+        "maximum_scaled_difference": "5.24003453029532117199717284905694419482738139893554780127908421405929814337273174076519425743683477195228732201240147940E-21",
+        "validity_stage_rows": 128
+      },
+      "admitted_rhs_rows": 128,
+      "complete_word_mismatches": 0,
+      "blocks": [
+        {
+          "block": 0,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 21.037100000000002,
+              "candidate": 22.1555
+            },
+            "candidate_change_percent": 5.3163221166415475,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 21.512050000000002,
+              "candidate": 22.619
+            },
+            "candidate_change_percent": 5.145720654237973,
+            "improved": false
+          }
+        },
+        {
+          "block": 1,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 21.10756,
+              "candidate": 22.14962
+            },
+            "candidate_change_percent": 4.936904123451491,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 21.543,
+              "candidate": 22.6115
+            },
+            "candidate_change_percent": 4.959847746367729,
+            "improved": false
+          }
+        },
+        {
+          "block": 2,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 21.1026,
+              "candidate": 22.1644
+            },
+            "candidate_change_percent": 5.03160747964706,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 21.560450000000003,
+              "candidate": 22.604599999999998
+            },
+            "candidate_change_percent": 4.842895208587916,
+            "improved": false
+          }
+        },
+        {
+          "block": 3,
+          "gpu_interval_ms": {
+            "medians": {
+              "original": 21.15222,
+              "candidate": 22.15636
+            },
+            "candidate_change_percent": 4.747208567233141,
+            "improved": false
+          },
+          "host_submit_wait_ms": {
+            "medians": {
+              "original": 21.59715,
+              "candidate": 22.61065
+            },
+            "candidate_change_percent": 4.692748811764513,
+            "improved": false
+          }
+        }
+      ],
+      "device": {
+        "name": "AMD Radeon 780M Graphics",
+        "driver_name": "AMD proprietary driver",
+        "driver_info": "26.8.1 (LLPC)",
+        "driver_id": 1,
+        "api_version": 4211037,
+        "driver_version": 8389003,
+        "vendor_id": 4098,
+        "device_id": 6400
+      },
+      "loaded_modules": [
+        {
+          "path": "C:\\Windows\\System32\\vulkan-1.dll",
+          "bytes": 1719408,
+          "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+        },
+        {
+          "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+          "bytes": 103213064,
+          "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650"
+        }
+      ]
+    }
+  ]
+}

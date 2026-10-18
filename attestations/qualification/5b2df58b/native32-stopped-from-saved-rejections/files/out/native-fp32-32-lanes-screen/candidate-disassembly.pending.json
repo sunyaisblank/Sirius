@@ -1,0 +1,119 @@
+{
+  "schema": "sirius-native-fp32-32-lanes-two-disassemblies-pending-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "tools_executed": false,
+  "root_release_required": true,
+  "requires_actual_product_receipt": "out/native-fp32-32-lanes-screen/root-compiler-products.json",
+  "candidate_module_pins": "ROOT_PENDING_ACTUAL_COMPILER_PRODUCTS",
+  "commands": [
+    {
+      "label": "candidate-retained_transport",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/native-fp32-32-lanes-screen/candidate/retained_transport.spv",
+        "-o",
+        "{folder}/candidate-retained_transport.spvasm"
+      ]
+    },
+    {
+      "label": "candidate-retained_endpoint",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/native-fp32-32-lanes-screen/candidate/retained_endpoint.spv",
+        "-o",
+        "{folder}/candidate-retained_endpoint.spvasm"
+      ]
+    }
+  ],
+  "exact_command_count": 2,
+  "no_baseline_or_unchanged_disassembly": true,
+  "qualified_disassembler": {
+    "path": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+    "bytes": 792008,
+    "sha256": "ba9f6efbf025471a37c5d44abd350e4af7f085854bfa76cca9126f0cad0db466"
+  },
+  "baseline_reuse": [
+    {
+      "label": "baseline-retained_transport",
+      "baseline_spv": {
+        "path": "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+        "bytes": 85364,
+        "sha256": "b52e6373f6b30aac6c7fe877f6e07f3c47c7ac9eafa1671840eacd19960d7cb1"
+      },
+      "saved_assembly": {
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.spvasm",
+        "bytes": 246554,
+        "sha256": "cb9003c48a19654f734f653a92e9adec9d67f44006fe4300ad574028c75ba413"
+      },
+      "exact_Git_member": {
+        "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_transport.spvasm",
+        "blob": "ab7b1b215f7c07c3668407027019387a69dd69da"
+      },
+      "saved_command_exit": 0,
+      "source_and_disassembler_before_after_matches_current": true
+    },
+    {
+      "label": "baseline-retained_endpoint",
+      "baseline_spv": {
+        "path": "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+        "bytes": 99300,
+        "sha256": "785d94c53839693af8a0c752b8d7f0f1bd44789df17f3ab4eef79d3684faa559"
+      },
+      "saved_assembly": {
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.spvasm",
+        "bytes": 288928,
+        "sha256": "d4d16c8d3385f7b7f9b64a52a34594c8b3144e9606c1f1bb57061c9106951043"
+      },
+      "exact_Git_member": {
+        "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+        "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/baseline-retained_endpoint.spvasm",
+        "blob": "c96771fda28d52f4705b309f132061e4b748c994"
+      },
+      "saved_command_exit": 0,
+      "source_and_disassembler_before_after_matches_current": true
+    }
+  ],
+  "immutable_producer_receipts": {
+    "owner.json": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/owner.json",
+      "bytes": 1940,
+      "sha256": "7b95e46d2ba82b46ddd6f1b72431d510b78fb4184b978e84e5ccb7a6d91b5b78"
+    },
+    "inputs-before.json": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/inputs-before.json",
+      "bytes": 1593084,
+      "sha256": "02df52ca8270ef58a64c37c468f9af1f49926e257340782c4c58bbbd1c03ca3b"
+    },
+    "inputs-after.json": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/inputs-after.json",
+      "bytes": 1593084,
+      "sha256": "02df52ca8270ef58a64c37c468f9af1f49926e257340782c4c58bbbd1c03ca3b"
+    },
+    "results.json": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/disassemble/results.json",
+      "bytes": 23778,
+      "sha256": "8140d14bb815e190ab03a49de14589f819976442dfdda3de0f898b024648bc77"
+    }
+  },
+  "prior_posttool_preflight": {
+    "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/root-preflight.json",
+    "bytes": 1662076,
+    "sha256": "1a473bacfbe53be2c489b623ba4033fd5a6bad7a0ee748f867d80504eac62a4a"
+  },
+  "original_commands": {
+    "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/posttools/commands.json",
+    "bytes": 18928,
+    "sha256": "4d00f07dec9b640d9c2ec15251a329b97cb718538a9d5548a4f696059a19de26"
+  },
+  "root_requirements": [
+    "Confirm compiler terminal/full frozen current inputs before invoking compare_products.py",
+    "Require root-compiler-products exact2changed/33same,40arrays2changed38same,7tables/constants/ownerlayout before candidate disassembly",
+    "Pin actual two candidate inputs,current same qualified disassembler/interpreter/DSO/metadata and mature owner;root alone release one bounded batch",
+    "Use archived baseline assemblies only after saved producer/input/tool identity joins above remain exact;do not recreate live packed roots",
+    "No emitted semantic comparison or runtime permission derives from this pending metadata"
+  ],
+  "scope": "Offline ordinary two-candidate disassembly metadata only;baseline reuse is permanent f851 exact bytes. No candidate output,ABI/CFG/arithmetic/cost or runtime result claimed."
+}

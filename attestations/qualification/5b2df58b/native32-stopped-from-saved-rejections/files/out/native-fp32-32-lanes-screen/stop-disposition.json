@@ -1,0 +1,103 @@
+{
+  "schema": "sirius-native-fp32-lanes32-preexecution-stop-v1",
+  "recorded_utc": "2026-10-18T05:26:34.918132+00:00",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "actor": "/root/sanitizer_gate_contract",
+  "authority": "/root final stop instruction; no new original-fixture premise established",
+  "disposition": "STOP_ALL_NATIVE32_THIS_ROUND_BEFORE_COMPILER",
+  "reason": "Completed native Transport32 and Endpoint32 rejections preclude treating the earlier Endpoint static milestone as an unfinished performance frontier. Isolated Endpoint wins did not satisfy the original complete-path gates.",
+  "history": {
+    "transport32": {
+      "review": {
+        "path": "attestations/native-vulkan/3045067/transport-lanes32-rejected/independent-final-review.json",
+        "bytes": 648,
+        "sha256": "335efe5dbfb4cd6222e72d131008a2207c2902c682fc429cfc3d56da25fb1706"
+      },
+      "verified_saved_disposition": "Reject without source adoption or coupled trial",
+      "regressed_matched_blocks_both_clocks": 14,
+      "improved_matched_blocks_both_clocks": 2,
+      "scope": "Default/native general rows only; no established hardware regression cause or frame effect."
+    },
+    "endpoint32": {
+      "root_decision": {
+        "path": "attestations/native-vulkan/9d56406/endpoint-native-lanes32-rejected/root-retention-decision.json",
+        "bytes": 29936,
+        "sha256": "ece411f3f4deeb33e319157081a6b56e2b949dd1af45b3004ac00ee98b178805"
+      },
+      "independent_review": {
+        "path": "attestations/native-vulkan/9d56406/endpoint-native-lanes32-rejected/independent-runtime-retention-review.json",
+        "bytes": 67670,
+        "sha256": "34682481d9144e7a5ebcd7a0d081c8b8517397424deceafaaaa42f142dedb3c5"
+      },
+      "candidate_revision": "9d56406ae3f57fa622187351134dddf71cd36a66",
+      "baseline_revision": "3045067d4c29da744059798e175b97942a319f84",
+      "seven_original_controls_passed": true,
+      "eight_matched_owners_completed": true,
+      "retention_checks": 44,
+      "passed": 37,
+      "failed": 7,
+      "root_disposition": "reject benefit; preserve trial and restore accepted baseline in pushed Git",
+      "independent_disposition": "Reject benefit. Original finite numerical/stream controls pass, while the frozen complete coupled benefit gate fails. Root owns preservation and baseline restoration; no unchanged retry or coupled addition is supported.",
+      "failed_gate_scope": "Six complete coupled directional aggregate 5% checks and forward coupled_repeat1 device nonregression; isolated Endpoint thresholds passed."
+    }
+  },
+  "held_packet": {
+    "source_freeze": {
+      "path": "out/native-fp32-32-lanes-source/source-freeze.json",
+      "bytes": 1438,
+      "sha256": "e453b7f11fbb6a4172db7a167cef6aa5766d12c564a5f8a6397fe83f7c712c8b"
+    },
+    "source_contracts": {
+      "path": "out/native-fp32-32-lanes-source/source-contracts.json",
+      "bytes": 9035,
+      "sha256": "704ec5a69557ef4859981b492c8e9e40028eef7a702fb6ae7726e25a6fb2a709"
+    },
+    "candidate_patch": {
+      "path": "out/native-fp32-32-lanes-source/candidate.patch",
+      "bytes": 2586,
+      "sha256": "fe4a2eb618bf945830e7c37cd337011094b1cbb47f2993ad08fc551f852bd3d4"
+    },
+    "actions": {
+      "path": "out/native-fp32-32-lanes-screen/actions.json",
+      "bytes": 508188,
+      "sha256": "70842c34f687031923b5ad1dc2f415866ad882feb5df823a4d5c03054c072ed2"
+    },
+    "preflight": {
+      "path": "out/native-fp32-32-lanes-screen/root-preflight.json",
+      "bytes": 1648289,
+      "sha256": "d62e84de32f880ddd024fbd5bcf051f943f704067c9b3f4e6e610e56fe887603"
+    },
+    "source_packet_files_unchanged_against_preflight": 10,
+    "private_source_files_unchanged_against_preflight": 34,
+    "original_preflight_static_rows": 4938,
+    "original_expected_owner_rows": 4939,
+    "offline_compile_released": false,
+    "runtime_released": false,
+    "original_source_actions_preflight_modified": false,
+    "stop_record_is_unbound_sidecar": true
+  },
+  "execution": {
+    "compiler_screen_executed": false,
+    "compiler_owner_started": false,
+    "postcompiler_reader_executed": false,
+    "disassembly_executed": false,
+    "runtime_executed": false,
+    "controls_executed": false,
+    "benefit_executed": false,
+    "ci_dispatched": false,
+    "source_adopted": false,
+    "endpoint_only_packet_created": false,
+    "new_compiler_or_runtime_result": null
+  },
+  "absence_checks": [
+    "out/native-fp32-32-lanes-screen/candidate",
+    "out/native-fp32-endpoint-32-lanes-source",
+    "out/native-fp32-endpoint-32-lanes-screen",
+    "out/native-fp32-32-lanes-screen/root-compiler-products.json"
+  ],
+  "limits": [
+    "This records a root-directed preexecution stop and selected historical dispositions, not a new full historical audit.",
+    "Existing source-only correctness findings remain historical; they do not admit another screen or runtime.",
+    "No cleanup, branch/source change, compiler/provider/test operation or further candidate work is authorized by this record."
+  ]
+}

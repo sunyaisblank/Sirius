@@ -1,0 +1,36 @@
+--- a/scripts/build-retained-kernels.py
++++ b/scripts/build-retained-kernels.py
+@@ -314,7 +314,8 @@
+     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
+     # Normal Transport, Endpoint and DopriPhase cover complete 64-wide layers
+     # with sixteen invocations and stride over their complete producer sets.
+-    execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
++    execution_lanes = (32 if not portable and not fp64 and source.stem in ("retained_transport", "retained_endpoint")
++                       else 16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
+                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
+     if stage_seven_owner:
+         if not portable or not normal_sum32 or source.stem not in ("retained_transport", "retained_endpoint") or execution_lanes != 16:
+--- a/src/sirius/kernels/retained_transport.slang
++++ b/src/sirius/kernels/retained_transport.slang
+@@ -154,7 +154,8 @@
+ #endif
+                                  )) RejectRetainedProgram();
+         }
+-#elif defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#elif (defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)) || \
++    (!defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER) && SIRIUS_RETAINED_EXECUTION_LANES == 32)
+         else {
+             // Cover the original complete layer before its publication barrier.
+             for (uint node = start + lane; node < end;
+--- a/src/sirius/kernels/retained_endpoint.slang
++++ b/src/sirius/kernels/retained_endpoint.slang
+@@ -156,7 +156,8 @@
+                 if (!EvaluateOne(node, row, rowBase, programBase, registers)) RejectRetainedProgram();
+         }
+ #else
+-#if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32)
++#if (defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32)) || \
++    (!defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER) && SIRIUS_RETAINED_EXECUTION_LANES == 32)
+         else {
+             // All layer destinations are disjoint; inputs live until the join.
+             // Execute the same bounded layer with the declared invocation stride.

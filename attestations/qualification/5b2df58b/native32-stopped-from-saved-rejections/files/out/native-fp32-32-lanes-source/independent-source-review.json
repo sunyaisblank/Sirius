@@ -1,0 +1,63 @@
+{
+  "schema": "sirius-native-fp32-32-lanes-independent-source-review-v1",
+  "passed": true,
+  "source_screen_admitted": true,
+  "compiler_execution_admitted": false,
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "source-freeze.json": [
+      1438,
+      "e453b7f11fbb6a4172db7a167cef6aa5766d12c564a5f8a6397fe83f7c712c8b"
+    ],
+    "source-contracts.json": [
+      9035,
+      "704ec5a69557ef4859981b492c8e9e40028eef7a702fb6ae7726e25a6fb2a709"
+    ],
+    "candidate.patch": [
+      2586,
+      "fe4a2eb618bf945830e7c37cd337011094b1cbb47f2993ad08fc551f852bd3d4"
+    ]
+  },
+  "preimages_and_delta": "All8 frozen members match. Three originals equal current canonical bytes. Regenerated textual unified diff equals the sealed3-hunk patch: builder execution_lanes selection plus one preprocessor condition per T/E. No arithmetic/helper/table/host/test edit.",
+  "mode_isolation": "Only ordinary nonportable fp64=False Transport/Endpoint select32. Existing FMA compiler calls require fp64=True; all FMA/wide, portable, Stage7 owner and other five stages retain their prior definitions/branches. Added branch is false for every excluded Boolean macro combination. SIRIUS_RETAINED_LANES remains64; scratch remains original5R.",
+  "table_checks": {
+    "method": "Passive decimal-array reads of existing header/owner offsets, without executing any project generator/parser. All layer destination sets are unique/disjoint from operands; all operands defined earlier and all roots owned. Each32-stride covers every layer node exactly once, at most2nodes/lane.",
+    "GeneralTransport": [
+      2587,
+      117,
+      64,
+      29,
+      0
+    ],
+    "SchwarzschildTransport": [
+      557,
+      42,
+      37,
+      2,
+      0
+    ],
+    "GeneralEndpoint": [
+      2205,
+      111,
+      64,
+      20,
+      41
+    ],
+    "SchwarzschildEndpoint": [
+      1943,
+      84,
+      64,
+      20,
+      19
+    ],
+    "columns": "instructions/layers/maxwidth/layers_over32/mixed_opcode_layers",
+    "accepted_mixed_fixture": "MixedIndependentTransportLayersPreserveWordsAndRefusal changes first offsets0/40/47 to0/46/47. All47 original producers are independent input/constants with distinct destinations;32-stride still covers46+1 completely. Its invalid-opcode refusal still reaches the unchanged layer join/status check before publication."
+  },
+  "Hoare_composition": "For each valid current layer, inputs remain live through its existing join and no destination aliases an input or another writer. Serializing a lane\u2019s second independent node changes no per-node operands/expression order. EvaluateOne and scalar/triple helpers contain no collective. RejectRetainedProgram remains atomic; no status-dependent early break was added. The single post-layer barrier/status consumption remains uniform. Endpoint prefix skip/curved projection/suffix and flat lane-zero returns are unchanged.",
+  "complete_consumers": "SV_GroupID still selects one ray per workgroup. T output/scratch clear, stage input/root/publication and finalerror loops already stride EXECUTION_LANES over all40 components; CacheCoefficient guards25 values, all covered by32 before its unchanged barrier. Endpoint still publishes20 metric/tangent roots plus40phase+40physical values; lane0 projected-input writes precede the original full join. Coefficients, descriptors, row sizes, headers, limits and all original assertions/refusal paths remain unchanged.",
+  "history_and_materiality": "Current default-only T+E isolation and current general/Schwarzschild tables are distinct from the reported retired all-native-mode T32 experiment. No historical gain or samples are reused. Source establishes neither physical-work reduction nor emitted memory/JIT/occupancy/wave-size/latency benefit; fewer invocations may change compiler liveness, divergence or register allocation adversely.",
+  "required_next_screen": "ROOT separately admits the exact original offline producer. Prove actual intended source selection, LocalSize32 only for the two targets, complete loop/CFG/barrier/arithmetic/ABI coverage and33 excluded SPVs byte-exact out of35. Expected main40arrays2changed/38same plus2owner exact and all7tables/layouts are hypotheses until emitted checks. No native control/22gate benefit/frame/CI/adoption authority is granted.",
+  "method_scope": "Read-only source/hash/stdlib data/Boolean checks and local Git metadata only. No project module import/generator/compiler/validator/provider/test/CI execution, new test, canonical edit or tool-executable closure claim. Review sidecar is outside8-member freeze."
+}

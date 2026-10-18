@@ -1,0 +1,164 @@
+{
+  "schema": "sirius-native-fp32-transport-endpoint-32-lanes-source-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "compiler_admitted": false,
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "canonical_changed": false,
+  "scope": "Only ordinary native binary32 Transport and Endpoint: !portable && !fp64. No FMA exception; FMA products are actually fp64=True and remain unchanged. Expected2changed/33exactSPVs;main40arrays2changed38same+2ownerexact. No new option or source helper.",
+  "source_delta": {
+    "builder": "Only execution_lanes ternary extends with nativeFP32 T/E32; SIRIUS_RETAINED_LANES stays64. All definitions/flags/tables/generated rows/arithmetic modes unchanged.",
+    "kernels": "Extend existing strided EvaluateProgram branch selection with explicit !PORTABLE&&!FP64&&!STAGE7_OWNER&&EXECUTION_LANES==32. Existing complete-node loop body/EvaluateOne/WriteValue/opcode operands, status and all barriers unchanged. Excluded profiles select original text/branches.",
+    "original_preimages_and_candidates": [
+      {
+        "original": {
+          "path": "out/native-fp32-32-lanes-source/originals/scripts/build-retained-kernels.py",
+          "bytes": 35006,
+          "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+        },
+        "candidate": {
+          "path": "out/native-fp32-32-lanes-source/candidate/scripts/build-retained-kernels.py",
+          "bytes": 35129,
+          "sha256": "99f6e240e2231ba46f4303ed2ecfb685feca49fba36cfe8d782b5e646e4e5a45"
+        }
+      },
+      {
+        "original": {
+          "path": "out/native-fp32-32-lanes-source/originals/src/sirius/kernels/retained_transport.slang",
+          "bytes": 28933,
+          "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+        },
+        "candidate": {
+          "path": "out/native-fp32-32-lanes-source/candidate/src/sirius/kernels/retained_transport.slang",
+          "bytes": 29098,
+          "sha256": "ec6f446a30992c357af0416f23e794fcf8b8a73e3f2862f5c81b80f5e6f5804e"
+        }
+      },
+      {
+        "original": {
+          "path": "out/native-fp32-32-lanes-source/originals/src/sirius/kernels/retained_endpoint.slang",
+          "bytes": 38824,
+          "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+        },
+        "candidate": {
+          "path": "out/native-fp32-32-lanes-source/candidate/src/sirius/kernels/retained_endpoint.slang",
+          "bytes": 38989,
+          "sha256": "84a5b3d3482b427a469dc2638e9869089b8c1650d518b50d113d1af34e86c937"
+        }
+      }
+    ],
+    "patch": {
+      "path": "out/native-fp32-32-lanes-source/candidate.patch",
+      "bytes": 2586,
+      "sha256": "fe4a2eb618bf945830e7c37cd337011094b1cbb47f2993ad08fc551f852bd3d4"
+    }
+  },
+  "guard_proof": {
+    "native32_extension_false_for_every_excluded_portable_FP64_owner_profile": true,
+    "branch_predicate_truth_rows_checked": 32,
+    "FMA_fact": "compile_shader rejects FMA unless fp64=True and portable=False; SIRIUS_RETAINED_FP64=1 stays set. No widened FMA product is changed.",
+    "no_homogeneity_assumption": "EvaluateOne still decodes each node opcode/operands independently; Endpoint general41 andSchwarzschild19 mixed-opcode layers remain unchanged. Transport ready-op homogeneity is not required."
+  },
+  "bounded_existing_table_observations": {
+    "header": {
+      "path": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h",
+      "bytes": 7952166,
+      "sha256": "3f7aca3372bb872934e978fb0270f2375ce8d2361555b35c8b891e42e07161cc"
+    },
+    "owner_layout_offsets": {
+      "path": "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.h",
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+    },
+    "tables": [
+      {
+        "stage": "Transport",
+        "family": "General",
+        "instructions": 2587,
+        "layers": 117,
+        "max_width": 64,
+        "layers_over32": 29,
+        "mixed_opcode_layers": 0,
+        "all_layer_destinations_disjoint_and_no_intralayer_input_alias": true,
+        "all_original_nodes_covered_once_by32_stride": true
+      },
+      {
+        "stage": "Transport",
+        "family": "Schwarzschild",
+        "instructions": 557,
+        "layers": 42,
+        "max_width": 37,
+        "layers_over32": 2,
+        "mixed_opcode_layers": 0,
+        "all_layer_destinations_disjoint_and_no_intralayer_input_alias": true,
+        "all_original_nodes_covered_once_by32_stride": true
+      },
+      {
+        "stage": "Endpoint",
+        "family": "General",
+        "instructions": 2205,
+        "layers": 111,
+        "max_width": 64,
+        "layers_over32": 20,
+        "mixed_opcode_layers": 41,
+        "all_layer_destinations_disjoint_and_no_intralayer_input_alias": true,
+        "all_original_nodes_covered_once_by32_stride": true
+      },
+      {
+        "stage": "Endpoint",
+        "family": "Schwarzschild",
+        "instructions": 1943,
+        "layers": 84,
+        "max_width": 64,
+        "layers_over32": 20,
+        "mixed_opcode_layers": 19,
+        "all_layer_destinations_disjoint_and_no_intralayer_input_alias": true,
+        "all_original_nodes_covered_once_by32_stride": true
+      }
+    ],
+    "clarification": "557nodes/42layers is SchwarzschildTransport only. Current SchwarzschildEndpoint is1943nodes/84layers,including20layers wider than32. All four original tables remain byte-exact."
+  },
+  "valid_plan_reasoning": "For each original nonempty layer[start,end) of width<=64, lane0..31 enumerates start+lane+k*32 exactly once,at most2nodes/lane. Current canonical layers have distinct destinations disjoint from all layer inputs,so serializing two independent nodes within one lane changes no operand or arithmetic order. No barrier added/removed/moved; status consumed only after same layer join. Accepted mixed layers are not rejected or relabeled.",
+  "lane_dependent_paths": {
+    "Transport": "Output clear, scratch-valid initialization,40component stage-input/roots/publication/final-error loops already stride EXECUTION_LANES.25cached coefficients are guarded lane<25 and fit32; stage1 cache barrier and all7stage/rollback/refusal control unchanged.",
+    "Endpoint": "Output clear already strides EXECUTION_LANES; input/projection/root/publication remain original lane0/all-lane loops with uniform joins. Native branch has no portable16term cooperative cache change. Prefix validation/skip and projected suffix barrier unchanged.",
+    "bounds": "Native32 covers every original up-to64-wide layer; maxnode end<=count<=65536,addition32 cannot uint-overflow. No narrower layer acceptance, row-capacity/byte/ABI/control/governor/precision/refusal/cancel/rollback changes.",
+    "public_buffers": "Same five-word retained values,row sizes/descriptors/program tables/workgroup-row ownership. Only targeted LocalSize changes64to32; scratch representation remains canonical5R,not rejected packing."
+  },
+  "source_authority": [
+    {
+      "path": "src/sirius/kernels/retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    }
+  ],
+  "history": {
+    "old_native_T32_commit": "b34d8c25",
+    "issue44_comment": 6003707260,
+    "status": "Historical default~4%gain/wide~1-2%regression,retired. Not new benefit evidence,not reused samples/acceptance. New premise uses current ready-op+zero-spin spherical tables and includes ordinary Endpoint while excluding ALLwide/FMA.",
+    "previous_packed_scratch": "Rejected private representation remains separate; no packed source copied or combined."
+  },
+  "future_requirements": [
+    "Independent/root SOURCE review before any compiler",
+    "Exact current matching offline producer all35;2targeted LocalSize32/interface/layer-loop/unchanged arithmetic-barrier proof and33byteexact exclusions,7tables/constants/ownerheaders exact",
+    "No numerical/runtime/cost result inferred from source or workgroup size",
+    "All8 original native integrated controls and sole unchanged nativeABBA22gates required before any adoption; ROOT sole operator; no frameattempt or newCI/ref/sourceadoption authorized"
+  ],
+  "limits": "No source generator,compiler,validator,provider,test,frame,CI or tool operation by author. Passive current-source/encoded-table/Git reads and ignored candidate copies only. No physical-work reduction,allocation/JIT/wave/occupancy/latency/speed claim."
+}

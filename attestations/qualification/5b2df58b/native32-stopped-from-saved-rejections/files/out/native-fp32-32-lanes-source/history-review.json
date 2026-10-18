@@ -1,0 +1,109 @@
+{
+  "schema": "sirius-native-fp32-32-lanes-bounded-history-review-v1",
+  "reviewed_at_utc": "2026-10-18T05:26:46.333864+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "decision": "STOP all native32 candidates this round before compiler execution; retain accepted Transport64 and Endpoint64.",
+  "source_semantics_review_retained": true,
+  "performance_admission_withdrawn": true,
+  "compiler_execution_admitted": false,
+  "runtime_admitted": false,
+  "pins": [
+    {
+      "path": "attestations/native-vulkan/3045067/transport-lanes32-rejected/independent-final-review.json",
+      "bytes": 648,
+      "sha256": "335efe5dbfb4cd6222e72d131008a2207c2902c682fc429cfc3d56da25fb1706"
+    },
+    {
+      "path": "attestations/native-vulkan/50565ab/endpoint-native-lanes32-generated-code/root-native-static-decision.json",
+      "bytes": 1807,
+      "sha256": "a09f49d8b86a5cd27f029cad8283ce0e45a2dce6bcc52f56fcbee9313661f9f4"
+    },
+    {
+      "path": "attestations/native-vulkan/9d56406/endpoint-native-lanes32-rejected/root-retention-decision.json",
+      "bytes": 29936,
+      "sha256": "ece411f3f4deeb33e319157081a6b56e2b949dd1af45b3004ac00ee98b178805"
+    },
+    {
+      "path": "attestations/native-vulkan/9d56406/endpoint-native-lanes32-rejected/independent-runtime-retention-review.json",
+      "bytes": 67670,
+      "sha256": "34682481d9144e7a5ebcd7a0d081c8b8517397424deceafaaaa42f142dedb3c5"
+    },
+    {
+      "path": "attestations/native-vulkan/9d56406/endpoint-native-lanes32-rejected/trial-source.json",
+      "bytes": 761,
+      "sha256": "2d5c6c24b90ee30a809ae00276cee160468e00651545e9dec3ff6b668328b368"
+    },
+    {
+      "path": "attestations/native-vulkan/9d56406/endpoint-native-lanes32-rejected/reconstruction-windows-9d56406.json",
+      "bytes": 2053,
+      "sha256": "c5f11d12fb3befdbdede76d4caba8a34ffc77099efca25715b6255e797e45914"
+    },
+    {
+      "path": "out/native-fp32-32-lanes-source/independent-source-review.json",
+      "bytes": 4666,
+      "sha256": "835602e4159883f3d2e4c9d08ca174504c450fc7b2fe59ee7f1e138c3720470d"
+    }
+  ],
+  "transport304": {
+    "verified_samples": 528,
+    "improved_blocks_both_clocks": 2,
+    "regressed_blocks_both_clocks": 14,
+    "disposition": "Reject without source adoption or coupled trial. This later default/native general-row screen is distinct from earlier broader b34. Current Transport baseline b52e6373\u2026 is identical; the unchanged general/flat fixture has no new Schwarzschild-table gain premise."
+  },
+  "endpoint505_then9d": {
+    "history_correction": "505 zero-dispatch static PASS was superseded by9d integrated benefit rejection; previously-uncompleted description was incomplete.",
+    "exact505_source_copies_integrated": true,
+    "candidate_SPV_sha256": "39e0148ccbbb37b18d566e9e62a527a60447ba174a354390d2b0817e5a9fa134",
+    "controls_passed": 7,
+    "matched_owners_completed": 8,
+    "factored_buffers_equal": 28,
+    "coupled_buffers_equal": 11,
+    "same_loaded_provider_and_device": true,
+    "failed_complete_coupled_sum_percent_change": {
+      "forward": {
+        "device_ms": -0.965780930343707,
+        "host_completion_ms": -1.6292876803633671,
+        "complete_call_ms": -2.2449585539855654
+      },
+      "reverse": {
+        "device_ms": -3.3320464536356065,
+        "host_completion_ms": -2.6213235018058723,
+        "complete_call_ms": -1.978480789121817
+      }
+    },
+    "required_each_percent_change": "<= -5",
+    "additional_failed_condition": {
+      "direction": "forward",
+      "scope": "coupled_repeat1",
+      "metric": "device_ms",
+      "candidate_percent_change": 0.21745000781683288,
+      "required_percent_change": "<= 0",
+      "passed": false
+    },
+    "failed_conditions": 7,
+    "final_root_decision": "reject benefit; preserve trial and restore accepted baseline in pushed Git",
+    "independent_final_decision": "Reject benefit; original controls passed but complete coupled gate failed. No unchanged retry or coupled addition supported."
+  },
+  "original_host_producer": {
+    "mechanism": "Commit exact candidate source copies; genuine Windows CI compilation/export and typed reconstruction. Retained Endpoint is embedded via retained_kernels.h in backend/app; loose SPV replacement is not its consumer.",
+    "ci_export": "attestations/native-build/9d56406/windows-build",
+    "verified_consumed_inputs": 20,
+    "verified_executables": 7,
+    "full_runtime_qualification_claimed": false
+  },
+  "current_disposition": {
+    "root_decision": "STOP all native32 this round BEFORE compile. Combined source/compiler packets held unchanged, never executed; no E-only directory or concrete admission.",
+    "reason": "Combined T+E remains untested, but adding known Transport regressions to failed Endpoint whole-path benefit has no grounded new fixture premise. Keep T64/E64; no gate tuning or retry.",
+    "semantic_review": "Existing source semantic PASS remains valid; performance admission withdrawn."
+  },
+  "scope": "Selected saved-source/metadata review only; no repeat raw audit, execution, network/process query or canonical mutation. No new emitted/runtime identity, timing cause, frame gain, science or release claim.",
+  "repository_observation": {
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "new_receipt_committed_or_pushed": false
+  }
+}
