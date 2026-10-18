@@ -1,0 +1,56 @@
+{
+  "schema": "sirius-native-constant-independent-preservation-review-v1",
+  "created_utc": "2026-10-18T09:41:53.384322+00:00",
+  "passed": true,
+  "audit_completed": true,
+  "bundle": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass",
+  "evidence_commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+  "MANIFEST": {
+    "bytes": 338464,
+    "sha256": "ba0b39aa58133ae5dd4e3ad938fb29436da9345a0528e60d390a26adb3bdf47c"
+  },
+  "PRESERVATION": {
+    "bytes": 898,
+    "sha256": "468c0b1a87bc050497f49783f9405fbb3ebd3217f30f41059b6ed16d9ed9ee32"
+  },
+  "root_actual_Git_publication": {
+    "path": "out/native-constant-preservation/root-actual-Git-preservation.json",
+    "bytes": 206741,
+    "sha256": "fe0341dd0d6821f8bf15d62ab2c5d5fa70c600399f12b5176f163e747126d88c"
+  },
+  "checks": {
+    "payload_files": 585,
+    "payload_bytes": 71209573,
+    "exact_live_owned_roots": 20,
+    "live_inventory_files": 585,
+    "all_copy_bytes_hashes_regular_modes_equal": true,
+    "bundle_exact_members": 587,
+    "all587_actual_Git_blob_bytes_and_modes_equal": true,
+    "canonical538_Git_blobIDs_and_modes_unchanged": true,
+    "archive_backed_stage_members": 122,
+    "expanded_stage_bytes": 97981785,
+    "all_ZIP_member_CRC_safe_names_and_current_stage_bytes_equal": true,
+    "stage_inventory_and_modes_equal_manifest_member_map": true,
+    "ROOT_actual_push_and_fresh_remote_tag_branch_proof_seen": true
+  },
+  "mode_notes": [
+    "ZIP transport permissions differ from all122 explicit stage member modes; MANIFEST stores current0o644 per member for exact POSIX restoration. Archive bytes are retained once and all member bytes match.",
+    "Preexisting scripts/verify-operating-model.py remains Git100755/physical100644. Source mode was not changed; canonical Git comparison uses stored Git modes."
+  ],
+  "claim_scope": "Preserves actual one private Windows producer, eight original native controls and sole original22/22 benefitPASS. All8/benefit acceptance receipts and complete declared source/raw owned records are copied exactly; this is a preservation audit, not a repeated numerical experiment.",
+  "limits": [
+    "No full host/toolchain/SDK/transitive-DSO backup or fresh all-host rehash. No provider/test/helper/compiler/network/process execution by reviewer.",
+    "No completed frame/UI/fullscience/Mandatory/all-provider/release qualification or source adoption. Source integration requires separate ROOT action; this receipt authorizes no cleanup.",
+    "Remote publication is ROOT actual closed-push/fresh-read evidence; reviewer issued no remote query."
+  ],
+  "workspace": {
+    "HEAD": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "tracked_clean": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "canonical_committed_pushed": true,
+    "sidecar_outside_bundle_pending_ROOT_preservation": true
+  },
+  "blockers": []
+}
