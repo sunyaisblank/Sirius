@@ -1,0 +1,77 @@
+{
+  "source_only": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "executed": false,
+  "compiler_admitted": false,
+  "CI_dispatched": false,
+  "runtime_admitted": false,
+  "private_producer_revision": "ROOT_PENDING",
+  "artifact_run_id": "ROOT_PENDING",
+  "artifact_id": "ROOT_PENDING",
+  "actual_product_pins": null,
+  "canonical_VulkanDevice_unchanged": true,
+  "scope": "SOURCE preparation only. ROOT sole materialization/compile/CI/runtime operator; actual compiler products and emitted proof remain required. No old RTConstant/Pure-CSE or wave32 allowance carried forward.",
+  "schema": "sirius-native-rounded-error-composer-source-v1",
+  "origin": {
+    "commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+    "path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-producer-source/compose_inputs.py",
+    "blob": "2d7ce2a1ec21d5b147bcfbef4867f71bedd11b34",
+    "bytes": 12447,
+    "sha256": "220e7e259531f3b4e2914f28144edc1615deb65e3bfb8afbb0feff5e23a29306"
+  },
+  "emitted_admission": {
+    "schema": "sirius-native-rounded-error-emitted-admission-v1",
+    "required_true": [
+      "passed",
+      "outside_RTAccumulateRoundedProduct_semantics_preserved",
+      "public_ABI_equal",
+      "guarded_native_error_word_refinement_validated"
+    ],
+    "rich_pins": [
+      "compiler_owner",
+      "compiler_products",
+      "command_results"
+    ],
+    "exact_modules": [
+      "retained_transport.spv",
+      "retained_endpoint.spv",
+      "retained_dense.spv",
+      "retained_initialize.spv",
+      "retained_dopri_phase.spv"
+    ],
+    "no_preaccepted_lowering_exception": true
+  },
+  "compiler_products_schema": "sirius-native-rounded-error-five-compiler-products-v1",
+  "compiler_namespace": "out/native-rounded-error-compiler-source/candidate",
+  "output_namespace": "out/native-rounded-error-producer-inputs",
+  "baseline": {
+    "commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+    "path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-producer-inputs",
+    "root_composed_inputs": {
+      "bytes": 16583,
+      "sha256": "d43b0d3278a648d3871e7a4cd1f3c723f6e93b23721b4573578a5afb69a07e2d"
+    },
+    "selected_historical_arm": "candidate",
+    "current38canonical_headers_SPVs_passively_matched": true,
+    "historical_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "current_canonical_equality_rechecked_before_output": true
+  },
+  "candidate_source": {
+    "path": "out/native-rounded-error-source/retained_triple.slang",
+    "bytes": 15684,
+    "sha256": "a7ce249702bf35f4370b9d836640f88c59789f551292cddaeae51570eea88e9f"
+  },
+  "mandatory_scope": {
+    "input_files": 77,
+    "SPVs_per_arm": 35,
+    "main_arrays_per_arm": 40,
+    "changed_main_arrays": 5,
+    "unchanged_main_arrays": 35,
+    "seven_tables_and_other_header_text_exact": true,
+    "excluded_SPVs_exact": 30,
+    "owner_payloads_per_arm": 2,
+    "owner_headers_and_layout_exact": true,
+    "observer_c948_exact": true
+  },
+  "holds": "No output creation during source preparation; composer refuses absent/nonpassing exact actual owner25calls/products/emitted admission. Outside helper proof must inspect actual lowering; no arbitrary CSE normalization presumed."
+}

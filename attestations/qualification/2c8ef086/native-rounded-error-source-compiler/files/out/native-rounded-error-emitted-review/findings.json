@@ -1,0 +1,129 @@
+{
+  "schema": "sirius-native-rounded-error-emitted-findings-v1",
+  "passed": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "outside_RTAccumulateRoundedProduct_functions_alpha_exact": true,
+  "outside_RTAccumulateRoundedProduct_semantics_preserved": true,
+  "public_ABI_equal": true,
+  "bounded_native_rounded_product_error_equivalence_validated": true,
+  "guarded_native_error_word_refinement_validated": true,
+  "full_review": {
+    "path": "out/native-rounded-error-emitted-review/independent-emitted-review.json",
+    "bytes": 15502,
+    "sha256": "595888aa09ab8083634fbe031c46d19ec64e48aa3137dee4ef1b419dee99caab"
+  },
+  "reader": {
+    "path": "out/native-rounded-error-emitted-review/review_emitted.py",
+    "bytes": 19119,
+    "sha256": "ec37b10ff2785032fb3b99cef876236edda9ca76da387e8a627ed86e94082468"
+  },
+  "source_preimage": {
+    "path": "out/native-rounded-error-emitted-review/originals/review_emitted.strict-alpha.py",
+    "bytes": 19412,
+    "sha256": "be0641916098df0cf503c10ccf9782df58da5471242d45a7e8580e14aefe47b1"
+  },
+  "typed_Module_normalization_class_byte_exact_preimage": true,
+  "modules": {
+    "retained_transport.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_transport.spv",
+      "bytes": 86584,
+      "sha256": "58858d30aa72bc753cf7ddcbbfd9dc138cfdbb539509a9c442c62c421783f215"
+    },
+    "retained_endpoint.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_endpoint.spv",
+      "bytes": 100480,
+      "sha256": "8ced5a6cac1ce599e3fd7b094221ea852b54657269ba8e95f00af0e54ab369df"
+    },
+    "retained_dense.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dense.spv",
+      "bytes": 79132,
+      "sha256": "b7403e018886de85a4e48b4174bafdb78a984783f4edb1e37a75f7a1e562dfb9"
+    },
+    "retained_initialize.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_initialize.spv",
+      "bytes": 57988,
+      "sha256": "18b808d44f7c816e479a4b8688b9cb4340a2350a3423113ac272d50db3e7b01f"
+    },
+    "retained_dopri_phase.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dopri_phase.spv",
+      "bytes": 59620,
+      "sha256": "b22614988a5ae537e73db7e591af5f8a7a650624ecef26189d6e12be47180c7a"
+    }
+  },
+  "actual_result": "Five modules,25 actual successful compiler/assembler/validator/disassembler calls. Full current2c8 canonical SPVs equal immutable fd530 candidate SPVs and their recorded final ASM; baseline tools/outputs joined without recompilation.",
+  "invariants": "Every outside helper function, including RTConstant, ScratchAddress and ComputeMain, is strict typed alpha-exact. Globals/full ABI/type/layout/decorations/modes equal; original local64x1x1, RTE32/DenormPreserve32, every float Add/Sub/Mul NoContraction, no wide/fused/relaxed arithmetic. Only two new uint constants0x0e000000 and0x0b800000.",
+  "helper_proof": "All8 emitted helper instances match the complete exact29-row typed unsigned-inclusive guard/word transform/fallback CFG. Both paths initialize one Function-float error before its sole tail load. Source-proved equal error replacement and exact helper inverse reproduce every original prefix/fallback/tail instruction and use. All private status, early zero/refusal, product, accumulation and arithmetic order remain. No RTConstant or pure-CSE exception applied; no separate lowering allowance needed.",
+  "counts": [
+    {
+      "name": "retained_transport",
+      "function_instances": 70,
+      "outside_instances_alpha_exact": 68,
+      "outside_rows_exact": 5030,
+      "helper_instances": 2
+    },
+    {
+      "name": "retained_endpoint",
+      "function_instances": 78,
+      "outside_instances_alpha_exact": 76,
+      "outside_rows_exact": 6094,
+      "helper_instances": 2
+    },
+    {
+      "name": "retained_dense",
+      "function_instances": 70,
+      "outside_instances_alpha_exact": 68,
+      "outside_rows_exact": 4649,
+      "helper_instances": 2
+    },
+    {
+      "name": "retained_initialize",
+      "function_instances": 58,
+      "outside_instances_alpha_exact": 57,
+      "outside_rows_exact": 3419,
+      "helper_instances": 1
+    },
+    {
+      "name": "retained_dopri_phase",
+      "function_instances": 59,
+      "outside_instances_alpha_exact": 58,
+      "outside_rows_exact": 3516,
+      "helper_instances": 1
+    }
+  ],
+  "helper_witnesses": {
+    "path": "out/native-rounded-error-emitted-review/helper-typed-witnesses.json",
+    "bytes": 6100,
+    "sha256": "fbb0ee5a04959092a5deb93e82dc40cff22a780894ebb993c629ecb2a6ad5521"
+  },
+  "readable_full_helper_delta": {
+    "path": "out/native-rounded-error-emitted-review/guarded-helper.diff",
+    "bytes": 45941,
+    "sha256": "7b1adc15ec9550fa496e77a1cf7b8ee4126eddcffa96b9d5bceae3c9691a85e2"
+  },
+  "source_equivalence_review": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-source/independent-source-review.json",
+    "bytes": 6123,
+    "sha256": "e7c742194adabddeeb646ef34916584fefc25048afdc76311c76c642fb1fdfbe"
+  },
+  "recorded_terminal": {
+    "before_after_rows_equal": 4489,
+    "wall_seconds": 3.7717728720162995,
+    "peak_sampled_rss_kib": 252280,
+    "recorded_births_absent": 7,
+    "new_process_query": false,
+    "all_current_host_inputs_rehashed_by_this_reader": false
+  },
+  "passive_reader_corrections": {
+    "path": "out/native-rounded-error-emitted-review/reader-prewrite-correction.json",
+    "bytes": 816,
+    "sha256": "bd6f19f5dc4f4437966eed91712b9c22aedfc139aa868ed5756073c544d9cd1d"
+  },
+  "correction_scope": "Two prewrite analysis assumptions only: real original table/layout definitions were nonempty; historical internal tool key was ROOT-relative. Source preimages retained. No compiler/product/workload changed.",
+  "limits": [
+    "No provider/test/compiler/tool/network/Git mutation or fresh process query. Standalone standard-library saved-file comparison only.",
+    "Compiler whole-input currentness/birth-absence follows ROOT terminal plus equal saved4489before-after rows; this reader did not repeat all-host hashing.",
+    "Five-module offline emitted semantics only. Other30 SPVs/complete header/tables composition, same-provider buffers/original8+22, numerical/performance/frame/adoption/release remain separately required."
+  ],
+  "runtime_admitted": false,
+  "production_adopted": false
+}

@@ -1,0 +1,273 @@
+{
+  "schema": "sirius-native-rounded-error-independent-emitted-review-v1",
+  "passed": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "outside_RTAccumulateRoundedProduct_functions_alpha_exact": true,
+  "outside_RTAccumulateRoundedProduct_semantics_preserved": true,
+  "public_ABI_equal": true,
+  "bounded_native_rounded_product_error_equivalence_validated": true,
+  "guarded_native_error_word_refinement_validated": true,
+  "compiler_owner": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/owner.json",
+    "bytes": 2397,
+    "sha256": "3c097758752c10528a8af7f8ad794151be823fecad69cc938fccc656a4fa55e2"
+  },
+  "compiler_products": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/products.json",
+    "bytes": 7373,
+    "sha256": "c90d024ccfbaaf532c6d523863b094f617acdb1aec06ad7629d3c381735a9fb0"
+  },
+  "command_results": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/command-results.json",
+    "bytes": 26897,
+    "sha256": "5568418af1b03a0e65b7d2ff1218c41b545c68e892f357426ebf4f6e35c6c72a"
+  },
+  "modules": {
+    "retained_transport.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_transport.spv",
+      "bytes": 86584,
+      "sha256": "58858d30aa72bc753cf7ddcbbfd9dc138cfdbb539509a9c442c62c421783f215"
+    },
+    "retained_endpoint.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_endpoint.spv",
+      "bytes": 100480,
+      "sha256": "8ced5a6cac1ce599e3fd7b094221ea852b54657269ba8e95f00af0e54ab369df"
+    },
+    "retained_dense.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dense.spv",
+      "bytes": 79132,
+      "sha256": "b7403e018886de85a4e48b4174bafdb78a984783f4edb1e37a75f7a1e562dfb9"
+    },
+    "retained_initialize.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_initialize.spv",
+      "bytes": 57988,
+      "sha256": "18b808d44f7c816e479a4b8688b9cb4340a2350a3423113ac272d50db3e7b01f"
+    },
+    "retained_dopri_phase.spv": {
+      "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dopri_phase.spv",
+      "bytes": 59620,
+      "sha256": "b22614988a5ae537e73db7e591af5f8a7a650624ecef26189d6e12be47180c7a"
+    }
+  },
+  "proof": [
+    {
+      "name": "retained_transport",
+      "canonical_SPV": {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv",
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "saved_baseline_SPV": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_transport.spv",
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "saved_baseline_ASM": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_transport.final.spvasm",
+        "bytes": 247983,
+        "sha256": "1844399649ad66e36259650dd53ba04736e220d4c33ab91ad5264e7f06a7a4fe"
+      },
+      "candidate_SPV": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_transport.spv",
+        "bytes": 86584,
+        "sha256": "58858d30aa72bc753cf7ddcbbfd9dc138cfdbb539509a9c442c62c421783f215"
+      },
+      "candidate_ASM": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_transport.final.spvasm",
+        "bytes": 250179,
+        "sha256": "03af710b90a9d2a0e82d17886220e0a4294a5b9f963cec7e31f736f317cf1eb7"
+      },
+      "functions": 70,
+      "outside_helper_instances_exact": 68,
+      "outside_instruction_rows_exact": 5030,
+      "outside_proof_digest": "96ff5a6717a6c8b489f0ded719bc9a0762b4b70f8cc8bcb824c0e82e8822bca4",
+      "helper_instances": 2,
+      "full_header_and_global_ABI_equal": true,
+      "mode": "local64x1x1/RTE32/DenormPreserve32/NoContraction; no relaxed/wide/fused arithmetic"
+    },
+    {
+      "name": "retained_endpoint",
+      "canonical_SPV": {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv",
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      },
+      "saved_baseline_SPV": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_endpoint.spv",
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      },
+      "saved_baseline_ASM": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_endpoint.final.spvasm",
+        "bytes": 290227,
+        "sha256": "08351118faca9d78277e0a7ffd9be007486d42e7f069b136c8c8e501c9ab5c20"
+      },
+      "candidate_SPV": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_endpoint.spv",
+        "bytes": 100480,
+        "sha256": "8ced5a6cac1ce599e3fd7b094221ea852b54657269ba8e95f00af0e54ab369df"
+      },
+      "candidate_ASM": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_endpoint.final.spvasm",
+        "bytes": 292423,
+        "sha256": "6c4980a4da607ae7c3a3cf5952f22a5755e16bdf1f817bf08d15ad667a7e2530"
+      },
+      "functions": 78,
+      "outside_helper_instances_exact": 76,
+      "outside_instruction_rows_exact": 6094,
+      "outside_proof_digest": "a23c65c9c948a592ba2319fc02e1e02420a04527f73c1f1d6908a63c7aef79cf",
+      "helper_instances": 2,
+      "full_header_and_global_ABI_equal": true,
+      "mode": "local64x1x1/RTE32/DenormPreserve32/NoContraction; no relaxed/wide/fused arithmetic"
+    },
+    {
+      "name": "retained_dense",
+      "canonical_SPV": {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv",
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+      },
+      "saved_baseline_SPV": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_dense.spv",
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+      },
+      "saved_baseline_ASM": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_dense.final.spvasm",
+        "bytes": 227986,
+        "sha256": "cce44cbe9b96ff0a635b406b66b0b788d58b46d79efee54738d826692f7d13a3"
+      },
+      "candidate_SPV": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dense.spv",
+        "bytes": 79132,
+        "sha256": "b7403e018886de85a4e48b4174bafdb78a984783f4edb1e37a75f7a1e562dfb9"
+      },
+      "candidate_ASM": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dense.final.spvasm",
+        "bytes": 230182,
+        "sha256": "2580245bdec3641c8ff35cfecd324691d541ea710828d3d95663c32ffa0ae470"
+      },
+      "functions": 70,
+      "outside_helper_instances_exact": 68,
+      "outside_instruction_rows_exact": 4649,
+      "outside_proof_digest": "cdaf4b0ebaf8c8a76b847ea67c7938b76a5a4694ce0eeae88cf446495937bd7e",
+      "helper_instances": 2,
+      "full_header_and_global_ABI_equal": true,
+      "mode": "local64x1x1/RTE32/DenormPreserve32/NoContraction; no relaxed/wide/fused arithmetic"
+    },
+    {
+      "name": "retained_initialize",
+      "canonical_SPV": {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv",
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+      },
+      "saved_baseline_SPV": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_initialize.spv",
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+      },
+      "saved_baseline_ASM": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_initialize.final.spvasm",
+        "bytes": 166369,
+        "sha256": "3e8e75074b2e62131b15ca16afd0e246c9ec2be9fba0665c31a2e0bf6366d979"
+      },
+      "candidate_SPV": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_initialize.spv",
+        "bytes": 57988,
+        "sha256": "18b808d44f7c816e479a4b8688b9cb4340a2350a3423113ac272d50db3e7b01f"
+      },
+      "candidate_ASM": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_initialize.final.spvasm",
+        "bytes": 167513,
+        "sha256": "a9977fafdef4896889559205bb77f5c46f15d7dd17d6115b0e58083e4ad2cf04"
+      },
+      "functions": 58,
+      "outside_helper_instances_exact": 57,
+      "outside_instruction_rows_exact": 3419,
+      "outside_proof_digest": "15a695c2d02ac58c3d90b9a44161cc95290b05df510bd287bd012f25909e7b51",
+      "helper_instances": 1,
+      "full_header_and_global_ABI_equal": true,
+      "mode": "local64x1x1/RTE32/DenormPreserve32/NoContraction; no relaxed/wide/fused arithmetic"
+    },
+    {
+      "name": "retained_dopri_phase",
+      "canonical_SPV": {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv",
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      },
+      "saved_baseline_SPV": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_dopri_phase.spv",
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      },
+      "saved_baseline_ASM": {
+        "path": "/home/astra/.project/Sirius/attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate/retained_dopri_phase.final.spvasm",
+        "bytes": 171285,
+        "sha256": "477b63da23cb9cb3f36ed80f73f2e7a1c4f493ff9793f4eb4f054f86725fac72"
+      },
+      "candidate_SPV": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dopri_phase.spv",
+        "bytes": 59620,
+        "sha256": "b22614988a5ae537e73db7e591af5f8a7a650624ecef26189d6e12be47180c7a"
+      },
+      "candidate_ASM": {
+        "path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/candidate/retained_dopri_phase.final.spvasm",
+        "bytes": 172429,
+        "sha256": "580d1240bc7f0b0027c2203da994ed7c73be587a5de4265c9f1e7a355052616b"
+      },
+      "functions": 59,
+      "outside_helper_instances_exact": 58,
+      "outside_instruction_rows_exact": 3516,
+      "outside_proof_digest": "2792d210e388b0823a641d47558de411168ba744b12f39e526e65866385a3209",
+      "helper_instances": 1,
+      "full_header_and_global_ABI_equal": true,
+      "mode": "local64x1x1/RTE32/DenormPreserve32/NoContraction; no relaxed/wide/fused arithmetic"
+    }
+  ],
+  "helper_typed_witnesses": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-emitted-review/helper-typed-witnesses.json",
+    "bytes": 6100,
+    "sha256": "fbb0ee5a04959092a5deb93e82dc40cff22a780894ebb993c629ecb2a6ad5521"
+  },
+  "exact_helper_delta": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-emitted-review/guarded-helper.diff",
+    "bytes": 45941,
+    "sha256": "7b1adc15ec9550fa496e77a1cf7b8ee4126eddcffa96b9d5bceae3c9691a85e2"
+  },
+  "reader": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-emitted-review/review_emitted.py",
+    "bytes": 19119,
+    "sha256": "ec37b10ff2785032fb3b99cef876236edda9ca76da387e8a627ed86e94082468"
+  },
+  "prior_strict_reader": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-emitted-review/originals/review_emitted.strict-alpha.py",
+    "bytes": 19412,
+    "sha256": "be0641916098df0cf503c10ccf9782df58da5471242d45a7e8580e14aefe47b1"
+  },
+  "source_equivalence_review": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-source/independent-source-review.json",
+    "bytes": 6123,
+    "sha256": "e7c742194adabddeeb646ef34916584fefc25048afdc76311c76c642fb1fdfbe"
+  },
+  "root_compiler_terminal": {
+    "path": "/home/astra/.project/Sirius/out/native-rounded-error-publication/root-compiler-terminal.json",
+    "bytes": 331,
+    "sha256": "37ae60ee9c5bb3ac5781b25b74496302087d25ae76f2b2281313f7d2e3dc741e"
+  },
+  "terminal_scope": {
+    "before_after_rows_equal": 4489,
+    "wall_seconds": 3.7717728720162995,
+    "peak_sampled_rss_kib": 252280,
+    "recorded_births_absent": 7,
+    "new_process_query": false,
+    "all_current_host_inputs_rehashed_by_this_reader": false
+  },
+  "normalization": "Original strict typed normalization reused. Every outside function including RTConstant and ComputeMain is strictly alpha-exact with no CSE/side-effect exception. Only two new uint constants occur. Every changed helper matches the entire exact29-row typed guard/word/fallback CFG template, with private float error local initialized by both arms before sole tail load. Removing only that proved insertion, replacing that one error load by original fallback SSA, and retaining its four exact original arithmetic instructions reproduces every original helper instruction and use in order. Complete capability/mode/type/global/layout/decorations multiset then equals canonical; no NoContraction or other decoration is dropped.",
+  "baseline_provenance": "Each saved fd530 candidate SPV/full final ASM is checked against its original products record and successful disassembler record; the saved SPV equals the actual current2c8 canonical module byte-for-byte. Selected disassembler identity matches original sealed tool. No old live raw path is demanded.",
+  "scope": "Five ordinary native modules only; exact source guarded error expression and typed emitted fallback/ABI/modes. Same-provider full buffers/original8 controls/sole original22 benefit remain required. No separate lowering allowance, inherited RTConstant refinement or CSE exception.",
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "operations": "Passive standalone standard-library JSON/hash/ASM comparison only; no project import/helper/compiler/SPIR-V tool/provider/test/network/Git mutation. Existing ROOT terminal seals reused; no new all-host sweep."
+}

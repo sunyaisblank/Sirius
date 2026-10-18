@@ -1,0 +1,110 @@
+--- originals/compose_inputs.py
++++ compose_inputs.py
+@@ -1,10 +1,10 @@
+ """Compose diagnostic inputs only; ROOT executes after emitted admission.
+ 
+ Usage: python3 -B compose_inputs.py EMITTED_ADMISSION.json
+-The single admission has schema sirius-native-constant-emitted-admission-v1,
++The single admission has schema sirius-native-rounded-error-emitted-admission-v1,
+ passed/source_revision, compiler_owner/compiler_products/command_results pins,
+-modules {SPV filename: identity}, and true outside_constructor_semantics_preserved_with_explicit_pure_CSE,
+-public_ABI_equal, bounded_native_constructor_refinement_validated. Each identity has
++modules {SPV filename: identity}, and true outside_RTAccumulateRoundedProduct_semantics_preserved,
++public_ABI_equal, guarded_native_error_word_refinement_validated. Each identity has
+ path/bytes/sha256. It grants no provider, runtime, benefit or adoption authority.
+ """
+ from pathlib import Path
+@@ -16,11 +16,11 @@
+ import sys
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-BASIS = ROOT / "out/native-fp32-packed-scratch-producer-inputs"
+-COMPILE = ROOT / "out/native-constant-compiler-source/candidate"
+-OUTPUT = ROOT / "out/native-constant-producer-inputs"
++BASIS = ROOT / "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-producer-inputs"
++COMPILE = ROOT / "out/native-rounded-error-compiler-source/candidate"
++OUTPUT = ROOT / "out/native-rounded-error-producer-inputs"
+ CANONICAL = ROOT / "bin/linux-gcc/src/sirius/backend/retained"
+-REVISION = "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e"
++REVISION = "2c8ef08693d46f57d5dea14efdbddd4874dac684"
+ TARGETS = {"retained_transport.spv": "kTransportShader",
+            "retained_endpoint.spv": "kEndpointShader",
+            "retained_dense.spv": "kDenseShader",
+@@ -83,11 +83,11 @@
+     require(admission_path.is_relative_to(ROOT), "admission must be inside this checkout")
+     admission_bytes = read(admission_path)
+     admission = json.loads(admission_bytes)
+-    require(admission["schema"] == "sirius-native-constant-emitted-admission-v1"
++    require(admission["schema"] == "sirius-native-rounded-error-emitted-admission-v1"
+             and admission["passed"] is True and admission["source_revision"] == REVISION,
+             "emitted admission refused")
+-    for field in ("outside_constructor_semantics_preserved_with_explicit_pure_CSE", "public_ABI_equal",
+-                  "bounded_native_constructor_refinement_validated"):
++    for field in ("outside_RTAccumulateRoundedProduct_semantics_preserved", "public_ABI_equal",
++                  "guarded_native_error_word_refinement_validated"):
+         require(admission[field] is True, f"missing emitted check: {field}")
+     owner_bytes = read(COMPILE / "owner.json", admission["compiler_owner"])
+     product_bytes = read(COMPILE / "products.json", admission["compiler_products"])
+@@ -99,7 +99,7 @@
+             and owner["remaining_owned_processes"] == []
+             and owner["source_unchanged"] is True and owner["whole_inputs_unchanged"] is True
+             and owner["source"] == {"revision": REVISION, "status": ""}, "compiler owner refused")
+-    require(products["schema"] == "sirius-native-constant-five-compiler-products-v1"
++    require(products["schema"] == "sirius-native-rounded-error-five-compiler-products-v1"
+             and products["passed"] is True and products["actual_tool_calls"] == 25
+             and products["optimizer_invoked"] is False and products["runtime_admitted"] is False,
+             "compiler products refused")
+@@ -108,18 +108,24 @@
+     require(len(commands) == 25 and all(type(r["exit_code"]) is int and r["exit_code"] == 0
+                                        for r in commands), "compiler calls incomplete")
+     read(COMPILE.parent / "source/src/sirius/kernels/retained_triple.slang", {
+-        "bytes": 15525, "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"})
++        "bytes": 15684, "sha256": "a7ce249702bf35f4370b9d836640f88c59789f551292cddaeae51570eea88e9f"})
+     read(COMPILE.parent / "source/src/sirius/kernels/retained_scratch.slang", {
+         "bytes": 892, "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"})
+     read(COMPILE.parent / "recipes.json", products["recipe"])
+ 
+     prior_bytes = read(BASIS / "root-composed-inputs.json", {
+-        "bytes": 30848, "sha256": "5d4062652bcad0e10807c8195b6279d05f9fd5a2a9dbad592424d1f977da5922"})
++        "bytes": 16583, "sha256": "d43b0d3278a648d3871e7a4cd1f3c723f6e93b23721b4573578a5afb69a07e2d"})
+     prior = json.loads(prior_bytes)
+-    require(prior["passed"] is True and prior["source_revision"] == REVISION,
+-            "baseline composition authority refused")
+-    files = {name: read(BASIS / name, row) for name, row in prior["files"].items()
+-             if name.startswith("baseline/") or name == "observer/audited-observer.cpp"}
++    require(prior["schema"] == "sirius-native-constant-diagnostic-input-composition-v1"
++            and prior["passed"] is True
++            and prior["source_revision"] == "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
++            "historical constructor composition authority refused")
++    # Its admitted candidate, adopted in current2c8, is this trial's baseline.
++    # Every copied header/SPV must also equal current canonical products below.
++    files = {("baseline/" + name.removeprefix("candidate/")
++              if name.startswith("candidate/") else name): read(BASIS / name, row)
++             for name, row in prior["files"].items()
++             if name.startswith("candidate/") or name == "observer/audited-observer.cpp"}
+     require(len(files) == 39, "expected38 baseline files and observer")
+     for name, data in files.items():
+         if name.startswith("baseline/"):
+@@ -190,9 +196,11 @@
+         with path.open("xb") as stream:
+             stream.write(data)
+         path.chmod(0o644)
+-    report = {"schema": "sirius-native-constant-diagnostic-input-composition-v1", "passed": True,
++    report = {"schema": "sirius-native-rounded-error-diagnostic-input-composition-v1", "passed": True,
+               "created_utc": datetime.now(timezone.utc).isoformat(), "source_revision": REVISION,
+-              "prior_baseline_authority": identity(prior_bytes), "emitted_admission": {
++              "prior_baseline_authority": identity(prior_bytes),
++              "prior_baseline_selected_arm": "candidate", "current_canonical_baseline_checked": True,
++              "emitted_admission": {
+                   "path": str(admission_path.relative_to(ROOT)), **identity(admission_bytes)},
+               "compiler_owner": identity(owner_bytes), "compiler_products": identity(product_bytes),
+               "command_results": identity(command_bytes), "target_array_names": TARGETS,
+@@ -201,7 +209,7 @@
+               "observer_exact": True, "observer_original_cases": 27, "observer_ordered_assertions": 1492,
+               "files": {n: {**identity(d), "mode": "0o644"} for n, d in sorted(files.items())},
+               "cpp_producer_compiled": False, "runtime_released": False, "adoption_admitted": False,
+-              "scope": "Five new compiler/emitted-reviewed ordinary nativeFP32 RTConstant SPVs composed with current5b2 canonical unpacked baseline. Diagnostic input composition only; no provider/science/benefit/fullqualification authority."}
++              "scope": "Five new compiler/emitted-reviewed ordinary nativeFP32 rounded-product error SPVs composed with current2c8 canonical unpacked baseline. Diagnostic input composition only; no provider/science/benefit/fullqualification authority."}
+     with (OUTPUT / "root-composed-inputs.json").open("x") as stream:
+         json.dump(report, stream, indent=2)
+         stream.write("\n")

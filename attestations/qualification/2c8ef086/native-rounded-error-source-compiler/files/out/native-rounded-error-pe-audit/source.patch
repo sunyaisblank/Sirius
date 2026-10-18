@@ -1,0 +1,139 @@
+--- originals/audit_export_windows_paths.py
++++ audit_export_windows_paths.py
+@@ -14,7 +14,7 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-INPUTS = ROOT / "out/native-constant-producer-inputs"
++INPUTS = ROOT / "out/native-rounded-error-producer-inputs"
+ NS = {"m": "http://schemas.microsoft.com/developer/msbuild/2003"}
+ 
+ 
+@@ -178,21 +178,41 @@
+     for key in ("passed", "configure_passed", "build_passed", "source_unchanged", "frozen_build_inputs_unchanged"):
+         require(result[key] is True, "Producer did not pass: " + key)
+     require(result["source_revision"] == result["github_sha"] == args.revision, "Producer revision mismatch")
++    require(result["producer_profile"] == "native-rounded-error-five-shader-only"
++            and result["canonical_CXX_source_revision"] == "2c8ef08693d46f57d5dea14efdbddd4874dac684"
++            and result["expected_private_compile_objects"] == 5
++            and result["private_compile_object_count"] == 5, "Wrong private producer profile")
+     require(result["repository"] == "sunyaisblank/Sirius" and str(result["run_id"]) == args.run_id,
+             "Producer run/repository mismatch")
+     require(str(result["run_attempt"]) == "1", "Unexpected run attempt")
+     before = document(export / "build-inputs-before.json")
+     require(before == document(export / "build-inputs-after.json"), "Build seals differ")
+     source = document(export / "source-before-configure.json")
++    composition = document(INPUTS / "root-composed-inputs.json")
++    require(composition["schema"] == "sirius-native-rounded-error-diagnostic-input-composition-v1"
++            and composition["passed"] is True
++            and composition["source_revision"] == "2c8ef08693d46f57d5dea14efdbddd4874dac684"
++            and len(composition["files"]) == 77, "Wrong current input composition")
++    for relative, row in composition["files"].items():
++        logical = Path(relative)
++        require(not logical.is_absolute() and ".." not in logical.parts
++                and "\\" not in relative and ":" not in relative, "Unsafe composed input")
++        actual_input = INPUTS / logical
++        require(actual_input.is_file() and not actual_input.is_symlink()
++                and identity(actual_input) == {k: row[k] for k in ("bytes", "sha256")},
++                "Composed input differs: " + relative)
++        suffix = "out/native-rounded-error-producer-inputs/" + relative
++        selected_row(source, suffix, identity(actual_input))
++        selected_row(before, suffix, identity(actual_input))
+     for arm in ("baseline", "candidate"):
+         for header in ("retained_kernels.h", "retained_owner_kernels.h", "retained_owner_layout.h"):
+-            suffix = "out/native-constant-producer-inputs/" + arm + "/" + header
++            suffix = "out/native-rounded-error-producer-inputs/" + arm + "/" + header
+             selected_row(source, suffix, identity(INPUTS / arm / header))
+             selected_row(before, suffix, identity(INPUTS / arm / header))
+     for relative in ("src/sirius/backend/retained_compute.cpp", "tests/backend/retained_dopri_test.cpp",
+                      "src/sirius/backend/vulkan/vulkan_device.cpp", "cmake/sirius_toolchain.cmake"):
+         selected_row(source, relative, identity(ROOT / relative))
+-    selected_row(source, "out/native-constant-producer-inputs/observer/audited-observer.cpp",
++    selected_row(source, "out/native-rounded-error-producer-inputs/observer/audited-observer.cpp",
+                  identity(INPUTS / "observer/audited-observer.cpp"))
+     expected = {arm: arrays(INPUTS / arm / "retained_kernels.h") for arm in ("baseline", "candidate")}
+     require(all(len(v) == 40 for v in expected.values()), "Expected40 main arrays")
+@@ -202,6 +222,30 @@
+     owner_arrays = arrays(INPUTS / "baseline/retained_owner_kernels.h")
+     require(len(owner_arrays) == 2 and owner_arrays == arrays(INPUTS / "candidate/retained_owner_kernels.h"),
+             "Owner payload delta")
++    require((INPUTS / "baseline/retained_owner_layout.h").read_bytes()
++            == (INPUTS / "candidate/retained_owner_layout.h").read_bytes(), "Owner layout delta")
++    kinds = {"camera": "Camera", "transport": "Transport", "endpoint": "Endpoint",
++             "dense": "Dense", "initialize": "Initialize", "ray_camera": "RayCamera",
++             "dopri_phase": "DopriPhase"}
++    tables = {"k" + kind + "Program" for kind in kinds.values()}
++    require({name for name in expected["baseline"] if name.endswith("Program")} == tables
++            and all(expected["baseline"][name] == expected["candidate"][name] for name in tables),
++            "Seven program-table delta")
++    for arm in ("baseline", "candidate"):
++        shader_payloads = {}
++        for stem, kind in kinds.items():
++            for suffix, variant in (("", ""), ("_fp64", "Fp64"), ("_portable", "Portable"),
++                                    ("_portable_fp64", "PortableFp64"), ("_fma", "Fma"),
++                                    ("_portable_normal_sum", "PortableNormalSum")):
++                filename = "retained_" + stem + suffix + ".spv"
++                if (INPUTS / arm / "shaders" / filename).is_file():
++                    shader_payloads[filename] = expected[arm]["k" + kind + variant + "Shader"]
++        for stem, kind in (("transport", "Transport"), ("endpoint", "Endpoint")):
++            shader_payloads["retained_" + stem + "_portable_stage7_owner.spv"] = owner_arrays["k" + kind + "Shader"]
++        require(len(shader_payloads) == 35 and set(shader_payloads)
++                == {path.name for path in (INPUTS / arm / "shaders").glob("*.spv")}, "35-SPV inventory differs")
++        require(all((INPUTS / arm / "shaders" / name).read_bytes() == payload
++                    for name, payload in shader_payloads.items()), "Header/SPV payload mismatch")
+     products = {}
+     for arm in ("baseline", "candidate"):
+         exe = export / "payload" / arm / ("original_" + arm + "_controls.exe")
+@@ -220,7 +264,7 @@
+             require(all(data.find(foreign) < 0 for _, _, _, data in sections),
+                     "Foreign changed-arm shader remains in PE: " + arm + " " + name)
+     tlogs = {}
+-    targets = ["native_packed_dopri"] + ["native_packed_" + arm + "_" + kind
++    targets = ["native_rounded_error_dopri"] + ["native_rounded_error_" + arm + "_" + kind
+                for arm in ("baseline", "candidate") for kind in ("compute", "controls")]
+     for target in targets:
+         base = export / "metadata/private-objects" / (target + ".dir") / "Release"
+@@ -232,14 +276,14 @@
+         command = "\n".join(text(p) for p in commands)
+         dependencies = norm("\n".join(text(p) for p in reads))
+         check_flags(command, target)
+-        if target == "native_packed_dopri":
++        if target == "native_rounded_error_dopri":
+             require("retained_kernels.h" not in dependencies, "Shared DP consumes an arm header")
+         else:
+             arm = "baseline" if "baseline" in target else "candidate"
+             other = "candidate" if arm == "baseline" else "baseline"
+             for header in (("retained_kernels.h", "retained_owner_layout.h", "retained_owner_kernels.h")
+                            if target.endswith("compute") else ("retained_kernels.h", "retained_owner_layout.h")):
+-                suffix = "out/native-constant-producer-inputs/" + arm + "/" + header
++                suffix = "out/native-rounded-error-producer-inputs/" + arm + "/" + header
+                 require(suffix in dependencies, "Private dependency missing: " + suffix)
+             require("/" + other + "/retained_kernels.h" not in dependencies, "Other arm header consumed")
+         if not target.endswith("compute"):
+@@ -247,22 +291,22 @@
+         project = ET.parse(export / "metadata/projects" / (target + ".vcxproj")).getroot()
+         sources = [v.attrib["Include"] for v in project.findall(".//m:ClCompile[@Include]", NS)]
+         require(len(sources) == 1, "Private target source count differs")
+-        expected_source = ("tests/backend/retained_dopri_test.cpp" if target == "native_packed_dopri"
++        expected_source = ("tests/backend/retained_dopri_test.cpp" if target == "native_rounded_error_dopri"
+                            else "src/sirius/backend/retained_compute.cpp" if target.endswith("compute")
+-                           else "out/native-constant-producer-inputs/observer/audited-observer.cpp")
++                           else "out/native-rounded-error-producer-inputs/observer/audited-observer.cpp")
+         require(norm(sources[0]).endswith(expected_source), "Wrong private source: " + target)
+         tlogs[target] = {"object": identity(objects[0]), "source": sources[0],
+                          "command_tlogs": [str(p.relative_to(export)) for p in commands],
+                          "read_tlogs": [str(p.relative_to(export)) for p in reads]}
+     for arm in ("baseline", "candidate"):
+-        base = export / "metadata/private-objects" / ("native_packed_" + arm + "_controls.dir") / "Release"
++        base = export / "metadata/private-objects" / ("native_rounded_error_" + arm + "_controls.dir") / "Release"
+         link_reads = logs(base, "link.read.")
+         link_commands = logs(base, "link.command.")
+         require(link_reads and link_commands, "Missing LINK records: " + arm)
+         dependencies = norm("\n".join(text(p) for p in link_reads))
+         command = "\n".join(text(p) for p in link_commands)
+         require("/wholearchive" not in command.lower(), "Unexpected WHOLEARCHIVE")
+-        for target in ("native_packed_" + arm + "_compute", "native_packed_" + arm + "_controls", "native_packed_dopri"):
++        for target in ("native_rounded_error_" + arm + "_compute", "native_rounded_error_" + arm + "_controls", "native_rounded_error_dopri"):
+             folder = export / "metadata/private-objects" / (target + ".dir") / "Release"
+             obj = next(folder.rglob("*.obj"))
+             suffix = norm(obj.relative_to(export / "metadata/private-objects"))

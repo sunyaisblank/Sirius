@@ -1,0 +1,38 @@
+{
+  "schema": "sirius-native-rounded-error-source-admission-v1",
+  "admitted_for_narrow_compiler_screen": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "files": {
+    "out/native-rounded-error-source/independent-source-review.json": {
+      "bytes": 6123,
+      "sha256": "e7c742194adabddeeb646ef34916584fefc25048afdc76311c76c642fb1fdfbe",
+      "mode": "0o644"
+    },
+    "out/native-rounded-error-source/original-retained_triple.slang": {
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426",
+      "mode": "0o644"
+    },
+    "out/native-rounded-error-source/retained_triple.slang": {
+      "bytes": 15684,
+      "sha256": "a7ce249702bf35f4370b9d836640f88c59789f551292cddaeae51570eea88e9f",
+      "mode": "0o644"
+    },
+    "out/native-rounded-error-source/source-contracts.json": {
+      "bytes": 10188,
+      "sha256": "bd5e014df565b1d257f5089cc7ecb1da49362ab0e9d0114483b3dcf7fcc13aa1",
+      "mode": "0o644"
+    },
+    "out/native-rounded-error-source/source.patch": {
+      "bytes": 892,
+      "sha256": "1c7a5ddb293423041c6bd8819a8dc5cdd8665910fd5f603d3ede6eeb2bae0687",
+      "mode": "0o644"
+    }
+  },
+  "source_proof": "Guarded normal scaling with exact two upward word increments; untouched fallback. Independent source review passes.",
+  "eligible_scope": "Only ordinary nativeFP32 Transport/Endpoint/DP/Dense/Initialize; unchanged portable/FP64/FMA/owner. Verify emitted output.",
+  "cost_premise": "Existing saved1cb6 driver output retains the target expression, no runtime benefit inferred.",
+  "compiler_execution_admitted": false,
+  "provider_execution_admitted": false,
+  "source_adopted": false
+}

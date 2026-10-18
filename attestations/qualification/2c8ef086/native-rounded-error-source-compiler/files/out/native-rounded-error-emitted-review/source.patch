@@ -1,0 +1,365 @@
+--- originals/review_emitted.strict-alpha.py
++++ review_emitted.py
+@@ -1,30 +1,22 @@
+-"""Self-contained finite saved-file proof; no project imports or tool/provider execution.
+-Typed normalization is adapted from the archived validation-only emitted reviewer.
+-Only function-local result IDs, recursively typed static IDs, and debug/function
+-names/occurrences identify counterparts; instruction order/operands remain exact.
++"""Passive exact saved-SPIRV comparison; standard library only, no project imports.
++Module normalization is preserved from the fd530 strict reader. No pure-CSE or
++RTConstant exemption is imported. ROOT owns actual compiler and SPIR-V tools.
+ """
+ from pathlib import Path
+ from collections import Counter
+ from functools import lru_cache
+-import difflib, hashlib, json, re
+-
+-R=Path('/home/astra/.project/Sirius')
+-W=R/'out/native-constant-compiler-source'
+-P=R/'out/native-constant-publication'
+-ARCH=R/'attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen'
+-BASE=ARCH/'posttools/disassemble'
+-PRIOR=R/'attestations/qualification/5b2df58b/native-transport-validation-rejected/files/out/native-transport-validation-publication/source/review_emitted.py'
++import hashlib,json,re,difflib
++R=Path(__file__).resolve().parents[2]
++W=R/'out/native-rounded-error-compiler-source'
++P=Path(__file__).resolve().parent
++BASE=R/'attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/candidate'
+ TOK=re.compile(r'"(?:\\.|[^"\\])*"|[^\s]+')
+-REV='5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e'
+ NAMES=['retained_transport','retained_endpoint','retained_dense','retained_initialize','retained_dopri_phase']
+-def read(p):return json.loads(Path(p).read_text(encoding='utf-8-sig'))
+ def identity(p):
+  b=Path(p).read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+ def pin(p):return {'path':str(p),**identity(p)}
+-def signature(v):return hashlib.sha256(json.dumps(v,separators=(',',':')).encode()).hexdigest()
+-def match_pin(p,row):
+- assert identity(p)=={k:row[k] for k in ('bytes','sha256')},str(p)
+- if 'resolved_path' in row:assert str(Path(p).resolve())==row['resolved_path'],str(p)
++def signature(value):return hashlib.sha256(json.dumps(value,separators=(',',':')).encode()).hexdigest()
++def read(p):return json.loads(Path(p).read_text(encoding='utf-8-sig'))
+ 
+ class Module:
+     def __init__(self,path):
+@@ -77,147 +69,188 @@
+         return Counter(values)
+ 
+ 
+-# Complete concrete Transport constructor witness, not a permissive pattern.
+-CONSTRUCTOR='''%RTConstant = OpFunction %RetainedTriple None %500
+-%x_2 = OpFunctionParameter %float
+-%1599 = OpLabel
+-%r_2 = OpVariable %_ptr_Function_RetainedTriple Function
+-%1600 = OpVariable %_ptr_Function_float Function
+-%1601 = OpFunctionCall %bool %RPBounded %x_2 %uint_2071986176
+-%1602 = OpLogicalNot %bool %1601
+-OpSelectionMerge %1603 None
+-OpBranchConditional %1602 %1604 %1603
+-%1604 = OpLabel
+-%1605 = OpFunctionCall %RetainedTriple %RTInvalid
+-OpReturnValue %1605
+-%1603 = OpLabel
+-%1606 = OpAccessChain %_ptr_Function_float %r_2 %int_0
+-%1607 = OpBitcast %uint %x_2
+-%1608 = OpBitwiseAnd %uint %1607 %uint_2147483647
+-%1609 = OpIEqual %bool %1608 %uint_0
+-OpSelectionMerge %1610 None
+-OpBranchConditional %1609 %1611 %1612
+-%1611 = OpLabel
+-%1613 = OpBitcast %float %uint_0
+-OpStore %1600 %1613
+-OpBranch %1610
+-%1612 = OpLabel
+-OpStore %1600 %x_2
+-OpBranch %1610
+-%1610 = OpLabel
+-%1614 = OpLoad %float %1600
+-OpStore %1606 %1614
+-%1615 = OpAccessChain %_ptr_Function_float %r_2 %int_1
+-%1616 = OpBitcast %float %uint_0
+-OpStore %1615 %1616
+-%1617 = OpAccessChain %_ptr_Function_float %r_2 %int_2
+-OpStore %1617 %1616
+-%1618 = OpAccessChain %_ptr_Function_float %r_2 %int_3
+-OpStore %1618 %1616
+-%1619 = OpAccessChain %_ptr_Function_uint %r_2 %int_4
+-OpStore %1619 %uint_1
+-%1620 = OpLoad %RetainedTriple %r_2
+-OpReturnValue %1620
+-OpFunctionEnd'''
++
++GUARD_TEMPLATE="""$MAG = OpBitcast @uint $ABS
++$LOW = OpUGreaterThanEqual @bool $MAG @u234881024
++OpSelectionMerge $GJOIN None
++OpBranchConditional $LOW $LOWOK $LOWFAIL
++$LOWOK = OpLabel
++$UPPER = OpULessThanEqual @bool $MAG @u1585446912
++OpStore $BOOL $UPPER
++OpBranch $GJOIN
++$LOWFAIL = OpLabel
++OpStore $BOOL @false
++OpBranch $GJOIN
++$GJOIN = OpLabel
++$GUARD = OpLoad @bool $BOOL
++OpSelectionMerge $EJOIN None
++OpBranchConditional $GUARD $TAKE $FALL
++$TAKE = OpLabel
++$SUB = OpISub @uint $MAG @u192937984
++$ADD = OpIAdd @uint $SUB @u2
++$TRANS = OpBitcast @float $ADD
++OpStore $ERROR $TRANS
++OpBranch $EJOIN
++$FALL = OpLabel
++$SCALE = OpBitcast @float @u872415232
++$MUL = OpFunctionCall @float @fnRPUpMultiply $ABS $SCALE
++$TINY = OpBitcast @float @u5
++$FALLERROR = OpFunctionCall @float @fnRPUpAdd $MUL $TINY
++OpStore $ERROR $FALLERROR
++OpBranch $EJOIN
++$EJOIN = OpLabel"""
++
++
++def expected_static(marker):
++ if marker in ('@uint','@float','@bool'):
++  return {'@uint':('OpTypeInt','32','0'),'@float':('OpTypeFloat','32'),'@bool':('OpTypeBool',)}[marker]
++ if marker=='@false':return ('OpConstantFalse',('OpTypeBool',))
++ if marker.startswith('@u'):return ('OpConstant',('OpTypeInt','32','0'),marker[2:])
++ if marker.startswith('@fn'):return ('function',(marker[3:],0))
++ raise ValueError(marker)
++
++
++def match_guard(m,rows,roles):
++ expected=[line.split() for line in GUARD_TEMPLATE.splitlines()]
++ assert len(rows)==len(expected)
++ for row,template in zip(rows,expected):
++  assert len(row)==len(template),(row,template)
++  for token,want in zip(row,template):
++   if want.startswith('$'):
++    if want not in roles:
++     assert token.startswith('%') and token not in roles.values(),(want,token)
++     roles[want]=token
++    assert token==roles[want],(want,token,roles[want])
++   elif want.startswith('@'):
++    assert m.norm(token)==expected_static(want),(want,m.norm(token))
++   else:assert token==want,(token,want)
++ return roles
++
++
++def function_pointer_type(m,ident,kind):
++ row=TOK.findall(m.defs[ident]);assert row[0]=='OpVariable' and row[2:] == ['Function']
++ assert m.norm(row[1])==('OpTypePointer','Function',expected_static(kind))
++
++
++def validate_and_restore_helper(a,b,key):
++ rows=b.rows[key]
++ abs_index,= [i for i,row in enumerate(rows) if len(row)>4 and row[2]=='OpFunctionCall' and b.keys.get(row[4])==('RPAbs',0)]
++ term_index,= [i for i,row in enumerate(rows) if len(row)>4 and row[2]=='OpFunctionCall' and b.keys.get(row[4],('',0))[0]=='RTAccumulateTerm']
++ error_id,= [row[0] for row in rows if len(row)>4 and row[2]=='OpVariable' and
++            b.norm(row[3])==('OpTypePointer','Function',('OpTypeFloat','32'))]
++ bool_id,= [row[0] for row in rows if len(row)>4 and row[2]=='OpVariable' and
++            b.norm(row[3])==('OpTypePointer','Function',('OpTypeBool',))]
++ function_pointer_type(b,error_id,'@float');function_pointer_type(b,bool_id,'@bool')
++ roles=match_guard(b,rows[abs_index+1:term_index],{'$ABS':rows[abs_index][0],'$ERROR':error_id,'$BOOL':bool_id})
++ assert all(bool_id not in row for row in rows[term_index:]),'guard bool escaped into tail'
++ error_loads=[(i,row) for i,row in enumerate(rows) if len(row)>4 and row[2]=='OpLoad' and row[4]==error_id]
++ assert len(error_loads)==1 and error_loads[0][0]>term_index
++ load_index,load_row=error_loads[0]
++ occurrences=[(i,row) for i,row in enumerate(rows) if error_id in row]
++ assert len(occurrences)==4 and occurrences[0][1][0]==error_id and sum(row[0]=='OpStore' for _,row in occurrences)==2
++ # All newly emitted instructions match the exact typed guard template above.
++ # Substitute only the source-proved equal error value, restoring the original
++ # fallback's SSA expression for a complete instruction-order comparison.
++ kept=[]
++ retain={roles[x] for x in ('$SCALE','$MUL','$TINY','$FALLERROR')}
++ for i,row in enumerate(rows):
++  if row[0]==error_id or i==load_index:continue
++  if abs_index<i<term_index and row[0] not in retain:continue
++  kept.append((i,[roles['$FALLERROR'] if v==load_row[0] else v for v in row]))
++ b.kept[key]=kept
++ for ident,location in list(b.local.items()):
++  if location[0]==key:del b.local[ident]
++ counter=0
++ for _,row in kept:
++  if len(row)>1 and row[1]=='=':b.local[row[0]]=(key,counter);counter+=1
++ b.norm.cache_clear()
++ assert a.normalized_rows(key)==b.normalized_rows(key),('helper inverse',key)
++ return {'function':list(key),'canonical_rows':len(a.rows[key]),'candidate_rows':len(rows),
++         'exact_guard_rows':len(GUARD_TEMPLATE.splitlines()),'roles':roles,
++         'restored_all_original_rows_and_uses_exact':True}
++
++
++def match(p,row):assert identity(p)=={k:row[k] for k in ('bytes','sha256')},str(p)
+ 
+ 
+ def main():
+- target=P/'independent-emitted-and-compiler-review.json';assert not target.exists()
+- q=W/'candidate';pf=read(W/'root-preflight.json');before=read(q/'inputs-before.json');after=read(q/'inputs-after.json')
+- assert len(pf['files'])==pf['static_input_count']==4450
+- assert len(before)==pf['prospective_owner_input_count']==4451 and before==after
+- for key,row in before.items():match_pin(Path(key) if Path(key).is_absolute() else R/key,row)
+- for key,row in pf['files'].items():match_pin(Path(key),row)
+- assert {str((Path(k) if Path(k).is_absolute() else R/k).resolve()) for k in before}=={str(Path(k).resolve()) for k in pf['files']}|{str((W/'root-preflight.json').resolve())}
+- owner=read(q/'owner.json');assert owner['passed'] is True and owner['status']=='terminal' and owner['child_exit']==0 and owner['stop_reason'] is None
+- assert owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[] and owner['source_unchanged'] is True and owner['whole_inputs_unchanged'] is True
+- assert owner['source']=={'revision':REV,'status':''} and owner['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
+- assert owner['provider_mappings']==[] and owner['declared_output_environment']=={'GTEST_OUTPUT':''}
+- assert owner['peak_sampled_rss_kib']<4194304 and owner['minimum_sampled_available_kib']>2097152 and owner['wall_seconds']<300
+- assert len(owner['observed_births'])==7 and all(b['absent'] is True and b['current_start_ticks'] is None for b in owner['observed_births'])
+- action=read(W/'actions.json')['candidate'];assert action['kind']=='build' and action['software_provider'] is False and action['expected_exit']==0
+- assert action['limits']==owner['limits'] and owner['argv']==[a.replace('{folder}',str(q)) for a in action['argv']]
+- recipe=read(W/'recipes.json');products=read(q/'products.json');results=read(q/'command-results.json')
+- assert [p['name'] for p in recipe['profiles']]==NAMES
+- assert products['schema']=='sirius-native-constant-five-compiler-products-v1' and products['passed'] is True
++ target=P/'independent-emitted-review.json';assert not target.exists()
++ q=W/'candidate';pf=read(W/'root-preflight.json');owner=read(q/'owner.json')
++ before=read(q/'inputs-before.json');after=read(q/'inputs-after.json')
++ assert before==after and len(before)==pf['prospective_owner_input_count']
++ assert owner['passed'] is True and owner['status']=='terminal' and owner['child_exit']==0 and owner['stop_reason'] is None
++ assert owner['source']=={'revision':'2c8ef08693d46f57d5dea14efdbddd4874dac684','status':''}
++ assert owner['source_unchanged'] is True and owner['whole_inputs_unchanged'] is True
++ assert owner['cleanup_errors']==[] and owner['remaining_owned_processes']==[] and owner['provider_mappings']==[]
++ assert owner['limits']=={'seconds':300,'rss_kib':4194304,'reserve_kib':2097152}
++ assert owner['wall_seconds']<300 and owner['peak_sampled_rss_kib']<4194304 and owner['minimum_sampled_available_kib']>2097152
++ assert all(row['absent'] is True and row['current_start_ticks'] is None for row in owner['observed_births'])
++ products=read(q/'products.json');commands=read(q/'command-results.json');recipe=read(W/'recipes.json')
++ assert products['schema']=='sirius-native-rounded-error-five-compiler-products-v1' and products['passed'] is True
+  assert products['runtime_admitted'] is False and products['emitted_semantics_admitted'] is False and products['optimizer_invoked'] is False
+- assert len(results)==products['actual_tool_calls']==25 and set(products['products'])==set(NAMES)
++ assert len(commands)==products['actual_tool_calls']==25 and set(products['products'])==set(NAMES)
+  assert products['recipe']==pin(W/'recipes.json')
+- oldproducts=read(ARCH/'root-compiler-products.json');assert oldproducts['passed'] is True
+- olddis=read(BASE/'results.json');oldbefore=read(BASE/'inputs-before.json');oldafter=read(BASE/'inputs-after.json')
+- oldtools=read(ARCH/'posttools/root-preflight.json')['files']
+- mapping={};reports=[];diffs=[];template=None
+- for index,profile in enumerate(recipe['profiles']):
+-  name=profile['name'];paths={s:q/(name+s) for s in recipe['expected_products_per_profile']};tools=recipe['tools'];src=Path(recipe['source_directory'])
+-  expected=[('compile',[tools['compiler'],str(src/(name+'.slang')),*profile['definitions'],'-I',str(src),'-O0','-target','spirv','-profile','spirv_1_5','-entry','ComputeMain','-stage','compute','-denorm-mode-fp32','preserve','-o',str(paths['.compiler.spv'])]),('raw-disassemble',[tools['disassembler'],str(paths['.compiler.spv']),'-o',str(paths['.raw.spvasm'])]),('assemble',[tools['assembler'],'--target-env','spv1.5',str(paths['.spvasm']),'-o',str(paths['.spv'])]),('validate',[tools['validator'],'--target-env','vulkan1.2',str(paths['.spv'])]),('final-disassemble',[tools['disassembler'],str(paths['.spv']),'-o',str(paths['.final.spvasm'])])]
+-  for actual,(label,argv) in zip(results[index*5:index*5+5],expected):
+-   assert actual['label']==name+'-'+label and actual['argv']==argv and actual['exit_code']==0
+-   for stream in ('stdout','stderr'):match_pin(Path(actual[stream]['path']),actual[stream])
++ oldproducts=read(BASE/'products.json');oldcommands=read(BASE/'command-results.json');oldbefore=read(BASE/'inputs-before.json')
++ oldrecipe=read(BASE.parent/'recipes.json');assert recipe['profiles']==oldrecipe['profiles']
++ baseline_products=read(W/'baseline-products.json')
++ source=W/'source/src/sirius/kernels';source_files=sorted(p for p in source.iterdir() if p.is_file())
++ assert len(source_files)==33
++ for path in source_files:
++  expected=R/'out/native-rounded-error-source/retained_triple.slang' if path.name=='retained_triple.slang' else R/'src/sirius/kernels'/path.name
++  assert path.read_bytes()==expected.read_bytes(),('private source',path.name)
++ reports=[];helper_proofs=[];deltas=[]
++ for index,name in enumerate(NAMES):
++  profile=recipe['profiles'][index];assert profile['name']==name
++  assert not any(flag in ' '.join(profile['definitions']) for flag in ('SIRIUS_RETAINED_FP64','SIRIUS_RETAINED_FMA32','SIRIUS_RETAINED_PORTABLE','SIRIUS_RETAINED_STAGE7_OWNER'))
++  paths={suffix:q/(name+suffix) for suffix in recipe['expected_products_per_profile']};tools=recipe['tools']
++  expected=[('compile',[tools['compiler'],str(source/(name+'.slang')),*profile['definitions'],'-I',str(source),'-O0','-target','spirv','-profile','spirv_1_5','-entry','ComputeMain','-stage','compute','-denorm-mode-fp32','preserve','-o',str(paths['.compiler.spv'])]),('raw-disassemble',[tools['disassembler'],str(paths['.compiler.spv']),'-o',str(paths['.raw.spvasm'])]),('assemble',[tools['assembler'],'--target-env','spv1.5',str(paths['.spvasm']),'-o',str(paths['.spv'])]),('validate',[tools['validator'],'--target-env','vulkan1.2',str(paths['.spv'])]),('final-disassemble',[tools['disassembler'],str(paths['.spv']),'-o',str(paths['.final.spvasm'])])]
++  for row,(label,argv) in zip(commands[index*5:index*5+5],expected):
++   assert row['label']==name+'-'+label and row['argv']==argv and row['exit_code']==0
++   for stream in ('stdout','stderr'):match(Path(row[stream]['path']),row[stream])
+   for suffix,path in paths.items():assert products['products'][name][suffix]==pin(path)
+-  annotated=paths['.spvasm'].read_text();inverse=re.sub(r'^.*OpCapability RoundingModeRTE\n','',annotated,flags=re.M);inverse=re.sub(r'^.*OpExecutionMode %\S+ RoundingModeRTE 32\n','',inverse,flags=re.M)
++  annotated=paths['.spvasm'].read_text()
++  inverse=re.sub(r'^.*OpCapability RoundingModeRTE\n','',annotated,flags=re.M)
++  inverse=re.sub(r'^.*OpExecutionMode %\S+ RoundingModeRTE 32\n','',inverse,flags=re.M)
+   assert inverse==paths['.raw.spvasm'].read_text()
+-  # Same saved disassembler and exact source SPV were used for canonical ASM.
+-  oldcmd,=[r for r in olddis if r.get('label')=='baseline-'+name]
+-  assert oldcmd['returncode']==0 if 'returncode' in oldcmd else oldcmd['exit_code']==0
+-  assert oldcmd['argv'][0]==tools['disassembler']
+-  match_pin(Path(tools['disassembler']),oldtools[tools['disassembler']])
+-  oldspv=oldcmd['argv'][1];oldkey=oldspv if oldspv in oldbefore else str(Path(oldspv).relative_to(R));assert oldbefore[oldkey]==oldafter[oldkey]
+-  baseline=pf['baseline_SPVs'][name+'.spv'];match_pin(Path(baseline['path']),oldbefore[oldkey])
+-  oldrow,=[r for r in oldproducts['products'] if r['name']==name+'.spv'];assert oldrow['baseline']==identity(Path(baseline['path']))
+-  basepath=BASE/('baseline-'+name+'.spvasm');assert oldcmd['argv'][-1].endswith('/baseline-'+name+'.spvasm')
+-  # Old saved command-result output identity, if present, must bind the ASM too.
+-  for field in ('output','assembly'):
+-   if field in oldcmd:match_pin(basepath,oldcmd[field])
+-  a=Module(basepath);b=Module(paths['.final.spvasm'])
+-  assert set(a.by_key)==set(b.by_key) and len(a.by_key)==len(b.by_key)
+-  assert a.globals_normal()==b.globals_normal(),('globals',name)
+-  assert Counter(a.norm(i) for i in a.static)==Counter(b.norm(i) for i in b.static),('static',name)
+-  assert a.semantic_header()==b.semantic_header(),('header',name)
++  baseline=BASE/(name+'.spv');baseasm=BASE/(name+'.final.spvasm')
++  match(baseline,oldproducts['products'][name]['.spv']);match(baseasm,oldproducts['products'][name]['.final.spvasm'])
++  canonical=R/baseline_products['SPVs'][name+'.spv']['path'];match(canonical,baseline_products['SPVs'][name+'.spv'])
++  assert baseline.read_bytes()==canonical.read_bytes()
++  oldcmd,=[row for row in oldcommands if row['label']==name+'-final-disassemble']
++  assert oldcmd['exit_code']==0 and oldcmd['argv'][0]==tools['disassembler']
++  toolkey=tools['disassembler'] if tools['disassembler'] in oldbefore else str(Path(tools['disassembler']).relative_to(R))
++  oldtool=oldbefore[toolkey];match(Path(tools['disassembler']),oldtool)
++  a,b=Module(baseasm),Module(paths['.final.spvasm'])
++  assert set(a.by_key)==set(b.by_key) and a.globals_normal()==b.globals_normal()
++  extra=Counter(b.norm(i) for i in b.static)-Counter(a.norm(i) for i in a.static)
++  assert not Counter(a.norm(i) for i in a.static)-Counter(b.norm(i) for i in b.static)
++  assert extra==Counter({('OpConstant',('OpTypeInt','32','0'),'234881024'):1,('OpConstant',('OpTypeInt','32','0'),'192937984'):1}),('extra static',name,extra)
++  outside=[]
++  for key in sorted(a.by_key):
++   if key[0]=='RTAccumulateRoundedProduct':continue
++   assert a.normalized_rows(key)==b.normalized_rows(key),('outside strict alpha',name,key)
++   outside.append({'function':list(key),'rows':len(a.rows[key]),'digest':signature(a.normalized_rows(key))})
++  helpers=[key for key in a.by_key if key[0]=='RTAccumulateRoundedProduct'];assert helpers
++  for key in helpers:
++   deltas.append(''.join(difflib.unified_diff([' '.join(row)+'\n' for row in a.rows[key]],[' '.join(row)+'\n' for row in b.rows[key]],fromfile=name+'/canonical-'+str(key),tofile=name+'/candidate-'+str(key))))
++   helper_proofs.append({'module':name,**validate_and_restore_helper(a,b,key)})
++  # After the exact helper inverse, result-local NoContraction IDs have their
++  # original roles. No decorations are omitted from this complete comparison.
++  assert a.semantic_header()==b.semantic_header(),('capability/ABI/decorations',name)
++  for op in ('FAdd','FSub','FMul'):
++   ids=re.findall(r'(%\S+) = Op'+op+r' ',b.text)
++   decorations=set(re.findall(r'OpDecorate (%\S+) NoContraction',b.text))
++   assert ids and set(ids)<=decorations
+   assert re.findall(r'OpExecutionMode %\S+ LocalSize (.+)',b.text)==['64 1 1']
+-  assert re.findall(r'OpExecutionMode %\S+ DenormPreserve (.+)',b.text)==['32'] and re.findall(r'OpExecutionMode %\S+ RoundingModeRTE (.+)',b.text)==['32']
+-  assert 'SignedZeroInfNanPreserve' not in b.text
+-  functions=[];hashes={};localpairs=[]
+-  for key in sorted(a.by_key):
+-   if key==('RTConstant',0):continue
+-   ar=a.normalized_rows(key);br=b.normalized_rows(key)
+-   if ar!=br:
+-    differences=[{'row':n,'baseline':a.kept[key][n][1],'candidate':b.kept[key][n][1],'baseline_normal':x,'candidate_normal':y} for n,(x,y) in enumerate(zip(ar,br)) if x!=y]
+-    print(json.dumps({'module':name,'function':key,'lengths':[len(ar),len(br)],'first_differences':differences[:8]},indent=2))
+-   assert ar==br,('body',name,key)
+-   ad=[row[0] for _,row in a.kept[key] if len(row)>1 and row[1]=='='];bd=[row[0] for _,row in b.kept[key] if len(row)>1 and row[1]=='=']
+-   assert len(ad)==len(bd);localpairs.append({'function':list(key),'baseline_id':a.by_key[key],'candidate_id':b.by_key[key],'definition_id_pairs':list(zip(ad,bd))})
+-   functions.append({'function':list(key),'rows':len(ar),'normalized_sha256':signature(ar)});hashes[str(key)]=signature(ar)
+-  assert len([k for k in a.by_key if k[0]=='RTConstant'])==1
+-  oldbody=a.rows[('RTConstant',0)];assert len(oldbody)==7 and oldbody[4][2]=='OpFunctionCall' and a.keys[oldbody[4][4]]==('RTPack',0)
+-  assert oldbody[4][5]==oldbody[1][0] and oldbody[4][6:]==[oldbody[3][0]]*3
+-  assert oldbody[3][2:] == ['OpBitcast','%float','%uint_0'] and a.defs['%uint_0']=='OpConstant %uint 0'
+-  if template is None:
+-   assert b.rows[('RTConstant',0)]==[TOK.findall(line) for line in CONSTRUCTOR.splitlines()]
+-   assert b.defs['%float']=='OpTypeFloat 32' and b.defs['%uint']=='OpTypeInt 32 0' and b.defs['%int']=='OpTypeInt 32 1'
+-   assert b.defs['%RetainedTriple']=='OpTypeStruct %float %float %float %float %uint'
+-   for ident,value in [('uint_0',0),('uint_1',1),('uint_2071986176',0x7b800000),('uint_2147483647',0x7fffffff)]:assert b.defs['%'+ident]==f'OpConstant %uint {value}'
+-   for value in range(5):assert b.defs['%int_'+str(value)]==f'OpConstant %int {value}'
+-   template=b.normalized_rows(('RTConstant',0))
+-  assert b.normalized_rows(('RTConstant',0))==template,('constructor',name)
+-  # Exact immutable globals/type/decorations and full outside bodies constitute ABI/workgroup/packing proof.
+-  staticpairs=[{'baseline_id':i,'candidate_ids':[j for j in b.static if b.norm(j)==a.norm(i)],'recursive_typed_signature':signature(a.norm(i))} for i in a.static]
+-  assert all(row['candidate_ids'] for row in staticpairs)
+-  mapping[name]={'functions':localpairs,'static':staticpairs,'globals':[{'name':a.names[i],'baseline_id':i,'candidate_id':next(j for j in b.globals if b.names[j]==a.names[i]),'typed_signature':signature(a.globals_normal()[a.names[i]])} for i in a.globals]}
+-  diffs.append(''.join(difflib.unified_diff([' '.join(x)+'\n' for x in oldbody],[' '.join(x)+'\n' for x in b.rows[('RTConstant',0)]],fromfile=name+'/canonical-RTConstant',tofile=name+'/candidate-RTConstant')))
+-  reports.append({'name':name,'baseline_SPV':baseline,'baseline_ASM':pin(basepath),'candidate_SPV':pin(paths['.spv']),'candidate_ASM':pin(paths['.final.spvasm']),'function_instances':len(a.by_key),'outside_RTConstant_instances_exact':len(functions),'ComputeMain_rows_alpha_exact':len(a.rows[('ComputeMain',0)]),'outside_instruction_rows_exact':sum(f['rows'] for f in functions),'outside_function_proof_digest':signature(functions),'constructor_rows':len(template),'typed_constructor_proof_digest':signature(template),'all_recursive_static_definitions_and_global_declarations_equal':True,'whole_capability_mode_decorations_multiset_equal':True,'local_size':[64,1,1]})
+- idmap=P/'source/emitted-id-map.json';idmap.write_text(json.dumps(mapping,separators=(',',':'))+'\n')
+- diff=P/'source/RTConstant.diff';diff.write_text('\n'.join(diffs))
+- result={'schema':'sirius-native-constant-independent-emitted-and-compiler-review-v1','passed':True,'source_revision':REV,'reviewer':'/root/sanitizer_gate_contract','compiler_source_authored_by_reviewer':False,'prior_refinement_review_authored_by_reviewer':True,'actual_tools_operated_by_ROOT_only':True,
+- 'outside_RTConstant_functions_alpha_exact':True,'public_ABI_equal':True,'bounded_native_constructor_refinement_validated':True,
+- 'compiler_owner':pin(q/'owner.json'),'compiler_products':pin(q/'products.json'),'command_results':pin(q/'command-results.json'),'modules':{n+'.spv':pin(q/(n+'.spv')) for n in NAMES},
+- 'terminal':{'static_current':4450,'before_after_current':4451,'actual_tool_calls':25,'wall_seconds':owner['wall_seconds'],'peak_sampled_rss_kib':owner['peak_sampled_rss_kib'],'minimum_sampled_available_kib':owner['minimum_sampled_available_kib'],'observed_births_recorded_absent':owner['observed_births'],'fresh_process_census_performed':False,'source_and_inputs_unchanged':True,'cleanup_errors':[],'remaining_owned':[]},
+- 'proof':reports,
+- 'constructor_contract':'Entire 42-row actual typed constructor matched across all5modules. First call RPBounded(x,0x7b800000); false returns unchanged RTInvalid. Surviving path uses absbits mask0x7fffffff and zero comparison; high selects bitcastuint0 for either zero sign, else exact x. Local struct members0/1/2/3/4 receive high/+0/+0/+0/uint1; complete struct loaded and returned. Only RPBounded and RTInvalid calls; old RTPack call removed. Bound/helper/invalid implementation unchanged. All alternatives/merges/stores/returns included; no extra constructor instructions ignored.',
+- 'normalization':'Adapted saved validation reviewer without cut ranges: every ordered token in every function except sole RTConstant, including full ComputeMain, compared. Function identity=(OpName, occurrence), local IDs paired by definition order. Types/constants/imports recurse through exact opcode/literal/operand signatures; global variables matched by names and separately exact typed declarations. Static signatures and semantic decoration/header multiplicities exactly equal. Only entry-interface declaration-list order treated as unordered same-global list; descriptor/layout operand order is preserved. OpName/debug order and assembler Bound are excluded. No arithmetic opcode, operand, branch, call, storage, barrier or decoration dropped.',
+- 'pins':{k:pin(p) for k,p in {'reader':Path(__file__),'prior_reader':PRIOR,'mapping':idmap,'readable_delta':diff,'before':q/'inputs-before.json','after':q/'inputs-after.json','preflight':W/'root-preflight.json','recipe':W/'recipes.json','source_refinement':R/'out/native-constant-source-review/semantic-refinement-review.json','baseline_product_proof':ARCH/'root-compiler-products.json','baseline_disassembly_results':BASE/'results.json','baseline_disassembly_before':BASE/'inputs-before.json','baseline_disassembly_after':BASE/'inputs-after.json','baseline_disassembly_preflight':ARCH/'posttools/root-preflight.json'}.items()},
+- 'scope':'Five actual offline ordinary nativeFP32 modules only. Public modes/local64/storage/layout/packing/RMW/barriers/math/tables and full ComputeMain are unchanged under complete explicit typed mapping. Constructor chooses a legal bounded canonical representation; universal prior-driver word equality is not claimed. Original same-provider32fullbuffer gate/all8controls/sole22benefit gates remain required. No provider, numerical, performance, adoption or qualification admission.',
+- 'runtime_admitted':False,'production_adopted':False,'operations':'Only passive standard-library saved-file/hash/JSON/text comparison; no project import/helper/compiler/SPIR-V tool/provider/test/network/Git mutation. Recorded owner birth-absence retained; no fresh process query.'}
++  assert re.findall(r'OpExecutionMode %\S+ DenormPreserve (.+)',b.text)==['32']
++  assert re.findall(r'OpExecutionMode %\S+ RoundingModeRTE (.+)',b.text)==['32']
++  assert not re.search(r'\b(?:FPFastMathMode|FPFastMathDefault|RelaxedPrecision|OpFmaKHR)\b',b.text)
++  assert not re.search(r'OpType(?:Float|Int) 64',b.text)
++  reports.append({'name':name,'canonical_SPV':pin(canonical),'saved_baseline_SPV':pin(baseline),'saved_baseline_ASM':pin(baseasm),'candidate_SPV':pin(paths['.spv']),'candidate_ASM':pin(paths['.final.spvasm']),'functions':len(a.by_key),'outside_helper_instances_exact':len(outside),'outside_instruction_rows_exact':sum(row['rows'] for row in outside),'outside_proof_digest':signature(outside),'helper_instances':len(helpers),'full_header_and_global_ABI_equal':True,'mode':'local64x1x1/RTE32/DenormPreserve32/NoContraction; no relaxed/wide/fused arithmetic'})
++ diff=P/'guarded-helper.diff';diff.write_text('\n'.join(deltas))
++ witnesses=P/'helper-typed-witnesses.json';witnesses.write_text(json.dumps(helper_proofs,indent=2)+'\n')
++ result={'schema':'sirius-native-rounded-error-independent-emitted-review-v1','passed':True,'source_revision':'2c8ef08693d46f57d5dea14efdbddd4874dac684','outside_RTAccumulateRoundedProduct_functions_alpha_exact':True,'outside_RTAccumulateRoundedProduct_semantics_preserved':True,'public_ABI_equal':True,'bounded_native_rounded_product_error_equivalence_validated':True,'guarded_native_error_word_refinement_validated':True,'compiler_owner':pin(q/'owner.json'),'compiler_products':pin(q/'products.json'),'command_results':pin(q/'command-results.json'),'modules':{name+'.spv':pin(q/(name+'.spv')) for name in NAMES},'proof':reports,'helper_typed_witnesses':pin(witnesses),'exact_helper_delta':pin(diff),'reader':pin(Path(__file__)),'prior_strict_reader':pin(P/'originals/review_emitted.strict-alpha.py'),'source_equivalence_review':pin(R/'out/native-rounded-error-source/independent-source-review.json'),'root_compiler_terminal':pin(R/'out/native-rounded-error-publication/root-compiler-terminal.json'),'terminal_scope':{'before_after_rows_equal':len(before),'wall_seconds':owner['wall_seconds'],'peak_sampled_rss_kib':owner['peak_sampled_rss_kib'],'recorded_births_absent':len(owner['observed_births']),'new_process_query':False,'all_current_host_inputs_rehashed_by_this_reader':False},'normalization':'Original strict typed normalization reused. Every outside function including RTConstant and ComputeMain is strictly alpha-exact with no CSE/side-effect exception. Only two new uint constants occur. Every changed helper matches the entire exact29-row typed guard/word/fallback CFG template, with private float error local initialized by both arms before sole tail load. Removing only that proved insertion, replacing that one error load by original fallback SSA, and retaining its four exact original arithmetic instructions reproduces every original helper instruction and use in order. Complete capability/mode/type/global/layout/decorations multiset then equals canonical; no NoContraction or other decoration is dropped.','baseline_provenance':'Each saved fd530 candidate SPV/full final ASM is checked against its original products record and successful disassembler record; the saved SPV equals the actual current2c8 canonical module byte-for-byte. Selected disassembler identity matches original sealed tool. No old live raw path is demanded.','scope':'Five ordinary native modules only; exact source guarded error expression and typed emitted fallback/ABI/modes. Same-provider full buffers/original8 controls/sole original22 benefit remain required. No separate lowering allowance, inherited RTConstant refinement or CSE exception.','runtime_admitted':False,'production_adopted':False,'operations':'Passive standalone standard-library JSON/hash/ASM comparison only; no project import/helper/compiler/SPIR-V tool/provider/test/network/Git mutation. Existing ROOT terminal seals reused; no new all-host sweep.'}
+  target.write_text(json.dumps(result,indent=2)+'\n')
+- print(json.dumps({'report':pin(target),'reader':pin(Path(__file__)),'mapping':pin(idmap),'readable_delta':pin(diff)},indent=2))
++ print(json.dumps({'report':pin(target),'witnesses':pin(witnesses),'diff':pin(diff),'reader':pin(Path(__file__))}))
+ 
+ if __name__=='__main__':main()

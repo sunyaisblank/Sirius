@@ -1,0 +1,147 @@
+{
+  "schema": "sirius-native-rounded-error-five-compiler-source-contract-v1",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "source_only": true,
+  "offline_compile_released": false,
+  "runtime_admitted": false,
+  "canonical_changed": false,
+  "origin": {
+    "commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+    "members": {
+      "run_owned.py": {
+        "Git_path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/run_owned.py",
+        "bytes": 12518,
+        "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+      },
+      "owned_guard.py": {
+        "Git_path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/owned_guard.py",
+        "bytes": 20791,
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+      },
+      "compile_five.py": {
+        "Git_path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/compile_five.py",
+        "bytes": 5823,
+        "sha256": "bfe49a6ec4edbb4fe6c949282e95dfd1250911e99ac20952517e0b75b2f8db11"
+      },
+      "recipes.json": {
+        "Git_path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/recipes.json",
+        "bytes": 4328,
+        "sha256": "d43f298da878d765c2ec7f6f01414e2576ecf777c63e295fe5ff255eccff947f"
+      },
+      "source-contracts.json": {
+        "Git_path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/source-contracts.json",
+        "bytes": 5138,
+        "sha256": "3f87839999bbcd76475afd144155dc35e702e7bc4d5bdebd4911c5629461efcd"
+      },
+      "tool-observation-reuse.json": {
+        "Git_path": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-compiler-source/tool-observation-reuse.json",
+        "bytes": 2655,
+        "sha256": "624d8a58414f9d232e5c6c2de494f34888151701f14e1f6578d731af9ab12aa0"
+      }
+    }
+  },
+  "candidate": {
+    "path": "out/native-rounded-error-source/retained_triple.slang",
+    "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-source/retained_triple.slang",
+    "bytes": 15684,
+    "sha256": "a7ce249702bf35f4370b9d836640f88c59789f551292cddaeae51570eea88e9f"
+  },
+  "private_sources": {
+    "files": 33,
+    "only_delta": "retained_triple.slang=a7ce2497;other32exact canonical2c8",
+    "scratch": {
+      "path": "out/native-rounded-error-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/source/src/sirius/kernels/retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "builder_preimage": {
+      "path": "out/native-rounded-error-compiler-source/originals/build-retained-kernels.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/originals/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    }
+  },
+  "apparatus": {
+    "owner": {
+      "path": "out/native-rounded-error-compiler-source/run_owned.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/run_owned.py",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    "guard": {
+      "path": "out/native-rounded-error-compiler-source/owned_guard.py",
+      "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "driver": "Only two recipe/product schema literals differ from exact5823B fd530 driver; native_controls annotation/refusal body and all25 ordered calls byteexact.",
+    "profiles": [
+      "retained_transport",
+      "retained_endpoint",
+      "retained_dense",
+      "retained_initialize",
+      "retained_dopri_phase"
+    ],
+    "commands_per_profile": [
+      "compile",
+      "raw-disassemble",
+      "assemble",
+      "validate",
+      "final-disassemble"
+    ],
+    "actual_calls_if_successful": 25,
+    "recipe": "Original O0/spirv_1_5/ComputeMain/compute/DenormPreserve32; unchanged native_controls(fma=False) verifies all NoContraction, addsRTE32; no relaxed/wide/FMA arithmetic; assembleSPV1.5/validateVulkan1.2.",
+    "optimizer_invoked": false,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    }
+  },
+  "saved_current_tool_pin_scope": {
+    "path": "out/native-rounded-error-compiler-source/tool-observation-reuse.json",
+    "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/tool-observation-reuse.json",
+    "bytes": 2562,
+    "sha256": "fd91f5446b78b1bd8caf5be66ec08a87c927d2dcea53f0406d8e0a76a6c662bb"
+  },
+  "baseline": {
+    "path": "out/native-rounded-error-compiler-source/baseline-products.json",
+    "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-compiler-source/baseline-products.json",
+    "bytes": 15626,
+    "sha256": "5a41aa0b2287eaada1d0cb4c6dc03aaa3d3d0975973fd4380b8a3f3b1c4a1bf8"
+  },
+  "source_proof": {
+    "path": "out/native-rounded-error-source/independent-source-review.json",
+    "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-source/independent-source-review.json",
+    "bytes": 6123,
+    "sha256": "e7c742194adabddeeb646ef34916584fefc25048afdc76311c76c642fb1fdfbe"
+  },
+  "ROOT_source_admission": {
+    "path": "out/native-rounded-error-publication/root-source-admission.json",
+    "resolved_path": "/home/astra/.project/Sirius/out/native-rounded-error-publication/root-source-admission.json",
+    "bytes": 1695,
+    "sha256": "12b675b18a44f0f330a6bcd2c7742b56417b6768209452f76b08fcf28d89a2f5"
+  },
+  "future_outputs": "Only new candidate/ five{name.compiler.spv,.raw.spvasm,.spvasm,.spv,.final.spvasm},25command receipts/logs/products + unchanged mature owner/maps/samples. No output exists now.",
+  "untouched30": "All35 baselineSPVs/three headers are held input pins. Only five private candidate modules compile;30excluded are not regenerated and must remain byteexact before/after. Composer may later retain their canonical bytes; no new30module emission claim.",
+  "prelaunch": "ROOT full source/toolpin/concrete input-boundary review plus independent source proof and explicit compiler release. sourceadmission grants candidate scope, not execution. Assertions enabled; no inherited provider/cache/debug overrides; candidate absent.",
+  "postcompile": "ROOT must verify actual ownedclosure/births/inputseals/25zero calls and independent actual emitted ABI/modes/guard+fallback+worderror semantics and outsidehelper preservation versus five current baseline controls. Compilation grants no Windows build/provider/numeric/benefit/adoption permission.",
+  "emitted_interface_proposed": {
+    "schema": "sirius-native-rounded-error-emitted-admission-v1",
+    "fields": [
+      "outside_RTAccumulateRoundedProduct_semantics_preserved",
+      "public_ABI_equal",
+      "guarded_native_error_word_refinement_validated"
+    ],
+    "no_RTConstant_or_CSE_exception_inherited": true,
+    "status": "Actual independent/ROOT emitted data proof required; no true values inferred."
+  },
+  "command_after_ROOT_release": "/usr/bin/python3 -B out/native-rounded-error-compiler-source/run_owned.py candidate",
+  "author_executions": {
+    "project_helpers_imported_or_invoked": 0,
+    "compiler_or_posttools_provider_tests": 0,
+    "tool_version_ldd_process_network_queries": 0
+  },
+  "created_UTC": "2026-10-18T11:28:06.240927+00:00"
+}
