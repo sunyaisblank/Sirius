@@ -1,0 +1,36 @@
+{
+  "schema": "sirius-owned-profiler-actual-running-v1",
+  "created_utc": "2026-10-18T00:06:40.038218+00:00",
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "argv": [
+    "/usr/lib/linux-tools-6.8.0-146/perf",
+    "record",
+    "--no-buildid-cache",
+    "-e",
+    "cpu-clock:u",
+    "-F",
+    "19",
+    "--call-graph",
+    "dwarf,8192",
+    "-o",
+    "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+    "--",
+    "/usr/bin/python3",
+    "-u",
+    "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/run_owned.py",
+    "trace-jacobi-all-rungs"
+  ],
+  "birth": {
+    "pid": 28532,
+    "start_ticks": "15578379",
+    "session": 28532
+  },
+  "external_launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  },
+  "accounting": "Profiler outside mature aggregate; owner+target all original guards unchanged. Data is mutable output, never input.",
+  "release": {
+    "bytes": 4708,
+    "sha256": "6fd63c726cec3c649148e0c96f34dc71f89e68bc5381b5d9e52248a205635a6d"
+  }
+}

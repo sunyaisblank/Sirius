@@ -1,0 +1,386 @@
+{
+  "schema": "sirius-shared-segment-rhs-compiler-readiness-v1",
+  "created_utc": "2026-10-17T23:49:47.126231+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "recipes": {
+    "candidate-fp32": {
+      "original_recipe_variant": "fp32",
+      "original_line_number": 3,
+      "original_source_argv": [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv"
+      ],
+      "owner_argv": [
+        "/usr/bin/env",
+        "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/trace.slang",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "{folder}/trace.spv"
+      ],
+      "original_CWD": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+      "canonical_baseline_product": "bin/linux-gcc/kernels/trace.spv",
+      "owned_product": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/trace.spv",
+      "role": "candidate",
+      "only_source_and_output_arguments_differ_from_original": false,
+      "prior_consumable_receipt_and_product_selectors": 7,
+      "authorized_candidate_source_search_delta": {
+        "insert_before_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate"
+        ],
+        "preserved_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+        ],
+        "no_other_flag_change": true
+      }
+    },
+    "candidate-fp32comp": {
+      "original_recipe_variant": "fp32comp",
+      "original_line_number": 17,
+      "original_source_argv": [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang",
+        "-DSIRIUS_FP32_COMP",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv"
+      ],
+      "owner_argv": [
+        "/usr/bin/env",
+        "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/trace.slang",
+        "-DSIRIUS_FP32_COMP",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "{folder}/trace.spv"
+      ],
+      "original_CWD": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+      "canonical_baseline_product": "bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "owned_product": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv",
+      "role": "candidate",
+      "only_source_and_output_arguments_differ_from_original": false,
+      "prior_consumable_receipt_and_product_selectors": 21,
+      "authorized_candidate_source_search_delta": {
+        "insert_before_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate"
+        ],
+        "preserved_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+        ],
+        "no_other_flag_change": true
+      }
+    },
+    "candidate-fp64": {
+      "original_recipe_variant": "fp64",
+      "original_line_number": 16,
+      "original_source_argv": [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang",
+        "-DSIRIUS_FP64",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-warnings-disable",
+        "30082",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp64.spv"
+      ],
+      "owner_argv": [
+        "/usr/bin/env",
+        "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/trace.slang",
+        "-DSIRIUS_FP64",
+        "-target",
+        "spirv",
+        "-profile",
+        "spirv_1_5",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-warnings-disable",
+        "30082",
+        "-o",
+        "{folder}/trace.spv"
+      ],
+      "original_CWD": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+      "canonical_baseline_product": "bin/linux-gcc/kernels/trace_fp64.spv",
+      "owned_product": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/trace.spv",
+      "role": "candidate",
+      "only_source_and_output_arguments_differ_from_original": false,
+      "prior_consumable_receipt_and_product_selectors": 35,
+      "authorized_candidate_source_search_delta": {
+        "insert_before_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate"
+        ],
+        "preserved_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+        ],
+        "no_other_flag_change": true
+      }
+    },
+    "candidate-cuda": {
+      "original_recipe_variant": "cuda",
+      "original_line_number": 18,
+      "original_source_argv": [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang",
+        "-target",
+        "cuda",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu"
+      ],
+      "owner_argv": [
+        "/usr/bin/env",
+        "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/trace.slang",
+        "-target",
+        "cuda",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "{folder}/trace.cu"
+      ],
+      "original_CWD": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+      "canonical_baseline_product": "bin/linux-gcc/kernels/portability/trace.cu",
+      "owned_product": "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu",
+      "role": "candidate",
+      "only_source_and_output_arguments_differ_from_original": false,
+      "prior_consumable_receipt_and_product_selectors": 49,
+      "authorized_candidate_source_search_delta": {
+        "insert_before_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate"
+        ],
+        "preserved_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+        ],
+        "no_other_flag_change": true
+      }
+    },
+    "candidate-metal": {
+      "original_recipe_variant": "metal",
+      "original_line_number": 19,
+      "original_source_argv": [
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels/trace.slang",
+        "-target",
+        "metal",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal"
+      ],
+      "owner_argv": [
+        "/usr/bin/env",
+        "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+        "/opt/slang/bin/slangc",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/trace.slang",
+        "-target",
+        "metal",
+        "-entry",
+        "ComputeMain",
+        "-stage",
+        "compute",
+        "-I",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate",
+        "-I",
+        "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+        "-o",
+        "{folder}/trace.metal"
+      ],
+      "original_CWD": "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+      "canonical_baseline_product": "bin/linux-gcc/kernels/portability/trace.metal",
+      "owned_product": "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal",
+      "role": "candidate",
+      "only_source_and_output_arguments_differ_from_original": false,
+      "prior_consumable_receipt_and_product_selectors": 63,
+      "authorized_candidate_source_search_delta": {
+        "insert_before_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/out/trace-riemann-stencil-import-order/inputs/candidate"
+        ],
+        "preserved_original_I": [
+          "-I",
+          "/home/astra/.project/Sirius/src/sirius/backend/../kernels"
+        ],
+        "no_other_flag_change": true
+      }
+    }
+  },
+  "actual_root_selected_environment": {
+    "LANG": "C.UTF-8",
+    "LC_CTYPE": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/home/astra/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.codex/tmp/arg0-linux/codex-arg0yBb0Y8:/home/astra/.codex/packages/standalone/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/home/astra/.local/bin:/home/astra/.cargo/bin:/home/astra/.juliaup/bin:/home/astra/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Git/cmd:/Docker/host/bin:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Users/alarisadmin/AppData/Local/Programs/OpenAI/Codex/bin:/mnt/c/Program Files/PowerShell/7:/mnt/c/Program Files/Eclipse Adoptium/jdk-25.0.1.8-hotspot/bin:/mnt/c/Program Files/Microsoft/jdk-25.0.2.10-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/PowerShell/7/:/mnt/c/Program Files/Neovim/bin:/Docker/host/bin:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/alarisadmin/AppData/Local/Microsoft/WinGet/Packages/Fastfetch-cli.Fastfetch_Microsoft.Winget.Source_8wekyb3d8bbwe:/mnt/c/Users/alarisadmin/.local/bin:/snap/bin:/home/astra/.dotnet/tools"
+  },
+  "source_review": {
+    "path": "out/trace-jacobi-shared-segment-rhs/independent-source-review.json",
+    "bytes": 4953,
+    "sha256": "d2dd75c8b86e89df03db14111ebdf834e4d78d574feace287dbcff7e04fee41f"
+  },
+  "five_canonical_control_reuse": {
+    "fp32": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-fp32.json",
+        "bytes": 4409,
+        "sha256": "585c265a87faf9a2d7eb8d3947d39c3cd72fa68a84284e2747a2498f6e052e84"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-fp32/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "fp32comp": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-fp32comp.json",
+        "bytes": 4484,
+        "sha256": "23282a95bbb51a4c64424b72fa755952dd5d704af59329069d7e4d3b5048c8c4"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "fp64": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-fp64.json",
+        "bytes": 5025,
+        "sha256": "826c9c20859acfa48c44959777ad008e04cebb6875b9d129020fdd53c6151e66"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-fp64/trace.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "cuda": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-cuda.json",
+        "bytes": 4021,
+        "sha256": "63b401d59b3caffba7de5b1bcabcce8bf5383c286405c04d2a085bf595c2449c"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-cuda/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "metal": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-metal.json",
+        "bytes": 4041,
+        "sha256": "65b4676e7a9f6b9ff438d1c2f183a4b084165a72163f5ff1b42a91f8467b6b5a"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-metal/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    }
+  },
+  "new_candidate_order": [
+    "candidate-fp32",
+    "candidate-fp32comp",
+    "candidate-fp64",
+    "candidate-cuda",
+    "candidate-metal"
+  ],
+  "initial_released_cases": [
+    "candidate-fp32"
+  ],
+  "later_cases_released": false,
+  "first_candidate_required_gate": "Actual emitted fixed8event0..<8 sharing, geometry only0/2/6, singleRiemann/stencil and singleRHS body, exact8event expressions/outputjoins/definiteassignment/oldbounds and full ABI/modes before remaining4.",
+  "private_source_graph": "Newprivate trace09a3 imports gr_deviation beforecamera; exact18835B9737 privategrdev; other9 canonical current source modules unchanged. Prior actual source-open proof reused; new emitted phase-body proves new helper selected.",
+  "runtime_released": false,
+  "source_candidate_applied": false,
+  "scope": "Original-recipe candidate-only offline screen; matched5canonical controls/tools reused. No new tests/framework or standardmetadataquery."
+}

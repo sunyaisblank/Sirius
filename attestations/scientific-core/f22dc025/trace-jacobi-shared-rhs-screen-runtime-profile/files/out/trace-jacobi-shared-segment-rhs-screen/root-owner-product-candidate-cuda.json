@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "candidate-cuda",
+  "created_utc": "2026-10-17T23:56:25.986522+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4503,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 4,
+  "owner_seconds": 1.0421275690023322,
+  "peak_sampled_aggregate_RSS_KiB": 274068,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 25356,
+      "saved_start_ticks": "15518681",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 25360,
+      "saved_start_ticks": "15518756",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "current_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu",
+    "bytes": 336360,
+    "sha256": "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+  },
+  "role": "candidate",
+  "variant": "cuda",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/portability/trace.cu",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.cu",
+    "bytes": 321379,
+    "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-cuda/trace.cu",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/samples.jsonl": {
+      "bytes": 891,
+      "sha256": "24e7f7493d294d7dba11edf6f0220c1a2efc5a2d588327670549bf5e69cd9e7d"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/inputs-before.json": {
+      "bytes": 1486026,
+      "sha256": "2c045b5ed0cb2a1cad07b0a96091dfa0f10ab6fac3346159889c19d6ae3105f5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/inputs-after.json": {
+      "bytes": 1486026,
+      "sha256": "2c045b5ed0cb2a1cad07b0a96091dfa0f10ab6fac3346159889c19d6ae3105f5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/owner.json": {
+      "bytes": 2555,
+      "sha256": "b70bcf96b837a9f021af6329e64f9ba8ab074e921f6d77a9f058c3ac13a4513b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu": {
+      "bytes": 336360,
+      "sha256": "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-cuda.json": {
+      "bytes": 2277,
+      "sha256": "d9c812af768769abd5b47fe483e78a0fbfeb6f40e763d8725a9abd5ebd9cba35"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-cuda.log": {
+      "bytes": 674,
+      "sha256": "7afffca794bb7720328e6a19f2d5fc487240c38dee6bf4029995148a0b6803ed"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

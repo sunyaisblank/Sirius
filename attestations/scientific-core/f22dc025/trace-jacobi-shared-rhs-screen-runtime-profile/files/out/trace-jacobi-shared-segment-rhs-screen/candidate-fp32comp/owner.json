@@ -1,0 +1,71 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/env",
+    "--chdir=/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend",
+    "/opt/slang/bin/slangc",
+    "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/trace.slang",
+    "-DSIRIUS_FP32_COMP",
+    "-target",
+    "spirv",
+    "-profile",
+    "spirv_1_5",
+    "-entry",
+    "ComputeMain",
+    "-stage",
+    "compute",
+    "-I",
+    "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate",
+    "-I",
+    "/home/astra/.project/Sirius/src/sirius/backend/../kernels",
+    "-o",
+    "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv"
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "candidate-fp32comp",
+  "child_exit": 0,
+  "child_pid": 25222,
+  "child_start_ticks": "15516243",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 25206,
+    "pid": 25213,
+    "ppid": 25207,
+    "rss_kib": 29900,
+    "session": 25206,
+    "start_ticks": "15516162",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": ""
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "meaning": "One original Slang recipe with exact private shared-eight-event geometry/RHS grdev9737 and unchanged trace09a3, original tool/CWD/flags/private-I selection and 300s4GiB2reserve; canonical controls reused by matching complete producer identity. FirstFP32 emitted phase-loop/ABI/dataflow gate before later4. No numerical/provider/runtime/JIT/RSS/performance/adoption qualification; stop firstnonpass.",
+  "minimum_sampled_available_kib": 17986304,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 25222,
+      "saved_start_ticks": "15516243"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 447896,
+  "provider_mappings": [],
+  "remaining_owned_processes": [],
+  "scope": "One original Slang recipe with exact private shared-eight-event geometry/RHS grdev9737 and unchanged trace09a3, original tool/CWD/flags/private-I selection and 300s4GiB2reserve; canonical controls reused by matching complete producer identity. FirstFP32 emitted phase-loop/ABI/dataflow gate before later4. No numerical/provider/runtime/JIT/RSS/performance/adoption qualification; stop firstnonpass.",
+  "source": {
+    "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 4.362400994985364,
+  "whole_inputs_unchanged": true
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "candidate-cuda",
+  "created_utc": "2026-10-17T23:56:26.844868+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3874,
+    "sha256": "9942e9a4b272c785b1521d9e642e87ae021a5d84909ba9bd337eca87157049ba"
+  },
+  "posttools": {
+    "bytes": 1172,
+    "sha256": "ad2740d78782d5504aef5aa8e1d3cc3c18765d690af9a9d550d1a051a3d18ab2"
+  },
+  "whole_input_rows": 4503,
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu",
+    "bytes": 336360,
+    "sha256": "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+  },
+  "role": "candidate",
+  "variant": "cuda",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "five_original_control_proofs_reused_matching_producer": true,
+  "full_COMP_FP64_portable_static_review_pending": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/samples.jsonl": {
+      "bytes": 891,
+      "sha256": "24e7f7493d294d7dba11edf6f0220c1a2efc5a2d588327670549bf5e69cd9e7d"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/inputs-before.json": {
+      "bytes": 1486026,
+      "sha256": "2c045b5ed0cb2a1cad07b0a96091dfa0f10ab6fac3346159889c19d6ae3105f5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/inputs-after.json": {
+      "bytes": 1486026,
+      "sha256": "2c045b5ed0cb2a1cad07b0a96091dfa0f10ab6fac3346159889c19d6ae3105f5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/owner.json": {
+      "bytes": 2555,
+      "sha256": "b70bcf96b837a9f021af6329e64f9ba8ab074e921f6d77a9f058c3ac13a4513b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu": {
+      "bytes": 336360,
+      "sha256": "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-cuda.json": {
+      "bytes": 2277,
+      "sha256": "d9c812af768769abd5b47fe483e78a0fbfeb6f40e763d8725a9abd5ebd9cba35"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-cuda.log": {
+      "bytes": 674,
+      "sha256": "7afffca794bb7720328e6a19f2d5fc487240c38dee6bf4029995148a0b6803ed"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-cuda.json": {
+      "bytes": 3874,
+      "sha256": "9942e9a4b272c785b1521d9e642e87ae021a5d84909ba9bd337eca87157049ba"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-cuda.json": {
+      "bytes": 1172,
+      "sha256": "ad2740d78782d5504aef5aa8e1d3cc3c18765d690af9a9d550d1a051a3d18ab2"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

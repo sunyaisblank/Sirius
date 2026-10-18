@@ -1,0 +1,220 @@
+{
+  "schema": "sirius-shared-rhs-runtime-concrete-readiness-v1",
+  "created_utc": "2026-10-18T00:04:29.777832+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "materialized": true,
+  "runtime_release_pending": true,
+  "host_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "shader_identity": "Private unapplied trace09a3+grdev9737; new9d4b/65a83/de928 accepted products. Canonical f22 unchanged.",
+  "profiler": {
+    "observation": {
+      "path": "out/trace-jacobi-shared-segment-rhs-profile/root-profile-tool-observation.json",
+      "bytes": 12503,
+      "sha256": "c035ba1fee1251561c9c96d528a0a5235921c7ab4f8af5859596805791a993e8"
+    },
+    "actual_planned_argv": [
+      "/usr/lib/linux-tools-6.8.0-146/perf",
+      "record",
+      "--no-buildid-cache",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "19",
+      "--call-graph",
+      "dwarf,8192",
+      "-o",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+      "--",
+      "/usr/bin/python3",
+      "-u",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/run_owned.py",
+      "trace-jacobi-all-rungs"
+    ],
+    "selected_observer_environment": {
+      "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com "
+    },
+    "config_paths_absent": [
+      "/etc/perfconfig",
+      "/home/astra/.perfconfig"
+    ],
+    "scope": "Existing user-space profiler runs around unchanged mature owner; scoped to inherited owned descendants, not systemwide. Target argv, environment, cache, original assertions and300s/4GiB/reserve guards stay unchanged. Profiler RSS is separate outside mature owner aggregate, with host reserve still sampled; no guard-transfer or uninstrumented performance claim. Actual wrapper PID/birth/maps and final data/status require ROOT checks.",
+    "mutable_output_not_input": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+    "wrapper_exit_and_samebirth_required": true
+  },
+  "source_review": {
+    "bytes": 2961,
+    "sha256": "b74738478dc28a730bb37c50811ac836e124c33e388b103c834c09c383b3d5c8"
+  },
+  "complete_independent_emitted_review": {
+    "bytes": 5899,
+    "sha256": "0ffecaf55bc92f542bfc3816cf551dafe0b03a6112e31356585658807cb88736"
+  },
+  "compiler_completion": {
+    "bytes": 23816,
+    "sha256": "e60132e0b454c49f5a4a2e40955bf1c63b2957faef2cbaaaeb30b35d0e3d3461"
+  },
+  "compiler_ABI": {
+    "bytes": 21403,
+    "sha256": "e43cebdba5ab8c815874310b469eaecaafe4feb8e7cb163eb9db20055003368d"
+  },
+  "actual_stage": {
+    "schema": "sirius-shared-rhs-root-stage-v1",
+    "created_utc": "2026-10-18T00:03:52.974988+00:00",
+    "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "runtime_execution_released": false,
+    "copies": [
+      {
+        "source": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "destination": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+        "identity": {
+          "bytes": 13502080,
+          "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+        },
+        "regular_real_copy": true,
+        "mode": "0o755"
+      },
+      {
+        "source": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/trace.spv",
+        "destination": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace.spv",
+        "identity": {
+          "bytes": 2325528,
+          "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+        },
+        "regular_real_copy": true,
+        "mode": "0o644"
+      },
+      {
+        "source": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv",
+        "destination": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace_fp32comp.spv",
+        "identity": {
+          "bytes": 2328852,
+          "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+        },
+        "regular_real_copy": true,
+        "mode": "0o644"
+      },
+      {
+        "source": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/trace.spv",
+        "destination": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace_fp64.spv",
+        "identity": {
+          "bytes": 2336860,
+          "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+        },
+        "regular_real_copy": true,
+        "mode": "0o644"
+      }
+    ],
+    "all788_existing_strict_build_inputs_fresh_matching": true,
+    "genuine_host_named_Git_fullbytes_join": {
+      "commit": "34a94cd5b367dfdb9b62f71be693bf1e80bf7781",
+      "member": "attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/bin/linux-gcc/tests/backend/sirius_backend_tests"
+    },
+    "five_new_candidates_five_reused_controls_complete": true,
+    "root_FULLREAD_source_and_final_emitted_reviews": true,
+    "files": {
+      "out/trace-jacobi-shared-segment-rhs-runtime-pending/source-contracts.json": {
+        "bytes": 9181,
+        "sha256": "41127cd30fc2f0b5fc1fd5ae511688c85e909a8f564fe17427504cd10914d704"
+      },
+      "out/trace-jacobi-shared-segment-rhs-runtime-pending/independent-source-review.json": {
+        "bytes": 2961,
+        "sha256": "b74738478dc28a730bb37c50811ac836e124c33e388b103c834c09c383b3d5c8"
+      },
+      "out/trace-jacobi-shared-segment-rhs-screen/root-completed.json": {
+        "bytes": 23816,
+        "sha256": "e60132e0b454c49f5a4a2e40955bf1c63b2957faef2cbaaaeb30b35d0e3d3461"
+      },
+      "out/trace-jacobi-shared-segment-rhs-screen/root-emitted-observation.json": {
+        "bytes": 21403,
+        "sha256": "e43cebdba5ab8c815874310b469eaecaafe4feb8e7cb163eb9db20055003368d"
+      },
+      "out/trace-jacobi-shared-segment-rhs-screen/independent-emitted-review.json": {
+        "bytes": 5899,
+        "sha256": "0ffecaf55bc92f542bfc3816cf551dafe0b03a6112e31356585658807cb88736"
+      },
+      "out/e2-original-cpu-witnesses-pending/build-input-observation.json": {
+        "bytes": 240790,
+        "sha256": "e83ff8903332cb3ce6a583723f3972e31d28225ee8602f2eeb7622e46f1078e4"
+      }
+    },
+    "source_build_hold_release": false,
+    "scope": "Reversible genuine stage4 only; independent concrete runtime review/root release pending."
+  },
+  "metadata_observation": {
+    "bytes": 310610,
+    "sha256": "61ed872ddd6f67da86d2f8ae181a2400f72f55cb51f791ff34d01d8f469384fe"
+  },
+  "live_registered": 1152,
+  "selected_registration": {
+    "command": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "name": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "properties": [
+      {
+        "name": "SKIP_REGULAR_EXPRESSION",
+        "value": [
+          "\\[  SKIPPED \\]"
+        ]
+      },
+      {
+        "name": "LABELS",
+        "value": [
+          "Correctness",
+          "Mandatory",
+          "Operational",
+          "Rendering"
+        ]
+      },
+      {
+        "name": "RESOURCE_LOCK",
+        "value": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "name": "WORKING_DIRECTORY",
+        "value": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend"
+      }
+    ]
+  },
+  "actions": {
+    "bytes": 71634,
+    "sha256": "e973a10fce45ef4a08ecd86bfb3f3c47be654f5367a761afff1a65f685700bcb"
+  },
+  "all_pending_selectors_retained_inorder": true,
+  "pending_selector_count": 102,
+  "added_selector_count": 1025,
+  "per_launch_external_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  },
+  "owner_child_environment": {
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/gtest.xml"
+  },
+  "default_cache": true,
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "strict_fp64_PROPERTY_NAME_absence_required": true,
+  "required_stdout_markers_inorder": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ],
+  "markers_are_PASS": false,
+  "actual_provider_current_dev_inode_and_samebirth_environment_postcheck_required": true,
+  "preservation_timing": "Compiler and runtime in one coherent preserved batch after decision, before cleanup; all original science/runtime/resource gates retained.",
+  "scope": "Concrete preparation only; independent runtime review and ROOT release required before sole original attempt."
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "sirius-trace-stencil-root-posttool-observation-v1",
+  "case": "candidate-fp32",
+  "created_utc": "2026-10-17T23:45:19.528855+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv",
+    "bytes": 2344956,
+    "sha256": "e18ea630b410e72bf1b0d214afd58aea0ec0a0aa1f3cbb36354dff50d627c246"
+  },
+  "owner_product_check": {
+    "bytes": 3880,
+    "sha256": "a12f51d50820f5fdb8338b4a752b44821446de39e6f6ec9477e2e68729699da0"
+  },
+  "operations": [
+    {
+      "operation": "validate",
+      "tool_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv"
+      ],
+      "actual_wrapped_argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "300s",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv"
+      ],
+      "actual_closed_exit": 0,
+      "seconds": 7.646118959004525,
+      "stdout": {
+        "path": "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-validate.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-validate.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "disassemble",
+      "tool_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/root-spv-candidate-fp32.spvasm"
+      ],
+      "actual_wrapped_argv": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=10s",
+        "300s",
+        "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv",
+        "-o",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/root-spv-candidate-fp32.spvasm"
+      ],
+      "actual_closed_exit": 0,
+      "seconds": 0.48542583000380546,
+      "stdout": {
+        "path": "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-disassemble.stdout",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-disassemble.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "posttool_guard_scope": "Separate root-owned GNUtimeout300s/TERM/KILL10s per command and actual subprocess completion; no aggregateRSS/reserve or full session-census certification for these posttools. Mature Slangowner guards remain separate.",
+  "SPIRV_validation_and_disassembly_completed": true,
+  "portable_source_only_no_CUDA_or_Metal_native_compiler_executed": false,
+  "files": {
+    "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/root-post-candidate-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/root-spv-candidate-fp32.spvasm": {
+      "bytes": 6888848,
+      "sha256": "f7f02602da224c9b6d545bfb6a2cd121b51520c989710a40ade23bff4ecc2bb2"
+    }
+  },
+  "scope": "Original SPVvalidator and ordinary disassembly only; emitted ABI/CFG/footprint and all5 baseline attribution gate pending. No driver execution/runtime benefit/numerical adoption."
+}

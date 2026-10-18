@@ -1,0 +1,95 @@
+--- original-gr_deviation.slang
++++ candidate-gr_deviation.slang
+@@ -227,43 +227,55 @@
+     Real4 k1XiA, k1VA, k2XiA, k2VA, k3XiA, k3VA, k4XiA, k4VA;
+     Real4 k1XiB, k1VB, k2XiB, k2VB, k3XiB, k3VB, k4XiB, k4VB;
+ 
+-    GetRiemannTensorCart(startPosition, M, a, Q, Lambda, R);
+-    GetKerrSchildFamilyChristoffel(startPosition, M, a, Q, Lambda, Gamma);
+-    GeodesicDeviationRhs(Gamma, R, startTangent, xiA, VA, k1XiA, k1VA);
+-    GeodesicDeviationRhs(Gamma, R, startTangent, xiB, VB, k1XiB, k1VB);
+-
+-    Vec4Cart midpointPosition = AddVec4Cart(
+-        ScaleVec4Cart(AddVec4Cart(startPosition, endPosition), Real(0.5)),
+-        ScaleVec4Cart(
+-            AddVec4Cart(startTangent, ScaleVec4Cart(endTangent, Real(-1.0))),
+-            dLambda / Real(8.0)));
+-    Vec4Cart midpointTangent = AddVec4Cart(
+-        ScaleVec4Cart(
+-            AddVec4Cart(endPosition, ScaleVec4Cart(startPosition, Real(-1.0))),
+-            Real(1.5) / dLambda),
+-        ScaleVec4Cart(AddVec4Cart(startTangent, endTangent), Real(-0.25)));
+-    GetRiemannTensorCart(midpointPosition, M, a, Q, Lambda, R);
+-    GetKerrSchildFamilyChristoffel(midpointPosition, M, a, Q, Lambda, Gamma);
+-
+-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+-                         xiA + k1XiA * (Real(0.5) * dLambda),
+-                         VA + k1VA * (Real(0.5) * dLambda), k2XiA, k2VA);
+-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+-                         xiA + k2XiA * (Real(0.5) * dLambda),
+-                         VA + k2VA * (Real(0.5) * dLambda), k3XiA, k3VA);
+-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+-                         xiB + k1XiB * (Real(0.5) * dLambda),
+-                         VB + k1VB * (Real(0.5) * dLambda), k2XiB, k2VB);
+-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
+-                         xiB + k2XiB * (Real(0.5) * dLambda),
+-                         VB + k2VB * (Real(0.5) * dLambda), k3XiB, k3VB);
+-
+-    GetRiemannTensorCart(endPosition, M, a, Q, Lambda, R);
+-    GetKerrSchildFamilyChristoffel(endPosition, M, a, Q, Lambda, Gamma);
+-    GeodesicDeviationRhs(Gamma, R, endTangent,
+-                         xiA + k3XiA * dLambda, VA + k3VA * dLambda, k4XiA, k4VA);
+-    GeodesicDeviationRhs(Gamma, R, endTangent,
+-                         xiB + k3XiB * dLambda, VB + k3VB * dLambda, k4XiB, k4VB);
++    [loop] for (int phase = 0; phase < 3; ++phase) {
++        Vec4Cart phasePosition;
++        Vec4Cart phaseTangent;
++        if (phase == 0) {
++            phasePosition = startPosition;
++            phaseTangent = startTangent;
++        } else if (phase == 1) {
++            Vec4Cart midpointPosition = AddVec4Cart(
++                ScaleVec4Cart(AddVec4Cart(startPosition, endPosition), Real(0.5)),
++                ScaleVec4Cart(
++                    AddVec4Cart(startTangent, ScaleVec4Cart(endTangent, Real(-1.0))),
++                    dLambda / Real(8.0)));
++            Vec4Cart midpointTangent = AddVec4Cart(
++                ScaleVec4Cart(
++                    AddVec4Cart(endPosition, ScaleVec4Cart(startPosition, Real(-1.0))),
++                    Real(1.5) / dLambda),
++                ScaleVec4Cart(AddVec4Cart(startTangent, endTangent), Real(-0.25)));
++            phasePosition = midpointPosition;
++            phaseTangent = midpointTangent;
++        } else {
++            phasePosition = endPosition;
++            phaseTangent = endTangent;
++        }
++        GetRiemannTensorCart(phasePosition, M, a, Q, Lambda, R);
++        GetKerrSchildFamilyChristoffel(phasePosition, M, a, Q, Lambda, Gamma);
++
++        if (phase == 0) {
++            GeodesicDeviationRhs(Gamma, R, phaseTangent, xiA, VA, k1XiA, k1VA);
++            GeodesicDeviationRhs(Gamma, R, phaseTangent, xiB, VB, k1XiB, k1VB);
++        } else if (phase == 1) {
++            GeodesicDeviationRhs(Gamma, R, phaseTangent,
++                                 xiA + k1XiA * (Real(0.5) * dLambda),
++                                 VA + k1VA * (Real(0.5) * dLambda), k2XiA, k2VA);
++            GeodesicDeviationRhs(Gamma, R, phaseTangent,
++                                 xiA + k2XiA * (Real(0.5) * dLambda),
++                                 VA + k2VA * (Real(0.5) * dLambda), k3XiA, k3VA);
++            GeodesicDeviationRhs(Gamma, R, phaseTangent,
++                                 xiB + k1XiB * (Real(0.5) * dLambda),
++                                 VB + k1VB * (Real(0.5) * dLambda), k2XiB, k2VB);
++            GeodesicDeviationRhs(Gamma, R, phaseTangent,
++                                 xiB + k2XiB * (Real(0.5) * dLambda),
++                                 VB + k2VB * (Real(0.5) * dLambda), k3XiB, k3VB);
++        } else {
++            GeodesicDeviationRhs(Gamma, R, phaseTangent,
++                                 xiA + k3XiA * dLambda, VA + k3VA * dLambda, k4XiA, k4VA);
++            GeodesicDeviationRhs(Gamma, R, phaseTangent,
++                                 xiB + k3XiB * dLambda, VB + k3VB * dLambda, k4XiB, k4VB);
++        }
++    }
+ 
+     const Real sixthStep = dLambda / Real(6.0);
+     xiA += (k1XiA + k2XiA * Real(2.0) + k3XiA * Real(2.0) + k4XiA) * sixthStep;

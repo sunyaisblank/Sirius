@@ -1,0 +1,35 @@
+{
+  "schema": "sirius-trace-jacobi-stencil-import-order-private-stage-pending-commands-v1",
+  "source_only": true,
+  "source_revision": "ROOT_PENDING_REVISION",
+  "stage": "ROOT_PENDING_STAGE",
+  "metadata": "ROOT_PENDING_METADATA",
+  "admitted": false,
+  "runtime_admitted": false,
+  "order": [
+    "trace-jacobi-all-rungs"
+  ],
+  "stop_first_nonpass": true,
+  "commands_after_root_admission": [
+    "/usr/bin/python3 out/trace-riemann-stencil-import-order-runtime-pending/run_owned.py trace-jacobi-all-rungs",
+    "/usr/bin/python3 out/trace-riemann-stencil-import-order-runtime-pending/root_acceptance.py trace-jacobi-all-rungs"
+  ],
+  "hold": "ROOT_PENDING full ten-operation compiler/static review and immutable publication; independent/root source and concrete runtime admission; root-only regular stage4 from genuine fe663 Linux host plus three current candidate products; fresh matching full runtime/provider/DSO/source/registration/wholeinputs and explicit root release. First FP32 source-selection/emitted gate is not a runtime release. No actual stage/actions/readiness/inventory/preflight or case created by this source preparation.",
+  "required_stdout_progress_marker_lines_in_order": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ],
+  "strict_additional_root_postcheck": "Inherited generic collector get(property)==None is insufficient: separately require fp64_evidence PROPERTY NAME absent, all9 exact marker lines in order, full exact unchanged three-rung source, actual LVP0/live provider+birthday/dev-inode ownership, and staged actual candidate modules joined to accepted compiler products and emitted review. Exercised markers alone are notPASS. Root must bind the selected stencil body and accepted emitted ABI/CFG for all three private modules, not prior pair-loop-only modules.",
+  "environment_from_root_after_admission": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+    "cache": "DEFAULT; disable_software_shader_cache=false; no borrowed cacheOFF assumption",
+    "selected_provider": "Unchanged owner sets VK_DRIVER_FILES=/usr/share/vulkan/icd.d/lvp_icd.json and SIRIUS_VULKAN_DEVICE=0; actual loaded mappings and source bytes must be observed by root."
+  }
+}

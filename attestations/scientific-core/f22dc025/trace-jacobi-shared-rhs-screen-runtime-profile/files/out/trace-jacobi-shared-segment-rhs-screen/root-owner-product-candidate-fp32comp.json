@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "candidate-fp32comp",
+  "created_utc": "2026-10-17T23:56:02.923757+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4489,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 17,
+  "owner_seconds": 4.362400994985364,
+  "peak_sampled_aggregate_RSS_KiB": 447896,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 25213,
+      "saved_start_ticks": "15516162",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 25222,
+      "saved_start_ticks": "15516243",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "current_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv",
+    "bytes": 2328852,
+    "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+  },
+  "role": "candidate",
+  "variant": "fp32comp",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/trace_fp32comp.spv",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace_fp32comp.spv",
+    "bytes": 2997776,
+    "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp32comp/trace.spv",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/samples.jsonl": {
+      "bytes": 3786,
+      "sha256": "e987fade0a5e05de56be600252947b8a20779c5e80d22ac5ad686007048441ce"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/inputs-before.json": {
+      "bytes": 1481664,
+      "sha256": "66ba8009ea647114b4638630b9afebf555ad1354ffd133ad8956c9d71ff107a7"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/inputs-after.json": {
+      "bytes": 1481664,
+      "sha256": "66ba8009ea647114b4638630b9afebf555ad1354ffd133ad8956c9d71ff107a7"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/owner.json": {
+      "bytes": 2623,
+      "sha256": "914de557610ec735d6ce942efcf31664321840084556dadd66835774dc853a52"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-fp32comp.json": {
+      "bytes": 2281,
+      "sha256": "bc30ac01b594410057cfd4ed66d4588a83c20b4663cfa87d69e5c1e84c4e07b8"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-fp32comp.log": {
+      "bytes": 677,
+      "sha256": "636ee2653d8b1ec8e4021f3bf18885428d3b6a95070874d171b8c3195bfbef7f"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

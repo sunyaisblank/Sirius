@@ -1,0 +1,69 @@
+{
+  "schema": "sirius-shared-segment-RHS-independent-five-target-emitted-review-v1",
+  "passed": true,
+  "decision": "SHARED_EIGHT_EVENT_FIVE_TARGET_OFFLINE_EMITTED_PASS",
+  "created_utc": "2026-10-17T23:59:38.589983+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "reviewer": "/root/divide_contract_review authored candidate/mature apparatus. ROOT is separate actual producer; Forensic source admission reused. Passive bounded source/emitted review, not independent source authorship.",
+  "evidence": [
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs-screen/independent-first-candidate-emitted-review.json",
+      "bytes": 6721,
+      "sha256": "d5c28d79e3d2d03055f9cff4798d331bb14a1230e0f17a4f0f1a6ff4e195a500"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs/independent-source-review.json",
+      "bytes": 4953,
+      "sha256": "d2dd75c8b86e89df03db14111ebdf834e4d78d574feace287dbcff7e04fee41f"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs-screen/root-completed.json",
+      "bytes": 23816,
+      "sha256": "e60132e0b454c49f5a4a2e40955bf1c63b2957faef2cbaaaeb30b35d0e3d3461"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs-screen/root-emitted-observation.json",
+      "bytes": 21403,
+      "sha256": "e43cebdba5ab8c815874310b469eaecaafe4feb8e7cb163eb9db20055003368d"
+    }
+  ],
+  "product_pins": [
+    [
+      "candidate-fp32",
+      2325528,
+      "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    ],
+    [
+      "candidate-fp32comp",
+      2328852,
+      "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    ],
+    [
+      "candidate-fp64",
+      2336860,
+      "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    ],
+    [
+      "candidate-cuda",
+      336360,
+      "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+    ],
+    [
+      "candidate-metal",
+      358799,
+      "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+    ]
+  ],
+  "joins": "All5 accepted products hash-joined to ROOT completion. Three SPV validation/disassembly pairs0; CUDA/MSL emission only. Five original canonical controls reused with matched effective producer inputs; no repeated controls/history. Actual trace09a3/grdev9737 and firstFP32 selected-body/producer joins reused from first gate.",
+  "findings": {
+    "FP32": "Full first gate d5c28d79e3d2d03055f9cff4798d331bb14a1230e0f17a4f0f1a6ff4e195a500 reused: fixed8events, geometry0/2/6, exact midpoint timing, full unchanged Riemann/Gamma/RHS bodies, argument/16k carry and final commits.",
+    "COMP": "Entire pair/event/commit region96581-102255 alpha-identical FP3296468-102142. Hence same0..<8/+1, geometry carry, all8 arguments/output roles,16k assignments and pair copyback. COMP remains float32; original compensation outside helper unchanged.",
+    "FP64": "Counter%84762 reset0 at96829; DontUnroll96832/<8 at96840. Geometry selector96846-97001 isomorphic FP32 modulo float/double types, preserving0/2/6 start/mid/end and tangent carry. Complete Riemann97002-100622 equals accepted priorFP6497097-100717; complete Gamma100629-101537 equals prior98458-99366. Distance1..2/original converted eps/weights remain. Input selector+full RHS+copyout+final four commits101539-102317 form one consistent alpha-join with FP32101353-102131 after float/double type substitution and explicitly accounting for original precision-specific rounded1/6 (FP64 .16666666666666666, FP32 .166666672). This ties the same16k roles across all8 events to the final left-associated sums, rather than comparing isolated unlabeled blocks.",
+    "carry_limits": "All8 events remain startA,startB,midA2,midA3,midB2,midB3,endA,endB. Geometry fully overwritten at0/2/6, reused otherwise. Lowering copies undefined future-k slots through early merges; those do not reach arithmetic before required event definitions. Pair0..<2 and four-column copyback precede accepted central-state commit. No work reduction:3Riemann+3explicitGamma+8RHS per pair.",
+    "CUDA_Metal": "One geometry and one RHS callsite in each emitted helper, event0..<8/+1 and geometry0/2/6. Midpoint calculated only after startB, original8 argument groups and output roles preserved. Complete copyout/carry region after RHS through step increment is identical across targets under consistent identifier renaming/#line removal. Original Riemann, Gamma and RHS helper definitions each equal prior accepted portable source; record/binding/entry declarations unchanged. CUDA anchors: loop13088-13095, geometry13276/13282,RHS13457,carry14038/14041,commits14047-14051. Metal:13381-13388,geometry13569/13575,RHS13761,carry14342/14345,commits14357-14360. Source body/mode emission only, no native CUDA/Metal compiler/driver execution.",
+    "ABI": "Direct caps/extensions/memory/entry/modes/35decorations/16memberdecorations equal reused matching controls. ROOT complete recursive7binding+builtin/type/member/width graph joined. main8x8x1; onefunction/zerocalls. FP32/COMP record272,FP64 record480; original float32 source/volume and uint32 control/identity retained. No new precision/fastmath/layout assumption."
+  },
+  "blockers": [],
+  "disposition": "PASS bounded five-target offline emitted consistency screen. ROOT concrete stage/current-input/runtime review and explicit release still required. Compiler/runtime preservation may be batched per explicit acceleration steering; no source adoption or runtime authorization from this receipt.",
+  "limits": "Not formal whole-program/all40/numerical proof. No JIT/allocation-cause/RSS/time/performance cure, native portable execution, scientific completion, Mandatory or release claim. Actual driver liveness/indexing/spills and guarded runtime completion remain unproved. No compiler/posttool/helper/project import/parser program/provider/test/network/process/cache/Git mutation by reviewer."
+}

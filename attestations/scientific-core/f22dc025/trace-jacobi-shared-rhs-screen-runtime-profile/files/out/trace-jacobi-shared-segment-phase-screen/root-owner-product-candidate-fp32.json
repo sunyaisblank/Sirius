@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "candidate-fp32",
+  "created_utc": "2026-10-17T23:44:48.701954+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4482,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 21,
+  "owner_seconds": 5.407277338003041,
+  "peak_sampled_aggregate_RSS_KiB": 447544,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 20022,
+      "saved_start_ticks": "15450035",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 20027,
+      "saved_start_ticks": "15450106",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "current_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv",
+    "bytes": 2344956,
+    "sha256": "e18ea630b410e72bf1b0d214afd58aea0ec0a0aa1f3cbb36354dff50d627c246"
+  },
+  "role": "candidate",
+  "variant": "fp32",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/trace.spv",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/trace.spv",
+    "bytes": 2994452,
+    "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-fp32/trace.spv",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/samples.jsonl": {
+      "bytes": 4670,
+      "sha256": "d8b751cbfeaec17bc2c64435d7bf76be2b69d283b18c9bd009381ced061ad630"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/stderr.log": {
+      "bytes": 2870,
+      "sha256": "9e0b564906aed02b6bebdaaf7b7f6361cdcd520fc047fc3d555b9c9a396bbfd7"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/inputs-before.json": {
+      "bytes": 1479585,
+      "sha256": "e0f5c3f86dea2cfb57001326321576603d20d02bd3aa498b8f4b1bad547ad240"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/inputs-after.json": {
+      "bytes": 1479585,
+      "sha256": "e0f5c3f86dea2cfb57001326321576603d20d02bd3aa498b8f4b1bad547ad240"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/owner.json": {
+      "bytes": 2585,
+      "sha256": "ac1e5d10601989d980db66237f3dadcd779a396853157b7dd6fb1f74eb93a3fc"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/candidate-fp32/trace.spv": {
+      "bytes": 2344956,
+      "sha256": "e18ea630b410e72bf1b0d214afd58aea0ec0a0aa1f3cbb36354dff50d627c246"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2277,
+      "sha256": "190ac051a07de4ac965938e0f564f727106506a70a297f15a597c48fcb56ed22"
+    },
+    "out/trace-jacobi-shared-segment-phase-screen/root-helper-candidate-fp32.log": {
+      "bytes": 668,
+      "sha256": "3eb5720988368066da14801009b690c1efb652ff5368236522b1671369006b68"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

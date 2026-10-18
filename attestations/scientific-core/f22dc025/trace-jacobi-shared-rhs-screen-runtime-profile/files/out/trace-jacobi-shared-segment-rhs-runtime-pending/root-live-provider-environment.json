@@ -1,0 +1,1827 @@
+{
+  "schema": "sirius-shared-rhs-live-owned-provider-environment-observation-v1",
+  "created_utc": "2026-10-18T00:07:10.773139+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed_observation": true,
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "roles": {
+    "controller": {
+      "process_before": {
+        "pid": 28533,
+        "state": "S",
+        "session": 28532,
+        "start_ticks": "15578380"
+      },
+      "process_after": {
+        "pid": 28533,
+        "state": "R",
+        "session": 28532,
+        "start_ticks": "15578380"
+      },
+      "selected_environment": {
+        "HOME": "/home/astra",
+        "DEBUGINFOD_URLS": "",
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+        "PERF_BUILDID_DIR": "/home/astra/.debug"
+      },
+      "maps": [
+        "00400000-00420000 r--p 00000000 08:30 10804                              /usr/bin/python3.12",
+        "00420000-00703000 r-xp 00020000 08:30 10804                              /usr/bin/python3.12",
+        "00703000-00a28000 r--p 00303000 08:30 10804                              /usr/bin/python3.12",
+        "00a28000-00a29000 r--p 00627000 08:30 10804                              /usr/bin/python3.12",
+        "00a29000-00ba7000 rw-p 00628000 08:30 10804                              /usr/bin/python3.12",
+        "00ba7000-00bab000 rw-p 00000000 00:00 0 ",
+        "39392000-398b1000 rw-p 00000000 00:00 0                                  [heap]",
+        "7d9616500000-7d9616600000 rw-p 00000000 00:00 0 ",
+        "7d9616600000-7d96166b3000 r--p 00000000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "7d96166b3000-7d96169e7000 r-xp 000b3000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "7d96169e7000-7d9616ab2000 r--p 003e7000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "7d9616ab2000-7d9616b0e000 r--p 004b1000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "7d9616b0e000-7d9616b11000 rw-p 0050d000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "7d9616b11000-7d9616b14000 rw-p 00000000 00:00 0 ",
+        "7d9616b39000-7d9616c39000 rw-p 00000000 00:00 0 ",
+        "7d9616c39000-7d9616c3c000 r--p 00000000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7d9616c3c000-7d9616c5e000 r-xp 00003000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7d9616c5e000-7d9616c69000 r--p 00025000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7d9616c69000-7d9616c6a000 r--p 00030000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7d9616c6a000-7d9616c6b000 rw-p 00031000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7d9616c6b000-7d9616c6e000 r--p 00000000 08:30 11119                      /usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c6e000-7d9616c73000 r-xp 00003000 08:30 11119                      /usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c73000-7d9616c76000 r--p 00008000 08:30 11119                      /usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c76000-7d9616c77000 r--p 0000a000 08:30 11119                      /usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c77000-7d9616c78000 rw-p 0000b000 08:30 11119                      /usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c78000-7d9616c7a000 r--p 00000000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "7d9616c7a000-7d9616c88000 r-xp 00002000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "7d9616c88000-7d9616c8a000 r--p 00010000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "7d9616c8a000-7d9616c8b000 r--p 00011000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "7d9616c8b000-7d9616c8c000 rw-p 00012000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "7d9616c96000-7d9616c98000 r--p 00000000 08:30 11101                      /usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c98000-7d9616c9b000 r-xp 00002000 08:30 11101                      /usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c9b000-7d9616c9d000 r--p 00005000 08:30 11101                      /usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c9d000-7d9616c9e000 r--p 00006000 08:30 11101                      /usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c9e000-7d9616c9f000 rw-p 00007000 08:30 11101                      /usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so",
+        "7d9616c9f000-7d9616ca3000 r--p 00000000 08:30 10662                      /usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "7d9616ca3000-7d9616ca9000 r-xp 00004000 08:30 10662                      /usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "7d9616ca9000-7d9616cad000 r--p 0000a000 08:30 10662                      /usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "7d9616cad000-7d9616cae000 r--p 0000d000 08:30 10662                      /usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "7d9616cae000-7d9616cb0000 rw-p 0000e000 08:30 10662                      /usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+        "7d9616cb0000-7d9616db0000 rw-p 00000000 00:00 0 ",
+        "7d9616db0000-7d9616db2000 r--p 00000000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7d9616db2000-7d9616db9000 r-xp 00002000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7d9616db9000-7d9616dba000 r--p 00009000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7d9616dba000-7d9616dbb000 r--p 0000a000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7d9616dbb000-7d9616dbc000 rw-p 0000b000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7d9616dbc000-7d9616dc2000 r--p 00000000 08:30 11111                      /usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "7d9616dc2000-7d9616dd4000 r-xp 00006000 08:30 11111                      /usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "7d9616dd4000-7d9616dda000 r--p 00018000 08:30 11111                      /usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "7d9616dda000-7d9616ddb000 r--p 0001d000 08:30 11111                      /usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "7d9616ddb000-7d9616ddf000 rw-p 0001e000 08:30 11111                      /usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+        "7d9616ddf000-7d9617000000 rw-p 00000000 00:00 0 ",
+        "7d9617000000-7d9617028000 r--p 00000000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7d9617028000-7d96171b1000 r-xp 00028000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7d96171b1000-7d9617200000 r--p 001b1000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7d9617200000-7d9617204000 r--p 001ff000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7d9617204000-7d9617206000 rw-p 00203000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7d9617206000-7d9617213000 rw-p 00000000 00:00 0 ",
+        "7d961721b000-7d961721d000 r--p 00000000 08:30 11117                      /usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+        "7d961721d000-7d9617224000 r-xp 00002000 08:30 11117                      /usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+        "7d9617224000-7d9617226000 r--p 00009000 08:30 11117                      /usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+        "7d9617226000-7d9617227000 r--p 0000a000 08:30 11117                      /usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+        "7d9617227000-7d9617228000 rw-p 0000b000 08:30 11117                      /usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+        "7d9617228000-7d961736d000 rw-p 00000000 00:00 0 ",
+        "7d961736d000-7d96173c6000 r--p 00000000 08:30 62180                      /usr/lib/locale/C.utf8/LC_CTYPE",
+        "7d96173c6000-7d96173c8000 rw-p 00000000 00:00 0 ",
+        "7d96173c8000-7d96173cc000 r--p 00000000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7d96173cc000-7d96173eb000 r-xp 00004000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7d96173eb000-7d96173f3000 r--p 00023000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7d96173f3000-7d96173f5000 r--p 0002b000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7d96173f5000-7d96173f6000 rw-p 0002d000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7d96173f6000-7d96173f8000 r--p 00000000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7d96173f8000-7d961740a000 r-xp 00002000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7d961740a000-7d9617410000 r--p 00014000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7d9617410000-7d9617411000 r--p 0001a000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7d9617411000-7d9617412000 rw-p 0001b000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7d9617412000-7d9617422000 r--p 00000000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7d9617422000-7d96174a1000 r-xp 00010000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7d96174a1000-7d96174f9000 r--p 0008f000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7d96174f9000-7d96174fa000 r--p 000e7000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7d96174fa000-7d96174fb000 rw-p 000e8000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7d96174fe000-7d9617505000 r--s 00000000 08:30 62138                      /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+        "7d9617505000-7d9617507000 rw-p 00000000 00:00 0 ",
+        "7d9617507000-7d9617508000 r--p 00000000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7d9617508000-7d9617533000 r-xp 00001000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7d9617533000-7d961753d000 r--p 0002c000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7d961753d000-7d961753f000 r--p 00036000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7d961753f000-7d9617541000 rw-p 00038000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7ffed41df000-7ffed4201000 rw-p 00000000 00:00 0                          [stack]",
+        "7ffed426c000-7ffed4270000 r--p 00000000 00:00 0                          [vvar]",
+        "7ffed4270000-7ffed4272000 r-xp 00000000 00:00 0                          [vdso]"
+      ],
+      "regular_file_classes": {
+        "/usr/bin/python3.12": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/bin/python3.12",
+            "bytes": 8020928,
+            "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 10804,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+            "bytes": 5309400,
+            "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 217287,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+            "bytes": 202904,
+            "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 95115,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/python3.12/lib-dynload/_lzma.cpython-312-x86_64-linux-gnu.so",
+            "bytes": 49256,
+            "sha256": "cb298120e40f064dc047e638d911f8b3b0abf625bf1d6bd07902b46efd820fd7"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 11119,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+            "bytes": 78944,
+            "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 46850,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/python3.12/lib-dynload/_bz2.cpython-312-x86_64-linux-gnu.so",
+            "bytes": 32112,
+            "sha256": "eff8df23cdc54d38ce9ca600d07c21ccfd7f22bd52a0720e599e6828d3e2eb76"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 11101,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+            "bytes": 64368,
+            "sha256": "8dc6cda6dd9495b95a2bfb5b26e8cf06b72f36dc0213d958b9277a958287f0fe"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 10662,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+            "bytes": 47672,
+            "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12829,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+            "bytes": 137968,
+            "sha256": "aad3e24f186e6c0a1c7efa8f16004f951f527db86f6451d30118657384a456c1"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 11111,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "bytes": 2129424,
+            "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62152,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+            "bytes": 48952,
+            "sha256": "ca8e35c58f7bc8e27258c4af43651c941413bc6318903621253485b0395758a3"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 11117,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/locale/C.utf8/LC_CTYPE": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_CTYPE",
+            "bytes": 360460,
+            "sha256": "59015993b1b671273461ef1167d7a9ad76dc090d521c91102e962217ed6b6dba"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62180,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+            "bytes": 186624,
+            "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 339097,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+            "bytes": 113000,
+            "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 1856,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+            "bytes": 952616,
+            "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62156,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+            "bytes": 27028,
+            "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62138,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "bytes": 236616,
+            "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62148,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        }
+      },
+      "runtime_generated_vulkan_memfd_maps": [],
+      "other_nonpersistent_or_deleted_file_maps": [],
+      "actual_executable": "/usr/bin/python3.12"
+    },
+    "child": {
+      "process_before": {
+        "pid": 28537,
+        "state": "R",
+        "session": 28537,
+        "start_ticks": "15578464"
+      },
+      "process_after": {
+        "pid": 28537,
+        "state": "R",
+        "session": 28537,
+        "start_ticks": "15578464"
+      },
+      "selected_environment": {
+        "HOME": "/home/astra",
+        "DEBUGINFOD_URLS": "",
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+        "PERF_BUILDID_DIR": "/home/astra/.debug",
+        "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "SIRIUS_VULKAN_DEVICE": "0",
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/gtest.xml"
+      },
+      "maps": [
+        "5c40a098c000-5c40a09b2000 r--p 00000000 08:30 2415820                    /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+        "5c40a09b2000-5c40a0df2000 r-xp 00026000 08:30 2415820                    /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+        "5c40a0df2000-5c40a140d000 r--p 00466000 08:30 2415820                    /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+        "5c40a140d000-5c40a1583000 r--p 00a80000 08:30 2415820                    /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+        "5c40a1583000-5c40a1584000 rw-p 00bf6000 08:30 2415820                    /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+        "5c40db886000-5c40f5df2000 rw-p 00000000 00:00 0                          [heap]",
+        "724ff8000000-724ff8021000 rw-p 00000000 00:00 0 ",
+        "724ff8021000-724ffc000000 ---p 00000000 00:00 0 ",
+        "725000000000-725000021000 rw-p 00000000 00:00 0 ",
+        "725000021000-725004000000 ---p 00000000 00:00 0 ",
+        "725004000000-725004021000 rw-p 00000000 00:00 0 ",
+        "725004021000-725008000000 ---p 00000000 00:00 0 ",
+        "725008000000-725008021000 rw-p 00000000 00:00 0 ",
+        "725008021000-72500c000000 ---p 00000000 00:00 0 ",
+        "72500c000000-72500c021000 rw-p 00000000 00:00 0 ",
+        "72500c021000-725010000000 ---p 00000000 00:00 0 ",
+        "725010000000-725010021000 rw-p 00000000 00:00 0 ",
+        "725010021000-725014000000 ---p 00000000 00:00 0 ",
+        "725014000000-725014021000 rw-p 00000000 00:00 0 ",
+        "725014021000-725018000000 ---p 00000000 00:00 0 ",
+        "725018000000-725018021000 rw-p 00000000 00:00 0 ",
+        "725018021000-72501c000000 ---p 00000000 00:00 0 ",
+        "72501c7f9000-72501c7fa000 ---p 00000000 00:00 0 ",
+        "72501c7fa000-72501cffa000 rw-p 00000000 00:00 0 ",
+        "72501cffa000-72501cffb000 ---p 00000000 00:00 0 ",
+        "72501cffb000-72501d7fb000 rw-p 00000000 00:00 0 ",
+        "72501d7fb000-72501d7fc000 ---p 00000000 00:00 0 ",
+        "72501d7fc000-72501dffc000 rw-p 00000000 00:00 0 ",
+        "72501dffc000-72501dffd000 ---p 00000000 00:00 0 ",
+        "72501dffd000-72501e7fd000 rw-p 00000000 00:00 0 ",
+        "72501e7fd000-72501e7fe000 ---p 00000000 00:00 0 ",
+        "72501e7fe000-72501effe000 rw-p 00000000 00:00 0 ",
+        "72501effe000-72501efff000 ---p 00000000 00:00 0 ",
+        "72501efff000-72501f7ff000 rw-p 00000000 00:00 0 ",
+        "72501f7ff000-72501f800000 ---p 00000000 00:00 0 ",
+        "72501f800000-725020021000 rw-p 00000000 00:00 0 ",
+        "725020021000-725024000000 ---p 00000000 00:00 0 ",
+        "725024000000-725024021000 rw-p 00000000 00:00 0 ",
+        "725024021000-725028000000 ---p 00000000 00:00 0 ",
+        "725028000000-725028021000 rw-p 00000000 00:00 0 ",
+        "725028021000-72502c000000 ---p 00000000 00:00 0 ",
+        "72502c000000-72502c021000 rw-p 00000000 00:00 0 ",
+        "72502c021000-725030000000 ---p 00000000 00:00 0 ",
+        "725030000000-725030021000 rw-p 00000000 00:00 0 ",
+        "725030021000-725034000000 ---p 00000000 00:00 0 ",
+        "725034000000-725034021000 rw-p 00000000 00:00 0 ",
+        "725034021000-725038000000 ---p 00000000 00:00 0 ",
+        "725038000000-725038021000 rw-p 00000000 00:00 0 ",
+        "725038021000-72503c000000 ---p 00000000 00:00 0 ",
+        "72503c7f9000-72503c7fa000 ---p 00000000 00:00 0 ",
+        "72503c7fa000-72503cffa000 rw-p 00000000 00:00 0 ",
+        "72503cffa000-72503cffb000 ---p 00000000 00:00 0 ",
+        "72503cffb000-72503d7fb000 rw-p 00000000 00:00 0 ",
+        "72503d7fb000-72503d7fc000 ---p 00000000 00:00 0 ",
+        "72503d7fc000-72503dffc000 rw-p 00000000 00:00 0 ",
+        "72503dffc000-72503dffd000 ---p 00000000 00:00 0 ",
+        "72503dffd000-72503e7fd000 rw-p 00000000 00:00 0 ",
+        "72503e7fd000-72503e7fe000 ---p 00000000 00:00 0 ",
+        "72503e7fe000-72503effe000 rw-p 00000000 00:00 0 ",
+        "72503effe000-72503efff000 ---p 00000000 00:00 0 ",
+        "72503efff000-72503f7ff000 rw-p 00000000 00:00 0 ",
+        "72503f7ff000-72503f800000 ---p 00000000 00:00 0 ",
+        "72503f800000-725040021000 rw-p 00000000 00:00 0 ",
+        "725040021000-725044000000 ---p 00000000 00:00 0 ",
+        "725044000000-725044021000 rw-p 00000000 00:00 0 ",
+        "725044021000-725048000000 ---p 00000000 00:00 0 ",
+        "725048000000-725048021000 rw-p 00000000 00:00 0 ",
+        "725048021000-72504c000000 ---p 00000000 00:00 0 ",
+        "72504c000000-72504c021000 rw-p 00000000 00:00 0 ",
+        "72504c021000-725050000000 ---p 00000000 00:00 0 ",
+        "725050000000-725050021000 rw-p 00000000 00:00 0 ",
+        "725050021000-725054000000 ---p 00000000 00:00 0 ",
+        "725054000000-725054021000 rw-p 00000000 00:00 0 ",
+        "725054021000-725058000000 ---p 00000000 00:00 0 ",
+        "725058000000-725058021000 rw-p 00000000 00:00 0 ",
+        "725058021000-72505c000000 ---p 00000000 00:00 0 ",
+        "72505c7f9000-72505c7fa000 ---p 00000000 00:00 0 ",
+        "72505c7fa000-72505cffa000 rw-p 00000000 00:00 0 ",
+        "72505cffa000-72505cffb000 ---p 00000000 00:00 0 ",
+        "72505cffb000-72505d7fb000 rw-p 00000000 00:00 0 ",
+        "72505d7fb000-72505d7fc000 ---p 00000000 00:00 0 ",
+        "72505d7fc000-72505dffc000 rw-p 00000000 00:00 0 ",
+        "72505dffc000-72505dffd000 ---p 00000000 00:00 0 ",
+        "72505dffd000-72505e7fd000 rw-p 00000000 00:00 0 ",
+        "72505e7fd000-72505e7fe000 ---p 00000000 00:00 0 ",
+        "72505e7fe000-72505effe000 rw-p 00000000 00:00 0 ",
+        "72505effe000-72505efff000 ---p 00000000 00:00 0 ",
+        "72505efff000-72505f7ff000 rw-p 00000000 00:00 0 ",
+        "72505f7ff000-72505f800000 ---p 00000000 00:00 0 ",
+        "72505f800000-725060021000 rw-p 00000000 00:00 0 ",
+        "725060021000-725064000000 ---p 00000000 00:00 0 ",
+        "725064000000-725064021000 rw-p 00000000 00:00 0 ",
+        "725064021000-725068000000 ---p 00000000 00:00 0 ",
+        "725068000000-725068021000 rw-p 00000000 00:00 0 ",
+        "725068021000-72506c000000 ---p 00000000 00:00 0 ",
+        "72506c000000-72506c021000 rw-p 00000000 00:00 0 ",
+        "72506c021000-725070000000 ---p 00000000 00:00 0 ",
+        "725070000000-725070021000 rw-p 00000000 00:00 0 ",
+        "725070021000-725074000000 ---p 00000000 00:00 0 ",
+        "725074000000-725074021000 rw-p 00000000 00:00 0 ",
+        "725074021000-725078000000 ---p 00000000 00:00 0 ",
+        "725078000000-725078021000 rw-p 00000000 00:00 0 ",
+        "725078021000-72507c000000 ---p 00000000 00:00 0 ",
+        "72507c389000-72507c7f9000 rw-p 00000000 00:00 0 ",
+        "72507c7f9000-72507c7fa000 ---p 00000000 00:00 0 ",
+        "72507c7fa000-72507cffa000 rw-p 00000000 00:00 0 ",
+        "72507cffa000-72507cffb000 ---p 00000000 00:00 0 ",
+        "72507cffb000-72507d7fb000 rw-p 00000000 00:00 0 ",
+        "72507d7fb000-72507d7fc000 ---p 00000000 00:00 0 ",
+        "72507d7fc000-72507dffc000 rw-p 00000000 00:00 0 ",
+        "72507dffc000-72507dffd000 ---p 00000000 00:00 0 ",
+        "72507dffd000-72507e7fd000 rw-p 00000000 00:00 0 ",
+        "72507e7fd000-72507e7fe000 ---p 00000000 00:00 0 ",
+        "72507e7fe000-72507effe000 rw-p 00000000 00:00 0 ",
+        "72507effe000-72507efff000 ---p 00000000 00:00 0 ",
+        "72507efff000-72507f7ff000 rw-p 00000000 00:00 0 ",
+        "72507f7ff000-72507f800000 ---p 00000000 00:00 0 ",
+        "72507f800000-725080021000 rw-p 00000000 00:00 0 ",
+        "725080021000-725084000000 ---p 00000000 00:00 0 ",
+        "725084000000-725084021000 rw-p 00000000 00:00 0 ",
+        "725084021000-725088000000 ---p 00000000 00:00 0 ",
+        "725088000000-725088021000 rw-p 00000000 00:00 0 ",
+        "725088021000-72508c000000 ---p 00000000 00:00 0 ",
+        "72508c000000-72508c021000 rw-p 00000000 00:00 0 ",
+        "72508c021000-725090000000 ---p 00000000 00:00 0 ",
+        "725090000000-725090021000 rw-p 00000000 00:00 0 ",
+        "725090021000-725094000000 ---p 00000000 00:00 0 ",
+        "725094000000-725094081000 rw-s 00005000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "725094081000-7250942b9000 rw-p 00000000 00:00 0 ",
+        "7250942b9000-7250943fa000 rw-s 00000000 08:30 73478                      /home/astra/.cache/mesa_shader_cache/index",
+        "7250943fa000-7250943fb000 ---p 00000000 00:00 0 ",
+        "7250943fb000-725094bfb000 rw-p 00000000 00:00 0 ",
+        "725094bfb000-725094bfc000 ---p 00000000 00:00 0 ",
+        "725094bfc000-7250953fc000 rw-p 00000000 00:00 0 ",
+        "7250953fc000-7250953fd000 ---p 00000000 00:00 0 ",
+        "7250953fd000-725095bfd000 rw-p 00000000 00:00 0 ",
+        "725095bfd000-725095bfe000 ---p 00000000 00:00 0 ",
+        "725095bfe000-7250963fe000 rw-p 00000000 00:00 0 ",
+        "7250963fe000-7250963ff000 ---p 00000000 00:00 0 ",
+        "7250963ff000-725096bff000 rw-p 00000000 00:00 0 ",
+        "725096bff000-725096c00000 ---p 00000000 00:00 0 ",
+        "725096c00000-725097400000 rw-p 00000000 00:00 0 ",
+        "725097400000-725097401000 r--p 00000000 08:30 12903                      /usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+        "725097401000-725097402000 r-xp 00001000 08:30 12903                      /usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+        "725097402000-72509915e000 r--p 00002000 08:30 12903                      /usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+        "72509915e000-72509915f000 r--p 01d5d000 08:30 12903                      /usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+        "72509915f000-725099160000 rw-p 01d5e000 08:30 12903                      /usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+        "725099194000-725099200000 rw-p 00000000 00:00 0 ",
+        "725099200000-725099268000 r--p 00000000 08:30 12913                      /usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+        "725099268000-72509936d000 r-xp 00068000 08:30 12913                      /usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+        "72509936d000-7250993f7000 r--p 0016d000 08:30 12913                      /usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+        "7250993f7000-72509940a000 r--p 001f7000 08:30 12913                      /usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+        "72509940a000-72509940b000 rw-p 0020a000 08:30 12913                      /usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+        "72509940b000-72509940d000 rw-p 00000000 00:00 0 ",
+        "725099419000-72509941e000 rw-s 00087000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "72509941e000-72509944d000 r--p 00000000 08:30 179224                     /usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+        "72509944d000-7250995b3000 r-xp 0002f000 08:30 179224                     /usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+        "7250995b3000-7250995f5000 r--p 00195000 08:30 179224                     /usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+        "7250995f5000-7250995fe000 r--p 001d6000 08:30 179224                     /usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+        "7250995fe000-7250995ff000 rw-p 001df000 08:30 179224                     /usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+        "7250995ff000-725099600000 rw-p 00000000 00:00 0 ",
+        "725099600000-7250a1808000 r-xp 00000000 08:30 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7250a1808000-7250a1809000 ---p 08208000 08:30 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7250a1809000-7250a1e9e000 r--p 08208000 08:30 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7250a1e9e000-7250a1ee6000 rw-p 0889d000 08:30 47452                      /usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+        "7250a1ee6000-7250a1f8e000 rw-p 00000000 00:00 0 ",
+        "7250a1f8f000-7250a1f92000 r--p 00000000 08:30 143371                     /usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+        "7250a1f92000-7250a1fa1000 r-xp 00003000 08:30 143371                     /usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+        "7250a1fa1000-7250a1fa5000 r--p 00012000 08:30 143371                     /usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+        "7250a1fa5000-7250a1fa6000 r--p 00016000 08:30 143371                     /usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+        "7250a1fa6000-7250a1fa7000 rw-p 00017000 08:30 143371                     /usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+        "7250a1fa7000-7250a1fa9000 rw-p 00000000 00:00 0 ",
+        "7250a1fa9000-7250a1fab000 r--p 00000000 08:30 12951                      /usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+        "7250a1fab000-7250a1fb4000 r-xp 00002000 08:30 12951                      /usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+        "7250a1fb4000-7250a1fb6000 r--p 0000b000 08:30 12951                      /usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+        "7250a1fb6000-7250a1fb7000 r--p 0000c000 08:30 12951                      /usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+        "7250a1fb7000-7250a1fb8000 rw-p 0000d000 08:30 12951                      /usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+        "7250a1fb8000-7250a1fbb000 r--p 00000000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7250a1fbb000-7250a1fdd000 r-xp 00003000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7250a1fdd000-7250a1fe8000 r--p 00025000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7250a1fe8000-7250a1fe9000 r--p 00030000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7250a1fe9000-7250a1fea000 rw-p 00031000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "7250a1fea000-7250a1fee000 r--p 00000000 08:30 12743                      /usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+        "7250a1fee000-7250a1ffa000 r-xp 00004000 08:30 12743                      /usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+        "7250a1ffa000-7250a1ffd000 r--p 00010000 08:30 12743                      /usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+        "7250a1ffd000-7250a1ffe000 r--p 00012000 08:30 12743                      /usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+        "7250a1ffe000-7250a1fff000 rw-p 00013000 08:30 12743                      /usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+        "7250a1fff000-7250a2000000 rw-p 00000000 00:00 0 ",
+        "7250a2000000-7250a205b000 r--p 00000000 08:30 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7250a205b000-7250a246b000 r-xp 0005b000 08:30 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7250a246b000-7250a2ac6000 r--p 0046b000 08:30 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7250a2ac6000-7250a2b5c000 r--p 00ac5000 08:30 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7250a2b5c000-7250a2b61000 rw-p 00b5b000 08:30 143595                     /usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "7250a2b61000-7250a2b8d000 rw-p 00000000 00:00 0 ",
+        "7250a2b90000-7250a2b91000 rw-s 00086000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2b91000-7250a2b92000 rw-s 00004000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2b92000-7250a2ba0000 r--p 00000000 08:30 49522                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+        "7250a2ba0000-7250a2bb3000 r-xp 0000e000 08:30 49522                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+        "7250a2bb3000-7250a2bc1000 r--p 00021000 08:30 49522                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+        "7250a2bc1000-7250a2bc5000 r--p 0002e000 08:30 49522                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+        "7250a2bc5000-7250a2bc6000 rw-p 00032000 08:30 49522                      /usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+        "7250a2bc6000-7250a2bce000 r--p 00000000 08:30 12809                      /usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+        "7250a2bce000-7250a2bed000 r-xp 00008000 08:30 12809                      /usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+        "7250a2bed000-7250a2bf9000 r--p 00027000 08:30 12809                      /usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+        "7250a2bf9000-7250a2bfb000 r--p 00033000 08:30 12809                      /usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+        "7250a2bfb000-7250a2bfc000 rw-p 00035000 08:30 12809                      /usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+        "7250a2bfc000-7250a2c00000 rw-p 00000000 00:00 0 ",
+        "7250a2c00000-7250a2c28000 r--p 00000000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7250a2c28000-7250a2db1000 r-xp 00028000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7250a2db1000-7250a2e00000 r--p 001b1000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7250a2e00000-7250a2e04000 r--p 001ff000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7250a2e04000-7250a2e06000 rw-p 00203000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "7250a2e06000-7250a2e13000 rw-p 00000000 00:00 0 ",
+        "7250a2e13000-7250a2e14000 rw-s 00003000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2e14000-7250a2e15000 rw-s 00002000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2e15000-7250a2e16000 rw-s 00001000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2e16000-7250a2e18000 r--p 00000000 08:30 12682                      /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+        "7250a2e18000-7250a2e1a000 r-xp 00002000 08:30 12682                      /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+        "7250a2e1a000-7250a2e1c000 r--p 00004000 08:30 12682                      /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+        "7250a2e1c000-7250a2e1d000 r--p 00005000 08:30 12682                      /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+        "7250a2e1d000-7250a2e1e000 rw-p 00006000 08:30 12682                      /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+        "7250a2e1e000-7250a2e1f000 r--p 00000000 08:30 12674                      /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+        "7250a2e1f000-7250a2e21000 r-xp 00001000 08:30 12674                      /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+        "7250a2e21000-7250a2e22000 r--p 00003000 08:30 12674                      /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+        "7250a2e22000-7250a2e23000 r--p 00003000 08:30 12674                      /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+        "7250a2e23000-7250a2e24000 rw-p 00004000 08:30 12674                      /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+        "7250a2e24000-7250a2e26000 r--p 00000000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7250a2e26000-7250a2e2d000 r-xp 00002000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7250a2e2d000-7250a2e2e000 r--p 00009000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7250a2e2e000-7250a2e2f000 r--p 0000a000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7250a2e2f000-7250a2e30000 rw-p 0000b000 08:30 12829                      /usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+        "7250a2e30000-7250a2e35000 r--p 00000000 08:30 13109                      /usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+        "7250a2e35000-7250a2e3b000 r-xp 00005000 08:30 13109                      /usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+        "7250a2e3b000-7250a2e3d000 r--p 0000b000 08:30 13109                      /usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+        "7250a2e3d000-7250a2e3f000 r--p 0000d000 08:30 13109                      /usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+        "7250a2e3f000-7250a2e40000 rw-p 0000f000 08:30 13109                      /usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+        "7250a2e40000-7250a2e41000 r--p 00000000 08:30 13143                      /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+        "7250a2e41000-7250a2e42000 r-xp 00001000 08:30 13143                      /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+        "7250a2e42000-7250a2e43000 r--p 00002000 08:30 13143                      /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+        "7250a2e43000-7250a2e44000 r--p 00002000 08:30 13143                      /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+        "7250a2e44000-7250a2e45000 rw-p 00003000 08:30 13143                      /usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+        "7250a2e45000-7250a2e46000 r--p 00000000 08:30 13129                      /usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+        "7250a2e46000-7250a2e47000 r-xp 00001000 08:30 13129                      /usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+        "7250a2e47000-7250a2e48000 r--p 00002000 08:30 13129                      /usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+        "7250a2e48000-7250a2e49000 r--p 00002000 08:30 13129                      /usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+        "7250a2e49000-7250a2e4a000 rw-p 00003000 08:30 13129                      /usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+        "7250a2e4a000-7250a2e4d000 r--p 00000000 08:30 13131                      /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+        "7250a2e4d000-7250a2e50000 r-xp 00003000 08:30 13131                      /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+        "7250a2e50000-7250a2e51000 r--p 00006000 08:30 13131                      /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+        "7250a2e51000-7250a2e52000 r--p 00007000 08:30 13131                      /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+        "7250a2e52000-7250a2e53000 rw-p 00008000 08:30 13131                      /usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+        "7250a2e53000-7250a2e56000 r--p 00000000 08:30 13133                      /usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+        "7250a2e56000-7250a2e59000 r-xp 00003000 08:30 13133                      /usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+        "7250a2e59000-7250a2e5b000 r--p 00006000 08:30 13133                      /usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+        "7250a2e5b000-7250a2e5c000 r--p 00007000 08:30 13133                      /usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+        "7250a2e5c000-7250a2e5d000 rw-p 00008000 08:30 13133                      /usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+        "7250a2e5d000-7250a2e61000 r--p 00000000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "7250a2e61000-7250a2f08000 r-xp 00004000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "7250a2f08000-7250a2f15000 r--p 000ab000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "7250a2f15000-7250a2f16000 r--p 000b7000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "7250a2f16000-7250a2f17000 rw-p 000b8000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "7250a2f17000-7250a2f27000 r--p 00000000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7250a2f27000-7250a2fa6000 r-xp 00010000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7250a2fa6000-7250a2ffe000 r--p 0008f000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7250a2ffe000-7250a2fff000 r--p 000e7000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7250a2fff000-7250a3000000 rw-p 000e8000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "7250a3000000-7250a309d000 r--p 00000000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "7250a309d000-7250a31e5000 r-xp 0009d000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "7250a31e5000-7250a326c000 r--p 001e5000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "7250a326c000-7250a3277000 r--p 0026b000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "7250a3277000-7250a327a000 rw-p 00276000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "7250a327a000-7250a327e000 rw-p 00000000 00:00 0 ",
+        "7250a327e000-7250a327f000 r--p 00000000 08:30 13123                      /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+        "7250a327f000-7250a3280000 r-xp 00001000 08:30 13123                      /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+        "7250a3280000-7250a3281000 r--p 00002000 08:30 13123                      /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+        "7250a3281000-7250a3282000 r--p 00002000 08:30 13123                      /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+        "7250a3282000-7250a3283000 rw-p 00003000 08:30 13123                      /usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+        "7250a3283000-7250a3285000 r--p 00000000 08:30 13119                      /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+        "7250a3285000-7250a3287000 r-xp 00002000 08:30 13119                      /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+        "7250a3287000-7250a3288000 r--p 00004000 08:30 13119                      /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+        "7250a3288000-7250a3289000 r--p 00004000 08:30 13119                      /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+        "7250a3289000-7250a328a000 rw-p 00005000 08:30 13119                      /usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+        "7250a328a000-7250a328b000 r--p 00000000 08:30 11728                      /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+        "7250a328b000-7250a328c000 r-xp 00001000 08:30 11728                      /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+        "7250a328c000-7250a328d000 r--p 00002000 08:30 11728                      /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+        "7250a328d000-7250a328e000 r--p 00002000 08:30 11728                      /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+        "7250a328e000-7250a328f000 rw-p 00003000 08:30 11728                      /usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+        "7250a328f000-7250a3296000 r--p 00000000 08:30 13125                      /usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+        "7250a3296000-7250a329b000 r-xp 00007000 08:30 13125                      /usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+        "7250a329b000-7250a329e000 r--p 0000c000 08:30 13125                      /usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+        "7250a329e000-7250a329f000 r--p 0000f000 08:30 13125                      /usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+        "7250a329f000-7250a32a0000 rw-p 00010000 08:30 13125                      /usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+        "7250a32a0000-7250a32ab000 r--p 00000000 08:30 13135                      /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+        "7250a32ab000-7250a32be000 r-xp 0000b000 08:30 13135                      /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+        "7250a32be000-7250a32c7000 r--p 0001e000 08:30 13135                      /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+        "7250a32c7000-7250a32c8000 r--p 00026000 08:30 13135                      /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+        "7250a32c8000-7250a32c9000 rw-p 00027000 08:30 13135                      /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+        "7250a32c9000-7250a32cd000 r--p 00000000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7250a32cd000-7250a32ec000 r-xp 00004000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7250a32ec000-7250a32f4000 r--p 00023000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7250a32f4000-7250a32f6000 r--p 0002b000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7250a32f6000-7250a32f7000 rw-p 0002d000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "7250a32f7000-7250a32fc000 r--p 00000000 08:30 124045                     /usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+        "7250a32fc000-7250a3308000 r-xp 00005000 08:30 124045                     /usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+        "7250a3308000-7250a330c000 r--p 00011000 08:30 124045                     /usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+        "7250a330c000-7250a330d000 r--p 00015000 08:30 124045                     /usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+        "7250a330d000-7250a330e000 rw-p 00016000 08:30 124045                     /usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+        "7250a330e000-7250a3310000 r--p 00000000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7250a3310000-7250a3322000 r-xp 00002000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7250a3322000-7250a3328000 r--p 00014000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7250a3328000-7250a3329000 r--p 0001a000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7250a3329000-7250a332a000 rw-p 0001b000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "7250a332a000-7250a332f000 rw-p 00000000 00:00 0 ",
+        "7250a332f000-7250a3333000 r--p 00000000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "7250a3333000-7250a3357000 r-xp 00004000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "7250a3357000-7250a335b000 r--p 00028000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "7250a335b000-7250a335c000 r--p 0002b000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "7250a335c000-7250a335d000 rw-p 0002c000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "7250a335d000-7250a3363000 r--p 00000000 08:30 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7250a3363000-7250a33af000 r-xp 00006000 08:30 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7250a33af000-7250a33d9000 r--p 00052000 08:30 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7250a33d9000-7250a33da000 r--p 0007b000 08:30 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7250a33da000-7250a33db000 rw-p 0007c000 08:30 13100                      /usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+        "7250a33db000-7250a33dc000 r--p 00000000 00:00 0 ",
+        "7250a33dc000-7250a33dd000 r-xp 00000000 00:00 0 ",
+        "7250a33dd000-7250a33de000 r--p 00000000 00:00 0 ",
+        "7250a33de000-7250a33df000 r-xp 00000000 00:00 0 ",
+        "7250a33df000-7250a33e0000 r--p 00000000 00:00 0 ",
+        "7250a33e0000-7250a33e1000 r-xp 00000000 00:00 0 ",
+        "7250a33e1000-7250a33e2000 r--p 00000000 00:00 0 ",
+        "7250a33e2000-7250a33e3000 r-xp 00000000 00:00 0 ",
+        "7250a33e3000-7250a33e4000 r--p 00000000 00:00 0 ",
+        "7250a33e4000-7250a33e5000 r-xp 00000000 00:00 0 ",
+        "7250a33e5000-7250a33e7000 rw-p 00000000 00:00 0 ",
+        "7250a33e7000-7250a33e8000 r--p 00000000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7250a33e8000-7250a3413000 r-xp 00001000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7250a3413000-7250a341d000 r--p 0002c000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7250a341d000-7250a341f000 r--p 00036000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7250a341f000-7250a3421000 rw-p 00038000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7ffea59f3000-7ffea5a15000 rw-p 00000000 00:00 0                          [stack]",
+        "7ffea5a33000-7ffea5a37000 r--p 00000000 00:00 0                          [vvar]",
+        "7ffea5a37000-7ffea5a39000 r-xp 00000000 00:00 0                          [vdso]"
+      ],
+      "regular_file_classes": {
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests": {
+          "identity_at_observation": {
+            "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+            "bytes": 13502080,
+            "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 2415820,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/home/astra/.cache/mesa_shader_cache/index": {
+          "identity_at_observation": {
+            "resolved_path": "/home/astra/.cache/mesa_shader_cache/index",
+            "bytes": 1310728,
+            "sha256": "dcc24f8eb90834a98e6112f7bb9083c15bc0d89f5bf5d50d839abdd81f718945"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 73478,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": true,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libicudata.so.74.2",
+            "bytes": 30795392,
+            "sha256": "ddbb3718b8bd9cbd780e5ab08b4503c30a6c4fa0706ebe5d074ed6b596c1714e"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12903,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libicuuc.so.74.2",
+            "bytes": 2140336,
+            "sha256": "7560aadde38e5f4237a47a1ddd5891f9b36768a77a60faae30beee003ac01901"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12913,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+            "bytes": 1967424,
+            "sha256": "209e941be9eb2eb9ab36caaa0b81d1c6b36c8f5d7268c24f19e81039137e6485"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 179224,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1",
+            "bytes": 143545784,
+            "sha256": "4b93481bd1c9d42c0951275dd275d4a9d30db78c309ae2cc0405669bc6dbbf8a"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 47452,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libVkLayer_MESA_device_select.so",
+            "bytes": 97744,
+            "sha256": "78864ea761293a5f2e24b1b92dee83f4ce05ecd7d65547a3576c28a2d0f3bcd7"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 143371,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libmd.so.0.1.0",
+            "bytes": 55536,
+            "sha256": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12951,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+            "bytes": 202904,
+            "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 95115,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libbsd.so.0.12.1",
+            "bytes": 80888,
+            "sha256": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12743,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+            "bytes": 11929384,
+            "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 143595,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libtinfo.so.6.4",
+            "bytes": 208328,
+            "sha256": "e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 49522,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libedit.so.2.0.72",
+            "bytes": 220472,
+            "sha256": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12809,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "bytes": 2129424,
+            "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62152,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0",
+            "bytes": 26776,
+            "sha256": "667d97d6da16016400ab10de9f83ef4ab209ceb6adf68ff9650225ec13e723b0"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12682,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0",
+            "bytes": 18696,
+            "sha256": "8040da3f8516c1acfe39f04ff022480cdb273705ba5e7a4ca70bbdb1527cd67a"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12674,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+            "bytes": 47672,
+            "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12829,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.22.0",
+            "bytes": 64776,
+            "sha256": "1c22abb422953442aa12822ea51ac76d1c8be92ed143e0159e0f830776cde2b2"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13109,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxshmfence.so.1.0.0",
+            "bytes": 14480,
+            "sha256": "7d40b02b27d449b6b26cea10ea10aafd0cce5a1e2d7859ea57f34b29fe88923f"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13143,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0",
+            "bytes": 14552,
+            "sha256": "ad78a7b22409685ca82e54346c2b9465d697f303e69e74a9c1693bb206e319df"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13129,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-sync.so.1.0.0",
+            "bytes": 35032,
+            "sha256": "27c2d6dddde34146904c3c64cfcc885a14a351636d6611877368a48e29355c39"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13131,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0",
+            "bytes": 35016,
+            "sha256": "e59ef497333a6ede2096a0bd9eeb6ec4023374c16d3a8d7511d1251fb7f9b9df"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13133,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+            "bytes": 755864,
+            "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13153,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+            "bytes": 952616,
+            "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62156,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+            "bytes": 2592224,
+            "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 55475,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-present.so.0.0.0",
+            "bytes": 14536,
+            "sha256": "d06d982abe6e9202aecd22322166be8ba49e68e05889fb6c6faec0daa88530a4"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13123,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-dri3.so.0.1.0",
+            "bytes": 22744,
+            "sha256": "a919146693e71897484c2996beb837273a7a278d1a2afe477bc072f10681f3b0"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13119,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0",
+            "bytes": 14024,
+            "sha256": "941ab0ca78131e168817049d4c9935bb0e29b584cf05b58c47e3071f1fa81cf8"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 11728,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb-randr.so.0.1.0",
+            "bytes": 67784,
+            "sha256": "9fa6b0ec4af163a86bc9a9ded3309a5979155fb5ef2d311fdda7fff0e9eee01a"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13125,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0",
+            "bytes": 162392,
+            "sha256": "7958a0136b121bdc4c708968569ad152a9ed208ab026e2537b1005dde64ca440"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13135,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+            "bytes": 186624,
+            "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 339097,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libdrm.so.2.125.0",
+            "bytes": 92760,
+            "sha256": "ff39219aa058421e46afd36851342370cd1932d2557eb22f54e129755642bf67"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 124045,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+            "bytes": 113000,
+            "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 1856,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "bytes": 183024,
+            "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 55603,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libvulkan.so.1.3.275",
+            "bytes": 510592,
+            "sha256": "e833b010f814b72c6aca0300c8b5f19b6106ffa06c24ddc95a293970c7d6058e"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13100,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "bytes": 236616,
+            "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62148,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        }
+      },
+      "runtime_generated_vulkan_memfd_maps": [],
+      "other_nonpersistent_or_deleted_file_maps": [
+        "725094000000-725094081000 rw-s 00005000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "725099419000-72509941e000 rw-s 00087000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2b90000-7250a2b91000 rw-s 00086000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2b91000-7250a2b92000 rw-s 00004000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2e13000-7250a2e14000 rw-s 00003000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2e14000-7250a2e15000 rw-s 00002000 00:01 32132                      /memfd:allocation fd (deleted)",
+        "7250a2e15000-7250a2e16000 rw-s 00001000 00:01 32132                      /memfd:allocation fd (deleted)"
+      ],
+      "actual_executable": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests"
+    },
+    "profiler": {
+      "process_before": {
+        "pid": 28532,
+        "state": "S",
+        "session": 28532,
+        "start_ticks": "15578379"
+      },
+      "process_after": {
+        "pid": 28532,
+        "state": "S",
+        "session": 28532,
+        "start_ticks": "15578379"
+      },
+      "selected_environment": {
+        "HOME": "/home/astra",
+        "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com ",
+        "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+      },
+      "maps": [
+        "62ecfb9e1000-62ecfba24000 r--p 00000000 08:30 1625523                    /usr/lib/linux-tools-6.8.0-146/perf",
+        "62ecfba24000-62ecfbc6e000 r-xp 00043000 08:30 1625523                    /usr/lib/linux-tools-6.8.0-146/perf",
+        "62ecfbc6e000-62ecfc2be000 r--p 0028d000 08:30 1625523                    /usr/lib/linux-tools-6.8.0-146/perf",
+        "62ecfc2be000-62ecfc2e6000 r--p 008dc000 08:30 1625523                    /usr/lib/linux-tools-6.8.0-146/perf",
+        "62ecfc2e6000-62ecfc303000 rw-p 00904000 08:30 1625523                    /usr/lib/linux-tools-6.8.0-146/perf",
+        "62ecfc303000-62ecfc308000 rw-p 00000000 00:00 0 ",
+        "62ed21e57000-62ed21ea2000 rw-p 00000000 00:00 0                          [heap]",
+        "73b709875000-73b7098f6000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b7098f6000-73b709977000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709977000-73b7099f8000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b7099f8000-73b709a79000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709a79000-73b709afa000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709afa000-73b709b7b000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709b7b000-73b709bfc000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709bfc000-73b709c7d000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709c7d000-73b709cfe000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709cfe000-73b709d7f000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709d7f000-73b709e00000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b709e00000-73b709e28000 r--p 00000000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "73b709e28000-73b709fb1000 r-xp 00028000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "73b709fb1000-73b70a000000 r--p 001b1000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "73b70a000000-73b70a004000 r--p 001ff000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "73b70a004000-73b70a006000 rw-p 00203000 08:30 62152                      /usr/lib/x86_64-linux-gnu/libc.so.6",
+        "73b70a006000-73b70a013000 rw-p 00000000 00:00 0 ",
+        "73b70a07d000-73b70a0fe000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b70a0fe000-73b70a17f000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b70a17f000-73b70a200000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b70a200000-73b70a29d000 r--p 00000000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "73b70a29d000-73b70a3e5000 r-xp 0009d000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "73b70a3e5000-73b70a46c000 r--p 001e5000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "73b70a46c000-73b70a477000 r--p 0026b000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "73b70a477000-73b70a47a000 rw-p 00276000 08:30 55475                      /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+        "73b70a47a000-73b70a47e000 rw-p 00000000 00:00 0 ",
+        "73b70a4a5000-73b70a526000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b70a526000-73b70a5a7000 rw-s 00000000 00:0f 1042                       anon_inode:[perf_event]",
+        "73b70a5a7000-73b70a600000 r--p 00000000 08:30 62180                      /usr/lib/locale/C.utf8/LC_CTYPE",
+        "73b70a600000-73b70a717000 r--p 00000000 08:30 45887                      /usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+        "73b70a717000-73b70aa2f000 r-xp 00117000 08:30 45887                      /usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+        "73b70aa2f000-73b70acae000 r--p 0042f000 08:30 45887                      /usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+        "73b70acae000-73b70ad27000 r--p 006ad000 08:30 45887                      /usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+        "73b70ad27000-73b70aea5000 rw-p 00726000 08:30 45887                      /usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+        "73b70aea5000-73b70aea8000 rw-p 00000000 00:00 0 ",
+        "73b70aed6000-73b70aeda000 r--p 00000000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "73b70aeda000-73b70aefe000 r-xp 00004000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "73b70aefe000-73b70af02000 r--p 00028000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "73b70af02000-73b70af03000 r--p 0002b000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "73b70af03000-73b70af04000 rw-p 0002c000 08:30 55603                      /usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "73b70af04000-73b70af08000 r--p 00000000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "73b70af08000-73b70af27000 r-xp 00004000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "73b70af27000-73b70af2f000 r--p 00023000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "73b70af2f000-73b70af31000 r--p 0002b000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "73b70af31000-73b70af32000 rw-p 0002d000 08:30 339097                     /usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+        "73b70af32000-73b70af34000 r--p 00000000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "73b70af34000-73b70af42000 r-xp 00002000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "73b70af42000-73b70af44000 r--p 00010000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "73b70af44000-73b70af45000 r--p 00011000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "73b70af45000-73b70af46000 rw-p 00012000 08:30 46850                      /usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+        "73b70af46000-73b70af4a000 r--p 00000000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "73b70af4a000-73b70aff1000 r-xp 00004000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "73b70aff1000-73b70affe000 r--p 000ab000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "73b70affe000-73b70afff000 r--p 000b7000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "73b70afff000-73b70b000000 rw-p 000b8000 08:30 13153                      /usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+        "73b70b000000-73b70b04b000 r--p 00000000 08:30 13049                      /usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+        "73b70b04b000-73b70b1ab000 r-xp 0004b000 08:30 13049                      /usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+        "73b70b1ab000-73b70b1f0000 r--p 001ab000 08:30 13049                      /usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+        "73b70b1f0000-73b70b1f4000 r--p 001ef000 08:30 13049                      /usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+        "73b70b1f4000-73b70b210000 rw-p 001f3000 08:30 13049                      /usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+        "73b70b210000-73b70b3ac000 rw-p 00000000 00:00 0 ",
+        "73b70b3b3000-73b70b3b4000 r--p 00000000 08:30 62192                      /usr/lib/locale/C.utf8/LC_NUMERIC",
+        "73b70b3b4000-73b70b3b5000 r--p 00000000 08:30 62199                      /usr/lib/locale/C.utf8/LC_TIME",
+        "73b70b3b5000-73b70b3b6000 r--p 00000000 08:30 61840                      /usr/lib/locale/C.utf8/LC_COLLATE",
+        "73b70b3b6000-73b70b3b7000 r--p 00000000 08:30 62189                      /usr/lib/locale/C.utf8/LC_MONETARY",
+        "73b70b3b7000-73b70b3b8000 r--p 00000000 08:30 62188                      /usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES",
+        "73b70b3b8000-73b70b3b9000 r--p 00000000 08:30 62193                      /usr/lib/locale/C.utf8/LC_PAPER",
+        "73b70b3b9000-73b70b3ba000 r--p 00000000 08:30 62190                      /usr/lib/locale/C.utf8/LC_NAME",
+        "73b70b3ba000-73b70b3bc000 rw-p 00000000 00:00 0 ",
+        "73b70b3bc000-73b70b3c0000 r--p 00000000 08:30 1625394                    /usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+        "73b70b3c0000-73b70b3dc000 r-xp 00004000 08:30 1625394                    /usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+        "73b70b3dc000-73b70b3e3000 r--p 00020000 08:30 1625394                    /usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+        "73b70b3e3000-73b70b3e4000 r--p 00026000 08:30 1625394                    /usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+        "73b70b3e4000-73b70b3e5000 rw-p 00027000 08:30 1625394                    /usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+        "73b70b3e5000-73b70b3e8000 r--p 00000000 08:30 52487                      /usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+        "73b70b3e8000-73b70b3ef000 r-xp 00003000 08:30 52487                      /usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+        "73b70b3ef000-73b70b3f1000 r--p 0000a000 08:30 52487                      /usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+        "73b70b3f1000-73b70b3f2000 r--p 0000b000 08:30 52487                      /usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+        "73b70b3f2000-73b70b3f3000 rw-p 0000c000 08:30 52487                      /usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+        "73b70b3f3000-73b70b3f6000 r--p 00000000 08:30 96728                      /usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+        "73b70b3f6000-73b70b3fc000 r-xp 00003000 08:30 96728                      /usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+        "73b70b3fc000-73b70b3fe000 r--p 00009000 08:30 96728                      /usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+        "73b70b3fe000-73b70b3ff000 r--p 0000b000 08:30 96728                      /usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+        "73b70b3ff000-73b70b400000 rw-p 0000c000 08:30 96728                      /usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+        "73b70b400000-73b70b4b3000 r--p 00000000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "73b70b4b3000-73b70b7e7000 r-xp 000b3000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "73b70b7e7000-73b70b8b2000 r--p 003e7000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "73b70b8b2000-73b70b90e000 r--p 004b1000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "73b70b90e000-73b70b911000 rw-p 0050d000 08:30 217287                     /usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+        "73b70b911000-73b70b914000 rw-p 00000000 00:00 0 ",
+        "73b70b914000-73b70b915000 r--p 00000000 08:30 61839                      /usr/lib/locale/C.utf8/LC_ADDRESS",
+        "73b70b915000-73b70b91d000 rw-p 00000000 00:00 0 ",
+        "73b70b91d000-73b70b920000 r--p 00000000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "73b70b920000-73b70b942000 r-xp 00003000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "73b70b942000-73b70b94d000 r--p 00025000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "73b70b94d000-73b70b94e000 r--p 00030000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "73b70b94e000-73b70b94f000 rw-p 00031000 08:30 95115                      /usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+        "73b70b94f000-73b70b952000 r--p 00000000 08:30 13093                      /usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+        "73b70b952000-73b70b95c000 r-xp 00003000 08:30 13093                      /usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+        "73b70b95c000-73b70b95e000 r--p 0000d000 08:30 13093                      /usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+        "73b70b95e000-73b70b95f000 r--p 0000e000 08:30 13093                      /usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+        "73b70b95f000-73b70b960000 rw-p 0000f000 08:30 13093                      /usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+        "73b70b960000-73b70b96c000 rw-p 00000000 00:00 0 ",
+        "73b70b96c000-73b70b96e000 r--p 00000000 08:30 13091                      /usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+        "73b70b96e000-73b70b97a000 r-xp 00002000 08:30 13091                      /usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+        "73b70b97a000-73b70b97c000 r--p 0000e000 08:30 13091                      /usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+        "73b70b97c000-73b70b97d000 r--p 0000f000 08:30 13091                      /usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+        "73b70b97d000-73b70b97e000 rw-p 00010000 08:30 13091                      /usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+        "73b70b97e000-73b70b988000 rw-p 00000000 00:00 0 ",
+        "73b70b988000-73b70b99c000 r--p 00000000 08:30 12801                      /usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+        "73b70b99c000-73b70ba09000 r-xp 00014000 08:30 12801                      /usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+        "73b70ba09000-73b70ba33000 r--p 00081000 08:30 12801                      /usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+        "73b70ba33000-73b70ba3b000 r--p 000ab000 08:30 12801                      /usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+        "73b70ba3b000-73b70ba3c000 rw-p 000b3000 08:30 12801                      /usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+        "73b70ba3c000-73b70ba3f000 r--p 00000000 08:30 12810                      /usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+        "73b70ba3f000-73b70ba55000 r-xp 00003000 08:30 12810                      /usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+        "73b70ba55000-73b70ba59000 r--p 00019000 08:30 12810                      /usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+        "73b70ba59000-73b70ba5a000 r--p 0001c000 08:30 12810                      /usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+        "73b70ba5a000-73b70ba5b000 rw-p 0001d000 08:30 12810                      /usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+        "73b70ba5b000-73b70ba5d000 r--p 00000000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "73b70ba5d000-73b70ba6f000 r-xp 00002000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "73b70ba6f000-73b70ba75000 r--p 00014000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "73b70ba75000-73b70ba76000 r--p 0001a000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "73b70ba76000-73b70ba77000 rw-p 0001b000 08:30 1856                       /usr/lib/x86_64-linux-gnu/libz.so.1.3",
+        "73b70ba77000-73b70ba87000 r--p 00000000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "73b70ba87000-73b70bb06000 r-xp 00010000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "73b70bb06000-73b70bb5e000 r--p 0008f000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "73b70bb5e000-73b70bb5f000 r--p 000e7000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "73b70bb5f000-73b70bb60000 rw-p 000e8000 08:30 62156                      /usr/lib/x86_64-linux-gnu/libm.so.6",
+        "73b70bb60000-73b70bb61000 r--p 00000000 08:30 62194                      /usr/lib/locale/C.utf8/LC_TELEPHONE",
+        "73b70bb61000-73b70bb62000 r--p 00000000 08:30 62187                      /usr/lib/locale/C.utf8/LC_MEASUREMENT",
+        "73b70bb62000-73b70bb69000 r--s 00000000 08:30 62138                      /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+        "73b70bb69000-73b70bb6a000 r--p 00000000 08:30 62186                      /usr/lib/locale/C.utf8/LC_IDENTIFICATION",
+        "73b70bb6a000-73b70bb6c000 rw-p 00000000 00:00 0 ",
+        "73b70bb6c000-73b70bb6d000 r--p 00000000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "73b70bb6d000-73b70bb98000 r-xp 00001000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "73b70bb98000-73b70bba2000 r--p 0002c000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "73b70bba2000-73b70bba4000 r--p 00036000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "73b70bba4000-73b70bba6000 rw-p 00038000 08:30 62148                      /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "7ffd08446000-7ffd08468000 rw-p 00000000 00:00 0                          [stack]",
+        "7ffd08475000-7ffd08479000 r--p 00000000 00:00 0                          [vvar]",
+        "7ffd08479000-7ffd0847b000 r-xp 00000000 00:00 0                          [vdso]"
+      ],
+      "regular_file_classes": {
+        "/usr/lib/linux-tools-6.8.0-146/perf": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/linux-tools-6.8.0-146/perf",
+            "bytes": 11764472,
+            "sha256": "2914099e8d0e4530fa9143ffd8a2ed5790bc04eb7f565c49ae85df265dce7782"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 1625523,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "bytes": 2129424,
+            "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62152,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+            "bytes": 2592224,
+            "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 55475,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/locale/C.utf8/LC_CTYPE": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_CTYPE",
+            "bytes": 360460,
+            "sha256": "59015993b1b671273461ef1167d7a9ad76dc090d521c91102e962217ed6b6dba"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62180,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+            "bytes": 9061000,
+            "sha256": "1021f236227334ded6d1bbbc4bb6f5d933f793d8397c969896cfbdf03ce96223"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 45887,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "bytes": 183024,
+            "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 55603,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+            "bytes": 186624,
+            "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 339097,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+            "bytes": 78944,
+            "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 46850,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+            "bytes": 755864,
+            "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13153,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libslang.so.2.3.3": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+            "bytes": 2157592,
+            "sha256": "af564bc54e7c7bc51c21de935846ac6fe5bd551c22ab5af72927ff5e31aaaac4"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13049,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/locale/C.utf8/LC_NUMERIC": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_NUMERIC",
+            "bytes": 50,
+            "sha256": "f5976e6b3e6b24dfe03caad6a5b98d894d8110d8bd15507e690fd60fd3e04ab2"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62192,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_TIME": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_TIME",
+            "bytes": 3360,
+            "sha256": "0910b595d1d5d4e52cc0f415bbb1ff07c015d6860d34aae02505dd9973a63154"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62199,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_COLLATE": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_COLLATE",
+            "bytes": 1406,
+            "sha256": "47a5f5359a8f324abc39d69a7f6241a2ac0e2fbbeae5b9c3a756e682b75d087b"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 61840,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_MONETARY": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_MONETARY",
+            "bytes": 270,
+            "sha256": "bfd9e9975443b834582493fe9a8d7aefcd989376789c17470a1e548aee76fd55"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62189,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES",
+            "bytes": 48,
+            "sha256": "f9ad02f1d8eba721d4cbd50c365b5c681c39aec008f90bfc2be2dc80bfbaddcb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62188,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_PAPER": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_PAPER",
+            "bytes": 34,
+            "sha256": "cde048b81e2a026517cc707c906aebbd50f5ee3957b6f0c1c04699dffcb7c015"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62193,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_NAME": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_NAME",
+            "bytes": 62,
+            "sha256": "14507aad9f806112e464b9ca94c93b2e4d759ddc612b5f87922d7cac7170697d"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62190,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+            "bytes": 162696,
+            "sha256": "aaea15e052e86192f90a64fe03779c74ec5b41c59622c6e121d7c89d0d20e63c"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 1625394,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+            "bytes": 52248,
+            "sha256": "02d7582c5d391e460e56aa67a414360e3183b968206645b9123f9dc7bff5d009"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 52487,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libcap.so.2.66": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+            "bytes": 51536,
+            "sha256": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 96728,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+            "bytes": 5309400,
+            "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 217287,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/locale/C.utf8/LC_ADDRESS": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_ADDRESS",
+            "bytes": 127,
+            "sha256": "26e2800affab801cb36d4ff9625a95c3abceeda2b6553a7aecd0cfcf34c98099"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 61839,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+            "bytes": 202904,
+            "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 95115,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+            "bytes": 63776,
+            "sha256": "28e77a498f2f17f8cb883c91303f9901343ea0d8e34959d138dd462fcc9b201f"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13093,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+            "bytes": 67672,
+            "sha256": "70a88c376a1aced719ca7bdcd5cdd6c5d3bdce44b99f5ab2037fdad096bbf03d"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 13091,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libdw-0.190.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+            "bytes": 737696,
+            "sha256": "989dc9873f358a5af7d18d6100cf5fd66531d7990dc47d69068b3c6c96588867"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12801,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libelf-0.190.so": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+            "bytes": 121560,
+            "sha256": "248c989360783cdc52f3659921de852c2efcc2097253ce58e34443f856412814"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 12810,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+            "bytes": 113000,
+            "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 1856,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+            "bytes": 952616,
+            "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62156,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/locale/C.utf8/LC_TELEPHONE": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_TELEPHONE",
+            "bytes": 47,
+            "sha256": "f4caf0d12844219b65ba42edc7ec2f5ac1b2fc36a3c88c28887457275daca1ee"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62194,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/locale/C.utf8/LC_MEASUREMENT": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_MEASUREMENT",
+            "bytes": 23,
+            "sha256": "bb14a6f2cbd5092a755e8f272079822d3e842620dd4542a8dfa1e5e72fc6115b"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62187,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache",
+            "bytes": 27028,
+            "sha256": "52c227df9d53248238602c1ddaccd2c8ddc4cc6a61aa45d7c425af590b8806a5"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62138,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        },
+        "/usr/lib/locale/C.utf8/LC_IDENTIFICATION": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/locale/C.utf8/LC_IDENTIFICATION",
+            "bytes": 258,
+            "sha256": "38a1d8e5271c86f48910d9c684f64271955335736e71cec35eeac942f90eb091"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62186,
+          "immutable_input_bound": false,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": true
+        },
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+          "identity_at_observation": {
+            "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "bytes": 236616,
+            "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+          },
+          "device_major": 8,
+          "device_minor": 48,
+          "inode": 62148,
+          "immutable_input_bound": true,
+          "known_default_provider_mutable_cache": false,
+          "late_observed_profiler_locale_data_not_prebound": false
+        }
+      },
+      "runtime_generated_vulkan_memfd_maps": [],
+      "other_nonpersistent_or_deleted_file_maps": [],
+      "actual_executable": "/usr/lib/linux-tools-6.8.0-146/perf"
+    }
+  },
+  "actual_samebirth_LVP0_JIT0_default_cache": true,
+  "current_provider_map_dev_inode_and_full_content_matches": true,
+  "all_immutable_mapped_regular_files_bound": false,
+  "all_owner_and_target_immutable_mapped_regular_files_bound": true,
+  "all_profiler_ELF_mapped_code_bound": true,
+  "root_snapshot_correction": {
+    "first_snapshot_actual_closed_exit": 1,
+    "reason": "ROOT initial all-file assertion also included11 perf locale data files absent from before-input map. Mature owner/target inputs and profiler executable/20DSOs remain bound. No workload/helper/target retry or before-map modification. Locale files have current snapshot pins only; no claim they were frozen before.",
+    "late_locale_count": 11
+  },
+  "all_regular_mapped_files_are_immutable_prebound": false,
+  "mutable_default_cache_is_not_frozen_source_or_cold_proof": true,
+  "observer_scope": "Corrected ROOT snapshot outside mature owner aggregate sampling; no guard transfer, cache write/reset/relocation/disable or second workload. Runtime-generated Vulkan memfd and mutable default cache are classified separately; no stable cache/hit/miss/cause/performance claim.",
+  "numerical_or_runtime_completion_verdict": false
+}

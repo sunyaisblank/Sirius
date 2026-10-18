@@ -1,0 +1,89 @@
+{
+  "schema": "sirius-trace-stencil-root-owner-product-check-v1",
+  "case": "candidate-metal",
+  "created_utc": "2026-10-17T23:56:31.036485+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "actual_helper_observed_closed_exit": 0,
+  "owner_terminal_passed_exit0_original_guards": true,
+  "whole_input_rows": 4510,
+  "preflight_local_absolute_paths_normalized_to_owner_relative_keys": true,
+  "before_after_current_and_prior_raw_exact": true,
+  "source_unchanged": true,
+  "sample_count": 4,
+  "owner_seconds": 1.0455222589953337,
+  "peak_sampled_aggregate_RSS_KiB": 274392,
+  "saved_owned_births_fresh_rechecked": [
+    {
+      "pid": 25398,
+      "saved_start_ticks": "15519192",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 25402,
+      "saved_start_ticks": "15519270",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "current_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal",
+    "bytes": 358799,
+    "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+  },
+  "role": "candidate",
+  "variant": "metal",
+  "matching_original_control_byteequal_baseline": null,
+  "control_baseline": {
+    "path": "bin/linux-gcc/kernels/portability/trace.metal",
+    "resolved_path": "/home/astra/.project/Sirius/bin/linux-gcc/kernels/portability/trace.metal",
+    "bytes": 344056,
+    "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88",
+    "previous_actual_control": "out/trace-jacobi-pair-loop-screen/control-metal/trace.metal",
+    "actual_previous_control_bytes_equal": true
+  },
+  "separate_validation_disassembly_and_root_acceptance_pending": true,
+  "all5_controls_before_candidate_source_attribution": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/samples.jsonl": {
+      "bytes": 892,
+      "sha256": "4c9d6a949902d269a5b9da04f151a3acde28dfe949ea4145f9739b8c7afb1f48"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/inputs-before.json": {
+      "bytes": 1488175,
+      "sha256": "cf11b4fb8d58cc4ffdedc24eb5a38be0c9e17f18aa3ef5fd983f927b3d776874"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/inputs-after.json": {
+      "bytes": 1488175,
+      "sha256": "cf11b4fb8d58cc4ffdedc24eb5a38be0c9e17f18aa3ef5fd983f927b3d776874"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/owner.json": {
+      "bytes": 2561,
+      "sha256": "dc2b024329fd62afa134ee53fdea14a39cb3d59978cbe73495081b7fd7eb3e4b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal": {
+      "bytes": 358799,
+      "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-metal.json": {
+      "bytes": 2278,
+      "sha256": "a80bb40d9d4cb123244fe721c14463ede2a1ee15762a41e4e2356d787fab0ae5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-metal.log": {
+      "bytes": 675,
+      "sha256": "6a6bb82195d7cfc9bf87d684648cbea25ca88272a08d92289c32ea24b050cdc1"
+    }
+  },
+  "scope": "One actual offline compiler owner/product only; no scientific/numerical/runtime/RSS/JIT/performance/adoption verdict. Three-dimensional8x8x1 kernel and ABI remain separate emitted checks."
+}

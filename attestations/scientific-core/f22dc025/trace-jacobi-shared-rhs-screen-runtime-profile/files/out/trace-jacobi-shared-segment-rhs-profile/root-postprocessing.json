@@ -1,0 +1,94 @@
+{
+  "schema": "sirius-shared-rhs-existing-profile-postprocess-v1",
+  "created_utc": "2026-10-18T00:11:45.992930+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "profile_data": {
+    "bytes": 81135236,
+    "sha256": "b74efc546e7f601a9bbdc9481eb1906677a7d651199cee48a3feb6a9b4832c48"
+  },
+  "tool": {
+    "resolved_path": "/usr/lib/linux-tools-6.8.0-146/perf",
+    "bytes": 11764472,
+    "sha256": "2914099e8d0e4530fa9143ffd8a2ed5790bc04eb7f565c49ae85df265dce7782"
+  },
+  "actual_operations": [
+    {
+      "name": "header",
+      "argv": [
+        "/usr/lib/linux-tools-6.8.0-146/perf",
+        "report",
+        "-i",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+        "--stdio",
+        "--header-only"
+      ],
+      "actual_closed_exit": 0,
+      "wall_seconds": 0.007815295975888148,
+      "stdout": {
+        "bytes": 1983,
+        "sha256": "1c08adb24c47b08e80a79cbc94e3fa0730f9f8d7320ad092dc4dc13ea4df3aeb"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "flat",
+      "argv": [
+        "/usr/lib/linux-tools-6.8.0-146/perf",
+        "report",
+        "-i",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+        "--stdio",
+        "--no-children",
+        "-g",
+        "none",
+        "--sort",
+        "comm,dso,symbol",
+        "--percent-limit",
+        "0.5"
+      ],
+      "actual_closed_exit": 0,
+      "wall_seconds": 2.6712104250036646,
+      "stdout": {
+        "bytes": 28028,
+        "sha256": "330d41e4237566565c154e165711be7b9c5dd62c4c171e6c4ca89b690c6d9992"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "callgraph",
+      "argv": [
+        "/usr/lib/linux-tools-6.8.0-146/perf",
+        "report",
+        "-i",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+        "--stdio",
+        "--children",
+        "--sort",
+        "comm,dso,symbol",
+        "--percent-limit",
+        "1"
+      ],
+      "actual_closed_exit": 0,
+      "wall_seconds": 3.1223647260048892,
+      "stdout": {
+        "bytes": 458105,
+        "sha256": "123c013eef7536a96596d852b8c54069cb9e1ac12132294e4943e7d72ca335f2"
+      },
+      "stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "reporter_only_environment_delta": {
+    "DEBUGINFOD_URLS": ""
+  },
+  "target_environment_unchanged": true,
+  "scope": "Read-only postprocessing of the sole completed original attempt; no project/provider rerun. Sampling/callstack/symbol coverage, observer accounting and late-only profiler locale inputs limit causal/performance inferences."
+}

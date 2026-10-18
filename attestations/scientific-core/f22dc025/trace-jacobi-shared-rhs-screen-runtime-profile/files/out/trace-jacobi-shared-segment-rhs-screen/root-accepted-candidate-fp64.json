@@ -1,0 +1,102 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "candidate-fp64",
+  "created_utc": "2026-10-17T23:56:21.138865+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3870,
+    "sha256": "13cae9dc07ef1b56d86d0081e7ad3b56b437c9a03625d6c73cfa6d5a9b7f0900"
+  },
+  "posttools": {
+    "bytes": 4828,
+    "sha256": "71e2504c08604c19a7dfe2a102220c292a671d6f81ea42419af234d2a92fe7ce"
+  },
+  "whole_input_rows": 4496,
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/trace.spv",
+    "bytes": 2336860,
+    "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+  },
+  "role": "candidate",
+  "variant": "fp64",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": true,
+  "emitted_entry": "main",
+  "emitted_local_size": [
+    8,
+    8,
+    1
+  ],
+  "five_original_control_proofs_reused_matching_producer": true,
+  "full_COMP_FP64_portable_static_review_pending": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/samples.jsonl": {
+      "bytes": 4451,
+      "sha256": "2aab087d4f07dc8a91f7de6b7a4221bdaa77eea9707868ca2de3e1f3ff50c32c"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/inputs-before.json": {
+      "bytes": 1483873,
+      "sha256": "123acc8e06f5f5f6f9ba945a972d2ab2e55ed0f48b7a2ff26167d5884af7ca6f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/inputs-after.json": {
+      "bytes": 1483873,
+      "sha256": "123acc8e06f5f5f6f9ba945a972d2ab2e55ed0f48b7a2ff26167d5884af7ca6f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/owner.json": {
+      "bytes": 2649,
+      "sha256": "ba55150eace6e32c99ee6fb1b97af171828e934c72cd75efeb318862ac82ac29"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/trace.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-fp64.json": {
+      "bytes": 2277,
+      "sha256": "e186fa3099345f4f6a9aa073539e1ecc510a5c54352d5995319e4e57e8e1ddfd"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-fp64.log": {
+      "bytes": 674,
+      "sha256": "883154da7d52ab10b8351216614126e2cac64496ae600babeab45b62862815b6"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-spv-candidate-fp64.spvasm": {
+      "bytes": 6908055,
+      "sha256": "603bd3866d2aaf5b8f0a36f3401456baa561cfe530fb13be313424018aaf0936"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-fp64.json": {
+      "bytes": 3870,
+      "sha256": "13cae9dc07ef1b56d86d0081e7ad3b56b437c9a03625d6c73cfa6d5a9b7f0900"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-fp64.json": {
+      "bytes": 4828,
+      "sha256": "71e2504c08604c19a7dfe2a102220c292a671d6f81ea42419af234d2a92fe7ce"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

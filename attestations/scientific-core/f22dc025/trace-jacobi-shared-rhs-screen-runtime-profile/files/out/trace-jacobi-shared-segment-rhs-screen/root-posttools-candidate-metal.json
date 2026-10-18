@@ -1,0 +1,22 @@
+{
+  "schema": "sirius-trace-stencil-root-posttool-observation-v1",
+  "case": "candidate-metal",
+  "created_utc": "2026-10-17T23:56:31.144466+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal",
+    "bytes": 358799,
+    "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+  },
+  "owner_product_check": {
+    "bytes": 3902,
+    "sha256": "7dbb374de3fdeb9ecb2add44c2e69827b2f32260bd79251293948bc5cfed87a3"
+  },
+  "operations": [],
+  "posttool_guard_scope": "Separate root-owned GNUtimeout300s/TERM/KILL10s per command and actual subprocess completion; no aggregateRSS/reserve or full session-census certification for these posttools. Mature Slangowner guards remain separate.",
+  "SPIRV_validation_and_disassembly_completed": false,
+  "portable_source_only_no_CUDA_or_Metal_native_compiler_executed": true,
+  "files": {},
+  "scope": "Original SPVvalidator and ordinary disassembly only; emitted ABI/CFG/footprint and all5 baseline attribution gate pending. No driver execution/runtime benefit/numerical adoption."
+}

@@ -1,0 +1,137 @@
+{
+  "schema": "sirius-private-trace-jacobi-shared-segment-rhs-source-candidate-v1",
+  "created_utc": "2026-10-17T23:47:42.748223+00:00",
+  "source_only": true,
+  "runtime_admitted": false,
+  "tracked_source_applied": false,
+  "files": [
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs/original-gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs/candidate-gr_deviation.slang",
+      "bytes": 18835,
+      "sha256": "9737e7ad54d06c9cb584c14504d574f88551833b3c602ed8335157c100a6a38b"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs/original-trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs/candidate-trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-rhs/patch.diff",
+      "bytes": 5698,
+      "sha256": "ee4f1b688c9b3d11eb5640b9647b2ebaa62f14f179c40abdad70ac719ae22208"
+    }
+  ],
+  "base": "Original17768B/7663 private distance-stencil helper, not a second delta on the three-phase prototype. Both63512B/09a3 trace copies remain exact current private import-order/pair-loop source. Complete original helper preserved; change only its evaluation region before unchanged sixthStep/commit suffix.",
+  "implementation": "Fixed [loop] int step=0;step<8;++step. One Riemann and one Christoffel textual call execute only at0(start),2(midpoint),6(end). phaseTangent/R/Gamma persist for associated steps. One RHS textual call executes every step, using named Real4 stepXi/stepV temporaries and stepDXi/stepDV outputs copied to the original sixteen named k vectors. No new arrays or zero initializations.",
+  "events": [
+    {
+      "step": 0,
+      "tangent": "startTangent",
+      "xi": "xiA",
+      "V": "VA",
+      "dXi": "k1XiA",
+      "dV": "k1VA"
+    },
+    {
+      "step": 1,
+      "tangent": "startTangent",
+      "xi": "xiB",
+      "V": "VB",
+      "dXi": "k1XiB",
+      "dV": "k1VB"
+    },
+    {
+      "step": 2,
+      "tangent": "midpointTangent",
+      "xi": "xiA + k1XiA * (Real(0.5) * dLambda)",
+      "V": "VA + k1VA * (Real(0.5) * dLambda)",
+      "dXi": "k2XiA",
+      "dV": "k2VA"
+    },
+    {
+      "step": 3,
+      "tangent": "midpointTangent",
+      "xi": "xiA + k2XiA * (Real(0.5) * dLambda)",
+      "V": "VA + k2VA * (Real(0.5) * dLambda)",
+      "dXi": "k3XiA",
+      "dV": "k3VA"
+    },
+    {
+      "step": 4,
+      "tangent": "midpointTangent",
+      "xi": "xiB + k1XiB * (Real(0.5) * dLambda)",
+      "V": "VB + k1VB * (Real(0.5) * dLambda)",
+      "dXi": "k2XiB",
+      "dV": "k2VB"
+    },
+    {
+      "step": 5,
+      "tangent": "midpointTangent",
+      "xi": "xiB + k2XiB * (Real(0.5) * dLambda)",
+      "V": "VB + k2VB * (Real(0.5) * dLambda)",
+      "dXi": "k3XiB",
+      "dV": "k3VB"
+    },
+    {
+      "step": 6,
+      "tangent": "endTangent",
+      "xi": "xiA + k3XiA * dLambda",
+      "V": "VA + k3VA * dLambda",
+      "dXi": "k4XiA",
+      "dV": "k4VA"
+    },
+    {
+      "step": 7,
+      "tangent": "endTangent",
+      "xi": "xiB + k3XiB * dLambda",
+      "V": "VB + k3VB * dLambda",
+      "dXi": "k4XiB",
+      "dV": "k4VB"
+    }
+  ],
+  "Hoare": {
+    "preconditions": "Unchanged original input/mode/domain/alias preconditions and host accepted-segment authority. Start/end and metric inputs are by value. Normal trace caller provides distinct adjacent X/V elements; no stronger public alias assumption is introduced.",
+    "invariant": "Before event0 no k is read. Event0 assigns k1A, event1 k1B, event2 k2A, event3 k3A, event4 k2B, event5 k3B, event6 k4A, event7 k4B. Each selected argument reads only entry inout values and previously assigned k. No inout value is written until the original four final commits after event7.",
+    "geometry_lifetime": "At event0 all R/Gamma components and phaseTangent are assigned before the first RHS, and remain unchanged through1. Event2 computes the exact original midpoint expressions after startB and overwrites complete geometry/tangent before RHS2; reused unchanged through5. Event6 overwrites at the end point before RHS6 and reuses through7. Riemann initializes all256 outputs; Christoffel initializes all64 outputs even on original flat/origin returns. No stale or uninitialized array component or tangent is consumed.",
+    "definite_assignment": "Every stepXi/stepV branch assigns both values. RHS fully writes both output vectors before copyout. Fixed0..<8/+1 permits only the eight listed events; the final else is event7. The exact event induction establishes all16k definitions before final commits. No artificial zero definition masks a missing definition; actual compiler CFG/definite-assignment lowering remains a required screen gate.",
+    "rounding_order": "Selected xi/V expression tokens are exact original call arguments, same Real4 type and operator grouping. Independent argument expressions are evaluated into same-type locals before the call; no arithmetic is added, reassociated or reduced. Original step midpoint expression tokens, k2-to-k3 and k3-to-k4 dependencies, and final sixthStep/weighted-commit bytes remain. Pure selected-value copy assignments introduce no mathematical interpolation, compensation or projection.",
+    "physical_work": "Exactly3 Riemann+3 explicit Christoffel+8 RHS calls per pair; no stage or RHS is skipped. Geometry calls remain Riemann then Christoffel, then corresponding RHS events in original order. Internal metric/stencil contractions and mode policies remain unchanged.",
+    "failure_cancellation": "Void geometry/RHS helpers retain original nonfinite propagation; no new abort/refusal/finite check/fallback/retry/cancellation point. Trace frame/whole-state rollback, all accepted consumers, dispatch/attempt/physical1000ms and resource guards remain outside this unchanged helper authority.",
+    "alias_and_liveness": "Original public signature and inout order remain. Inputs are read before final commits exactly as originally. Named temporary copies do not alias R/Gamma/k outputs. All16k vectors and existing R/Gamma arrays remain; no dynamic sample array or indexing into k is introduced. Driver register pressure, branch/phi formation, loop retention and spills remain unproved."
+  },
+  "mechanical_checks": {
+    "outside_region_byte_exact": true,
+    "trace_copies_byte_exact": true,
+    "midpoint_expression_tokens_exact": true,
+    "all8_input_expression_and_output_destination_joins_exact": true,
+    "all16_original_k_declarations_unchanged": true,
+    "sixthStep_and_final_commits_byte_exact": true,
+    "textual_calls_original_candidate": {
+      "Riemann": [
+        3,
+        1
+      ],
+      "explicit_Christoffel": [
+        3,
+        1
+      ],
+      "RHS": [
+        8,
+        1
+      ]
+    }
+  },
+  "scope": "Optional private source candidate pending independent/root source review and actual controlled code generation, import provenance, ordinary emitted ABI/CFG/mode/arithmetic and lifetime review. No execution/adoption authority. Current guarded stencil runtime timed out300s after six completed progress markers plus FP64begin, noXML/full numerical verdict; this does not identify an allocating/compiler-call cause or prove a cure. The earlier three-phase prototype reduction is static-only and is not a new unchanged runtime retry.",
+  "risks": "One textual helper callsite is intended to reduce repeated static expansion, not physical operations. Compiler may clone/unroll/hoist anyway; step selection, cross-event liveness and private output copies may affect SSA/register/spill cost. No code size/JIT/RSS/time/numerical/portable-runtime/performance claim before actual evidence.",
+  "authoring": "Only owned original/candidate copies, patch and this source contract are written. No canonical source/product edits, helper/import/project parser, compiler/posttool/provider/test/network/process/Git operation."
+}

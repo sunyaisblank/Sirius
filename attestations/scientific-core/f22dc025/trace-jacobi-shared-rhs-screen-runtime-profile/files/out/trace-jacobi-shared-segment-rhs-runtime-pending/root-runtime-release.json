@@ -1,0 +1,107 @@
+{
+  "schema": "sirius-shared-rhs-runtime-ROOT-release-v1",
+  "created_utc": "2026-10-18T00:06:34.712894+00:00",
+  "released": true,
+  "source": {
+    "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "status": "",
+    "tracking": [
+      "0",
+      "0"
+    ],
+    "worktrees": "worktree /home/astra/.project/Sirius\nHEAD f22dc025d112c2d967356dead6b6e9caf8b42d67\nbranch refs/heads/development/minimum-step-floor-2026-10-15\n\n"
+  },
+  "root_FULLREAD_source_complete_emitted_and_concrete_runtime_reviews": true,
+  "all_static_preflight_pins_fresh_exact": 1549,
+  "expected_owner_whole_inputs": 1550,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/independent-runtime-review.json": {
+      "bytes": 7107,
+      "sha256": "c99f219c8bec7f084d87dd3e0de6eb41102667f81481829863cf4474b30ec0c2"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-preflight.json": {
+      "bytes": 403910,
+      "sha256": "61ee042bc8134b0cdc3c4fed139f8a514cb86b18b52898a4836f69476ce3e2a4"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/readiness.json": {
+      "bytes": 9151,
+      "sha256": "28bb3def4db053109a57d614dc8313739f348320daa49954455b1706011afed1"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/actions.json": {
+      "bytes": 71634,
+      "sha256": "e973a10fce45ef4a08ecd86bfb3f3c47be654f5367a761afff1a65f685700bcb"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-runtime-observation.json": {
+      "bytes": 310610,
+      "sha256": "61ed872ddd6f67da86d2f8ae181a2400f72f55cb51f791ff34d01d8f469384fe"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-stage-materialization.json": {
+      "bytes": 3587,
+      "sha256": "f643b28ad80988a7953c53a855499b2facc8670f33c6b0426dcb160c34d4a13b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/independent-emitted-review.json": {
+      "bytes": 5899,
+      "sha256": "0ffecaf55bc92f542bfc3816cf551dafe0b03a6112e31356585658807cb88736"
+    }
+  },
+  "actual_root_protected_environment": {},
+  "available_host_KiB": 18974584,
+  "external_launch_environment": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0"
+  },
+  "profiler": {
+    "observation": {
+      "path": "out/trace-jacobi-shared-segment-rhs-profile/root-profile-tool-observation.json",
+      "bytes": 12503,
+      "sha256": "c035ba1fee1251561c9c96d528a0a5235921c7ab4f8af5859596805791a993e8"
+    },
+    "actual_planned_argv": [
+      "/usr/lib/linux-tools-6.8.0-146/perf",
+      "record",
+      "--no-buildid-cache",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "19",
+      "--call-graph",
+      "dwarf,8192",
+      "-o",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+      "--",
+      "/usr/bin/python3",
+      "-u",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/run_owned.py",
+      "trace-jacobi-all-rungs"
+    ],
+    "selected_observer_environment": {
+      "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com "
+    },
+    "config_paths_absent": [
+      "/etc/perfconfig",
+      "/home/astra/.perfconfig"
+    ],
+    "scope": "Existing user-space profiler runs around unchanged mature owner; scoped to inherited owned descendants, not systemwide. Target argv, environment, cache, original assertions and300s/4GiB/reserve guards stay unchanged. Profiler RSS is separate outside mature owner aggregate, with host reserve still sampled; no guard-transfer or uninstrumented performance claim. Actual wrapper PID/birth/maps and final data/status require ROOT checks.",
+    "mutable_output_not_input": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+    "wrapper_exit_and_samebirth_required": true
+  },
+  "case": "trace-jacobi-all-rungs",
+  "sole_original_attempt_released": true,
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "default_cache": true,
+  "strict_property_NAME_absence_nine_ordered_markers_zero_FESD_actual_provider_birth_map_checks_required": true,
+  "fresh_remote_branch_observed": {
+    "actual_closed_git_ls_remote_exit": 0,
+    "revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "ref": "refs/heads/development/minimum-step-floor-2026-10-15",
+    "observed_UTC": "2026-10-17T23:34:15Z"
+  },
+  "preservation_timing": "User-directed compiler+runtime coherent batch after result, before cleanup; raw/source/build held.",
+  "stop_first_nonpass": true,
+  "source_candidate_applied": false,
+  "source_build_hold_release": false,
+  "scope": "One private changed-shader original witness only; no prior or future retry, relaxed guard, coldframe/performance/fullscience/Mandatory/adoption/release qualification."
+}

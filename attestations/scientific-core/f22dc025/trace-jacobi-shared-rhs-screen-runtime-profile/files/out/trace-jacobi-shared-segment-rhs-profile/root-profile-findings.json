@@ -1,0 +1,105 @@
+{
+  "schema": "sirius-shared-rhs-actual-profile-findings-v1",
+  "created_utc": "2026-10-18T00:13:03.265256+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "original_focused_numerical_witness_passed": true,
+  "wall_seconds": 268.9945692840265,
+  "peak_sampled_owner_aggregate_RSS_KiB": 1966104,
+  "actual_reports_all_closed0": true,
+  "reported_lost_samples": 0,
+  "flat_top12_report_rows": [
+    "9.45% sirius_backend_ libvulkan_lvp.so [.] 0x00000000002aaf0c - -",
+    "3.24% sirius_backend_ libLLVM.so.20.1 [.] llvm::LiveRangeCalc::findReachingDefs(llvm::LiveRange&, llvm::MachineBasicBlock&, llvm::SlotIndex, unsigned int, llvm::ArrayRef<llvm::SlotIndex>) - -",
+    "2.95% sirius_backend_ libvulkan_lvp.so [.] 0x00000000002a186a - -",
+    "2.93% sirius_backend_ libLLVM.so.20.1 [.] llvm::DominatorTreeBase<llvm::MachineBasicBlock, true>::dominates(llvm::MachineBasicBlock const*, llvm::MachineBasicBlock const*) const - -",
+    "2.63% sirius_backend_ libvulkan_lvp.so [.] 0x00000000002a1a6c - -",
+    "2.61% sirius_backend_ libLLVM.so.20.1 [.] llvm::LiveRangeUpdater::add(llvm::LiveRange::Segment) - -",
+    "2.28% sirius_backend_ libLLVM.so.20.1 [.] llvm::LiveRange::extendInBlock(llvm::ArrayRef<llvm::SlotIndex>, llvm::SlotIndex, llvm::SlotIndex) - -",
+    "2.17% python3 python3.12 [.] _PyEval_EvalFrameDefault - -",
+    "2.08% sirius_backend_ libLLVM.so.20.1 [.] llvm::SpillPlacement::activate(unsigned int) - -",
+    "1.92% sirius_backend_ libLLVM.so.20.1 [.] llvm::LiveIntervals::extendSegmentsToUses(llvm::LiveRange&, llvm::SmallVector<std::pair<llvm::SlotIndex, llvm::VNInfo*>, 16u>&, llvm::Register, llvm::LaneBitmask) - -",
+    "1.85% sirius_backend_ libvulkan_lvp.so [.] 0x00000000002a1a68 - -",
+    "1.63% sirius_backend_ libvulkan_lvp.so [.] 0x00000000002aaee0 - -"
+  ],
+  "selected_inclusive_report_rows": [
+    "44.74% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::FPPassManager::runOnFunction(llvm::Function&) - -",
+    "44.63% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::FPPassManager::runOnModule(llvm::Module&) - -",
+    "44.56% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::MCJIT::emitObject(llvm::Module*) - -",
+    "44.11% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::MachineFunctionPass::runOnFunction(llvm::Function&) - -",
+    "26.72% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::MCJIT::generateCodeForModule(llvm::Module*) - -",
+    "20.82% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::RegAllocBase::allocatePhysRegs() - -",
+    "14.97% 0.00% sirius_backend_ libLLVM.so.20.1 [.] llvm::MCJIT::finalizeObject() - -"
+  ],
+  "grounded_inference": "The sampled original attempt spends substantial sampled user CPU in LLVM machine-code generation, live-range and register-allocation routines. These are actual named callstack/self-sample observations; hidden provider offsets and incomplete stacks prevent a complete phase/cause accounting. Reduced emitted bytes alone is not a demonstrated driver-time or performance benefit.",
+  "limits": [
+    "UserCPU sampling only, nominal19Hz; inclusive percentages overlap and include the unchanged mature Python controller, so cannot be summed or read as wall-time fractions.",
+    "Provider symbols include unresolved offsets and the largest inclusive row is unknown0xffffffffffffffff; no complete symbol/callchain coverage.",
+    "Perf event timestamps have no clock-domain calibration to ROOT/Python observations; do not derive per-rung timing by joining them.",
+    "Profiler RSS is outside mature aggregate; host reserve is sampled; no uninstrumented performance or exact peak bound.",
+    "No corresponding baseline profile or original ABBA benefit gates. No coldframe/provider-wide/external-domain qualification."
+  ],
+  "actual_diagnostic_environment": {
+    "controller": {
+      "DEBUGINFOD_URLS": "",
+      "PERF_BUILDID_DIR": "/home/astra/.debug"
+    },
+    "child": {
+      "DEBUGINFOD_URLS": "",
+      "PERF_BUILDID_DIR": "/home/astra/.debug"
+    },
+    "profiler": {
+      "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com "
+    }
+  },
+  "original_inherited_diagnostic_environment": {
+    "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com "
+  },
+  "correction_to_overbroad_environment_claim": {
+    "root_postprocessing_record": {
+      "bytes": 2933,
+      "sha256": "9e4824c923a386dfe24b8023dd8f0768e97e7c5f872cd57c2b0043406972d462"
+    },
+    "original_field_target_environment_unchanged": true,
+    "corrected_full_environment_identity": false,
+    "reason": "perf actually injects DEBUGINFOD_URLS empty and PERF_BUILDID_DIR=/home/astra/.debug into owner/child. Inherited perf itself retains original Ubuntu DEBUGINFOD_URLS. Earlier source/setup/postprocessing expectation of blanket environment identity is overbroad.",
+    "scientific_settings": "Actual LVP0/JIT0/default Mesa cache/no cache relocation/filter/assertions/physical1000ms/300s4GiB2reserve unchanged; the three-rung positive numerical witness is scoped separately from environment-identical or uninstrumented performance qualification.",
+    "no_rerun_or_frozen_map_rewrite": true
+  },
+  "late_observer_locale_gap": {
+    "first_snapshot_actual_closed_exit": 1,
+    "reason": "ROOT initial all-file assertion also included11 perf locale data files absent from before-input map. Mature owner/target inputs and profiler executable/20DSOs remain bound. No workload/helper/target retry or before-map modification. Locale files have current snapshot pins only; no claim they were frozen before.",
+    "late_locale_count": 11
+  },
+  "decision": "Admit the successful original focused numerical witness at its genuine host/private-source identities, preserve this batch, then adopt the already reviewed coherent source repair. Next latency work should target grounded code-generation/liveness costs and matching ownership, rather than repeat the same focused run.",
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-profile/root-postprocessing.json": {
+      "bytes": 2933,
+      "sha256": "9e4824c923a386dfe24b8023dd8f0768e97e7c5f872cd57c2b0043406972d462"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/header.stdout": {
+      "bytes": 1983,
+      "sha256": "1c08adb24c47b08e80a79cbc94e3fa0730f9f8d7320ad092dc4dc13ea4df3aeb"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/flat.stdout": {
+      "bytes": 28028,
+      "sha256": "330d41e4237566565c154e165711be7b9c5dd62c4c171e6c4ca89b690c6d9992"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/callgraph.stdout": {
+      "bytes": 458105,
+      "sha256": "123c013eef7536a96596d852b8c54069cb9e1ac12132294e4943e7d72ca335f2"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/runtime.data": {
+      "bytes": 81135236,
+      "sha256": "b74efc546e7f601a9bbdc9481eb1906677a7d651199cee48a3feb6a9b4832c48"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-completed.json": {
+      "bytes": 7685,
+      "sha256": "2abafb56f0a14aeaf4404307444af78159bdd4f4f7df3f8dea7c1e8e7f01b8ce"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-live-provider-environment.json": {
+      "bytes": 116095,
+      "sha256": "425b06f4e556c4adcbbb5f56eab20277ebe84364097f1f678791ee7840785751"
+    }
+  },
+  "scope": "Profile observations and explicit apparatus limitations only; no causally isolated speedup, source adoption or full qualification."
+}

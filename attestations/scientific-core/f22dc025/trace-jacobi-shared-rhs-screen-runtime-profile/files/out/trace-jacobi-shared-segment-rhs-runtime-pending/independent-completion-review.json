@@ -1,0 +1,150 @@
+{
+  "schema": "sirius-shared-rhs-independent-original-runtime-completion-review-v1",
+  "created_utc": "2026-10-18T00:13:16.663135+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "audit_completed": true,
+  "ownership_record_valid": true,
+  "decision": "ONE_ORIGINAL_PRIVATE_THREE_RUNG_WITNESS_PASS",
+  "review_scope": "Bounded completed test/ownership/input/provider audit. Accepted source/runtime/full emitted proofs reused; no historical replay or profile-postprocessing verdict. Authored pending runtime adapter; ROOT separately reviewed it and operated the sole run.",
+  "pins": {
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-completed.json": {
+      "bytes": 7685,
+      "sha256": "2abafb56f0a14aeaf4404307444af78159bdd4f4f7df3f8dea7c1e8e7f01b8ce"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-live-provider-environment.json": {
+      "bytes": 116095,
+      "sha256": "425b06f4e556c4adcbbb5f56eab20277ebe84364097f1f678791ee7840785751"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-accepted-trace-jacobi-all-rungs.json": {
+      "bytes": 2177,
+      "sha256": "c72e803ff062aedee50976e682d9d26af63da2f412cc608fa9f41baee8f06f78"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/independent-runtime-review.json": {
+      "bytes": 7107,
+      "sha256": "c99f219c8bec7f084d87dd3e0de6eb41102667f81481829863cf4474b30ec0c2"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/root-record-closed.json": {
+      "bytes": 5579,
+      "sha256": "fc5475c785ec2ecae90d77ab3b7e90ba62ead6005ef165e6ef4117d20ea04f7e"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/runtime.data": {
+      "bytes": 81135236,
+      "sha256": "b74efc546e7f601a9bbdc9481eb1906677a7d651199cee48a3feb6a9b4832c48"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/root-profile-findings.json": {
+      "bytes": 7324,
+      "sha256": "9af8239afb67964ed0d8121408c3958e3e639cd0a4fc5579144ef92aab5a9b8f"
+    }
+  },
+  "inputs_and_terminal": {
+    "static_current_rows": 1549,
+    "before_equals_after_current_rows": 1550,
+    "actual_beforeafter_rows": 3100,
+    "all_root_raw_and_acceptance_release_links_rehashed": true,
+    "source_and_inputs_unchanged": true,
+    "profiler_observed_closed_exit": 0,
+    "owner_child_exit": 0,
+    "collector_actual_closed_exit": 0,
+    "stop_reason": null,
+    "owner_seconds": 268.9945692840265,
+    "samples": 10049,
+    "peak_sampled_owner_plus_target_RSS_KiB": 1966104,
+    "minimum_available_KiB": 16225896,
+    "original300s_4GiB_2GiB_guards_satisfied": true,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "saved_ROOT_fresh_sameboot_absence_records": [
+      {
+        "pid": 28533,
+        "saved_start_ticks": "15578380",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "pid": 28537,
+        "saved_start_ticks": "15578464",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      },
+      {
+        "pid": 28532,
+        "saved_start_ticks": "15578379",
+        "current_start_ticks": null,
+        "owned_birth_absent": true
+      }
+    ],
+    "reviewer_process_queries": false
+  },
+  "scientific_eligibility": {
+    "exact_original_active_case": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "exact_single_XML_run_completed_zero_FESD": true,
+    "strict_fp64_evidence_PROPERTY_NAME_absent": true,
+    "ordered_all9markers": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "test_seconds": "268.827",
+    "full_original_unchanged_assertions_and_failure_retention_recovery_authority": "Source and genuine f22 host joined in accepted preparation. Supported FP32/COMP/FP64 paths evidenced by zeroFESD, strict absence and all three prepared/exercised phases; no unsupported-decline promotion. Original128attempts/physical1000ms/record/buffer and numerical checks retained.",
+    "markers_alone_not_numerical_PASS": true,
+    "private_program_only": "Genuine fe663 host +private09a3 trace/9737 deviation, new9d4b/65a83/de928 modules; tracked f22 candidate unapplied."
+  },
+  "environment_and_mapping": {
+    "samebirth_profiler_controller_child_identity_joined": true,
+    "same_child_current_LVP_device_inode": "08:30 major8/minor48 inode143595; full9d69 bytes joined",
+    "LVP_JIT_OPTIMIZATION_LEVEL0_device0_default_Mesa_cache_observed": true,
+    "immutable_bound_mapped_rows_by_role": {
+      "controller": 17,
+      "child": 35,
+      "profiler": 23
+    },
+    "profiler_ELF_code_and_owner_target_immutable_inputs_bound": true,
+    "all_observer_regular_data_prebound": false,
+    "late_profiler_locale_files": [
+      "/usr/lib/locale/C.utf8/LC_NUMERIC",
+      "/usr/lib/locale/C.utf8/LC_TIME",
+      "/usr/lib/locale/C.utf8/LC_COLLATE",
+      "/usr/lib/locale/C.utf8/LC_MONETARY",
+      "/usr/lib/locale/C.utf8/LC_MESSAGES/SYS_LC_MESSAGES",
+      "/usr/lib/locale/C.utf8/LC_PAPER",
+      "/usr/lib/locale/C.utf8/LC_NAME",
+      "/usr/lib/locale/C.utf8/LC_ADDRESS",
+      "/usr/lib/locale/C.utf8/LC_TELEPHONE",
+      "/usr/lib/locale/C.utf8/LC_MEASUREMENT",
+      "/usr/lib/locale/C.utf8/LC_IDENTIFICATION"
+    ],
+    "late_locale_scope": "Current snapshot identities only; never prelaunch/beforeafter-frozen. Initial ROOT all-file assertion failed; correction preserved without target/helper retry or input-map edit. No observer-complete reproducibility claim.",
+    "mutable_Mesa_index": "Observed separately; not rehashed as frozen input or cache-cold/hit/miss evidence. Runtime memfd separate.",
+    "perf_diagnostic_environment_delta": "Actual owner/child DEBUGINFOD_URLS empty and PERF_BUILDID_DIR=/home/astra/.debug; profiler inherited nonempty DEBUGINFOD_URLS. Preserve these perf-induced diagnostic variables rather than claim blanket full environment identity. Scientific LVP/Mesa/test settings remain the admitted values.",
+    "profiler_accounting": "19Hz user/DWARF8192 inherited descendants, outside mature aggregate; host reserve sampled. No uninstrumented performance or precise continuous RSS guarantee."
+  },
+  "disposition": "Eligible as this one original focused test with the private changed program. No source adoption, allP1/fullscience/Mandatory/cold/native portability/release qualification, comparative JIT/RSS/time benefit or full-frame evidence. Profile data is closed and pinned; ROOT postprocessing now closed; only its later findings/correction receipt and linked hashes were checked, without a full statistical/symbol/attribution reanalysis. No cleanup/next launch/hold release authority.",
+  "repository": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "status": "",
+    "tracking_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "new_review_publication_pending_ROOT": true
+  },
+  "method": "Passive stdlib JSON/XML/text/hash/read-onlyGit only; no helper/project/profiler/provider/compiler/test/network/cache/process execution or mutation beyond this receipt.",
+  "profile_findings_correction": {
+    "read_and_pinned": true,
+    "linked_raw_hashes_joined_only_no_full_profile_reanalysis": true,
+    "historical_root_postprocessing_blanket_target_environment_unchanged_true_retained": true,
+    "corrected_full_environment_identity": false,
+    "actual_perf_injected_diagnostic_variables_match_saved_live_snapshot": true,
+    "observer_locale11_still_late_only": true,
+    "limits": "ROOT named LLVM userCPU samples are observational; inclusive percentages overlap and include controller, unresolved stacks remain, no calibrated per-rung timestamp join or wall-time/baseline speedup claim. This completion audit admits no independent full-profile/cause/adoption result."
+  }
+}

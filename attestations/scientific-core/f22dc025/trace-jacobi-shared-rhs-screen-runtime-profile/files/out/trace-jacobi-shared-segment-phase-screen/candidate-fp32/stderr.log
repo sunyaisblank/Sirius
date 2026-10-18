@@ -1,0 +1,48 @@
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:261:46
+    |
+261 | xiA + k1XiA * (Real(0.5) * dLambda),
+    |             ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:262:44
+    |
+262 | VA + k1VA * (Real(0.5) * dLambda), k2XiA, k2VA);
+    |           ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:274:46
+    |
+274 | xiA + k3XiA * dLambda, VA + k3VA * dLambda, k4XiA, k4VA);
+    |             ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:274:67
+    |
+274 | xiA + k3XiA * dLambda, VA + k3VA * dLambda, k4XiA, k4VA);
+    |                                  ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:267:46
+    |
+267 | xiB + k1XiB * (Real(0.5) * dLambda),
+    |             ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:268:44
+    |
+268 | VB + k1VB * (Real(0.5) * dLambda), k2XiB, k2VB);
+    |           ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:276:46
+    |
+276 | xiB + k3XiB * dLambda, VB + k3VB * dLambda, k4XiB, k4VB);
+    |             ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-phase-screen/inputs/candidate/gr_deviation.slang:276:67
+    |
+276 | xiB + k3XiB * dLambda, VB + k3VB * dLambda, k4XiB, k4VB);
+    |                                  ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+----'

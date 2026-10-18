@@ -1,0 +1,79 @@
+{
+  "schema": "sirius-private-trace-jacobi-shared-segment-phases-source-candidate-v1",
+  "created_utc": "2026-10-17T23:41:05.337658+00:00",
+  "source_only": true,
+  "runtime_admitted": false,
+  "tracked_source_applied": false,
+  "inputs_and_outputs": [
+    {
+      "path": "out/trace-jacobi-shared-segment-phases/original-gr_deviation.slang",
+      "bytes": 17768,
+      "sha256": "7663ddf8dafbd5f204bb586eb47141aed2d90eabe0301ba07f312b95c68aff8b"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-phases/candidate-gr_deviation.slang",
+      "bytes": 18264,
+      "sha256": "a75bcee061333845b47b94124c2d9dd7bce20ec474df21cf9d9bc80bf2c67994"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-phases/original-trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-phases/candidate-trace.slang",
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+    },
+    {
+      "path": "out/trace-jacobi-shared-segment-phases/patch.diff",
+      "bytes": 5093,
+      "sha256": "18b137951c96197b0e93b2a705f58c3af0130a90de13d4675725c19135fa1b53"
+    }
+  ],
+  "base": "Exact current private import-order trace09a3 plus reviewed stencil gr_deviation7663. This is a composite optional private source candidate; not canonical f22 source qualification. Both trace copies are byte-identical; the existing trace pair loop/import order and distance-loop implementation are untouched.",
+  "allowed_delta": "Only AdvanceJacobiPairAcceptedSegment statements between its 16 named k-vector declarations and unchanged sixthStep/four commits are replaced. Three ordered straight-line geometry phases become phase0..<3 [loop] with one textual Riemann call and one textual Christoffel call. No function, public signature, module/import, numerical literal, metric contraction or other production body changes.",
+  "Hoare": {
+    "preconditions": "Same as original helper: start/end central states and metric arguments are by-value; dLambda and all Real/mode policies unchanged. Normal trace caller supplies four distinct writable X/V elements for adjacent columns in each pair. No new finite/nonzero/radius assumptions or general alias contract is added. Host grants one accepted central segment and retains original dispatch/cancellation authority.",
+    "invariant": "Before phase0, all four inout Jacobi values equal entry values and all k vectors are unread. Before phase1, k1XiA/k1VA and k1XiB/k1VB are fully assigned by start A then start B. Before phase2, those and k2/k3 for A and B are fully assigned in original mid A2,A3,B2,B3 order. After phase2, k4A then k4B are assigned. Inout values are unmodified throughout the loop; the original four final weighted commits follow once after its fixed third iteration.",
+    "definite_assignment": "phasePosition and phaseTangent are assigned on every exhaustive if/else path before the shared geometry calls. Exactly phases0,1,2 are reachable from int0/<3/+1. Every k read is dominated dynamically by its original earlier-phase assignment; no uninitialized k is read, and no zero initialization is added. Actual compiler definite-assignment/CFG lowering remains a required screen gate.",
+    "midpoint": "The exact cubic-Hermite midpointPosition and midpointTangent expression tokens are preserved, only indented inside phase1. They execute after both start RHS calls and before midpoint geometry/RHS, as before. phase0/2 select bit-preserving Vec4Cart copies of start/end. No endpoint interpolation, arithmetic reassociation or coordinate averaging is substituted.",
+    "geometry": "R[4][4][4][4] and Gamma[4][4][4] are the same two existing helper work arrays. GetRiemannTensorCart fully initializes its output and retains its unchanged centralGamma/dGamma/flat-origin logic; GetKerrSchildFamilyChristoffel zeroes/writes all64 entries before any original early return. Thus each shared phase consumes freshly overwritten geometry, not stale data. Inner distance loops, original coordinate/conversion spellings, plus-before-minus, coefficient accumulation and tensor contraction remain byte-identical.",
+    "RHS_order": [
+      "start A(k1)",
+      "start B(k1)",
+      "mid A(k2)",
+      "mid A(k3)",
+      "mid B(k2)",
+      "mid B(k3)",
+      "end A(k4)",
+      "end B(k4)"
+    ],
+    "operation_order": "Every original RHS call and its Jacobi argument-expression tokens remains, with only the tangent symbol replaced by the selected equal phaseTangent. Original dt/half-dt vector arithmetic, k2 dependence of k3, k3 dependence of k4 and final sixthStep/weighted sum expressions are unchanged. Phase selection and copy assignments add no floating arithmetic. The final weighted-commit suffix is byte-exact.",
+    "failure_cancellation": "These geometry/RHS helpers are void and introduce no new refusal, abort, retry, finite check or fallback. Nonfinite propagation remains original and downstream acceptance/frame/full-state rollback predicates are unchanged. There is no new intermediate global state store or dispatch/cancellation point. Physical work remains3 Riemann +3 Christoffel +8 RHS per pair, and original host guards/attempt caps/physical1000ms are unaffected.",
+    "overlap_and_liveness": "Public arguments and inout call order remain unchanged. The trace caller uses firstColumn=2*pair and +1 with separate X/V arrays; all four addresses remain distinct and committed only after geometry/RHS. No new arrays or sample tensors; all16 named k vectors remain live as required. R/Gamma storage spans the phase loop and is reused only after complete overwrite. Compiler hoisting/unrolling/register/spill/liveness may still differ and require actual emitted/static review."
+  },
+  "mechanical_source_checks": {
+    "outside_replaced_region_byte_identical": true,
+    "trace_two_copies_byte_identical": true,
+    "midpoint_expression_tokens_identical": true,
+    "sixthStep_and_commit_suffix_byte_identical": true,
+    "RHS_textual_calls_original_candidate": [
+      8,
+      8
+    ],
+    "Riemann_textual_calls_original_candidate": [
+      3,
+      1
+    ],
+    "Christoffel_textual_calls_original_candidate": [
+      3,
+      1
+    ],
+    "all16_named_k_vectors_and_existing_arrays_unchanged": true,
+    "new_array_declarations": 0
+  },
+  "required_before_any_execution": "Independent/root source review, controlled original/candidate compiler recipe and actual import-source evidence, emitted fixed three-phase CFG/definite assignment, exact3 geometry and8 RHS dynamic order, ordinary ABI/modes/rounding checks, and fresh root input/ownership admission. No runtime is authorized by these copies. Existing current runtime is not queried or altered.",
+  "cost_and_scope_limits": "Target is fewer static copies of the large Riemann/Gamma code inside an inlined module. [loop] does not guarantee sharing after downstream lowering. No observed compiler output, module reduction, JIT/allocation cause, memory/time benefit, numerical completion, physical work reduction or production adoption is claimed. Candidate remains optional unapplied scratch if current original diagnostic passes; any next action is ROOT decision. No new test, tolerance, buffer, projection, mode or ABI policy.",
+  "authoring_method": "Passive source/hash/text-diff and source identity checks only; no helper/project import/parser executable, compiler, provider, test, network, process or Git mutation. Only this owned source directory is written."
+}

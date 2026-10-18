@@ -1,0 +1,281 @@
+{
+  "schema": "sirius-owned-private-runtime-profile-tool-observation-v1",
+  "created_utc": "2026-10-17T23:54:26.958551+00:00",
+  "tool": {
+    "resolved_path": "/usr/lib/linux-tools-6.8.0-146/perf",
+    "bytes": 11764472,
+    "sha256": "2914099e8d0e4530fa9143ffd8a2ed5790bc04eb7f565c49ae85df265dce7782"
+  },
+  "operations": [
+    {
+      "operation": "version",
+      "argv": [
+        "/usr/lib/linux-tools-6.8.0-146/perf",
+        "version"
+      ],
+      "actual_closed_exit": 0,
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/version.stdout",
+        "bytes": 20,
+        "sha256": "872a8d41083366461ad9d70ca003f0af9d5ae9f8d2cfa12fd05ee7b9cdf3129c"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/version.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "ldd",
+      "argv": [
+        "/usr/bin/ldd",
+        "/usr/lib/linux-tools-6.8.0-146/perf"
+      ],
+      "actual_closed_exit": 0,
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/ldd.stdout",
+        "bytes": 1515,
+        "sha256": "7cc7316d8c268d729ca66e81d48a7a0b7108118254432c0ba661f1b6cf2948d0"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/ldd.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "report-capability",
+      "argv": [
+        "/usr/lib/linux-tools-6.8.0-146/perf",
+        "report",
+        "-i",
+        "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/capability.data",
+        "--stdio",
+        "--header-only"
+      ],
+      "actual_closed_exit": 0,
+      "stdout": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/report-capability.stdout",
+        "bytes": 1797,
+        "sha256": "5114022792d1af1da633e6b3f000f4778abcbd81afa9e95fc595ff362e1351af"
+      },
+      "stderr": {
+        "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/report-capability.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "resolved_DT_NEEDED": {
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+      "bytes": 78944,
+      "sha256": "cc08c9f50a8009ffd6391e0116a100369b11ca9238fa52392c019e6645b122a1"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libcap.so.2.66": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libcap.so.2.66",
+      "bytes": 51536,
+      "sha256": "6ac6abc86ac891c6e13486470e26f1d939f47fda9e6b5d5508a7f5ec881adc84"
+    },
+    "/usr/lib/x86_64-linux-gnu/libcrypto.so.3": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "bytes": 5309400,
+      "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdw-0.190.so": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libdw-0.190.so",
+      "bytes": 737696,
+      "sha256": "989dc9873f358a5af7d18d6100cf5fd66531d7990dc47d69068b3c6c96588867"
+    },
+    "/usr/lib/x86_64-linux-gnu/libelf-0.190.so": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libelf-0.190.so",
+      "bytes": 121560,
+      "sha256": "248c989360783cdc52f3659921de852c2efcc2097253ce58e34443f856412814"
+    },
+    "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "bytes": 186624,
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libnuma.so.1.0.0",
+      "bytes": 52248,
+      "sha256": "02d7582c5d391e460e56aa67a414360e3183b968206645b9123f9dc7bff5d009"
+    },
+    "/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libpython3.12.so.1.0",
+      "bytes": 9061000,
+      "sha256": "1021f236227334ded6d1bbbc4bb6f5d933f793d8397c969896cfbdf03ce96223"
+    },
+    "/usr/lib/x86_64-linux-gnu/libslang.so.2.3.3": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libslang.so.2.3.3",
+      "bytes": 2157592,
+      "sha256": "af564bc54e7c7bc51c21de935846ac6fe5bd551c22ab5af72927ff5e31aaaac4"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libtraceevent.so.1.8.2",
+      "bytes": 162696,
+      "sha256": "aaea15e052e86192f90a64fe03779c74ec5b41c59622c6e121d7c89d0d20e63c"
+    },
+    "/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind-x86_64.so.8.0.1",
+      "bytes": 67672,
+      "sha256": "70a88c376a1aced719ca7bdcd5cdd6c5d3bdce44b99f5ab2037fdad096bbf03d"
+    },
+    "/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libunwind.so.8.0.1",
+      "bytes": 63776,
+      "sha256": "28e77a498f2f17f8cb883c91303f9901343ea0d8e34959d138dd462fcc9b201f"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5",
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    }
+  },
+  "loader_cache": {
+    "resolved_path": "/etc/ld.so.cache",
+    "bytes": 38899,
+    "sha256": "ac03cb977be6e5a0150c240a6c67b400e3665ff78e14456df8c1243b640fdf39"
+  },
+  "capability_true_actual_closed_exit": 0,
+  "negative_child_false_actual_exit_propagated": 1,
+  "capability_and_failure_streams": {
+    "capability.data": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/capability.data",
+      "bytes": 13176,
+      "sha256": "1752c7d033f0c91c4199e56a0f3d47414e54dcaf278427aa75262938d5f60e4e"
+    },
+    "version.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/version.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "capability.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/capability.stderr",
+      "bytes": 153,
+      "sha256": "f9dbb941166d158b9081989061033fa1bedcc86f04b4fb28353040ff269db1f0"
+    },
+    "ldd.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/ldd.stdout",
+      "bytes": 1515,
+      "sha256": "7cc7316d8c268d729ca66e81d48a7a0b7108118254432c0ba661f1b6cf2948d0"
+    },
+    "failure-propagation.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/failure-propagation.stderr",
+      "bytes": 162,
+      "sha256": "fbf7014b7fa55abce2235857a8c7a32263e4f65c675226790e92839caf078a79"
+    },
+    "failure-propagation.data": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/failure-propagation.data",
+      "bytes": 13240,
+      "sha256": "b08081a43fc1c77503c41d466696459324385f8ed65738fda6b4c68aabb3c937"
+    },
+    "failure-propagation.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/failure-propagation.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "capability.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/capability.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "version.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/version.stdout",
+      "bytes": 20,
+      "sha256": "872a8d41083366461ad9d70ca003f0af9d5ae9f8d2cfa12fd05ee7b9cdf3129c"
+    },
+    "ldd.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/ldd.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "report-capability.stderr": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/report-capability.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "report-capability.stdout": {
+      "resolved_path": "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/report-capability.stdout",
+      "bytes": 1797,
+      "sha256": "5114022792d1af1da633e6b3f000f4778abcbd81afa9e95fc595ff362e1351af"
+    }
+  },
+  "sampling_recipe": [
+    "record",
+    "--no-buildid-cache",
+    "-e",
+    "cpu-clock:u",
+    "-F",
+    "19",
+    "--call-graph",
+    "dwarf,8192",
+    "-o",
+    "ROOT_OWNED_PROFILE_DATA",
+    "--",
+    "/usr/bin/python3",
+    "-u",
+    "ROOT_MATURE_OWNER",
+    "trace-jacobi-all-rungs"
+  ],
+  "wrapper_scope": "Existing user-space profiler runs around unchanged mature owner; scoped to inherited owned descendants, not systemwide. Target argv, environment, cache, original assertions and300s/4GiB/reserve guards stay unchanged. Profiler RSS is separate outside mature owner aggregate, with host reserve still sampled; no guard-transfer or uninstrumented performance claim. Actual wrapper PID/birth/maps and final data/status require ROOT checks.",
+  "default_usr_bin_perf_wrapper": "Its version probe exited2 for missing exact6.6.87.2Microsoft wrapper lookup. Actual installed6.8.0-146 binary works with currentkernel in observed record/header-report probes; no installation or globalsetting mutation.",
+  "kernel_perf_event_paranoid_observed": 2,
+  "no_project_test_or_provider_executed": true,
+  "runtime_admitted": false,
+  "scope": "Profiler capability/input preparation only; no actual project/runtime data or JIT cause/numerical/performance conclusion.",
+  "recipe_update": {
+    "created_utc": "2026-10-18T00:03:52.975734+00:00",
+    "actual_local_help_argv": [
+      "/usr/lib/linux-tools-6.8.0-146/perf",
+      "record",
+      "-h"
+    ],
+    "actual_help_closed_exit": 129,
+    "observed_option": "-N, --no-buildid-cache: do not update the buildid cache",
+    "delta": "Adds supported no-buildid-cache only to actual recording; capability true/false probes used original recipe. No additional project workload.",
+    "config_paths_observed_absent": [
+      "/etc/perfconfig",
+      "/home/astra/.perfconfig"
+    ],
+    "observer_selected_environment": {
+      "DEBUGINFOD_URLS": "https://debuginfod.ubuntu.com "
+    }
+  }
+}

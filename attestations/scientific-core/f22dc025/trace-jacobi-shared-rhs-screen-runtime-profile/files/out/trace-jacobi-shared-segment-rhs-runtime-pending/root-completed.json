@@ -1,0 +1,176 @@
+{
+  "schema": "sirius-shared-rhs-original-profiled-runtime-completion-v1",
+  "created_utc": "2026-10-18T00:11:37.509833+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "audit_completed": true,
+  "classification": "ORIGINAL_THREE_RUNG_TEST_PASS",
+  "actual_profiler_observed_closed_exit": 0,
+  "owner_passed": true,
+  "owner_terminal_child_exit": 0,
+  "stop_reason": null,
+  "wall_seconds": 268.9945692840265,
+  "peak_sampled_aggregate_RSS_KiB": 1966104,
+  "minimum_sampled_available_KiB": 16225896,
+  "sample_count": 10049,
+  "cleanup_errors": [],
+  "remaining_owned_processes": [],
+  "beforeafter_rows_checked": 3100,
+  "whole_input_rows_current_exact": 1550,
+  "saved_owned_births_fresh_absent": [
+    {
+      "pid": 28533,
+      "saved_start_ticks": "15578380",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 28537,
+      "saved_start_ticks": "15578464",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "pid": 28532,
+      "saved_start_ticks": "15578379",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "progress_markers": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ],
+  "all9ordered_markers": true,
+  "XML": {
+    "root_attributes": {
+      "tests": "1",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "time": "268.827",
+      "timestamp": "2026-10-18T11:06:40.895",
+      "name": "AllTests"
+    },
+    "case_attributes": [
+      {
+        "name": "ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "file": "/home/astra/.project/Sirius/tests/backend/kernel_trace_test.cpp",
+        "line": "424",
+        "status": "run",
+        "result": "completed",
+        "time": "268.827",
+        "timestamp": "2026-10-18T11:06:40.895",
+        "classname": "KernelTrace"
+      }
+    ],
+    "strict_completed_zero_FESD_no_fp64_PROPERTY_NAME": true
+  },
+  "collector": {
+    "argv": [
+      "/usr/bin/python3",
+      "-B",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/root_acceptance.py",
+      "trace-jacobi-all-rungs"
+    ],
+    "actual_closed_exit": 0
+  },
+  "all3rung_numerical_verdict": true,
+  "individual_exercised_markers_are_PASS": false,
+  "actual_owned_samebirth_LVP0_JIT0_defaultcache_observed": true,
+  "immutable_runtime_mapped_code_bound": true,
+  "all_observer_mapped_regular_inputs_prebound": false,
+  "profiler_locale_data_gap": {
+    "first_snapshot_actual_closed_exit": 1,
+    "reason": "ROOT initial all-file assertion also included11 perf locale data files absent from before-input map. Mature owner/target inputs and profiler executable/20DSOs remain bound. No workload/helper/target retry or before-map modification. Locale files have current snapshot pins only; no claim they were frozen before.",
+    "late_locale_count": 11
+  },
+  "profiler_scope": "User19Hz/DWARF8192 inherited own descendants; profiler RSS outside mature aggregate, host reserve sampled. No uninstrumented performance/precise RSS bound claim.",
+  "source_and_inputs_unchanged": true,
+  "source_candidate_applied": false,
+  "unchanged_retry_or_guard_raise": false,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/gtest.xml": {
+      "bytes": 609,
+      "sha256": "af3984694343a063e839cbf98a368423837a1caccd00b9ed5eeaa7c03e0cff0d"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/inputs-after.json": {
+      "bytes": 387779,
+      "sha256": "6a4f1e6568f8551eeca1a36f492a2df564f76cc41555441246471676a3ae8335"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/inputs-before.json": {
+      "bytes": 387779,
+      "sha256": "6a4f1e6568f8551eeca1a36f492a2df564f76cc41555441246471676a3ae8335"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/owner.json": {
+      "bytes": 3709,
+      "sha256": "fc053ad3125a6a6c54c052aa135a9090d0ba43c3314a7a5cb720752384c79d71"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/samples.jsonl": {
+      "bytes": 2251641,
+      "sha256": "000a3584a5ecf1679f6bbeae7d82ef936cac29f8df412222bb3824b8451580c8"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/trace-jacobi-all-rungs/stdout.log": {
+      "bytes": 1187,
+      "sha256": "cf84f348d231881e320815cae75b808e87d3a98603a981a4e11955dc81214da1"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/helper.stdout": {
+      "bytes": 1038,
+      "sha256": "0336599175d232f1895ec53f98186134f81ab6aaa6b7d3647cf8545a909e697b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/helper.stderr": {
+      "bytes": 196,
+      "sha256": "fb2afc2cc37acf70060c9890d457ce68b3ff5e218e947f902c9ca1c9bf0a9445"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-runtime-release.json": {
+      "bytes": 4708,
+      "sha256": "6fd63c726cec3c649148e0c96f34dc71f89e68bc5381b5d9e52248a205635a6d"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-live-provider-environment.json": {
+      "bytes": 116095,
+      "sha256": "425b06f4e556c4adcbbb5f56eab20277ebe84364097f1f678791ee7840785751"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/independent-runtime-review.json": {
+      "bytes": 7107,
+      "sha256": "c99f219c8bec7f084d87dd3e0de6eb41102667f81481829863cf4474b30ec0c2"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/root-record-running.json": {
+      "bytes": 1047,
+      "sha256": "e0cfa6ce15251d22927d174488909284ecdac5da2b32b50fc273b45c7919acbb"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/root-record-closed.json": {
+      "bytes": 5579,
+      "sha256": "fc5475c785ec2ecae90d77ab3b7e90ba62ead6005ef165e6ef4117d20ea04f7e"
+    },
+    "out/trace-jacobi-shared-segment-rhs-profile/runtime.data": {
+      "bytes": 81135236,
+      "sha256": "b74efc546e7f601a9bbdc9481eb1906677a7d651199cee48a3feb6a9b4832c48"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/collector.stdout": {
+      "bytes": 189,
+      "sha256": "31adfd506deb0002598319756f93ce3406d43d0c968eed9b61b28e09567f0a1b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/collector.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/root-accepted-trace-jacobi-all-rungs.json": {
+      "bytes": 2177,
+      "sha256": "c72e803ff062aedee50976e682d9d26af63da2f412cc608fa9f41baee8f06f78"
+    }
+  },
+  "source_build_hold_release": false,
+  "next_decision": "Use actual profile and original assertion results to choose coherent next source repair; do not retry a failed program unchanged.",
+  "scope": "One original focused private three-rung runtime witness only. No coldframe/fullscience/Mandatory/native portable/external eight-domain/release qualification."
+}

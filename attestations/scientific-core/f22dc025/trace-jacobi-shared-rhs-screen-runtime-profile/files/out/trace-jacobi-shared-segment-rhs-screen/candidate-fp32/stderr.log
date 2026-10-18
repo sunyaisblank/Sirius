@@ -1,0 +1,12 @@
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+----'
+warning[E41035]: possible use of uninitialized variable
+   --> /home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-screen/inputs/candidate/gr_deviation.slang:286:29
+    |
+286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+    |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+----'

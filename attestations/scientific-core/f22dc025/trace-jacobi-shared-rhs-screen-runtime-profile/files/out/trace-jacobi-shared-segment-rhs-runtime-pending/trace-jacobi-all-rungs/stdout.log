@@ -1,0 +1,21 @@
+Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTrace
+[ RUN      ] KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs
+[TraceJacobiRung] module=trace.spv phase=begin
+[TraceJacobiRung] module=trace.spv phase=prepared
+[TraceJacobiRung] module=trace.spv phase=exercised
+[TraceJacobiRung] module=trace_fp32comp.spv phase=begin
+[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared
+[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised
+[TraceJacobiRung] module=trace_fp64.spv phase=begin
+[TraceJacobiRung] module=trace_fp64.spv phase=prepared
+[TraceJacobiRung] module=trace_fp64.spv phase=exercised
+[       OK ] KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs (268827 ms)
+[----------] 1 test from KernelTrace (268827 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (268827 ms total)
+[  PASSED  ] 1 test.

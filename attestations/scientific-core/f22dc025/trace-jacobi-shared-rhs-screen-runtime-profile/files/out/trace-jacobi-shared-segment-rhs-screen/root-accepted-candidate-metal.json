@@ -1,0 +1,78 @@
+{
+  "schema": "sirius-trace-stencil-root-accepted-offline-operation-v1",
+  "case": "candidate-metal",
+  "created_utc": "2026-10-17T23:56:31.858127+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "root_Slang_helper_and_posttool_operations_actual_observed_closed_exit": 0,
+  "owner_product_check": {
+    "bytes": 3902,
+    "sha256": "7dbb374de3fdeb9ecb2add44c2e69827b2f32260bd79251293948bc5cfed87a3"
+  },
+  "posttools": {
+    "bytes": 1177,
+    "sha256": "39a814089ad7552e13344c395015b8e2a11e7419dfd045a80f284c037748c691"
+  },
+  "whole_input_rows": 4510,
+  "product": {
+    "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal",
+    "bytes": 358799,
+    "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+  },
+  "role": "candidate",
+  "variant": "metal",
+  "matching_original_control_byteequal_baseline": null,
+  "SPIRV_original_validator_and_disassembly_passed": false,
+  "emitted_entry": null,
+  "emitted_local_size": null,
+  "five_original_control_proofs_reused_matching_producer": true,
+  "full_COMP_FP64_portable_static_review_pending": true,
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/samples.jsonl": {
+      "bytes": 892,
+      "sha256": "4c9d6a949902d269a5b9da04f151a3acde28dfe949ea4145f9739b8c7afb1f48"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/inputs-before.json": {
+      "bytes": 1488175,
+      "sha256": "cf11b4fb8d58cc4ffdedc24eb5a38be0c9e17f18aa3ef5fd983f927b3d776874"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/inputs-after.json": {
+      "bytes": 1488175,
+      "sha256": "cf11b4fb8d58cc4ffdedc24eb5a38be0c9e17f18aa3ef5fd983f927b3d776874"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/owner.json": {
+      "bytes": 2561,
+      "sha256": "dc2b024329fd62afa134ee53fdea14a39cb3d59978cbe73495081b7fd7eb3e4b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal": {
+      "bytes": 358799,
+      "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-metal.json": {
+      "bytes": 2278,
+      "sha256": "a80bb40d9d4cb123244fe721c14463ede2a1ee15762a41e4e2356d787fab0ae5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-metal.log": {
+      "bytes": 675,
+      "sha256": "6a6bb82195d7cfc9bf87d684648cbea25ca88272a08d92289c32ea24b050cdc1"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-metal.json": {
+      "bytes": 3902,
+      "sha256": "7dbb374de3fdeb9ecb2add44c2e69827b2f32260bd79251293948bc5cfed87a3"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-metal.json": {
+      "bytes": 1177,
+      "sha256": "39a814089ad7552e13344c395015b8e2a11e7419dfd045a80f284c037748c691"
+    }
+  },
+  "source_build_hold_release": false,
+  "scope": "One exact offline compiler/product and required posttools accepted for serial advance. No full emitted semantic/numerical/provider/RSS/JIT/performance/adoption qualification."
+}

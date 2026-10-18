@@ -1,0 +1,35 @@
+{
+  "schema": "sirius-shared-segment-rhs-original-private-runtime-pending-commands-v1",
+  "source_only": true,
+  "admitted": false,
+  "runtime_admitted": false,
+  "source_revision": "ROOT_PENDING_REVISION",
+  "stage": "ROOT_PENDING_STAGE",
+  "metadata": "ROOT_PENDING_METADATA",
+  "order": [
+    "trace-jacobi-all-rungs"
+  ],
+  "stop_first_nonpass": true,
+  "commands_after_root_admission": [
+    "LVP_JIT_OPTIMIZATION_LEVEL=0 /usr/bin/python3 -B out/trace-jacobi-shared-segment-rhs-runtime-pending/run_owned.py trace-jacobi-all-rungs",
+    "/usr/bin/python3 -B out/trace-jacobi-shared-segment-rhs-runtime-pending/root_acceptance.py trace-jacobi-all-rungs"
+  ],
+  "hold": "All five NEW candidate operations, accepted reused canonical5 baseline proof and complete emitted/mode/ABI/source-selection gate; current genuine stage4/full runtime input closure/registration/guards/environment and independent/root concrete admission before sole runtime. Reversible stage/metadata may parallel final review; execution may not. Compiler+runtime publication is batched after bounded decision before cleanup; no publication-before-stage cycle. Profiling wrapper/tool/DSO/failure propagation binding is ROOT_PENDING and not authorized by these commands.",
+  "required_stdout_progress_marker_lines_in_order": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ],
+  "strict_additional_root_postcheck": "Require fp64_evidence PROPERTY NAME absent, all9ordered markers and one completed zeroFESD XML. Generic get(None) is insufficient; no skip/refusal is a positive FP64 path. Actual samebirth LVP0/JIT0/defaultcache, current dev/inode/hash+mapped-input joins and terminal cleanup required.",
+  "environment_from_root_after_admission": {
+    "LVP_JIT_OPTIMIZATION_LEVEL": "0",
+    "cache": "DEFAULT;disable_software_shader_cache=false; no cache reset/relocation/cold assumption",
+    "selected_provider": "Mature owner selects lvp_icd.json/device0; fresh actual child mappings and current filesystem dev/inode required."
+  }
+}

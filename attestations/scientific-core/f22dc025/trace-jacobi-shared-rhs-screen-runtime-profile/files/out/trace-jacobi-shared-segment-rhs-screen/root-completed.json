@@ -1,0 +1,550 @@
+{
+  "schema": "sirius-private-stencil-root-five-new-offline-operations-completed-v1",
+  "created_utc": "2026-10-17T23:58:01.805366+00:00",
+  "passed": true,
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "all5_new_candidate_serial_helpers_owners_and_posttools_actual_closed0": true,
+  "five_original_canonical_controls_reused_matching_producer": {
+    "fp32": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-fp32.json",
+        "bytes": 4409,
+        "sha256": "585c265a87faf9a2d7eb8d3947d39c3cd72fa68a84284e2747a2498f6e052e84"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-fp32/trace.spv",
+        "bytes": 2994452,
+        "sha256": "6138b0f9e29cf252dbfd0a8cb9961f45197b985675393a00910c9261333674bd"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "fp32comp": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-fp32comp.json",
+        "bytes": 4484,
+        "sha256": "23282a95bbb51a4c64424b72fa755952dd5d704af59329069d7e4d3b5048c8c4"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-fp32comp/trace.spv",
+        "bytes": 2997776,
+        "sha256": "16e33aab014756c5c96f5f54411a619014cf5db78e602c3a79344a38005e5d8d"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "fp64": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-fp64.json",
+        "bytes": 5025,
+        "sha256": "826c9c20859acfa48c44959777ad008e04cebb6875b9d129020fdd53c6151e66"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-fp64/trace.spv",
+        "bytes": 2847024,
+        "sha256": "6fd282a8a20c2c6994a25ac411f626ba06e110f7857cd8eba8c3cae4e7045076"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "cuda": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-cuda.json",
+        "bytes": 4021,
+        "sha256": "63b401d59b3caffba7de5b1bcabcce8bf5383c286405c04d2a085bf595c2449c"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-cuda/trace.cu",
+        "bytes": 321379,
+        "sha256": "33f75938e5ff2f27735de8c921ff3962f1534bc42db5443b71dd7c63d79fbcd1"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    },
+    "metal": {
+      "accepted_receipt": {
+        "path": "out/trace-riemann-stencil-import-order/root-accepted-control-metal.json",
+        "bytes": 4041,
+        "sha256": "65b4676e7a9f6b9ff438d1c2f183a4b084165a72163f5ff1b42a91f8467b6b5a"
+      },
+      "product": {
+        "path": "out/trace-riemann-stencil-import-order/control-metal/trace.metal",
+        "bytes": 344056,
+        "sha256": "31194b4d28aac0351bb137fc6192e01e447f2763df6f4b7292354ddc2c3c3d88"
+      },
+      "producer_canonical_source_argv_original_CWD_flags_and_all_effective_inputs_unchanged": true
+    }
+  },
+  "all5_original_controls_reused_byteequal_current_canonical_baselines": true,
+  "SPV_products_validated_and_ordinary_disassembled": 3,
+  "CUDA_Metal_native_compile_or_execution": false,
+  "beforeafter_rows_checked": 44960,
+  "whole_owner_input_union_current_exact": 4510,
+  "total_samples": 62,
+  "saved_owned_births_fresh_absent": [
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 22788,
+      "saved_start_ticks": "15482122",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 22792,
+      "saved_start_ticks": "15482194",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25213,
+      "saved_start_ticks": "15516162",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25222,
+      "saved_start_ticks": "15516243",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25311,
+      "saved_start_ticks": "15517377",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25315,
+      "saved_start_ticks": "15517454",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25356,
+      "saved_start_ticks": "15518681",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25360,
+      "saved_start_ticks": "15518756",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25398,
+      "saved_start_ticks": "15519192",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "saved_boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+      "pid": 25402,
+      "saved_start_ticks": "15519270",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "cases": [
+    {
+      "case": "candidate-fp32",
+      "role": "candidate",
+      "variant": "fp32",
+      "product": {
+        "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/trace.spv",
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      },
+      "whole_input_rows": 4482,
+      "samples": 17,
+      "owner_seconds": 4.359819125995273,
+      "peak_sampled_aggregate_RSS_KiB": 447476,
+      "control_byteequal": null,
+      "posttool_actual_closed_exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "case": "candidate-fp32comp",
+      "role": "candidate",
+      "variant": "fp32comp",
+      "product": {
+        "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv",
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      },
+      "whole_input_rows": 4489,
+      "samples": 17,
+      "owner_seconds": 4.362400994985364,
+      "peak_sampled_aggregate_RSS_KiB": 447896,
+      "control_byteequal": null,
+      "posttool_actual_closed_exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "case": "candidate-fp64",
+      "role": "candidate",
+      "variant": "fp64",
+      "product": {
+        "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/trace.spv",
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      },
+      "whole_input_rows": 4496,
+      "samples": 20,
+      "owner_seconds": 5.1365052860055584,
+      "peak_sampled_aggregate_RSS_KiB": 449408,
+      "control_byteequal": null,
+      "posttool_actual_closed_exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "case": "candidate-cuda",
+      "role": "candidate",
+      "variant": "cuda",
+      "product": {
+        "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu",
+        "bytes": 336360,
+        "sha256": "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+      },
+      "whole_input_rows": 4503,
+      "samples": 4,
+      "owner_seconds": 1.0421275690023322,
+      "peak_sampled_aggregate_RSS_KiB": 274068,
+      "control_byteequal": null,
+      "posttool_actual_closed_exits": []
+    },
+    {
+      "case": "candidate-metal",
+      "role": "candidate",
+      "variant": "metal",
+      "product": {
+        "path": "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal",
+        "bytes": 358799,
+        "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+      },
+      "whole_input_rows": 4510,
+      "samples": 4,
+      "owner_seconds": 1.0455222589953337,
+      "peak_sampled_aggregate_RSS_KiB": 274392,
+      "control_byteequal": null,
+      "posttool_actual_closed_exits": []
+    }
+  ],
+  "files": {
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/samples.jsonl": {
+      "bytes": 3786,
+      "sha256": "653f78925a141fe2e034b2d2bd58795db5eb456ca2851bd8fe71a1591a1df4c9"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/inputs-before.json": {
+      "bytes": 1479511,
+      "sha256": "1e5cd80a905ba551409154e161fa7935e1e3ccabbfba4cf5e1b86b8c050a1956"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/inputs-after.json": {
+      "bytes": 1479511,
+      "sha256": "1e5cd80a905ba551409154e161fa7935e1e3ccabbfba4cf5e1b86b8c050a1956"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/owner.json": {
+      "bytes": 2589,
+      "sha256": "1bd9a967d713df36d6352ab66b10e77425687d4952113a3e991e79f5540d36be"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-fp32.json": {
+      "bytes": 2277,
+      "sha256": "4225357d3a906a76a62eb818a4843b056d3cbb1c4e6640efc9f1290240efbfea"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-fp32.log": {
+      "bytes": 673,
+      "sha256": "62cba23cd2336adcad4c4bd20a0db661cfda50f0ab9c3514d1f5bdcf348f4989"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-spv-candidate-fp32.spvasm": {
+      "bytes": 6829232,
+      "sha256": "696f0a0d848ec3c32ab52148da819f5661b3c78c577c31ce7d8961127ebf03b0"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-fp32.json": {
+      "bytes": 3859,
+      "sha256": "7e6fa4d30c1dfc2678852d2d4e142e157f78a37070a51607bac7aed23fc3dbab"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-fp32.json": {
+      "bytes": 4827,
+      "sha256": "583f260cf0efbbf77e1e4519af2cbaddba821357d5683855045c8438cbf63c57"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-accepted-candidate-fp32.json": {
+      "bytes": 4550,
+      "sha256": "3732f976ff75240fde1ccc83dcc5dba495ad843140a2d8aad215af3681edb459"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/samples.jsonl": {
+      "bytes": 3786,
+      "sha256": "e987fade0a5e05de56be600252947b8a20779c5e80d22ac5ad686007048441ce"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/inputs-before.json": {
+      "bytes": 1481664,
+      "sha256": "66ba8009ea647114b4638630b9afebf555ad1354ffd133ad8956c9d71ff107a7"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/inputs-after.json": {
+      "bytes": 1481664,
+      "sha256": "66ba8009ea647114b4638630b9afebf555ad1354ffd133ad8956c9d71ff107a7"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/owner.json": {
+      "bytes": 2623,
+      "sha256": "914de557610ec735d6ce942efcf31664321840084556dadd66835774dc853a52"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp32comp/trace.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-fp32comp.json": {
+      "bytes": 2281,
+      "sha256": "bc30ac01b594410057cfd4ed66d4588a83c20b4663cfa87d69e5c1e84c4e07b8"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-fp32comp.log": {
+      "bytes": 677,
+      "sha256": "636ee2653d8b1ec8e4021f3bf18885428d3b6a95070874d171b8c3195bfbef7f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32comp-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32comp-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32comp-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp32comp-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-spv-candidate-fp32comp.spvasm": {
+      "bytes": 6838261,
+      "sha256": "5156c62e3b572d595b784f32d3fde1e5dfa758cbbf980a7b1643ee45a9282c8a"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-fp32comp.json": {
+      "bytes": 3929,
+      "sha256": "0167597238d56cab0dc58dd1f898e35604f36bf5bf9954da97faaf4ca33cde5d"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-fp32comp.json": {
+      "bytes": 4895,
+      "sha256": "f8319398023ee9bd18f486bdf39869477b4122942b1599df723504ccb04af307"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-accepted-candidate-fp32comp.json": {
+      "bytes": 4626,
+      "sha256": "15ce11116ec33b3c56d812e734157d7ab041925d5be9784f83dec2785855afcb"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/samples.jsonl": {
+      "bytes": 4451,
+      "sha256": "2aab087d4f07dc8a91f7de6b7a4221bdaa77eea9707868ca2de3e1f3ff50c32c"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/inputs-before.json": {
+      "bytes": 1483873,
+      "sha256": "123acc8e06f5f5f6f9ba945a972d2ab2e55ed0f48b7a2ff26167d5884af7ca6f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/inputs-after.json": {
+      "bytes": 1483873,
+      "sha256": "123acc8e06f5f5f6f9ba945a972d2ab2e55ed0f48b7a2ff26167d5884af7ca6f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/owner.json": {
+      "bytes": 2649,
+      "sha256": "ba55150eace6e32c99ee6fb1b97af171828e934c72cd75efeb318862ac82ac29"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-fp64/trace.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-fp64.json": {
+      "bytes": 2277,
+      "sha256": "e186fa3099345f4f6a9aa073539e1ecc510a5c54352d5995319e4e57e8e1ddfd"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-fp64.log": {
+      "bytes": 674,
+      "sha256": "883154da7d52ab10b8351216614126e2cac64496ae600babeab45b62862815b6"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-validate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-validate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-disassemble.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-post-candidate-fp64-disassemble.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-spv-candidate-fp64.spvasm": {
+      "bytes": 6908055,
+      "sha256": "603bd3866d2aaf5b8f0a36f3401456baa561cfe530fb13be313424018aaf0936"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-fp64.json": {
+      "bytes": 3870,
+      "sha256": "13cae9dc07ef1b56d86d0081e7ad3b56b437c9a03625d6c73cfa6d5a9b7f0900"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-fp64.json": {
+      "bytes": 4828,
+      "sha256": "71e2504c08604c19a7dfe2a102220c292a671d6f81ea42419af234d2a92fe7ce"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-accepted-candidate-fp64.json": {
+      "bytes": 4550,
+      "sha256": "740af3cb25a08d2bbe5e71e3e26d514bbf3b6b54ec19b6534fb99e33b6f39e86"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/samples.jsonl": {
+      "bytes": 891,
+      "sha256": "24e7f7493d294d7dba11edf6f0220c1a2efc5a2d588327670549bf5e69cd9e7d"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/inputs-before.json": {
+      "bytes": 1486026,
+      "sha256": "2c045b5ed0cb2a1cad07b0a96091dfa0f10ab6fac3346159889c19d6ae3105f5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/inputs-after.json": {
+      "bytes": 1486026,
+      "sha256": "2c045b5ed0cb2a1cad07b0a96091dfa0f10ab6fac3346159889c19d6ae3105f5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/owner.json": {
+      "bytes": 2555,
+      "sha256": "b70bcf96b837a9f021af6329e64f9ba8ab074e921f6d77a9f058c3ac13a4513b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu": {
+      "bytes": 336360,
+      "sha256": "71c1f71aa8ef5c4ccffd6d2c40be3b7ebf0bde8c567bf5011994c67567df6301"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-cuda.json": {
+      "bytes": 2277,
+      "sha256": "d9c812af768769abd5b47fe483e78a0fbfeb6f40e763d8725a9abd5ebd9cba35"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-cuda.log": {
+      "bytes": 674,
+      "sha256": "7afffca794bb7720328e6a19f2d5fc487240c38dee6bf4029995148a0b6803ed"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-cuda.json": {
+      "bytes": 3874,
+      "sha256": "9942e9a4b272c785b1521d9e642e87ae021a5d84909ba9bd337eca87157049ba"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-cuda.json": {
+      "bytes": 1172,
+      "sha256": "ad2740d78782d5504aef5aa8e1d3cc3c18765d690af9a9d550d1a051a3d18ab2"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-accepted-candidate-cuda.json": {
+      "bytes": 3516,
+      "sha256": "f3981666c3da93c322853436b9ef74180b6fccc6ff00492abae39e379c9c8316"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/samples.jsonl": {
+      "bytes": 892,
+      "sha256": "4c9d6a949902d269a5b9da04f151a3acde28dfe949ea4145f9739b8c7afb1f48"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/stderr.log": {
+      "bytes": 772,
+      "sha256": "b3134a7682edbaff9e54ff24032de01c1af2cc3be84d0863e58f0ac9af9f0eae"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/inputs-before.json": {
+      "bytes": 1488175,
+      "sha256": "cf11b4fb8d58cc4ffdedc24eb5a38be0c9e17f18aa3ef5fd983f927b3d776874"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/inputs-after.json": {
+      "bytes": 1488175,
+      "sha256": "cf11b4fb8d58cc4ffdedc24eb5a38be0c9e17f18aa3ef5fd983f927b3d776874"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/owner.json": {
+      "bytes": 2561,
+      "sha256": "dc2b024329fd62afa134ee53fdea14a39cb3d59978cbe73495081b7fd7eb3e4b"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal": {
+      "bytes": 358799,
+      "sha256": "73e84f12e9b29a76b4aa0d7a733b540dd88a32d3d8c48e99d24920dc135a5fe9"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-prelaunch-candidate-metal.json": {
+      "bytes": 2278,
+      "sha256": "a80bb40d9d4cb123244fe721c14463ede2a1ee15762a41e4e2356d787fab0ae5"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-helper-candidate-metal.log": {
+      "bytes": 675,
+      "sha256": "6a6bb82195d7cfc9bf87d684648cbea25ca88272a08d92289c32ea24b050cdc1"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-owner-product-candidate-metal.json": {
+      "bytes": 3902,
+      "sha256": "7dbb374de3fdeb9ecb2add44c2e69827b2f32260bd79251293948bc5cfed87a3"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-posttools-candidate-metal.json": {
+      "bytes": 1177,
+      "sha256": "39a814089ad7552e13344c395015b8e2a11e7419dfd045a80f284c037748c691"
+    },
+    "out/trace-jacobi-shared-segment-rhs-screen/root-accepted-candidate-metal.json": {
+      "bytes": 3536,
+      "sha256": "3b5dcf08c9db1ae05a117af96707cd9e4dce58a945f0397606c6b4fe5b66d5a5"
+    }
+  },
+  "emitted_review_pending": true,
+  "preservation_timing": "Per user acceleration instruction, retain all raw/source/build now and batch compiler+bounded-runtime preservation before cleanup. Separate compiler publication before runtime is superseded self-imposed sequencing; no scientific/runtime/correctness/input/guard gate removed.",
+  "source_candidate_applied": false,
+  "source_build_hold_release": false,
+  "scope": "Exact offline compiler completion and control attribution. No numerical/provider/driver/JIT/RSS/performance/canonical-source/Mandatory/cold/release qualification."
+}

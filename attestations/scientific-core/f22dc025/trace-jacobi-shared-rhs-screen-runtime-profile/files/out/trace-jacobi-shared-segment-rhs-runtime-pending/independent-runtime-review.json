@@ -1,0 +1,149 @@
+{
+  "schema": "sirius-shared-rhs-independent-concrete-runtime-review-v1",
+  "created_utc": "2026-10-18T00:05:56.629378+00:00",
+  "source_revision": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+  "passed": true,
+  "decision": "MATERIALIZED_RUNTIME_AND_PROFILE_METADATA_PASS_PENDING_ROOT_RELEASE",
+  "reviewer_scope": "Authored pending runtime adapter; independently reviews ROOT concrete materialization. ROOT independently reviewed source, Divide reviewed emitted products. Passive stdlib/hash/JSON/read-onlyGit only; no helper/tool/provider/test/process/network/cache execution.",
+  "release_pins": {
+    "actions.json": {
+      "bytes": 71634,
+      "sha256": "e973a10fce45ef4a08ecd86bfb3f3c47be654f5367a761afff1a65f685700bcb"
+    },
+    "readiness.json": {
+      "bytes": 9151,
+      "sha256": "28bb3def4db053109a57d614dc8313739f348320daa49954455b1706011afed1"
+    },
+    "root-preflight.json": {
+      "bytes": 403910,
+      "sha256": "61ee042bc8134b0cdc3c4fed139f8a514cb86b18b52898a4836f69476ce3e2a4"
+    },
+    "root-runtime-observation.json": {
+      "bytes": 310610,
+      "sha256": "61ed872ddd6f67da86d2f8ae181a2400f72f55cb51f791ff34d01d8f469384fe"
+    },
+    "root-stage-materialization.json": {
+      "bytes": 3587,
+      "sha256": "f643b28ad80988a7953c53a855499b2facc8670f33c6b0426dcb160c34d4a13b"
+    },
+    "source-contracts.json": {
+      "bytes": 9181,
+      "sha256": "41127cd30fc2f0b5fc1fd5ae511688c85e909a8f564fe17427504cd10914d704"
+    },
+    "independent-source-review.json": {
+      "bytes": 2961,
+      "sha256": "b74738478dc28a730bb37c50811ac836e124c33e388b103c834c09c383b3d5c8"
+    }
+  },
+  "concrete_checks": {
+    "all1549_static_pins_current_exact": true,
+    "owner_expected_rows": 1550,
+    "complete_owner_set_static_plus_PF_self": true,
+    "tracked_source_rows": 538,
+    "PF_selfhash_and_future_outputs_excluded": true,
+    "pending_selectors_order_retained": 102,
+    "same_common_input_strengthening_added": 1025,
+    "final_frozen_selectors": 1127,
+    "all970_runtime_build_profiler_input_rows_current_and_bound": true,
+    "all788_strictbuild_proof_reused_matching": true,
+    "genuine_four_separate_regular_copies_fullbytes_modes_checked": true,
+    "host": "fe663 genuine f22",
+    "private_new_modules": "9d4b/65a83/de928 from private trace09a3+grdev9737",
+    "five_NEW_candidates_and_five_matching_REUSED_controls": true,
+    "full_final_emitted_PASS_joined": true,
+    "no_case_or_accepted_output_exists": true
+  },
+  "original_contract": {
+    "case": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "argv": [
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/sirius_backend_tests",
+      "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs"
+    ],
+    "registered1152": true,
+    "active_original_flag_omission_equivalent": true,
+    "no_original_CTest_TIMEOUT": true,
+    "typed_expected_exit0": true,
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "software_provider": true,
+    "disable_software_shader_cache": false,
+    "unchanged_three_rungs_assertions_128attempts_physical1000ms": true,
+    "strict_completed_single_zeroFESD_XML_and_property_NAMEabsence_required": true,
+    "all9ordered_markers_required": [
+      "[TraceJacobiRung] module=trace.spv phase=begin",
+      "[TraceJacobiRung] module=trace.spv phase=prepared",
+      "[TraceJacobiRung] module=trace.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+      "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+    ],
+    "markers_alone_not_PASS": true
+  },
+  "profiling": {
+    "actual_planned_argv": [
+      "/usr/lib/linux-tools-6.8.0-146/perf",
+      "record",
+      "--no-buildid-cache",
+      "-e",
+      "cpu-clock:u",
+      "-F",
+      "19",
+      "--call-graph",
+      "dwarf,8192",
+      "-o",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-profile/runtime.data",
+      "--",
+      "/usr/bin/python3",
+      "-u",
+      "/home/astra/.project/Sirius/out/trace-jacobi-shared-segment-rhs-runtime-pending/run_owned.py",
+      "trace-jacobi-all-rungs"
+    ],
+    "profile_tool_observation": {
+      "path": "out/trace-jacobi-shared-segment-rhs-profile/root-profile-tool-observation.json",
+      "bytes": 12503,
+      "sha256": "c035ba1fee1251561c9c96d528a0a5235921c7ab4f8af5859596805791a993e8"
+    },
+    "actual_tool_and20DSOs_rehashed_bound": true,
+    "true_probe_exit0_false_probe_exit1_preserved": true,
+    "supported_no_buildid_cache_option_added_after_help129": true,
+    "actual_owner_Python_u": "Unbuffered launcher; exact mature helper bytes and scientific childargv unchanged; normal assertions required.",
+    "per_process_inherited_scope": "No systemwide flag; perf records launched owner and inherited descendants. Actual profiler/controller/child identity and coverage require ROOT live/final observations.",
+    "profiler_RSS_outside_owner_aggregate": true,
+    "host_reserve_still_sampled": true,
+    "mutable_runtime_data_excluded_from_frozen_inputs": true,
+    "perf_configs_absent_checked": [
+      "/etc/perfconfig",
+      "/home/astra/.perfconfig"
+    ],
+    "DEBUGINFOD_URLS_preserved": "https://debuginfod.ubuntu.com ",
+    "limits": "Capability probes do not establish target profiling/completion. Need separate actual wrapper+owner exit/teardown/data checks; failure cannot be hidden. No uninstrumented performance, complete callstack/symbol or no-network inference from this preparation."
+  },
+  "ROOT_release_and_postconditions": {
+    "separate_ROOT_release": true,
+    "actual_samebirth_profiler_controller_child_maps_and_closed_statuses": true,
+    "actual_LVP_JIT_OPTIMIZATION_LEVEL0_defaultcache_device0": true,
+    "provider_current_map_join": "08:30 major8/minor48 inode143595 plus full9d69 content; do not require historical host device80.",
+    "immutable_mapped_code_input_joins_plus_separate_runtime_memfd_mutable_cache_classification": true,
+    "source_beforeafter_inputs_guards_cleanup_and_owned_birth_absence": true,
+    "strict_fp64_evidence_PROPERTY_NAMEabsence_beyond_generic_getNone": true,
+    "no_unchanged_retry_or_guard_relaxation": true
+  },
+  "preservation_and_limits": "User-directed combined compiler+runtime preservation after bounded decision before cleanup, without publication cycle. Private candidate remains unapplied; source/build holds retained. No runtime/numerical/allP1/Mandatory/fullscience/cold/JIT-RSS-time benefit/adoption/release claim.",
+  "repository": {
+    "HEAD": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "status": "",
+    "tracking_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "review_publication_pending_ROOT": true
+  }
+}
