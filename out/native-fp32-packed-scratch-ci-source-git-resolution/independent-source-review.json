@@ -1,0 +1,54 @@
+{
+  "schema": "sirius-native-packed-ci-command-resolution-independent-delta-review-v1",
+  "created_utc": "2026-10-18T05:56:55.874817+00:00",
+  "passed": true,
+  "source_correction_admitted": true,
+  "execution_release_granted": false,
+  "runtime_admitted": false,
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/source-freeze.json",
+      "bytes": 712,
+      "sha256": "cffde5176c5741d277004092e1f6f39e262a7d10736048a4b7185e21946af747"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/source-contracts.json",
+      "bytes": 4425,
+      "sha256": "4c8be3805ed3f76c30539e316a0bec22bd3d0f193d671e069c916e06eff30b11"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/correction.patch",
+      "bytes": 3236,
+      "sha256": "7387933fc11e69e1d3ee75d7197d3297bed6b8e697faca8db9da68cb457f7e45"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/build-and-stage.ps1",
+      "bytes": 18890,
+      "sha256": "be1e4df497cc732f68f332b679f0b6d0fa707c97cf37d99e602579e13a74a953"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/native-packed-diagnostic.yml",
+      "bytes": 1331,
+      "sha256": "52217aabff1e54aa2e197d3ffe66676c2d5a461134e7427a7d6275dec3e3056e"
+    }
+  ],
+  "predecessor": {
+    "source_revision": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+    "run_id": 39101875847,
+    "failed_log": {
+      "path": "out/native-fp32-packed-scratch-ci-publication/run39101875847-failed.log",
+      "bytes": 4889,
+      "sha256": "647922c0a69fb35b73b540d81574cf05f7bd0acc938562bc8ef962735760a082"
+    },
+    "actual_failure": "Saved log shows CommandNotFound for concatenated Git bin/cmd/ucrt64 paths. Occurred during initial revision lookup before configure; no candidate compile or native performance result.",
+    "reviewer_miss": "My previous source PASS missed multi-Application Get-Command results. That PASS did not establish operational resolver correctness; the failed source and prior receipt remain immutable."
+  },
+  "delta_findings": [
+    "Exactly two primary resolvers become git.exe/cmake.exe Application arrays; both must be nonempty. First ApplicationInfo.Source is explicitly cast to scalar string before call-operator invocation, avoiding array-to-command-name joining. Normal returned PATH order is retained; PATH is not changed.",
+    "All returned candidates and chosen scalar paths are recorded before Clean-Revision. No invented cloud tool path or tool substitution; subsequent selected-tool hashing/build freeze remains unchanged.",
+    "Other script edits are only addition of corrected source namespace to the recursive input scope and catch-only ScriptStackTrace/InvocationInfo.PositionMessage. Workflow changes only the run-path literal. Exact inverse reconstructs both original full files; both original preimages were checked against named898e52 Git blobs.",
+    "Original private branch/one-job/pinned actions, configure/build argv, strict CMake fragment, two-arm inputs, parallel2, failure propagation, snapshots, CRT/package handling and absence of PE/provider/test commands are reused from prior reviewed source without a repeat audit."
+  ],
+  "remaining_conditions": "ROOT owns changed-source commit/push and actual CI invocation. Scalar-selection source fix is admitted, not an observed corrected configure/build success. Actual tool-resolution receipt/input seals/MSVC commands/header/linkmap/PE proof and later original native8+22 gates remain necessary.",
+  "method": "Passive saved-log/source/JSON/hash and two read-only Git blob joins only. No PowerShell/parser/tool/CMake/compiler/provider/test/network/process execution; only this sidecar written."
+}

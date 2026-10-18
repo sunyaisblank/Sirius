@@ -1,0 +1,17 @@
+{
+  "schema": "sirius-native-packed-first-CI-actual-failure-audit-v1",
+  "created_utc": "2026-10-18T05:53:08.580762+00:00",
+  "run": 39101875847,
+  "attempt": 1,
+  "diagnostic_commit": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+  "artifact_id": 12127110548,
+  "artifact_digest": "sha256:36869d9f30888e25a9fa2299470cd28727e0d30b086a228005ea583a19f6d1d1",
+  "zip_bytes": 1621,
+  "all_zip_CRC_safe_paths_and_manifest_files_verified": true,
+  "actual_configure_or_build_commands": 0,
+  "actual_PE_provider_or_test_executed": false,
+  "failure": "System.Management.Automation.CommandNotFoundException: The term 'C:\\Program Files\\Git\\bin\\git.exe C:\\Program Files\\Git\\cmd\\git.exe C:\\Program Files\\Git\\ucrt64\\bin\\git.exe' is not recognized as a name of a cmdlet, function, script file, or executable program.\r\nCheck the spelling of the name, or if a path was included, verify that the path is correct and try again.\r\n   at System.Management.Automation.ExceptionHandlingOps.CheckActionPreference(FunctionContext funcContext, Exception exception)\r\n   at System.Management.Automation.Interpreter.ActionCallInstruction`2.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)\r\n   at System.Management.Automation.Interpreter.EnterTryCatchFinallyInstruction.Run(InterpretedFrame frame)",
+  "cause": "Get-Command -CommandTypeApplication returnedthreeGitapplications. .Source remainedanarrayandwasconvertedtooneconcatenatedcommand,notthesinglefirstPATHapplication. Sourceandindependentreviewmissedthis.",
+  "remediation": "NewseparatesourcepacketselectsnormalfirstPATHscalarandrecordsallcandidatepaths;original898source/falseartifactretained. No unchangedrerun or nativebenefitresult.",
+  "runtime_released": false
+}

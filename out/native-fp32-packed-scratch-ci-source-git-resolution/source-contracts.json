@@ -1,0 +1,83 @@
+{
+  "schema": "sirius-native-packed-ci-primary-command-resolution-source-correction-v1",
+  "source_only": true,
+  "admitted": false,
+  "compiler_or_provider_or_ci_rerun_executed": false,
+  "failed_predecessor": {
+    "revision": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+    "run_id": 39101875847,
+    "attempt": 1,
+    "job_id": 117599644240,
+    "jobs_metadata": {
+      "path": "out/native-fp32-packed-scratch-ci-publication/run39101875847-jobs.json",
+      "bytes": 2274,
+      "sha256": "60ed85f70f61f7264c0d784d78968df2c640688010305f33be4183679edb4d62"
+    },
+    "api_conclusion": "failure",
+    "failed_step": "Compile and stage the two matched private producers",
+    "step_elapsed_seconds_from_API": 2,
+    "root_observed_cause": "Get-Command git returned three Application objects; .Source became a string array and Clean-Revision invoked the concatenated command name. Failure occurred before configure/build.",
+    "raw_failure_log_audited_by_this_author": false,
+    "raw_artifact_download_scope": "ROOT reported actual log cause; archive download/preservation pending ROOT. No new configure/build/PE/provider result inferred."
+  },
+  "preimages": {
+    "script": {
+      "path": "out/native-fp32-packed-scratch-ci-source/build-and-stage.ps1",
+      "bytes": 18041,
+      "sha256": "7a87a0b1ba81d560aa2108f54fd4b96194db272f7fad991c97da727229cdbcd3",
+      "commit": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+      "git_path": "out/native-fp32-packed-scratch-ci-source/build-and-stage.ps1",
+      "git_blob": "c4612cacf1c2c8e10e7431896752b344815ab0c2"
+    },
+    "workflow": {
+      "path": "out/native-fp32-packed-scratch-ci-source/native-packed-diagnostic.yml",
+      "bytes": 1316,
+      "sha256": "40bfa96848e4bb14f9347b9f2a7892d5bcaee8136576f57f23e619f28769665d",
+      "commit": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+      "git_path": ".github/workflows/native-packed-diagnostic.yml",
+      "git_blob": "7596c6dbbd2bddf6df81921b9120a41fd5c97106"
+    },
+    "old_source_freeze": {
+      "path": "out/native-fp32-packed-scratch-ci-source/source-freeze.json",
+      "bytes": 567,
+      "sha256": "f6200cefe26bbf17af09a8e6fa95a14bf97a1ac943a3734f753fea6a9a6e74f8"
+    }
+  },
+  "exact_correction": {
+    "script": "Only two Application resolver statements replaced by explicit candidate arrays, nonempty check, first normal PATH entry cast as scalar string, and all candidate/selected paths written before Clean-Revision; no PATH mutation. Add only new source namespace to recursive input roots and failure ScriptStackTrace/InvocationInfo.PositionMessage metadata.",
+    "workflow": "Exactly one script run-path literal retargeted to the corrected namespace; same future canonical workflow destination.",
+    "inverse_script_exact": true,
+    "inverse_workflow_exact": true,
+    "failed_packet_and_Git_898_unchanged": true
+  },
+  "unchanged": [
+    "Private-branch-only push trigger and one Windows2022 job/30min budget",
+    "Pinned checkout+autocrlf scope, SDK/toolchain/artifact actions and settings",
+    "Configure flags, absolute same fragment, private target, parallel2, all build/source/tool/dependency freezes",
+    "Same two-arm source/header inputs, output payload/CRT selection and five objects/tlogs",
+    "No PE/provider/test/Mandatory/science/native-cost/adoption claim"
+  ],
+  "future_execution": {
+    "workflow_destination": ".github/workflows/native-packed-diagnostic.yml",
+    "private_branch": "development/native-fp32-packed-scratch-diagnostic-2026-10-18",
+    "root_only": "Narrow independent/root delta review and any ROOT-selected nonprovider resolver probe before a changed-source commit/push. This source packet does not release any invocation.",
+    "configure_build_passed": false
+  },
+  "files": {
+    "script": {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/build-and-stage.ps1",
+      "bytes": 18890,
+      "sha256": "be1e4df497cc732f68f332b679f0b6d0fa707c97cf37d99e602579e13a74a953"
+    },
+    "workflow": {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/native-packed-diagnostic.yml",
+      "bytes": 1331,
+      "sha256": "52217aabff1e54aa2e197d3ffe66676c2d5a461134e7427a7d6275dec3e3056e"
+    },
+    "patch": {
+      "path": "out/native-fp32-packed-scratch-ci-source-git-resolution/correction.patch",
+      "bytes": 3236,
+      "sha256": "7387933fc11e69e1d3ee75d7197d3297bed6b8e697faca8db9da68cb457f7e45"
+    }
+  }
+}
