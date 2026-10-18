@@ -230,12 +230,27 @@ public CoupledTrial AttemptCoupledGeodesicStep(CoupledState start,Real step,
     result.status=kCoupledInvalid;result.stepFactor=Real(0.5);
     if(!CoupledControlRepresented(control)||!CoupledFinite(start)||
        !isfinite(step)||!(step>Real(0))) return result;
-    if(!TryCoupledRK4(start,step,M,a,Q,Lambda,result.full,result.fullIncrement,result.stages)||
-       !TryCoupledRK4(start,step*Real(0.5),M,a,Q,Lambda,result.midpoint,
-                      result.midpointIncrement,result.stages)||
-       !TryCoupledRK4(result.midpoint,step*Real(0.5),M,a,Q,Lambda,result.fine,
-                      result.fineIncrement,result.stages)) {
-        result.status=kCoupledDerivativeDomain;return result;
+    [loop] for(uint trial=0;trial<3;++trial) {
+        CoupledState trialStart=start;
+        Real trialStep=step;
+        if(trial!=0) {
+            trialStep=step*Real(0.5);
+            if(trial==2) trialStart=result.midpoint;
+        }
+        CoupledState trialFinish;
+        CoupledIncrement trialIncrement;
+        bool represented=TryCoupledRK4(trialStart,trialStep,M,a,Q,Lambda,
+                                      trialFinish,trialIncrement,result.stages);
+        if(trial==0) {
+            result.full=trialFinish;result.fullIncrement=trialIncrement;
+        } else if(trial==1) {
+            result.midpoint=trialFinish;result.midpointIncrement=trialIncrement;
+        } else {
+            result.fine=trialFinish;result.fineIncrement=trialIncrement;
+        }
+        if(!represented) {
+            result.status=kCoupledDerivativeDomain;return result;
+        }
     }
     result.unprojectedError=RelativeStepDifference(CoupledCentral(start),
         CoupledCentral(result.full),CoupledCentral(result.fine))/control.centralTolerance;
