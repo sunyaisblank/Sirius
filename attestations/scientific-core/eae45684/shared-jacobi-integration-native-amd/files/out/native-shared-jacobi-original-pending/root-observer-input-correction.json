@@ -1,0 +1,21 @@
+{
+  "schema": "sirius-native-shared-jacobi-observer-input-correction-v1",
+  "created_utc": "2026-10-18T00:46:43.177534+00:00",
+  "runtime_released": false,
+  "binding_before": {
+    "bytes": 217386,
+    "sha256": "5852f3f692d81181a3c534cb61ec73ef85af56ebb1069997e6aa20424b5991f5"
+  },
+  "binding_after": {
+    "bytes": 217546,
+    "sha256": "f334f92f85220ed2564185eab38bf84de23fce4f09c20b38395fddc6efa97fb6"
+  },
+  "single_added_input": {
+    "/mnt/c/Windows/System32/vulkan-1.dll": {
+      "bytes": 1719408,
+      "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+    }
+  },
+  "bound_input_count": 1110,
+  "reason": "Unchanged terminal-audit.ps1 also reports installed System32 loader metadata; include that observer-only regular file before concrete admission. Actual mapped loader still must equal staged SDKloader; no provider substitution/source/helper/argv/plan/runtime/guard change. Historical materialization receipt preserved."
+}

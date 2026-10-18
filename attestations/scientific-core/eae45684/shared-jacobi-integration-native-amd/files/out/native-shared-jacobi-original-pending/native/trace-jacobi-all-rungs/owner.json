@@ -1,0 +1,56 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "bounded-native-Windows-control",
+    "start_utc":  "2026-10-18T00:50:48.8224906Z",
+    "owner_pid":  17172,
+    "owner_start_time_utc":  "2026-10-18T00:50:41.2299998Z",
+    "test_executable":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release\\sirius_backend_tests.exe",
+    "test_executable_sha256":  "28411691c78bb94dd811015cb2fab6f566bb5bf5b9b99f8fb917496eba8cdbc9",
+    "arguments":  [
+                      "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+                      "--gtest_color=no",
+                      "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\native\\trace-jacobi-all-rungs\\gtest.xml\""
+                  ],
+    "working_directory":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release",
+    "outer_guard_seconds":  900,
+    "rss_guard_bytes":  4294967296,
+    "outer_stop":  false,
+    "status":  "completed",
+    "numerical_control_passed":  true,
+    "expected_cases":  [
+                           "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs"
+                       ],
+    "qualification_claimed":  false,
+    "scope":  "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+    "invocation_kind":  "Control",
+    "system_inventory_passed":  false,
+    "environment":  {
+                        "VK_DRIVER_FILES":  null,
+                        "VK_ICD_FILENAMES":  null,
+                        "VK_ADD_DRIVER_FILES":  null,
+                        "SIRIUS_VULKAN_DEVICE":  null,
+                        "SIRIUS_PRECISION":  null,
+                        "SIRIUS_MEMORY_BUDGET_MB":  null,
+                        "SIRIUS_DISPATCH_TARGET_MS":  null,
+                        "TEMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\temp\\trace-jacobi-all-rungs",
+                        "TMP":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\temp\\trace-jacobi-all-rungs",
+                        "TMPDIR":  null
+                    },
+    "test_pid":  18216,
+    "test_start_time_utc":  "2026-10-18T00:50:52.1675373Z",
+    "returncode":  0,
+    "exit_code_source":  "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+    "owned_process_absent":  true,
+    "end_utc":  "2026-10-18T01:00:17.6391556Z",
+    "elapsed_seconds":  568.7923926,
+    "peak_sampled_rss_bytes":  1174265856,
+    "source_revision":  "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "live_source_revision":  "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "source_build_gate_sha256":  "92023a61cd5dd78e516594a4a4e7df48c3304aa6404bc0f5e5d892cf119fc93b",
+    "source_build_gate_unchanged":  true,
+    "loaded_driver_modules_recorded":  true,
+    "test_executable_unchanged":  true,
+    "cleanup_errors":  [
+
+                       ]
+}

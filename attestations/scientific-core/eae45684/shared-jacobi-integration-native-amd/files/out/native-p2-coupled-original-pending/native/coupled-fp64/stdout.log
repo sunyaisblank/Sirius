@@ -1,0 +1,36 @@
+Running main() from D:\a\Sirius\Sirius\bin\windows-msvc\_deps\googletest-src\googletest\src\gtest_main.cc
+Note: Google Test filter = KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelParity
+[ RUN      ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+[CoupledDevice] index=0 name=AMD Radeon 780M Graphics kind=integrated vendor_id=4098 device_id=6400 driver_id=1 driver_name=AMD proprietary driver driver_info=26.8.1 (LLPC) supports_fp64=1
+[DispatchPhases] coupled_0_actual pipeline_setup_ms=0 command_setup_ms=0 submit_wait_ms=0 cleanup_ms=0 total_ms=0 pipeline_created=0
+[CoupledStep] coupled_0_actual submit_wait_ms=0 dispatch_wall_ms=34719.1
+D:\a\Sirius\Sirius\tests\backend\kernel_parity_test.cpp(2447): error: Value of: dispatched.has_value()
+  Actual: false
+Expected: true
+kernel: create compute pipeline: VkResult -3
+Google Test trace:
+D:\a\Sirius\Sirius\tests\backend\kernel_parity_test.cpp(2553): sample=0
+
+D:\a\Sirius\Sirius\tests\backend\kernel_parity_test.cpp(2464): error: Expected: dispatch("actual", timing) doesn't generate new fatal failures in the current thread.
+  Actual: it does.
+Google Test trace:
+D:\a\Sirius\Sirius\tests\backend\kernel_parity_test.cpp(2553): sample=0
+
+D:\a\Sirius\Sirius\tests\backend\kernel_parity_test.cpp(2556): error: Expected: RunTimedCoupledProbe(*fixture.device, fixture.kernel, samples[index], index, result) doesn't generate new fatal failures in the current thread.
+  Actual: it does.
+Google Test trace:
+D:\a\Sirius\Sirius\tests\backend\kernel_parity_test.cpp(2553): sample=0
+
+[  FAILED  ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64 (35720 ms)
+[----------] 1 test from KernelParity (35721 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (35723 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64
+
+ 1 FAILED TEST

@@ -1,0 +1,30 @@
+{
+  "schema": "sirius-native-trace-jacobi-source-preparation-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "source_protocol_parent": {
+    "commit": "f8e2064c8cbd6b8df362d012e5d4fbccd329efa0",
+    "member_prefix": "attestations/scientific-core/e0db7d59/native-amd-kerr-cartdelta-rhs-controls/files/out/native-windows-kerr-rhs-e0db7d59/"
+  },
+  "current_CI": {
+    "run_id": "39082394780",
+    "artifact_id": null,
+    "status": "ROOT_PENDING",
+    "M_identity": null,
+    "native_gate_identity": null,
+    "Windows_backend_identity": null,
+    "Windows_trace_products": null
+  },
+  "materialization": "ROOT only, after actual currentCI/product validation and source review: regular stage/current inputs+pendingplan\u2192actualplan/physicalfreeze/bindings\u2192independent/root concrete input review\u2192explicit release\u2192one owner then terminal. No executable preparation helper is added.",
+  "commands": [
+    "python3 -B out/native-shared-jacobi-original-pending/run_system.py trace-jacobi-all-rungs",
+    "python3 -B out/native-shared-jacobi-original-pending/run_terminal.py trace-jacobi-all-rungs"
+  ],
+  "scope": "Native current-source original P2 only; source preparation supplies no actual product/provider/query/result evidence.",
+  "diagnostic_seconds": {
+    "owner": 900,
+    "bridge": 1380,
+    "terminal": 60
+  }
+}

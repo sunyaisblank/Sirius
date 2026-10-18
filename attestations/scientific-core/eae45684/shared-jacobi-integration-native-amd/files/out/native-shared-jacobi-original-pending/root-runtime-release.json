@@ -1,0 +1,36 @@
+{
+  "schema": "sirius-native-shared-jacobi-root-runtime-release-v1",
+  "created_utc": "2026-10-18T00:50:31.194687+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "released": true,
+  "independent_review": {
+    "bytes": 6386,
+    "sha256": "f192100f313a6728434a023908888bf09426435915e99cab0b23292e45979be7"
+  },
+  "binding_before": {
+    "bytes": 217546,
+    "sha256": "f334f92f85220ed2564185eab38bf84de23fce4f09c20b38395fddc6efa97fb6"
+  },
+  "binding_after": {
+    "bytes": 217545,
+    "sha256": "f2d0f55d201eddcd90a90e2f5d67486f2b4af6795bee0d23e4540bba1d9fe35e"
+  },
+  "only_delta_top_level_admitted_false_to_true": true,
+  "all1110_physical_inputs_fresh_exact": true,
+  "source_clean_pushed_tracking0_0": true,
+  "one_released_owner_command": [
+    "/usr/bin/python3",
+    "-B",
+    "out/native-shared-jacobi-original-pending/run_system.py",
+    "trace-jacobi-all-rungs"
+  ],
+  "terminal_only_after_owner_positive": [
+    "/usr/bin/python3",
+    "-B",
+    "out/native-shared-jacobi-original-pending/run_terminal.py",
+    "trace-jacobi-all-rungs"
+  ],
+  "retry_or_guardraise_released": false,
+  "source_build_private_stage_cleanup_released": false,
+  "scope": "One original current-source native AMD P2 witness. Original1000ms dispatch/assertions/defaultcache retained; prospective900s4GiBchildRSS2GiBWSLreserve/1380bridge/60terminal. No runtime verdict until actual postconditions and terminal closure."
+}

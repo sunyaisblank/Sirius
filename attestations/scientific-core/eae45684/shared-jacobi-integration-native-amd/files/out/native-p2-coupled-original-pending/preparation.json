@@ -1,0 +1,26 @@
+{
+  "schema": "sirius-native-p2-coupled-source-preparation-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "source_origin": "out/native-shared-jacobi-original-pending",
+  "diagnostic_seconds": {
+    "owner": 900,
+    "bridge": 1380,
+    "terminal": 60
+  },
+  "current_CI": {
+    "run_id": "39082394780",
+    "artifact_id": null,
+    "M_identity": null,
+    "native_gate_identity": null,
+    "Windows_backend_identity": null,
+    "Windows_program_identities": null
+  },
+  "commands": [
+    "python3 -B out/native-p2-coupled-original-pending/run_system.py coupled-fp64",
+    "python3 -B out/native-p2-coupled-original-pending/run_terminal.py coupled-fp64"
+  ],
+  "materialization": "ROOT only after preceding native run completion/review: genuine current stage/complete inputs+actualplan/freeze/bindings\u2192independent/root concrete review\u2192explicit release\u2192one owner then terminal. No executable preparation helper added.",
+  "scope": "No runtime, scientific, product or provider admission from pending source."
+}

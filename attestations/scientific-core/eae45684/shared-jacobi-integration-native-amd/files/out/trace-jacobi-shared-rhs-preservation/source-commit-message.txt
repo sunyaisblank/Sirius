@@ -1,0 +1,5 @@
+Share Jacobi stage bodies to bound shader compilation
+
+Use bounded pair, stencil-distance and eight-event loops while retaining the original evaluation order, precision policy, RK sums and failure/commit behavior. Share geometry at start/midpoint/end and the Jacobi RHS callsite.
+
+Five new compiler targets passed with five matching canonical controls reused. The original three-rung test passed in269seconds under the original science/resource guards. Evidence: b86756348bc43f99eb6355e7524aa4a3b97656f0 (observer/profile limits retained). Full science, coldframe, Mandatory and release qualification remain open.

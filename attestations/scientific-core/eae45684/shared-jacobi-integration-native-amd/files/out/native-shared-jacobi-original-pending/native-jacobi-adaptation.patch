@@ -1,0 +1,283 @@
+--- originals/run_system.py
++++ run_system.py
+@@ -1,4 +1,4 @@
+-"""Own the selected bounded Kerr composite controls with unchanged native ownership."""
++"""Own one original all-rung Jacobi control with unchanged native ownership."""
+ from pathlib import Path, PurePosixPath
+ import hashlib
+ import json
+@@ -16,22 +16,10 @@
+ WORK = Path(__file__).resolve().parent
+ if ROOT != WORK.parents[1]: raise RuntimeError('Run from the canonical checkout')
+ ACTION_NAMES = {
+-    'floor-fp32':'KernelParity.RejectedNeighbourRetriesExactMinimumFp32',
+-    'floor-fp32comp':'KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp',
+-    'floor-fp64':'KernelParity.RejectedNeighbourRetriesExactMinimumFp64',
+-    'captured-fp32':'KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32',
+-    'captured-fp32comp':'KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp',
+-    'kerr-image':'KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow',
+-    'kerr-precision':'KernelTrace.Fp64RungAgreesWithFp32OnKerrScene'}
+-PROFILES = {
+-    'original-kerr-only':['kerr-image','kerr-precision'],
+-    'floor-regressions-then-original-kerr':list(ACTION_NAMES)}
+-OWNER_SECONDS = {name:(28800 if name.startswith('kerr-') else 900) for name in ACTION_NAMES}
+-EVIDENCE_PROPERTIES = {
+-    'floor-fp32':('fp32_evidence','real_adaptive_minimum_retry_controls_executed'),
+-    'floor-fp32comp':('fp32comp_evidence','real_adaptive_minimum_retry_controls_executed'),
+-    'floor-fp64':('fp64_evidence','real_adaptive_minimum_retry_controls_executed'),
+-    'kerr-precision':('fp64_evidence','native_comparison_executed')}
++    'trace-jacobi-all-rungs':'KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs'}
++PROFILES = {'original-trace-jacobi':['trace-jacobi-all-rungs']}
++OWNER_SECONDS = {name:900 for name in ACTION_NAMES}
++EVIDENCE_PROPERTIES = {}
+ kind, = sys.argv[1:]
+ assert kind in ACTION_NAMES
+ plan = json.loads((WORK / 'plan.json').read_text())
+@@ -39,14 +27,14 @@
+ binding = json.loads(binding_path.read_text())
+ HEAD = plan['runner_source_revision']
+ SOURCE = plan['source_revision']
+-assert plan['schema'] == 'sirius-native-windows-kerr-composite-plan-v1'
+-assert binding['schema'] == 'sirius-native-windows-kerr-composite-bindings-v1'
++assert plan['schema'] == 'sirius-native-windows-trace-jacobi-plan-v1'
++assert binding['schema'] == 'sirius-native-windows-trace-jacobi-bindings-v1'
+ assert plan['control_profile'] == binding['control_profile'] and plan['control_profile'] in PROFILES
+ ORDER = PROFILES[plan['control_profile']]
+ assert kind in ORDER and set(binding['actions']) == set(ORDER) and set(binding['terminal_actions']) == set(ORDER)
+ assert plan['admitted'] is True and binding['admitted'] is True
+-assert SOURCE == HEAD == 'e0db7d5970d4878a1b5418c4dc058a435f2df8e9'
+-assert plan['stage'] == binding['stage'] == 'bin/windows-msvc/diagnostic-e0db7d59'
++assert SOURCE == HEAD == 'eae45684ee6f2d1b1baf9673a53ec9c349f936e1'
++assert plan['stage'] == binding['stage'] == 'bin/windows-msvc/diagnostic-eae45684'
+ assert plan['windows_checkout_unc']==binding['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'
+ signals = []
+ predecessors = {}
+@@ -72,7 +60,7 @@
+     assert binding['files'][str(manifest_path.relative_to(ROOT))] == binding['manifest_identity']
+     manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
+     for key, value in {'schema':'sirius-windows-diagnostic-build-products-v1', 'source_revision':SOURCE,
+-                       'repository':'sunyaisblank/Sirius', 'run_id':'38754177960', 'run_attempt':'1'}.items():
++                       'repository':'sunyaisblank/Sirius', 'run_id':'39082394780', 'run_attempt':'1'}.items():
+         assert type(manifest[key]) is str and manifest[key] == value
+     assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
+     assert binding['artifact']['repository'] == manifest['repository'] and binding['artifact']['run_id'] == manifest['run_id']
+@@ -273,6 +261,14 @@
+         key, expected_value = EVIDENCE_PROPERTIES[kind]
+         assert properties.get(key) == expected_value
+         record['required_evidence_property'] = {key:properties[key]}
++    assert not any(p.get('name') == 'fp64_evidence' for p in cases[0].findall('./properties/property'))
++    expected_progress = [f'[TraceJacobiRung] module={module} phase={phase}'.encode('ascii')
++                         for module in ['trace.spv','trace_fp32comp.spv','trace_fp64.spv']
++                         for phase in ['begin','prepared','exercised']]
++    actual_progress = [line.rstrip(b'\r') for line in (output/'stdout.log').read_bytes().splitlines()
++                       if line.startswith(b'[TraceJacobiRung]')]
++    assert actual_progress == expected_progress
++    record['required_original_rung_progress'] = [line.decode('ascii') for line in actual_progress]
+     record['loaded_provider_evidence_complete'] = owner['loaded_driver_modules_recorded'] is True
+     if owner['loaded_driver_modules_recorded']:
+         modules=json.loads((output/'driver-modules.json').read_text(encoding='utf-8-sig'))
+--- originals/run_terminal.py
++++ run_terminal.py
+@@ -16,7 +16,7 @@
+     assert bindings['files'][str(manifest_path.relative_to(ROOT))] == bindings['manifest_identity']
+     manifest = json.loads(manifest_path.read_text(encoding='utf-8-sig'))
+     for key, value in {'schema':'sirius-windows-diagnostic-build-products-v1', 'source_revision':bindings['source_revision'],
+-                       'repository':'sunyaisblank/Sirius', 'run_id':'38754177960', 'run_attempt':'1'}.items():
++                       'repository':'sunyaisblank/Sirius', 'run_id':'39082394780', 'run_attempt':'1'}.items():
+         assert type(manifest[key]) is str and manifest[key] == value
+     assert manifest['diagnostic_build_only'] is True and manifest['qualification_claimed'] is False
+     assert bindings['artifact']['repository'] == manifest['repository'] and bindings['artifact']['run_id'] == manifest['run_id']
+@@ -87,6 +87,10 @@
+  if case in EVIDENCE_PROPERTIES:
+   key,expected_value=EVIDENCE_PROPERTIES[case]
+   assert properties.get(key)==expected_value
++ assert not any(p.get('name') == 'fp64_evidence' for p in cases[0].findall('./properties/property'))
++ expected_progress=[f'[TraceJacobiRung] module={module} phase={phase}'.encode('ascii') for module in ['trace.spv','trace_fp32comp.spv','trace_fp64.spv'] for phase in ['begin','prepared','exercised']]
++ actual_progress=[line.rstrip(b'\r') for line in (WORK/'native'/case/'stdout.log').read_bytes().splitlines() if line.startswith(b'[TraceJacobiRung]')]
++ assert actual_progress==expected_progress
+  receipts.append(WORK/'native'/case/'gtest.xml')
+  if (WORK/'native'/case/'driver-modules.json').exists():
+   module_path=WORK/'native'/case/'driver-modules.json';receipts.append(module_path)
+@@ -105,33 +109,21 @@
+ def interrupted(signum,frame):controller_signals.append(signum)
+ signal.signal(signal.SIGTERM,interrupted);signal.signal(signal.SIGINT,interrupted)
+ ACTION_NAMES = {
+-    'floor-fp32':'KernelParity.RejectedNeighbourRetriesExactMinimumFp32',
+-    'floor-fp32comp':'KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp',
+-    'floor-fp64':'KernelParity.RejectedNeighbourRetriesExactMinimumFp64',
+-    'captured-fp32':'KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32',
+-    'captured-fp32comp':'KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp',
+-    'kerr-image':'KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow',
+-    'kerr-precision':'KernelTrace.Fp64RungAgreesWithFp32OnKerrScene'}
+-PROFILES = {
+-    'original-kerr-only':['kerr-image','kerr-precision'],
+-    'floor-regressions-then-original-kerr':list(ACTION_NAMES)}
+-OWNER_SECONDS = {name:(28800 if name.startswith('kerr-') else 900) for name in ACTION_NAMES}
+-EVIDENCE_PROPERTIES = {
+-    'floor-fp32':('fp32_evidence','real_adaptive_minimum_retry_controls_executed'),
+-    'floor-fp32comp':('fp32comp_evidence','real_adaptive_minimum_retry_controls_executed'),
+-    'floor-fp64':('fp64_evidence','real_adaptive_minimum_retry_controls_executed'),
+-    'kerr-precision':('fp64_evidence','native_comparison_executed')}
+-case,=sys.argv[1:];assert case in ACTION_NAMES;mode='native-kerr-composite';label=case
++    'trace-jacobi-all-rungs':'KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs'}
++PROFILES = {'original-trace-jacobi':['trace-jacobi-all-rungs']}
++OWNER_SECONDS = {name:900 for name in ACTION_NAMES}
++EVIDENCE_PROPERTIES = {}
++case,=sys.argv[1:];assert case in ACTION_NAMES;mode='native-trace-jacobi';label=case
+ binding_path=WORK/'execution-bindings.json'
+ bindings=document(binding_path);binding_sha256=sha(binding_path)
+ plan=document(WORK/'plan.json');assert plan['admitted'] is True and bindings['admitted'] is True
+-assert plan['schema']=='sirius-native-windows-kerr-composite-plan-v1'
+-assert bindings['schema']=='sirius-native-windows-kerr-composite-bindings-v1'
++assert plan['schema']=='sirius-native-windows-trace-jacobi-plan-v1'
++assert bindings['schema']=='sirius-native-windows-trace-jacobi-bindings-v1'
+ assert plan['control_profile']==bindings['control_profile'] and plan['control_profile'] in PROFILES
+ ORDER=PROFILES[plan['control_profile']]
+ assert case in ORDER and set(bindings['actions'])==set(ORDER) and set(bindings['terminal_actions'])==set(ORDER)
+-assert plan['source_revision']==plan['runner_source_revision']==bindings['source_revision']==bindings['runner_source_revision']=='e0db7d5970d4878a1b5418c4dc058a435f2df8e9'
+-assert plan['stage']==bindings['stage']=='bin/windows-msvc/diagnostic-e0db7d59'
++assert plan['source_revision']==plan['runner_source_revision']==bindings['source_revision']==bindings['runner_source_revision']=='eae45684ee6f2d1b1baf9673a53ec9c349f936e1'
++assert plan['stage']==bindings['stage']=='bin/windows-msvc/diagnostic-eae45684'
+ assert plan['windows_checkout_unc']==bindings['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'
+ assert plan['order']==ORDER and set(plan['actions'])==set(ORDER)
+ for action_label in ORDER:
+@@ -155,7 +147,7 @@
+ arguments=['/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-Command',command]
+ cleanup_args=[arguments[0],'-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',win(WORK/'emergency_native_cleanup.ps1'),'-TemporaryDirectory',win(temp),'-Output',win(temp),'-Receipt',win(WORK/(prefix+'-emergency-cleanup.json'))]
+ assert arguments==bindings['terminal_actions'][case]['argv'] and cleanup_args==bindings['terminal_actions'][case]['cleanup_argv']
+-record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'terminal-audit.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Selected original native-AMD Kerr/parity control and current source/product/input identities; bounded Windows birth/provider/accessible-consumer audit. No hidden/global/unconditional compiler-descendant absence or full qualification claim.'}
++record={'mode':mode,'label':label,'case':case,'read_case_pass':True,'observer_sha256':sha(Path(__file__)),'audit_script_sha256':sha(WORK/'terminal-audit.ps1'),'arguments':arguments,'deadline_seconds':60,'outer_stop':False,'errors':[],'started_epoch':time.time(),'qualification_claimed':False,'scope':'Selected original native-AMD all-rung Jacobi control and current source/product/input identities; bounded Windows birth/provider/accessible-consumer audit. No hidden/global/unconditional compiler-descendant absence or full qualification claim.'}
+ started=time.monotonic()
+ with (WORK/(prefix+'.stdout')).open('wb') as out,(WORK/(prefix+'.stderr')).open('wb') as err:
+  assert not controller_signals,('interrupted before spawn',controller_signals)
+@@ -221,7 +213,6 @@
+ bridge.write_text(json.dumps(record,indent=2)+'\n')
+ print(json.dumps({k:record[k] for k in ('mode','label','case','returncode','elapsed_seconds','accepted')}),flush=True)
+ assert record['accepted']
+-result={'pass':True,'case':case,'mode':mode,'label':label,'record':observed,'terminal_receipt':str(receipt.relative_to(ROOT)),'terminal_receipt_sha256':sha(receipt),'terminal_bridge_sha256':sha(bridge),'loaded_provider_evidence_complete':record['loaded_provider_evidence_complete'],'source_revision':bindings['source_revision'],'native_build_gate_authority_used':True,'mandatory_or_full_runtime_admitted':False,'scope':'One selected original native-AMD Kerr/parity control only, with actual stagedSDKloader+AMD and original assertions. Precision requires actual native comparison; floor controls require actual rung execution. Limited accessible census; no saved image buffer, UI/fullMandatory/fullscience/domain/release qualification claim.'}
+-if case=='kerr-precision':result['fp64_evidence']='native_comparison_executed'
++result={'pass':True,'case':case,'mode':mode,'label':label,'record':observed,'terminal_receipt':str(receipt.relative_to(ROOT)),'terminal_receipt_sha256':sha(receipt),'terminal_bridge_sha256':sha(bridge),'loaded_provider_evidence_complete':record['loaded_provider_evidence_complete'],'source_revision':bindings['source_revision'],'native_build_gate_authority_used':True,'mandatory_or_full_runtime_admitted':False,'scope':'One original native-AMD Jacobi control only: all three original rungs exercised without an FP64-decline property, actual stagedSDKloader+AMD, complete zero-FESD XML and original assertions. Progress is not independently a PASS. Limited accessible census; no fullP1/fullscience/Mandatory/performance/release claim.'}
+ assert not controller_signals,('controller signals before acceptance publication',controller_signals)
+ output=WORK/(prefix+'-accepted.json');assert not output.exists();output.write_text(json.dumps(result,indent=2)+'\n')
+--- originals/plan.pending.json
++++ plan.pending.json
+@@ -1,41 +1,31 @@
+ {
+-  "schema": "sirius-native-windows-kerr-composite-plan-v1",
++  "schema": "sirius-native-windows-trace-jacobi-plan-v1",
+   "admitted": false,
+-  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+-  "runner_source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+-  "control_profile": "original-kerr-only",
+-  "stage": "bin/windows-msvc/diagnostic-e0db7d59",
++  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
++  "runner_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
++  "control_profile": "original-trace-jacobi",
++  "stage": "bin/windows-msvc/diagnostic-eae45684",
+   "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+   "order": [
+-    "kerr-image",
+-    "kerr-precision"
++    "trace-jacobi-all-rungs"
+   ],
+   "actions": {
+-    "kerr-image": {
++    "trace-jacobi-all-rungs": {
+       "kind": "Control",
+-      "test": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
++      "test": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+       "expected_exit": 0,
+-      "owner_seconds": 28800,
+-      "bridge_outer_seconds": 29280
+-    },
+-    "kerr-precision": {
+-      "kind": "Control",
+-      "test": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+-      "expected_exit": 0,
+-      "owner_seconds": 28800,
+-      "bridge_outer_seconds": 29280
++      "owner_seconds": 900,
++      "bridge_outer_seconds": 1380
+     }
+   },
+   "owner_rss_bytes": 4294967296,
+   "minimum_wsl_available_kib": 2097152,
+   "terminal_observer_seconds": 60,
+-  "resource_semantics": "Unchanged held-handle Windows owner samples child WorkingSet64/PrivateMemorySize64 under4GiB. WSL sampled MemAvailable reserve2GiB; Linux bridge owner+480seconds; separate terminal60seconds. Original trace/P1 physical1000ms assertions unchanged; outer900/28800 bounds are prospective external diagnostics, not original whole-test deadlines or aggregate Windows/bootstrap memory guarantees. Default AMD cache and inherited override refusal unchanged.",
++  "resource_semantics": "Exact mature native held-handle Windows owner samples child WorkingSet64 with4GiB stop and records private bytes; WSL sampled available-memory reserve2GiB; bridge owner+480s; terminal60s. 900s is prospective external native diagnostic cap, reusing the existing first-five control ceiling, not an original registered test deadline or aggregate Windows process-tree bound. Original physical1000ms dispatch and scientific assertions unchanged. Default native cache; inherited override refusal unchanged.",
+   "prospective_commands": [
+-    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py kerr-image",
+-    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py kerr-image",
+-    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_system.py kerr-precision",
+-    "python3 -B out/native-windows-kerr-rhs-e0db7d59/run_terminal.py kerr-precision"
++    "python3 -B out/native-shared-jacobi-original-pending/run_system.py trace-jacobi-all-rungs",
++    "python3 -B out/native-shared-jacobi-original-pending/run_terminal.py trace-jacobi-all-rungs"
+   ],
+   "stop_on_first_nonpass": true,
+-  "scope": "Source-only pending positive-control protocol. No sampler/near rerun. Image then precision only after image terminal acceptance. Optional five parity witnesses run first only after explicit root selection. No fullMandatory, whole-domain horizon, image archive, performance or release qualification claim."
++  "scope": "One original current-source P2 witness, all three supported rungs/within-rung failure retention and restart. No repeated sampler/near/image/precision controls. No runtime or native product authority yet."
+ }
+--- originals/execution-bindings.pending.json
++++ execution-bindings.pending.json
+@@ -1,15 +1,15 @@
+ {
+-  "schema": "sirius-native-windows-kerr-composite-bindings-v1",
++  "schema": "sirius-native-windows-trace-jacobi-bindings-v1",
+   "admitted": false,
+-  "source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+-  "runner_source_revision": "e0db7d5970d4878a1b5418c4dc058a435f2df8e9",
+-  "control_profile": "original-kerr-only",
+-  "stage": "bin/windows-msvc/diagnostic-e0db7d59",
++  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
++  "runner_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
++  "control_profile": "original-trace-jacobi",
++  "stage": "bin/windows-msvc/diagnostic-eae45684",
+   "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+   "artifact": {
+     "id": null,
+     "repository": "sunyaisblank/Sirius",
+-    "run_id": "38754177960",
++    "run_id": "39082394780",
+     "run_attempt": "1",
+     "name": "sirius-windows-diagnostic-build-products",
+     "zip_identity": null
+@@ -20,31 +20,23 @@
+   "expected_amd_module": null,
+   "files": null,
+   "actions": {
+-    "kerr-image": {
+-      "argv": null,
+-      "cleanup_argv": null
+-    },
+-    "kerr-precision": {
++    "trace-jacobi-all-rungs": {
+       "argv": null,
+       "cleanup_argv": null
+     }
+   },
+   "terminal_actions": {
+-    "kerr-image": {
+-      "argv": null,
+-      "cleanup_argv": null
+-    },
+-    "kerr-precision": {
++    "trace-jacobi-all-rungs": {
+       "argv": null,
+       "cleanup_argv": null
+     }
+   },
+   "pending_root_fields": [
+-    "Actual completed CI source/product/registration validation; positive native gate receipt and tested executable joins required, never presumed from exported diagnostic M.",
+-    "Actual artifact ID/ZIP/current diagnostic M/native gate identities, complete installed manifest member set and whole physical input map.",
+-    "Actual samehost AMD module row and exact stagedSDKloader path/hash; no installed-file-as-mapping inference.",
+-    "Exactly selected plan/profile and all native/terminal argv+cleanup pairs. Optional five parity phases require explicit root selection and prospective900second guards review.",
+-    "Actual current source/helpers/plan/metadata/static freeze and independent/root runtime admission; actualplan/bindings/native/temp must stay absent until then."
++    "Actual currentCI completion/artifactID/ZIP/M/native9buildgate and exact tested executable/product/resource joins. No old revision/executable alias.",
++    "Actual complete regular diagnostic stage/all manifest rows and matching current source/registration/alignment receipts, SDK loader/current host AMD module identity and device selection provenance.",
++    "Actual plan/whole physical input map/freeze/helper+source/predecessor evidence; current backend/3trace products and current host/provider/tool/runtime inputs. No guessed Windows binaries or DSOs.",
++    "Exactly one owner argv+cleanup and terminal argv+cleanup, derived from these current five helpers/actual stage/gate; admittedfalse until independent/root concrete review and explicit release.",
++    "Actualplan/bindings/source-freeze/native/temp and outputs stay absent until ROOT materializes after actualCI validation."
+   ],
+-  "scope": "Pending source-copy template only. Prior02ee expected-failure context is historical negative evidence, not current positive product authority. No provider query, staging, native test, CI retry or runtime admission."
++  "scope": "Source-only pending native positive-control protocol. Known Linux tested bytes are not Windows aliases. This template is not a current CI/stage/native/scientific verdict."
+ }

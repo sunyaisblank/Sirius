@@ -1,0 +1,109 @@
+{
+  "schema": "sirius-native-shared-jacobi-independent-runtime-review-v1",
+  "created_utc": "2026-10-18T00:49:59.622716+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "passed": true,
+  "decision": "MATERIALIZED_INPUTS_PASS_SEPARATE_ROOT_RELEASE_REQUIRED",
+  "execution_released": false,
+  "reviewer": "forensic_obligations; passive independent review; ROOT sole operator.",
+  "release_pins": {
+    "execution-bindings.json": {
+      "bytes": 217546,
+      "sha256": "f334f92f85220ed2564185eab38bf84de23fce4f09c20b38395fddc6efa97fb6"
+    },
+    "reviewed-held-execution-bindings.json": {
+      "bytes": 217546,
+      "sha256": "f334f92f85220ed2564185eab38bf84de23fce4f09c20b38395fddc6efa97fb6"
+    },
+    "plan.json": {
+      "bytes": 1844,
+      "sha256": "911af14f3e213440d1fba3f04c8a183e8cf70bfacf3ae4c3be005d9b651faff7"
+    },
+    "source-freeze.json": {
+      "bytes": 85085,
+      "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+    },
+    "root-materialization.json": {
+      "bytes": 3472,
+      "sha256": "1019d95a6535e7976d3dbf41b59fb01f4f001ecbde63bbcae0c750b65f5fdcaa"
+    },
+    "root-observer-input-correction.json": {
+      "bytes": 966,
+      "sha256": "28e2f1949a735f50a17a69399213415789284f2fe912ed8f76643a92b968294e"
+    },
+    "root-preflight.json": {
+      "bytes": 1785,
+      "sha256": "4f4f296ddc9b8f3b4edf426b46be1115401ea0236aec71c3110310f1c37796e7"
+    },
+    "independent-source-review.json": {
+      "bytes": 5556,
+      "sha256": "407ea92a4a9306fc3abffdc5617b9989dffd90bc8312968940022020b4472e64"
+    }
+  },
+  "current_CI_review_pins": {
+    "out/shared-jacobi-current-ci/independent-ci-review.json": {
+      "bytes": 7824,
+      "sha256": "8d1b0c710476093e113edc9632c414c6eb4a845c26460bc961304d7f49e70705"
+    },
+    "out/shared-jacobi-current-ci/independent-ci-jobs-supplement.json": {
+      "bytes": 1682,
+      "sha256": "60574fb7ec0123c072ceb464b45cb83b240f4ba40a1ee37ccc2a25f64e587a01"
+    }
+  },
+  "concrete_checks": {
+    "all1110_binding_file_entries_current_bytes_and_sha256": true,
+    "all538_source_freeze_entries_current_and_exact_tracked_file_set": true,
+    "all140_stage_regular_files_exactly138_manifest_rows_plus_manifest_and_current_native_gate": true,
+    "current_CI_source_run_attempt_repository_and_native9_gate_joined": true,
+    "native9_scope": "1152 registered,9 selected/executed,zero failures/errors/skips; build/non-render authority only.",
+    "current_Windows_CLI_backend_and_three_trace_products_match_manifest_gate_and_reviewed_identities": true,
+    "existing_independent_source_and_CI_reviews_reused_unchanged": true,
+    "typed_single_Control_original_filter_int0_900s_owner_1380s_bridge_60s_terminal": true,
+    "both_system_and_terminal_argv_and_both_emergency_cleanup_argv_reconstructed_exact": true,
+    "binding_self_and_future_outputs_excluded_no_selfcycle": true,
+    "native_and_temp_directories_absent_at_review": true
+  },
+  "observer_input_correction": {
+    "historical_materialization_binding_pin_remains_historical": true,
+    "only_added_input": "/mnt/c/Windows/System32/vulkan-1.dll",
+    "identity": {
+      "bytes": 1719408,
+      "sha256": "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a"
+    },
+    "exact_inverse_in_memory_matches_original217386_byte_5852f3_binding": true,
+    "scope": "Installed System32 loader is terminal-observer metadata only. Actual same-child mapped loader must equal staged SDK loader1685432B/cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696; observer file is not provider substitution.",
+    "no_plan_helper_source_argv_guard_or_test_change": true
+  },
+  "allowed_release_delta": {
+    "file": "execution-bindings.json",
+    "only_change": "Top-level admitted false to true; every other key/value and all physical inputs unchanged.",
+    "held_preimage_matches_reviewed_held_execution_bindings": true,
+    "selfcycle_avoidance": "Binding excludes itself; both reviewed wrappers dynamically pin its complete actual bytes/hash for each operation.",
+    "separate_ROOT_release_required": true,
+    "this_review_does_not_flip_admission_or_launch": true
+  },
+  "required_actual_postconditions": [
+    "Normal Python assertions and inherited-override refusal/default native cache; original test source,1000ms physical limit,128 attempts,three rungs,four Jacobi columns,failure retention/recovery and all assertions unchanged.",
+    "Native owner held handles/birth identities and successful exit; child WorkingSet64 sampled4GiB,WSL available-memory reserve2GiB,owner900s/bridge1380s/terminal60s. These are prospective external bounds,not original whole-test deadline,Windows aggregate/GPU bound or continuous monitoring guarantee.",
+    "Fresh same-child mapped staged SDK loader and expected installed AMD path/hash/version; installed disk metadata alone is not actual device/provider execution proof.",
+    "Exactly one original completed testcase XML with zero failures/errors/skips/disabled and strict fp64_evidence PROPERTY NAME absence; all nine exact module/phase markers in order. No fabricated positive FP64 property; markers alone insufficient.",
+    "All before/after/current source,physical-input and binding seals; terminal repeat-read of original outputs/XML/maps,birth/post-module seals and accessible-consumer census. First nonpass stops for truthful ROOT failure/teardown audit; no retry/guard raise admitted."
+  ],
+  "limits": [
+    "Prior full CI review and completed-jobs supplement compose scoped historical snapshots; neither is overwritten. Three integration jobs passed;five full-qualification/diagnostic jobs intentionally unrequested. This is not full CI qualification.",
+    "No local native runtime,scientific result,fullP1/eight-domain/Mandatory/UI/cold/cache/latency/benefit/release qualification from metadata review.",
+    "No helper,PowerShell,provider,test,compiler,network,process or cache operation performed by reviewer; no claim all Windows OS DLLs or global consumers prebound/absent."
+  ],
+  "repository": {
+    "HEAD": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_status": "clean",
+    "upstream_ahead_behind": [
+      0,
+      0
+    ],
+    "sole_worktree": true,
+    "source_committed_pushed": true,
+    "this_new_sidecar_uncommitted_pending_ROOT_preservation": true
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "schema": "sirius-shared-jacobi-strict-build-completed-v1",
+  "created_utc": "2026-10-18T00:22:49.819513+00:00",
+  "passed": true,
+  "source": {
+    "revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "status": "",
+    "tracking": [
+      "0",
+      "0"
+    ],
+    "worktrees": "worktree /home/astra/.project/Sirius\nHEAD eae45684ee6f2d1b1baf9673a53ec9c349f936e1\nbranch refs/heads/development/minimum-step-floor-2026-10-15\n\n"
+  },
+  "actual_helper_closed_exit": 0,
+  "owner_child_exit": 0,
+  "wall_seconds": 80.2751803320134,
+  "samples": 304,
+  "peak_sampled_aggregate_RSS_KiB": 1041788,
+  "minimum_available_KiB": 15995204,
+  "whole_beforeafter_rows": 9834,
+  "all4917_current_source_tool_configuration_inputs_exact": true,
+  "saved_build_births_fresh_absent": [
+    {
+      "pid": 34984,
+      "saved_start_ticks": "15655570",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 34988,
+      "saved_start_ticks": "15655641",
+      "current_start_ticks": null,
+      "absent": true
+    }
+  ],
+  "cleanup_errors": [],
+  "remaining_owned_processes": [],
+  "strict_configure": {
+    "bytes": 1583,
+    "sha256": "132b8b10890a6aff1cca7ea12bea1155309ceb95f63d83c36c315c96f5ae2312"
+  },
+  "five_current_ELFs": {
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "bytes": 13502080,
+      "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+    },
+    "bin/linux-gcc/tests/core/sirius_core_tests": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+      "bytes": 11397000,
+      "sha256": "1fc7e054eb365e31d8aa458944398f56ded4b7f8ce5efcb20ef19a574fff63f8"
+    },
+    "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+      "bytes": 12212608,
+      "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e"
+    }
+  },
+  "canonical_SPV_fullbytes_and_portable_program_text_equal_reviewed_private_products": [
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace.spv",
+      "canonical_product": "bin/linux-gcc/kernels/trace.spv",
+      "identity": {
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      },
+      "fullbytes_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace.spv",
+      "canonical_product": "bin/linux-gcc/tests/backend/resources/kernels/trace.spv",
+      "identity": {
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      },
+      "fullbytes_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace_fp32comp.spv",
+      "canonical_product": "bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "identity": {
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      },
+      "fullbytes_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace_fp32comp.spv",
+      "canonical_product": "bin/linux-gcc/tests/backend/resources/kernels/trace_fp32comp.spv",
+      "identity": {
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      },
+      "fullbytes_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace_fp64.spv",
+      "canonical_product": "bin/linux-gcc/kernels/trace_fp64.spv",
+      "identity": {
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      },
+      "fullbytes_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-runtime-pending/stage/resources/kernels/trace_fp64.spv",
+      "canonical_product": "bin/linux-gcc/tests/backend/resources/kernels/trace_fp64.spv",
+      "identity": {
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      },
+      "fullbytes_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-screen/candidate-cuda/trace.cu",
+      "canonical_product": "bin/linux-gcc/kernels/portability/trace.cu",
+      "identity": {
+        "bytes": 336030,
+        "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+      },
+      "fullbytes_equal": false,
+      "only_diagnostic_line_filename_changes": 11,
+      "all_other_bytes_line_numbers_and_program_text_equal": true
+    },
+    {
+      "private_source": "out/trace-jacobi-shared-segment-rhs-screen/candidate-metal/trace.metal",
+      "canonical_product": "bin/linux-gcc/kernels/portability/trace.metal",
+      "identity": {
+        "bytes": 358529,
+        "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+      },
+      "fullbytes_equal": false,
+      "only_diagnostic_line_filename_changes": 9,
+      "all_other_bytes_line_numbers_and_program_text_equal": true
+    }
+  ],
+  "canonical_backend_host_fullbytes_equal_original_private_test_host": true,
+  "Slang_possible_initialization_warning_count": 28,
+  "warning_scope": "Slang conservative path warnings on loop-carried geometry/phase values; first-event0 writes precede every use per accepted source/emitted review. Runtime original all3rungs passed. No new initialization patch or test weakening. GCC/C++ Werror build and SourceGovernance actual0.",
+  "focused_runtime_reuse": "Current canonical backend host and all3staged modules are byteidentical to the exact private tuple that passed the original268.995s test. Same code, original filter and original scientific assertions; retain private execution path/source/profiler limits explicitly. No second runtime attempt or claim of a new execution.",
+  "files": {
+    "out/trace-shared-jacobi-strict-build/strict-build/inputs-after.json": {
+      "bytes": 1572392,
+      "sha256": "b946ecb6a34aec395945bee867f1f2d537cb98da9285c649f6454d29b7dcba18"
+    },
+    "out/trace-shared-jacobi-strict-build/strict-build/inputs-before.json": {
+      "bytes": 1572392,
+      "sha256": "b946ecb6a34aec395945bee867f1f2d537cb98da9285c649f6454d29b7dcba18"
+    },
+    "out/trace-shared-jacobi-strict-build/strict-build/owner.json": {
+      "bytes": 13162,
+      "sha256": "7039313d744e89de013db2aeac7c51613d505e1fbf024d926b288cbca8d559d1"
+    },
+    "out/trace-shared-jacobi-strict-build/strict-build/samples.jsonl": {
+      "bytes": 314946,
+      "sha256": "b1145a51aba1924b6994fc20c864765fc7e49d44e56a2ef89ff4e1a083aeb48f"
+    },
+    "out/trace-shared-jacobi-strict-build/strict-build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-shared-jacobi-strict-build/strict-build/stdout.log": {
+      "bytes": 13073,
+      "sha256": "ba62cadd11eab59fa61e8ac411e2babcbe2960b52bde7a0328d0e889142cb20e"
+    },
+    "out/trace-shared-jacobi-strict-build/root-helper-closure.json": {
+      "bytes": 238,
+      "sha256": "c37515d4eaa00bfd0610d74e49fec41863a22f6c084a897039a75b4e82456471"
+    },
+    "out/trace-shared-jacobi-strict-build/helper.stdout": {
+      "bytes": 712,
+      "sha256": "3cbd85c12ef963b49373df7f1262fb25b30e3ad9e333d3002621c5c4f9e87c18"
+    },
+    "out/trace-shared-jacobi-strict-build/helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/trace-jacobi-shared-rhs-preservation/root-source-adoption.json": {
+      "bytes": 1322,
+      "sha256": "86fe4801299d5ba15d9b492c71c318080cbed82875af0bab0a35bc189f322fdd"
+    },
+    "out/trace-jacobi-shared-rhs-preservation/root-source-publication.json": {
+      "bytes": 415,
+      "sha256": "051c06176e7fea0368dd6825c119c739ebe9f997e5c74060b7e8d7a01a9e5c7a"
+    },
+    "out/trace-jacobi-shared-segment-rhs-runtime-pending/independent-completion-review.json": {
+      "bytes": 8312,
+      "sha256": "835fff701f52dcce33cdc2165e4e5ae1662e510f5c114a539b06b848163977eb"
+    }
+  },
+  "full_qualification_pending": true,
+  "scope": "Actual strict GCC14/C++26 Release qualification-mode build, original six targets/SourceGovernance and canonical/private exact product joins only. No full scientific/Mandatory/cold/retained benefit/native portability/all8external-domain/release qualification."
+}

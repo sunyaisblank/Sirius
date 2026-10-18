@@ -1,0 +1,40 @@
+{
+  "schema": "sirius-shared-jacobi-independent-completed-job-supplement-v1",
+  "created_utc": "2026-10-18T00:44:30.092970+00:00",
+  "passed": true,
+  "run_id": 39082394780,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "pins": {
+    "jobs-completed.json": {
+      "bytes": 14220,
+      "sha256": "b13daee62f2ffa9797696f4929d74aff69ef0e7fecb53da73a5454de36f7cda5"
+    },
+    "run-current.json": {
+      "bytes": 12707,
+      "sha256": "3feb3ce060504075d6f0b0536fb674cbb94c116952736cbfc8f5329d182087ea"
+    },
+    "request.json": {
+      "bytes": 148,
+      "sha256": "6586919d5e957e08627f5b3b38589fd15a41675d3891e86357ff0a089b16b66a"
+    },
+    "independent-ci-review.json": {
+      "bytes": 7824,
+      "sha256": "8d1b0c710476093e113edc9632c414c6eb4a845c26460bc961304d7f49e70705"
+    }
+  },
+  "all8_jobs_completed": true,
+  "exact3_success": [
+    "integration-no-render",
+    "integration-macos-no-render",
+    "integration-windows-no-render"
+  ],
+  "exact5_unrequested_skips": [
+    "windows-build",
+    "linux-gate",
+    "linux-sanitizers",
+    "macos-build",
+    "macos-retained-diagnostic"
+  ],
+  "scope": "Completes per-job status provenance for the existing successful default integration CI/export review. Prior review and historical jobs-current snapshot remain unchanged. Intentional unrequested fullqualification/Mac diagnostic jobs differ from zero-skip native9 authority gates. No runtime/Mandatory/science/eight-domain/release admission. ROOT API call provenance reused; reviewer executed no API/provider/test/tool/network action.",
+  "repository": "Current eae clean/pushed0:0/sole checkout; this ignored supplement awaits ROOT preservation."
+}

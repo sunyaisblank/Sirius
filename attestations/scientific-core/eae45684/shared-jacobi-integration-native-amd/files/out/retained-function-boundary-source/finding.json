@@ -1,0 +1,14 @@
+{
+  "schema": "sirius-mesa2528-vulkan-function-boundary-source-finding-v1",
+  "decision": "DONTINLINE_DOES_NOT_SURVIVE_ORDINARY_VULKAN_COMPUTE_FRONTEND",
+  "source": "Official mesa-25.2.8 ref,commit f97d7dcca0e51d7e20ed4342bb5ea8afea7db7fa; saved files/Gitblob+SHA256 in primary-source-pins.json.",
+  "path": [
+    "lvp_pipeline.c277-308 compile_spirv calls vk_pipeline_shader_stage_to_nir; vk_pipeline.c180-185 calls vk_spirv_to_nir.",
+    "vtn_cfg.c327-328 imports SPIR-V Inline/DontInline into NIR function flags.",
+    "vk_nir.c165-172 unconditionally lowers local initializers/returns, runs nir_inline_functions, then removes non-entrypoints.",
+    "nir_functions.c224-230 only permits retained driver functions for MESA_SHADER_KERNEL. Ordinary Vulkan MESA_SHADER_COMPUTE does not take that exemption;233-248 recursively expands every defined direct callee without checking dont_inline.",
+    "lvp_pipeline.c579-584 passes resulting compute NIR to create_compute_state; lp_state_cs.c467-569 can emit separate LLVM helpers and lp_bld_nir_soa.c2625-2632 emits LLVM calls, but ordinary Vulkan frontend has already eliminated these source boundaries."
+  ],
+  "conclusion": "Slang -O0 and SPIR-V DontInline cannot preserve arithmetic reuse as ordinary Vulkan compute LLVM calls on this upstream path. Gallivm generic function support/OpenCL kernel exemption is not Vulkan compute authority. Stop this hypothesis before any patch/compiler/provider workload; original science/benefit/scene gates unchanged.",
+  "limits": "Exact upstream release-source finding, not proof installed Ubuntu Mesa binaries are byte-built from this tree or lack distro patches. No installed-binary/source-build correspondence, runtime profile, JIT-time/RSS/performance claim. No compilation/test/provider/CI/process/cache action; canonical/native packets untouched."
+}

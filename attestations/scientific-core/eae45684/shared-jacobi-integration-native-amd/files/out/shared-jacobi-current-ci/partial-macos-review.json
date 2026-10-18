@@ -1,0 +1,190 @@
+{
+  "schema": "sirius-current-shared-jacobi-independent-partial-macos-CI-review-v1",
+  "created_utc": "2026-10-18T00:39:09.910054+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "run_id": 39082394780,
+  "passed": true,
+  "decision": "AVAILABLE_MACOS_NATIVE_BUILD_EXPORTS_PASS_FULL_CI_PENDING",
+  "blockers": [],
+  "selected_pins": {
+    "artifact-12119361984.json": {
+      "bytes": 3605,
+      "sha256": "4c7b5f70ce12453035cbd5c8083fdc645a6b007f4e1faa0880abafe2f3877a20"
+    },
+    "artifact-12119247320.json": {
+      "bytes": 17055,
+      "sha256": "ece7954ecc06d5f8869daa11cd2650604ff82768712746f1817feb686e69f5c9"
+    },
+    "artifacts-list-20261018T003113.json": {
+      "bytes": 1521,
+      "sha256": "3aed8635b8b35ceaccd908b384f78e62248862a6caf32257f7e5b06c430f2886"
+    },
+    "run-current.json": {
+      "bytes": 12704,
+      "sha256": "4dd5608f0d15c64e60db19bfb96ca7a5a7bdcf88fda8b7d6e87ff3915f7e931d"
+    },
+    "jobs-current.json": {
+      "bytes": 13852,
+      "sha256": "54c30bde14c8892583fb8c23e14f66a3bebd60fc96074f99d5198013e12131fb"
+    },
+    "request.json": {
+      "bytes": 148,
+      "sha256": "6586919d5e957e08627f5b3b38589fd15a41675d3891e86357ff0a089b16b66a"
+    },
+    "files/sirius-macos-native-attestation/macos-build.json": {
+      "bytes": 8900,
+      "sha256": "ae23e1a90aaa47bd9d0f302908cc01354b4007abc79508ab7160d44bb555947a"
+    },
+    "files/sirius-macos-native-attestation/native_build_gate.json": {
+      "bytes": 9651,
+      "sha256": "c5f2cd6904b8bcb587069970e257e3811fa9a456c255a0cb1656d722929a8d79"
+    },
+    "files/sirius-macos-native-attestation/native_build_gate_junit.xml": {
+      "bytes": 5163,
+      "sha256": "33c84d1251209da0daef821676c6d7618a90a07c4cb4d59dff85b1dcd7d1fcf7"
+    },
+    "files/sirius-macos-native-attestation/ctest-inventory.json": {
+      "bytes": 1198664,
+      "sha256": "59d08689bc8a5c1bb2b315a1b23268afe503560f43c2c4d46c55c9d4a6bd7b10"
+    },
+    "files/sirius-macos-native-attestation/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "6e28dd688193e6db1912aa0976bc3919258f6e5434b04fbd8212fe10cae1b7ff"
+    }
+  },
+  "artifact_checks": {
+    "actual_artifact_IDs": [
+      12119361984,
+      12119247320
+    ],
+    "API_run_attempt_source_digest_sizes_joined": true,
+    "ZIP_safe_regular_members_CRC_extracted_fullbytes_modes_checked": 44,
+    "diagnostic_members": 4,
+    "native_members": 40,
+    "native_expanded_payload_bytes": 101313909,
+    "all39_native_attestation_artifact_leaves_hashed": true,
+    "duplicate_diagnostic_gate_XML_log_equal_native_export": true
+  },
+  "native_build_joins": {
+    "schema2_native_gate_passed_clean_eae_qualification": true,
+    "registered": 1152,
+    "canonical_inventory_digest_not_raw_JSON_digest_joined": true,
+    "exact_native_authority_cases": [
+      "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+      "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+      "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+      "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+      "OperationalAttestation.FalseExternalEvidenceIsRejected",
+      "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+      "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+      "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+      "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+    ],
+    "native9_raw_JUnit_run_zero_FESD": true,
+    "tested_executables": 7,
+    "product_artifacts": 9,
+    "test_inputs": 20,
+    "all_build_manifest_gate_claims_export_wholehashes_joined": true,
+    "all7_exports_MachO64_headers": {
+      "sirius": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      },
+      "sirius_app_tests": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      },
+      "sirius_backend_tests": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      },
+      "sirius_base_tests": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      },
+      "sirius_core_tests": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      },
+      "sirius_oracle_tests": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      },
+      "sirius_render_tests": {
+        "magic": "cffaedfe",
+        "cpu_type": 16777228
+      }
+    },
+    "source_product_roles_match_current_operatingmodel_starfield_viewer_sources": true,
+    "canonical_current_trace_SPVs_equal_mac_export": {
+      "trace.spv": {
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      },
+      "trace_fp32comp.spv": {
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      },
+      "trace_fp64.spv": {
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      }
+    },
+    "original_P2_active_registration_noTIMEOUT_argv_retained": true,
+    "baseline_comparison": "Not needed for these direct current-source/API/export joins; prior history and shared tool hashes not swept."
+  },
+  "CI_snapshot_scope": {
+    "as_read_run_status": "in_progress",
+    "as_read_run_conclusion": null,
+    "jobs": {
+      "integration-windows-no-render": {
+        "status": "in_progress",
+        "conclusion": null
+      },
+      "integration-no-render": {
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "integration-macos-no-render": {
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "windows-build": {
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      "macos-retained-diagnostic": {
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      "linux-gate": {
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      "linux-sanitizers": {
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      "macos-build": {
+        "status": "completed",
+        "conclusion": "skipped"
+      }
+    },
+    "request_fullqualification_false_macos_retained_false": true,
+    "unrequested_fullqualification_job_skips_distinct_from_native9_zero_skip": true,
+    "all_CI_success_not_claimed": true
+  },
+  "limits": "macOS current native-build/non-render authority evidence only; runtime_ready=false, alignment0of8/ultimateideal false. No Mac MoltenVK/render/scientific/fullMandatory/UI/portability/performance/release qualification or Windows current-product/native eligibility. APIs/downloads/verification commands were ROOT operations; reviewer executed no project/helper/native/provider/compiler/test/network/process/cache tool. No new source changes.",
+  "repository": {
+    "HEAD": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "status": "",
+    "tracking_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "source_committed_pushed": true,
+    "new_review_publication_pending_ROOT": true
+  }
+}

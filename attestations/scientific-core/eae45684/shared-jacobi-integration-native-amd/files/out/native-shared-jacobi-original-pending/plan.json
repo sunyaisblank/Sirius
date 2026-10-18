@@ -1,0 +1,31 @@
+{
+  "schema": "sirius-native-windows-trace-jacobi-plan-v1",
+  "admitted": true,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "runner_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "control_profile": "original-trace-jacobi",
+  "stage": "bin/windows-msvc/diagnostic-eae45684",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "trace-jacobi-all-rungs"
+  ],
+  "actions": {
+    "trace-jacobi-all-rungs": {
+      "kind": "Control",
+      "test": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "Exact mature native held-handle Windows owner samples child WorkingSet64 with4GiB stop and records private bytes; WSL sampled available-memory reserve2GiB; bridge owner+480s; terminal60s. 900s is prospective external native diagnostic cap, reusing the existing first-five control ceiling, not an original registered test deadline or aggregate Windows process-tree bound. Original physical1000ms dispatch and scientific assertions unchanged. Default native cache; inherited override refusal unchanged.",
+  "prospective_commands": [
+    "python3 -B out/native-shared-jacobi-original-pending/run_system.py trace-jacobi-all-rungs",
+    "python3 -B out/native-shared-jacobi-original-pending/run_terminal.py trace-jacobi-all-rungs"
+  ],
+  "stop_on_first_nonpass": true,
+  "scope": "Materialized one original current-source P2 case. Plan is fixed before review; execution remains held by execution-bindings admittedfalse until independent concrete review and ROOT separate release. No native runtime verdict."
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "sirius-native-windows-p2-coupled-plan-v1",
+  "admitted": true,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "runner_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "control_profile": "original-coupled-fp64",
+  "stage": "bin/windows-msvc/diagnostic-eae45684",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "order": [
+    "coupled-fp64"
+  ],
+  "actions": {
+    "coupled-fp64": {
+      "kind": "Control",
+      "test": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "expected_exit": 0,
+      "owner_seconds": 900,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "Exact mature native held-handle Windows owner samples child WorkingSet64 with4GiB stop and records private bytes; WSL sampled available-memory reserve2GiB; bridge owner+480s; terminal60s. 900s is prospective external native diagnostic cap, reusing the existing first-five control ceiling, not an original registered test deadline or aggregate Windows process-tree bound. Original physical1000ms dispatch and scientific assertions unchanged. Default native cache; inherited override refusal unchanged.",
+  "prospective_commands": [
+    "python3 -B out/native-p2-coupled-original-pending/run_system.py coupled-fp64",
+    "python3 -B out/native-p2-coupled-original-pending/run_terminal.py coupled-fp64"
+  ],
+  "stop_on_first_nonpass": true,
+  "scope": "Materialized one original fp64 joint-map witness. Fixed plan; execution held by binding admittedfalse until independent concrete review and separate ROOT release. No Jacobi/floor/image rerun or full scientific verdict."
+}

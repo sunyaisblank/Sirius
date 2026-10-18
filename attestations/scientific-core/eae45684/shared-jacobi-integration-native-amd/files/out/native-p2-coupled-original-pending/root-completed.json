@@ -1,0 +1,213 @@
+{
+  "schema": "sirius-native-p2-coupled-root-completed-failure-audit-v1",
+  "created_utc": "2026-10-18T01:13:54.556137+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "passed": false,
+  "audit_completed": true,
+  "actual_closures": {
+    "owner_helper_tool_session_id": 76927,
+    "owner_helper_actual_closed_exit": 1,
+    "failure_terminal_audit_tool_session_id": 94024,
+    "failure_terminal_audit_actual_closed_exit": 0,
+    "positive_Python_terminal_reader_invoked": false,
+    "scope": "ROOT observed actual tool closures; read-only reviewed PowerShell terminal argv used for failed-attempt teardown audit. Distinct clocks not calibrated or combined."
+  },
+  "original_test": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+  "failure": "First coupled_0_actual vkCreateComputePipelines returned VkResult -3 (VK_ERROR_INITIALIZATION_FAILED), before successful submit/readback or any numerical packet. Driver cause undiagnosed.",
+  "XML": {
+    "tests": 1,
+    "failed_cases": 1,
+    "failure_elements": 3,
+    "errors": 0,
+    "skips": 0,
+    "disabled": 0,
+    "status": "run",
+    "result": "completed",
+    "seconds": "35.72",
+    "genuine_final_positive_property_absent": true
+  },
+  "actual_device_properties": {
+    "coupled_device_index": "0",
+    "coupled_device_name": "AMD Radeon 780M Graphics",
+    "coupled_device_kind": "integrated",
+    "coupled_vendor_id": "4098",
+    "coupled_device_id": "6400",
+    "coupled_driver_id": "1",
+    "coupled_driver_name": "AMD proprietary driver",
+    "coupled_driver_info": "26.8.1 (LLPC)",
+    "coupled_supports_fp64": "true",
+    "coupled_allocation_limit_bytes": "1073741824",
+    "coupled_initial_allocated_bytes": "0"
+  },
+  "first_packet_properties": {
+    "coupled_0_requested_bytes": "336",
+    "coupled_0_requested_cumulative_bytes": "336",
+    "coupled_0_allocated_bytes": "336",
+    "coupled_0_actual_submit_wait_ms": "0.000000",
+    "coupled_0_actual_dispatch_wall_ms": "34719.102400",
+    "coupled_0_actual_pipeline_setup_ms": "0.000000",
+    "coupled_0_actual_command_setup_ms": "0.000000",
+    "coupled_0_actual_cleanup_ms": "0.000000",
+    "coupled_0_actual_total_ms": "0.000000",
+    "coupled_0_actual_pipeline_created": "false"
+  },
+  "timing_limit": "DispatchTiming phase zeros/pipeline_createdfalse are unpopulated failure outputs, not measured zero-cost phases. First dispatch_wall_ms describes the failed host call only; no JIT-stage attribution or cross-clock calibration.",
+  "Windows_owner_seconds": 37.2598543,
+  "WSL_bridge_seconds": 39.14422142499825,
+  "peak_sampled_child_working_set_bytes": 396337152,
+  "samples": 37,
+  "minimum_WSL_available_KiB": 20427864,
+  "outer_guard_triggered": false,
+  "whole_beforeafter_current_rows": 1109,
+  "all_selected_inputs_unchanged": true,
+  "all_saved_Linux_births_fresh_absent": true,
+  "saved_Linux_births": [
+    {
+      "role": "owner-wrapper",
+      "pid": 67492,
+      "saved_start_ticks": "15927092",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "role": "Windows-owner-interop",
+      "pid": 67495,
+      "saved_start_ticks": "15927330",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "role": "failure-audit-wrapper",
+      "pid": 75888,
+      "saved_start_ticks": "15941750",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "role": "failure-auditor-interop",
+      "pid": 75892,
+      "saved_start_ticks": "15941869",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "Windows_owner_test_births": [
+    {
+      "kind": "owner",
+      "pid": 18380,
+      "recorded_start_utc": "2026-10-18T01:06:59.9444748Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "kind": "test",
+      "pid": 10212,
+      "recorded_start_utc": "2026-10-18T01:07:01.7225135Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    }
+  ],
+  "same_child_modules": [
+    {
+      "name": "vulkan-1.dll",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release\\vulkan-1.dll",
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "version": "1.4.357.0"
+    },
+    {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    }
+  ],
+  "shutdown_audit_passed": true,
+  "source_clean_committed_pushed0_0": true,
+  "raw_files": {
+    "out/native-p2-coupled-original-pending/root-actual-closures.json": {
+      "bytes": 415,
+      "sha256": "fe1df8a625fe23d9c82a0cecca64bb602e2926de6254dfa7e3d71200027df5f5"
+    },
+    "out/native-p2-coupled-original-pending/helper.stdout": {
+      "bytes": 173,
+      "sha256": "36f0054d6aff4f689eb459925be280a7031ba65cb86001581c740f4870620df8"
+    },
+    "out/native-p2-coupled-original-pending/helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-p2-coupled-original-pending/coupled-fp64-bridge.json": {
+      "bytes": 2679,
+      "sha256": "dc034ccd60b0ec66c8d79c22309763d7aaab64d0e0c114a26ed29b1b1a975dd6"
+    },
+    "out/native-p2-coupled-original-pending/coupled-fp64-bridge.stdout": {
+      "bytes": 131,
+      "sha256": "065ea58d60ad32858f88d53784293b519633102c53c38d8c5fe1a83c4d6d5014"
+    },
+    "out/native-p2-coupled-original-pending/coupled-fp64-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-p2-coupled-original-pending/coupled-fp64-inputs-before.json": {
+      "bytes": 201994,
+      "sha256": "0ba1a86bebfa8abfe7fab0e0b7e2ecc8e0090525de538d7f910e9241b3129551"
+    },
+    "out/native-p2-coupled-original-pending/coupled-fp64-inputs-after.json": {
+      "bytes": 201994,
+      "sha256": "0ba1a86bebfa8abfe7fab0e0b7e2ecc8e0090525de538d7f910e9241b3129551"
+    },
+    "out/native-p2-coupled-original-pending/terminal-coupled-fp64.json": {
+      "bytes": 4056,
+      "sha256": "21521f422f83e4c1d6c43e4ab4908101495affead3ac9f312945e47f1aeaa8b7"
+    },
+    "out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit-bridge.json": {
+      "bytes": 2232,
+      "sha256": "841c1f646f360c23cad57d860456434d223041fb681c5135c8974802f1b6c69e"
+    },
+    "out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit.stdout": {
+      "bytes": 175,
+      "sha256": "bc8975773e4e359fe1b57f1eb66e0c23f2ee6afa1364e860f91a44780fe6ec37"
+    },
+    "out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-p2-coupled-original-pending/native/coupled-fp64/owner.json": {
+      "bytes": 3246,
+      "sha256": "8bf3d875500c81684d286595d86a86d28812a6b2f2d8e16f05fd0caa8290cda7"
+    },
+    "out/native-p2-coupled-original-pending/native/coupled-fp64/stdout.log": {
+      "bytes": 2111,
+      "sha256": "d1eeef9bcb0744f946b22142e4fa437f864cdd08e785bc3a54e21c1cde7ac68f"
+    },
+    "out/native-p2-coupled-original-pending/native/coupled-fp64/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-p2-coupled-original-pending/native/coupled-fp64/gtest.xml": {
+      "bytes": 4144,
+      "sha256": "177543f71e0795153a1b3c5494a5b94e40674ad6904e65c549710e9c319c6a0d"
+    },
+    "out/native-p2-coupled-original-pending/native/coupled-fp64/memory.json": {
+      "bytes": 5051,
+      "sha256": "dc731708b312298ee73aad6d88f9247816e8cd35193ae87ce7ceea128363082b"
+    },
+    "out/native-p2-coupled-original-pending/native/coupled-fp64/driver-modules.json": {
+      "bytes": 685,
+      "sha256": "00a09589b7b749216c0b8c9138f859c8efd20a21d4a0fa564ec81ee6715f11a0"
+    },
+    "out/native-p2-coupled-original-pending/temp/coupled-fp64/bootstrap.json": {
+      "bytes": 857,
+      "sha256": "90cf09f76daf68feed04f4389cdf9d239fc07b0d92eb0c836847c212d7c333bb"
+    },
+    "out/native-p2-coupled-original-pending/temp/terminal-coupled-fp64/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "bdedc884d8469037dea1e83ee635334819b97933b1434146b1cc564a40667755"
+    }
+  },
+  "retry_or_guardraise_released": false,
+  "cleanup_released": false,
+  "scope": "Truthful failure and owned shutdown audit only. Earlier native Jacobi PASS remains separate. Original FP64 coupled seven positives/two refusals were NOT completed; no numerical result/fullscience/Mandatory/performance/release claim. Resource guards unchanged; memory sampled child-only,not totalWindows/GPU/continuous. Accessible census not globalabsence. No unchanged workload retry."
+}

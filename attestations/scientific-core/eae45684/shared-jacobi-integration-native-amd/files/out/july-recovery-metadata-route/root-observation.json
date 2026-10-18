@@ -1,0 +1,81 @@
+{
+  "schema": "sirius-july-recovery-ROOT-bounded-observation-v1",
+  "created_utc": "2026-10-18T00:28:27.800444+00:00",
+  "actual_closed_exit": 0,
+  "script": {
+    "bytes": 3864,
+    "sha256": "11293cf605bbe0fae3095666cd0d7cc49f068e66771b973d686333b2c690d70b"
+  },
+  "result": {
+    "schema": "sirius-july-recovery-metadata-route-v1",
+    "utc": "2026-10-18T00:28:27.9859644Z",
+    "pid": 16904,
+    "process_start_utc": "2026-10-18T00:28:27.6888978Z",
+    "user": "Alaris\\Astra",
+    "pattern": "(?i)sirius|dngr|july|renderer|forensic|comparator|kerr|schwarzschild|alcubierre|wormhole|ellis|imax",
+    "recent": {
+      "inspected": 0,
+      "total_links": 0,
+      "path": "C:\\Users\\alarisadmin\\AppData\\Roaming\\Microsoft\\Windows\\Recent",
+      "failures": 0,
+      "limit": 1000,
+      "matches": []
+    },
+    "recycle": [
+      {
+        "matches": [
+          {
+            "payload_exists": true,
+            "original_bytes": 0,
+            "original_path": "C:\\Users\\alarisadmin\\Desktop\\Sirius",
+            "metadata": "C:\\$Recycle.Bin\\S-1-5-21-1334885117-291844716-1896000840-1002\\$IZXN38L",
+            "deleted_utc": "2026-10-17T23:22:41.0480000Z",
+            "payload": "C:\\$Recycle.Bin\\S-1-5-21-1334885117-291844716-1896000840-1002\\$RZXN38L"
+          }
+        ],
+        "inspected": 7,
+        "root": "C:\\$Recycle.Bin\\S-1-5-21-1334885117-291844716-1896000840-1002",
+        "failures": 0,
+        "limit": 2000,
+        "metadata_total": 7,
+        "exists": true
+      },
+      {
+        "exists": false,
+        "root": "W:\\$Recycle.Bin\\S-1-5-21-1334885117-291844716-1896000840-1002"
+      },
+      {
+        "exists": false,
+        "root": "X:\\$Recycle.Bin\\S-1-5-21-1334885117-291844716-1896000840-1002"
+      }
+    ],
+    "file_history": [
+      {
+        "exists": false,
+        "path": "C:\\Users\\alarisadmin\\AppData\\Local\\Microsoft\\Windows\\FileHistory\\Configuration\\Config1.xml"
+      },
+      {
+        "exists": false,
+        "path": "C:\\Users\\alarisadmin\\AppData\\Local\\Microsoft\\Windows\\FileHistory\\Configuration\\Config2.xml"
+      }
+    ],
+    "shadow_copies": [],
+    "gaps": [
+      "ShadowCopy: Initialization failure "
+    ],
+    "read_only_metadata": true
+  },
+  "metadata_correction": {
+    "first_actual_windows_closed_exit": 1,
+    "reason": "PowerShell automatic Matches dictionary replaced the local collection during regex matching, causing final JSON nonstring-key serialization failure. Renamed only local collection; original script/rawfailure retained. This repeats read-only metadata only, no renderer/provider/test or destructive recovery.",
+    "prior_script": {
+      "bytes": 3852,
+      "sha256": "ca8b4fab2f00dec2f549084ebecb5e90776249928ea83ae54e5ec1c04801b33b"
+    },
+    "prior_stderr": {
+      "bytes": 1618,
+      "sha256": "5640ebeeed10793bf7d46fe2f75f4b865d0607455bd5f5aed09340441297dae9"
+    }
+  },
+  "scope": "Different bounded read-only metadata route: current-user Recent shortcuts, fixed-volume current-SID RecycleBin metadata, FileHistory config references and VSS inventory. No cloud hydration, raw-disk scan, restore or recovered original tape/comparator/manifest identity claim."
+}

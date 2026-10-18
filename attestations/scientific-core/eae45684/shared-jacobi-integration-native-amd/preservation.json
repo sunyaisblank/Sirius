@@ -1,0 +1,1522 @@
+{
+  "schema": "sirius-shared-jacobi-integration-copy-preservation-v1",
+  "created_utc": "2026-10-18T01:17:54.659375+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "manifest": {
+    "bytes": 58878,
+    "sha256": "8600e54974419025927c86dead6ad315f1ca7eb4908ca2a979cb428ed6a62454"
+  },
+  "copy_mapping": [
+    {
+      "source": "bin/linux-gcc/CMakeCache.txt",
+      "copy": "files/bin/linux-gcc/CMakeCache.txt",
+      "mode": "0o644",
+      "bytes": 60324,
+      "sha256": "e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f"
+    },
+    {
+      "source": "bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "copy": "files/bin/linux-gcc/generated/sirius/alignment_receipt.json",
+      "mode": "0o644",
+      "bytes": 1240,
+      "sha256": "6e28dd688193e6db1912aa0976bc3919258f6e5434b04fbd8212fe10cae1b7ff"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "copy": "files/bin/linux-gcc/kernels/coupled_probe_fp64.spv",
+      "mode": "0o644",
+      "bytes": 1225888,
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/parity_probe.spv",
+      "copy": "files/bin/linux-gcc/kernels/parity_probe.spv",
+      "mode": "0o644",
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+      "copy": "files/bin/linux-gcc/kernels/parity_probe_fp32comp.spv",
+      "mode": "0o644",
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/parity_probe_fp64.spv",
+      "copy": "files/bin/linux-gcc/kernels/parity_probe_fp64.spv",
+      "mode": "0o644",
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/portability/trace.cu",
+      "copy": "files/bin/linux-gcc/kernels/portability/trace.cu",
+      "mode": "0o644",
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/portability/trace.metal",
+      "copy": "files/bin/linux-gcc/kernels/portability/trace.metal",
+      "mode": "0o644",
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/trace.spv",
+      "copy": "files/bin/linux-gcc/kernels/trace.spv",
+      "mode": "0o644",
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "copy": "files/bin/linux-gcc/kernels/trace_fp32comp.spv",
+      "mode": "0o644",
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    {
+      "source": "bin/linux-gcc/kernels/trace_fp64.spv",
+      "copy": "files/bin/linux-gcc/kernels/trace_fp64.spv",
+      "mode": "0o644",
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    },
+    {
+      "source": "bin/linux-gcc/src/sirius/app/sirius",
+      "copy": "files/bin/linux-gcc/src/sirius/app/sirius",
+      "mode": "0o755",
+      "bytes": 9725048,
+      "sha256": "d7e7bfeb5fd4ffc72ae0005803f91101fe9fb6448331b131a2397c0f017c0d07"
+    },
+    {
+      "source": "bin/linux-gcc/src/sirius/app/sirius_app_tests",
+      "copy": "files/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+      "mode": "0o755",
+      "bytes": 11397000,
+      "sha256": "1fc7e054eb365e31d8aa458944398f56ded4b7f8ce5efcb20ef19a574fff63f8"
+    },
+    {
+      "source": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "copy": "files/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "mode": "0o755",
+      "bytes": 12212608,
+      "sha256": "37fef0e35bea4abf28a075ba6b5cf1918cfde318a4988ae0255553f50689f18e"
+    },
+    {
+      "source": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "copy": "files/bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "mode": "0o755",
+      "bytes": 13502080,
+      "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+    },
+    {
+      "source": "bin/linux-gcc/tests/core/sirius_core_tests",
+      "copy": "files/bin/linux-gcc/tests/core/sirius_core_tests",
+      "mode": "0o755",
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58"
+    },
+    {
+      "source": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+      "copy": "files/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+      "mode": "0o755",
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/query-fixed.ps1",
+      "copy": "files/out/july-recovery-metadata-route/query-fixed.ps1",
+      "mode": "0o644",
+      "bytes": 3864,
+      "sha256": "11293cf605bbe0fae3095666cd0d7cc49f068e66771b973d686333b2c690d70b"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/query.ps1",
+      "copy": "files/out/july-recovery-metadata-route/query.ps1",
+      "mode": "0o644",
+      "bytes": 3852,
+      "sha256": "ca8b4fab2f00dec2f549084ebecb5e90776249928ea83ae54e5ec1c04801b33b"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/recycle-top-level.json",
+      "copy": "files/out/july-recovery-metadata-route/recycle-top-level.json",
+      "mode": "0o644",
+      "bytes": 844,
+      "sha256": "22817e56f2b488c54ff44f843833cc97cda46fdaa48840d2dc73b1410e3ecc54"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/root-alternate-shadow-observation.json",
+      "copy": "files/out/july-recovery-metadata-route/root-alternate-shadow-observation.json",
+      "mode": "0o644",
+      "bytes": 445,
+      "sha256": "932146b37b28b9de7a0693d0f16f597c8ece5e71cc16c0801feedc26dd4504a0"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/root-observation.json",
+      "copy": "files/out/july-recovery-metadata-route/root-observation.json",
+      "mode": "0o644",
+      "bytes": 3194,
+      "sha256": "0c2204fcd4dbd7a78e131dc9c68d39608109494345813e7ab15ad0446937a1af"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/root-search-index-observation.json",
+      "copy": "files/out/july-recovery-metadata-route/root-search-index-observation.json",
+      "mode": "0o644",
+      "bytes": 527,
+      "sha256": "b3a38b45759320fc35e4f7caac46fdb2849b38783750fe701adbf5d339280b59"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/search-index-bootstrap.json",
+      "copy": "files/out/july-recovery-metadata-route/search-index-bootstrap.json",
+      "mode": "0o644",
+      "bytes": 96,
+      "sha256": "2ca7311246b58cd61592fbceb4b0f2c5fe68ff13be2b7272eb53c5a42cc32228"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/search-index-metadata.ps1",
+      "copy": "files/out/july-recovery-metadata-route/search-index-metadata.ps1",
+      "mode": "0o644",
+      "bytes": 2112,
+      "sha256": "67d3881f0dd68b0bf2a781c0d794ed3911599e580814c0ecd0b847bb9daa984a"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/search-index.stderr",
+      "copy": "files/out/july-recovery-metadata-route/search-index.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/search-index.stdout",
+      "copy": "files/out/july-recovery-metadata-route/search-index.stdout",
+      "mode": "0o644",
+      "bytes": 874,
+      "sha256": "94bb9c719db8f087a25e27a8601eae688e56e6b20fba367defa062188c0f4975"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/stderr-fixed.log",
+      "copy": "files/out/july-recovery-metadata-route/stderr-fixed.log",
+      "mode": "0o644",
+      "bytes": 840,
+      "sha256": "018966bf53cb60e3be45739d0b615e36ec0cd64fb2dc331e24320ce44f76ddff"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/stderr.log",
+      "copy": "files/out/july-recovery-metadata-route/stderr.log",
+      "mode": "0o644",
+      "bytes": 1618,
+      "sha256": "5640ebeeed10793bf7d46fe2f75f4b865d0607455bd5f5aed09340441297dae9"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/stdout-fixed.json",
+      "copy": "files/out/july-recovery-metadata-route/stdout-fixed.json",
+      "mode": "0o644",
+      "bytes": 1478,
+      "sha256": "4e376837ea00da29152ba645d0c577195a731ba157e3b1e281a09d086212785b"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/stdout.json",
+      "copy": "files/out/july-recovery-metadata-route/stdout.json",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/vssadmin.stderr",
+      "copy": "files/out/july-recovery-metadata-route/vssadmin.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/july-recovery-metadata-route/vssadmin.stdout",
+      "copy": "files/out/july-recovery-metadata-route/vssadmin.stdout",
+      "mode": "0o644",
+      "bytes": 282,
+      "sha256": "d7a817a49f898af1a717ffbcabd46d7a6aa034f4c26a0aba49994ab2a93b8077"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/coupled-fp64-bridge.json",
+      "copy": "files/out/native-p2-coupled-original-pending/coupled-fp64-bridge.json",
+      "mode": "0o644",
+      "bytes": 2679,
+      "sha256": "dc034ccd60b0ec66c8d79c22309763d7aaab64d0e0c114a26ed29b1b1a975dd6"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/coupled-fp64-bridge.stderr",
+      "copy": "files/out/native-p2-coupled-original-pending/coupled-fp64-bridge.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/coupled-fp64-bridge.stdout",
+      "copy": "files/out/native-p2-coupled-original-pending/coupled-fp64-bridge.stdout",
+      "mode": "0o644",
+      "bytes": 131,
+      "sha256": "065ea58d60ad32858f88d53784293b519633102c53c38d8c5fe1a83c4d6d5014"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/coupled-fp64-inputs-after.json",
+      "copy": "files/out/native-p2-coupled-original-pending/coupled-fp64-inputs-after.json",
+      "mode": "0o644",
+      "bytes": 201994,
+      "sha256": "0ba1a86bebfa8abfe7fab0e0b7e2ecc8e0090525de538d7f910e9241b3129551"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/coupled-fp64-inputs-before.json",
+      "copy": "files/out/native-p2-coupled-original-pending/coupled-fp64-inputs-before.json",
+      "mode": "0o644",
+      "bytes": 201994,
+      "sha256": "0ba1a86bebfa8abfe7fab0e0b7e2ecc8e0090525de538d7f910e9241b3129551"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/emergency_native_cleanup.ps1",
+      "copy": "files/out/native-p2-coupled-original-pending/emergency_native_cleanup.ps1",
+      "mode": "0o644",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/execution-bindings.json",
+      "copy": "files/out/native-p2-coupled-original-pending/execution-bindings.json",
+      "mode": "0o644",
+      "bytes": 216940,
+      "sha256": "4630059e25ed1c881febb4720fbe545869e77f7f46233c5bec02ee31f00cc0be"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/execution-bindings.pending.json",
+      "copy": "files/out/native-p2-coupled-original-pending/execution-bindings.pending.json",
+      "mode": "0o644",
+      "bytes": 2247,
+      "sha256": "b2b2cfd4916e3ca52bc05f0a89c0ec930bf37fae652d9a35d96345b848e0c856"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/helper.stderr",
+      "copy": "files/out/native-p2-coupled-original-pending/helper.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/helper.stdout",
+      "copy": "files/out/native-p2-coupled-original-pending/helper.stdout",
+      "mode": "0o644",
+      "bytes": 173,
+      "sha256": "36f0054d6aff4f689eb459925be280a7031ba65cb86001581c740f4870620df8"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/independent-completion-review.json",
+      "copy": "files/out/native-p2-coupled-original-pending/independent-completion-review.json",
+      "mode": "0o644",
+      "bytes": 2973,
+      "sha256": "50cabac913075418a8e92bd7db277286613335bb68ca2ed25477fbceee82bb9f"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/independent-runtime-review.json",
+      "copy": "files/out/native-p2-coupled-original-pending/independent-runtime-review.json",
+      "mode": "0o644",
+      "bytes": 3067,
+      "sha256": "dc36e8ad4aca8e53e5afecd9db145edd65fb9d28d808b355110612bcfc47e118"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/independent-source-review.json",
+      "copy": "files/out/native-p2-coupled-original-pending/independent-source-review.json",
+      "mode": "0o644",
+      "bytes": 8080,
+      "sha256": "324169f9665e8bd31ff8c226eae7adc4758c861f5b5b4c0223426afcbd9c4bed"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native/coupled-fp64/driver-modules.json",
+      "copy": "files/out/native-p2-coupled-original-pending/native/coupled-fp64/driver-modules.json",
+      "mode": "0o644",
+      "bytes": 685,
+      "sha256": "00a09589b7b749216c0b8c9138f859c8efd20a21d4a0fa564ec81ee6715f11a0"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native/coupled-fp64/gtest.xml",
+      "copy": "files/out/native-p2-coupled-original-pending/native/coupled-fp64/gtest.xml",
+      "mode": "0o644",
+      "bytes": 4144,
+      "sha256": "177543f71e0795153a1b3c5494a5b94e40674ad6904e65c549710e9c319c6a0d"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native/coupled-fp64/memory.json",
+      "copy": "files/out/native-p2-coupled-original-pending/native/coupled-fp64/memory.json",
+      "mode": "0o644",
+      "bytes": 5051,
+      "sha256": "dc731708b312298ee73aad6d88f9247816e8cd35193ae87ce7ceea128363082b"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native/coupled-fp64/owner.json",
+      "copy": "files/out/native-p2-coupled-original-pending/native/coupled-fp64/owner.json",
+      "mode": "0o644",
+      "bytes": 3246,
+      "sha256": "8bf3d875500c81684d286595d86a86d28812a6b2f2d8e16f05fd0caa8290cda7"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native/coupled-fp64/stderr.log",
+      "copy": "files/out/native-p2-coupled-original-pending/native/coupled-fp64/stderr.log",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native/coupled-fp64/stdout.log",
+      "copy": "files/out/native-p2-coupled-original-pending/native/coupled-fp64/stdout.log",
+      "mode": "0o644",
+      "bytes": 2111,
+      "sha256": "d1eeef9bcb0744f946b22142e4fa437f864cdd08e785bc3a54e21c1cde7ac68f"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/native-coupled-adaptation.patch",
+      "copy": "files/out/native-p2-coupled-original-pending/native-coupled-adaptation.patch",
+      "mode": "0o644",
+      "bytes": 15281,
+      "sha256": "98b9a2e2003e92e7b68a68a24ed195327834f2d418674ae4e81cb4d82c434fb0"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/emergency_native_cleanup.ps1",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/emergency_native_cleanup.ps1",
+      "mode": "0o644",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/execution-bindings.pending.json",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/execution-bindings.pending.json",
+      "mode": "0o644",
+      "bytes": 2074,
+      "sha256": "07992ab67030e803561647fa75d56014cd3e5315e748ec01b26f86cb5f6b9441"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/plan.pending.json",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/plan.pending.json",
+      "mode": "0o644",
+      "bytes": 1823,
+      "sha256": "8f9f53404d6ad91e54752bacd5acfc8824b0574f898b9add252b8bf0d26f8347"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/run_native_control.ps1",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/run_native_control.ps1",
+      "mode": "0o644",
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/run_system.py",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/run_system.py",
+      "mode": "0o644",
+      "bytes": 19077,
+      "sha256": "6cb1621edfb90d4a7960f0f8ae4b2b5f291ed682d1277579e8238de1ee35e057"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/run_terminal.py",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/run_terminal.py",
+      "mode": "0o644",
+      "bytes": 18048,
+      "sha256": "7aec6797594138f295e3c70abe0fdfe82b08803109f6dff3525081bde113dbd0"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/originals/terminal-audit.ps1",
+      "copy": "files/out/native-p2-coupled-original-pending/originals/terminal-audit.ps1",
+      "mode": "0o644",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/plan.json",
+      "copy": "files/out/native-p2-coupled-original-pending/plan.json",
+      "mode": "0o644",
+      "bytes": 1781,
+      "sha256": "ec4ecacd2b6fb7c72f7931d8db08b34dd2c76da11b6793d86fda1c5148696510"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/plan.pending.json",
+      "copy": "files/out/native-p2-coupled-original-pending/plan.pending.json",
+      "mode": "0o644",
+      "bytes": 1755,
+      "sha256": "20342b9bd4734196780935ee22e9b87bac5158d02ef73eb5ed9d13a72b9eeaaa"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/preparation.json",
+      "copy": "files/out/native-p2-coupled-original-pending/preparation.json",
+      "mode": "0o644",
+      "bytes": 1100,
+      "sha256": "c66efbba370961dbae7cc06557c8801d4ac7b335b1faaffc98960a2b2cfca92a"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/reviewed-held-execution-bindings.json",
+      "copy": "files/out/native-p2-coupled-original-pending/reviewed-held-execution-bindings.json",
+      "mode": "0o644",
+      "bytes": 216941,
+      "sha256": "64da389d9fc7a290b412bb81a34ade07d09d4c48c337adecca8ed49cbbe76f8d"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/root-actual-closures.json",
+      "copy": "files/out/native-p2-coupled-original-pending/root-actual-closures.json",
+      "mode": "0o644",
+      "bytes": 415,
+      "sha256": "fe1df8a625fe23d9c82a0cecca64bb602e2926de6254dfa7e3d71200027df5f5"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/root-completed.json",
+      "copy": "files/out/native-p2-coupled-original-pending/root-completed.json",
+      "mode": "0o644",
+      "bytes": 9019,
+      "sha256": "4ca6c112a61e3ae31d024c5313e9243d8017610220faa1811e0f99c78d7c2bcd"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/root-materialization.json",
+      "copy": "files/out/native-p2-coupled-original-pending/root-materialization.json",
+      "mode": "0o644",
+      "bytes": 3641,
+      "sha256": "95ab42a5b7907bfbfb34c6b7825dc21706f94040f2e8da7c8821ae0bd5c6530c"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/root-runtime-release.json",
+      "copy": "files/out/native-p2-coupled-original-pending/root-runtime-release.json",
+      "mode": "0o644",
+      "bytes": 1406,
+      "sha256": "d32910bd7450d96da37baad7c054eefb08ea8ba5e73ba122a6f3cace030457a2"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/run_native_control.ps1",
+      "copy": "files/out/native-p2-coupled-original-pending/run_native_control.ps1",
+      "mode": "0o644",
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/run_system.py",
+      "copy": "files/out/native-p2-coupled-original-pending/run_system.py",
+      "mode": "0o644",
+      "bytes": 18952,
+      "sha256": "cde29a5f3421f07ece1ff4079a3c8dd63e617e262f76415582fab50dc05b55f4"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/run_terminal.py",
+      "copy": "files/out/native-p2-coupled-original-pending/run_terminal.py",
+      "mode": "0o644",
+      "bytes": 17963,
+      "sha256": "48ac4f379b4d561d7562ea082b5be82c7da75f810cbcc640eb1b03013258aa99"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/source-contracts.json",
+      "copy": "files/out/native-p2-coupled-original-pending/source-contracts.json",
+      "mode": "0o644",
+      "bytes": 10683,
+      "sha256": "7b479305cb164ff180052cfd2f763ca024997a54969d64b92c66694f267b7e8e"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/source-freeze.json",
+      "copy": "files/out/native-p2-coupled-original-pending/source-freeze.json",
+      "mode": "0o644",
+      "bytes": 85085,
+      "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/temp/coupled-fp64/bootstrap.json",
+      "copy": "files/out/native-p2-coupled-original-pending/temp/coupled-fp64/bootstrap.json",
+      "mode": "0o644",
+      "bytes": 857,
+      "sha256": "90cf09f76daf68feed04f4389cdf9d239fc07b0d92eb0c836847c212d7c333bb"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/temp/terminal-coupled-fp64/bootstrap.json",
+      "copy": "files/out/native-p2-coupled-original-pending/temp/terminal-coupled-fp64/bootstrap.json",
+      "mode": "0o644",
+      "bytes": 223,
+      "sha256": "bdedc884d8469037dea1e83ee635334819b97933b1434146b1cc564a40667755"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/terminal-audit.ps1",
+      "copy": "files/out/native-p2-coupled-original-pending/terminal-audit.ps1",
+      "mode": "0o644",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit-bridge.json",
+      "copy": "files/out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit-bridge.json",
+      "mode": "0o644",
+      "bytes": 2232,
+      "sha256": "841c1f646f360c23cad57d860456434d223041fb681c5135c8974802f1b6c69e"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit.stderr",
+      "copy": "files/out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit.stdout",
+      "copy": "files/out/native-p2-coupled-original-pending/terminal-coupled-fp64-failure-audit.stdout",
+      "mode": "0o644",
+      "bytes": 175,
+      "sha256": "bc8975773e4e359fe1b57f1eb66e0c23f2ee6afa1364e860f91a44780fe6ec37"
+    },
+    {
+      "source": "out/native-p2-coupled-original-pending/terminal-coupled-fp64.json",
+      "copy": "files/out/native-p2-coupled-original-pending/terminal-coupled-fp64.json",
+      "mode": "0o644",
+      "bytes": 4056,
+      "sha256": "21521f422f83e4c1d6c43e4ab4908101495affead3ac9f312945e47f1aeaa8b7"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/emergency_native_cleanup.ps1",
+      "copy": "files/out/native-shared-jacobi-original-pending/emergency_native_cleanup.ps1",
+      "mode": "0o644",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/execution-bindings.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/execution-bindings.json",
+      "mode": "0o644",
+      "bytes": 217545,
+      "sha256": "f2d0f55d201eddcd90a90e2f5d67486f2b4af6795bee0d23e4540bba1d9fe35e"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/execution-bindings.pending.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/execution-bindings.pending.json",
+      "mode": "0o644",
+      "bytes": 2074,
+      "sha256": "07992ab67030e803561647fa75d56014cd3e5315e748ec01b26f86cb5f6b9441"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/helper.stderr",
+      "copy": "files/out/native-shared-jacobi-original-pending/helper.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/helper.stdout",
+      "copy": "files/out/native-shared-jacobi-original-pending/helper.stdout",
+      "mode": "0o644",
+      "bytes": 168,
+      "sha256": "fc674daed9917ce0558c2fae6bd7afca2721b75748d30deeaef3a35f317f70bb"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/host-module-current.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/host-module-current.json",
+      "mode": "0o644",
+      "bytes": 413,
+      "sha256": "70272fa82a542ba944ba681113872a18b61200e9c5a2d828092696d44e9a583e"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/host-module-current.stderr",
+      "copy": "files/out/native-shared-jacobi-original-pending/host-module-current.stderr",
+      "mode": "0o644",
+      "bytes": 616,
+      "sha256": "2ce70d6c8c9ad6726c794690c8b14a2b83673648cac88edf4ff1acc50ec46348"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/independent-completion-review.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/independent-completion-review.json",
+      "mode": "0o644",
+      "bytes": 3237,
+      "sha256": "0952e2a63764b178afc69892a0514269095fad9f0f166cd12be682fa5ced26bb"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/independent-runtime-review.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/independent-runtime-review.json",
+      "mode": "0o644",
+      "bytes": 6386,
+      "sha256": "f192100f313a6728434a023908888bf09426435915e99cab0b23292e45979be7"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/independent-source-review.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/independent-source-review.json",
+      "mode": "0o644",
+      "bytes": 5556,
+      "sha256": "407ea92a4a9306fc3abffdc5617b9989dffd90bc8312968940022020b4472e64"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/driver-modules.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/driver-modules.json",
+      "mode": "0o644",
+      "bytes": 685,
+      "sha256": "00a09589b7b749216c0b8c9138f859c8efd20a21d4a0fa564ec81ee6715f11a0"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/gtest.xml",
+      "copy": "files/out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/gtest.xml",
+      "mode": "0o644",
+      "bytes": 606,
+      "sha256": "1af7dd90c303760863180016c9555497a879595cd5ff0ba586aab5fa9afc4852"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/memory.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/memory.json",
+      "mode": "0o644",
+      "bytes": 76912,
+      "sha256": "70a4e13edcab1264edb9473a7c7ac3e971e385a681191244d2876faef37f2d3b"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/owner.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/owner.json",
+      "mode": "0o644",
+      "bytes": 3302,
+      "sha256": "9812c8a551381d4d0cf51b5cd4eb3ee771d1290de8e618477168fd27c1024414"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/stderr.log",
+      "copy": "files/out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/stderr.log",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/stdout.log",
+      "copy": "files/out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/stdout.log",
+      "mode": "0o644",
+      "bytes": 1202,
+      "sha256": "36176e67fae04e092df07f36606526e894864231c2374186e753c1045a1cbb18"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/native-jacobi-adaptation.patch",
+      "copy": "files/out/native-shared-jacobi-original-pending/native-jacobi-adaptation.patch",
+      "mode": "0o644",
+      "bytes": 21470,
+      "sha256": "590fc0e7e2b0c06be2e0d88f824af19d16b3c82f69c637822d761d99f5302be3"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/emergency_native_cleanup.ps1",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/emergency_native_cleanup.ps1",
+      "mode": "0o644",
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/execution-bindings.pending.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/execution-bindings.pending.json",
+      "mode": "0o644",
+      "bytes": 2143,
+      "sha256": "3bd6cd9ad96db0b40db841aa75f47614d8ee68e4d83d54efc63585824c4f81f5"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/plan.pending.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/plan.pending.json",
+      "mode": "0o644",
+      "bytes": 2209,
+      "sha256": "d80a5f7f6f29d7230fc14f82763f9db02d3100e78bcf595344a56f9d88e8a13b"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/run_native_control.ps1",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/run_native_control.ps1",
+      "mode": "0o644",
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/run_system.py",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/run_system.py",
+      "mode": "0o644",
+      "bytes": 19322,
+      "sha256": "8219114bd4dfb92588b41c6f683e60be3693624c2b6e4928ffbc10cf069532b4"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/run_terminal.py",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/run_terminal.py",
+      "mode": "0o644",
+      "bytes": 18548,
+      "sha256": "38c3050708fc6f379578ff04fc4653797f66539f89f916ceeebec4681e62c766"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/originals/terminal-audit.ps1",
+      "copy": "files/out/native-shared-jacobi-original-pending/originals/terminal-audit.ps1",
+      "mode": "0o644",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/plan.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/plan.json",
+      "mode": "0o644",
+      "bytes": 1844,
+      "sha256": "911af14f3e213440d1fba3f04c8a183e8cf70bfacf3ae4c3be005d9b651faff7"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/plan.pending.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/plan.pending.json",
+      "mode": "0o644",
+      "bytes": 1823,
+      "sha256": "8f9f53404d6ad91e54752bacd5acfc8824b0574f898b9add252b8bf0d26f8347"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/preparation.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/preparation.json",
+      "mode": "0o644",
+      "bytes": 1411,
+      "sha256": "3951bed97c0c87068f4638f4d457388f6b4e45fb2fbb39f1b94302097ade2263"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/reviewed-held-execution-bindings.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/reviewed-held-execution-bindings.json",
+      "mode": "0o644",
+      "bytes": 217546,
+      "sha256": "f334f92f85220ed2564185eab38bf84de23fce4f09c20b38395fddc6efa97fb6"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-actual-closures.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-actual-closures.json",
+      "mode": "0o644",
+      "bytes": 587,
+      "sha256": "b454587ad4747c59bbcfb8c817fb5d9ef6e798938f4d59276691e11ff854a5de"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-completed.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-completed.json",
+      "mode": "0o644",
+      "bytes": 8718,
+      "sha256": "c318b8934829d189236c21b55b5d92bfaa7cf9efa85765e3368fdb4461cbb491"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-host-module-observation.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-host-module-observation.json",
+      "mode": "0o644",
+      "bytes": 963,
+      "sha256": "dc8cc357c49c62fde92b5a0e3ff65f3aceb288c362ae72bc1c9f5fcb47a2e89a"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-materialization.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-materialization.json",
+      "mode": "0o644",
+      "bytes": 3472,
+      "sha256": "1019d95a6535e7976d3dbf41b59fb01f4f001ecbde63bbcae0c750b65f5fdcaa"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-observer-input-correction.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-observer-input-correction.json",
+      "mode": "0o644",
+      "bytes": 966,
+      "sha256": "28e2f1949a735f50a17a69399213415789284f2fe912ed8f76643a92b968294e"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-preflight.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-preflight.json",
+      "mode": "0o644",
+      "bytes": 1785,
+      "sha256": "4f4f296ddc9b8f3b4edf426b46be1115401ea0236aec71c3110310f1c37796e7"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-runtime-release.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-runtime-release.json",
+      "mode": "0o644",
+      "bytes": 1435,
+      "sha256": "9f8aa5ca59a515370bc3d08336797087a898055ff79c5ff151d0e42b0dcd8b05"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/root-stage-materialization.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/root-stage-materialization.json",
+      "mode": "0o644",
+      "bytes": 67615,
+      "sha256": "151447e9af708d56c820822c927c37f70c669f72b84f62cdee60fb3ee5e3be07"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/run_native_control.ps1",
+      "copy": "files/out/native-shared-jacobi-original-pending/run_native_control.ps1",
+      "mode": "0o644",
+      "bytes": 12691,
+      "sha256": "fa58bec790688093194ce279a075b4bf377eff9c9540670c764514193a5bd6f3"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/run_system.py",
+      "copy": "files/out/native-shared-jacobi-original-pending/run_system.py",
+      "mode": "0o644",
+      "bytes": 19077,
+      "sha256": "6cb1621edfb90d4a7960f0f8ae4b2b5f291ed682d1277579e8238de1ee35e057"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/run_terminal.py",
+      "copy": "files/out/native-shared-jacobi-original-pending/run_terminal.py",
+      "mode": "0o644",
+      "bytes": 18048,
+      "sha256": "7aec6797594138f295e3c70abe0fdfe82b08803109f6dff3525081bde113dbd0"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/source-contracts.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/source-contracts.json",
+      "mode": "0o644",
+      "bytes": 8836,
+      "sha256": "72df131153d438784bdf6d05c730ce543d232b0f79a4fc7af4d13e0834b91595"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/source-freeze.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/source-freeze.json",
+      "mode": "0o644",
+      "bytes": 85085,
+      "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/temp/terminal-trace-jacobi-all-rungs/bootstrap.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/temp/terminal-trace-jacobi-all-rungs/bootstrap.json",
+      "mode": "0o644",
+      "bytes": 222,
+      "sha256": "ad24f782b226d29810026fef0d3088d6dd8f55424aeec5511a37e294982349e4"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/temp/trace-jacobi-all-rungs/bootstrap.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/temp/trace-jacobi-all-rungs/bootstrap.json",
+      "mode": "0o644",
+      "bytes": 873,
+      "sha256": "36d048a71c1cf8336b9a40c26593eceb8439a07c684a77a3165cc93f0b212731"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-audit.ps1",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-audit.ps1",
+      "mode": "0o644",
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-helper.stderr",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-helper.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-helper.stdout",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-helper.stdout",
+      "mode": "0o644",
+      "bytes": 175,
+      "sha256": "7c9d195787e4d2aa0179c9405055bcf4a287915409b01a2fc933604e14b311cb"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs-accepted.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs-accepted.json",
+      "mode": "0o644",
+      "bytes": 9307,
+      "sha256": "886155e36a5ef383cc08f0f652e1dd5c93d050496d7e0d339f9ef37e5b0b7563"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs-bridge.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs-bridge.json",
+      "mode": "0o644",
+      "bytes": 2448,
+      "sha256": "720a3065f440c42146858544ca1be1ca476d2f4f5632c5c5ba4ed87250eae96b"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.json",
+      "mode": "0o644",
+      "bytes": 4066,
+      "sha256": "f5e00bdb8e8c1f537df4190e3c0f2a18233417c2fd0b5c7c1ebbe5c85d22b477"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.stderr",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.stdout",
+      "copy": "files/out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.stdout",
+      "mode": "0o644",
+      "bytes": 185,
+      "sha256": "c9490c43d6f9931ac8bbe6f1ca121e3e5f6c6e28115b2fdfe301e5484b73c38b"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.json",
+      "mode": "0o644",
+      "bytes": 3408,
+      "sha256": "c314130db471024542bb325a46eab94f4847408c8f9cc3538a77247326e0930c"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.stderr",
+      "copy": "files/out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.stdout",
+      "copy": "files/out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.stdout",
+      "mode": "0o644",
+      "bytes": 133,
+      "sha256": "8ed20b4bf7c8cb8da52a5eebf8edaae34c5b38b4f5641957dafc3e8dd643d812"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-inputs-after.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-inputs-after.json",
+      "mode": "0o644",
+      "bytes": 202424,
+      "sha256": "a14118fa893f7445e34dd77f57678d7b8759c5685e9443c54d8cbcf0ee61805f"
+    },
+    {
+      "source": "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-inputs-before.json",
+      "copy": "files/out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-inputs-before.json",
+      "mode": "0o644",
+      "bytes": 202424,
+      "sha256": "a14118fa893f7445e34dd77f57678d7b8759c5685e9443c54d8cbcf0ee61805f"
+    },
+    {
+      "source": "out/retained-function-boundary-source/finding.json",
+      "copy": "files/out/retained-function-boundary-source/finding.json",
+      "mode": "0o644",
+      "bytes": 1845,
+      "sha256": "e251822a7fbf24105d3bd3e0098919bd9b7f63220e4501527681ca7bd212568c"
+    },
+    {
+      "source": "out/retained-function-boundary-source/lp_bld_nir_soa.c",
+      "copy": "files/out/retained-function-boundary-source/lp_bld_nir_soa.c",
+      "mode": "0o644",
+      "bytes": 246649,
+      "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+    },
+    {
+      "source": "out/retained-function-boundary-source/lp_state_cs.c",
+      "copy": "files/out/retained-function-boundary-source/lp_state_cs.c",
+      "mode": "0o644",
+      "bytes": 96209,
+      "sha256": "6675c1ece36b60c45727bfaa77802439c457339fcb43a35e81786815ce372339"
+    },
+    {
+      "source": "out/retained-function-boundary-source/lvp_pipeline.c",
+      "copy": "files/out/retained-function-boundary-source/lvp_pipeline.c",
+      "mode": "0o644",
+      "bytes": 58416,
+      "sha256": "67427ba594f80cc78c99d8440d87318accf0966c3e1bf32e5c0b099e9729acd8"
+    },
+    {
+      "source": "out/retained-function-boundary-source/nir_functions.c",
+      "copy": "files/out/retained-function-boundary-source/nir_functions.c",
+      "mode": "0o644",
+      "bytes": 20120,
+      "sha256": "649379fca27d574d1ec1ad52aaf5335d9ecf86a5f88b7b44f8f092bba9c83abf"
+    },
+    {
+      "source": "out/retained-function-boundary-source/primary-source-pins.json",
+      "copy": "files/out/retained-function-boundary-source/primary-source-pins.json",
+      "mode": "0o644",
+      "bytes": 3261,
+      "sha256": "603fb25bfa063c3c8bdccf02bee5f2be2f431c4df4988885e56c74fbfc26f350"
+    },
+    {
+      "source": "out/retained-function-boundary-source/vk_nir.c",
+      "copy": "files/out/retained-function-boundary-source/vk_nir.c",
+      "mode": "0o644",
+      "bytes": 7547,
+      "sha256": "198c1f7544f00a35d7ec97632592b216487386f4b45b1e96e243d95e19e29a96"
+    },
+    {
+      "source": "out/retained-function-boundary-source/vk_pipeline.c",
+      "copy": "files/out/retained-function-boundary-source/vk_pipeline.c",
+      "mode": "0o644",
+      "bytes": 83587,
+      "sha256": "01343d4d2c50ef32b0329b4303e8fe037dd158e7ea354c8e1e7bf8397aca1ee7"
+    },
+    {
+      "source": "out/retained-function-boundary-source/vtn_cfg.c",
+      "copy": "files/out/retained-function-boundary-source/vtn_cfg.c",
+      "mode": "0o644",
+      "bytes": 28285,
+      "sha256": "a3a673e2c29318d399282e41ad02e8a3c8100879187a967c251b5b030af744da"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/archives/12119247320-sirius-macos-native-attestation.zip",
+      "copy": "files/out/shared-jacobi-current-ci/archives/12119247320-sirius-macos-native-attestation.zip",
+      "mode": "0o644",
+      "bytes": 53779913,
+      "sha256": "e7abdad7aa25bbc8410d392e530a4edc130827b7a358029855dbd4028225b259"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/archives/12119361984-sirius-gate-diagnostics-integration-macos-no-render.zip",
+      "copy": "files/out/shared-jacobi-current-ci/archives/12119361984-sirius-gate-diagnostics-integration-macos-no-render.zip",
+      "mode": "0o644",
+      "bytes": 5672,
+      "sha256": "cfd6b8908b3520c67aab546c1de8d286c24cd25e1f1612756cb52d02062ed33e"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/archives/12120076728-sirius-gate-diagnostics-integration-windows-no-render.zip",
+      "copy": "files/out/shared-jacobi-current-ci/archives/12120076728-sirius-gate-diagnostics-integration-windows-no-render.zip",
+      "mode": "0o644",
+      "bytes": 5839,
+      "sha256": "66dfbcca98279db11538a5389e94d8399b5cba65473a3814c5c7f878a7f7473f"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/archives/12120081687-sirius-windows-native-attestation.zip",
+      "copy": "files/out/shared-jacobi-current-ci/archives/12120081687-sirius-windows-native-attestation.zip",
+      "mode": "0o644",
+      "bytes": 52609401,
+      "sha256": "260fcaaebd13cb30febb75a9150e5d6e2683ab790ea260bcc527acae5011f07b"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/archives/12120135575-sirius-windows-diagnostic-build-products.zip",
+      "copy": "files/out/shared-jacobi-current-ci/archives/12120135575-sirius-windows-diagnostic-build-products.zip",
+      "mode": "0o644",
+      "bytes": 55041179,
+      "sha256": "222837fd67cf5158ab43ae1ff52d05cafc2bfea45949dfe46080c6c3aa5d04a9"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12119247320.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12119247320.json",
+      "mode": "0o644",
+      "bytes": 17055,
+      "sha256": "ece7954ecc06d5f8869daa11cd2650604ff82768712746f1817feb686e69f5c9"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12119247320.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12119247320.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12119361984.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12119361984.json",
+      "mode": "0o644",
+      "bytes": 3605,
+      "sha256": "4c7b5f70ce12453035cbd5c8083fdc645a6b007f4e1faa0880abafe2f3877a20"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12119361984.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12119361984.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12120076728.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12120076728.json",
+      "mode": "0o644",
+      "bytes": 3672,
+      "sha256": "dcd3667b1e3e3e2d3e950be49cfa3e6545c6943bcc23356dbc2fdb80b9a0936c"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12120076728.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12120076728.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12120081687.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12120081687.json",
+      "mode": "0o644",
+      "bytes": 17137,
+      "sha256": "9bc6b9b0e64b08d384bc67670f28338ffcbbc4db33adc59a0de92a7f524d1b08"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12120081687.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12120081687.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12120135575.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12120135575.json",
+      "mode": "0o644",
+      "bytes": 68120,
+      "sha256": "d5aea64a1456c04f5d1993e42731ae68b0db86d595771c6872dc2f71421167d4"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifact-12120135575.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/artifact-12120135575.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifacts-current.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifacts-current.json",
+      "mode": "0o644",
+      "bytes": 3761,
+      "sha256": "37e9a731ceb693d29a193564225312e146d2efa86d10617162af52f0be38f6c0"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifacts-current.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/artifacts-current.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifacts-list-20261018T003113.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifacts-list-20261018T003113.json",
+      "mode": "0o644",
+      "bytes": 1521,
+      "sha256": "3aed8635b8b35ceaccd908b384f78e62248862a6caf32257f7e5b06c430f2886"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/artifacts-list-20261018T003845.json",
+      "copy": "files/out/shared-jacobi-current-ci/artifacts-list-20261018T003845.json",
+      "mode": "0o644",
+      "bytes": 3761,
+      "sha256": "37e9a731ceb693d29a193564225312e146d2efa86d10617162af52f0be38f6c0"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/dispatch.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/dispatch.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/dispatch.stdout",
+      "copy": "files/out/shared-jacobi-current-ci/dispatch.stdout",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/independent-ci-jobs-supplement.json",
+      "copy": "files/out/shared-jacobi-current-ci/independent-ci-jobs-supplement.json",
+      "mode": "0o644",
+      "bytes": 1682,
+      "sha256": "60574fb7ec0123c072ceb464b45cb83b240f4ba40a1ee37ccc2a25f64e587a01"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/independent-ci-review.json",
+      "copy": "files/out/shared-jacobi-current-ci/independent-ci-review.json",
+      "mode": "0o644",
+      "bytes": 7824,
+      "sha256": "8d1b0c710476093e113edc9632c414c6eb4a845c26460bc961304d7f49e70705"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/jobs-completed.json",
+      "copy": "files/out/shared-jacobi-current-ci/jobs-completed.json",
+      "mode": "0o644",
+      "bytes": 14220,
+      "sha256": "b13daee62f2ffa9797696f4929d74aff69ef0e7fecb53da73a5454de36f7cda5"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/jobs-completed.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/jobs-completed.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/jobs-current.json",
+      "copy": "files/out/shared-jacobi-current-ci/jobs-current.json",
+      "mode": "0o644",
+      "bytes": 13852,
+      "sha256": "54c30bde14c8892583fb8c23e14f66a3bebd60fc96074f99d5198013e12131fb"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/jobs-current.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/jobs-current.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/partial-macos-review.json",
+      "copy": "files/out/shared-jacobi-current-ci/partial-macos-review.json",
+      "mode": "0o644",
+      "bytes": 7090,
+      "sha256": "cc993c683784541e2cde9ec09a23f2aeb3af853d88017f570506c1162bfb4874"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/request.json",
+      "copy": "files/out/shared-jacobi-current-ci/request.json",
+      "mode": "0o644",
+      "bytes": 148,
+      "sha256": "6586919d5e957e08627f5b3b38589fd15a41675d3891e86357ff0a089b16b66a"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/root-dispatch.json",
+      "copy": "files/out/shared-jacobi-current-ci/root-dispatch.json",
+      "mode": "0o644",
+      "bytes": 910,
+      "sha256": "b5457e0370138e2d2bcb44cdd0e44261706ac4534c18ba25cac4f0040be38485"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/run-current.json",
+      "copy": "files/out/shared-jacobi-current-ci/run-current.json",
+      "mode": "0o644",
+      "bytes": 12707,
+      "sha256": "3feb3ce060504075d6f0b0536fb674cbb94c116952736cbfc8f5329d182087ea"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/run-current.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/run-current.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/runs.json",
+      "copy": "files/out/shared-jacobi-current-ci/runs.json",
+      "mode": "0o644",
+      "bytes": 2073,
+      "sha256": "91400a02c8a8a34f2cd2c623a8bffa24fbc55e47ac20065a7039d1f2b3da0558"
+    },
+    {
+      "source": "out/shared-jacobi-current-ci/runs.stderr",
+      "copy": "files/out/shared-jacobi-current-ci/runs.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-runtime-issue53-followup/after.json",
+      "copy": "files/out/shared-jacobi-runtime-issue53-followup/after.json",
+      "mode": "0o644",
+      "bytes": 29278,
+      "sha256": "eebb96c587fafd45c0dd7bef351ac41acd23637a4d75df44de87049d685a04ae"
+    },
+    {
+      "source": "out/shared-jacobi-runtime-issue53-followup/before.json",
+      "copy": "files/out/shared-jacobi-runtime-issue53-followup/before.json",
+      "mode": "0o644",
+      "bytes": 26071,
+      "sha256": "cdbd6b5eff9526c3409f5aab91c4c4109139d4e486eea3b943bdbae0e05ced20"
+    },
+    {
+      "source": "out/shared-jacobi-runtime-issue53-followup/get.stderr",
+      "copy": "files/out/shared-jacobi-runtime-issue53-followup/get.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-runtime-issue53-followup/patch.stderr",
+      "copy": "files/out/shared-jacobi-runtime-issue53-followup/patch.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/shared-jacobi-runtime-issue53-followup/request.json",
+      "copy": "files/out/shared-jacobi-runtime-issue53-followup/request.json",
+      "mode": "0o644",
+      "bytes": 27722,
+      "sha256": "dd8a8a1336d150b558e5bcf9db98d9676965ad02de6e98a80bfd7ea12b3d4fbb"
+    },
+    {
+      "source": "out/shared-jacobi-runtime-issue53-followup/root-followup-verification.json",
+      "copy": "files/out/shared-jacobi-runtime-issue53-followup/root-followup-verification.json",
+      "mode": "0o644",
+      "bytes": 494,
+      "sha256": "1e0b671447a2e31b84d550c4c720cdb4b63ef17ab7df38b94a4e620506538a6a"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/checkpoint-push.log",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/checkpoint-push.log",
+      "mode": "0o644",
+      "bytes": 166,
+      "sha256": "7e14bb5534d8de3901c6746dde7a0d71aae9e8d7b7f318db2acecb1aa1428a02"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/checkpoint-remote-ref.txt",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/checkpoint-remote-ref.txt",
+      "mode": "0o644",
+      "bytes": 98,
+      "sha256": "28ab7fb994b33ce9a174400d9c7d2a4dbe0440f598361e990dffc7d4983d8f8d"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/push.log",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/push.log",
+      "mode": "0o644",
+      "bytes": 628,
+      "sha256": "04d18b8f454801ee44aca60ac30525422dedbc6b99b7a3f3f9c430ee1dbe1b77"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/remote-ref.txt",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/remote-ref.txt",
+      "mode": "0o644",
+      "bytes": 100,
+      "sha256": "88d90d0e98da58a540df204b13e48e15b00cbbc1bfaa6f0d8d27a5f29e98c243"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/root-git-preservation.json",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/root-git-preservation.json",
+      "mode": "0o644",
+      "bytes": 1357,
+      "sha256": "1d782cd1ca8c1e7330de8ae87b3dc275671c96906a1b9df480509d30f50a05a0"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/root-preservation-check.json",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/root-preservation-check.json",
+      "mode": "0o644",
+      "bytes": 1215,
+      "sha256": "960b088ecb869ac63550a17d2aa4dca4119098206eca9b1f74cf6207a8d31cd5"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/root-source-adoption.json",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/root-source-adoption.json",
+      "mode": "0o644",
+      "bytes": 1322,
+      "sha256": "86fe4801299d5ba15d9b492c71c318080cbed82875af0bab0a35bc189f322fdd"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/root-source-build-hold-release.json",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/root-source-build-hold-release.json",
+      "mode": "0o644",
+      "bytes": 1090,
+      "sha256": "886b48a4a989bc764e8e7ddb09def2f5ce4c623ade7d498683be25ba8eb41ba4"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/root-source-publication.json",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/root-source-publication.json",
+      "mode": "0o644",
+      "bytes": 415,
+      "sha256": "051c06176e7fea0368dd6825c119c739ebe9f997e5c74060b7e8d7a01a9e5c7a"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/source-commit-message.txt",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/source-commit-message.txt",
+      "mode": "0o644",
+      "bytes": 614,
+      "sha256": "edc028ce23b2febf46737360fcb800ca9d463bb70465b9380174f1ceeb942ed4"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/source-push.log",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/source-push.log",
+      "mode": "0o644",
+      "bytes": 119,
+      "sha256": "1fd99c7cdf50159527ae60a039ceec24b7109026e3e5a724159d843dd873509a"
+    },
+    {
+      "source": "out/trace-jacobi-shared-rhs-preservation/source-remote-ref.txt",
+      "copy": "files/out/trace-jacobi-shared-rhs-preservation/source-remote-ref.txt",
+      "mode": "0o644",
+      "bytes": 94,
+      "sha256": "64e218934f4a250fb474147d688696f54ff8c8d50f999b2afc0817fdc048d72d"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/actions.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/actions.json",
+      "mode": "0o644",
+      "bytes": 463711,
+      "sha256": "cc09a51dc6054f1042934cad502965b56f0ae82d9cc4fc8f7d6932271cdbc467"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/configure.log",
+      "copy": "files/out/trace-shared-jacobi-strict-build/configure.log",
+      "mode": "0o644",
+      "bytes": 1277,
+      "sha256": "103f8bd1532bb7bb881c33d96ddf8a520b50fe3d7c0a9d91f46eef29d8397d0d"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/helper.stderr",
+      "copy": "files/out/trace-shared-jacobi-strict-build/helper.stderr",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/helper.stdout",
+      "copy": "files/out/trace-shared-jacobi-strict-build/helper.stdout",
+      "mode": "0o644",
+      "bytes": 712,
+      "sha256": "3cbd85c12ef963b49373df7f1262fb25b30e3ad9e333d3002621c5c4f9e87c18"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/independent-integration-review.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/independent-integration-review.json",
+      "mode": "0o644",
+      "bytes": 5981,
+      "sha256": "801285ca6d4a32f191fb1957ca93c82f5d4f21bf47546dfdcbf36f4e63c85ff2"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/owned_guard.py",
+      "copy": "files/out/trace-shared-jacobi-strict-build/owned_guard.py",
+      "mode": "0o644",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/root-completed.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/root-completed.json",
+      "mode": "0o644",
+      "bytes": 8744,
+      "sha256": "a3dc1488336c297c5f9c8e7e4a3a9da6668c5aeff15c9c8f3b22bf009decb806"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/root-configure-observation.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/root-configure-observation.json",
+      "mode": "0o644",
+      "bytes": 1583,
+      "sha256": "132b8b10890a6aff1cca7ea12bea1155309ceb95f63d83c36c315c96f5ae2312"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/root-helper-closure.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/root-helper-closure.json",
+      "mode": "0o644",
+      "bytes": 238,
+      "sha256": "c37515d4eaa00bfd0610d74e49fec41863a22f6c084a897039a75b4e82456471"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/root-preflight.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/root-preflight.json",
+      "mode": "0o644",
+      "bytes": 1623093,
+      "sha256": "e8567424c986f0101b2d233f9bd25fac9c173d1a87a1bf570173a8f037487fa7"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/run_owned.py",
+      "copy": "files/out/trace-shared-jacobi-strict-build/run_owned.py",
+      "mode": "0o644",
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/strict-build/inputs-after.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/strict-build/inputs-after.json",
+      "mode": "0o644",
+      "bytes": 1572392,
+      "sha256": "b946ecb6a34aec395945bee867f1f2d537cb98da9285c649f6454d29b7dcba18"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/strict-build/inputs-before.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/strict-build/inputs-before.json",
+      "mode": "0o644",
+      "bytes": 1572392,
+      "sha256": "b946ecb6a34aec395945bee867f1f2d537cb98da9285c649f6454d29b7dcba18"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/strict-build/owner.json",
+      "copy": "files/out/trace-shared-jacobi-strict-build/strict-build/owner.json",
+      "mode": "0o644",
+      "bytes": 13162,
+      "sha256": "7039313d744e89de013db2aeac7c51613d505e1fbf024d926b288cbca8d559d1"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/strict-build/samples.jsonl",
+      "copy": "files/out/trace-shared-jacobi-strict-build/strict-build/samples.jsonl",
+      "mode": "0o644",
+      "bytes": 314946,
+      "sha256": "b1145a51aba1924b6994fc20c864765fc7e49d44e56a2ef89ff4e1a083aeb48f"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/strict-build/stderr.log",
+      "copy": "files/out/trace-shared-jacobi-strict-build/strict-build/stderr.log",
+      "mode": "0o644",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "out/trace-shared-jacobi-strict-build/strict-build/stdout.log",
+      "copy": "files/out/trace-shared-jacobi-strict-build/strict-build/stdout.log",
+      "mode": "0o644",
+      "bytes": 13073,
+      "sha256": "ba62cadd11eab59fa61e8ac411e2babcbe2960b52bde7a0328d0e889142cb20e"
+    },
+    {
+      "source": "out/shared-jacobi-integration-preservation/findings.md",
+      "copy": "README.md",
+      "mode": "0o644",
+      "bytes": 3866,
+      "sha256": "41da346b3b693b3131e5909606b358971dbc4bcefb003c446247dcd3e7ef044e"
+    }
+  ],
+  "copied_payload_files": 215,
+  "payload_bytes": 243210708,
+  "all_copy_bytes_and_modes_exact": true,
+  "raw_CI_archives_preserve_all227_members_without_expanded_duplication": true,
+  "Git_publication_pending": true,
+  "cleanup_released": false
+}

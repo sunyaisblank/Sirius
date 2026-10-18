@@ -1,0 +1,9 @@
+{
+    "query":  "SELECT TOP 60 System.ItemPathDisplay,System.ItemNameDisplay,System.DateModified,System.Size FROM SystemIndex WHERE (SCOPE=\u0027file:C:/Users/alarisadmin/Desktop\u0027 OR SCOPE=\u0027file:C:/Users/alarisadmin/Documents\u0027 OR SCOPE=\u0027file:C:/Users/alarisadmin/Downloads\u0027 OR SCOPE=\u0027file:C:/Users/alarisadmin/OneDrive\u0027) AND (System.FileName LIKE \u0027%Sirius%\u0027 OR System.FileName LIKE \u0027%render%\u0027 OR System.FileName LIKE \u0027%comparator%\u0027 OR System.FileName LIKE \u0027%tape%\u0027)",
+    "utc":  "2026-10-18T01:07:36.6681975Z",
+    "rows":  [
+
+             ],
+    "truncated_at_limit":  false,
+    "scope":  "Read-only Windows Search filename metadata in four current-user roots; no file opening/hydration/restore/content scan. Index omissions/staleness and unindexed storage remain outside this route."
+}

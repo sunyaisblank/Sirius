@@ -1,0 +1,191 @@
+{
+  "schema": "sirius-native-shared-jacobi-root-completed-v1",
+  "created_utc": "2026-10-18T01:02:25.208896+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "passed": true,
+  "audit_completed": true,
+  "actual_closures": {
+    "schema": "sirius-native-shared-jacobi-ROOT-observed-tool-closures-v1",
+    "created_utc": "2026-10-18T01:02:23.877603+00:00",
+    "owner_helper_tool_session_id": 29731,
+    "owner_helper_actual_closed_exit": 0,
+    "terminal_helper_tool_session_id": 14124,
+    "terminal_helper_actual_closed_exit": 0,
+    "owner_then_terminal_serial": true,
+    "scope": "Actual exec/write_stdin tool completions observed by ROOT, paired with mature independent native/WSL ownership and scientific receipts. WSL monotonic/Windows QPC/GTest clocks are distinct and not calibrated for cross-clock timing joins."
+  },
+  "original_test": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+  "single_case_zero_FESD_completed": true,
+  "FP64_decline_property_NAME_absent": true,
+  "ordered_original9_progress": [
+    "[TraceJacobiRung] module=trace.spv phase=begin",
+    "[TraceJacobiRung] module=trace.spv phase=prepared",
+    "[TraceJacobiRung] module=trace.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+    "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+  ],
+  "Windows_owner_seconds": 568.7923926,
+  "GTest_seconds": "564.381",
+  "peak_sampled_child_working_set_bytes": 1174265856,
+  "sample_count": 558,
+  "minimum_WSL_available_KiB": 16118656,
+  "whole_input_beforeafter_current_rows": 1111,
+  "all_selected_inputs_unchanged": true,
+  "all_saved_Linux_births_fresh_absent": true,
+  "saved_Linux_births": [
+    {
+      "role": "owner-wrapper",
+      "pid": 49638,
+      "saved_start_ticks": "15832742",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "role": "Windows-owner-interop",
+      "pid": 49642,
+      "saved_start_ticks": "15833041",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    },
+    {
+      "role": "terminal-interop",
+      "pid": 62625,
+      "saved_start_ticks": "15897438",
+      "current_start_ticks": null,
+      "owned_birth_absent": true
+    }
+  ],
+  "Windows_owner_test_births_and_module_postseals": [
+    {
+      "kind": "owner",
+      "pid": 17172,
+      "recorded_start_utc": "2026-10-18T00:50:41.2299998Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    },
+    {
+      "kind": "test",
+      "pid": 18216,
+      "recorded_start_utc": "2026-10-18T00:50:52.1675373Z",
+      "pid_currently_live": false,
+      "owned_birth_absent": true
+    }
+  ],
+  "actual_same_child_modules": [
+    {
+      "name": "vulkan-1.dll",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release\\vulkan-1.dll",
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "version": "1.4.357.0"
+    },
+    {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    }
+  ],
+  "source_clean_committed_pushed0_0": true,
+  "raw_files": {
+    "out/native-shared-jacobi-original-pending/root-actual-closures.json": {
+      "bytes": 587,
+      "sha256": "b454587ad4747c59bbcfb8c817fb5d9ef6e798938f4d59276691e11ff854a5de"
+    },
+    "out/native-shared-jacobi-original-pending/helper.stdout": {
+      "bytes": 168,
+      "sha256": "fc674daed9917ce0558c2fae6bd7afca2721b75748d30deeaef3a35f317f70bb"
+    },
+    "out/native-shared-jacobi-original-pending/helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.json": {
+      "bytes": 3408,
+      "sha256": "c314130db471024542bb325a46eab94f4847408c8f9cc3538a77247326e0930c"
+    },
+    "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.stdout": {
+      "bytes": 133,
+      "sha256": "8ed20b4bf7c8cb8da52a5eebf8edaae34c5b38b4f5641957dafc3e8dd643d812"
+    },
+    "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-inputs-before.json": {
+      "bytes": 202424,
+      "sha256": "a14118fa893f7445e34dd77f57678d7b8759c5685e9443c54d8cbcf0ee61805f"
+    },
+    "out/native-shared-jacobi-original-pending/trace-jacobi-all-rungs-inputs-after.json": {
+      "bytes": 202424,
+      "sha256": "a14118fa893f7445e34dd77f57678d7b8759c5685e9443c54d8cbcf0ee61805f"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-helper.stdout": {
+      "bytes": 175,
+      "sha256": "7c9d195787e4d2aa0179c9405055bcf4a287915409b01a2fc933604e14b311cb"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-helper.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.json": {
+      "bytes": 4066,
+      "sha256": "f5e00bdb8e8c1f537df4190e3c0f2a18233417c2fd0b5c7c1ebbe5c85d22b477"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs-bridge.json": {
+      "bytes": 2448,
+      "sha256": "720a3065f440c42146858544ca1be1ca476d2f4f5632c5c5ba4ed87250eae96b"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs-accepted.json": {
+      "bytes": 9307,
+      "sha256": "886155e36a5ef383cc08f0f652e1dd5c93d050496d7e0d339f9ef37e5b0b7563"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.stdout": {
+      "bytes": 185,
+      "sha256": "c9490c43d6f9931ac8bbe6f1ca121e3e5f6c6e28115b2fdfe301e5484b73c38b"
+    },
+    "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/owner.json": {
+      "bytes": 3302,
+      "sha256": "9812c8a551381d4d0cf51b5cd4eb3ee771d1290de8e618477168fd27c1024414"
+    },
+    "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/stdout.log": {
+      "bytes": 1202,
+      "sha256": "36176e67fae04e092df07f36606526e894864231c2374186e753c1045a1cbb18"
+    },
+    "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/gtest.xml": {
+      "bytes": 606,
+      "sha256": "1af7dd90c303760863180016c9555497a879595cd5ff0ba586aab5fa9afc4852"
+    },
+    "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/memory.json": {
+      "bytes": 76912,
+      "sha256": "70a4e13edcab1264edb9473a7c7ac3e971e385a681191244d2876faef37f2d3b"
+    },
+    "out/native-shared-jacobi-original-pending/native/trace-jacobi-all-rungs/driver-modules.json": {
+      "bytes": 685,
+      "sha256": "00a09589b7b749216c0b8c9138f859c8efd20a21d4a0fa564ec81ee6715f11a0"
+    },
+    "out/native-shared-jacobi-original-pending/temp/trace-jacobi-all-rungs/bootstrap.json": {
+      "bytes": 873,
+      "sha256": "36d048a71c1cf8336b9a40c26593eceb8439a07c684a77a3165cc93f0b212731"
+    },
+    "out/native-shared-jacobi-original-pending/temp/terminal-trace-jacobi-all-rungs/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "ad24f782b226d29810026fef0d3088d6dd8f55424aeec5511a37e294982349e4"
+    }
+  },
+  "scope": "One original native AMD all-three-rung Jacobi numerical/failure-retention/restart witness with genuine current Windows host/products. Original science/physical1000ms/defaultcache unchanged. Prospective900/1380/60,4GiB childWorkingSet/2GiBWSL reserve; no aggregateWindows/GPU2048MiB or continuous monitoring claim. Accessible consumer census only; no global consumer absence. No comparison/cold/fullP1/fullscience/Mandatory/eight-domain/UI/release qualification.",
+  "cleanup_released": false
+}

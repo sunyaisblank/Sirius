@@ -1,0 +1,125 @@
+{
+  "schema": "sirius-shared-jacobi-independent-canonical-integration-reuse-review-v1",
+  "created_utc": "2026-10-18T00:26:37.465189+00:00",
+  "passed": true,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "decision": "STRICT_BUILD_AND_EXACT_FOCUSED_PROGRAM_REUSE_PASS",
+  "pins": {
+    "out/trace-shared-jacobi-strict-build/root-completed.json": {
+      "bytes": 8744,
+      "sha256": "a3dc1488336c297c5f9c8e7e4a3a9da6668c5aeff15c9c8f3b22bf009decb806"
+    },
+    "out/trace-shared-jacobi-strict-build/root-configure-observation.json": {
+      "bytes": 1583,
+      "sha256": "132b8b10890a6aff1cca7ea12bea1155309ceb95f63d83c36c315c96f5ae2312"
+    },
+    "out/trace-jacobi-shared-rhs-preservation/root-source-build-hold-release.json": {
+      "bytes": 1090,
+      "sha256": "886b48a4a989bc764e8e7ddb09def2f5ce4c623ade7d498683be25ba8eb41ba4"
+    },
+    "out/trace-jacobi-shared-rhs-preservation/root-source-publication.json": {
+      "bytes": 415,
+      "sha256": "051c06176e7fea0368dd6825c119c739ebe9f997e5c74060b7e8d7a01a9e5c7a"
+    }
+  },
+  "integration": {
+    "parent": "f22dc025d112c2d967356dead6b6e9caf8b42d67",
+    "only_two_changed_files_exact_reviewed_private_bytes": {
+      "src/sirius/kernels/trace.slang": {
+        "bytes": 63512,
+        "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36"
+      },
+      "src/sirius/kernels/gr_deviation.slang": {
+        "bytes": 18835,
+        "sha256": "9737e7ad54d06c9cb584c14504d574f88551833b3c602ed8335157c100a6a38b"
+      }
+    },
+    "runtime_source_profile_publication": "b86756348bc43f99eb6355e7524aa4a3b97656f0",
+    "build_checkpoint_publication": "7a1d3bcefa1805ec85ca716c9cc9950f9d328e0a",
+    "source_build_release_only_no_cleanup": true,
+    "selected_actual_named_Git_source_host_three_SPVs_and_prior_review_fullbytes_checked": true
+  },
+  "strict_build": {
+    "actual_configure_owner_helper_and_child_closed0": true,
+    "preset": "linux-gcc",
+    "Release_qualification_contract2_Mandatory_Werror_requireVulkan": true,
+    "alignment_admitted": 0,
+    "alignment_pending": 8,
+    "original_six_targets_parallel2_SourceGovernance": true,
+    "owner_seconds": 80.2751803320134,
+    "samples": 304,
+    "peak_sampled_aggregate_RSS_KiB": 1041788,
+    "minimum_available_KiB": 15995204,
+    "all4917_before_equals_after_current_identities_hashed": true,
+    "actual_beforeafter_rows": 9834,
+    "source_and_inputs_unchanged": true,
+    "cleanup_errors": [],
+    "remaining_owned_processes": [],
+    "ROOT_saved_two_owned_births_fresh_absent": true,
+    "no_reviewer_process_queries": true
+  },
+  "exact_current_program_tuple": {
+    "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+      "bytes": 13502080,
+      "sha256": "fe663e0cd3272306e62a56a3cda6277eda061501cd0943581ac4fde1f315a567"
+    },
+    "bin/linux-gcc/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+    },
+    "bin/linux-gcc/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+    },
+    "bin/linux-gcc/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+    }
+  },
+  "reuse": {
+    "canonical_generated_and_backendstaged_SPVs_equal_published_private_fullbytes": true,
+    "canonical_backend_host_equal_private_fe663_fullbytes": true,
+    "original_case": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+    "published_prior_completion": {
+      "commit": "b86756348bc43f99eb6355e7524aa4a3b97656f0",
+      "review_bytes": 8312,
+      "review_sha256": "835fff701f52dcce33cdc2165e4e5ae1662e510f5c114a539b06b848163977eb",
+      "owner_seconds": 268.9945692840265
+    },
+    "conclusion": "Reuse the accepted original private three-rung observation for the identical canonical executable/module tuple. No new execution or repeat test claimed/needed for this identity join.",
+    "historical_runtime_maps_not_replayed_as_current_after_adoption": true,
+    "prior_profiler_environment_and_late_locale_limits_retained": true
+  },
+  "portable_outputs": {
+    "CUDA_Metal_differ_only_line_filenames": [
+      11,
+      9
+    ],
+    "all_other_bytes_and_line_numbers_program_text_equal": true,
+    "native_compilation_or_runtime_not_claimed": true
+  },
+  "warning_classification_correction": {
+    "total": 28,
+    "gr_deviation_E41035_geometry_carry": 22,
+    "unchanged_gr_kerr_infinity_E41035_stages": 3,
+    "unchanged_gr_kerr_infinity_E41018_derivative_on_false_return": 3,
+    "historical_ROOT_warning_scope_overbroad": true,
+    "event0_all8event_source_CFG_proof_applies_only_gr_deviation_carry": true,
+    "no_warning_suppression_initialization_math_patch_or_allmode_warning_elimination_claim": true,
+    "passive_receipt_prewrite_corrections": "Count assertion first mistook total28 for28 E41035; subsequent text regex result-shape unpacking stopped beforewrites. Actual25+3 classes read directly; no tool/build/test/helper/workload rerun. Full4917/current/namedGit tuple/portable checks had completed before these metadata construction corrections."
+  },
+  "scope": "Source/build+exact focused-program reuse only. No new test or profile study/fullscience/Mandatory/cold/benefit/native portability/eight-domain/release qualification, speedup/RSS claim, cleanup or next-execution authority. CI evidence is separate/pending.",
+  "repository": {
+    "HEAD": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "status": "",
+    "tracking_ahead_behind": [
+      "0",
+      "0"
+    ],
+    "sole_worktree": true,
+    "source_committed_pushed": true,
+    "review_publication_pending_ROOT": true
+  },
+  "method": "Passive stdlib JSON/text/hash and read-onlyGit only; no executable helper/project/tool/provider/test/process/cache/network operation or mutation beyond this receipt."
+}

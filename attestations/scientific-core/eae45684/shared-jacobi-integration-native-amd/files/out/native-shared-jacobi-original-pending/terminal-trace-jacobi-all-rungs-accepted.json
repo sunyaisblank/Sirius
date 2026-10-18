@@ -1,0 +1,179 @@
+{
+  "pass": true,
+  "case": "trace-jacobi-all-rungs",
+  "mode": "native-trace-jacobi",
+  "label": "trace-jacobi-all-rungs",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-18T00:50:48.8224906Z",
+      "owner_pid": 17172,
+      "owner_start_time_utc": "2026-10-18T00:50:41.2299998Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release\\sirius_backend_tests.exe",
+      "test_executable_sha256": "28411691c78bb94dd811015cb2fab6f566bb5bf5b9b99f8fb917496eba8cdbc9",
+      "arguments": [
+        "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\native\\trace-jacobi-all-rungs\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release",
+      "outer_guard_seconds": 900,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\temp\\trace-jacobi-all-rungs",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\temp\\trace-jacobi-all-rungs",
+        "TMPDIR": null
+      },
+      "test_pid": 18216,
+      "test_start_time_utc": "2026-10-18T00:50:52.1675373Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-18T01:00:17.6391556Z",
+      "elapsed_seconds": 568.7923926,
+      "peak_sampled_rss_bytes": 1174265856,
+      "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "live_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "source_build_gate_sha256": "92023a61cd5dd78e516594a4a4e7df48c3304aa6404bc0f5e5d892cf119fc93b",
+      "source_build_gate_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "runner_source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+      "kind": "trace-jacobi-all-rungs",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\run_native_control.ps1",
+        "-Stage",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684\\tests\\backend\\Release",
+        "-Output",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\native\\trace-jacobi-all-rungs",
+        "-Filter",
+        "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "-Seconds",
+        "900",
+        "-RssBytes",
+        "4294967296",
+        "-TemporaryDirectory",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-shared-jacobi-original-pending\\temp\\trace-jacobi-all-rungs",
+        "-BuildRoot",
+        "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\diagnostic-eae45684",
+        "-ExpectedGateSha256",
+        "92023a61cd5dd78e516594a4a4e7df48c3304aa6404bc0f5e5d892cf119fc93b",
+        "-LiveRevision",
+        "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+        "-ExecutableName",
+        "sirius_backend_tests.exe",
+        "-InvocationKind",
+        "Control"
+      ],
+      "binding_sha256": "f2d0f55d201eddcd90a90e2f5d67486f2b4af6795bee0d23e4540bba1d9fe35e",
+      "linux_controller_pid": 49638,
+      "linux_controller_birth": "15832742",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 1380,
+      "windows_owner_seconds": 900,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "Exact mature native held-handle Windows owner samples child WorkingSet64 with4GiB stop and records private bytes; WSL sampled available-memory reserve2GiB; bridge owner+480s; terminal60s. 900s is prospective external native diagnostic cap, reusing the existing first-five control ceiling, not an original registered test deadline or aggregate Windows process-tree bound. Original physical1000ms dispatch and scientific assertions unchanged. Default native cache; inherited override refusal unchanged.",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 16118656,
+      "linux_child_pid": 49642,
+      "linux_child_birth": "15833041",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": true,
+      "mandatory_or_full_runtime_admitted": false,
+      "required_original_rung_progress": [
+        "[TraceJacobiRung] module=trace.spv phase=begin",
+        "[TraceJacobiRung] module=trace.spv phase=prepared",
+        "[TraceJacobiRung] module=trace.spv phase=exercised",
+        "[TraceJacobiRung] module=trace_fp32comp.spv phase=begin",
+        "[TraceJacobiRung] module=trace_fp32comp.spv phase=prepared",
+        "[TraceJacobiRung] module=trace_fp32comp.spv phase=exercised",
+        "[TraceJacobiRung] module=trace_fp64.spv phase=begin",
+        "[TraceJacobiRung] module=trace_fp64.spv phase=prepared",
+        "[TraceJacobiRung] module=trace_fp64.spv phase=exercised"
+      ],
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 559.8700743610098,
+      "signals": []
+    },
+    "stdout_sha256": "36176e67fae04e092df07f36606526e894864231c2374186e753c1045a1cbb18",
+    "whole_inputs": {
+      "trace-jacobi-all-rungs-bridge.json": {
+        "bytes": 3408,
+        "sha256": "c314130db471024542bb325a46eab94f4847408c8f9cc3538a77247326e0930c"
+      },
+      "native/trace-jacobi-all-rungs/owner.json": {
+        "bytes": 3302,
+        "sha256": "9812c8a551381d4d0cf51b5cd4eb3ee771d1290de8e618477168fd27c1024414"
+      },
+      "native/trace-jacobi-all-rungs/stdout.log": {
+        "bytes": 1202,
+        "sha256": "36176e67fae04e092df07f36606526e894864231c2374186e753c1045a1cbb18"
+      },
+      "native/trace-jacobi-all-rungs/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/trace-jacobi-all-rungs/memory.json": {
+        "bytes": 76912,
+        "sha256": "70a4e13edcab1264edb9473a7c7ac3e971e385a681191244d2876faef37f2d3b"
+      },
+      "trace-jacobi-all-rungs-inputs-before.json": {
+        "bytes": 202424,
+        "sha256": "a14118fa893f7445e34dd77f57678d7b8759c5685e9443c54d8cbcf0ee61805f"
+      },
+      "trace-jacobi-all-rungs-inputs-after.json": {
+        "bytes": 202424,
+        "sha256": "a14118fa893f7445e34dd77f57678d7b8759c5685e9443c54d8cbcf0ee61805f"
+      },
+      "native/trace-jacobi-all-rungs/gtest.xml": {
+        "bytes": 606,
+        "sha256": "1af7dd90c303760863180016c9555497a879595cd5ff0ba586aab5fa9afc4852"
+      },
+      "native/trace-jacobi-all-rungs/driver-modules.json": {
+        "bytes": 685,
+        "sha256": "00a09589b7b749216c0b8c9138f859c8efd20a21d4a0fa564ec81ee6715f11a0"
+      }
+    }
+  },
+  "terminal_receipt": "out/native-shared-jacobi-original-pending/terminal-trace-jacobi-all-rungs.json",
+  "terminal_receipt_sha256": "f5e00bdb8e8c1f537df4190e3c0f2a18233417c2fd0b5c7c1ebbe5c85d22b477",
+  "terminal_bridge_sha256": "720a3065f440c42146858544ca1be1ca476d2f4f5632c5c5ba4ed87250eae96b",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "native_build_gate_authority_used": true,
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "One original native-AMD Jacobi control only: all three original rungs exercised without an FP64-decline property, actual stagedSDKloader+AMD, complete zero-FESD XML and original assertions. Progress is not independently a PASS. Limited accessible census; no fullP1/fullscience/Mandatory/performance/release claim."
+}

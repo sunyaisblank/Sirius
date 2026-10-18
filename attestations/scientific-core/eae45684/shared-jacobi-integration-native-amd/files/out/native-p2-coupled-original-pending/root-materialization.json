@@ -1,0 +1,92 @@
+{
+  "schema": "sirius-native-p2-coupled-root-materialization-v1",
+  "created_utc": "2026-10-18T01:04:22.539396+00:00",
+  "source_revision": "eae45684ee6f2d1b1baf9673a53ec9c349f936e1",
+  "materialized": true,
+  "runtime_released": false,
+  "plan_fixed_true_binding_held_false": true,
+  "source_clean_pushed_tracking0_0": true,
+  "reused_current_stage_files": 140,
+  "fresh_matched_previous_input_rows": 1110,
+  "new_binding_input_count": 1108,
+  "current_selected_Windows_and_Linux_product_hashes_equal": {
+    "parity_probe.spv": {
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff",
+      "bytes": 3377936
+    },
+    "coupled_probe_fp64.spv": {
+      "sha256": "ee60ee290ca0f18c3031ca456a731e88568e6e268b5b032bc0cb840df999a667",
+      "bytes": 1225888
+    }
+  },
+  "source_freeze538_reused_exact": {
+    "bytes": 85085,
+    "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+  },
+  "source_review": {
+    "bytes": 8080,
+    "sha256": "324169f9665e8bd31ff8c226eae7adc4758c861f5b5b4c0223426afcbd9c4bed"
+  },
+  "preceding_attempt": {
+    "audit": {
+      "bytes": 8718,
+      "sha256": "c318b8934829d189236c21b55b5d92bfaa7cf9efa85765e3368fdb4461cbb491"
+    },
+    "independent_review": {
+      "bytes": 3237,
+      "sha256": "0952e2a63764b178afc69892a0514269095fad9f0f166cd12be682fa5ced26bb"
+    },
+    "passed": true
+  },
+  "current_registration": {
+    "command": [
+      "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe",
+      "--gtest_filter=KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+      "--gtest_also_run_disabled_tests"
+    ],
+    "config": "Release",
+    "name": "KernelParity.FourColumnRK4MapMatchesIndependentNeighboursFp64",
+    "properties": [
+      {
+        "name": "SKIP_REGULAR_EXPRESSION",
+        "value": [
+          "\\[  SKIPPED \\]"
+        ]
+      },
+      {
+        "name": "LABELS",
+        "value": [
+          "Correctness",
+          "Mandatory"
+        ]
+      },
+      {
+        "name": "RESOURCE_LOCK",
+        "value": [
+          "sirius_vulkan_device"
+        ]
+      },
+      {
+        "name": "WORKING_DIRECTORY",
+        "value": "D:/a/Sirius/Sirius/bin/windows-msvc/tests/backend"
+      }
+    ]
+  },
+  "files": {
+    "out/native-p2-coupled-original-pending/plan.json": {
+      "bytes": 1781,
+      "sha256": "ec4ecacd2b6fb7c72f7931d8db08b34dd2c76da11b6793d86fda1c5148696510"
+    },
+    "out/native-p2-coupled-original-pending/execution-bindings.json": {
+      "bytes": 216941,
+      "sha256": "64da389d9fc7a290b412bb81a34ade07d09d4c48c337adecca8ed49cbbe76f8d"
+    },
+    "out/native-p2-coupled-original-pending/source-freeze.json": {
+      "bytes": 85085,
+      "sha256": "e460ee3f46c6345c94f0a0eabf9a47581903ed3242b6747fd57065a09789fe20"
+    }
+  },
+  "root_review": "Full original case/RunTimedCoupledProbe/OpenProbe and exact adapter diff/source review read. Genuine final singleton fp64_evidence and actual supports64 required; seven positives/two refusals/all original32residuals/constraints/1000ms/1GiB internal assertions unchanged. Both defaultparity+coupled modules included; no new source/CI/compiler/stage copy or provider query. Actual current defaultcache,900/1380/60 and4GiBchild/2GiBWSL guards unchanged.",
+  "only_allowed_activation": "Top-level binding admittedfalse\u2192true after independent concrete review and separate ROOT release; no plan/helper/source/input/argv change.",
+  "scope": "Concrete next original fp64 coupled witness only; predecessor attempt closed and reviewed. No current result/fulltrace/sourceevent/science/Mandatory/performance/release claim."
+}
