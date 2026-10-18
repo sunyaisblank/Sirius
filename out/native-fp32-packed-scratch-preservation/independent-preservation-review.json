@@ -1,0 +1,99 @@
+{
+  "schema": "sirius-native-packed-scratch-independent-preservation-review-v1",
+  "created_utc": "2026-10-18T06:38:35.380180+00:00",
+  "reviewer": "/root/forensic_obligations",
+  "passed": true,
+  "audit_completed": true,
+  "benefit_passed": false,
+  "decision": "REJECT_NATIVE_PACKED_SCRATCH_COST",
+  "pins": {
+    "manifest": {
+      "path": "attestations/qualification/5b2df58b/native-packed-scratch-rejected/manifest.json",
+      "bytes": 139990,
+      "sha256": "714522d17a2d9df76d6d68e5b473ea013948584210b3998927a0e4aeda15a40f"
+    },
+    "preservation": {
+      "path": "attestations/qualification/5b2df58b/native-packed-scratch-rejected/preservation.json",
+      "bytes": 147473,
+      "sha256": "63f882edfd0a985b48c83b3739a16211f4da3c3216d5c5e54d531418cb1ba70a"
+    },
+    "root_prepublication": {
+      "path": "out/native-fp32-packed-scratch-preservation/root-preservation-check.json",
+      "bytes": 760,
+      "sha256": "4328bd426a2c5130ba42651589b179d4bf885e54185573cb97fe8cd87e23dc60"
+    },
+    "actual_comparison": {
+      "path": "out/native-fp32-packed-scratch-ABBA-evidence/native-comparison.json",
+      "bytes": 231614,
+      "sha256": "7e8e9fa38951210c0f6f29c8bc85aba18e29ae5e387bd53173d7957fc311615b"
+    },
+    "independent_result_audit": {
+      "path": "out/native-fp32-packed-scratch-runtime-publication/independent-ABBA-rejection-review.json",
+      "bytes": 9617,
+      "sha256": "044f1b3760bcb6d6df9b662aaecb2317849fd6a36fc9d6a6e7f0130f475df2e8"
+    },
+    "native128_source_stop": {
+      "path": "out/native-fp32-packed-native128-source/findings.json",
+      "bytes": 5533,
+      "sha256": "ca92ef9ce59fe9df0972c1733ae2e4826db9e465bfc2918687dc3342125b5df9"
+    }
+  },
+  "preservation": {
+    "payload_files": 401,
+    "payload_bytes": 157583039,
+    "bundle_files_including_manifest_and_preservation": 403,
+    "source_inventory_scopes": 18,
+    "inventory_unique_current_regular_files": 401,
+    "every_copy_mapping_original_and_copy_full_bytes_hash_and_local_mode_verified": true,
+    "copy_mapping_and_manifest_and_inventory_exact_sets_no_duplicates_or_extra_files": true,
+    "manifest_pin_in_preservation_verified": true,
+    "all_payload_local_modes": "0o644",
+    "Git_commit": "06fdb5fdd4dfd1b07d2044b4ca5950492143125c",
+    "Git_parent": "9e4a126ab2cb7d6f1977ea7f13208ad488bc4c2c",
+    "local_tag": "evidence/native-packed-scratch-rejected-5b2df58b",
+    "Git_full_blob_bytes_verified": 403,
+    "Git_full_blob_bytes_total": 157870502,
+    "Git_modes": "403 x100644",
+    "method": "Read-only ls-tree and cat-file batch; every named-commit blob compared byte-for-byte to its bundle file. No reliance on ROOT verification boolean alone."
+  },
+  "outcome": {
+    "original_control8_passed": true,
+    "ABBA_order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "processes_per_slot": 1,
+    "outer_repeats_or_warmup": 0,
+    "checks_passed": 21,
+    "checks_total": 22,
+    "sole_failed_check": {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "improvement_percent": 3.1264607529394794,
+      "minimum_percent": 5
+    },
+    "all16_stage_and2_inclusive_API_conditions_passed": true,
+    "result_audit_retained": "Pinned independent audit and its critical/raw slot owner/XML/terminal pins match current saved files;32readbacks/51markers/54joins per instance remain recorded, without rerunning readers or recomputing the experiment.",
+    "remaining7_controls_unrun": true,
+    "remaining_phase_root_absent": true,
+    "native128": "Source-only STOP before candidate/patch/compiler. Current64node layer cap invalidates the macro-only added-expression-parallelism premise; older128 rescheduling evidence is explicitly different-source and not transferred.",
+    "source_adopted": false,
+    "full_qualification_claimed": false
+  },
+  "workspace": {
+    "canonical_source": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "tracked_tree_clean": true,
+    "upstream_ahead": 0,
+    "upstream_behind": 0,
+    "worktrees": 1,
+    "evidence_commit_verified_locally": true,
+    "evidence_push_completed_at_review": false,
+    "cleanup_released": false
+  },
+  "limits": "Preservation audit only. No new workload, helper, compiler, provider, reader or process query; no network/Git mutation. This is not a backup of every host/build input and does not establish occupancy, cache/driver causation, frame completion, remaining controls, full science/Mandatory/UI/release qualification. ROOT must independently complete publication/remote verification before any separately scoped cleanup.",
+  "blockers": []
+}
