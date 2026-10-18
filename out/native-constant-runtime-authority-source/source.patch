@@ -1,0 +1,75 @@
+--- originals/run_system.py
++++ run_system.py
+@@ -103,7 +103,7 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-transport-validation-windows-source/matched-producer.cmake'
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-constant-windows-source/matched-producer.cmake'
+     assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativePackedMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+--- originals/run_terminal.py
++++ run_terminal.py
+@@ -59,7 +59,7 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-transport-validation-windows-source/matched-producer.cmake'
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-constant-windows-source/matched-producer.cmake'
+     assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativePackedMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+--- originals/materialize_phase.py
++++ materialize_phase.py
+@@ -8,8 +8,8 @@
+ import sys
+ 
+ ROOT = Path.cwd()
+-AUTH = ROOT / 'out/native-transport-validation-runtime-authority-source'
+-READERS = ROOT / 'out/native-transport-validation-runtime-source'
++AUTH = ROOT / 'out/native-constant-runtime-authority-source'
++READERS = ROOT / 'out/native-constant-runtime-source'
+ 
+ 
+ def identity(path):
+@@ -75,7 +75,7 @@
+         if node.targets[0].id in ('ACTION_NAMES', 'ACTION_ARMS', 'PROFILES'):
+             constants[node.targets[0].id] = ast.literal_eval(node.value)
+ order = constants['PROFILES'][phase]
+-work = ROOT / ('out/native-transport-validation-runtime-' + phase)
++work = ROOT / ('out/native-constant-runtime-' + phase)
+ assert not work.exists()
+ 
+ prior_keys = {'timestamp': [], 'abba': ['timestamp_acceptance'],
+--- originals/materialize_reader_context.py
++++ materialize_reader_context.py
+@@ -15,7 +15,7 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-SOURCE = ROOT / 'out/native-transport-validation-runtime-source'
++SOURCE = ROOT / 'out/native-constant-runtime-source'
+ 
+ 
+ def identity(path):
+@@ -47,8 +47,8 @@
+     phase, authority_name = sys.argv[1:]
+     assert phase in ('timestamp', 'abba', 'all8')
+     profile = 'remaining' if phase == 'all8' else phase
+-    work = ROOT / ('out/native-transport-validation-runtime-' + profile)
+-    output = ROOT / ('out/native-transport-validation-' +
++    work = ROOT / ('out/native-constant-runtime-' + profile)
++    output = ROOT / ('out/native-constant-' +
+                      {'timestamp': 'timestamp-evidence', 'abba': 'ABBA-evidence',
+                       'all8': 'all8-evidence'}[phase])
+     assert not output.exists()
+@@ -107,7 +107,7 @@
+     assert set(av['arms']) == {'baseline', 'candidate'}
+     left, right = (av['arms'][arm]['arrays'] for arm in ('baseline', 'candidate'))
+     assert len(left) == len(right) == 40 and set(left) == set(right)
+-    assert {name for name in left if pin(left[name]) != pin(right[name])} == {'kTransportShader'}
++    assert {name for name in left if pin(left[name]) != pin(right[name])} == {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
+     for arm in ('baseline', 'candidate'):
+         relative = 'payload/' + arm + '/original_' + arm + '_controls.exe'
+         assert av['arms'][arm]['PE'] == pin(manifest['files'][relative]) == identity(stage / relative)

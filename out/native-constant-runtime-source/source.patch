@@ -1,0 +1,46 @@
+--- originals/native_evidence.py
++++ native_evidence.py
+@@ -165,7 +165,7 @@
+         assert set(self.arms) == {'baseline', 'candidate'}
+         a, b = (self.arms[k]['arrays'] for k in ('baseline', 'candidate'))
+         assert len(a) == len(b) == 40 and set(a) == set(b)
+-        changed = {'kTransportShader'}
++        changed = {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
+         assert {k for k in a if pin(a[k]) != pin(b[k])} == changed
+         for arm in self.arms.values():
+             for row in arm['arrays'].values(): pin(row)
+--- originals/protocol.pending.json
++++ protocol.pending.json
+@@ -123,7 +123,7 @@
+     },
+     "pool_subtract_resample_retry": false,
+     "source_exact_math": {
+-      "path": "out/native-transport-validation-runtime-source/numeric_gates.py",
++      "path": "out/native-constant-runtime-source/numeric_gates.py",
+       "bytes": 2890,
+       "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1"
+     }
+@@ -136,13 +136,18 @@
+   ],
+   "candidate_scope": {
+     "changed_main_array": [
+-      "kTransportShader"
++      "kTransportShader",
++      "kEndpointShader",
++      "kDenseShader",
++      "kInitializeShader",
++      "kDopriPhaseShader"
+     ],
+-    "unchanged_main_arrays": 39,
+-    "unchanged_other_SPVs": 34,
++    "unchanged_main_arrays": 35,
++    "unchanged_other_SPVs": 30,
+     "both_owner_payloads_exact_required": true,
+-    "packing_or_lane_or_math_change": false
++    "scratch_or_lane_or_arithmetic_mode_change": false,
++    "native_RTConstant_refinement_requires_actual_word_gates": true
+   },
+-  "wire_compatibility": "Existing native-packed schema/decision labels retained as compatibility names,not a statement that this validation-only candidate packs scratch.",
++  "wire_compatibility": "Mature native-packed schemas/decision labels are compatibility identifiers;this RTConstant candidate does not pack scratch or change arithmetic modes.",
+   "historical_unexecuted_wire_draft_origin_commit": "898e52ca3ecbab002a33ad0bb9420732717685d3"
+ }

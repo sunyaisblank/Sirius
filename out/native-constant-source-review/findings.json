@@ -1,0 +1,95 @@
+{
+  "schema": "sirius-native-RTConstant-bounded-source-finding-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "decision": "SOURCE_STOP",
+  "candidate_authored": false,
+  "patch_authored": false,
+  "compiler_or_helper_or_provider_or_test_executed": false,
+  "source_or_modes_or_gates_changed": false,
+  "device_counterexample_established": false,
+  "source_pins": [
+    {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "path": "scripts/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    },
+    {
+      "path": "src/sirius/backend/device.h",
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    {
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    }
+  ],
+  "scope": "One bounded source-only pass through ordinary nativeFP32 RTConstant/RTPack/RTFinishAccumulation/RetainedSum32/RTExact and their current native route/mode contracts. No history catalogue, DAG study, numerical emulation, compiler, provider or new apparatus.",
+  "current_facts": [
+    {
+      "locus": "retained_triple.slang:47-56",
+      "fact": "Native RTConstant still calls RTPack(x,+0,+0,+0). Only SIRIUS_RETAINED_PORTABLE already uses a bound check plus direct canonical five-field construction."
+    },
+    {
+      "locus": "retained_triple.slang:13-45",
+      "fact": "RTPack validates allthree limbs against magnitude bits0x7b800000, then RTFinishAccumulation validates nonnegative error and performs five ordered RetainedSum32 calls, assigns unchangederror andvalid1, and rechecks high bound."
+    },
+    {
+      "locus": "retained_pair.slang:5-56,88",
+      "fact": "Native RetainedSum32 magnitudeorders by rawabsbits then hi=a+b;lo=b-(hi-a), using three distinct NoContraction operations. RPBounded is absbits<=limit;0x7b800000 is inclusive2^120. Nonfinite and finitevalues beyond that bound must retain invalid behavior."
+    },
+    {
+      "locus": "retained_scalar.slang:24-46,65",
+      "fact": "Ordinarynative RPScalar is float;RPBits/asuint exposes words,RPZero uses asfloat(0u),native RPScalarEqual uses float==. OrderedAdd/Sub are explicit SPIR-V NoContraction FAdd/FSub."
+    },
+    {
+      "locus": "retained_triple.slang:58-65",
+      "fact": "RTExact is a predicate,not a constructor. Numeric zero equality does not distinguish signedzero,whereas rawwords and RTNegate sign-bit XOR do."
+    },
+    {
+      "locus": "device.h:79-81;retained_compute.cpp:155-168;build-retained-kernels.py:22-49",
+      "fact": "Ordinarynative routing requires denormal preservation and nearest rounding. Its builder requires DenormPreserve32/RTE32/NoContraction and rejects relaxed arithmetic. SignedZeroInfNanPreserve32 request and corresponding host eligibility are added only for FMA,which ordinaryFP32 doesnot select."
+    }
+  ],
+  "initial_direct_constructor": {
+    "under_usual_IEEE_RTE_and_gradual_underflow": "For admittedabsbits<=0x7b800000,hi=x except eitherzero sign canonicalizes to+0;lo/tail/error=+0 andvalid1. OtherwiseRTInvalid returns all+0/valid0.",
+    "not_all_finite": "Finiteabs>2^120 remains invalid; a merefinitecheck would weaken the contract.",
+    "source_operation_count_only": "Five normalization calls remain in native source. No actual emitted/hardware work or performance benefit is established;constant propagation may remove them."
+  },
+  "narrow_followup": {
+    "proposal": "Retain exact original RTPack fallback for magnitude0(either signedzero),magnitude>0x7b800000(includesnonfinite),and directconstruct only0<magnitude<=0x7b800000.",
+    "input_high_zero_obligation_removed": true,
+    "value_level_proof": "Under usual ordered IEEE RTE/gradual-underflow identities,each nonzero boundedx pluszero isexact. FiveTwoSum value pairs evolve(0,0),(x,0),(0,0),(x,0),(0,0). No overflow,inexact residual or nonzero error is introduced;numeric limbs wouldbe[x,0,0,0],valid1.",
+    "word_level_gap": "Even with nonzero input,the original constructor computes exactcancellation hi-x inside FastTwoSum and later arithmetic on zero residuals. Replacing those computedzero limbs with literalpositivezero requires their exactsign bits,not only numericzero. Fallback for inputzeros doesnot cover these intermediate/outputzeros. error itself is theoriginal passedliteral+0;lo/tail are the unresolved computedzero fields.",
+    "why_not_closed_by_current_checked_contract": "Neither the ordinarynative route requirement nor emittedmode builder explicitly requires signedzero preservation. This bounded source review therefore cannot infer universal low/tail+0 word equality from the checked contract. RTExact float== is weaker than the existing rawreadback/word/sign contract. Actual hardware may produce the proposedwords;no differing execution or devicefailure has been shown.",
+    "no_silent_repair": "No new SignedZeroInfNanPreserve mode,capability,providerrestriction,gate relaxation or furthercandidate is authorized or proposed here."
+  },
+  "open_obligation": "Establish exactlow/tailzero words for the original orderednative chain within its already-admitted modes,including cancellation/subnormal/sign behavior,with valid authority. A value-level IEEE simplification or a reported support property alone is not this source-level proof. Stop candidate preparation unless that gap is independently closed.",
+  "stopped_work": [
+    "No patch/candidate/sourcecopy/compilerpacket/runtimeprotocol created.",
+    "No arithmetic helper,fixture,mode,gate,shader,canonicalproduct,CI/ref/provider state changed.",
+    "No benchmark/native/provider test or numerical qualification/performance/adoption claim."
+  ],
+  "method": "Passive source reads and exact SHA256 pins only; findings written as requested. Current source evidence stops at missing bit-level contract,not a proved inequivalence or an invented priorrejection."
+}

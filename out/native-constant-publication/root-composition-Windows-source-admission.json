@@ -1,0 +1,30 @@
+{
+  "schema": "sirius-native-constant-composition-Windows-source-root-admission-v1",
+  "created_utc": "2026-10-18T08:39:42.587418+00:00",
+  "passed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "checks": {
+    "composer_inverse_exact": true,
+    "Windows_namespace_inverse_exact": true,
+    "PE_reader_five_namespace_only_inverse_exact": true,
+    "canonical_clean_and_output_absent": true
+  },
+  "frozen_source_packets": {
+    "native-constant-producer-source": {
+      "path": "out/native-constant-producer-source/source-freeze.json",
+      "bytes": 690,
+      "sha256": "a4592d30bcb2da1b80d553e92f64de3fb2d2a5f164ed0a281064e5996d7ff857"
+    },
+    "native-constant-windows-source": {
+      "path": "out/native-constant-windows-source/source-freeze.json",
+      "bytes": 1307,
+      "sha256": "c3328daefc0e6dd74b58023c71e3c9180cfc3989b39997d5a936b0c357ae1d52"
+    },
+    "native-constant-pe-audit": {
+      "path": "out/native-constant-pe-audit/source-freeze.json",
+      "bytes": 715,
+      "sha256": "70f68e28270f852748dd6b200a192fca14e0111526b839df40bd79dbf7f8914a"
+    }
+  },
+  "scope": "ROOT full read composer, contracts, patch and Windows CMake/PowerShell/YAML; exact inverse to successful mature recipe. Source admission only, actual emitted admission required before composition. PE reader namespace-only reuse, runtime/provider/benefit/release not admitted."
+}
