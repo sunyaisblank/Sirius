@@ -1,0 +1,45 @@
+{
+  "schema": "sirius-native-packed-private-ci-independent-source-review-v1",
+  "created_utc": "2026-10-18T05:46:23.434348+00:00",
+  "passed": true,
+  "source_admitted": true,
+  "remote_compile_release_granted": false,
+  "runtime_admitted": false,
+  "canonical_parent_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source/native-packed-diagnostic.yml",
+      "bytes": 1316,
+      "sha256": "40bfa96848e4bb14f9347b9f2a7892d5bcaee8136576f57f23e619f28769665d"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source/build-and-stage.ps1",
+      "bytes": 18041,
+      "sha256": "7a87a0b1ba81d560aa2108f54fd4b96194db272f7fad991c97da727229cdbcd3"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source/source-contracts.json",
+      "bytes": 7317,
+      "sha256": "6d9a8c392c630d5544cd1424f450f8346480017fc5e3c822c5d4d38c2008f0d6"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-ci-source/source-freeze.json",
+      "bytes": 567,
+      "sha256": "f6200cefe26bbf17af09a8e6fa95a14bf97a1ac943a3734f753fea6a9a6e74f8"
+    }
+  ],
+  "reused_fragment_review_sha256": "480694403b9119850ceb0bb5c9687b0900f5bf287758b525b9993f7681a3b1f8",
+  "findings": [
+    "Exactly one push-only windows-2022 job for development/native-fp32-packed-scratch-diagnostic-2026-10-18. Existing ci.yml is byte-exact and its main/rebuild push branches do not match. Existing pinned checkout/SDK1.4.357.0/upload actions retained; contents read only. Checkout-scoped core.autocrlf=false requests exact LF input bytes without changing canonical configuration.",
+    "Clean HEAD==GITHUB_SHA and exact ref are required. Configure uses the original Windows Release preset, qualification/runtime-required options and reviewed hook; cache checks retain tests/Mandatory/Werror/contracts2/static dependencies. Build selects only reviewed private target, parallel2 and MSBuild logs/binlog. No CTest, Mandatory/default ALL target, built Sirius PE or provider launch is requested.",
+    "Tracked/private source membership and bytes are sealed before configure and checked afterward. Selected actual tools are identified from command resolution/cache/compiler metadata/unique quoted configure MSBuild command, not guessed. Before/after build snapshots include these tools/adjacent DLLs, fetched source trees and fixed configure/project inputs. Export, objects, tlogs and products remain mutable outputs rather than frozen inputs.",
+    "Explicit native exit codes control progress; configure failure prevents build, build failure/input drift/missing products or five-object mismatch leaves overall passedfalse. Catch/finally retains available logs/result and creates a payload-only self-excluding manifest; always-upload includes hidden files. No success is inferred from diagnostic upload.",
+    "Configured Python alias length/link/stream hash and nonempty sibling are separately represented, with no interpreter substitution claim. Reparse source/product files refuse. CRT comes from selected VS release-redist metadata with compiler minor join; SDK loader has explicit origin. Copy hashes bind both arms, maps, configuration, five private objects and actual tlogs. Actual imports/DLL completeness/header precedence/canonical compute exclusion remain post-download gates."
+  ],
+  "scope_limits": [
+    "Source review only: no PowerShell/parser/CMake/compiler/CI/provider/test/network/process execution, no canonical or input mutation. Future commit-tree/push, exact cloud inputs and observed compile outcome remain ROOT-owned and unperformed.",
+    "Configure runs before selected cloud tool/fetched-source sealing. This is bounded diagnostic input scope, not a complete host, SDK-header/resource, transitive DSO or pre-configure executable seal. The30minute CI timeout is not an aggregate RSS owner guarantee.",
+    "No native-build attestation, Mandatory execution, science, retention, frame or release/adoption authority. Existing source math/assertions and native8+sole22 benefit gates remain unchanged. Actual MSVC commands/strict flags/header/map/PE payload joins and local ownership/provider admission are still required."
+  ],
+  "only_write": "out/native-fp32-packed-scratch-ci-source/independent-source-review.json"
+}

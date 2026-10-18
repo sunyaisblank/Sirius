@@ -1,0 +1,256 @@
+{
+  "schema": "sirius-native-fp32-packed-scratch-source-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "source_only": true,
+  "compiler_executed": false,
+  "runtime_admitted": false,
+  "production_adopted": false,
+  "canonical_source_changed": false,
+  "change": "One private retained_scratch.slang file. Exact archived four-word allocation/helper bodies, gated at both allocation and helpers to TERMS5 && !PORTABLE && !FP64 && !STAGE7_OWNER. No builder, native64-lane policy, math, table, test or public ABI change.",
+  "guard": "#if SIRIUS_RETAINED_TERMS == 5 && !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)",
+  "guard_occurrences": 2,
+  "byte_proofs": {
+    "canonical_original": {
+      "path": "src/sirius/kernels/retained_scratch.slang",
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8"
+    },
+    "two_guard_inverse_equals_archived_packed_source": true,
+    "native_selected_bodies_equal_archived_packed_native_bodies": true,
+    "excluded_branch_selection_reconstructs_original_892_bytes": true,
+    "semantic_consumers_byte_exact_to_archived_proof": [
+      {
+        "path": "src/sirius/kernels/retained_triple.slang",
+        "bytes": 15360,
+        "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+      },
+      {
+        "path": "src/sirius/kernels/retained_transport.slang",
+        "bytes": 28933,
+        "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+      },
+      {
+        "path": "src/sirius/kernels/retained_endpoint.slang",
+        "bytes": 38824,
+        "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+      },
+      {
+        "path": "src/sirius/kernels/retained_dense.slang",
+        "bytes": 20082,
+        "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c"
+      },
+      {
+        "path": "src/sirius/kernels/retained_initialize.slang",
+        "bytes": 8778,
+        "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6"
+      },
+      {
+        "path": "src/sirius/kernels/retained_dopri_phase.slang",
+        "bytes": 9959,
+        "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+      },
+      {
+        "path": "src/sirius/kernels/retained_scalar.slang",
+        "bytes": 3102,
+        "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+      },
+      {
+        "path": "src/sirius/kernels/retained_program.py",
+        "bytes": 38341,
+        "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0"
+      }
+    ]
+  },
+  "profile_enumeration": {
+    "authority": {
+      "path": "scripts/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    },
+    "loci": "compile_shader FP64/FMA definitions and unchanged execution_lanes; main seven-kind/four-profile loop, TERMS4 for Camera/RayCamera; three portable normal sums, two portable owners, two fp64=True FMA products.",
+    "total_spvs": 35,
+    "expected_changed_spvs": [
+      "retained_dense.spv",
+      "retained_dopri_phase.spv",
+      "retained_endpoint.spv",
+      "retained_initialize.spv",
+      "retained_transport.spv"
+    ],
+    "expected_changed_count": 5,
+    "expected_byte_exact_spvs": [
+      "retained_camera.spv",
+      "retained_camera_fp64.spv",
+      "retained_camera_portable.spv",
+      "retained_camera_portable_fp64.spv",
+      "retained_dense_fp64.spv",
+      "retained_dense_portable.spv",
+      "retained_dense_portable_fp64.spv",
+      "retained_dopri_phase_fp64.spv",
+      "retained_dopri_phase_portable.spv",
+      "retained_dopri_phase_portable_fp64.spv",
+      "retained_dopri_phase_portable_normal_sum.spv",
+      "retained_endpoint_fma.spv",
+      "retained_endpoint_fp64.spv",
+      "retained_endpoint_portable.spv",
+      "retained_endpoint_portable_fp64.spv",
+      "retained_endpoint_portable_normal_sum.spv",
+      "retained_endpoint_portable_stage7_owner.spv",
+      "retained_initialize_fp64.spv",
+      "retained_initialize_portable.spv",
+      "retained_initialize_portable_fp64.spv",
+      "retained_ray_camera.spv",
+      "retained_ray_camera_fp64.spv",
+      "retained_ray_camera_portable.spv",
+      "retained_ray_camera_portable_fp64.spv",
+      "retained_transport_fma.spv",
+      "retained_transport_fp64.spv",
+      "retained_transport_portable.spv",
+      "retained_transport_portable_fp64.spv",
+      "retained_transport_portable_normal_sum.spv",
+      "retained_transport_portable_stage7_owner.spv"
+    ],
+    "expected_byte_exact_count": 30,
+    "count_correction": "Initial seven-native estimate included TERMS4 Camera/RayCamera; ROOT confirmed actual five only.",
+    "main_header_arrays": 40,
+    "expected_changed_main_arrays": 5,
+    "expected_byte_exact_main_arrays": 35,
+    "program_tables_byte_exact": 7,
+    "owner_shader_arrays_byte_exact": 2,
+    "owner_headers_byte_exact": true,
+    "future_actual_product_proof_required": true
+  },
+  "matching_proof_reuse": {
+    "source_review": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-source/independent-source-review.json",
+      "bytes": 4452,
+      "sha256": "02d461cc433d9f952b683e54669946c73331b91f26070b627d6ccdf48c77f2eb",
+      "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+      "git_blob": "6892cd5aa3b885e5a2307220451b00b91c76c134"
+    },
+    "emitted_review": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/independent-emitted-review.json",
+      "bytes": 37764,
+      "sha256": "a2e277dc023faaeb4471d766e0a869ea5a05b14b38d15aac035c74c2103c3c1d",
+      "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+      "git_blob": "ceb4fe586beafac85db867e97e8cf14b04b4f876"
+    },
+    "packed_source": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-source/candidate-retained_scratch.slang",
+      "bytes": 2097,
+      "sha256": "560765bdacb0c0b1d37f24e21de0d34204fe8a6d5ccf632c5e4b2831f53096b9",
+      "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+      "git_blob": "6c52c7833c37d37daa23003466dc17e85e0ee29c"
+    },
+    "product_proof": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-screen/root-compiler-products.json",
+      "bytes": 15812,
+      "sha256": "2be6e9e799531dd19cf040829f4320c726e1e41c6f80ab9fec9629b2faafa114",
+      "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+      "git_blob": "e2629b766eb9a067331c5e2240d216b56404302b"
+    },
+    "scope": "Only the five ordinary native cases and unchanged consumers/exact packed bodies. No portable/wide/FMA runtime acceptance transfers; no new products yet.",
+    "native_cases": [
+      {
+        "module": "retained_dense.spv",
+        "archived_candidate": {
+          "bytes": 78684,
+          "sha256": "370697d19d3e6b55a497eba23c7eabf78e467b2a3375c381ceb5bde656071a45"
+        },
+        "scratch_uint_words": [
+          4075,
+          3260
+        ],
+        "unchanged_body_set_sha256": "34455aa938bd7b1ccdcdc1736b6d6596fefc9a3c31bab51eabe4c2e52f809c7f"
+      },
+      {
+        "module": "retained_dopri_phase.spv",
+        "archived_candidate": {
+          "bytes": 59472,
+          "sha256": "3d7dade451c06b3be91854248698d949fb5f6adb425481b0457dc4c2f3b77b3b"
+        },
+        "scratch_uint_words": [
+          3145,
+          2516
+        ],
+        "unchanged_body_set_sha256": "a6c6149e443296f7145d9de1b1f4de1780e6495068170062faf4d53898fec869"
+      },
+      {
+        "module": "retained_endpoint.spv",
+        "archived_candidate": {
+          "bytes": 100032,
+          "sha256": "d54548aa08ec5ac457a158aada9cec1eacd8b9bce853fd622b5dd80d6dab678c"
+        },
+        "scratch_uint_words": [
+          3060,
+          2448
+        ],
+        "unchanged_body_set_sha256": "bf135cf394e4570fbc190a86fc4a86edb5c9e0e485ab15194ad9730b75a8d100"
+      },
+      {
+        "module": "retained_initialize.spv",
+        "archived_candidate": {
+          "bytes": 57840,
+          "sha256": "0c5a1d958cbe8575236972f1290070124262dc46de48dc28e9f6e8a993847c48"
+        },
+        "scratch_uint_words": [
+          1810,
+          1448
+        ],
+        "unchanged_body_set_sha256": "dd93217c5a340786b4605b9b1c761e56b7d8aeee4f82b455c981cb7ac32d7f80"
+      },
+      {
+        "module": "retained_transport.spv",
+        "archived_candidate": {
+          "bytes": 86096,
+          "sha256": "afebb1111fcdb542c2d8c57f21ab1bac44ee71bf94f332a04533e27d4bb4cd4a"
+        },
+        "scratch_uint_words": [
+          2295,
+          1836
+        ],
+        "unchanged_body_set_sha256": "cdaa09310f3be486a086539d1860168c596efbfa11b4999dfe5e3e1a6c06cf7c"
+      }
+    ]
+  },
+  "representation_contract": {
+    "public_values": "All five public words preserved. Private components0..2 unchanged; word3 low31 bits carry nonnegative error payload, highbit carries validity0/1.",
+    "writes": "Same invocation writes components0..4; error write clears high validity; validity RMW preserves low31. Existing generated-layer single-writer ownership and publication barriers retained.",
+    "defined_values": "Compose exact prior proof: RTInvalid/RTFinishAccumulation, admitted input/coefficient/projection/selection sources preserve error sign0 and validity0/1. No primitive arithmetic rerun/new math claim.",
+    "initialization_limit": "Validity clear may read/preserve opaque uninitialized/stale low31 payload. No zero-initialization, equality of undefined words, arbitrary malformed-program payload or blanket rollback proof.",
+    "unchanged": "retainedStatus/RejectRetainedProgram tail, roots/40field publication, source tables, arithmetic, status/refusal/cancel/rollback/governors/barriers remain exact."
+  },
+  "performance_premise": {
+    "private_scratch_allocation": "4R versus5R uint words:20% fewer declared/previously emitted private scratch-array words for these five modules. Other allocations unchanged; no20% total-workgroup-LDS claim.",
+    "target": "Actual AMD780M native provider, future original apparatus only.",
+    "unknown": [
+      "Driver allocated LDS granularity/occupancy",
+      "register pressure/liveness/code cost and packed RMW overhead",
+      "native whole-path runtime benefit"
+    ],
+    "native32_proposal_included": false
+  },
+  "history": {
+    "previous_software_rejection": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/benefit/independent-completion-review.json",
+      "bytes": 7222,
+      "sha256": "42df68ac0dc7ca5b2faf4f0e8c2cbcbf7d55d5570fcbe7dc999f0ba71a5a65d7",
+      "commit": "f851c664135b2fdd579cc8daab4eecf6036c84ef",
+      "git_blob": "148ccdc0be3bd477e18176bcf969abf95014cd88"
+    },
+    "software_disposition": "LVP-only packed trial REJECT17/22:2/4whole,14/16stage,1/2API. Remaining7original controls unrun. Retired/no unchanged software retry; no conversion to PASS.",
+    "native_address_permutation": {
+      "path": "attestations/source-review/3045067/native-transport-scratch-layout/analysis.json",
+      "bytes": 758,
+      "sha256": "6d09d84d419f0ee45c201cf1969fe29d896597140bc95326f9aebb40004fe2dc"
+    },
+    "address_permutation_scope": "Only component-major address permutation; same allocation/arithmetic/caps/barriers, zero device runs. Not four-word packing.",
+    "bounded_history_limit": "Selected named prior records read; no native four-word runtime rejection found in these bounded records. Not an exhaustive-history claim."
+  },
+  "future_requirements": [
+    "Independent/root SOURCE admission before any compiler operation.",
+    "Actual35SPV proof:five changed and30canonical exact. New native five expected equal archived packed native five only after actual byte comparison.",
+    "40mainarrays5changed35same;7tables/publicconstants/2ownerheaders exact. All portable/wide/FMA/owner products remain canonical before possible adoption.",
+    "Actual native original8controls and sole unchanged22gateABBA remain mandatory before adoption. No new stage screen/PAL study/frame attempt/software retry/CI/ref writes."
+  ],
+  "non_execution": "Passive stdlib source/hash/JSON/text and read-only named Git blobs only. No project imports/helper,compiler,provider,test,generator,CI/network or canonical edit."
+}

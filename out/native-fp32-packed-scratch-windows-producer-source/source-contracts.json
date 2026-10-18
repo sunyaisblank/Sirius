@@ -1,0 +1,109 @@
+{
+  "schema": "sirius-native-only-packed-scratch-matched-Windows-producer-source-v1",
+  "source_only": true,
+  "admitted": false,
+  "configure_build_runtime_or_remote_execution_performed": false,
+  "created_utc": "2026-10-18T05:33:10.618104+00:00",
+  "canonical_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "fragment": {
+    "path": "out/native-fp32-packed-scratch-windows-producer-source/matched-producer.cmake",
+    "bytes": 5669,
+    "sha256": "c6712badcab8f941a6f0bbc5b4aded4e020d1ebc4e29bbf2cd4b3998c3c141cb"
+  },
+  "source_origin": {
+    "audited_observer": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/audited-observer.cpp",
+      "bytes": 342470,
+      "sha256": "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601"
+    },
+    "six_command_recipe": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/recipes.pending.json",
+      "bytes": 27387,
+      "sha256": "93a9559ca66177838dbcedc3c0f847cabf679ef6b84ae7e50287292ce505d987"
+    },
+    "canonical_compute": {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    "canonical_DP_test": {
+      "path": "tests/backend/retained_dopri_test.cpp",
+      "bytes": 71601,
+      "sha256": "6e8dc8601d496ef5dc9403e0a75a97bd00ed67f115ad491cb578ff54b3fb93d1"
+    },
+    "canonical_backend_CMake": {
+      "path": "src/sirius/backend/CMakeLists.txt",
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    "canonical_test_CMake": {
+      "path": "tests/backend/CMakeLists.txt",
+      "bytes": 5448,
+      "sha256": "f2598935e672c6f61fa8290d9077b511c58bf21e2c66acc2faa48546151df357"
+    },
+    "strict_target_configuration": {
+      "path": "cmake/sirius_toolchain.cmake",
+      "bytes": 5383,
+      "sha256": "53bb5f339886172e7552aa37122ec69b12bde6d2c96cfe18abe824310501e189"
+    }
+  },
+  "future_ROOT_inputs": {
+    "observer": "out/native-fp32-packed-scratch-producer-inputs/observer/audited-observer.cpp",
+    "headers_each_arm": [
+      "retained_kernels.h",
+      "retained_owner_kernels.h",
+      "retained_owner_layout.h"
+    ],
+    "arm_directories": [
+      "out/native-fp32-packed-scratch-producer-inputs/baseline",
+      "out/native-fp32-packed-scratch-producer-inputs/candidate"
+    ],
+    "materialized_by_this_author": false,
+    "required_gate": "ROOT actual header/source proof and independent admission before configure. Baseline40 main arrays equal canonical matched producer;candidate ONLY5 nativeFP32 T/E/Dense/Initialize/DP shader arrays differ;35other main arrays/all7tables/publicconstants/two ownerheaders exact. Portable/wide/FMA/owner paths untouched. No old software17/22 rejection promoted."
+  },
+  "producer_shape": "Two PE outputs,one common unchanged DP test object,one fresh full compute object+same audited observer compile per arm. Canonical libraries,configuration/CRT/Release optimization/architecture stay under normal windows-msvc preset. No canonical CMake/target/source mutation,source deletions,header generation,workflow or extra test/stage probe.",
+  "canonical_dependencies": {
+    "libraries": [
+      "sirius_backend_cpu",
+      "sirius_backend",
+      "sirius_render",
+      "GTest::gtest_main"
+    ],
+    "transitive": [
+      "sirius_base",
+      "sirius_core",
+      "Vulkan::Vulkan",
+      "Threads::Threads"
+    ],
+    "fixture_targets": [
+      "sirius_portable_binary32_test_inputs",
+      "sirius_retained_camera_test_inputs"
+    ],
+    "generated_fixture_include": "bin/windows-msvc/tests/backend/retained_camera/program_fixture.h",
+    "shader_build_dependency": "Canonical backend/render link targets retain original sirius_kernels dependency;private header data are externally admitted inputs. No candidate builder/compiler code added."
+  },
+  "compile_composition": {
+    "strict": "sirius_configure_target(CONTRACT_MODE2) preserves canonical MSVC C++latest/W4/permissive-/utf8/WX and current configuration/CRT;mandatory/runtime/Werror/contracts must already be ON/2. Explicit original test fail_on_skip force-include is needed because deferred root targets do not inherit tests-directory options. No Linux O3/std spelling blindly transferred to MSVC. SIRIUS_RELEASE_RESOURCE_LOCKED derives from the unchanged canonical alignment configuration,not a hard-coded Linux value.",
+    "compute": "Private OBJECTtarget links canonical backend for unchanged PUBLIC usage definitions including SIRIUS_HAS_RETAINED_COMPUTE;first private arm directory then canonical generated directory. Full retained_compute.cpp compiled,not a class shim.",
+    "observer_and_DP": "Same original TEST macros SIRIUS_TEST_HAS_KERNELS/SIRIUS_TEST_HAS_PORTABLE_BINARY32_REFERENCE/SIRIUS_TEST_HAS_RETAINED_CAMERA=1,canonical backend/render usage yields original retained/Vulkan feature definitions. Tests/source include,canonical retained header fallback,original retained-camera fixture path mirrored from f851 recipes. DP has no retained_kernels.h include;one common object prevents arm/header mixing.",
+    "resource_scope": "Audited observer and DP test source have no ResourcePath/externalSPV read;retained modules/tables are embedded in selected main/owner headers and program_fixture.h is generated test include. Full original27observer bodies/1492ASSERT+EXPECT lines stay byte-exact. Future native deployment still needs genuine current host/CRT/Vulkan SDK/AMD mapping and ownership;not supplied here."
+  },
+  "link_contract": "Direct private full-TU compute objects resolve all its out-of-line RetainedCompute/RetainedValue definitions;ordinary canonical backend archive should supply Vulkan device/integrator/executor,not duplicate retained_compute.obj. This is source expectation,not MSVC linkPASS. No WHOLEARCHIVE/alternate archives/options are introduced. Both original linkmaps and /VERBOSE:LIB logs must show no canonical compute-object extraction or mixed header arm,one canonical device implementation,and exact40main+owner payload selector identities before runtime.",
+  "future_entrypoint": {
+    "configure_hook": "-DCMAKE_PROJECT_Sirius_INCLUDE=<absolute path to matched-producer.cmake> on existing windows-msvc configure,after ROOT materializes approved inputs and preserves all canonical policy options. DEFER waits for canonical targets.",
+    "compile_only_target": "SiriusNativePackedMatchedProducer",
+    "outputs": [
+      "bin/windows-msvc/private-native-packed/baseline/Release/original_baseline_controls.exe",
+      "bin/windows-msvc/private-native-packed/candidate/Release/original_candidate_controls.exe"
+    ],
+    "all_actual_argv_toolchain_build_dependencies_budget_input_output_freeze": "ROOT_PENDING",
+    "execution_authorized": false
+  },
+  "remaining_gates": [
+    "Independent source review/current tool/header/fixture/command/input closure and explicit ROOT compile release.",
+    "Actual MSVC command/dependency/header selection,private5compile+2link operations PLUS whatever canonical dependency work the fresh build really needs;no fixed whole-build commandcount/time claim. PE/symbol/selector/map/CRT proof is required,not assumed from this fragment.",
+    "Actual same-child AMD/SDK ownership and original eight controls plus sole original22gate ABBA before any adoption. Native guard/source/ABI/full science remain distinct;no speculative throughput claim."
+  ],
+  "historical_scope": "Retired Transport32 and Endpoint32 are not being retried. This route is source-only for materially distinct nativeFP32-only packing;old wide/portable failed software candidate is not accepted. 50565ab host integration receipt is not a matched PE producer recipe.",
+  "no_additional_outputs": "Only this fragment+concise contracts authored;no observer/header/private source/workflow/configuration/product/binding or runtime artifacts."
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "sirius-native-packed-scratch-windows-producer-independent-source-review-v1",
+  "created_utc": "2026-10-18T05:36:28.392444+00:00",
+  "passed": true,
+  "source_admitted": true,
+  "compiler_execution_admitted": false,
+  "runtime_admitted": false,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": [
+    {
+      "path": "out/native-fp32-packed-scratch-windows-producer-source/matched-producer.cmake",
+      "bytes": 5669,
+      "sha256": "c6712badcab8f941a6f0bbc5b4aded4e020d1ebc4e29bbf2cd4b3998c3c141cb"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-windows-producer-source/source-contracts.json",
+      "bytes": 8024,
+      "sha256": "dff2ac1e31661ad95b15453bd1a1f74e030a1dea277dd4ba6a6d4b0e7ea6ce9a"
+    },
+    {
+      "path": "out/native-fp32-packed-scratch-source/independent-source-review.json",
+      "bytes": 5759,
+      "sha256": "d100ece6062ce190b8785b072e6d33c1721dffbe8d2a7703d09b665f6c61df7a"
+    }
+  ],
+  "findings": [
+    "CMAKE_PROJECT_Sirius_INCLUDE defines the hook at project initialization; root-directory DEFER invokes it after canonical targets/policy/tests exist. Required target and Windows/MSVC/64-bit checks fail closed. Actual x64 remains bound to the selected windows-msvc preset/toolchain, not inferred solely from pointer width.",
+    "Two matched PEs: common unchanged DP source compiled once, full retained_compute.cpp and exact audited observer compiled once per arm:5 private compiles+2links. Canonical backend/render/fixture/source-governance dependencies remain real additional work. No ALL/add_test/gtest-discovery/provider command added, no canonical CTest or Mandatory predicate changed; building this explicit target is diagnostic compilation, not a Mandatory pass.",
+    "BEFORE private arm include directory precedes canonical retained fallback for compute and observer. All3 private headers exist; owner headers equal. Actual candidate main-header66331eae\u2026 and baseline3f7aca33\u2026 match prior composition proof. DP has no retained_kernels.h include and uses common API/test-reference sources; shared object cannot select another arm shader array.",
+    "sirius_configure_target(CONTRACT_MODE2) supplies MSVC C++latest/W4/permissive-/utf8/WX. Backend/base/render PUBLIC usage preserves feature definitions, include roots and alignment-derived resource lock. Tests macros and original fixture include/dependencies are restored; explicit /FI fail_on_skip preserves required-runtime fatal refusal despite root-directory target creation.",
+    "All7 declared source-origin pins match actual bytes. Observer is exact342470B/c9485d03\u2026 saved audited payload and both arms compile it unchanged; no assertion/body/filter edit or reduced acceptance list. DP source is canonical71601B/6e8dc860\u2026; private compute is complete canonical45570B/ea1edc4e\u2026.",
+    "Direct private full-TU object definitions should prevent extraction of canonical retained_compute.obj from the static backend archive. This remains an actual linker gate: both /MAP and /VERBOSE:LIB plus symbol/payload proof must exclude duplicate/canonical compute extraction and mixed header arms. Source expectation is not link success."
+  ],
+  "required_actual_producer_gates": "ROOT separately binds exact configure options/toolchain/CRT/Release/architecture, full tools+canonical dependency work, include/dependency command records and both private header payloads; actual PE/linkmaps/selector extraction must prove selected40main arrays/two owner arrays before runtime. No shader recompilation is attributed to these saved native arrays.",
+  "remaining_limits": "No CMake/configure/compiler/CI/provider/test executed by reviewer. Source-only CMake-fragment admission; no actual MSVC build/header-selection/link success, native gate, numerical or benefit result. Original native8 controls and sole22-gate ABBA remain necessary before adoption.",
+  "method": "Passive source/text/JSON/hash review of exact fragment, contracts, canonical CMake/consumers and selected materialized headers. Only this sidecar written; no canonical or producer-input mutation."
+}
