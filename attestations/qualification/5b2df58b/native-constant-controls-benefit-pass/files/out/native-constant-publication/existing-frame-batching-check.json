@@ -1,0 +1,86 @@
+{
+  "schema": "sirius-existing-native-frame-batching-source-check-v1",
+  "created_utc": "2026-10-18T09:00:45.016488+00:00",
+  "audit_completed": true,
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "outcome": "saved_prefix_does_not_support_persistent_whole_path_batch1_or_sticky_safety_cap_collapse",
+  "inputs": [
+    {
+      "path": "attestations/qualification/5b2df58b/native-original-frame-current/files/out/native-current-retained-frame-corrected/native/native-frame/stdout.log",
+      "bytes": 248717,
+      "sha256": "578d8e003e403b2cbb8857bf94283dff87d13b3825d6962cedc2de5d7333e30c"
+    },
+    {
+      "path": "attestations/qualification/5b2df58b/native-original-frame-current/files/out/native-current-retained-frame-corrected/native/native-frame/stderr.log",
+      "bytes": 62452,
+      "sha256": "a351f0a525a69bfd14ff8186a80219e582ca76e5caf2db26c14e6cc5e4225cd8"
+    },
+    {
+      "path": "attestations/qualification/5b2df58b/native-original-frame-current/files/out/native-current-retained-frame-corrected/root-completed.json",
+      "bytes": 45279,
+      "sha256": "0825175f5eefc43deee88291398dc8dbd43c43582e0449facc174fac40a85166"
+    },
+    {
+      "path": "src/sirius/backend/retained_trace_executor.cpp",
+      "bytes": 37539,
+      "sha256": "0a8026051c7273c47e695b0b7e4e9e6830e0105dea5ce2ef0b588cfa2570c9a7"
+    }
+  ],
+  "observations": {
+    "stdout_lines27_37_42": "64 ray rows,128 projection slots,64 worker threads;1px denotes host work-tile size.",
+    "stderr_progress_lines": [
+      1,
+      25,
+      49,
+      73,
+      97,
+      121,
+      145,
+      169,
+      193
+    ],
+    "all_nine_progress_records": {
+      "batch_subdivisions": 0,
+      "safety_reductions": 0
+    },
+    "last_cumulative_stage_prefixes": {
+      "transport": {
+        "line": 205,
+        "commands": 12156,
+        "minimum_prefix": 3,
+        "maximum_prefix": 64,
+        "prefix64_commands": 2676
+      },
+      "endpoint": {
+        "line": 207,
+        "prefix128_commands": 2676
+      },
+      "dopri_phase": {
+        "line": 215,
+        "prefix128_commands": 4932
+      },
+      "ray_camera": {
+        "line": 213,
+        "commands": 987,
+        "prefix1_commands": 790,
+        "maximum_prefix": 61
+      }
+    }
+  },
+  "source_joins": {
+    "Run115_119": "batch_limit and safety_cap initialize from compute capacity;gather_limit=min(maximum_batch_rows_,batch_limit).",
+    "Run146_167": "Existing bounded1ms coalescing waits for gather limit,stopping,or all live traces queued.",
+    "Run269_275": "Sticky safety-cap reduction increments safety_fallbacks;no such reduction is reported in the saved prefix.",
+    "Run277_288": "Soft-target feedback can recover within the sticky safety_cap.",
+    "Run233_234": "Exact logical batch-size histogram exists in stats_.batch_row_counts,but is not exported in these saved logs."
+  },
+  "limits": [
+    "Actual cumulative multirow stage prefixes rule out the proposed persistent whole-path one-row premise for the observed prefix;they are not the exact logical-request batch histogram.",
+    "Camera1:790/987 is specific camera underfill;it does not prove interval batches are1 or identify the reason.",
+    "No saved live batch_limit/safety_cap or coalescing-ready counters;no conclusion about unsnapshotted tail after last progress record.",
+    "No GPU/driver/JIT causality,performance gain,source adoption,new test or retry admission. Original frame remains elapsed-guard incomplete."
+  ],
+  "new_workload_or_provider_or_query_executed": false,
+  "new_source_or_runtime_mutation": false,
+  "new_retry_admitted": false
+}

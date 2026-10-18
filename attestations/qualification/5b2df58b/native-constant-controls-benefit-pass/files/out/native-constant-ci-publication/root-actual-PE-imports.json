@@ -1,0 +1,59 @@
+{
+  "schema": "sirius-native-constant-actual-PE-imports-v1",
+  "passed": true,
+  "arms": {
+    "baseline": {
+      "PE": {
+        "path": "bin/windows-msvc/native-constant-matched-d2e1a265/payload/baseline/original_baseline_controls.exe",
+        "bytes": 9275392,
+        "sha256": "ab735feb377b0dcee909cf19bededcbb53160fdec537f20183a7f311d670dd09"
+      },
+      "imports": [
+        "vulkan-1.dll",
+        "KERNEL32.dll",
+        "MSVCP140.dll",
+        "MSVCP140_2.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll"
+      ]
+    },
+    "candidate": {
+      "PE": {
+        "path": "bin/windows-msvc/native-constant-matched-d2e1a265/payload/candidate/original_candidate_controls.exe",
+        "bytes": 9277440,
+        "sha256": "d1fcff1a126b6f24296b9f7569f087e2953b0396525343c16889bf9f4a172592"
+      },
+      "imports": [
+        "vulkan-1.dll",
+        "KERNEL32.dll",
+        "MSVCP140.dll",
+        "MSVCP140_2.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "api-ms-win-crt-environment-l1-1-0.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-time-l1-1-0.dll"
+      ]
+    }
+  },
+  "same_release_import_set": true,
+  "actual_debug_CRT_imports": false,
+  "scope": "Static PE import descriptors only; actual loaded SDK/AMD must still be observed from same runtime child."
+}

@@ -1,0 +1,144 @@
+{
+  "schema": "sirius-native-packed-soa-five-compiler-recipes-v1",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "tools": {
+    "compiler": "/opt/slang/bin/slangc",
+    "assembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+    "disassembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+    "validator": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+    "optimizer": "/usr/bin/spirv-opt"
+  },
+  "source_directory": "/home/astra/.project/Sirius/out/native-fp32-packed-soa-compiler-source/source/src/sirius/kernels",
+  "profiles": [
+    {
+      "name": "retained_transport",
+      "definitions": [
+        "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42",
+        "-DSIRIUS_RETAINED_COEFFICIENTS=25",
+        "-DSIRIUS_RETAINED_REGISTERS=459",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+        "-DSIRIUS_RETAINED_LAYERS=117",
+        "-DSIRIUS_RETAINED_PREFIX=0"
+      ],
+      "general_table": {
+        "instructions": 2587,
+        "registers": 459,
+        "outputs": 40,
+        "layers": 117,
+        "prefix": 0,
+        "words": 13096
+      },
+      "schwarzschild_table": {
+        "instructions": 557,
+        "registers": 459,
+        "outputs": 40,
+        "layers": 42,
+        "prefix": 0,
+        "words": 2871
+      }
+    },
+    {
+      "name": "retained_endpoint",
+      "definitions": [
+        "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=11240",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=9903",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=84",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX=202",
+        "-DSIRIUS_RETAINED_REGISTERS=612",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+        "-DSIRIUS_RETAINED_LAYERS=111",
+        "-DSIRIUS_RETAINED_PREFIX=250"
+      ],
+      "general_table": {
+        "instructions": 2205,
+        "registers": 612,
+        "outputs": 100,
+        "layers": 111,
+        "prefix": 250,
+        "words": 11240
+      },
+      "schwarzschild_table": {
+        "instructions": 1943,
+        "registers": 612,
+        "outputs": 100,
+        "layers": 84,
+        "prefix": 202,
+        "words": 9903
+      }
+    },
+    {
+      "name": "retained_dense",
+      "definitions": [
+        "-DSIRIUS_RETAINED_REGISTERS=815",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+        "-DSIRIUS_RETAINED_LAYERS=163",
+        "-DSIRIUS_RETAINED_PREFIX=0"
+      ],
+      "general_table": {
+        "instructions": 6345,
+        "registers": 815,
+        "outputs": 40,
+        "layers": 163,
+        "prefix": 0,
+        "words": 31932
+      },
+      "schwarzschild_table": null
+    },
+    {
+      "name": "retained_initialize",
+      "definitions": [
+        "-DSIRIUS_RETAINED_REGISTERS=362",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+        "-DSIRIUS_RETAINED_LAYERS=73",
+        "-DSIRIUS_RETAINED_PREFIX=0"
+      ],
+      "general_table": {
+        "instructions": 1961,
+        "registers": 362,
+        "outputs": 40,
+        "layers": 73,
+        "prefix": 0,
+        "words": 9922
+      },
+      "schwarzschild_table": null
+    },
+    {
+      "name": "retained_dopri_phase",
+      "definitions": [
+        "-DSIRIUS_RETAINED_REGISTERS=629",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+        "-DSIRIUS_RETAINED_LAYERS=45",
+        "-DSIRIUS_RETAINED_PREFIX=0"
+      ],
+      "general_table": {
+        "instructions": 2088,
+        "registers": 629,
+        "outputs": 200,
+        "layers": 45,
+        "prefix": 0,
+        "words": 10689
+      },
+      "schwarzschild_table": null
+    }
+  ],
+  "optimizer_invoked": false,
+  "expected_products_per_profile": [
+    ".compiler.spv",
+    ".raw.spvasm",
+    ".spvasm",
+    ".spv",
+    ".final.spvasm"
+  ]
+}

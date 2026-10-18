@@ -1,0 +1,126 @@
+{
+  "schema": "sirius-native-RTConstant-independent-source-contract-review-v1",
+  "created_utc": "2026-10-18T08:30:24.510547+00:00",
+  "reviewer": "/root/divide_contract_review",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "review_passed": true,
+  "decision": "GUARDED_DIRECT_CONSTRUCTION_IS_A_PERMISSIBLE_SEMANTIC_REFINEMENT; ACTUAL_SAME_PROVIDER_WORD_EQUALITY_REMAINS_UNPROVED_AND_MANDATORY",
+  "candidate_pins": {
+    "original": {
+      "path": "out/native-constant-source-candidate/original-retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    "candidate": {
+      "path": "out/native-constant-source-candidate/retained_triple.slang",
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+    },
+    "patch": {
+      "path": "out/native-constant-source-candidate/source.patch",
+      "bytes": 948,
+      "sha256": "4963e8c082114a9108cd9d5bc55285799b50430bbb2c9eca8fe60077650017b1"
+    }
+  },
+  "exact_patch_review": {
+    "inverse_and_regenerated_patch_exact": true,
+    "only_changed_region": "RTConstant preprocessor guard plus explanatory comment; existing direct-construction statements and original RTPack fallback are unchanged.",
+    "all_other_source_bytes_exact": true,
+    "guard": "PORTABLE || (!FP64 && !STAGE7_OWNER)",
+    "precision_exclusions": "Portable modes retain their old direct branch. Native FP64 and native-owner retain old RTPack. Every admitted FMA recipe requires native FP64 at builder331-334, so admitted FMA is also excluded; no assertion about an unsupported FMA-without-FP64 macro combination.",
+    "no_new_mode_or_flag": "No SignedZeroInfNanPreserve requirement, relaxed flag, contraction, tolerance, ABI, fallback or other helper-body change."
+  },
+  "mathematical_and_spec_reasoning": [
+    "The existing raw magnitude bound is inclusive |x|<=2^120 (0x7b800000). It rejects all larger finite values, infinities and NaNs before construction. Dropping it or substituting only isfinite would be invalid. RTInvalid behavior remains exact.",
+    "For bounded finite nonzero binary32 x, the usual ordered IEEE/RTE/gradual-underflow chain has five value-pairs (0,0),(x,0),(0,0),(x,0),(0,0). Addition of zero is exact; cancellation residuals are zero; no overflow, discarded magnitude or nonzero arithmetic radius occurs. Either input zero sign has the valid canonical all-positive-zero result. Direct construction retains the represented x and radius0/valid1.",
+    "The ordinary native entrypoint has RTE32/DenormPreserve32 and NoContraction but not SignedZeroInfNanPreserve32. Vulkan assumes NSZ/NotInf/NotNaN in that environment. NoContraction prevents its specified arithmetic rearrangement permissions; it does not independently require signed-zero preservation.",
+    "Consequently the specified literal-positive-zero result is a valid refinement of the allowed constructor behavior. This is a value/allowed-behavior argument, not proof that every baseline driver lowering emits those identical zero words. An existential allowed result and universal equality to every lowering are different requirements.",
+    "No actual counterexample or differing device result has been established. Missing universal zero-word proof does not itself establish inequivalence. Downstream bitcasts/sign-bit operations make actual zero words observable, so concrete raw-word checks cannot be dismissed using NSZ."
+  ],
+  "public_contract_and_required_checks": {
+    "universal_baseline_lowering_zero_word_identity": "No such explicit requirement found in the reviewed retained public ABI, architecture/specification and relevant original tests. The API represents the complete finite expansion/radius and all original assertions remain binding; this is a bounded review, not a claim to exhaust every historical note.",
+    "concrete_word_contract": "Exact local input/recovery/readback/memcmp assertions do exist. Existing timestamp reader/comparator requires all32 full-buffer stage/length/hash records equal across actual baseline/candidate slots under the same native provider. Those prerequisites remain exact, including zero bits; no masking, tolerance or fixture rewriting is permitted.",
+    "public_zero_boundary": "The original projection test explicitly masks sign for selected zero low/tail limbs while independently requiring complete current valid/refused-row identity; other explicit {+0} arrays remain literal exact tests. This demonstrates contextual checks, not permission to normalize arbitrary outputs.",
+    "still_required": "Actual emitted/source/mode/refusal review and original eight controls plus sole22-gate ABBA, exact same-provider32-buffer equality, full40fields/7RHS/3trials/4quartics, all rollback/malformed-input rules and original guards. Any actual word mismatch fails this candidate even if the new program is otherwise Vulkan-legal.",
+    "no_current_admission": "This source review neither executes nor admits compilation/runtime/adoption, nor edits the earlier SOURCE_STOP/root-disposition record. ROOT can reconsider that source-stop premise using this narrower quantifier distinction."
+  },
+  "primary_source": {
+    "title": "Khronos Vulkan specification, Vulkan Environment for SPIR-V",
+    "url": "https://docs.vulkan.org/spec/latest/appendices/spirvenv.html",
+    "checked_utc": "2026-10-18T08:30:24.511033+00:00",
+    "sections": [
+      "Precision and Operation of SPIR-V Instructions: floating-point environment/NoContraction/SignedZeroInfNanPreserve",
+      "Precision of Individual Operations: correctly rounded/RoundingModeRTE"
+    ],
+    "finding": "Without a matching SignedZeroInfNanPreserve execution mode the environment assumes NSZ, NotInf and NotNaN. NoContraction does not add that missing preservation mode. RTE and denormal preservation remain separate requirements. Latest published specification was consulted; no installed-driver conformance or binary/source correspondence is newly established."
+  },
+  "source_references": [
+    {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd",
+      "reviewed_lines": "13-56: bounded pack/five normalizations/direct portable constructor;58-68:RTExact and sign-bit RTNegate"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "reviewed_lines": "5-55: magnitude-ordered native FastTwoSum;88:bitwise RPBounded"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "reviewed_lines": "24-46:native bitcasts and NoContraction Add/Sub;65:literal positive zero"
+    },
+    {
+      "path": "scripts/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e",
+      "reviewed_lines": "22-49:native RTE32/DenormPreserve32/NoContraction, SignedZeroInfNanPreserve only FMA;331-334:FMA requires native FP64"
+    },
+    {
+      "path": "src/sirius/backend/device.h",
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983",
+      "reviewed_lines": "77-81:ordinary native admission requires denormal+nearest controls"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.h",
+      "bytes": 15862,
+      "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1",
+      "reviewed_lines": "12-28: complete expansion/radius public ABI, not universal baseline-lowering bit identity"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566",
+      "reviewed_lines": "155-168:ordinary/portable/wide/FMA selection"
+    },
+    {
+      "path": "tests/backend/retained_compute_test.cpp",
+      "bytes": 339892,
+      "sha256": "abdc5cef56aa3a4409209797b37794553400b855b534204af6cabe583c4fdee1",
+      "reviewed_lines": "1975:normalized exact-zero;2948-2991:whole-row/recovery identity and explicit sign-insensitive metric-zero checks;3799-3840+3990-4033:complete readbacks/within-route exact repeats"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 50298,
+      "sha256": "bdba6209c2fb15640a33fac6d2555a51e9723d6abbfdec54e66751b2bc7c2b10",
+      "reviewed_lines": "186-206:retained finite arithmetic enclosures and unchanged admitted limbs"
+    },
+    {
+      "path": "docs/SPECIFICATION.md",
+      "bytes": 34237,
+      "sha256": "7ac39de4a130c18631761797e071f92aea988ec3741e3591312010207df681fb",
+      "reviewed_lines": "scientific/strict qualification boundaries; no reviewed clause mandates equality to every legal native zero-sign lowering"
+    },
+    {
+      "path": "attestations/qualification/5b2df58b/native-transport-validation-rejected/files/out/native-transport-validation-runtime-source/compare_native.py",
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "reviewed_lines": "35:all current records readbacks equal initial_data;57:all32 raw readbacks equality prerequisite"
+    }
+  ],
+  "limits_and_method": "Source/contract reasoning and exact private-patch inverse only; no performance/operation-saving/ISA claim (compiler may already remove identities). Passive source/hash/read-onlyGit plus the one requested primary specification page; no shader/helper/parser/compiler/provider/test execution, no numerical emulation, no canonical/mode/gate change. Only this review receipt written."
+}

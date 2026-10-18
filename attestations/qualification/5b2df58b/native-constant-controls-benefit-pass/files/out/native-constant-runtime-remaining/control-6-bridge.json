@@ -1,0 +1,284 @@
+{
+  "source_revision": "d2e1a265106a8b27e976ccb47cef6303aaa51746",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "kind": "control-6",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-constant-runtime-remaining\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-constant-matched-d2e1a265\\payload\\candidate' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-constant-runtime-remaining\\native\\control-6' -Filter 'RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-constant-runtime-remaining\\control-6' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-constant-matched-d2e1a265' -ExpectedManifestSha256 '601519d7bb77013959a090a7f8860a903fc79f023f42eae8ec037a7bc03a8898' -ExpectedProducerSha256 'fa04d860b2c8fcae2cc475f70d44691accd68b3b1bd9a0302777fb7c64b6ced5' -Arm 'candidate' -LiveRevision '5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e' -ExecutableName 'original_candidate_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+  ],
+  "binding_sha256": "56da904f7d2219d089a4eece642ffa7231bb0b9001cfef27c1c60c5110a41159",
+  "linux_controller_pid": 12918,
+  "linux_controller_birth": "18798257",
+  "predecessor_inputs": {
+    "out/native-constant-runtime-remaining/control-1-bridge.json": {
+      "bytes": 2882,
+      "sha256": "b8a5a2985db2258426d6cdfacc475e4e19fe79dcc9029f2bc3a5711d76e8fa1e"
+    },
+    "out/native-constant-runtime-remaining/native/control-1/owner.json": {
+      "bytes": 3632,
+      "sha256": "7eb01442194aebe3760e1dc05894e7f12ceba7141e37497a085785520c8e6ac8"
+    },
+    "out/native-constant-runtime-remaining/native/control-1/stdout.log": {
+      "bytes": 756,
+      "sha256": "8f54d0c14b317ca4ee138cf58e90fe4add230ed609f3eeb2203b421d4f167cd5"
+    },
+    "out/native-constant-runtime-remaining/native/control-1/stderr.log": {
+      "bytes": 6823,
+      "sha256": "4e1067943b176d8be85148c3a8e3f6aa31e36cf5d1982b650298b05b8ec78c53"
+    },
+    "out/native-constant-runtime-remaining/native/control-1/memory.json": {
+      "bytes": 5152,
+      "sha256": "27c092c54ceb1c7b4bfb537d6a2a4f9f45712d361c524b8d95d11f4267c97a4d"
+    },
+    "out/native-constant-runtime-remaining/control-1-inputs-before.json": {
+      "bytes": 178760,
+      "sha256": "4590966ec278e7cd0f059818b00b197c7f7c62b7fb79fbf96d1421c61b91dd09"
+    },
+    "out/native-constant-runtime-remaining/control-1-inputs-after.json": {
+      "bytes": 178760,
+      "sha256": "4590966ec278e7cd0f059818b00b197c7f7c62b7fb79fbf96d1421c61b91dd09"
+    },
+    "out/native-constant-runtime-remaining/native/control-1/gtest.xml": {
+      "bytes": 5558,
+      "sha256": "ba53915dea1e112f096c6a8025137142bdf537cc09a232da92fc8baa43842016"
+    },
+    "out/native-constant-runtime-remaining/native/control-1/driver-modules.json": {
+      "bytes": 693,
+      "sha256": "3e1bb7422505623194c04d65258795fb88a2f60d141d1b2c4c0e36aaf90ec064"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-1.json": {
+      "bytes": 4075,
+      "sha256": "726a28bd787c0a2bafcab761e98e14c486151569e62d5749571f662573de1eb9"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-1-bridge.json": {
+      "bytes": 2400,
+      "sha256": "fad01f155fd55236efc7739d3e2d1d3684b6a468329bb18823a4f9b65d5564d2"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-1-accepted.json": {
+      "bytes": 9127,
+      "sha256": "e9884ae20cb3339275c4873ca8de784c1837082bf7e22ac8dfe98b54456ab402"
+    },
+    "out/native-constant-runtime-remaining/control-2-bridge.json": {
+      "bytes": 5113,
+      "sha256": "4791769c06cb435bbf7aa031227f29ad2ab4f13342e98464cc46105a6d3aebb6"
+    },
+    "out/native-constant-runtime-remaining/native/control-2/owner.json": {
+      "bytes": 3618,
+      "sha256": "9b6c3e442f4883c215d66a28c781f359a53c0a516a41ca5cff5b31d94c42ef53"
+    },
+    "out/native-constant-runtime-remaining/native/control-2/stdout.log": {
+      "bytes": 735,
+      "sha256": "4e05df9e119bce1167914e0dce3d256ee929c9ba3aa79e653b6a1ea3d184e2d9"
+    },
+    "out/native-constant-runtime-remaining/native/control-2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-constant-runtime-remaining/native/control-2/memory.json": {
+      "bytes": 4784,
+      "sha256": "48da3d6e12db46588ec9cc16205e7ac8f197f7be5ebce801a030cf0d7819ce2a"
+    },
+    "out/native-constant-runtime-remaining/control-2-inputs-before.json": {
+      "bytes": 180906,
+      "sha256": "f6c5de447ca68366f93d1d1a9e6d152b5ce8e6148959728eddaabd0922e29004"
+    },
+    "out/native-constant-runtime-remaining/control-2-inputs-after.json": {
+      "bytes": 180906,
+      "sha256": "f6c5de447ca68366f93d1d1a9e6d152b5ce8e6148959728eddaabd0922e29004"
+    },
+    "out/native-constant-runtime-remaining/native/control-2/gtest.xml": {
+      "bytes": 647,
+      "sha256": "abfb4a70a76c4d7cce17e1ae9de23f99f780de23e877f0454cfcff932f66d267"
+    },
+    "out/native-constant-runtime-remaining/native/control-2/driver-modules.json": {
+      "bytes": 693,
+      "sha256": "3e1bb7422505623194c04d65258795fb88a2f60d141d1b2c4c0e36aaf90ec064"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-2.json": {
+      "bytes": 4075,
+      "sha256": "18a37d67e2d56c1fc95750bfb9abd77d1e7cc5e2ad32fed64d6c40d179f4aba6"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-2-bridge.json": {
+      "bytes": 2399,
+      "sha256": "64065ebed7f3ab5c09f0b4fa8d0c021250b506f7c0967268507ad805c7db980b"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-2-accepted.json": {
+      "bytes": 11529,
+      "sha256": "c006c821d5ceb4eba0e0313dcba7114d6e0f6652cebd71ada7b3eea9e629b3d9"
+    },
+    "out/native-constant-runtime-remaining/control-3-bridge.json": {
+      "bytes": 7364,
+      "sha256": "acd82f7f102ac1df729b91863cd140f919d0ef6ab83796607ec516d5cbe0c3b8"
+    },
+    "out/native-constant-runtime-remaining/native/control-3/owner.json": {
+      "bytes": 3620,
+      "sha256": "00fb9dc7e303f557ffedfa9420b25df1bfaa5178c6df69527459e558ba9d51e4"
+    },
+    "out/native-constant-runtime-remaining/native/control-3/stdout.log": {
+      "bytes": 747,
+      "sha256": "4761d962695c79e7f70b9ce1220dc6d1106bade4f413e031a4a2bd6e30edef19"
+    },
+    "out/native-constant-runtime-remaining/native/control-3/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-constant-runtime-remaining/native/control-3/memory.json": {
+      "bytes": 409,
+      "sha256": "c72ee9cd289f3c5e4e37bf9d4834d1ec0d9607449805a6bfc939cd1c2a124c72"
+    },
+    "out/native-constant-runtime-remaining/control-3-inputs-before.json": {
+      "bytes": 183049,
+      "sha256": "55ded7917a7cfa584676d4b9e00cb4a4bd888d6c8f092733ad5a9bf0cda210e6"
+    },
+    "out/native-constant-runtime-remaining/control-3-inputs-after.json": {
+      "bytes": 183049,
+      "sha256": "55ded7917a7cfa584676d4b9e00cb4a4bd888d6c8f092733ad5a9bf0cda210e6"
+    },
+    "out/native-constant-runtime-remaining/native/control-3/gtest.xml": {
+      "bytes": 992,
+      "sha256": "24d404b99e90b7f9c033d2605dabebc38b9cc5d8b137978699e1bc3eccfdd3bc"
+    },
+    "out/native-constant-runtime-remaining/native/control-3/driver-modules.json": {
+      "bytes": 693,
+      "sha256": "3e1bb7422505623194c04d65258795fb88a2f60d141d1b2c4c0e36aaf90ec064"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-3.json": {
+      "bytes": 4075,
+      "sha256": "8d3ede1384919096970e022b08f15a23767e93dd228909d8e3edacd449930320"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-3-bridge.json": {
+      "bytes": 2400,
+      "sha256": "7c12acf3e484e19f367f2c4112677388b61ee6d4c4b3aa40e7417f215846711f"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-3-accepted.json": {
+      "bytes": 13979,
+      "sha256": "e10a030c1dfc0c6468a74f00203259d2405915c116ffd10e6c5474284c6c43e9"
+    },
+    "out/native-constant-runtime-remaining/control-4-bridge.json": {
+      "bytes": 9564,
+      "sha256": "aeb7d11f32c90fc4e04b82a64e68146fb50b58145526617e55feff0e9d9e1729"
+    },
+    "out/native-constant-runtime-remaining/native/control-4/owner.json": {
+      "bytes": 3583,
+      "sha256": "99e8244f04578f61410f802d97b6c1dd4f81f194494e5b3fb7a927198ea5d335"
+    },
+    "out/native-constant-runtime-remaining/native/control-4/stdout.log": {
+      "bytes": 689,
+      "sha256": "dcf10a941c64a6c9c91002c86d261367941dcc330a40f151f26b455f796509b6"
+    },
+    "out/native-constant-runtime-remaining/native/control-4/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-constant-runtime-remaining/native/control-4/memory.json": {
+      "bytes": 687,
+      "sha256": "38bcbb9454d0c4dd41301eceaca7f912734a99331c6509db1219194b2dd71e25"
+    },
+    "out/native-constant-runtime-remaining/control-4-inputs-before.json": {
+      "bytes": 185191,
+      "sha256": "13e6bf439356cbb7f730e9eb5afde572f67af08709597dc4750ce54529fe1f48"
+    },
+    "out/native-constant-runtime-remaining/control-4-inputs-after.json": {
+      "bytes": 185191,
+      "sha256": "13e6bf439356cbb7f730e9eb5afde572f67af08709597dc4750ce54529fe1f48"
+    },
+    "out/native-constant-runtime-remaining/native/control-4/gtest.xml": {
+      "bytes": 600,
+      "sha256": "4eb9c7890473c66a51a6e39ccbf058cd5084c60b019f190b368ee7f8e464fac1"
+    },
+    "out/native-constant-runtime-remaining/native/control-4/driver-modules.json": {
+      "bytes": 693,
+      "sha256": "3e1bb7422505623194c04d65258795fb88a2f60d141d1b2c4c0e36aaf90ec064"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-4.json": {
+      "bytes": 4075,
+      "sha256": "fc69897d27ef5d1035444cf64ab0e50234a9eb60b6c115752d7dbf748ce93432"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-4-bridge.json": {
+      "bytes": 2400,
+      "sha256": "e5b5840578876482c52b4c516156b55ebd40e5088aff1266d85768d38ef02e75"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-4-accepted.json": {
+      "bytes": 16315,
+      "sha256": "5baa044dc1042e679ca0ad44f24d6ee414d4c237c7c564795194f9d0f461ef5a"
+    },
+    "out/native-constant-runtime-remaining/control-5-bridge.json": {
+      "bytes": 11821,
+      "sha256": "61ecf9617b9847037959c517460417820066427d1ba49876fa15f48525ae31d8"
+    },
+    "out/native-constant-runtime-remaining/native/control-5/owner.json": {
+      "bytes": 3612,
+      "sha256": "2f1b137e2d8ed4a2a33d4cd6c3beccce96969358feb18cab3e2f106360d8f23d"
+    },
+    "out/native-constant-runtime-remaining/native/control-5/stdout.log": {
+      "bytes": 722,
+      "sha256": "e0a63f6070f132596bb49fc7ba3b77b864e697e8d558b8c4f529c5848826e897"
+    },
+    "out/native-constant-runtime-remaining/native/control-5/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-constant-runtime-remaining/native/control-5/memory.json": {
+      "bytes": 2467,
+      "sha256": "e68f17872644bba001fdc0e139bba34bfcbc0ccd79a3381f6e159020d3596849"
+    },
+    "out/native-constant-runtime-remaining/control-5-inputs-before.json": {
+      "bytes": 187333,
+      "sha256": "ebc7702396b2bde170a08b7372aa44c85ef9369e9a2fc0410ae018598b3186ac"
+    },
+    "out/native-constant-runtime-remaining/control-5-inputs-after.json": {
+      "bytes": 187333,
+      "sha256": "ebc7702396b2bde170a08b7372aa44c85ef9369e9a2fc0410ae018598b3186ac"
+    },
+    "out/native-constant-runtime-remaining/native/control-5/gtest.xml": {
+      "bytes": 612,
+      "sha256": "c310e0c8f0f20dc57001b7c78bf876144c5936c2ed2a484abb3efaf546b19fd1"
+    },
+    "out/native-constant-runtime-remaining/native/control-5/driver-modules.json": {
+      "bytes": 693,
+      "sha256": "3e1bb7422505623194c04d65258795fb88a2f60d141d1b2c4c0e36aaf90ec064"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-5.json": {
+      "bytes": 4075,
+      "sha256": "829f21908890592622947a5143f106413c68f9f0ae1e4e8a11fc505d74e28686"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-5-bridge.json": {
+      "bytes": 2400,
+      "sha256": "f6fa2b3fda6041b45876ecb41bfadd623fffd5a0dccdf75b9b018e23b1eb0efa"
+    },
+    "out/native-constant-runtime-remaining/terminal-control-5-accepted.json": {
+      "bytes": 18805,
+      "sha256": "db1dcce09b51b1cdf72d94557e942440e0b07388dededb51166cdd51bc0336ab"
+    }
+  },
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 300,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 19804448,
+  "linux_child_pid": 13034,
+  "linux_child_birth": "18798892",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "original_control_identity": {
+    "test": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+    "arm": "candidate"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 17.33721207099734,
+  "signals": []
+}

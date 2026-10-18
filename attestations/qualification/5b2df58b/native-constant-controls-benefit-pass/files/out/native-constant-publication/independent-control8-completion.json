@@ -1,0 +1,132 @@
+{
+  "schema": "sirius-native-constant-independent-control8-completion-v1",
+  "passed": true,
+  "audit_completed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "created_utc": "2026-10-18T09:14:29.540647+00:00",
+  "source_revision": "d2e1a265106a8b27e976ccb47cef6303aaa51746",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "original_controls_passed": 1,
+  "case": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+  "actual": {
+    "zero_failures_errors_skips_disabled": true,
+    "test_seconds": 50.079,
+    "Windows_owner_seconds": 51.7622869,
+    "Windows_peak_sampled_child_WorkingSet_bytes": 466407424,
+    "bridge_seconds": 60.815577551024035,
+    "terminal_seconds": 1.5041413589788135,
+    "actual_before_after_rows": 959,
+    "reader_context_files": 977,
+    "complete_unmasked_readback_records": 32,
+    "ordered_markers": 51,
+    "executed_module_joins": 54,
+    "selected_candidate_arrays": [
+      "kTransportShader",
+      "kEndpointShader",
+      "kDenseShader",
+      "kInitializeShader",
+      "kDopriPhaseShader"
+    ]
+  },
+  "ownership": {
+    "Windows_test_birth": [
+      15680,
+      "2026-10-18T09:09:21.1327737Z"
+    ],
+    "Windows_owner_birth": [
+      19116,
+      "2026-10-18T09:09:10.4953742Z"
+    ],
+    "terminal_recorded_births_absent": true,
+    "bridge_and_auditor_Linux_child_births_recorded_absent": true,
+    "cleanup_errors": [],
+    "accessible_consumer_matches": [],
+    "inaccessible_field_records": 189,
+    "global_absence_claimed": false
+  },
+  "provider": [
+    {
+      "name": "vulkan-1.dll",
+      "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-constant-matched-d2e1a265\\payload\\candidate\\vulkan-1.dll",
+      "bytes": 1685432,
+      "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+      "version": "1.4.357.0"
+    },
+    {
+      "name": "amdvlk64.dll",
+      "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+      "bytes": 103213064,
+      "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+      "version": "9.2.10.395"
+    }
+  ],
+  "checks": "Exact accepted rawowner/bridge/9whole-output seals and terminal hashes match. Original single XML case fullyrun zeroFESD; no guard stop. Same held-child SDK1.4.357 loader and AMD9.2.10.395 modules join postseals. RawXML32fullbuffer stage/size/hash fields equal acceptance with no masking; all51ordered marker values/timestamp arithmetic and54executed module identities join rawXML and actual candidate array authority. Original fixture assertions passed. Before/after959input maps equal;977context closure as frozen reader admission.",
+  "limits": "Quick passive completion audit; no whole977file rehash/new host/provider query while ABBA prepares. Uses saved actual before/after and accepted reader/terminal seals. Timestamp is candidate-only; cross-arm32buffer equality remains soleABBA gate. Context FP64/RTE64 describes required reported capability, not actual wide-control execution. No ABBA/performance/remaining7/fullqualification/adoption claim.",
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "remaining_seven_controls_passed": false,
+  "benefit_admitted": false,
+  "workloads_or_readers_rerun_by_reviewer": false,
+  "critical_pins": {
+    "acceptance": {
+      "path": "out/native-constant-timestamp-evidence/timestamp-acceptance.json",
+      "bytes": 53118,
+      "sha256": "8162cabf5c7b0e672e94e2793a0515bccc2cd247517a7a2ace777262e5151531"
+    },
+    "reader_context": {
+      "path": "out/native-constant-timestamp-evidence/reader-bindings.json",
+      "bytes": 173288,
+      "sha256": "15e274aadc5e17edf3fcf12e2e3f7c9bfc1cc2b501fd102b33943beb14010ad7"
+    },
+    "reader_admission": {
+      "path": "out/native-constant-timestamp-evidence/root-admission.json",
+      "bytes": 366,
+      "sha256": "148decf81d67ee827bb1500765292b99b51f2f1d11ba01fb60086b4af44b869d"
+    },
+    "owner": {
+      "path": "out/native-constant-runtime-timestamp/native/control-8/owner.json",
+      "bytes": 3597,
+      "sha256": "84f10058f190d6e476e203c7d0e57768363c2778ea4dd590a5c7921be234f592"
+    },
+    "XML": {
+      "path": "out/native-constant-runtime-timestamp/native/control-8/gtest.xml",
+      "bytes": 40766,
+      "sha256": "5ab702df952c3ea700967d45a316709204ea5e0f6e4cb9b6d5eb5576d5503e32"
+    },
+    "provider": {
+      "path": "out/native-constant-runtime-timestamp/native/control-8/driver-modules.json",
+      "bytes": 693,
+      "sha256": "3e1bb7422505623194c04d65258795fb88a2f60d141d1b2c4c0e36aaf90ec064"
+    },
+    "bridge": {
+      "path": "out/native-constant-runtime-timestamp/control-8-bridge.json",
+      "bytes": 2855,
+      "sha256": "6c3319bae15d69535d7fed6ad21b2b35c50174fa368f08cf0a8f87bb4d45702f"
+    },
+    "terminal": {
+      "path": "out/native-constant-runtime-timestamp/terminal-control-8.json",
+      "bytes": 4076,
+      "sha256": "963bf34eb9202edf939c971a56c62411d986701709ce9b5a007622993d3253bf"
+    },
+    "terminal_bridge": {
+      "path": "out/native-constant-runtime-timestamp/terminal-control-8-bridge.json",
+      "bytes": 2400,
+      "sha256": "0846ced0ae8018f898b2b57fe05365d21e34143aea0c0d23ed68c61e2a906a14"
+    },
+    "accepted": {
+      "path": "out/native-constant-runtime-timestamp/terminal-control-8-accepted.json",
+      "bytes": 9049,
+      "sha256": "0bc1f04c497acf81daedd0a3aca1792427bde4844b61657afbf882d3ad61bbd3"
+    },
+    "before": {
+      "path": "out/native-constant-runtime-timestamp/control-8-inputs-before.json",
+      "bytes": 159914,
+      "sha256": "9b7e152ecaf81dad6bccd8e91e25c64a657b208dd824b31f5e3f2b1c145afcb0"
+    },
+    "after": {
+      "path": "out/native-constant-runtime-timestamp/control-8-inputs-after.json",
+      "bytes": 159914,
+      "sha256": "9b7e152ecaf81dad6bccd8e91e25c64a657b208dd824b31f5e3f2b1c145afcb0"
+    }
+  }
+}

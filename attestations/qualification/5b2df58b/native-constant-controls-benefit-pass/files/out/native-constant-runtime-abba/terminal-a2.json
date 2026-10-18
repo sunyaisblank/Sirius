@@ -1,0 +1,65 @@
+﻿{
+    "schema_version":  1,
+    "kind":  "terminal ownership/provider seal audit",
+    "run":  "native/a2",
+    "births":  [
+                   {
+                       "kind":  "owner",
+                       "pid":  13032,
+                       "recorded_start_utc":  "2026-10-18T09:16:26.8455755Z",
+                       "pid_currently_live":  false,
+                       "owned_birth_absent":  true
+                   },
+                   {
+                       "kind":  "test",
+                       "pid":  17032,
+                       "recorded_start_utc":  "2026-10-18T09:16:49.5983101Z",
+                       "pid_currently_live":  false,
+                       "owned_birth_absent":  true
+                   }
+               ],
+    "loaded_module_post_seals":  [
+                                     {
+                                         "path":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-constant-matched-d2e1a265\\payload\\baseline\\vulkan-1.dll",
+                                         "expected_sha256":  "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+                                         "post_sha256":  "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+                                         "expected_bytes":  1685432,
+                                         "post_bytes":  1685432,
+                                         "unchanged":  true
+                                     },
+                                     {
+                                         "path":  "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+                                         "expected_sha256":  "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+                                         "post_sha256":  "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+                                         "expected_bytes":  103213064,
+                                         "post_bytes":  103213064,
+                                         "unchanged":  true
+                                     }
+                                 ],
+    "owned_executable_post_seal":  {
+                                       "path":  "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-constant-matched-d2e1a265\\payload\\baseline\\original_baseline_controls.exe",
+                                       "sha256":  "ab735feb377b0dcee909cf19bededcbb53160fdec537f20183a7f311d670dd09",
+                                       "unchanged":  true
+                                   },
+    "owned_births_absent":  true,
+    "all_observed_module_seals_match":  true,
+    "actual_loaded_modules_observed":  true,
+    "installed_loader_input":  {
+                                   "path":  "C:\\WINDOWS\\System32\\vulkan-1.dll",
+                                   "bytes":  1719408,
+                                   "sha256":  "45ee2efc5c6d3986da8181775610f308122c752e55e703340d9733bbbc4b9f1a",
+                                   "version":  "1.4.341.0",
+                                   "scope":  "Installed file input only; does not establish it was mapped by the inventory process."
+                               },
+    "consumer_scan":  {
+                          "processes":  276,
+                          "hidden_field_records":  189,
+                          "matches":  [
+
+                                      ],
+                          "accessible_compilers":  [
+
+                                                   ]
+                      },
+    "scope":  "Inventory only; absent short-lived module capture is explicitly incomplete loaded-provider evidence. Installed loader bytes do not replace it. Normal completion required. Accessible command/executable scan only; no handle enumeration, unconditional compiler-descendant guard ownership or all-consumer absence claim."
+}

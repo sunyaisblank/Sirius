@@ -1,0 +1,126 @@
+{
+  "schema": "sirius-native-RTConstant-semantic-refinement-review-v1",
+  "created_utc": "2026-10-18T08:29:14.920848+00:00",
+  "reviewer": "/root/sanitizer_gate_contract",
+  "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "passed": true,
+  "decision": "BOUNDED_NATIVE32_CONSTRUCTION_IS_LEGAL_SEMANTIC_REFINEMENT",
+  "scope": "Bounded source/specification and exact ROOT candidate review only; no patch authored by reviewer, compilation, emitted proof, runtime or cost admission.",
+  "prior_finding_preserved": {
+    "path": "out/native-constant-source-review/findings.json",
+    "bytes": 6717,
+    "sha256": "26e618d6ae5f2f6a6de39c32cf9c0277e59253d6dc1aade8c6564a258a5ea040"
+  },
+  "correction": "The historical SOURCE_STOP required equality with every admissible original native lowering. That stronger-than-contract prerequisite is withdrawn. The original finding/root disposition remain unchanged; no counterexample was established.",
+  "specification": {
+    "url": "https://docs.vulkan.org/spec/latest/appendices/spirvenv.html",
+    "rule": "Without explicit fast-math environment or SignedZeroInfNanPreserve for the width, Vulkan assumes NSZ/NotInf/NotNaN independently of NoContraction. DenormPreserve retains subnormals; FAdd/FSub are correctly rounded under RTE. Exact bounded simplification introduces no reassociation or mode change. Applying this rule below is reviewer inference."
+  },
+  "proof": {
+    "bounded_nonzero": "Magnitude <=0x7b800000 means finite |x|<=2^120. For nonzero x, native RTPack(x,+0,+0,+0) has five numerical TwoSum pairs (0,0),(x,0),(0,0),(x,0),(0,0). x+0 and x-x are exact, including subnormal x under DenormPreserve; no overflow, residual or radius is introduced. Direct [x,+0,+0,+0,1] is a permitted refinement.",
+    "signed_input_zero": "Direct [+0,+0,+0,+0,1] for either input-zero sign is likewise permitted by NSZ. The original RTE zero-tail chain admits these words (ordinary IEEE RTE -0 + +0 is +0). Zero fallback is not required by the inspected boundary. This does not prove every prior native lowering selected these words.",
+    "invalid": "The unchanged bit bound rejects all nonfinite and >2^120 inputs to exactly the original RTInvalid fields. No mere-finite widening or exceptional behavior change is justified.",
+    "contract": "RetainedValue exposes all three limbs and radius (20 bytes); IsRepresented checks finite bounds, validity, nonnegative radius and spacing. RTExact uses numeric zero equality. RPBits/RTNegate can observe zero signs, but do not upgrade the declared arithmetic environment to universal old-driver equality.",
+    "precise_boundary": "Existing memcmp ownership/capsule/repeat checks remain exact within actual executions. No requirement for bit equality across every admissible native lowering was found in these inspected declarations/tests."
+  },
+  "candidate": {
+    "author": "ROOT; reviewer authored no patch",
+    "pins": [
+      {
+        "path": "out/native-constant-source-candidate/original-retained_triple.slang",
+        "bytes": 15360,
+        "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+      },
+      {
+        "path": "out/native-constant-source-candidate/retained_triple.slang",
+        "bytes": 15525,
+        "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+      },
+      {
+        "path": "out/native-constant-source-candidate/source.patch",
+        "bytes": 948,
+        "sha256": "4963e8c082114a9108cd9d5bc55285799b50430bbb2c9eca8fe60077650017b1"
+      }
+    ],
+    "original_equals_current_canonical": true,
+    "patch_exact_unified_diff": true,
+    "inverse_one_directive_comment_replacement_restores_all_original_bytes": true,
+    "actual_delta": "One preprocessor condition and its comment; constructor statements, bound, fields, all remaining functions/math and original fallback body are byte-exact.",
+    "preprocessor_scope": "PORTABLE selects the existing direct body identically. Otherwise direct construction is newly selected only with neither FP64 nor STAGE7_OWNER. Original FP64 branch remains RTPack. Actual supported FMA requires FP64 and nonportable at build-retained-kernels.py:331-334, so FMA remains excluded; unsupported FMA-without-FP64 is not inferred as an admitted product.",
+    "signed_zero_fallback_required_by_inspected_contract": false,
+    "candidate_source_refinement_passed": true
+  },
+  "unchanged_empirical_gate": {
+    "authority": "native_evidence.py:343-359 and compare_native.py:16-39,57-58; current original timestamp case retained_compute_test.cpp:3768-3838,3906-4028.",
+    "requirement": "Exactly 32 full-buffer stage/size/SHA records (21 legacy+11 coupled) must equal across control-8 and sole A1/B1/B2/A2, alongside original marker/module/identity/numerical checks. Existing timestamp-enabled/disabled byte comparisons also remain. There is no signed-zero exemption. A legal refinement that changes actual bytes fails this empirical gate.",
+    "all_original_numerical_and_22_benefit_gates_remain": true
+  },
+  "limits": {
+    "universal_old_driver_word_equality_asserted": false,
+    "actual_native_equality_established": false,
+    "compiler_may_already_simplify": true,
+    "performance_established": false,
+    "execution_or_adoption_authorized": false,
+    "source_modes_gates_changed_by_reviewer": false,
+    "project_helper_import_compiler_provider_test_executed": false
+  },
+  "source_pins": [
+    {
+      "path": "src/sirius/kernels/retained_triple.slang",
+      "bytes": 15360,
+      "sha256": "5a4a948a2527526644ec7b82a6e18409577debe997ae47be899cdecb8f4654bd"
+    },
+    {
+      "path": "src/sirius/kernels/retained_pair.slang",
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    {
+      "path": "src/sirius/kernels/retained_scalar.slang",
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    {
+      "path": "scripts/build-retained-kernels.py",
+      "bytes": 35006,
+      "sha256": "5def59f8c5195af2035c4b9b823f7eb09eadb9119cb9012178b0cfd6981d818e"
+    },
+    {
+      "path": "src/sirius/backend/device.h",
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.h",
+      "bytes": 15862,
+      "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    {
+      "path": "tests/backend/retained_compute_test.cpp",
+      "bytes": 339892,
+      "sha256": "abdc5cef56aa3a4409209797b37794553400b855b534204af6cabe583c4fdee1"
+    },
+    {
+      "path": "attestations/qualification/5b2df58b/native-transport-validation-rejected/files/out/native-transport-validation-runtime-source/native_evidence.py",
+      "bytes": 29429,
+      "sha256": "0116b87ac2bc300fec368ec9ade67e1c004132a8f160d59a523a9288e2300e95"
+    },
+    {
+      "path": "attestations/qualification/5b2df58b/native-transport-validation-rejected/files/out/native-transport-validation-runtime-source/compare_native.py",
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe"
+    }
+  ],
+  "workspace": {
+    "tracked_tree_clean": true,
+    "branch": "development/minimum-step-floor-2026-10-15",
+    "HEAD_equals_upstream": true,
+    "sole_worktree": "/home/astra/.project/Sirius",
+    "new_review_committed_or_pushed": false
+  }
+}

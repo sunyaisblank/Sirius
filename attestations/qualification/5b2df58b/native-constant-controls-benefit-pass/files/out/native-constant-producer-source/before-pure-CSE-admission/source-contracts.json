@@ -1,0 +1,107 @@
+{
+  "schema": "sirius-native-constant-composer-source-v1",
+  "source_only": true,
+  "admitted": false,
+  "author": "/root/divide_contract_review",
+  "canonical_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "origin": {
+    "path": "attestations/qualification/5b2df58b/native-packed-soa-rejected/files/out/native-fp32-packed-soa-producer-source/compose_inputs.py",
+    "bytes": 12202,
+    "sha256": "71c8080460961b12834c0adb25b4a8607647117bd7db1d4cf0160015eb74b323"
+  },
+  "origin_archive_commit": "06376a05a74af6f3d410bac142a0771372054f40",
+  "candidate_source_contract": {
+    "path": "out/native-constant-source-candidate/source-contracts.json",
+    "bytes": 3537,
+    "sha256": "6d4a74e7208bd11c532a9363c7b9acea66fc2db99159d382e592c26efce248fe"
+  },
+  "candidate_source_freeze": {
+    "path": "out/native-constant-source-candidate/source-freeze.json",
+    "bytes": 669,
+    "sha256": "f15d2fd681999b28a3394d606dc39d319a8eb3644740e21ac5ac69a5a463875e"
+  },
+  "deltas": [
+    {
+      "old": "sirius-native-packed-soa-emitted-admission-v1",
+      "new": "sirius-native-constant-emitted-admission-v1",
+      "occurrences": 2
+    },
+    {
+      "old": "outside_helper_functions_alpha_exact",
+      "new": "outside_RTConstant_functions_alpha_exact",
+      "occurrences": 2
+    },
+    {
+      "old": "packed_component_major_address_validated",
+      "new": "bounded_native_constructor_refinement_validated",
+      "occurrences": 2
+    },
+    {
+      "old": "out/native-fp32-packed-soa-compiler-source/candidate",
+      "new": "out/native-constant-compiler-source/candidate",
+      "occurrences": 1
+    },
+    {
+      "old": "out/native-fp32-packed-soa-producer-inputs",
+      "new": "out/native-constant-producer-inputs",
+      "occurrences": 1
+    },
+    {
+      "old": "sirius-native-packed-soa-five-compiler-products-v1",
+      "new": "sirius-native-constant-five-compiler-products-v1",
+      "occurrences": 1
+    },
+    {
+      "old": "    read(COMPILE.parent / \"source/src/sirius/kernels/retained_scratch.slang\", {\n        \"bytes\": 2264, \"sha256\": \"c4261ae5201e4d627b5b02d6181fe8ecdd5f90b363eab92105cacfb2c96d7841\"})",
+      "new": "    read(COMPILE.parent / \"source/src/sirius/kernels/retained_triple.slang\", {\n        \"bytes\": 15525, \"sha256\": \"c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426\"})\n    read(COMPILE.parent / \"source/src/sirius/kernels/retained_scratch.slang\", {\n        \"bytes\": 892, \"sha256\": \"cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8\"})",
+      "occurrences": 1
+    },
+    {
+      "old": "sirius-native-packed-soa-diagnostic-input-composition-v1",
+      "new": "sirius-native-constant-diagnostic-input-composition-v1",
+      "occurrences": 1
+    },
+    {
+      "old": "Five new compiler/emitted-reviewed ordinary nativeFP32 SPVs composed with current5b2 canonical baseline.",
+      "new": "Five new compiler/emitted-reviewed ordinary nativeFP32 RTConstant SPVs composed with current5b2 canonical unpacked baseline.",
+      "occurrences": 1
+    }
+  ],
+  "inverse_exact": true,
+  "all_non_main_helpers_and_decimal_formatter_ASTs_exact": true,
+  "admission": {
+    "schema": "sirius-native-constant-emitted-admission-v1",
+    "source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+    "required_true": [
+      "passed",
+      "outside_RTConstant_functions_alpha_exact",
+      "public_ABI_equal",
+      "bounded_native_constructor_refinement_validated"
+    ],
+    "rich_pins": [
+      "compiler_owner",
+      "compiler_products",
+      "command_results"
+    ],
+    "modules_exact": [
+      "retained_transport.spv",
+      "retained_endpoint.spv",
+      "retained_dense.spv",
+      "retained_initialize.spv",
+      "retained_dopri_phase.spv"
+    ],
+    "products_schema": "sirius-native-constant-five-compiler-products-v1",
+    "actual_tool_calls": 25,
+    "state": "ROOT_PENDING actual emitted review/admission. Compiler schema/25 calls confirmed with compiler author; no current product result invented."
+  },
+  "source_pins_checked_by_composer": "Private compiled retained_triple.slang15525B c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426 and canonical unpacked retained_scratch.slang892B cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8.",
+  "baseline_authority": {
+    "path": "out/native-fp32-packed-scratch-producer-inputs/root-composed-inputs.json",
+    "bytes": 30848,
+    "sha256": "5d4062652bcad0e10807c8195b6279d05f9fd5a2a9dbad592424d1f977da5922"
+  },
+  "unchanged_baseline": "Exactly inherited canonical38files+observerc948 from authority5d406; match each baseline against current5b2canonical product. Old rejected candidate arm never read.",
+  "output": "Only out/native-constant-producer-inputs, exclusive absent-directory creation. Original77payload layout/mode0o644 retained: baseline38/candidate38/observer1 plus separate composition report. Replace complete five named native arrays and their five shader files; outside declaration text exact,35other main arrays/seven tables/30excluded SPVs/2owner payloads/layout/c948observer exact.",
+  "unchanged_requirements": "Native constructor semantic refinement is not current raw-word equality. Original same-provider32complete-buffer equality,all8 scientific/refusal/recovery controls,sole22numericgates/ABBA,original guards/cache/modes remain exact. Any actual zero-word mismatch fails. No output/materialization/build/provider/benefit/adoption authority supplied here.",
+  "method": "Source copying/literal inverse/builtin AST only; no composer/helper import or execution,compiler/provider/test/network/Git mutation or old/canonical packet edit."
+}

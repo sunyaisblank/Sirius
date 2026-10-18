@@ -1,0 +1,23 @@
+--- originals/compile_five.py
++++ compile_five.py
+@@ -44,7 +44,7 @@
+     output = Path(sys.argv[1]).resolve(strict=True)
+     assert output == WORK / "candidate" and output.is_dir()
+     recipe = json.loads((WORK / "recipes.json").read_text())
+-    assert recipe["schema"] == "sirius-native-packed-soa-five-compiler-recipes-v1"
++    assert recipe["schema"] == "sirius-native-constant-five-compiler-recipes-v1"
+     assert recipe["optimizer_invoked"] is False
+     names = ["retained_transport", "retained_endpoint", "retained_dense", "retained_initialize", "retained_dopri_phase"]
+     assert [row["name"] for row in recipe["profiles"]] == names
+@@ -88,9 +88,9 @@
+         products[name] = {suffix: identity(output / (name + suffix))
+                           for suffix in recipe["expected_products_per_profile"]}
+     assert len(records) == 25 and all(row["exit_code"] == 0 for row in records)
+-    result = {"schema": "sirius-native-packed-soa-five-compiler-products-v1", "passed": True,
++    result = {"schema": "sirius-native-constant-five-compiler-products-v1", "passed": True,
+               "scope": "Five ordinary native FP32 modules compiled/annotated/assembled/validated only",
+-              "runtime_admitted": False, "emitted_address_semantics_admitted": False,
++              "runtime_admitted": False, "emitted_semantics_admitted": False,
+               "optimizer_invoked": False, "actual_tool_calls": len(records),
+               "recipe": identity(WORK / "recipes.json"), "products": products}
+     (output / "products.json").write_text(json.dumps(result, indent=2) + "\n")

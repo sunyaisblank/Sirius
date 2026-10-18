@@ -1,0 +1,126 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": true,
+  "source_revision": "d2e1a265106a8b27e976ccb47cef6303aaa51746",
+  "runner_source_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "stage": "bin/windows-msvc/native-constant-matched-d2e1a265",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "remaining",
+  "order": [
+    "control-1",
+    "control-2",
+    "control-3",
+    "control-4",
+    "control-5",
+    "control-6",
+    "control-7"
+  ],
+  "actions": {
+    "control-1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "control-2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "control-3": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "control-4": {
+      "kind": "Control",
+      "test": "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "control-5": {
+      "kind": "Control",
+      "test": "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "control-6": {
+      "kind": "Control",
+      "test": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "control-7": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "control-1": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-1",
+      "TMP": "renders/native-constant-runtime-remaining/control-1"
+    },
+    "control-2": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-2",
+      "TMP": "renders/native-constant-runtime-remaining/control-2"
+    },
+    "control-3": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-3",
+      "TMP": "renders/native-constant-runtime-remaining/control-3"
+    },
+    "control-4": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-4",
+      "TMP": "renders/native-constant-runtime-remaining/control-4"
+    },
+    "control-5": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-5",
+      "TMP": "renders/native-constant-runtime-remaining/control-5"
+    },
+    "control-6": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-6",
+      "TMP": "renders/native-constant-runtime-remaining/control-6"
+    },
+    "control-7": {
+      "TEMP": "renders/native-constant-runtime-remaining/control-7",
+      "TMP": "renders/native-constant-runtime-remaining/control-7"
+    }
+  },
+  "phase_prerequisites": {
+    "timestamp_acceptance": {
+      "path": "out/native-constant-timestamp-evidence/timestamp-acceptance.json",
+      "identity": {
+        "bytes": 53118,
+        "sha256": "8162cabf5c7b0e672e94e2793a0515bccc2cd247517a7a2ace777262e5151531"
+      }
+    },
+    "benefit_acceptance": {
+      "path": "out/native-constant-ABBA-evidence/benefit-acceptance.json",
+      "identity": {
+        "bytes": 231532,
+        "sha256": "e9bb5dfbbcb39ea8ec78ccd693a6238558808ce173cfa101e1d89fc64849cf06"
+      }
+    }
+  }
+}

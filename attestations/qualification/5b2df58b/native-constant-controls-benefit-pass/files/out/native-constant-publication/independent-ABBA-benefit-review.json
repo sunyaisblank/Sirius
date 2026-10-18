@@ -1,0 +1,167 @@
+{
+  "schema": "sirius-native-constant-independent-ABBA-benefit-review-v1",
+  "created_utc": "2026-10-18T09:25:37.627487+00:00",
+  "passed": true,
+  "audit_completed": true,
+  "benefit_passed": true,
+  "checks_passed": 22,
+  "checks_total": 22,
+  "producer_revision": "d2e1a265106a8b27e976ccb47cef6303aaa51746",
+  "runner_revision": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "pins": {
+    "out/native-constant-ABBA-evidence/benefit-acceptance.json": {
+      "bytes": 231532,
+      "sha256": "e9bb5dfbbcb39ea8ec78ccd693a6238558808ce173cfa101e1d89fc64849cf06"
+    },
+    "out/native-constant-ABBA-evidence/reader-bindings.json": {
+      "bytes": 188773,
+      "sha256": "b4639c787d4815a163a5c1b899e68144ccd2507771fe382938dadb4a548cf5dc"
+    },
+    "out/native-constant-ABBA-evidence/root-admission.json": {
+      "bytes": 361,
+      "sha256": "0bb20d2eb116463ee101c95866916f875e9d45e208dab71738737f1beeebd64b"
+    },
+    "out/native-constant-pe-audit/matched-array-authority-d2e1a265.json": {
+      "bytes": 14732,
+      "sha256": "308a2c019b72f257e02b1889aef5ba25594e124ad362915174a603537ecc8b56"
+    },
+    "out/native-constant-runtime-source/source-freeze.json": {
+      "bytes": 3010,
+      "sha256": "4fd202ac03299e2be093d15af541c7aff2f7df6989457d98f0e3b1fff68f32f7"
+    },
+    "out/native-constant-runtime-authority-source/source-freeze.json": {
+      "bytes": 3164,
+      "sha256": "19569658a65d450a86aad9494c0b1820b7361d99a55e441da9a08af4138eec51"
+    }
+  },
+  "recomputation": {
+    "method": "Direct saved XML only; no comparator/helper/numeric_gates import. Reconstructed all four records exactly, including each original3samples/family, 51 ordered markers and inclusive Dispatch components. Middle sorted sample is each median; improvement=100*(baseline-candidate)/baseline. All20 comparisons and2API predicates exactly match sealed result.",
+    "whole_median_columns": [
+      "baseline_ms",
+      "candidate_ms",
+      "improvement_percent"
+    ],
+    "whole": {
+      "forward_legacy": [
+        32.8066,
+        26.3003,
+        19.83228984411674
+      ],
+      "forward_modern": [
+        28.8351,
+        16.269000000000002,
+        43.57917954160034
+      ],
+      "reverse_legacy": [
+        39.7915,
+        27.616,
+        30.598243343427615
+      ],
+      "reverse_modern": [
+        44.7477,
+        28.954700000000003,
+        35.29343407594133
+      ]
+    },
+    "whole_minimum_percent": 5,
+    "inclusive_stage_count": 16,
+    "inclusive_stage_minimum_percent": -5,
+    "lowest_actual_stage_improvement_percent": 17.016317016317018,
+    "API_gain_percent": [
+      89.87368841419436,
+      34.6536178851146
+    ],
+    "API_minimum_percent": 0,
+    "API_scope": "Observed Create plus all11 original numerical API windows; each modern complete-call equals its actual attempt+sample windows; provisioning separately0. No subtraction/pooling/resampling."
+  },
+  "closure": {
+    "completed_cases": [
+      "control-8",
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "ABBA_once": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "instances_per_slot": 1,
+    "internal_repeats_per_family": 3,
+    "warmup_or_outer_repeats": 0,
+    "all5_single_completed_XML_zero_FESD": true,
+    "all5_same32_complete_readback_hashes": true,
+    "per_case_markers": 51,
+    "per_case_executed_module_joins": 54,
+    "all7_selected_and54_executed_modules_join_actual_arm_arrays": true,
+    "recorded_context_files": 1060,
+    "full_host_rehash_performed": false,
+    "raw_accepted_beforeafter_terminal_source_pins_rechecked": true,
+    "case_columns": [
+      "label",
+      "beforeafter_rows",
+      "prior_raw_paths",
+      "Windows_owner_seconds",
+      "peak_sampled_child_WorkingSet_bytes",
+      "RSS_samples",
+      "null_RSS_samples"
+    ],
+    "cases": [
+      [
+        "control-8",
+        959,
+        0,
+        51.7622869,
+        466407424,
+        51,
+        0
+      ],
+      [
+        "a1",
+        988,
+        0,
+        51.827456,
+        505753600,
+        51,
+        0
+      ],
+      [
+        "b1",
+        1000,
+        12,
+        1.8301485,
+        66854912,
+        3,
+        0
+      ],
+      [
+        "b2",
+        1012,
+        24,
+        2.3382251,
+        66777088,
+        3,
+        0
+      ],
+      [
+        "a2",
+        1024,
+        36,
+        2.9396565,
+        3608576,
+        6,
+        1
+      ]
+    ]
+  },
+  "ownership": "Saved distinct Windows births and owner-end/test-start chronology agree with fixedorder; exact12prior raw/accepted/terminal paths perancestor frozen. All5 owners and terminal audits normalexit0/no stop/cleanup. SDK/AMD same-child paths/hashes and terminal postseals match; ownedbirths absent and accessible consumer/compiler scans empty within recorded hidden-field scope. Original300s/4GiB sampled childWorkingSet/2GiB sampled WSLreserve, defaultnative cache and refused software overrides retained.",
+  "limits": [
+    "A2 has1null RSS row:unobserved,notzero; sampled peaks do not bound unsampled or aggregateWindows/GPU memory. Initial review-only max incorrectly included null; corrected without workload/input mutation.",
+    "Original22PASS only. No remaining7 outcome reviewed here, adoption/fullscience/frame/Mandatory/release/causal or cold-performance claim. No new workload/provider/process query; light completed raw-data reads only."
+  ],
+  "canonical_workspace_clean_committed_pushed_sole_worktree": true,
+  "review_sidecar_pending_ROOT_preservation": true,
+  "blockers": []
+}

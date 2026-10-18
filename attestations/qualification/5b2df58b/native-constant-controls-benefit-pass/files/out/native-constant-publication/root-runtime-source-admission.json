@@ -1,0 +1,27 @@
+{
+  "schema": "sirius-native-constant-root-runtime-source-admission-v1",
+  "created_utc": "2026-10-18T08:42:24.035428+00:00",
+  "passed": true,
+  "freezes": [
+    {
+      "path": "out/native-constant-runtime-source/source-freeze.json",
+      "bytes": 3010,
+      "sha256": "4fd202ac03299e2be093d15af541c7aff2f7df6989457d98f0e3b1fff68f32f7"
+    },
+    {
+      "path": "out/native-constant-runtime-authority-source/source-freeze.json",
+      "bytes": 3164,
+      "sha256": "19569658a65d450a86aad9494c0b1820b7361d99a55e441da9a08af4138eec51"
+    }
+  ],
+  "exact_original_gate_readers": true,
+  "native_evidence_byte_exact_prior_five_payload_reader": {
+    "path": "attestations/qualification/5b2df58b/native-packed-scratch-rejected/files/out/native-fp32-packed-scratch-runtime-source/native_evidence.py",
+    "bytes": 29506,
+    "sha256": "ec5368565ceb7cec93254cab7dc5a08055f024375ece80c76677061ffd5bf201"
+  },
+  "authority_only_namespace_hooks_changed_set_delta": true,
+  "PS3_exact": true,
+  "passive_check_correction": "Initial root reader assumed files key; stopped before output. Actual authored freeze uses pins with checkout-relative paths; checked those exact entries. No packet or execution change.",
+  "scope": "ROOT read contracts and complete diffs; exact inverses to mature archived source. Latest context closure and original controls/22 gates/guards/default native cache preserved. Actual producer, concrete inputs and runtime admission remain pending."
+}
