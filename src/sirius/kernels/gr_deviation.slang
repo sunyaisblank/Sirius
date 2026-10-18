@@ -59,84 +59,95 @@ public void GetRiemannTensorCart(
                 dGamma[0][mu][nu][sig] = 0.0f;
 
     for (int rho = 1; rho < 4; rho++) {
-        Vec4Cart xp = x;
-        Vec4Cart xm = x;
-        Vec4Cart xpp = x;
-        Vec4Cart xmm = x;
-#ifndef SIRIUS_FP64
-        Vec4Cart xppp = x;
-        Vec4Cart xmmm = x;
-#endif
-        if (rho == 1) {
-            xp.x += eps;
-            xm.x -= eps;
-            xpp.x += 2.0f * eps;
-            xmm.x -= 2.0f * eps;
-#ifndef SIRIUS_FP64
-            xppp.x += 3.0f * eps;
-            xmmm.x -= 3.0f * eps;
-#endif
-        } else if (rho == 2) {
-            xp.y += eps;
-            xm.y -= eps;
-            xpp.y += 2.0f * eps;
-            xmm.y -= 2.0f * eps;
-#ifndef SIRIUS_FP64
-            xppp.y += 3.0f * eps;
-            xmmm.y -= 3.0f * eps;
-#endif
-        } else {
-            xp.z += eps;
-            xm.z -= eps;
-            xpp.z += 2.0f * eps;
-            xmm.z -= 2.0f * eps;
-#ifndef SIRIUS_FP64
-            xppp.z += 3.0f * eps;
-            xmmm.z -= 3.0f * eps;
-#endif
-        }
-
+        // Reuse the original two work arrays at each stencil distance.
         Real Gamma_plus[4][4][4];
         Real Gamma_minus[4][4][4];
-        GetKerrSchildFamilyChristoffel(xp, M, a, Q, Lambda, Gamma_plus);
-        GetKerrSchildFamilyChristoffel(xm, M, a, Q, Lambda, Gamma_minus);
-
-        for (int mu = 0; mu < 4; mu++)
-            for (int nu = 0; nu < 4; nu++)
-                for (int sig = 0; sig < 4; sig++)
-                    dGamma[rho][mu][nu][sig] =
 #ifdef SIRIUS_FP64
-                        8.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+        [loop] for (int distance = 1; distance <= 2; ++distance) {
 #else
-                        45.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+        [loop] for (int distance = 1; distance <= 3; ++distance) {
 #endif
+            Vec4Cart xp = x;
+            Vec4Cart xm = x;
+            if (rho == 1) {
+                if (distance == 1) {
+                    xp.x += eps;
+                    xm.x -= eps;
+                } else if (distance == 2) {
+                    xp.x += 2.0f * eps;
+                    xm.x -= 2.0f * eps;
+#ifndef SIRIUS_FP64
+                } else {
+                    xp.x += 3.0f * eps;
+                    xm.x -= 3.0f * eps;
+#endif
+                }
+            } else if (rho == 2) {
+                if (distance == 1) {
+                    xp.y += eps;
+                    xm.y -= eps;
+                } else if (distance == 2) {
+                    xp.y += 2.0f * eps;
+                    xm.y -= 2.0f * eps;
+#ifndef SIRIUS_FP64
+                } else {
+                    xp.y += 3.0f * eps;
+                    xm.y -= 3.0f * eps;
+#endif
+                }
+            } else {
+                if (distance == 1) {
+                    xp.z += eps;
+                    xm.z -= eps;
+                } else if (distance == 2) {
+                    xp.z += 2.0f * eps;
+                    xm.z -= 2.0f * eps;
+#ifndef SIRIUS_FP64
+                } else {
+                    xp.z += 3.0f * eps;
+                    xm.z -= 3.0f * eps;
+#endif
+                }
+            }
 
-        // Reuse the two Christoffel work arrays so the higher-order stencil
-        // does not double the shader's live local-array footprint.
-        GetKerrSchildFamilyChristoffel(xpp, M, a, Q, Lambda, Gamma_plus);
-        GetKerrSchildFamilyChristoffel(xmm, M, a, Q, Lambda, Gamma_minus);
-        for (int mu = 0; mu < 4; mu++)
-            for (int nu = 0; nu < 4; nu++)
-                for (int sig = 0; sig < 4; sig++)
+            GetKerrSchildFamilyChristoffel(xp, M, a, Q, Lambda, Gamma_plus);
+            GetKerrSchildFamilyChristoffel(xm, M, a, Q, Lambda, Gamma_minus);
+
+            if (distance == 1) {
+                for (int mu = 0; mu < 4; mu++)
+                    for (int nu = 0; nu < 4; nu++)
+                        for (int sig = 0; sig < 4; sig++)
+                            dGamma[rho][mu][nu][sig] =
 #ifdef SIRIUS_FP64
-                    dGamma[rho][mu][nu][sig] =
-                        (dGamma[rho][mu][nu][sig] -
-                         (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
-                        (12.0f * eps);
+                                8.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
 #else
-                    dGamma[rho][mu][nu][sig] -=
-                        9.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
-
-        GetKerrSchildFamilyChristoffel(xppp, M, a, Q, Lambda, Gamma_plus);
-        GetKerrSchildFamilyChristoffel(xmmm, M, a, Q, Lambda, Gamma_minus);
-        for (int mu = 0; mu < 4; mu++)
-            for (int nu = 0; nu < 4; nu++)
-                for (int sig = 0; sig < 4; sig++)
-                    dGamma[rho][mu][nu][sig] =
-                        (dGamma[rho][mu][nu][sig] +
-                         (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
-                        (60.0f * eps);
+                                45.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
 #endif
+            } else if (distance == 2) {
+                for (int mu = 0; mu < 4; mu++)
+                    for (int nu = 0; nu < 4; nu++)
+                        for (int sig = 0; sig < 4; sig++)
+#ifdef SIRIUS_FP64
+                            dGamma[rho][mu][nu][sig] =
+                                (dGamma[rho][mu][nu][sig] -
+                                 (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
+                                (12.0f * eps);
+#else
+                            dGamma[rho][mu][nu][sig] -=
+                                9.0f * (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig]);
+#endif
+#ifndef SIRIUS_FP64
+            } else {
+                for (int mu = 0; mu < 4; mu++)
+                    for (int nu = 0; nu < 4; nu++)
+                        for (int sig = 0; sig < 4; sig++)
+                            dGamma[rho][mu][nu][sig] =
+                                (dGamma[rho][mu][nu][sig] +
+                                 (Gamma_plus[mu][nu][sig] - Gamma_minus[mu][nu][sig])) /
+                                (60.0f * eps);
+#endif
+            }
+        }
     }
 
     // R^mu_nu_rho_sigma = d_rho Gamma^mu_nu_sigma - d_sigma Gamma^mu_nu_rho
@@ -216,43 +227,89 @@ public void AdvanceJacobiPairAcceptedSegment(
     Real4 k1XiA, k1VA, k2XiA, k2VA, k3XiA, k3VA, k4XiA, k4VA;
     Real4 k1XiB, k1VB, k2XiB, k2VB, k3XiB, k3VB, k4XiB, k4VB;
 
-    GetRiemannTensorCart(startPosition, M, a, Q, Lambda, R);
-    GetKerrSchildFamilyChristoffel(startPosition, M, a, Q, Lambda, Gamma);
-    GeodesicDeviationRhs(Gamma, R, startTangent, xiA, VA, k1XiA, k1VA);
-    GeodesicDeviationRhs(Gamma, R, startTangent, xiB, VB, k1XiB, k1VB);
+    Vec4Cart phaseTangent;
+    [loop] for (int step = 0; step < 8; ++step) {
+        if (step == 0 || step == 2 || step == 6) {
+            Vec4Cart phasePosition;
+            if (step == 0) {
+                phasePosition = startPosition;
+                phaseTangent = startTangent;
+            } else if (step == 2) {
+                Vec4Cart midpointPosition = AddVec4Cart(
+                    ScaleVec4Cart(AddVec4Cart(startPosition, endPosition), Real(0.5)),
+                    ScaleVec4Cart(
+                        AddVec4Cart(startTangent, ScaleVec4Cart(endTangent, Real(-1.0))),
+                        dLambda / Real(8.0)));
+                Vec4Cart midpointTangent = AddVec4Cart(
+                    ScaleVec4Cart(
+                        AddVec4Cart(endPosition, ScaleVec4Cart(startPosition, Real(-1.0))),
+                        Real(1.5) / dLambda),
+                    ScaleVec4Cart(AddVec4Cart(startTangent, endTangent), Real(-0.25)));
+                phasePosition = midpointPosition;
+                phaseTangent = midpointTangent;
+            } else {
+                phasePosition = endPosition;
+                phaseTangent = endTangent;
+            }
+            GetRiemannTensorCart(phasePosition, M, a, Q, Lambda, R);
+            GetKerrSchildFamilyChristoffel(phasePosition, M, a, Q, Lambda, Gamma);
+        }
 
-    Vec4Cart midpointPosition = AddVec4Cart(
-        ScaleVec4Cart(AddVec4Cart(startPosition, endPosition), Real(0.5)),
-        ScaleVec4Cart(
-            AddVec4Cart(startTangent, ScaleVec4Cart(endTangent, Real(-1.0))),
-            dLambda / Real(8.0)));
-    Vec4Cart midpointTangent = AddVec4Cart(
-        ScaleVec4Cart(
-            AddVec4Cart(endPosition, ScaleVec4Cart(startPosition, Real(-1.0))),
-            Real(1.5) / dLambda),
-        ScaleVec4Cart(AddVec4Cart(startTangent, endTangent), Real(-0.25)));
-    GetRiemannTensorCart(midpointPosition, M, a, Q, Lambda, R);
-    GetKerrSchildFamilyChristoffel(midpointPosition, M, a, Q, Lambda, Gamma);
+        Real4 stepXi, stepV;
+        if (step == 0) {
+            stepXi = xiA;
+            stepV = VA;
+        } else if (step == 1) {
+            stepXi = xiB;
+            stepV = VB;
+        } else if (step == 2) {
+            stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+            stepV = VA + k1VA * (Real(0.5) * dLambda);
+        } else if (step == 3) {
+            stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+            stepV = VA + k2VA * (Real(0.5) * dLambda);
+        } else if (step == 4) {
+            stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+            stepV = VB + k1VB * (Real(0.5) * dLambda);
+        } else if (step == 5) {
+            stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+            stepV = VB + k2VB * (Real(0.5) * dLambda);
+        } else if (step == 6) {
+            stepXi = xiA + k3XiA * dLambda;
+            stepV = VA + k3VA * dLambda;
+        } else {
+            stepXi = xiB + k3XiB * dLambda;
+            stepV = VB + k3VB * dLambda;
+        }
 
-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
-                         xiA + k1XiA * (Real(0.5) * dLambda),
-                         VA + k1VA * (Real(0.5) * dLambda), k2XiA, k2VA);
-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
-                         xiA + k2XiA * (Real(0.5) * dLambda),
-                         VA + k2VA * (Real(0.5) * dLambda), k3XiA, k3VA);
-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
-                         xiB + k1XiB * (Real(0.5) * dLambda),
-                         VB + k1VB * (Real(0.5) * dLambda), k2XiB, k2VB);
-    GeodesicDeviationRhs(Gamma, R, midpointTangent,
-                         xiB + k2XiB * (Real(0.5) * dLambda),
-                         VB + k2VB * (Real(0.5) * dLambda), k3XiB, k3VB);
-
-    GetRiemannTensorCart(endPosition, M, a, Q, Lambda, R);
-    GetKerrSchildFamilyChristoffel(endPosition, M, a, Q, Lambda, Gamma);
-    GeodesicDeviationRhs(Gamma, R, endTangent,
-                         xiA + k3XiA * dLambda, VA + k3VA * dLambda, k4XiA, k4VA);
-    GeodesicDeviationRhs(Gamma, R, endTangent,
-                         xiB + k3XiB * dLambda, VB + k3VB * dLambda, k4XiB, k4VB);
+        Real4 stepDXi, stepDV;
+        GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+        if (step == 0) {
+            k1XiA = stepDXi;
+            k1VA = stepDV;
+        } else if (step == 1) {
+            k1XiB = stepDXi;
+            k1VB = stepDV;
+        } else if (step == 2) {
+            k2XiA = stepDXi;
+            k2VA = stepDV;
+        } else if (step == 3) {
+            k3XiA = stepDXi;
+            k3VA = stepDV;
+        } else if (step == 4) {
+            k2XiB = stepDXi;
+            k2VB = stepDV;
+        } else if (step == 5) {
+            k3XiB = stepDXi;
+            k3VB = stepDV;
+        } else if (step == 6) {
+            k4XiA = stepDXi;
+            k4VA = stepDV;
+        } else {
+            k4XiB = stepDXi;
+            k4VB = stepDV;
+        }
+    }
 
     const Real sixthStep = dLambda / Real(6.0);
     xiA += (k1XiA + k2XiA * Real(2.0) + k3XiA * Real(2.0) + k4XiA) * sixthStep;

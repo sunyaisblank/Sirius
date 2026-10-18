@@ -40,9 +40,9 @@
 import gr_types;
 import gr_metrics;
 import gr_integrator;
+import gr_deviation;
 import gr_camera;
 import gr_disk;
-import gr_deviation;
 import gr_trace_event;
 import gr_ellis_topology;
 import gr_point_star;
@@ -1055,12 +1055,13 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     }
                 }
                 if (beamsEnabled && !isWarp && !isWormhole && dt > Real(0.0f)) {
-                    AdvanceJacobiPairAcceptedSegment(
-                        state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
-                        X[0], V[0], X[1], V[1]);
-                    AdvanceJacobiPairAcceptedSegment(
-                        state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
-                        X[2], V[2], X[3], V[3]);
+                    [loop] for (int pair = 0; pair < 2; ++pair) {
+                        const int firstColumn = 2 * pair;
+                        AdvanceJacobiPairAcceptedSegment(
+                            state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
+                            X[firstColumn], V[firstColumn],
+                            X[firstColumn + 1], V[firstColumn + 1]);
+                    }
                 }
 
                 affineLength += dt; lastStep = dt; ++accepted;
