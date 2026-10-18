@@ -1,0 +1,125 @@
+{
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "inputs_before": {
+    "/home/astra/.project/Sirius/out/native-wave32-source/vulkan_device.cpp": {
+      "bytes": 59255,
+      "sha256": "fe51e406bce4fe4e02097943dccd0c1df7d58099ac42a521ee27d59bf1cf10b0"
+    },
+    "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "/usr/bin/g++-14": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/home/astra/.project/Sirius/.clang-format": {
+      "bytes": 611,
+      "sha256": "75c5afeaba969da351f2f94b9b529c2058b714bcbb28b4523a7630a540e14775"
+    },
+    "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.h": {
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_portability.h": {
+      "bytes": 1636,
+      "sha256": "e3ff78fff5f8c3388be773b324db936fce0bca242b5d58318717c719428d5bff"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    }
+  },
+  "inputs_after": {
+    "/home/astra/.project/Sirius/out/native-wave32-source/vulkan_device.cpp": {
+      "bytes": 59255,
+      "sha256": "fe51e406bce4fe4e02097943dccd0c1df7d58099ac42a521ee27d59bf1cf10b0"
+    },
+    "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.cpp": {
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "/usr/bin/g++-14": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/home/astra/.project/Sirius/.clang-format": {
+      "bytes": 611,
+      "sha256": "75c5afeaba969da351f2f94b9b529c2058b714bcbb28b4523a7630a540e14775"
+    },
+    "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_device.h": {
+      "bytes": 9768,
+      "sha256": "604c1ca5ca914d73e0e1c7288f832309e39a07b1ac3006b98812d0fa7e80f3de"
+    },
+    "/home/astra/.project/Sirius/src/sirius/backend/vulkan/vulkan_portability.h": {
+      "bytes": 1636,
+      "sha256": "e3ff78fff5f8c3388be773b324db936fce0bca242b5d58318717c719428d5bff"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/compile_commands.json": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+    }
+  },
+  "results": [
+    {
+      "mode": "with-retained",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "/home/astra/.project/Sirius/out/native-wave32-source/vulkan_device.cpp",
+        "-fsyntax-only"
+      ],
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 2.5726495620037895,
+      "address_space_limit_per_process_bytes": 4294967296,
+      "deadline_seconds": 60
+    },
+    {
+      "mode": "without-retained",
+      "argv": [
+        "/usr/bin/g++-14",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "/home/astra/.project/Sirius/out/native-wave32-source/vulkan_device.cpp",
+        "-fsyntax-only"
+      ],
+      "returncode": 0,
+      "timeout": false,
+      "elapsed_seconds": 1.4198169729788788,
+      "address_space_limit_per_process_bytes": 4294967296,
+      "deadline_seconds": 60
+    }
+  ],
+  "scope": "Strict existing GCC preset recipe, syntax only; two supported source modes, no build product mutation/runtime/scientific/release qualification",
+  "passed": true
+}

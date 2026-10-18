@@ -1,0 +1,176 @@
+{
+  "schema": "sirius-native-wave32-private-windows-source-v1",
+  "source_only": true,
+  "compile_admitted": false,
+  "runtime_admitted": false,
+  "actual_producer_revision": null,
+  "actual_ci_run": null,
+  "canonical_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "preimages": {
+    "named_git_revision": "d2e1a265106a8b27e976ccb47cef6303aaa51746",
+    "files": [
+      {
+        "path": "out/native-wave32-windows-source/originals/build-and-stage.ps1",
+        "bytes": 19965,
+        "sha256": "6ea9400898ecba7234367293d5eadcd6408493c58f307fd9e2432d0daadd95c6",
+        "mode": "0644"
+      },
+      {
+        "path": "out/native-wave32-windows-source/originals/matched-producer.cmake",
+        "bytes": 5658,
+        "sha256": "dbb2c2be2e96284c32d8ca76202f47406da6b89209801a3ce3639c16545860ca",
+        "mode": "0644"
+      },
+      {
+        "path": "out/native-wave32-windows-source/originals/native-packed-diagnostic.yml",
+        "bytes": 1310,
+        "sha256": "112b83f2215687a49badb58732261579e4a0528759629a4bc263eec5b979dd86",
+        "mode": "0644"
+      }
+    ]
+  },
+  "current_sources": {
+    "matched-producer.cmake": {
+      "path": "out/native-wave32-windows-source/matched-producer.cmake",
+      "bytes": 5975,
+      "sha256": "aab286f278e354aedf4aa08f61b6cce6894089a9b8f5dd3615c547bef4157b8c",
+      "mode": "0644"
+    },
+    "build-and-stage.ps1": {
+      "path": "out/native-wave32-windows-source/build-and-stage.ps1",
+      "bytes": 20152,
+      "sha256": "25b929fad959f9aab5c1645c1881039abd2e3a628abab281466920254d3c0750",
+      "mode": "0644"
+    },
+    "native-wave32-diagnostic.yml": {
+      "path": "out/native-wave32-windows-source/native-wave32-diagnostic.yml",
+      "bytes": 1295,
+      "sha256": "0d60cc2d164c5cdee116bc66255187b2c9c1fe81cdc8166ba66f24c18a8a5f3a",
+      "mode": "0644"
+    }
+  },
+  "producer_inputs": {
+    "identity": {
+      "path": "out/native-wave32-producer-inputs/root-composed-inputs.json",
+      "bytes": 42808,
+      "sha256": "0c2398b231398dfd23d1e4b809686d90d4f1d8d0e5748d574f355efc7a9fa1da",
+      "mode": "0644"
+    },
+    "payload_files": 79,
+    "files_including_copy_receipt": 80,
+    "same_in_both_arms": [
+      "retained_kernels.h (40 arrays plus all original tables/text)",
+      "retained_owner_kernels.h",
+      "retained_owner_layout.h",
+      "all 35 SPV files"
+    ],
+    "observer": {
+      "path": "out/native-wave32-producer-inputs/observer/audited-observer.cpp",
+      "bytes": 342470,
+      "sha256": "c9485d03ec55b5c1307a34097f15efbc58c4f84749e9f3736ad063a68676b601",
+      "mode": "0644"
+    },
+    "baseline_vulkan": {
+      "path": "out/native-wave32-producer-inputs/baseline/vulkan_device.cpp",
+      "bytes": 56500,
+      "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae",
+      "mode": "0644"
+    },
+    "candidate_vulkan": {
+      "path": "out/native-wave32-producer-inputs/candidate/vulkan_device.cpp",
+      "bytes": 59255,
+      "sha256": "fe51e406bce4fe4e02097943dccd0c1df7d58099ac42a521ee27d59bf1cf10b0",
+      "mode": "0644"
+    },
+    "canonical_scratch_or_shader_changes": false
+  },
+  "sole_program_delta": "Private candidate VulkanDevice.cpp requests required subgroup size 32 only for exact ordinary native FP32 Transport module bytes on eligible AMD core-1.3 devices. Shader bytes and local workgroup 64 are identical. This packet does not independently admit the device-feature patch.",
+  "cmake": {
+    "hook": "CMAKE_PROJECT_Sirius_INCLUDE; deferred after canonical targets",
+    "custom_target": "SiriusNativeWave32MatchedProducer",
+    "object_targets": [
+      "native_wave32_dopri",
+      "native_wave32_baseline_compute",
+      "native_wave32_candidate_compute"
+    ],
+    "executable_targets": [
+      "native_wave32_baseline_controls",
+      "native_wave32_candidate_controls"
+    ],
+    "expected_private_compile_objects": 7,
+    "private_compiles": [
+      "shared retained_dopri_test.cpp once",
+      "retained_compute.cpp per arm (same source, same arm headers)",
+      "VulkanDevice.cpp per arm (baseline canonical; candidate private)",
+      "exact audited-observer.cpp per arm"
+    ],
+    "expected_private_links": 2,
+    "private_header_precedence": "arm directory BEFORE canonical generated retained directory",
+    "usage_requirements": "Both compute sources inherit canonical sirius_backend usage, including PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1; original strict sirius_configure_target CONTRACT_MODE 2 unchanged.",
+    "link_authority": "Both arm compute objects plus shared DP are explicit executable objects before linked canonical static libraries. Actual link/MAP must prove private VulkanDevice and retained_compute definitions selected; canonical archive copies remain exported for comparison. Source order is not an actual extraction proof.",
+    "canonical_dependency_work": "Original sirius_backend, render, GTest, source governance, kernel compilation and two fixture generators remain dependencies; seven private objects does not count all canonical dependency compilation.",
+    "no_test_registration": true
+  },
+  "workflow": {
+    "destination_at_root_publication": ".github/workflows/native-wave32-diagnostic.yml",
+    "trigger": "push only development/native-wave32-diagnostic-2026-10-18",
+    "job": "single windows-2022 matched producer; original 30-minute bound",
+    "actions": "Existing checkout, SDK 1.4.357.0 and upload SHA pins unchanged; autocrlf=false checkout override unchanged.",
+    "artifact_name": "sirius-native-wave32-matched-producer",
+    "artifact_path": "bin/windows-msvc/private-native-wave32-export",
+    "build_product_path": "bin/windows-msvc/private-native-wave32/{baseline,candidate}/Release"
+  },
+  "build_and_export": {
+    "configure_arguments": [
+      "--preset",
+      "windows-msvc",
+      "-DSIRIUS_ALIGNMENT_MODE=qualification",
+      "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+      "-DCMAKE_CONFIGURATION_TYPES:STRING=Release",
+      "-DCMAKE_PROJECT_Sirius_INCLUDE=<absolute new hook>"
+    ],
+    "build": "cmake --build --preset windows-msvc --config Release --target SiriusNativeWave32MatchedProducer --parallel 2 -- /verbosity:normal /bl:<export/build.binlog>",
+    "strict_flags_unchanged": [
+      "BUILD_TESTS=ON",
+      "SIRIUS_MANDATORY_TESTS=ON",
+      "SIRIUS_WERROR=ON",
+      "SIRIUS_CONTRACT_MODE=2",
+      "SIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+      "Release qualification",
+      "BUILD_SHARED_LIBS=OFF",
+      "forced fail_on_skip.h for original test sources"
+    ],
+    "source_snapshot_trees": [
+      "all Git tracked files",
+      "out/native-wave32-producer-inputs",
+      "out/native-wave32-windows-source",
+      "out/native-wave32-source"
+    ],
+    "snapshots": "Original pre/post configure sources and pre/post build sources/fetched source trees/configuration/projects/selected tools plus adjacent DLLs retained. Mutable build products excluded from frozen inputs.",
+    "objects_maps": "Both private Vulkan .obj files and all seven private .obj/tlogs/projects, two MAPs/VERBOSE:LIB/build logs/binlog, plus canonical backend .obj/tlogs/project/archive are exported.",
+    "runtime_packaging": "Original selected VS/MSVC-matched release CRT and SDK loader authority unchanged; no System32 DLL substitution.",
+    "wire_compatibility_schemas": [
+      "sirius-native-packed-matched-ci-producer-v1",
+      "sirius-native-packed-ci-export-manifest-v1"
+    ],
+    "pe_names_compatibility": [
+      "original_baseline_controls.exe",
+      "original_candidate_controls.exe"
+    ],
+    "compatibility_labels_are_not_packing_claim": true
+  },
+  "required_actual_review_before_runtime": [
+    "Exact private commit/canonical 538-source Git join and candidate source/observer identities",
+    "Actual strict cache/selected tools/build input seals",
+    "Seven actual CL object records and two LINK commands; private header precedence and device macros",
+    "Both private VulkanDevice object/symbol MAP contributions; canonical VulkanDevice/retained_compute archive members not substituted",
+    "PE embedded 40 main arrays and owner arrays byte-identical; actual imports/SDK/release CRT",
+    "Actual candidate subgroup capability/required32 eligibility and original unmodified readers/control/benefit gates need separate ROOT review"
+  ],
+  "limits": [
+    "No CMake, compiler, PE, provider, test, CI, network or Git mutation executed by this authoring task.",
+    "Bounded selected CI tools/adjacent DLLs and sources are not a complete host/SDK header/DSO backup or qualification.",
+    "No actual seven-object count, compile success, subgroup width observation, numerical result, performance benefit, release or adoption claim.",
+    "No canonical source, workflow or generated build output has been modified."
+  ]
+}

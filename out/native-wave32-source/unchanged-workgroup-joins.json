@@ -1,0 +1,30 @@
+{
+  "shader_sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+  "barriers": [
+    {
+      "opcode": 224,
+      "resolved_constant_operands": [
+        2,
+        1,
+        2376
+      ],
+      "static_count": 4
+    },
+    {
+      "opcode": 224,
+      "resolved_constant_operands": [
+        2,
+        2,
+        264
+      ],
+      "static_count": 5
+    }
+  ],
+  "capabilities": [
+    4464,
+    1,
+    4467
+  ],
+  "source_joins": "Group shared scratch/status/coefficient joins use GroupMemoryBarrierWithGroupSync; storage stages publish with AllMemoryBarrierWithGroupSync; no subgroup operations/capabilities",
+  "scope": "Static same-module synchronization premise only; runtime full readback/refusal/recovery controls required"
+}

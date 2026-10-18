@@ -1,0 +1,131 @@
+{
+  "schema": "sirius-native-wave32-independent-candidate-source-review-v1",
+  "passed": true,
+  "reviewer": "/root/divide_contract_review",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "scope": "Bounded source-only review of ROOT candidate; no compiler, helper, provider, host query, test or benchmark executed by reviewer.",
+  "candidate": {
+    "path": "out/native-wave32-source/vulkan_device.cpp",
+    "bytes": 59255,
+    "sha256": "fe51e406bce4fe4e02097943dccd0c1df7d58099ac42a521ee27d59bf1cf10b0"
+  },
+  "original": {
+    "path": "out/native-wave32-source/original-vulkan_device.cpp",
+    "bytes": 56500,
+    "sha256": "c3765cbb0e34bcd509ea63da6f264fbe4e34d2a6b4584bc0bdeedf1a75cf77ae"
+  },
+  "patch": {
+    "path": "out/native-wave32-source/source.patch",
+    "bytes": 4825,
+    "sha256": "adba485645e0218c025d08a0b8b4934f21b0295bbafc7578a37235521addd2c7"
+  },
+  "resolved_blocker": {
+    "issue": "Initial unconditional generated-header include and selector broke supported Vulkan builds without Slang/complete retained tools.",
+    "evidence": "backend/CMakeLists.txt24 creates Vulkan target before optional Slang return36\u201339; retained header/include/definition only added80\u2013149.",
+    "repair": "All six added regions, including include, helper, device declaration/pNext and pipeline declaration/pNext are under SIRIUS_HAS_RETAINED_COMPUTE. Removing these regions reproduces original outside whitespace.",
+    "status": "Resolved in exact fe51e406 candidate; ROOT owns proposed macro-on/off syntax checks."
+  },
+  "findings": {
+    "feature_admission": "AMD0x1002 integrated/discrete only, physical API>=1.3 and original native RTE32/DenormPreserve32 policy. Query requires subgroupSizeControl, min<=32<=max, compute required-size support and at least2 compute subgroups for unchanged64-thread workgroup. Vulkan1.3 core structs used; no new extension name required for this guarded core path.",
+    "device_chain": "Original legacy enabled.shaderFloat64 retained. Caller subgroup node is passed to unchanged CreateDeviceWithPortability. Its optional FMA feature prepends itself with fma.pNext=create_info.pNext; absent-FMA path preserves existing node. Portability subset extension and failure behavior unchanged.",
+    "determinism_cache_identity": "Repeated helper reads only immutable physical properties/feature support and DeviceInfo fields not changed by FMA admission. Exact kernel words and physical device fix policy for device lifetime, so existing pipeline key remains sufficient without class/state/ABI changes.",
+    "selector": "Full-length full-word span equality with generated ordinary nativeFP32 kTransportShader only. Narrow/wide/FMA/portable/owner/other stages have different words and retain null stagepNext. No substring/name/hash-only dispatch selector.",
+    "pipeline": "Only selected pipeline receives requiredSubgroupSize32; original entrymain, descriptor/layout, local64x1x1 shader, float modes, barriers/status, input/output/40fields, cancellation/refusal cleanup and pipeline failure handling stay unchanged. computeFullSubgroups remainsfalse and no full-subgroup flag is introduced.",
+    "optional_modes": "No-retained branch restored by compile guards; nonAMD/software/portable/API<1.3/missing feature/properties use original creation/pipeline policy. Header/class/publicABI/shader/layout/cache/governors unchanged.",
+    "controls": "Other shader source selection is unchanged, not an assertion that all control results are already proved. New same-provider raw-word/control8 and all eight original controls plus sole original22-gate benefit remain mandatory before adoption."
+  },
+  "driver_premise": {
+    "pins": [
+      {
+        "path": "out/native-shader-driver-introspection/transport-default-query/result.json",
+        "bytes": 5216,
+        "sha256": "74c91275c1cb00b8786e8379689bdf4cecf525dd89b890d5ac615c5336e33e22"
+      },
+      {
+        "path": "out/native-shader-driver-introspection/transport-wave32-query/result.json",
+        "bytes": 5761,
+        "sha256": "36d722ea0bc5bd092a705bd3afb0463a8abfa085c3c2565d76d40d13ac270338"
+      },
+      {
+        "path": "out/native-shader-driver-introspection/transport-default-query/decoded-driver-object.json",
+        "bytes": 3996,
+        "sha256": "bc0d7ace75e90c7029dcce12673fd97d309a246e543ccb54364c8cfca5da87b2"
+      },
+      {
+        "path": "out/native-shader-driver-introspection/transport-wave32-query/decoded-driver-object.json",
+        "bytes": 3996,
+        "sha256": "f5c2fc3e8d329033cd800bb71c2e082940b0c3cc5fe5f6ffb3ea6f9d7e40f6b8"
+      }
+    ],
+    "same_shader_bytes": 85832,
+    "workgroup": [
+      64,
+      1,
+      1
+    ],
+    "wavefront": [
+      64,
+      32
+    ],
+    "text_bytes": [
+      233728,
+      221824
+    ],
+    "SGPR": [
+      106,
+      100
+    ],
+    "VGPR": [
+      55,
+      54
+    ],
+    "LDS_bytes": 9728,
+    "scratch_bytes": 0,
+    "dispatches": 0,
+    "claim": "Diagnostic codegen/resource observations only; no dynamic occupancy, timing, benefit or correctness inference."
+  },
+  "source_evidence": [
+    {
+      "path": "src/sirius/backend/CMakeLists.txt",
+      "bytes": 17763,
+      "sha256": "db74fc732fb0c04a5bbb13db8885aa57c67d69f5b412371039295efb30b286f2"
+    },
+    {
+      "path": "src/sirius/backend/device.h",
+      "bytes": 9669,
+      "sha256": "be88c5cbec6c8dadabf10a9feb52e4df562ad811fcdd41aa90b4645852616983"
+    },
+    {
+      "path": "src/sirius/backend/retained_compute.cpp",
+      "bytes": 45570,
+      "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+    },
+    {
+      "path": "src/sirius/backend/vulkan/vulkan_portability.h",
+      "bytes": 1636,
+      "sha256": "e3ff78fff5f8c3388be773b324db936fce0bca242b5d58318717c719428d5bff"
+    },
+    {
+      "path": "tests/backend/vulkan_smoke_test.cpp",
+      "bytes": 56959,
+      "sha256": "c1c7d6010b8f070ea41355274f613a909b8fe3acf91614f18631c1646dd78061"
+    }
+  ],
+  "limits": [
+    "No new compilation or runtime admission granted by this source review.",
+    "Enabling optional subgroup feature does not alter other source stage settings; actual driver output/numeric equality and original benefit gates remain empirical obligations.",
+    "Supported feature requests may still fail at Vulkan device/pipeline creation; original explicit error paths remain, no silent fallback or changed numerical policy."
+  ],
+  "checkout": {
+    "branch": "development/native-constant-constructor-2026-10-18",
+    "clean_tracked_tree": true,
+    "tracking_ahead_behind": [
+      0,
+      0
+    ],
+    "worktrees": 1,
+    "candidate_ignored_private_source_only": true,
+    "canonical_source_committed_and_pushed": true
+  },
+  "created_UTC": "2026-10-18T10:43:54.311051+00:00"
+}
