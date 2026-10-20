@@ -230,6 +230,9 @@ WINDOWS_DIAGNOSTIC_BUILD_STAGE = r"""      - name: Stage diagnostic Windows buil
             $volume = $volumes[$index]
             foreach ($dll in @($loader) + @($crt)) { Copy-Item -LiteralPath $dll.FullName -Destination $volume -Force }
             $payload = @(Get-Item -LiteralPath (Join-Path $volume $executables[$index]))
+            if ($index -eq 0) {
+              $payload += @(Get-Item -LiteralPath (Join-Path $volume "sirius_render_tests.exe"))
+            }
             $payload += @(Get-ChildItem -Path "$volume/*.dll", "$volume/*.manifest" -File -Force)
             $payload += @(Get-ChildItem -LiteralPath "$volume/resources" -Recurse -File -Force)
             foreach ($file in $payload) {
