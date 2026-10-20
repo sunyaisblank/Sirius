@@ -1,0 +1,156 @@
+{
+  "structural_premise_observed": true,
+  "exact_original_module_equal": true,
+  "default55_features_and_extensions_equal": true,
+  "rows": {
+    "baseline": {
+      "loaded_module": {
+        "words": 26010,
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "actual_span_matches_frozen_input": true
+      },
+      "IR": {
+        "module": 135305428471504,
+        "module_generation": 5,
+        "function": 135305428475016,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 12933796,
+        "sha256": "15abead29dd695b923e8e327aae09ecc24b4001bfd1e68f5db77faa24dc89d68",
+        "optimized_module_observed": true
+      },
+      "actual_entry": {
+        "file": "jit-10.elf",
+        "function": {
+          "name": "cs_variant",
+          "section": 3,
+          "offset": 0,
+          "bytes": 314,
+          "address": 135305500971008
+        },
+        "dispatch_id": 0,
+        "buffers": [
+          0,
+          1
+        ],
+        "kernel": 0,
+        "worker_thread": 29,
+        "actual_entry_pc": 135305500971008,
+        "entry_sysv_integer_arguments_2_3_4": [
+          16,
+          1,
+          1
+        ]
+      },
+      "functions": [
+        {
+          "name": "cs_co_variant.resume",
+          "section": 3,
+          "offset": 24544,
+          "bytes": 855245,
+          "address": 135305500995552
+        },
+        {
+          "name": "cs_co_variant.destroy",
+          "section": 3,
+          "offset": 879792,
+          "bytes": 29,
+          "address": 135305501850800
+        },
+        {
+          "name": "cs_variant",
+          "section": 3,
+          "offset": 0,
+          "bytes": 314,
+          "address": 135305500971008
+        },
+        {
+          "name": "cs_co_variant",
+          "section": 3,
+          "offset": 320,
+          "bytes": 24214,
+          "address": 135305500971328
+        }
+      ],
+      "total_function_bytes": 879802,
+      "memory_fences": 9,
+      "widths": {
+        "8": 221346,
+        "16": 0
+      },
+      "allocator_calls": [],
+      "shared_pointer_IR_mentions": 0,
+      "complete_canary_completed": true,
+      "scope": "Actual public factory, complete unchanged module, ordinary optimized LLVM and actual called JIT entry; short-input return only."
+    },
+    "candidate": {
+      "loaded_module": {
+        "words": 26010,
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "actual_span_matches_frozen_input": true
+      },
+      "IR": {
+        "module": 140368255389392,
+        "module_generation": 5,
+        "function": 140368255392904,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 12838929,
+        "sha256": "2a9cf287940062cfcbd702f7e64762cf760383c4f5bcb84aa407abd8b029a9b4",
+        "optimized_module_observed": true
+      },
+      "actual_entry": {
+        "file": "jit-10.elf",
+        "function": {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 981524,
+          "address": 140368524935168
+        },
+        "dispatch_id": 0,
+        "buffers": [
+          0,
+          1
+        ],
+        "kernel": 0,
+        "worker_thread": 33,
+        "actual_entry_pc": 140368524935168,
+        "entry_sysv_integer_arguments_2_3_4": [
+          16,
+          1,
+          1
+        ]
+      },
+      "functions": [
+        {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 981524,
+          "address": 140368524935168
+        }
+      ],
+      "total_function_bytes": 981524,
+      "memory_fences": 9,
+      "widths": {
+        "8": 0,
+        "16": 184311
+      },
+      "allocator_calls": [],
+      "shared_pointer_IR_mentions": 0,
+      "complete_canary_completed": true,
+      "scope": "Actual public factory, complete unchanged module, ordinary optimized LLVM and actual called JIT entry; short-input return only."
+    }
+  },
+  "numerical_correctness_or_speed_established": false,
+  "remaining": "Original scalar/focused shared-memory atomic arithmetic, C8, sole ABBA22, remaining7 controls and original cold frame."
+}

@@ -1,0 +1,8 @@
+{
+  "source_fixture": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/portable_binary32_reference.bin",
+  "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+  "records": 174268,
+  "expected_derived_from_original_fixture_only": true,
+  "extra_immutable_output_tail_words": 48,
+  "barrier16_contract": "Permutation j=(5*i+7)%16; inverse i=13*(j-7)%16. All lanes rendezvous four times, even tail lanes. Atomics must join the exact active-lane bitmask and count. Original independently expected high/low/valid triples and all48 tail words checked."
+}
