@@ -1447,13 +1447,19 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     const auto nonzero = [](const auto& uuid) {
         return std::any_of(uuid.begin(), uuid.end(), [](auto byte) { return byte != 0; });
     };
-    const bool reusable_software =
-        selected.kind == sirius::backend::DeviceKind::kSoftware && nonzero(selected.device_uuid) &&
-        nonzero(selected.driver_uuid) &&
+    const bool reusable_identity =
+        nonzero(selected.device_uuid) && nonzero(selected.driver_uuid) &&
         std::count_if(devices->begin(), devices->end(), [&](const auto& other) {
             return other.device_uuid == selected.device_uuid &&
                    other.driver_uuid == selected.driver_uuid;
         }) == 1;
+    RecordProperty("reusable_preview_identity", reusable_identity ? "1" : "0");
+    const CompletedTileCallback verify_preview = [](int, int, int width, int height,
+                                                    std::span<const float> rgba) {
+        EXPECT_EQ(rgba.size(), static_cast<std::size_t>(width) * height * 4);
+        EXPECT_TRUE(std::all_of(rgba.begin(), rgba.end(),
+                                [](float value) { return std::isfinite(value); }));
+    };
     const auto expect_fresh_frame_stats = [&](const VulkanRenderStats& stats) {
         EXPECT_EQ(stats.explicit_buffer_allocation_bytes,
                   rendered->explicit_buffer_allocation_bytes);
@@ -1479,20 +1485,28 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
             EXPECT_TRUE(stats.retained_preparation.stages[stage].header_restored);
         }
     };
+    const auto created_pipeline = [](const VulkanRenderStats& stats) {
+        return stats.retained_timing.pipeline_creations != 0 ||
+               std::any_of(stats.retained_preparation.stages.begin(),
+                           stats.retained_preparation.stages.end(),
+                           [](const auto& stage) { return stage.timing.pipeline_created; });
+    };
+    const auto expect_reused_pipelines = [&](const VulkanRenderStats& stats) {
+        if (!stats.retained_intervals || !reusable_identity) return;
+        EXPECT_GT(stats.band_dispatches, 0);
+        EXPECT_FALSE(created_pipeline(stats));
+    };
     expect_fresh_frame_stats(*rendered);
     // The identical scene must publish identical finite radiance without
     // accumulating buffers, statistics or pipeline creation on an idle owner.
     DisplayBuffer repeated;
     repeated.Initialise(config.width, config.height);
-    const auto repeat = RenderVulkanToDisplay(config, repeated);
+    const auto repeat = RenderVulkanToDisplay(config, repeated, {}, {}, verify_preview);
     ASSERT_TRUE(repeat) << repeat.error().Description();
     EXPECT_EQ(repeated.GetUpdateCounter(), 1U);
     EXPECT_EQ(repeated.SnapshotFloatData(), complete);
     expect_fresh_frame_stats(*repeat);
-    if (repeat->retained_intervals && reusable_software) {
-        for (const auto stage : kSoftwarePreparationStages)
-            EXPECT_FALSE(repeat->retained_preparation.stages[stage].timing.pipeline_created);
-    }
+    expect_reused_pipelines(*repeat);
     RecordProperty("repeated_initialization_seconds",
                    std::to_string(repeat->initialization_seconds));
     // Compatible residency must still upload the new camera inputs.
@@ -1500,7 +1514,8 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     changed_config.camera_beta_right = -0.12;
     DisplayBuffer changed;
     changed.Initialise(config.width, config.height);
-    const auto changed_frame = RenderVulkanToDisplay(changed_config, changed);
+    const auto changed_frame =
+        RenderVulkanToDisplay(changed_config, changed, {}, {}, verify_preview);
     ASSERT_TRUE(changed_frame) << changed_frame.error().Description();
     EXPECT_EQ(changed.GetUpdateCounter(), 1U);
     const auto changed_pixels = changed.SnapshotFloatData();
@@ -1508,18 +1523,31 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
     EXPECT_TRUE(std::all_of(changed_pixels.begin(), changed_pixels.end(),
                             [](float value) { return std::isfinite(value); }));
     expect_fresh_frame_stats(*changed_frame);
-    if (changed_frame->retained_intervals && reusable_software) {
-        for (const auto stage : kSoftwarePreparationStages)
-            EXPECT_FALSE(changed_frame->retained_preparation.stages[stage].timing.pipeline_created);
-    }
-    // Cancel during frame preparation or tracing. The previously published
-    // image and its publication counter must remain unchanged.
-    int polls = 0;
-    const auto cancelled = RenderVulkanToDisplay(config, display, {}, [&] { return ++polls > 20; });
+    expect_reused_pipelines(*changed_frame);
+    // Cancel after actual completed-tile work. The previously committed image
+    // stays intact, while joined healthy device resources can serve a new frame.
+    std::atomic<unsigned> cancelled_tiles{0};
+    const auto cancelled = RenderVulkanToDisplay(
+        config, display, {}, [&] { return cancelled_tiles.load() != 0; },
+        [&](int x, int y, int width, int height, std::span<const float> rgba) {
+            verify_preview(x, y, width, height, rgba);
+            ++cancelled_tiles;
+        });
     EXPECT_FALSE(cancelled.has_value());
-    EXPECT_GT(polls, 20);
+    EXPECT_GT(cancelled_tiles.load(), 0U);
     EXPECT_EQ(display.GetUpdateCounter(), 1u);
     EXPECT_EQ(display.SnapshotFloatData(), complete);
+    DisplayBuffer after_cancel;
+    after_cancel.Initialise(config.width, config.height);
+    const auto resumed =
+        RenderVulkanToDisplay(changed_config, after_cancel, {}, {}, verify_preview);
+    ASSERT_TRUE(resumed) << resumed.error().Description();
+    EXPECT_EQ(after_cancel.GetUpdateCounter(), 1U);
+    EXPECT_EQ(after_cancel.SnapshotFloatData(), changed_pixels);
+    expect_fresh_frame_stats(*resumed);
+    expect_reused_pipelines(*resumed);
+    RecordProperty("cancelled_completed_tiles", std::to_string(cancelled_tiles.load()));
+    RecordProperty("resumed_pipeline_created", created_pipeline(*resumed) ? "1" : "0");
     if (!rendered->retained_intervals) {
         ScopedEnvironmentVariable source_too_large("SIRIUS_MEMORY_BUDGET_MB", "64");
         const auto refused = RenderVulkanToDisplay(config, display);
@@ -1536,19 +1564,34 @@ TEST(VulkanRenderSession, ContinuationRendererPublishesOnlyCompleteFramesWithinA
         EXPECT_EQ(display.GetUpdateCounter(), 1u);
         EXPECT_EQ(display.SnapshotFloatData(), complete);
     }
-    // Cancellation and an insufficient budget retire the leased pair. A
-    // subsequent normal render must recover within the original budget and
+    // An insufficient budget still retires the leased pair. A subsequent
+    // normal render must recover within the original budget and
     // publish the original scene, rather than inheriting failed-frame state.
     DisplayBuffer recovered;
     recovered.Initialise(config.width, config.height);
-    const auto recovery = RenderVulkanToDisplay(config, recovered);
+    const auto recovery = RenderVulkanToDisplay(config, recovered, {}, {}, verify_preview);
     ASSERT_TRUE(recovery) << recovery.error().Description();
     EXPECT_EQ(recovered.GetUpdateCounter(), 1U);
     EXPECT_EQ(recovered.SnapshotFloatData(), complete);
     expect_fresh_frame_stats(*recovery);
-    if (recovery->retained_intervals && reusable_software) {
-        for (const auto stage : kSoftwarePreparationStages)
-            EXPECT_TRUE(recovery->retained_preparation.stages[stage].timing.pipeline_created);
+    if (recovery->retained_intervals && reusable_identity) {
+        EXPECT_TRUE(created_pipeline(*recovery));
+        if (selected.kind == sirius::backend::DeviceKind::kSoftware) {
+            for (const auto stage : kSoftwarePreparationStages)
+                EXPECT_TRUE(recovery->retained_preparation.stages[stage].timing.pipeline_created);
+        }
+    }
+    if (recovery->retained_intervals && selected.kind != sirius::backend::DeviceKind::kSoftware) {
+        // A native render without a preview outlet keeps its fresh-owner policy,
+        // even when a compatible interactive owner is idle in this process.
+        DisplayBuffer headless;
+        headless.Initialise(config.width, config.height);
+        const auto fresh = RenderVulkanToDisplay(config, headless);
+        ASSERT_TRUE(fresh) << fresh.error().Description();
+        EXPECT_EQ(headless.GetUpdateCounter(), 1U);
+        EXPECT_EQ(headless.SnapshotFloatData(), complete);
+        expect_fresh_frame_stats(*fresh);
+        EXPECT_TRUE(created_pipeline(*fresh));
     }
 }
 

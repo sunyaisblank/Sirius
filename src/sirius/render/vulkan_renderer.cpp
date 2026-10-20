@@ -419,7 +419,7 @@ struct RetainedOwnerStore {
     ~RetainedOwnerStore() { existing_retained_store.store(nullptr, std::memory_order_release); }
 };
 
-void RetainCompletedOwner(std::unique_ptr<RetainedRenderOwner> owner) {
+void RetainIdleOwner(std::unique_ptr<RetainedRenderOwner> owner) {
     if (!owner->cacheable) return;
     // Initialize only after device creation initialized the backend process
     // pipeline cache. The idle device is consequently destroyed first.
@@ -431,14 +431,16 @@ void RetainCompletedOwner(std::unique_ptr<RetainedRenderOwner> owner) {
 
 Expected<std::unique_ptr<RetainedRenderOwner>> AcquireRetainedOwner(
     const SessionConfig& config, std::span<const backend::DeviceInfo> inventory, std::size_t index,
-    PrecisionRung rung) {
+    PrecisionRung rung, bool has_tile_outlet) {
     const auto& selected = inventory[index];
     const auto nonzero = [](const auto& uuid) {
         return std::any_of(uuid.begin(), uuid.end(), [](auto byte) { return byte != 0; });
     };
+    // Native preview updates share residency; headless native renders retain
+    // their fresh-owner policy. Device identity must be unique in either case.
     const bool cacheable =
-        selected.kind == backend::DeviceKind::kSoftware && nonzero(selected.device_uuid) &&
-        nonzero(selected.driver_uuid) &&
+        (selected.kind == backend::DeviceKind::kSoftware || has_tile_outlet) &&
+        nonzero(selected.device_uuid) && nonzero(selected.driver_uuid) &&
         std::count_if(inventory.begin(), inventory.end(), [&](const auto& other) {
             return other.device_uuid == selected.device_uuid &&
                    other.driver_uuid == selected.driver_uuid;
@@ -503,7 +505,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                                            RetainedRenderOwner& owner,
                                            const std::function<void(int, int)>& on_tile,
                                            const std::function<bool()>& should_cancel,
-                                           const CompletedTileCallback& on_completed_tile) {
+                                           const CompletedTileCallback& on_completed_tile,
+                                           bool& clean_cancellation) {
+    clean_cancellation = false;
     auto& device = *owner.device;
     auto& compute = owner.compute;
     const auto rung = owner.rung;
@@ -671,12 +675,19 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     }
     session.WaitForCompletion();
     if (const auto error = executor.Error()) return std::unexpected(*error);
-    if (session.GetState() != SessionState::Complete)
+    // Every worker request waits for dispatcher completion, including errors.
+    // Joining the workers makes this error check stable; the local dispatcher
+    // is also destroyed and joined before the caller can retain the owner.
+    const auto state = session.GetState();
+    if (state != SessionState::Complete) {
+        clean_cancellation = state == SessionState::Cancelled;
         return Fail(ErrorDomain::kPhysics, "render retained frame",
-                    session.GetState() == SessionState::Cancelled ? "render cancelled"
-                                                                  : session.GetErrorMessage());
-    if (should_cancel && should_cancel())
+                    clean_cancellation ? "render cancelled" : session.GetErrorMessage());
+    }
+    if (should_cancel && should_cancel()) {
+        clean_cancellation = true;
         return Fail(ErrorDomain::kPhysics, "publish retained frame", "render cancelled");
+    }
     const auto pixels = session.GetDisplayBuffer().SnapshotFloatData();
     if (!std::all_of(pixels.begin(), pixels.end(),
                      [](float value) { return std::isfinite(value); }))
@@ -896,15 +907,17 @@ Expected<VulkanRenderStats> RenderVulkanToDisplay(const SessionConfig& config,
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
         auto rung = SelectPrecisionRung((*devices)[*device_index].supports_fp64);
         if (!rung) return std::unexpected(rung.error());
-        auto owner = AcquireRetainedOwner(config, *devices, *device_index, *rung);
+        auto owner =
+            AcquireRetainedOwner(config, *devices, *device_index, *rung, bool(on_completed_tile));
         if (!owner) return std::unexpected(owner.error());
-        auto result =
-            RenderRetained(config, display, **owner, on_tile, should_cancel, on_completed_tile);
+        bool clean_cancellation = false;
+        auto result = RenderRetained(config, display, **owner, on_tile, should_cancel,
+                                     on_completed_tile, clean_cancellation);
         // RenderRetained has destroyed and joined its fresh session/executor.
-        // Failures and cancellation retire the complete owner.
+        // Failed or unconfirmed work still retires the complete owner.
+        if (result) result->device_index = *device_index;
+        if (result || (clean_cancellation && on_completed_tile)) RetainIdleOwner(std::move(*owner));
         if (result) {
-            result->device_index = *device_index;
-            RetainCompletedOwner(std::move(*owner));
             result->seconds =
                 std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
         }

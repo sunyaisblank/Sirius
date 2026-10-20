@@ -158,6 +158,9 @@ struct VulkanRenderStats {
 // committed to the caller beyond the error return. The optional completed-tile
 // outlet carries provisional finite linear radiance separately; its borrowed
 // span is valid during the callback and never commits `display`.
+// A tile outlet permits compatible native device/compute residency to survive
+// completion or fully joined cancellation. Frames and executors remain fresh;
+// native renders without an outlet retain their fresh-owner policy.
 [[nodiscard]] base::Expected<VulkanRenderStats> RenderVulkanToDisplay(
     const SessionConfig& config, DisplayBuffer& display,
     const std::function<void(int tiles_done, int tiles_total)>& on_tile = {},
