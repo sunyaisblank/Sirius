@@ -1,0 +1,39 @@
+{
+  "mode": "native-packed-original-controls",
+  "label": "a2",
+  "case": "a2",
+  "read_case_pass": true,
+  "observer_sha256": "d37a679c00f7ce4086a6fbe78c838e1b0411b839cf6cfa8c47edb56db0662f76",
+  "audit_script_sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+  "arguments": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';$p=Get-Process -Id $PID;$h=$p.Handle;@{owner_pid=$PID;owner_start_time_utc=$p.StartTime.ToUniversalTime().ToString('o');expected_test_executable='';scope='Read-only terminal auditor bootstrap, no Add-Type or scientific launch'}|ConvertTo-Json|Set-Content -LiteralPath '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-rounded-error-runtime-abba\\temp\\terminal-a2\\bootstrap.json' -Encoding UTF8;& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-rounded-error-runtime-abba\\terminal-audit.ps1' -Workspace '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-rounded-error-runtime-abba' -RunName 'native/a2' -Receipt 'terminal-a2.json' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-rounded-error-matched-current'"
+  ],
+  "deadline_seconds": 60,
+  "outer_stop": false,
+  "errors": [],
+  "started_epoch": 1792483039.4998977,
+  "qualification_claimed": false,
+  "scope": "Selected original native-AMD packed control and private compile-only source/product/input identities; bounded Windows birth/provider/accessible-consumer audit. No hidden/global/unconditional compiler-descendant absence or full qualification claim.",
+  "linux_child_pid": 29302,
+  "linux_child_birth": "34892130",
+  "controller_signals": [],
+  "returncode": 0,
+  "elapsed_seconds": 2.2544902639929205,
+  "linux_child_birth_absent": true,
+  "accepted": true,
+  "loaded_provider_evidence_complete": true,
+  "terminal_receipt_sha256": "991a52ef7bb8c0786d2d5980a98c6865a06f432d6fb3804eb71c59398a13c114",
+  "bootstrap": {
+    "owner_start_time_utc": "2026-10-20T07:57:19.0693374Z",
+    "scope": "Read-only terminal auditor bootstrap, no Add-Type or scientific launch",
+    "owner_pid": 13584,
+    "expected_test_executable": ""
+  },
+  "source_binding_owner_bridge_action_post_sealed": true
+}

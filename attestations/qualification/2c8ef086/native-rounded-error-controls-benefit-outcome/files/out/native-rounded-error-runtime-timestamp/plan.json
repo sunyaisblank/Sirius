@@ -1,0 +1,34 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": true,
+  "source_revision": "625abe4569c4b377fad6d8586d6f0487f01d9903",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "stage": "bin/windows-msvc/native-rounded-error-matched-current",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "timestamp",
+  "order": [
+    "control-8"
+  ],
+  "actions": {
+    "control-8": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "control-8": {
+      "TEMP": "renders/native-rounded-error-runtime-timestamp/control-8",
+      "TMP": "renders/native-rounded-error-runtime-timestamp/control-8"
+    }
+  },
+  "phase_prerequisites": {}
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "sirius-native-rounded-error-root-selected-command-details-v1",
+  "passed": true,
+  "producer_source_revision": "625abe4569c4b377fad6d8586d6f0487f01d9903",
+  "private_compute_canonical_usage": {
+    "baseline": {
+      "private_CL_tlog": {
+        "path": "bin/windows-msvc/native-rounded-error-matched-current/metadata/private-objects/native_rounded_error_baseline_compute.dir/Release/native_r.B47C00E1.tlog/CL.command.1.tlog",
+        "bytes": 1754,
+        "sha256": "a85a36b2fb7d60f4ae1563cc19b9927b69062e43a36dbab09b15d5a0ee74dbef"
+      },
+      "canonical_CL_tlog": {
+        "path": "bin/windows-msvc/native-rounded-error-matched-current/metadata/canonical-backend/src/sirius/backend/sirius_backend.dir/Release/sirius_backend.tlog/CL.command.1.tlog",
+        "bytes": 6218,
+        "sha256": "0abd04918e2f32861998a0cc65f6ab8e721c2c645e9e2ad68f72fea29a170640"
+      },
+      "equal_after_only_private_include_and_Fo_Fd_removal": true
+    },
+    "candidate": {
+      "private_CL_tlog": {
+        "path": "bin/windows-msvc/native-rounded-error-matched-current/metadata/private-objects/native_rounded_error_candidate_compute.dir/Release/native_r.5FFFAB00.tlog/CL.command.1.tlog",
+        "bytes": 1762,
+        "sha256": "f2a99a8cead50cc0e36b023ddeac37ab032ba72a2ead91fd395878114eace0a9"
+      },
+      "canonical_CL_tlog": {
+        "path": "bin/windows-msvc/native-rounded-error-matched-current/metadata/canonical-backend/src/sirius/backend/sirius_backend.dir/Release/sirius_backend.tlog/CL.command.1.tlog",
+        "bytes": 6218,
+        "sha256": "0abd04918e2f32861998a0cc65f6ab8e721c2c645e9e2ad68f72fea29a170640"
+      },
+      "equal_after_only_private_include_and_Fo_Fd_removal": true
+    }
+  },
+  "selection": {
+    "baseline": {
+      "MAP": {
+        "path": "bin/windows-msvc/native-rounded-error-matched-current/payload/baseline/original_baseline_controls.map",
+        "bytes": 5360392,
+        "sha256": "fa92d8b2424d6e9e2d04642fa64f55052cee79c9af3b90e95c23af8e7d883c35"
+      },
+      "four_exact_Vulkan_function_symbols": [
+        [
+          "0001:001414b0",
+          "?CreateVulkanDevice@backend@sirius@@YA?AV?$expected@V?$unique_ptr@VComputeDevice@backend@sirius@@U?$default_delete@VComputeDevice@backend@sirius@@@std@@@std@@VError@base@sirius@@@std@@_K@Z",
+          "00000001401424b0",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ],
+        [
+          "0001:001444b0",
+          "?EnumerateVulkanDevices@backend@sirius@@YA?AV?$expected@V?$vector@UDeviceInfo@backend@sirius@@V?$allocator@UDeviceInfo@backend@sirius@@@std@@@std@@VError@base@sirius@@@std@@XZ",
+          "00000001401454b0",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ],
+        [
+          "0001:00144850",
+          "?GetOrCreatePipeline@VulkanDevice@backend@sirius@@AEAA?AV?$expected@PEAUPipeline@VulkanDevice@backend@sirius@@VError@base@4@@std@@UKernelHandle@23@V?$span@$$CBUBufferHandle@backend@sirius@@$0?0@5@PEA_N@Z",
+          "0000000140145850",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ],
+        [
+          "0001:00145bd0",
+          "?LoadKernel@VulkanDevice@backend@sirius@@UEAA?AV?$expected@UKernelHandle@backend@sirius@@VError@base@3@@std@@V?$span@$$CBI$0?0@5@@Z",
+          "0000000140146bd0",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ]
+      ],
+      "one_RetainedCompute_Create_symbol": [
+        "0001:000f4480",
+        "?Create@RetainedCompute@backend@sirius@@SA?AV?$expected@V?$unique_ptr@VRetainedCompute@backend@sirius@@U?$default_delete@VRetainedCompute@backend@sirius@@@std@@@std@@VError@base@sirius@@@std@@AEAVComputeDevice@23@_K_NN2@Z",
+        "00000001400f5480",
+        "f",
+        "retained_compute.obj"
+      ],
+      "canonical_retained_compute_archive_member_absent_from_MAP": true
+    },
+    "candidate": {
+      "MAP": {
+        "path": "bin/windows-msvc/native-rounded-error-matched-current/payload/candidate/original_candidate_controls.map",
+        "bytes": 5360393,
+        "sha256": "f50aa5071e3d700e35edf9c2208b76007a490a66adcbf4145fa6e0a4466ebac8"
+      },
+      "four_exact_Vulkan_function_symbols": [
+        [
+          "0001:001414b0",
+          "?CreateVulkanDevice@backend@sirius@@YA?AV?$expected@V?$unique_ptr@VComputeDevice@backend@sirius@@U?$default_delete@VComputeDevice@backend@sirius@@@std@@@std@@VError@base@sirius@@@std@@_K@Z",
+          "00000001401424b0",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ],
+        [
+          "0001:001444b0",
+          "?EnumerateVulkanDevices@backend@sirius@@YA?AV?$expected@V?$vector@UDeviceInfo@backend@sirius@@V?$allocator@UDeviceInfo@backend@sirius@@@std@@@std@@VError@base@sirius@@@std@@XZ",
+          "00000001401454b0",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ],
+        [
+          "0001:00144850",
+          "?GetOrCreatePipeline@VulkanDevice@backend@sirius@@AEAA?AV?$expected@PEAUPipeline@VulkanDevice@backend@sirius@@VError@base@4@@std@@UKernelHandle@23@V?$span@$$CBUBufferHandle@backend@sirius@@$0?0@5@PEA_N@Z",
+          "0000000140145850",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ],
+        [
+          "0001:00145bd0",
+          "?LoadKernel@VulkanDevice@backend@sirius@@UEAA?AV?$expected@UKernelHandle@backend@sirius@@VError@base@3@@std@@V?$span@$$CBI$0?0@5@@Z",
+          "0000000140146bd0",
+          "f",
+          "sirius_backend:vulkan_device.obj"
+        ]
+      ],
+      "one_RetainedCompute_Create_symbol": [
+        "0001:000f4480",
+        "?Create@RetainedCompute@backend@sirius@@SA?AV?$expected@V?$unique_ptr@VRetainedCompute@backend@sirius@@U?$default_delete@VRetainedCompute@backend@sirius@@@std@@@std@@VError@base@sirius@@@std@@AEAVComputeDevice@23@_K_NN2@Z",
+        "00000001400f5480",
+        "f",
+        "retained_compute.obj"
+      ],
+      "canonical_retained_compute_archive_member_absent_from_MAP": true
+    }
+  },
+  "ROOT_read": "All5 actualCL and2 fullLINK records read: strictW4/WX/O2/Ob2/MD/fp:precise/C++latest/contract2; original forcedfail_on_skip ontest sources,arm headersfirst,canonicalSDK.",
+  "VERBOSE_limit": "RealVERBOSE:LIB option/outputread; no individualLoaded extraction messages asserted. Selection follows exactMAP symbols, unique byte-identical canonicalarchive member and actualLINK.read/object paths.",
+  "superseded_passive_assumption": "Initial root inline reader incorrectly expected two Create symbols perarm; actualraw has one perarm. That passive read stopped before anyfile/output or workload; corrected only the cardinality assumption, no source/artifact/workload changed.",
+  "runtime_admitted": false
+}

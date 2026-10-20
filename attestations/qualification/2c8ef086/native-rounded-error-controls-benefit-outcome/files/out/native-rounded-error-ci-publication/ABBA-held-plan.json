@@ -1,0 +1,81 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": false,
+  "source_revision": "625abe4569c4b377fad6d8586d6f0487f01d9903",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "stage": "bin/windows-msvc/native-rounded-error-matched-current",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "abba",
+  "order": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "actions": {
+    "a1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "a2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "a1": {
+      "TEMP": "renders/native-rounded-error-runtime-abba/a1",
+      "TMP": "renders/native-rounded-error-runtime-abba/a1"
+    },
+    "b1": {
+      "TEMP": "renders/native-rounded-error-runtime-abba/b1",
+      "TMP": "renders/native-rounded-error-runtime-abba/b1"
+    },
+    "b2": {
+      "TEMP": "renders/native-rounded-error-runtime-abba/b2",
+      "TMP": "renders/native-rounded-error-runtime-abba/b2"
+    },
+    "a2": {
+      "TEMP": "renders/native-rounded-error-runtime-abba/a2",
+      "TMP": "renders/native-rounded-error-runtime-abba/a2"
+    }
+  },
+  "phase_prerequisites": {
+    "timestamp_acceptance": {
+      "path": "out/native-rounded-error-timestamp-evidence/timestamp-acceptance.json",
+      "identity": {
+        "bytes": 53096,
+        "sha256": "59f189df67685a845e70f8adfb7fdd436daff8941d343c3f60fd7c163975ac6c"
+      }
+    }
+  }
+}

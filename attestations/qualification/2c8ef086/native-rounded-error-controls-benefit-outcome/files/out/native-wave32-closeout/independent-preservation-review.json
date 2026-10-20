@@ -1,0 +1,57 @@
+{
+  "schema": "sirius-native-wave32-independent-preservation-review-v1",
+  "passed": true,
+  "preservation_audit_completed": true,
+  "reviewer": "/root/sanitizer_gate_contract",
+  "bundle": "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome",
+  "critical_pins": [
+    {
+      "path": "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/MANIFEST.json",
+      "bytes": 125015,
+      "sha256": "346c36a8d930b9e3e13b4ffdee08a99e83b56e0ba2a43cfc4d91c224bc51cc3d"
+    },
+    {
+      "path": "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/PRESERVATION.json",
+      "bytes": 1252,
+      "sha256": "ddf24fb8d9e57cda67ecb91165beb8b8dba3df6b2a162a2e305eb7d8fcc45bf1"
+    },
+    {
+      "path": "out/native-wave32-preservation/root-Git.json",
+      "bytes": 76850,
+      "sha256": "e48783deb4ff4894dd57731e47cbe28b8eb633fcdf8727d3295551eb42f62f2d"
+    },
+    {
+      "path": "out/native-wave32-preservation/root-preparation.json",
+      "bytes": 1002,
+      "sha256": "7b5ee0936551d68e0ca7e6109ba37be83812312a05e9567fbd420fa5ede4f9ca"
+    }
+  ],
+  "counts": {
+    "ordinary_payloads": 199,
+    "bundle_files": 201,
+    "Git_stored_paths_including_two_late_extras": 203,
+    "payload_bytes": 33602187,
+    "ZIP_backed_stage_members": 124,
+    "external_source_5d99_current_bytes_matched_Git": 100
+  },
+  "checks": [
+    "Exact201tree/199original-copy byte+mode pairs and allclosedownedroot inventories verified. Three late preservation operationalfiles are explicitly outside snapshot; commit includes commit_bundle.py/root-preparation, root-Git receipt bound here without selfcycle.",
+    "One stored artifactZIP: CRC,124safeunique member names/allmember bytes and externalattrs joined to124currentstage files; manifest explicitrestoremode matches actualmodes. No duplicate expandedstage copy or hostbackup claim.",
+    "All203namedcommit:path fullGitbytes/size/blob/executablemode match current copies; localtag resolves b56762a5. External5d99threeprefix source files match actualGitbytes, canonical2c8 is ancestor. Five referenced commits exist; existing sourcepublication receipt retains actualpush/freshremote record.",
+    "Preserved raw/reader/independentreject exactly retain control8PASS, soleABBAauditPASS/benefitFAIL20of22, originaldistinctcontrols1of8, remaining7notrun, noadoption/fullqualification. Diagnosticdriver-codegen shrink is not benefit acceptance."
+  ],
+  "Git": {
+    "commit": "b56762a537711dfc85a4a8cdf86fa2a511d9f740",
+    "local_tag": "refs/tags/evidence/native-wave32-rejected-2c8ef086",
+    "stored_bytes_verified_independently": true,
+    "publication_receipt_pushed_at_review": true,
+    "fresh_remote_checked_by_reviewer": false,
+    "ROOT_fresh_remote_receipt": true
+  },
+  "limits": [
+    "Preservation only; no runtime/provider/test/benchmark/hostquery/recheck executed.",
+    "No cleanup/holdrelease/deletion/sourceadoption authority. ROOT owns scopedcleanup; actual push/freshremote are ROOT receipt evidence, not reviewer network queries.",
+    "Host hash-only dependencies remain hash-only; POSIXmodes recover from explicitmanifest, Git only tracks executable bit.",
+    "Historical pendingpublication fields remain chronology, superseded only by actualGitreceipt; no claim all8/fullscience/Mandatory/release passed."
+  ]
+}

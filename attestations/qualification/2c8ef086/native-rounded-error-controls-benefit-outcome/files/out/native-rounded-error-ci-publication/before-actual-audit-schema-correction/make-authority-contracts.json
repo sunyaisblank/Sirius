@@ -1,0 +1,59 @@
+{
+  "schema": "sirius-native-rounded-error-authority-composer-source-v1",
+  "source_only": true,
+  "executed": false,
+  "runtime_admitted": false,
+  "actual_run_artifact_stage_products_passed": false,
+  "origin": {
+    "commit": "b56762a537711dfc85a4a8cdf86fa2a511d9f740",
+    "path": "attestations/qualification/2c8ef086/native-wave32-controls-benefit-outcome/files/out/native-wave32-pe-audit/make_authority.py",
+    "bytes": 6455,
+    "sha256": "38ce839a278236e9baece428f041858997ba3d313a68c829efd3128a1396cd45"
+  },
+  "wire_shape_reference": {
+    "commit": "fd530d957d2e0737f5453d88d78d979f8ed17607",
+    "eligibility": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-pe-audit/root-actual-producer-eligibility.json",
+    "array_authority": "attestations/qualification/5b2df58b/native-constant-controls-benefit-pass/files/out/native-constant-pe-audit/matched-array-authority-d2e1a265.json",
+    "scope": "Shapes and matchingc948 observer/test-source evidence only; no prior verdict/product pin copied."
+  },
+  "argv": [
+    "python3",
+    "-B",
+    "out/native-rounded-error-ci-publication/make_authority.py",
+    "--stage",
+    "bin/windows-msvc/native-rounded-error-matched-current",
+    "--revision",
+    "ROOT_ACTUAL_PRIVATE_SHA",
+    "--run-id",
+    "ROOT_ACTUAL_RUN_ID",
+    "--pe-audit",
+    "ROOT_ACTUAL_PASSED_STATIC_PE_REPORT",
+    "--publication-check",
+    "ROOT_ACTUAL_PASSED_PUBLICATION_REPORT",
+    "--download",
+    "ROOT_ACTUAL_DOWNLOAD_REPORT",
+    "--root-manual-admission",
+    "ROOT_ACTUAL_MANUAL_AND_INDEPENDENT_ADMISSION"
+  ],
+  "outputs": [
+    "out/native-rounded-error-ci-publication/root-actual-producer-eligibility.json",
+    "out/native-rounded-error-ci-publication/matched-array-authority.json"
+  ],
+  "exclusive_outputs": true,
+  "holds": "Root/independent actual staticPE+publication reviews and exactmanual predicates required. Source template defaults passedfalse and allunknownactualpins ROOT_PENDING/null, refusing execution. Later concrete runtime review/release is separate. No artifact or stage created by author.",
+  "retained_predicates": [
+    "Actual new profile5/canonical2c8/SHA/run/attempt1 and passedconfigure+build/stableinput+source/domainfalse flags/M+producer identities; successful actualroot publication/CRCdownload/PEauditor records exactrichpins.",
+    "Actualsource membership/Gitcanonical2c8/source-tool-fetched-configured proof delegated only to pinned passed currentpublication checker; current77inputs and composition rejoined source-before/build-before,5objects/strictflags,35SPVs/7tables/ownerheaders composed from actualpassedPEreader.",
+    "All84 reported payload slices directly rehashed in2actualPEs,5changedmain/35same/2ownerexact,lowercaseFMAtyped header values; canonicalVulkanMAPsinglemember and current canonicalobject+archive pins, no privateVulkan or zeroshaderdelta.",
+    "Five actualCL strict commands and two actualLINK command bodies checked; armname-onlyLINK equality/no FORCE/WHOLEARCHIVE. RuntimeoriginsMSVCminor/CRT/SDK and rawactualimports matched; originalc948observer/testblob identity reused exactly."
+  ],
+  "manual_checks_retained": {
+    "actual_CL5_LINK2_canonical_usage_ROOT_read": "Read complete private5 CL and2 LINK command/read/project records, matching actualcanonical TU-specific usage flags/header precedence; no blanket all-build warning-free claim.",
+    "canonical_Vulkan_MAP_VERBOSE_archive_selection_ROOT_read": "Read raw MAP and VERBOSE library extraction for both links; privatecompute direct and canonical Vulkan selected exactly. Staticreader uniquely matches archived canonicalobject. No wave32 privateVulkan assumption.",
+    "actual_source_tools_SDK_CRT_import_provenance_ROOT_read": "Actual new API/download/head/full sourceGit/tool/alias/cache/SDKloader/releaseCRT/import proofs; configuredPython0Balias is metadata, not executable backup or substitution.",
+    "original_observer_integrity_reuse_ROOT_validated": "Exactc948 observer and unchanged canonicaltest blob preserve27bodies/1492ordered assertions; no native numerical acceptance from this."
+  },
+  "independence_boundary": "manual.independent_actual_producer_review is a rich pin to passed actual staticPE/publication evidence review with new producer SHA, before theseoutputs. It must not depend on theseoutputs, avoiding a cycle. Source-only review or oldproducer review cannot match new actual producer SHA. Later phase/concrete runtime review remains required.",
+  "scope_limits": "Bounded source/tool+adjacentDLL/fetched/configured+CRT/SDK provenance. No complete host/SDKheader/transitiveDSO backup, no numerical/benefit/fullscience/Mandatory/release/adoption or launch authority. No new control, compiler,provider,benchmark or unchangedretry.",
+  "author_checks": "AST parse/source inverse only; no helper invocation/import/provider/native/CI/network/Gitmutation."
+}

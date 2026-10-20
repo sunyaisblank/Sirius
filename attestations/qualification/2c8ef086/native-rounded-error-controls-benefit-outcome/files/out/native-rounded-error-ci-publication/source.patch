@@ -1,0 +1,210 @@
+--- originals/publish_source.py
++++ publish_source.py
+@@ -2,12 +2,13 @@
+ import json
+ import os
+ import subprocess
++import sys
+ from pathlib import Path
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+ WORK = Path(__file__).resolve().parent
+ BASE = '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+-BRANCH = 'refs/heads/development/native-wave32-diagnostic-2026-10-18'
++BRANCH = 'refs/heads/development/native-rounded-error-diagnostic-2026-10-18'
+ 
+ 
+ def run(*argv, data=None, env=None):
+@@ -18,13 +19,25 @@
+ assert run('git', 'rev-parse', 'HEAD').decode().strip() == BASE
+ assert not run('git', 'status', '--porcelain')
+ assert subprocess.run(['git', 'show-ref', '--verify', '--quiet', BRANCH], cwd=ROOT).returncode == 1
++assert len(sys.argv) == 2
++admission = ROOT / sys.argv[1]
++assert admission.resolve(strict=True) == admission and admission.is_relative_to(ROOT / 'out')
++composition_path = ROOT / 'out/native-rounded-error-producer-inputs/root-composed-inputs.json'
++composition = json.loads(composition_path.read_text())
++assert composition['schema'] == 'sirius-native-rounded-error-diagnostic-input-composition-v1'
++assert composition['passed'] is True and composition['source_revision'] == BASE and len(composition['files']) == 77
++assert composition['runtime_released'] is False and composition['adoption_admitted'] is False
++admission_bytes = admission.read_bytes()
++assert composition['emitted_admission'] == {'path': str(admission.relative_to(ROOT)), 'bytes': len(admission_bytes), 'sha256': hashlib.sha256(admission_bytes).hexdigest()}
++assert json.loads(admission_bytes)['passed'] is True
++assert not (WORK / 'source-Git.json').exists()
+ paths = []
+-for root in ['out/native-wave32-source', 'out/native-wave32-windows-source',
+-             'out/native-wave32-producer-inputs']:
++for root in ['out/native-rounded-error-source', 'out/native-rounded-error-windows-source',
++             'out/native-rounded-error-producer-inputs']:
+     paths.extend(p for p in (ROOT / root).rglob('*') if p.is_file())
+-paths += [WORK / 'root-compile-release.json', Path(__file__).resolve()]
++paths += [admission, Path(__file__).resolve()]
+ sources = {str(path.relative_to(ROOT)): path for path in paths}
+-sources['.github/workflows/native-wave32-diagnostic.yml'] = ROOT / 'out/native-wave32-windows-source/native-wave32-diagnostic.yml'
++sources['.github/workflows/native-rounded-error-diagnostic.yml'] = ROOT / 'out/native-rounded-error-windows-source/native-rounded-error-diagnostic.yml'
+ index = WORK / 'source.index'
+ assert not index.exists()
+ env = dict(os.environ, GIT_INDEX_FILE=str(index))
+@@ -42,7 +55,7 @@
+     run('git', 'update-index', '-z', '--index-info', data=b''.join(rows), env=env)
+     tree = run('git', 'write-tree', env=env).decode().strip()
+     commit = run('git', 'commit-tree', tree, '-p', BASE,
+-                 data=b'Prepare matched native Transport wave32 pipeline producer\n').decode().strip()
++                 data=b'Prepare matched native rounded-product error producer\n').decode().strip()
+     delta = run('git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit).decode().splitlines()
+     assert set(delta) == set(sources)
+     for name, identity in records.items():
+@@ -51,7 +64,7 @@
+     assert run('git', 'rev-parse', 'HEAD').decode().strip() == BASE
+     assert not run('git', 'status', '--porcelain')
+     run('git', 'update-ref', BRANCH, commit, '0' * 40)
+-    receipt = {'schema': 'sirius-native-wave32-private-source-publication-v1', 'commit': commit,
++    receipt = {'schema': 'sirius-native-rounded-error-private-source-publication-v1', 'commit': commit,
+                'base': BASE, 'branch': BRANCH, 'files': records,
+                'all_canonical_files_unchanged': True, 'stored_full_bytes_verified': True,
+                'pushed': False, 'compile_only': True, 'runtime_admitted': False}
+--- originals/fetch_producer.py
++++ fetch_producer.py
+@@ -1,6 +1,7 @@
+ import hashlib
+ import json
+ import os
++import re
+ import stat
+ import subprocess
+ import sys
+@@ -9,19 +10,22 @@
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+ WORK = Path(__file__).resolve().parent
+-RUN = 39120634635
+-HEAD = '5d993d12b3fde7a65eaa5f7988b73b86b3a9a291'
++assert len(sys.argv) == 5, 'ARTIFACTS_JSON ACTUAL_RUN_ID ACTUAL_PRIVATE_SHA NEW_STAGE'
+ artifacts_path = ROOT / sys.argv[1]
++RUN = int(sys.argv[2])
++HEAD = sys.argv[3]
++assert RUN > 0 and re.fullmatch('[0-9a-f]{40}', HEAD)
++stage = ROOT / sys.argv[4]
++assert stage.is_relative_to(ROOT / 'bin/windows-msvc') and stage.resolve() == stage
+ artifacts = json.loads(artifacts_path.read_text())['artifacts']
+ assert len(artifacts) == 1
+ artifact = artifacts[0]
+-assert artifact['name'] == 'sirius-native-wave32-matched-producer'
++assert artifact['name'] == 'sirius-native-rounded-error-matched-producer'
+ assert artifact['workflow_run']['id'] == RUN and artifact['workflow_run']['head_sha'] == HEAD
+ assert artifact['expired'] is False and 0 < artifact['size_in_bytes'] <= 300 * 1024 ** 2
+ expected_hash = artifact['digest']
+ assert expected_hash.startswith('sha256:') and len(expected_hash) == 71
+ archive = WORK / ('producer-%d.zip' % artifact['id'])
+-stage = ROOT / 'bin/windows-msvc/native-wave32-matched-current'
+ assert not archive.exists() and not stage.exists()
+ argv = ['gh', 'api', 'repos/sunyaisblank/Sirius/actions/artifacts/%d/zip' % artifact['id']]
+ with archive.open('xb') as stream:
+@@ -68,13 +72,15 @@
+ producer = json.loads((stage / 'producer-result.json').read_text())
+ assert manifest['source_revision'] == producer['source_revision'] == HEAD
+ assert manifest['passed'] and producer['passed']
+-assert producer['producer_profile'] == 'native-wave32-transport-device-only'
+-assert producer['private_compile_object_count'] == producer['expected_private_compile_objects'] == 7
+-assert producer['shader_bytes_identical_between_arms'] is True
++assert producer['producer_profile'] == 'native-rounded-error-five-shader-only'
++assert type(producer['private_compile_object_count']) is int and type(producer['expected_private_compile_objects']) is int
++assert producer['private_compile_object_count'] == producer['expected_private_compile_objects'] == 5
++assert producer['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert set(manifest['files']) | {'manifest.json'} == set(members)
+ for name, expected in manifest['files'].items():
+     assert all(members[name][key] == expected[key] for key in ['bytes', 'sha256']), name
+-record = {'run_id': RUN, 'producer_source_revision': HEAD, 'artifact': artifact,
++assert not (WORK / 'actual-download.json').exists()
++record = {'schema': 'sirius-native-rounded-error-actual-download-v1', 'run_id': RUN, 'producer_source_revision': HEAD, 'artifact': artifact,
+           'archive': str(archive.relative_to(ROOT)), 'archive_sha256': data_hash.hexdigest(),
+           'stage': str(stage.relative_to(ROOT)), 'members': members,
+           'API_digest_CRC_safe_members_and_manifest_exact': True,
+--- originals/check_publication.py
++++ check_publication.py
+@@ -2,12 +2,23 @@
+ import json
+ import re
+ import subprocess
++import sys
+ from pathlib import Path
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+ WORK = Path(__file__).resolve().parent
+-STAGE = ROOT / 'bin/windows-msvc/native-wave32-matched-current'
+-REVISION = '5d993d12b3fde7a65eaa5f7988b73b86b3a9a291'
++assert len(sys.argv) == 5, 'STAGE ACTUAL_PRIVATE_SHA ACTUAL_RUN_ID COMPLETED_RUN_JSON'
++STAGE = ROOT / sys.argv[1]
++REVISION = sys.argv[2]
++RUN = int(sys.argv[3])
++RUN_PATH = ROOT / sys.argv[4]
++BASE = '2c8ef08693d46f57d5dea14efdbddd4874dac684'
++assert STAGE.is_relative_to(ROOT / 'bin/windows-msvc') and STAGE.resolve(strict=True) == STAGE
++assert re.fullmatch('[0-9a-f]{40}', REVISION) and RUN > 0
++assert not (WORK / 'root-publication-check.json').exists()
++for arm in ['baseline', 'candidate']:
++    for suffix in ['stdout', 'stderr']:
++        assert not (WORK / (arm + '-PE-imports.' + suffix)).exists()
+ 
+ 
+ def read(path):
+@@ -24,6 +35,13 @@
+ 
+ 
+ producer = read(STAGE / 'producer-result.json')
++assert producer['schema'] == 'sirius-native-packed-matched-ci-producer-v1'
++assert producer['producer_profile'] == 'native-rounded-error-five-shader-only'
++assert producer['canonical_CXX_source_revision'] == BASE
++assert type(producer['private_compile_object_count']) is int and producer['private_compile_object_count'] == 5
++assert type(producer['expected_private_compile_objects']) is int and producer['expected_private_compile_objects'] == 5
++assert producer['source_revision'] == producer['github_sha'] == REVISION
++assert producer['run_id'] == str(RUN) and str(producer['run_attempt']) == '1'
+ before = read(STAGE / 'build-inputs-before.json')
+ assert before == read(STAGE / 'build-inputs-after.json')
+ source = read(STAGE / 'source-before-configure.json')
+@@ -48,6 +66,19 @@
+         data = subprocess.check_output(['git', 'cat-file', 'blob', blob], cwd=ROOT)
+         objects[blob] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+     expected[norm(name.decode())] = objects[blob]
++# The private source commit must conserve every canonical2c8 blob.
++canonical_tree = subprocess.check_output(['git', 'ls-tree', '-rz', BASE], cwd=ROOT)
++canonical_count = 0
++for item in canonical_tree.split(b'\0'):
++    if not item: continue
++    metadata, name = item.split(b'\t', 1)
++    mode, kind, oid = metadata.decode().split()
++    assert kind == 'blob'
++    if oid not in objects:
++        data = subprocess.check_output(['git', 'cat-file', 'blob', oid], cwd=ROOT)
++        objects[oid] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
++    assert expected[norm(name.decode())] == objects[oid], name
++    canonical_count += 1
+ assert set(expected) == set(source_rows)
+ for name, identity in expected.items():
+     assert all(source_rows[name][key] == identity[key] for key in ['bytes', 'sha256']), name
+@@ -63,10 +94,10 @@
+         sibling = build_rows[norm(tools['python_nonempty_sibling'])]
+         assert sibling['bytes'] > 0 and sibling['sha256'] == row['sha256']
+     tool_rows[name] = row
+-run = read(WORK / 'run-third.json')
++run = read(RUN_PATH)
+ assert run['head_sha'] == REVISION and run['status'] == 'completed' and run['conclusion'] == 'success'
+-assert run['event'] == 'push' and run['run_attempt'] == 1 and run['id'] == 39120634635
+-assert run['path'] == '.github/workflows/native-wave32-diagnostic.yml'
++assert run['event'] == 'push' and run['run_attempt'] == 1 and run['id'] == RUN
++assert run['path'] == '.github/workflows/native-rounded-error-diagnostic.yml'
+ packaging = read(STAGE / 'runtime-packaging.json')
+ imports = {}
+ for arm in ['baseline', 'candidate']:
+@@ -93,9 +124,9 @@
+ warnings = re.findall(r'\bwarning\s+([A-Z]\d+)\b', log, re.I)
+ assert not any(code.upper().startswith('LNK') for code in warnings)
+ assert len(tools) == 15
+-record = {'schema': 'sirius-native-wave32-actual-publication-check-v1', 'passed': True,
++record = {'schema': 'sirius-native-rounded-error-actual-publication-check-v1', 'passed': True,
+           'producer_source_revision': REVISION, 'all_Git_source_files': len(expected),
+-          'all_source_bytes_match_immutable_Git': True, 'before_after_build_rows': len(before),
++          'all_source_bytes_match_immutable_Git': True, 'canonical2c8_files_conserved': canonical_count, 'before_after_build_rows': len(before),
+           'selected_tools': tool_rows, 'PE_imports': imports,
+           'runtime_packaging_versions': [packaging['msvc_version'], packaging['release_crt_version']],
+           'warning_codes_including_summaries': {code: warnings.count(code) for code in sorted(set(warnings))},

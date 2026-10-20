@@ -1,0 +1,43 @@
+{
+  "source_revision": "625abe4569c4b377fad6d8586d6f0487f01d9903",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "kind": "a1",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-rounded-error-runtime-abba\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-rounded-error-matched-current\\payload\\baseline' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-rounded-error-runtime-abba\\native\\a1' -Filter 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-rounded-error-runtime-abba\\a1' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-rounded-error-matched-current' -ExpectedManifestSha256 'c7ba08f20ab52ff85e5207a36ce12d7dac22f1f147ac51425ac45848e072835c' -ExpectedProducerSha256 '4d7828f52337da9369b78029ed5491becfa25e8679e521b3702ce287aa407932' -Arm 'baseline' -LiveRevision '2c8ef08693d46f57d5dea14efdbddd4874dac684' -ExecutableName 'original_baseline_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+  ],
+  "binding_sha256": "e41f8932d081d103ad328098e8d32fe41895e3ed341f0a6a03fc912c8d1d7913",
+  "linux_controller_pid": 95138,
+  "linux_controller_birth": "34872868",
+  "predecessor_inputs": {},
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 300,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 15991280,
+  "linux_child_pid": 95178,
+  "linux_child_birth": "34873052",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "original_control_identity": {
+    "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "arm": "baseline"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 95.28000020899344,
+  "signals": []
+}

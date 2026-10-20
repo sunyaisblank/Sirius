@@ -1,0 +1,92 @@
+{
+  "schema": "sirius-native-rounded-error-independent-finalized-runtime-and-authority-source-review-v1",
+  "passed": true,
+  "source_only": true,
+  "runtime_admitted": false,
+  "authority_maker_executed": false,
+  "blockers": [],
+  "runtime_finalization": {
+    "receipt": {
+      "path": "out/native-rounded-error-publication/root-runtime-identity-finalization.json",
+      "bytes": 1339,
+      "sha256": "aebc8f6836eac58fba3ee2d28ad6e33b8c6e593ee71d80c9b640ed29be6230df"
+    },
+    "before_commit": "9b19b54c32b35cef2f4a06eb7ee9c3846a371e70",
+    "before_prefix": "attestations/qualification/2c8ef086/native-rounded-error-source-compiler/files/out/native-rounded-error-runtime-source/",
+    "actual_source": "625abe4569c4b377fad6d8586d6f0487f01d9903",
+    "actual_run": "39124065782",
+    "actual_artifact": 12135144562,
+    "only_changed_members": [
+      "protocol.pending.json",
+      "source-freeze.json"
+    ],
+    "only_protocol_changes": [
+      "producer_artifact_id",
+      "producer_run_id",
+      "producer_source_revision"
+    ],
+    "only_freeze_changed_row": "protocol.pending.json",
+    "all31_members_current_and_29_other_members_exact": true,
+    "initial_review": {
+      "path": "out/native-rounded-error-publication/independent-runtime-source-review.json",
+      "bytes": 4567,
+      "sha256": "dfe1b289baa8924ebc55a29894d3bfcdf34cc264aee24067c19b9d7b4e8070f9"
+    },
+    "current_freeze": {
+      "path": "out/native-rounded-error-runtime-source/source-freeze.json",
+      "bytes": 4556,
+      "sha256": "731cf1104b17afccbb18b778b48d0b3abf0b1aacd4bb119e666d941786d24d9a"
+    },
+    "conclusion": "Data-only finalization exactly preserves code/controls/thresholds/limits/cache/falseflags and original source admission scope."
+  },
+  "authority_source": {
+    "maker": {
+      "path": "out/native-rounded-error-ci-publication/make_authority.py",
+      "bytes": 17348,
+      "sha256": "0415a6d76e1158c7f9fdf2e2118bf13e92232e1605299a8709e9334a87bc6bfa"
+    },
+    "contracts": {
+      "path": "out/native-rounded-error-ci-publication/make-authority-contracts.json",
+      "bytes": 5643,
+      "sha256": "f0ba66a5e44de06600879ca5fa4ddf98e1ede9c7318a3f321b7051750ac9e2c5"
+    },
+    "freeze": {
+      "path": "out/native-rounded-error-ci-publication/make-authority-freeze.json",
+      "bytes": 885,
+      "sha256": "9dab3752abb8aff7d1f74bf3e400b302c281425c503a6afd27629c14ba13e32b"
+    },
+    "patch_and_named_preimage_exact": true,
+    "actual_schemas": {
+      "audit": {
+        "schema": "sirius-native-packed-static-PE-audit-v1",
+        "pin": {
+          "path": "out/native-rounded-error-pe-audit/actual-625abe45-audit.json",
+          "bytes": 41823,
+          "sha256": "f0870100e82d50c8c29a4344bc4c03a853266589c18fc7fb0a6a60967f9caa8b"
+        }
+      },
+      "publication": {
+        "schema": "sirius-native-rounded-error-actual-publication-check-v1",
+        "pin": {
+          "path": "out/native-rounded-error-ci-publication/root-publication-check.json",
+          "bytes": 10618,
+          "sha256": "9292ebbd6f40d60d2ec1aeb1229c34ce7cd414b8fdad509419ce7282311a15e9"
+        }
+      },
+      "download": {
+        "schema": "sirius-native-rounded-error-actual-download-v1",
+        "pin": {
+          "path": "out/native-rounded-error-ci-publication/actual-download.json",
+          "bytes": 33762,
+          "sha256": "74950cb54bd4ff8c2aa825e92e2131051504314b887339dffc6b762e3031fae3"
+        }
+      }
+    },
+    "schema_correction": "Current narrow audit lacks M/result identity fields; corrected code derives current identities and crossjoins actual accepted download members and M producer-result row. All literal top-level current data accesses checked against actual receipts. No invented old audit keys.",
+    "selection_authority": "Requires actual canonical object/archive identity, unique canonical Vulkan MAP member in both PEs, exact direct compute selection plus actual LINK.read/commands and no FORCE/WHOLEARCHIVE. Both LINK command bodies equal modulo arm names. Exact four critical method review remains explicit ROOT/manual+independent actual-producer responsibility; no missing VERBOSE Loaded lines are claimed.",
+    "wire": "Produces mature matched-array authority with both PE/header40+owner2 identities, strict five changed set/35same/seven tables/layout, lowercase typed FMA values and M/result pins. Output eligibility bytehash is computed before authority, avoiding selfcycle. Both exclusive outputs retain runtime_admitted:false.",
+    "gates": "Actual successful publication/source633/canonical538/input2861/tool15/SDKCRT/import schemas compose with narrow audit5CL/2LINK and77current input joins. c948 observer and unchanged test blob/integrity reuse are required. Current manual template stays passedfalse; exact rich manual and independent actual-producer review pins with newSHA are mandatory before output. The caller must choose the actual-producer receipt explicitly; code checks its passed/SHA and ROOT manual pin, not a general proof-kind inference."
+  },
+  "followup": "ROOT still supplies actual manual predicates and actual independent producer receipt, executes maker after fullread, and separately materializes/reviews held-false C8 inputs. This review does not fill predicates, execute maker, or admit phase/runtime. Assertion-enabled Python required.",
+  "limits": "No producer/PE/provider/tool/network/phase/context execution or project import. Passive JSON/hash/AST/source and exact named local Git reads only. No full host/SDK backup, numerical/benefit/frame/adoption/release inference."
+}

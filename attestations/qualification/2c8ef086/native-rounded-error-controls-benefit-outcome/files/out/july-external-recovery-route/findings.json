@@ -1,0 +1,109 @@
+{
+  "schema": "sirius-original-july-external-recovery-boundary-review-v1",
+  "created_utc": "2026-10-18T11:59:32.959588+00:00",
+  "review_completed": true,
+  "original_july_identity_recovered": false,
+  "new_search_boundary_identified": false,
+  "new_external_search_executed": false,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "inputs": {
+    "out/packed-scratch-and-july-issue-followup/issue100.json": {
+      "bytes": 8529,
+      "sha256": "b9a44b6ab09e1ef0670513b60d254654f9e1c5197c9042a9fae5882d4ff20a65"
+    },
+    "out/packed-scratch-and-july-issue-followup/issue100-comments.json": {
+      "bytes": 31776,
+      "sha256": "476fd32a54d97ac7734c4cb836a44138b8435c78dc2349e0c2e1e5dd17842b1d"
+    },
+    "out/july-recovery-metadata-route/root-observation.json": {
+      "bytes": 3194,
+      "sha256": "0c2204fcd4dbd7a78e131dc9c68d39608109494345813e7ab15ad0446937a1af"
+    },
+    "out/july-recovery-metadata-route/stdout-fixed.json": {
+      "bytes": 1478,
+      "sha256": "4e376837ea00da29152ba645d0c577195a731ba157e3b1e281a09d086212785b"
+    },
+    "out/july-recovery-metadata-route/root-alternate-shadow-observation.json": {
+      "bytes": 445,
+      "sha256": "932146b37b28b9de7a0693d0f16f597c8ece5e71cc16c0801feedc26dd4504a0"
+    },
+    "out/july-recovery-metadata-route/recycle-top-level.json": {
+      "bytes": 844,
+      "sha256": "22817e56f2b488c54ff44f843833cc97cda46fdaa48840d2dc73b1410e3ecc54"
+    },
+    "out/july-recovery-metadata-route/search-index.stdout": {
+      "bytes": 874,
+      "sha256": "94bb9c719db8f087a25e27a8601eae688e56e6b20fba367defa062188c0f4975"
+    },
+    "attestations/forensic/5b2df58b/july-snapshot-desktop-route/files/out/july-snapshot-desktop-metadata/independent-completion-review.json": {
+      "bytes": 4622,
+      "sha256": "8170376732669f587987aa5eb93158a4c1a748af2619718f8bc1f803a60fce6f"
+    }
+  },
+  "original_obligation": {
+    "Git_path": "70d156f:docs/SPECIFICATION.md",
+    "bytes": 14508,
+    "sha256": "65d2e4a5d58c822114296e855534a65beb8654b424aaddc77f2d332c5ea58659",
+    "authority_sections": [
+      "1.6",
+      "6(2)",
+      "6(6)",
+      "7 image gates"
+    ],
+    "required_identity": "Authentic pre-rebuild renders/ tapes, checked manifest and original comparator plus sufficient scene/command/configuration/toolchain provenance to establish exact CPU-pixel identity across the named behaviour-preserving transitions. Named intentional output changes remain separate.",
+    "concrete_path_hints": [
+      "renders/",
+      "renders/rebuild-baseline/README.md",
+      "C:/Users/alarisadmin/Desktop/Sirius"
+    ],
+    "known_claimed_formats": "Historical Kerr PNG/EXR and Alcubierre PNG comparison claims; no recovered authenticated original tape manifest/filename-to-hash binding. Newly reconstructed files are not original tapes.",
+    "user_no_clue": "Unknown backup location is not a waiver."
+  },
+  "already_covered": [
+    {
+      "boundary": "Checkout/local recovery archives",
+      "basis": "Issue100 comment6161995836: named session-notes archive63 UTF-8 members and targeted11 archive tips/5627 reachable object records. No repetition in this task."
+    },
+    {
+      "boundary": "Fixed FileHistory configuration paths",
+      "observation_receipt": "out/july-recovery-metadata-route/root-observation.json",
+      "as_of_utc": "2026-10-18T00:28:27.9859644Z",
+      "paths": [
+        "C:/Users/alarisadmin/AppData/Local/Microsoft/Windows/FileHistory/Configuration/Config1.xml",
+        "C:/Users/alarisadmin/AppData/Local/Microsoft/Windows/FileHistory/Configuration/Config2.xml"
+      ],
+      "result": "Both fixed files recorded absent. This is not an exhaustive FileHistory/service/backup-catalog census."
+    },
+    {
+      "boundary": "Current-user folder filename walks",
+      "basis": "Retained issue100 comment6173565863 records Desktop/Documents/Downloads/Pictures/OneDrive accessible,9 directory enumerations/18 entries/no matches/no access or cap gaps;3 Documents links not followed. Search terms Sirius/DNGR/July/tape/manifest/comparator/2026-07. No fresh walk here."
+    },
+    {
+      "boundary": "Windows Search metadata",
+      "basis": "Saved TOP60 index query scoped Desktop/Documents/Downloads/OneDrive returned0 rows/not truncated; unindexed storage is outside that route."
+    },
+    {
+      "boundary": "Concrete deleted original project path",
+      "basis": "Recent had0 links; RecycleBin identified Desktop/Sirius, whose surviving payload was empty. No alternative original path recovered."
+    },
+    {
+      "boundary": "Direct NT snapshot names and selected historical paths",
+      "basis": "Subsequent snapshot review closes the earlier privileged-CIM/VSS enumeration gap for the3 observed HarddiskVolumeShadowCopy1/2/3 Desktop/Sirius paths: all readable/non-reparse, each empty. It does not establish all-snapshot/all-volume absence."
+    }
+  ],
+  "decision": "STOP this proposed repeat boundary. FileHistory fixed configuration files and the named user project roots were already examined. Saved receipts offer no new concrete source/backup path justifying another query. No Windows filesystem/API/query/program, hydration, restore, new content scan or reconstruction was performed.",
+  "limits": [
+    "Historical saved observations, not a fresh claim of current absence.",
+    "No exhaustive FileHistory/catalog/OneDrive-backup/all-VSS/all-storage absence claim. A genuinely new externally supplied path or catalog remains a distinct possible future boundary.",
+    "Original tapes/manifest/comparator provenance remains unresolved; existing new reconstruction comparisons retain their separate scope."
+  ],
+  "workspace": {
+    "branch": "development/native-constant-constructor-2026-10-18",
+    "tracked_worktree_clean": true,
+    "ahead": 0,
+    "behind": 0,
+    "worktrees": 1,
+    "canonical_source_committed_and_pushed": true,
+    "this_finding": "Ignored diagnostic only; not committed/pushed by reviewer."
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "sirius-native-rounded-error-root-disposition-v1",
+  "decision": "REJECT",
+  "producer_source_revision": "625abe4569c4b377fad6d8586d6f0487f01d9903",
+  "canonical_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "audit_passed": true,
+  "control8_passed": true,
+  "benefit_passed": false,
+  "checks_passed": 20,
+  "checks_total": 22,
+  "whole_calls_passed": 2,
+  "whole_calls_total": 4,
+  "stages_passed": 16,
+  "stages_total": 16,
+  "inclusive_API_passed": 2,
+  "inclusive_API_total": 2,
+  "failed_conditions": [
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "4.06069952860384915544068005455425258397398790",
+      "minimum_percent": 5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "-1.76563908830476371416059802267097547729344503",
+      "minimum_percent": 5,
+      "passed": false
+    }
+  ],
+  "remaining7_state": "not materialized or run",
+  "source_adopted": false,
+  "unchanged_retry_or_pooling_or_resampling": false,
+  "frame_run_performed": false,
+  "cause_of_forward_reverse_difference": "Unproved; no noise/cache/thermal/causal attribution.",
+  "scope": "Exact error shortcut is not admitted for adoption after sole originalABBA benefit refusal. Preserve negative outcome; pursue a distinct supported cost premise."
+}
