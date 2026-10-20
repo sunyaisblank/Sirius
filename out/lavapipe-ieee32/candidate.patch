@@ -1,0 +1,177 @@
+--- a/src/util/u_math.h
++++ b/src/util/u_math.h
+@@ -787,6 +787,23 @@
+ void
+ util_fpstate_set(unsigned fpstate);
+ 
++/* This private Vulkan-only build has no D3D/OpenGL denormal-flush contract.
++ * x86-64 SSE2 is mandatory. Mask shader exceptions, select nearest-even and
++ * preserve both input/output subnormals; callers restore their saved MXCSR.
++ * No RTZ/flush mode is advertised, so all admitted explicit modes agree.
++ */
++#if defined(LP_VULKAN_IEEE32) && LP_VULKAN_IEEE32 && DETECT_ARCH_X86_64
++#define LP_VULKAN_IEEE32_ENABLED 1
++static inline void
++util_fpstate_set_ieee32(unsigned saved_fpstate)
++{
++   util_fpstate_set((saved_fpstate | 0x1f80u) & ~0xe040u);
++}
++#else
++#define LP_VULKAN_IEEE32_ENABLED 0
++#endif
++
++
+ /**
+  * For indexed draw calls, return true if the vertex count to be drawn is
+  * much lower than the vertex count that has to be uploaded, meaning
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -42,6 +42,7 @@
+ #include "util/os_memory.h"
+ #include "util/os_time.h"
+ #include "util/u_thread.h"
++#include "util/u_math.h"
+ #include "util/u_atomic.h"
+ #include "util/timespec.h"
+ #include "util/ptralloc.h"
+@@ -1034,7 +1035,7 @@
+       .shaderSignedZeroInfNanPreserveFloat16 = true,
+ 
+       .shaderDenormFlushToZeroFloat32 = false,
+-      .shaderDenormPreserveFloat32 = false,
++      .shaderDenormPreserveFloat32 = LP_VULKAN_IEEE32_ENABLED,
+       .shaderRoundingModeRTEFloat32 = true,
+       .shaderRoundingModeRTZFloat32 = false,
+       .shaderSignedZeroInfNanPreserveFloat32 = true,
+@@ -1294,6 +1295,9 @@
+    /* Vulkan 1.2 */
+    snprintf(p->driverName, VK_MAX_DRIVER_NAME_SIZE, "llvmpipe");
+    snprintf(p->driverInfo, VK_MAX_DRIVER_INFO_SIZE, "Mesa " PACKAGE_VERSION MESA_GIT_SHA1
++#if LP_VULKAN_IEEE32_ENABLED
++            " [Sirius scoped IEEE32 prototype]"
++#endif
+ #ifdef MESA_LLVM_VERSION_STRING
+             " (LLVM " MESA_LLVM_VERSION_STRING ")"
+ #endif
+@@ -1685,7 +1689,7 @@
+ }
+ 
+ static VkResult
+-lvp_queue_submit(struct vk_queue *vk_queue,
++lvp_queue_submit_work(struct vk_queue *vk_queue,
+                  struct vk_queue_submit *submit)
+ {
+    struct lvp_queue *queue = container_of(vk_queue, struct lvp_queue, vk);
+@@ -1736,6 +1740,23 @@
+    destroy_pipelines(queue);
+ 
+    return VK_SUCCESS;
++}
++
++/* Cover direct draw/geometry execution and all error returns on the queue
++ * worker. Separate compute/raster workers establish the same state below.
++ */
++static VkResult
++lvp_queue_submit(struct vk_queue *vk_queue, struct vk_queue_submit *submit)
++{
++#if LP_VULKAN_IEEE32_ENABLED
++   unsigned fpstate = util_fpstate_get();
++   util_fpstate_set_ieee32(fpstate);
++#endif
++   VkResult result = lvp_queue_submit_work(vk_queue, submit);
++#if LP_VULKAN_IEEE32_ENABLED
++   util_fpstate_set(fpstate);
++#endif
++   return result;
+ }
+ 
+ static VkResult
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -24,6 +24,7 @@
+  **************************************************************************/
+ 
+ #include "util/u_memory.h"
++#include "util/u_math.h"
+ #include "util/os_time.h"
+ #include "util/u_dump.h"
+ #include "util/u_string.h"
+@@ -1684,6 +1685,12 @@
+ static void
+ cs_exec_fn(void *init_data, int iter_idx, struct lp_cs_local_mem *lmem)
+ {
++#if LP_VULKAN_IEEE32_ENABLED
++   /* Applies equally to pool workers and the zero-worker direct path. */
++   unsigned fpstate = util_fpstate_get();
++   util_fpstate_set_ieee32(fpstate);
++#endif
++
+    struct lp_cs_job_info *job_info = init_data;
+    struct lp_jit_cs_thread_data thread_data;
+ 
+@@ -1734,6 +1741,9 @@
+                          job_info->work_dim, job_info->draw_id,
+                          io_ptr,
+                          &thread_data);
++#if LP_VULKAN_IEEE32_ENABLED
++   util_fpstate_set(fpstate);
++#endif
+ }
+ 
+ 
+--- a/src/gallium/drivers/llvmpipe/lp_rast.c
++++ b/src/gallium/drivers/llvmpipe/lp_rast.c
+@@ -1112,7 +1112,13 @@
+       /* Make sure that denorms are treated like zeros. This is
+        * the behavior required by D3D10. OpenGL doesn't care.
+        */
++      /* Retain ordinary Gallium behavior unless this Vulkan-only build
++       * implements its IEEE32 execution environment. */
++#if LP_VULKAN_IEEE32_ENABLED
++      util_fpstate_set_ieee32(fpstate);
++#else
+       util_fpstate_set_denorms_to_zero(fpstate);
++#endif
+ 
+       lp_rast_begin(rast, scene);
+ 
+@@ -1173,7 +1179,13 @@
+     * the behavior required by D3D10. OpenGL doesn't care.
+     */
+    unsigned fpstate = util_fpstate_get();
+-   util_fpstate_set_denorms_to_zero(fpstate);
++   /* Retain ordinary Gallium behavior unless this Vulkan-only build
++       * implements its IEEE32 execution environment. */
++#if LP_VULKAN_IEEE32_ENABLED
++      util_fpstate_set_ieee32(fpstate);
++#else
++      util_fpstate_set_denorms_to_zero(fpstate);
++#endif
+ 
+    while (1) {
+       /* wait for work */
+@@ -1219,6 +1231,9 @@
+       util_semaphore_signal(&task->work_done);
+    }
+ 
++#if LP_VULKAN_IEEE32_ENABLED
++   util_fpstate_set(fpstate);
++#endif
+ #ifdef _WIN32
+    util_semaphore_signal(&task->exited);
+ #endif
+--- a/src/gallium/auxiliary/draw/draw_pt.c
++++ b/src/gallium/auxiliary/draw/draw_pt.c
+@@ -524,7 +524,12 @@
+    /* Make sure that denorms are treated like zeros. This is
+     * the behavior required by D3D10. OpenGL doesn't care.
+     */
++#if LP_VULKAN_IEEE32_ENABLED
++   /* Vertex/geometry execution must share the Vulkan precision contract. */
++   util_fpstate_set_ieee32(fpstate);
++#else
+    util_fpstate_set_denorms_to_zero(fpstate);
++#endif
+ 
+    if (indirect && indirect->count_from_stream_output) {
+       resolve_draw_info(info, indirect, &draws[0], &resolved_info,
