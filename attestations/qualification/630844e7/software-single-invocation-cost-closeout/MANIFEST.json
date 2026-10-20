@@ -1,0 +1,129 @@
+{
+  "schema": "sirius-single-invocation-cost-publication-closeout-v1",
+  "operator_source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "parent_evidence_checkpoint": "121db07cabe4508890c3ba3045bfe040805df8be",
+  "files": {
+    "retirement.json": {
+      "bytes": 2069,
+      "sha256": "91b11ff6d80c8937adcdbf464b79cfb64618a253540fffdf2a282365781e18e6",
+      "mode": "0o644"
+    },
+    "issue44-after.json": {
+      "bytes": 16712,
+      "sha256": "fd9d3b7a989108503f5cd198253f7662b28fe1db0d140b5ff1182cd1304be8da",
+      "mode": "0o644"
+    },
+    "pr62-after.json": {
+      "bytes": 94,
+      "sha256": "0325ff659199b4716be18a672b1d534ccfa65a5c07074c31a9132f72e5696143",
+      "mode": "0o644"
+    },
+    "source-workspace-before-closeout.json": {
+      "bytes": 566,
+      "sha256": "4dc0c067b1d28e2af30b9e732e272e8357d2c48288a921cfb4b9c8f87a3d8321",
+      "mode": "0o644"
+    },
+    "publication-verification.json": {
+      "bytes": 289,
+      "sha256": "1dddbe577db95d787d79998203327fd1c2a7a9861d993fb10b22d5eafa0becb4",
+      "mode": "0o644"
+    },
+    "comment-created.json": {
+      "bytes": 4459,
+      "sha256": "b5c538278ba0f9c613aa9d97aa1373f9bacaca03db01d1b8ad298e617b3e3585",
+      "mode": "0o644"
+    },
+    "publish.py": {
+      "bytes": 3503,
+      "sha256": "dff3d35800dd0567945f7333cd527cf819eeeb71817d10b7c8cfe0d67f314467",
+      "mode": "0o644"
+    },
+    "checkpoint-remote.txt": {
+      "bytes": 212,
+      "sha256": "fbf7129cf5ca6da29d1cde5d31839829191acb26295177f628aa4ec0c41c4b72",
+      "mode": "0o644"
+    },
+    "issue44-before.json": {
+      "bytes": 16712,
+      "sha256": "fd9d3b7a989108503f5cd198253f7662b28fe1db0d140b5ff1182cd1304be8da",
+      "mode": "0o644"
+    },
+    "retire.py": {
+      "bytes": 3027,
+      "sha256": "64a4dfdc5444caa50a0b99c22425f7914a580e0171f7bbfb0941924a913a0f0b",
+      "mode": "0o644"
+    },
+    "comment-readback.json": {
+      "bytes": 4459,
+      "sha256": "b5c538278ba0f9c613aa9d97aa1373f9bacaca03db01d1b8ad298e617b3e3585",
+      "mode": "0o644"
+    },
+    "comment-payload.json": {
+      "bytes": 2794,
+      "sha256": "50c59faa95019e02f359910ed9bceb658774c89d08ed8a0bf3024cbecfe9e93c",
+      "mode": "0o644"
+    }
+  },
+  "source_root": "out/software-scalar-cost-publication",
+  "publication": {
+    "comment_url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6290498896",
+    "comment_exact_readback": true,
+    "issue44_body_and_original_acceptance_unchanged": true,
+    "issue44_state": "open",
+    "PR62_open_draft_source_unchanged": true,
+    "prototype_rejected": true
+  },
+  "retirement": {
+    "passed": true,
+    "published_checkpoint": "121db07cabe4508890c3ba3045bfe040805df8be",
+    "branch": "development/software-single-invocation-2026-10-20",
+    "tag": "evidence/software-single-invocation-endpoint-cost-630844e7",
+    "backing": [
+      {
+        "manifest": "attestations/qualification/630844e7/software-single-invocation-endpoint/MANIFEST.json",
+        "bytes": 64820,
+        "sha256": "d43045266d9f68002d50bdddaefe97cfa35126dac7b081c135b04105cc8a5d16",
+        "mode": "0o644",
+        "archive": "attestations/qualification/630844e7/software-single-invocation-endpoint/closed-prototype.zip"
+      },
+      {
+        "manifest": "attestations/qualification/630844e7/software-single-invocation-endpoint-cost/MANIFEST.json",
+        "bytes": 42213,
+        "sha256": "f5d7371f1c1d492f1286cb67c3e9a02fac25815daf449749b18553237dd7e6be",
+        "mode": "0o644",
+        "archive": "attestations/qualification/630844e7/software-single-invocation-endpoint-cost/closed-cost-trial.zip"
+      }
+    ],
+    "all_live_bytes_modes_archive_CRC_and_Git_payloads_equal_before_removal": true,
+    "retired_roots": [
+      "out/software-scalar-cohort",
+      "out/software-scalar-jit-host",
+      "out/software-scalar-jit",
+      "out/software-scalar-nojoin",
+      "out/software-scalar-nojoin-jit",
+      "out/software-scalar-numerics-build",
+      "out/software-scalar-endpoint-control",
+      "out/software-scalar-closure",
+      "bin/linux-gcc/software-scalar-cohort",
+      "bin/linux-gcc/software-scalar-endpoint",
+      "out/software-scalar-integrated-control",
+      "out/software-scalar-benefit-build",
+      "out/software-scalar-benefit-provenance",
+      "out/software-scalar-benefit",
+      "out/software-scalar-benefit-closeout",
+      "bin/linux-gcc/software-scalar-benefit",
+      "bin/linux-gcc/software-scalar-benefit-sealed"
+    ],
+    "retired_files": 402,
+    "retired_bytes": 251993690,
+    "canonical_preset_bins_and_unrelated_files_preserved": true,
+    "active_owned_runtime_processes": 0,
+    "prototype_disposition": "REJECT_ENDPOINT_SINGLE_INVOCATION_COST",
+    "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d"
+  },
+  "prototype_rejected": true,
+  "source_changes": false,
+  "production_adoption": false,
+  "full_qualification": false,
+  "current_goal_status": "active"
+}

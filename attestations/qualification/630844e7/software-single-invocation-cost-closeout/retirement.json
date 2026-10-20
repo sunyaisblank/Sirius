@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "published_checkpoint": "121db07cabe4508890c3ba3045bfe040805df8be",
+  "branch": "development/software-single-invocation-2026-10-20",
+  "tag": "evidence/software-single-invocation-endpoint-cost-630844e7",
+  "backing": [
+    {
+      "manifest": "attestations/qualification/630844e7/software-single-invocation-endpoint/MANIFEST.json",
+      "bytes": 64820,
+      "sha256": "d43045266d9f68002d50bdddaefe97cfa35126dac7b081c135b04105cc8a5d16",
+      "mode": "0o644",
+      "archive": "attestations/qualification/630844e7/software-single-invocation-endpoint/closed-prototype.zip"
+    },
+    {
+      "manifest": "attestations/qualification/630844e7/software-single-invocation-endpoint-cost/MANIFEST.json",
+      "bytes": 42213,
+      "sha256": "f5d7371f1c1d492f1286cb67c3e9a02fac25815daf449749b18553237dd7e6be",
+      "mode": "0o644",
+      "archive": "attestations/qualification/630844e7/software-single-invocation-endpoint-cost/closed-cost-trial.zip"
+    }
+  ],
+  "all_live_bytes_modes_archive_CRC_and_Git_payloads_equal_before_removal": true,
+  "retired_roots": [
+    "out/software-scalar-cohort",
+    "out/software-scalar-jit-host",
+    "out/software-scalar-jit",
+    "out/software-scalar-nojoin",
+    "out/software-scalar-nojoin-jit",
+    "out/software-scalar-numerics-build",
+    "out/software-scalar-endpoint-control",
+    "out/software-scalar-closure",
+    "bin/linux-gcc/software-scalar-cohort",
+    "bin/linux-gcc/software-scalar-endpoint",
+    "out/software-scalar-integrated-control",
+    "out/software-scalar-benefit-build",
+    "out/software-scalar-benefit-provenance",
+    "out/software-scalar-benefit",
+    "out/software-scalar-benefit-closeout",
+    "bin/linux-gcc/software-scalar-benefit",
+    "bin/linux-gcc/software-scalar-benefit-sealed"
+  ],
+  "retired_files": 402,
+  "retired_bytes": 251993690,
+  "canonical_preset_bins_and_unrelated_files_preserved": true,
+  "active_owned_runtime_processes": 0,
+  "prototype_disposition": "REJECT_ENDPOINT_SINGLE_INVOCATION_COST",
+  "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d"
+}
