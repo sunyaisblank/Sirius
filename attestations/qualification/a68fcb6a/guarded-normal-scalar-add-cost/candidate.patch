@@ -1,0 +1,48 @@
+--- src/sirius/kernels/portable_binary32.h
++++ private/src/sirius/kernels/portable_binary32.h
+@@ -125,6 +125,31 @@
+     return (sign << 31) | (e << 23) | (sig & 0x007fffffu);
+ }
+ SIRIUS_PB32_INLINE uint PB32Add(uint a, uint b) {
++#if defined(SIRIUS_RETAINED_NORMAL_SUM32)
++    // Normal finite inputs bounded by 2^124 cannot overflow binary32.
++    // RTE32 plus NoContraction gives the original rounded sum unless the
++    // nonzero subnormal result was flushed. Detect that case and use the
++    // untouched integer implementation below. Bitcasts preserve returned bits.
++    uint am = PB32Abs(a), bm = PB32Abs(b);
++    if (am >= 0x00800000u && am <= 0x7d800000u &&
++        bm >= 0x00800000u && bm <= 0x7d800000u) {
++#if defined(__cplusplus)
++        float af = std::bit_cast<float>(a), bf = std::bit_cast<float>(b);
++        volatile float native_sum = af + bf;
++        uint sum = std::bit_cast<uint>(float(native_sum));
++#else
++        float af = asfloat(a), bf = asfloat(b);
++        float native_sum = spirv_asm {
++            OpFAdd $$float %v $af $bf;
++            OpDecorate %v NoContraction;
++            OpCopyObject $$float result %v;
++        };
++        uint sum = asuint(native_sum);
++#endif
++        if (PB32Abs(sum) != 0u) return sum;
++        if (a == PB32Negate(b)) return 0u;
++    }
++#endif
+     if (PB32Nan(a) || PB32Nan(b)) return 0x7fc00000u;
+     if (PB32Infinity(a) || PB32Infinity(b)) {
+         if (PB32Infinity(a) && PB32Infinity(b) && ((a ^ b) >> 31) != 0u) return 0x7fc00000u;
+--- scripts/build-retained-kernels.py
++++ private/scripts/build-retained-kernels.py
+@@ -67,6 +67,11 @@
+     if not bodies:
+         raise ValueError("portable normal sum lost its guarded arithmetic")
+     for body in bodies:
++        if re.match(r"%PB32Add(?:_\d+)? = OpFunction ", body):
++            if re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFAdd"]:
++                raise ValueError("normal scalar addition changed its one-operation body")
++            expected.append("OpFAdd")
++            continue
+         if re.match(r"%RPUpAdd(?:_\d+)? = OpFunction ", body):
+             if re.findall(r"= (OpF(?!unction)\S+) ", body) != ["OpFAdd"]:
+                 raise ValueError("normal upward bound changed its single add body")

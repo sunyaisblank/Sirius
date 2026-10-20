@@ -1,0 +1,24 @@
+{
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "original_header": {
+    "bytes": 12797,
+    "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60"
+  },
+  "candidate_header": {
+    "bytes": 13858,
+    "sha256": "b46846757fa6f9f66b8e5c9ca5e8302a7e67afb6cd5ba72889d1f84c2d17a63c"
+  },
+  "scope": "PB32Add only, within existing RTE32 normal-sum modules; PB32Subtract/product-residual calls reach the same guarded addition. All original integer bodies and every other primitive remain text-identical. No production adoption, driver-control change or renderer repetition.",
+  "native_admission": "Both original raw inputs are normal binary32, absolute value <= 2^124; output is finite. Single NoContraction OpFAdd under RTE32. Any nonzero native result is the original correctly rounded result. If native result is zero, exact opposite words canonically return +0; every other case uses the original integer fallback. Inputs containing zero, subnormal, infinity or NaN and large finite inputs use the original path.",
+  "underflow_reason": "All finite binary32 values are multiples of 2^-149. A nonzero subnormal sum/difference of normal inputs is exactly representable. The only allowed value loss is flushing that result to zero, which the guard detects; bit-preserving operations cannot flush returned subnormal bits.",
+  "domain_restriction_reason": "Bounded inputs keep native results finite, avoiding a new SignedZeroInfNanPreserve requirement; integer paths retain every exceptional/overflow case.",
+  "primary_reference": "https://docs.vulkan.org/spec/latest/appendices/spirvenv.html#spirvenv-precision-operation",
+  "distinction": "Existing RetainedSum32 requires both operands on the 2^-126 lattice via its 2^-103 lower domain. This changes the scalar addition primitive with exact post-operation underflow detection, rather than changing an earlier rejected launch, divide estimate, sum absorption, cancellation-only or upward-add guard.",
+  "original_exact_fixture": {
+    "bytes": 4182444,
+    "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+  },
+  "original_records": 174268,
+  "full_fixture_order_and_expected_words_unchanged": true,
+  "implementation_files_in_canonical_source_changed": false
+}
