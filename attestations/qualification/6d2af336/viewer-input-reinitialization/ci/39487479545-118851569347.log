@@ -1,0 +1,1742 @@
+﻿2026-10-20T19:54:50.6227010Z Current runner version: '2.338.0'
+2026-10-20T19:54:50.6245290Z ##[group]Runner Image Provisioner
+2026-10-20T19:54:50.6245910Z Hosted Compute Agent
+2026-10-20T19:54:50.6246280Z Version: 20260828.587
+2026-10-20T19:54:50.6246700Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-10-20T19:54:50.6247910Z Build Date: 2026-08-28T16:44:25Z
+2026-10-20T19:54:50.6248470Z Worker ID: {2b54d4eb-cbf1-447f-ae1f-d69812b8978a}
+2026-10-20T19:54:50.6248930Z Azure Region: westus
+2026-10-20T19:54:50.6249320Z ##[endgroup]
+2026-10-20T19:54:50.6251000Z ##[group]Operating System
+2026-10-20T19:54:50.6251420Z macOS
+2026-10-20T19:54:50.6251820Z 15.7.9
+2026-10-20T19:54:50.6252160Z 24G830
+2026-10-20T19:54:50.6252500Z ##[endgroup]
+2026-10-20T19:54:50.6255170Z ##[group]Runner Image
+2026-10-20T19:54:50.6255620Z Image: macos-15-arm64
+2026-10-20T19:54:50.6256270Z Version: 20260907.0337.1
+2026-10-20T19:54:50.6257540Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20260907.0337/images/macos/macos-15-arm64-Readme.md
+2026-10-20T19:54:50.6258610Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20260907.0337
+2026-10-20T19:54:50.6259270Z ##[endgroup]
+2026-10-20T19:54:50.6260080Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T19:54:50.6261400Z Contents: read
+2026-10-20T19:54:50.6261850Z Metadata: read
+2026-10-20T19:54:50.6262210Z Packages: read
+2026-10-20T19:54:50.6262580Z ##[endgroup]
+2026-10-20T19:54:50.6264160Z Secret source: Actions
+2026-10-20T19:54:50.6264740Z Cache mode: write
+2026-10-20T19:54:50.6265230Z Prepare workflow directory
+2026-10-20T19:54:50.6538270Z Prepare all required actions
+2026-10-20T19:54:50.6579610Z Getting action download info
+2026-10-20T19:54:50.8533830Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-20T19:54:51.0419230Z Download action repository 'jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa' (SHA:37effcfa045411f8bfbbda26df2fd1b3bf3436fa)
+2026-10-20T19:54:51.8324090Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+2026-10-20T19:54:52.0679210Z Complete job name: integration-macos-no-render
+2026-10-20T19:54:52.1404680Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-20T19:54:52.1406760Z with:
+2026-10-20T19:54:52.1407220Z   repository: sunyaisblank/Sirius
+2026-10-20T19:54:52.1410940Z   token: ***
+2026-10-20T19:54:52.1411410Z   ssh-strict: true
+2026-10-20T19:54:52.1411860Z   ssh-user: git
+2026-10-20T19:54:52.1412290Z   persist-credentials: true
+2026-10-20T19:54:52.1412760Z   clean: true
+2026-10-20T19:54:52.1413130Z   sparse-checkout-cone-mode: true
+2026-10-20T19:54:52.1413720Z   fetch-depth: 1
+2026-10-20T19:54:52.1414210Z   fetch-tags: false
+2026-10-20T19:54:52.1414660Z   show-progress: true
+2026-10-20T19:54:52.1415020Z   lfs: false
+2026-10-20T19:54:52.1415330Z   submodules: false
+2026-10-20T19:54:52.1415800Z   set-safe-directory: true
+2026-10-20T19:54:52.1416340Z   allow-unsafe-pr-checkout: false
+2026-10-20T19:54:52.1417320Z ##[endgroup]
+2026-10-20T19:54:52.7485800Z Syncing repository: sunyaisblank/Sirius
+2026-10-20T19:54:52.7488230Z ##[group]Getting Git version info
+2026-10-20T19:54:52.7489090Z Working directory is '/Users/runner/work/Sirius/Sirius'
+2026-10-20T19:54:52.7490090Z [command]/opt/homebrew/bin/git version
+2026-10-20T19:54:52.8087530Z git version 2.55.0
+2026-10-20T19:54:52.8126970Z ##[endgroup]
+2026-10-20T19:54:52.8135000Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/604387b8-4bab-41cc-96d5-62eb31eaf1b8/.gitconfig'
+2026-10-20T19:54:52.8137390Z Temporarily overriding HOME='/Users/runner/work/_temp/604387b8-4bab-41cc-96d5-62eb31eaf1b8' before making global git config changes
+2026-10-20T19:54:52.8138570Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T19:54:52.8141000Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+2026-10-20T19:54:52.8328900Z Deleting the contents of '/Users/runner/work/Sirius/Sirius'
+2026-10-20T19:54:52.8332070Z ##[group]Determining repository object format
+2026-10-20T19:54:52.8333100Z ##[endgroup]
+2026-10-20T19:54:52.8334870Z ##[group]Initializing the repository
+2026-10-20T19:54:52.8337480Z [command]/opt/homebrew/bin/git init /Users/runner/work/Sirius/Sirius
+2026-10-20T19:54:52.8683910Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T19:54:52.8685630Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T19:54:52.8687070Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T19:54:52.8687940Z hint: call:
+2026-10-20T19:54:52.8688710Z hint:
+2026-10-20T19:54:52.8691850Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T19:54:52.8692830Z hint:
+2026-10-20T19:54:52.8693630Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T19:54:52.8694760Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T19:54:52.8695540Z hint:
+2026-10-20T19:54:52.8697150Z hint: 	git branch -m <name>
+2026-10-20T19:54:52.8697860Z hint:
+2026-10-20T19:54:52.8698700Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T19:54:52.8700520Z Initialized empty Git repository in /Users/runner/work/Sirius/Sirius/.git/
+2026-10-20T19:54:52.8712300Z [command]/opt/homebrew/bin/git remote add origin https://github.com/sunyaisblank/Sirius
+2026-10-20T19:54:52.8847290Z ##[endgroup]
+2026-10-20T19:54:52.8848890Z ##[group]Disabling automatic garbage collection
+2026-10-20T19:54:52.8849940Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-10-20T19:54:52.8939670Z ##[endgroup]
+2026-10-20T19:54:52.8940850Z ##[group]Setting up auth
+2026-10-20T19:54:52.8942100Z Removing SSH command configuration
+2026-10-20T19:54:52.8947120Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T19:54:52.9039450Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T19:54:53.0358250Z Removing HTTP extra header
+2026-10-20T19:54:53.0359560Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T19:54:53.0435950Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T19:54:53.1144410Z Removing includeIf entries pointing to credentials config files
+2026-10-20T19:54:53.1146330Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T19:54:53.1212070Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T19:54:53.2310500Z [command]/opt/homebrew/bin/git config --file /Users/runner/work/_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T19:54:53.2376480Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git.path /Users/runner/work/_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T19:54:53.2435230Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path /Users/runner/work/_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T19:54:53.2491090Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T19:54:53.2549710Z [command]/opt/homebrew/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T19:54:53.2609720Z ##[endgroup]
+2026-10-20T19:54:53.2610530Z ##[group]Fetching the repository
+2026-10-20T19:54:53.2612830Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +6d2af336b12dc430792bd5a83c04fb5632868c04:refs/remotes/origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:55.0346290Z From https://github.com/sunyaisblank/Sirius
+2026-10-20T19:54:55.0352330Z  * [new ref]         6d2af336b12dc430792bd5a83c04fb5632868c04 -> origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:55.0357380Z [command]/opt/homebrew/bin/git branch --list --remote origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:55.0463130Z   origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:55.0468000Z [command]/opt/homebrew/bin/git rev-parse refs/remotes/origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:55.0533760Z 6d2af336b12dc430792bd5a83c04fb5632868c04
+2026-10-20T19:54:55.0536940Z ##[endgroup]
+2026-10-20T19:54:55.0538240Z ##[group]Determining the checkout info
+2026-10-20T19:54:55.0540210Z ##[endgroup]
+2026-10-20T19:54:55.0541040Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-10-20T19:54:55.0654480Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T19:54:55.0715950Z ##[group]Checking out the ref
+2026-10-20T19:54:55.0717670Z [command]/opt/homebrew/bin/git checkout --progress --force -B development/viewer-input-reinitialization-2026-10-21 refs/remotes/origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:55.2888650Z Switched to a new branch 'development/viewer-input-reinitialization-2026-10-21'
+2026-10-20T19:54:55.2912530Z branch 'development/viewer-input-reinitialization-2026-10-21' set up to track 'origin/development/viewer-input-reinitialization-2026-10-21'.
+2026-10-20T19:54:55.2926350Z ##[endgroup]
+2026-10-20T19:54:55.3025010Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-10-20T19:54:55.3179390Z 6d2af336b12dc430792bd5a83c04fb5632868c04
+2026-10-20T19:54:55.3517610Z ##[group]Run brew install ninja
+2026-10-20T19:54:55.3518630Z [36;1mbrew install ninja[0m
+2026-10-20T19:54:55.3602180Z shell: /bin/bash -e {0}
+2026-10-20T19:54:55.3602920Z ##[endgroup]
+2026-10-20T19:54:57.7182330Z [33mWarning:[0m ninja 1.13.2 is already installed and up-to-date.
+2026-10-20T19:54:57.7184050Z To reinstall 1.13.2, run:
+2026-10-20T19:54:57.7202610Z   brew reinstall ninja
+2026-10-20T19:54:57.7338180Z ##[group]Run jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+2026-10-20T19:54:57.7339330Z with:
+2026-10-20T19:54:57.7339910Z   vulkan_version: 1.4.357.0
+2026-10-20T19:54:57.7340480Z   cache: true
+2026-10-20T19:54:57.7346280Z   github_token: ***
+2026-10-20T19:54:57.7347000Z ##[endgroup]
+2026-10-20T19:54:58.0860990Z Using github_token to authenticate GitHub API requests.
+2026-10-20T19:54:58.2476860Z 🎯 [Cache] Cache for 'Vulkan SDK' not found.
+2026-10-20T19:54:58.2477430Z 🔽 Downloading Vulkan SDK 1.4.357.0
+2026-10-20T19:54:58.5979960Z ✔️ Http(200): The requested VULKAN_SDK 1.4.357.0 is downloadable.
+2026-10-20T19:54:58.5981290Z     URL: https://sdk.lunarg.com/sdk/download/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip
+2026-10-20T19:55:08.2593110Z ✔️ Download completed successfully!
+2026-10-20T19:55:08.2627450Z    File: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-20T19:55:08.2658410Z    SHA HASH URL: https://sdk.lunarg.com/sdk/sha/1.4.357.0/mac/vulkansdk-macos-1.4.357.0.zip.json
+2026-10-20T19:55:09.1677500Z    SHA verified: /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-20T19:55:09.1678610Z 📦 Extracting Vulkan SDK...
+2026-10-20T19:55:09.1789030Z [command]/usr/bin/unzip -o -q /var/folders/nj/vtw8zd2j31d1gdrtntc5y4600000gn/T/vulkansdk-macos.zip
+2026-10-20T19:55:51.2065240Z    Installed into folder: /Users/runner/vulkan-sdk/1.4.357.0
+2026-10-20T19:55:51.2570370Z [command]/opt/homebrew/bin/gtar --posix -cf cache.tzst --exclude cache.tzst -P -C /Users/runner/work/Sirius/Sirius --files-from manifest.txt --delay-directory-restore --use-compress-program zstdmt
+2026-10-20T19:56:03.2575140Z Sent 0 of 520214159 (0.0%), 0.0 MBs/sec
+2026-10-20T19:56:04.2663540Z Sent 0 of 520214159 (0.0%), 0.0 MBs/sec
+2026-10-20T19:56:05.2537880Z Sent 50452111 of 520214159 (9.7%), 16.0 MBs/sec
+2026-10-20T19:56:06.2644630Z Sent 117560975 of 520214159 (22.6%), 28.0 MBs/sec
+2026-10-20T19:56:06.5589970Z Sent 520214159 of 520214159 (100.0%), 115.0 MBs/sec
+2026-10-20T19:56:06.8184110Z 🎯 [Cache] Saved Vulkan SDK in path: '/Users/runner/vulkan-sdk/1.4.357.0'. Cache Save ID: '9238148016'.
+2026-10-20T19:56:06.8287180Z ✔️ [PATH] Added path to Vulkan SDK to environment variable PATH.
+2026-10-20T19:56:06.8389840Z ✔️ [ENV] Set env variable VULKAN_SDK -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS".
+2026-10-20T19:56:06.8493200Z ✔️ [ENV] Set env variable VULKAN_VERSION -> "1.4.357.0".
+2026-10-20T19:56:06.8597480Z ✔️ [ENV] Set env variable VK_LAYER_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d".
+2026-10-20T19:56:06.8700060Z ✔️ [ENV] Set env variable DYLD_LIBRARY_PATH -> "/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:".
+2026-10-20T19:56:06.8717300Z ✅ Done.
+2026-10-20T19:56:06.9017030Z ##[group]Run command -v slangc
+2026-10-20T19:56:06.9017600Z [36;1mcommand -v slangc[0m
+2026-10-20T19:56:06.9017960Z [36;1mcommand -v spirv-val[0m
+2026-10-20T19:56:06.9309500Z shell: /bin/bash -e {0}
+2026-10-20T19:56:06.9313190Z env:
+2026-10-20T19:56:06.9313640Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T19:56:06.9314090Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T19:56:06.9314590Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T19:56:06.9315410Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T19:56:06.9316170Z ##[endgroup]
+2026-10-20T19:56:07.1837220Z /Users/runner/vulkan-sdk/1.4.357.0/macOS/bin/slangc
+2026-10-20T19:56:07.2041500Z /Users/runner/vulkan-sdk/1.4.357.0/macOS/bin/spirv-val
+2026-10-20T19:56:07.2618020Z ##[group]Run cmake --preset macos -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
+2026-10-20T19:56:07.2618900Z [36;1mcmake --preset macos -DSIRIUS_ALIGNMENT_MODE=qualification -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON[0m
+2026-10-20T19:56:07.2667840Z shell: /bin/bash -e {0}
+2026-10-20T19:56:07.2668160Z env:
+2026-10-20T19:56:07.2668540Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T19:56:07.2668960Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T19:56:07.2669350Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T19:56:07.2670230Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T19:56:07.2670850Z ##[endgroup]
+2026-10-20T19:56:10.5620010Z -- The CXX compiler identification is AppleClang 17.0.0.17000013
+2026-10-20T19:56:11.5693230Z -- The C compiler identification is AppleClang 17.0.0.17000013
+2026-10-20T19:56:11.6426800Z -- Detecting CXX compiler ABI info
+2026-10-20T19:56:12.0442350Z -- Detecting CXX compiler ABI info - done
+2026-10-20T19:56:12.0917980Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-10-20T19:56:12.0930870Z -- Detecting CXX compile features
+2026-10-20T19:56:12.0949410Z -- Detecting CXX compile features - done
+2026-10-20T19:56:12.1131820Z -- Detecting C compiler ABI info
+2026-10-20T19:56:12.5290190Z -- Detecting C compiler ABI info - done
+2026-10-20T19:56:12.5817830Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-10-20T19:56:12.5819400Z -- Detecting C compile features
+2026-10-20T19:56:12.5823760Z -- Detecting C compile features - done
+2026-10-20T19:56:13.2641820Z -- Found Python3: /opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14 (found version "3.14.7") found components: Interpreter
+2026-10-20T19:56:20.0003810Z -- ┌─ FTXUI options ─────────────────────
+2026-10-20T19:56:20.0005330Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-20T19:56:20.0005980Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-20T19:56:20.0006360Z -- │ FTXUI_QUIET              : OFF
+2026-10-20T19:56:20.0006730Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-20T19:56:20.0007250Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-20T19:56:20.0007610Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-20T19:56:20.0007980Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-20T19:56:20.0008270Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-20T19:56:20.0008820Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-20T19:56:20.0009230Z -- └─────────────────────────────────────
+2026-10-20T19:56:20.0267060Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-20T19:56:20.3081890Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+2026-10-20T19:56:20.3088720Z -- Found Threads: TRUE
+2026-10-20T19:56:43.7846780Z -- Using the multi-header code from /Users/runner/work/Sirius/Sirius/bin/macos/_deps/json-src/include/
+2026-10-20T19:56:45.4214370Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-20T19:56:47.2588930Z -- Including Cocoa support
+2026-10-20T19:56:47.5983920Z -- The OBJC compiler identification is AppleClang 17.0.0.17000013
+2026-10-20T19:56:47.6185780Z -- Detecting OBJC compiler ABI info
+2026-10-20T19:56:47.9428940Z -- Detecting OBJC compiler ABI info - done
+2026-10-20T19:56:48.0071940Z -- Check for working OBJC compiler: /usr/bin/clang - skipped
+2026-10-20T19:56:51.9708540Z -- Mandatory test gating: ENABLED
+2026-10-20T19:56:51.9749830Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-20T19:56:51.9750560Z -- Configuring done (44.5s)
+2026-10-20T19:56:53.0721910Z -- Generating done (1.1s)
+2026-10-20T19:56:53.0730980Z -- Build files have been written to: /Users/runner/work/Sirius/Sirius/bin/macos
+2026-10-20T19:56:53.0977670Z ##[group]Run cmake --build --preset macos --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j3
+2026-10-20T19:56:53.0981210Z [36;1mcmake --build --preset macos --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j3[0m
+2026-10-20T19:56:53.1079630Z shell: /bin/bash -e {0}
+2026-10-20T19:56:53.1080450Z env:
+2026-10-20T19:56:53.1081110Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T19:56:53.1081990Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T19:56:53.1082910Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T19:56:53.1084650Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T19:56:53.1086360Z ##[endgroup]
+2026-10-20T19:56:53.2042860Z [0/2] Re-checking globbed directories...
+2026-10-20T19:56:53.5632200Z [1/288] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/contracts.cpp.o
+2026-10-20T19:56:54.2892800Z [2/288] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/tensor.cpp.o
+2026-10-20T19:56:55.0087680Z [3/288] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/resource_locator.cpp.o
+2026-10-20T19:56:55.4547120Z [4/288] Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:55.4659890Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.4783790Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:55.4887450Z     |
+2026-10-20T19:56:55.4989110Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:55.5100680Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.5205060Z ----'
+2026-10-20T19:56:55.5305640Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.5409190Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:55.5512990Z     |
+2026-10-20T19:56:55.5614850Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:55.5739830Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.5740500Z ----'
+2026-10-20T19:56:55.5740870Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.5741380Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:56:55.5741940Z     |
+2026-10-20T19:56:55.5742250Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.5742780Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.5743360Z ----'
+2026-10-20T19:56:55.5744020Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.5846600Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:56:55.5943050Z     |
+2026-10-20T19:56:55.6049170Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.6152010Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.6254870Z ----'
+2026-10-20T19:56:55.6354040Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.6454110Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:56:55.6556670Z     |
+2026-10-20T19:56:55.6657200Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.6759430Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.6858950Z ----'
+2026-10-20T19:56:55.6960080Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.7061790Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:56:55.7165660Z     |
+2026-10-20T19:56:55.7268250Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.7371340Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.7473760Z ----'
+2026-10-20T19:56:55.7575660Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.7677530Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:56:55.7778850Z     |
+2026-10-20T19:56:55.7879260Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.7980620Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.8081120Z ----'
+2026-10-20T19:56:55.8182490Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.8282740Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:56:55.8383080Z     |
+2026-10-20T19:56:55.8484210Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.8586000Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.8686040Z ----'
+2026-10-20T19:56:55.8818460Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.8940410Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:56:55.9043030Z     |
+2026-10-20T19:56:55.9144670Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.9247110Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:55.9353120Z ----'
+2026-10-20T19:56:55.9454980Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:55.9558020Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:56:55.9670520Z     |
+2026-10-20T19:56:55.9794990Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:56:55.9934830Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.0058990Z ----'
+2026-10-20T19:56:56.0196580Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.0324780Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:56:56.0447800Z     |
+2026-10-20T19:56:56.0565780Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:56:56.0674030Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.0796410Z ----'
+2026-10-20T19:56:56.0900890Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.1004100Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:56:56.1110290Z     |
+2026-10-20T19:56:56.1232520Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:56:56.1352390Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.1454060Z ----'
+2026-10-20T19:56:56.1555100Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.1656440Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:56:56.1756510Z     |
+2026-10-20T19:56:56.1876980Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:56:56.1978460Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.2079680Z ----'
+2026-10-20T19:56:56.2181190Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.2282470Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:56:56.2382820Z     |
+2026-10-20T19:56:56.2483180Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:56:56.2584750Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.2685150Z ----'
+2026-10-20T19:56:56.2786410Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.2888510Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:56.2989840Z     |
+2026-10-20T19:56:56.3091110Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:56.3191310Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.3292290Z ----'
+2026-10-20T19:56:56.3393280Z [5/288] Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:56.3494440Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.3594880Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:56.3695660Z     |
+2026-10-20T19:56:56.3798160Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:56.3900440Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.4002490Z ----'
+2026-10-20T19:56:56.4103650Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.4205140Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:56.4306720Z     |
+2026-10-20T19:56:56.4408920Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:56.4511890Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.4614900Z ----'
+2026-10-20T19:56:56.4716400Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.4816780Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:56:56.4918210Z     |
+2026-10-20T19:56:56.5019830Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.5120860Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.5221970Z ----'
+2026-10-20T19:56:56.5323020Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.5424110Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:56:56.5525080Z     |
+2026-10-20T19:56:56.5625480Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.5726380Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.5826460Z ----'
+2026-10-20T19:56:56.5927420Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.6028850Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:56:56.6130000Z     |
+2026-10-20T19:56:56.6231520Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.6334110Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.6438460Z ----'
+2026-10-20T19:56:56.6540790Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.6642160Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:56:56.6742650Z     |
+2026-10-20T19:56:56.6843970Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.6947060Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.7047450Z ----'
+2026-10-20T19:56:56.7150160Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.7252230Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:56:56.7353640Z     |
+2026-10-20T19:56:56.7458210Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.7564960Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.7688140Z ----'
+2026-10-20T19:56:56.7810780Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.7932960Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:56:56.8078450Z     |
+2026-10-20T19:56:56.8205610Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.8327390Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.8449490Z ----'
+2026-10-20T19:56:56.8569500Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.8696840Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:56:56.8798840Z     |
+2026-10-20T19:56:56.8900610Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.9001200Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.9123390Z ----'
+2026-10-20T19:56:56.9224560Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.9325530Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:56:56.9425990Z     |
+2026-10-20T19:56:56.9527180Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:56:56.9649270Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:56.9750950Z ----'
+2026-10-20T19:56:56.9852200Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:56.9953760Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:56:57.0060760Z     |
+2026-10-20T19:56:57.0163180Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:56:57.0263840Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.0365710Z ----'
+2026-10-20T19:56:57.0467190Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.0581780Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:56:57.0683240Z     |
+2026-10-20T19:56:57.0784910Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:56:57.0886500Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.0986920Z ----'
+2026-10-20T19:56:57.1088830Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.1189490Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:56:57.1291650Z     |
+2026-10-20T19:56:57.1393120Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:56:57.1494280Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.1595250Z ----'
+2026-10-20T19:56:57.1696480Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.1797010Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:56:57.1899110Z     |
+2026-10-20T19:56:57.2000280Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:56:57.2102300Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.2203580Z ----'
+2026-10-20T19:56:57.2304770Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.2405720Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:57.2506260Z     |
+2026-10-20T19:56:57.2608520Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:57.2715490Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.2812250Z ----'
+2026-10-20T19:56:57.2913640Z [6/288] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/geodesic_integrator.cpp.o
+2026-10-20T19:56:57.3015120Z [7/288] Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:57.3116170Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.3217450Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:57.3322200Z     |
+2026-10-20T19:56:57.3429190Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:57.3532190Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.3632480Z ----'
+2026-10-20T19:56:57.3733200Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.3834580Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:57.3935460Z     |
+2026-10-20T19:56:57.4036410Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:57.4137880Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.4237610Z ----'
+2026-10-20T19:56:57.4338630Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.4440910Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:56:57.4541680Z     |
+2026-10-20T19:56:57.4641670Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.4742430Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.4844210Z ----'
+2026-10-20T19:56:57.4945990Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.5046610Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:56:57.5148200Z     |
+2026-10-20T19:56:57.5248880Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.5349730Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.5450950Z ----'
+2026-10-20T19:56:57.5551630Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.5652570Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:56:57.5753830Z     |
+2026-10-20T19:56:57.5854860Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.5956500Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.6056710Z ----'
+2026-10-20T19:56:57.6157720Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.6258690Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:56:57.6396240Z     |
+2026-10-20T19:56:57.6518950Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.6660570Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.6784480Z ----'
+2026-10-20T19:56:57.6914700Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.7043250Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:56:57.7165650Z     |
+2026-10-20T19:56:57.7283000Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.7404880Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.7528570Z ----'
+2026-10-20T19:56:57.7630170Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.7731290Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:56:57.7830980Z     |
+2026-10-20T19:56:57.7931540Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.8032150Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.8132150Z ----'
+2026-10-20T19:56:57.8233580Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.8335240Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:56:57.8435920Z     |
+2026-10-20T19:56:57.8536330Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.8636960Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.8739370Z ----'
+2026-10-20T19:56:57.8839780Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.8940570Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:56:57.9042520Z     |
+2026-10-20T19:56:57.9143510Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:56:57.9245160Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.9347200Z ----'
+2026-10-20T19:56:57.9448550Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:57.9549130Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:56:57.9650180Z     |
+2026-10-20T19:56:57.9772680Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:56:57.9873500Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:57.9973480Z ----'
+2026-10-20T19:56:58.0074900Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.0175540Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:56:58.0276890Z     |
+2026-10-20T19:56:58.0377900Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:56:58.0485250Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.0507050Z ----'
+2026-10-20T19:56:58.0608020Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.0711150Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:56:58.0823710Z     |
+2026-10-20T19:56:58.0924530Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:56:58.1025580Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.1127400Z ----'
+2026-10-20T19:56:58.1228500Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.1329910Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:56:58.1431090Z     |
+2026-10-20T19:56:58.1532090Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:56:58.1634030Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.1735550Z ----'
+2026-10-20T19:56:58.1836450Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.1937490Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:58.2038590Z     |
+2026-10-20T19:56:58.2139650Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:58.2252060Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.2353270Z ----'
+2026-10-20T19:56:58.2454320Z [8/288] Linking CXX static library src/sirius/libsirius_base.a
+2026-10-20T19:56:58.2555530Z [9/288] Linking CXX static library src/sirius/core/libsirius_core.a
+2026-10-20T19:56:58.2656850Z [10/288] Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:58.2758590Z warning[E41018]: returning without initializing out parameter
+2026-10-20T19:56:58.2861150Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-20T19:56:58.2963040Z     |
+2026-10-20T19:56:58.3064260Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-20T19:56:58.3165820Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-20T19:56:58.3267220Z ----'
+2026-10-20T19:56:58.3369390Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.3470980Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-20T19:56:58.3572020Z     |
+2026-10-20T19:56:58.3672980Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-20T19:56:58.3775300Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.3877640Z ----'
+2026-10-20T19:56:58.3978910Z [11/288] Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:58.4080170Z warning[E41018]: returning without initializing out parameter
+2026-10-20T19:56:58.4181640Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-20T19:56:58.4282950Z     |
+2026-10-20T19:56:58.4384670Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-20T19:56:58.4486270Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-20T19:56:58.4588990Z ----'
+2026-10-20T19:56:58.4690300Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.4793720Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-20T19:56:58.4896150Z     |
+2026-10-20T19:56:58.5000340Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-20T19:56:58.5102750Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.5204780Z ----'
+2026-10-20T19:56:58.5307280Z [12/288] Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:58.5408880Z warning[E41018]: returning without initializing out parameter
+2026-10-20T19:56:58.5511230Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-20T19:56:58.5613700Z     |
+2026-10-20T19:56:58.5715690Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-20T19:56:58.5818580Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-20T19:56:58.5919780Z ----'
+2026-10-20T19:56:58.6038060Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:58.6141170Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-20T19:56:58.6243470Z     |
+2026-10-20T19:56:58.6346700Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-20T19:56:58.6379230Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:58.6481140Z ----'
+2026-10-20T19:56:58.6586360Z [13/288] Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:58.7769690Z [14/288] Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:59.0540420Z [15/288] Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:57:00.0613100Z [16/288] Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:57:11.8902580Z [17/288] Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+2026-10-20T19:57:11.8908930Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:11.9017430Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:11.9125140Z     |
+2026-10-20T19:57:11.9234510Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:11.9358350Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:11.9469260Z ----'
+2026-10-20T19:57:11.9570780Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:11.9673610Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:11.9776310Z     |
+2026-10-20T19:57:11.9877790Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:11.9981410Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.0084430Z ----'
+2026-10-20T19:57:12.0206630Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.0309250Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:12.0411340Z     |
+2026-10-20T19:57:12.0512370Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.0613560Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.0716180Z ----'
+2026-10-20T19:57:12.0817630Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.0944990Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:12.1047630Z     |
+2026-10-20T19:57:12.1154770Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.1267280Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.1369510Z ----'
+2026-10-20T19:57:12.1486160Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.1596050Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:12.1699000Z     |
+2026-10-20T19:57:12.1800030Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.1902320Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.2004160Z ----'
+2026-10-20T19:57:12.2107270Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.2233250Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:12.2361850Z     |
+2026-10-20T19:57:12.2462910Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.2565510Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.2669800Z ----'
+2026-10-20T19:57:12.2772420Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.2873800Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:12.2975960Z     |
+2026-10-20T19:57:12.3077230Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.3178720Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.3286840Z ----'
+2026-10-20T19:57:12.3397610Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.3489000Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:12.3590710Z     |
+2026-10-20T19:57:12.3714570Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.3817430Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.3932420Z ----'
+2026-10-20T19:57:12.4034760Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.4136530Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:12.4237890Z     |
+2026-10-20T19:57:12.4339690Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.4439970Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.4541530Z ----'
+2026-10-20T19:57:12.4644950Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.4766350Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:12.4806280Z     |
+2026-10-20T19:57:12.4907980Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:12.5017770Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.5119530Z ----'
+2026-10-20T19:57:12.5220740Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.5321760Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:12.5430830Z     |
+2026-10-20T19:57:12.5531740Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:12.5635260Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.5748740Z ----'
+2026-10-20T19:57:12.5851500Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.5975470Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:12.6097190Z     |
+2026-10-20T19:57:12.6198200Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:12.6308530Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.6415250Z ----'
+2026-10-20T19:57:12.6516240Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.6626090Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:12.6727280Z     |
+2026-10-20T19:57:12.6829560Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:12.6934890Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.7036310Z ----'
+2026-10-20T19:57:12.7138350Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.7240060Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:12.7342000Z     |
+2026-10-20T19:57:12.7443360Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:12.7557570Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.7659400Z ----'
+2026-10-20T19:57:12.7761290Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.7864250Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:12.7957040Z     |
+2026-10-20T19:57:12.8075970Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:12.8205060Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.8329010Z ----'
+2026-10-20T19:57:12.8452220Z [18/288] Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-20T19:57:12.8579580Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.8682950Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:12.8767660Z     |
+2026-10-20T19:57:12.8975360Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:12.9081520Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.9178580Z ----'
+2026-10-20T19:57:12.9281370Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.9385680Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:12.9486720Z     |
+2026-10-20T19:57:12.9589460Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:12.9692210Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:12.9794980Z ----'
+2026-10-20T19:57:12.9897280Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:12.9999350Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:13.0101100Z     |
+2026-10-20T19:57:13.0202650Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.0305320Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.0407730Z ----'
+2026-10-20T19:57:13.0510350Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.0613040Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:13.0720080Z     |
+2026-10-20T19:57:13.0823890Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.0925600Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.1028060Z ----'
+2026-10-20T19:57:13.1140440Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.1242280Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:13.1344080Z     |
+2026-10-20T19:57:13.1444960Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.1545380Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.1646280Z ----'
+2026-10-20T19:57:13.1746880Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.1848730Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:13.1947940Z     |
+2026-10-20T19:57:13.2049580Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.2151060Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.2252350Z ----'
+2026-10-20T19:57:13.2352800Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.2485510Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:13.2620400Z     |
+2026-10-20T19:57:13.2721720Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.2822960Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.2929750Z ----'
+2026-10-20T19:57:13.3046070Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.3147890Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:13.3248090Z     |
+2026-10-20T19:57:13.3349630Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.3457230Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.3570920Z ----'
+2026-10-20T19:57:13.3686050Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.3810400Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:13.3916050Z     |
+2026-10-20T19:57:13.4018190Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.4121030Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.4242160Z ----'
+2026-10-20T19:57:13.4348070Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.4450180Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:13.4562630Z     |
+2026-10-20T19:57:13.4665800Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.4779700Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.4899700Z ----'
+2026-10-20T19:57:13.5000980Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.5103380Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:13.5205860Z     |
+2026-10-20T19:57:13.5307930Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:13.5410040Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.5511630Z ----'
+2026-10-20T19:57:13.5613180Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.5714660Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:13.5815970Z     |
+2026-10-20T19:57:13.5917320Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:13.6019000Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.6120430Z ----'
+2026-10-20T19:57:13.6221810Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.6323520Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:13.6425770Z     |
+2026-10-20T19:57:13.6526880Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:13.6628340Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.6729740Z ----'
+2026-10-20T19:57:13.6830960Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.6932380Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:13.7033690Z     |
+2026-10-20T19:57:13.7134890Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:13.7237190Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.7339820Z ----'
+2026-10-20T19:57:13.7441530Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.7542920Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:13.7646830Z     |
+2026-10-20T19:57:13.7763390Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:13.7865790Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.7973680Z ----'
+2026-10-20T19:57:13.8074960Z [19/288] Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+2026-10-20T19:57:13.8176320Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.8288510Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:13.8409740Z     |
+2026-10-20T19:57:13.8550550Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:13.8655550Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.8774200Z ----'
+2026-10-20T19:57:13.8775400Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.8876860Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:13.8996230Z     |
+2026-10-20T19:57:13.9097690Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:13.9213470Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.9319310Z ----'
+2026-10-20T19:57:13.9420260Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.9547000Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:13.9669080Z     |
+2026-10-20T19:57:13.9790390Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.9791040Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.9791560Z ----'
+2026-10-20T19:57:13.9791990Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.9792560Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:13.9793110Z     |
+2026-10-20T19:57:13.9793370Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.9794000Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.9794530Z ----'
+2026-10-20T19:57:13.9794810Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.9795400Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:13.9795880Z     |
+2026-10-20T19:57:13.9832720Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.9833380Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.9833840Z ----'
+2026-10-20T19:57:13.9834710Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.9835200Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:13.9835610Z     |
+2026-10-20T19:57:13.9835830Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:13.9836270Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:13.9836630Z ----'
+2026-10-20T19:57:13.9836960Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:13.9938090Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:14.0039450Z     |
+2026-10-20T19:57:14.0140510Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.0241970Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.0345500Z ----'
+2026-10-20T19:57:14.0451550Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.0552740Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:14.0653950Z     |
+2026-10-20T19:57:14.0754980Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.0855930Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.0956800Z ----'
+2026-10-20T19:57:14.1057620Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.1159200Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:14.1261460Z     |
+2026-10-20T19:57:14.1372390Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.1487150Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.1588240Z ----'
+2026-10-20T19:57:14.1689740Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.1790800Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:14.1891820Z     |
+2026-10-20T19:57:14.1993570Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.2095210Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.2196270Z ----'
+2026-10-20T19:57:14.2317330Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.2418430Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:14.2525760Z     |
+2026-10-20T19:57:14.2637900Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:14.2767190Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.2896770Z ----'
+2026-10-20T19:57:14.3008220Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3111770Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:14.3212950Z     |
+2026-10-20T19:57:14.3408350Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:14.3536060Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.3536590Z ----'
+2026-10-20T19:57:14.3646870Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3777600Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:14.3908620Z     |
+2026-10-20T19:57:14.3908850Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:14.3909270Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.3909640Z ----'
+2026-10-20T19:57:14.3909830Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3910280Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:14.3911480Z     |
+2026-10-20T19:57:14.3911630Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:14.3911990Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.3912340Z ----'
+2026-10-20T19:57:14.3912540Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3912940Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:14.3913310Z     |
+2026-10-20T19:57:14.3913570Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:14.3914100Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.3914480Z ----'
+2026-10-20T19:57:14.3914740Z [20/288] Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-20T19:57:14.3915130Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3915540Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:14.3915890Z     |
+2026-10-20T19:57:14.3916170Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:14.3916650Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.3916990Z ----'
+2026-10-20T19:57:14.3917170Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3917560Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:14.3917910Z     |
+2026-10-20T19:57:14.3918180Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:14.3918660Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.3919310Z ----'
+2026-10-20T19:57:14.3919510Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.3919920Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:14.3920280Z     |
+2026-10-20T19:57:14.3920730Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.4033480Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.4151020Z ----'
+2026-10-20T19:57:14.4252600Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.4358840Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:14.4468260Z     |
+2026-10-20T19:57:14.4569060Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.4700090Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.4802230Z ----'
+2026-10-20T19:57:14.4903880Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.5010590Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:14.5111820Z     |
+2026-10-20T19:57:14.5212850Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.5317840Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.5421360Z ----'
+2026-10-20T19:57:14.5523780Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.5625220Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:14.5726420Z     |
+2026-10-20T19:57:14.5827320Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.5956770Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.6063480Z ----'
+2026-10-20T19:57:14.6165290Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.6277810Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:14.6379120Z     |
+2026-10-20T19:57:14.6480240Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.6603540Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.6704820Z ----'
+2026-10-20T19:57:14.6805900Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.6907280Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:14.7008460Z     |
+2026-10-20T19:57:14.7109630Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.7210920Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.7312880Z ----'
+2026-10-20T19:57:14.7414130Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.7515320Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:14.7616500Z     |
+2026-10-20T19:57:14.7718270Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.7820000Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.7921320Z ----'
+2026-10-20T19:57:14.8022280Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.8123370Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:14.8224300Z     |
+2026-10-20T19:57:14.8325880Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:14.8427800Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.8528840Z ----'
+2026-10-20T19:57:14.8630670Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.8732020Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:14.8833220Z     |
+2026-10-20T19:57:14.8934380Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:14.9035550Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.9137890Z ----'
+2026-10-20T19:57:14.9239150Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.9340230Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:14.9441450Z     |
+2026-10-20T19:57:14.9542520Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:14.9643680Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:14.9771940Z ----'
+2026-10-20T19:57:14.9873600Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:14.9975290Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:15.0076810Z     |
+2026-10-20T19:57:15.0178380Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:15.0280530Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.0382310Z ----'
+2026-10-20T19:57:15.0483380Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.0585000Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:15.0686780Z     |
+2026-10-20T19:57:15.0788070Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:15.0889380Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.0989580Z ----'
+2026-10-20T19:57:15.1090850Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.1191820Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:15.1292470Z     |
+2026-10-20T19:57:15.1393350Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:15.1494360Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.1595680Z ----'
+2026-10-20T19:57:15.1697240Z [21/288] Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+2026-10-20T19:57:15.1798540Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.1899950Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:15.2001210Z     |
+2026-10-20T19:57:15.2102480Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:15.2204820Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.2320080Z ----'
+2026-10-20T19:57:15.2421230Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.2523860Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:15.2625200Z     |
+2026-10-20T19:57:15.2726340Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:15.2833520Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.2937900Z ----'
+2026-10-20T19:57:15.3060000Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.3161290Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:15.3262460Z     |
+2026-10-20T19:57:15.3366640Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.3471460Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.3572810Z ----'
+2026-10-20T19:57:15.3674000Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.3783540Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:15.3885660Z     |
+2026-10-20T19:57:15.3986850Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.4088070Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.4189920Z ----'
+2026-10-20T19:57:15.4291900Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.4393540Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:15.4495110Z     |
+2026-10-20T19:57:15.4596120Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.4697340Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.4798670Z ----'
+2026-10-20T19:57:15.4899930Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.5001190Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:15.5102810Z     |
+2026-10-20T19:57:15.5203890Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.5305560Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.5406990Z ----'
+2026-10-20T19:57:15.5508010Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.5610890Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:15.5712640Z     |
+2026-10-20T19:57:15.5814170Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.5919660Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.6019980Z ----'
+2026-10-20T19:57:15.6121330Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.6222200Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:15.6323220Z     |
+2026-10-20T19:57:15.6425630Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.6527060Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.6628830Z ----'
+2026-10-20T19:57:15.6732950Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.6837060Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:15.6939900Z     |
+2026-10-20T19:57:15.7052980Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.7154280Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.7257870Z ----'
+2026-10-20T19:57:15.7364450Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.7467150Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:15.7568820Z     |
+2026-10-20T19:57:15.7669140Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:15.7769940Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.7870340Z ----'
+2026-10-20T19:57:15.7970950Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.8071540Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:15.8171550Z     |
+2026-10-20T19:57:15.8272490Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:15.8373260Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.8474020Z ----'
+2026-10-20T19:57:15.8575110Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.8675810Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:15.8775900Z     |
+2026-10-20T19:57:15.8876560Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:15.8985570Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.9077710Z ----'
+2026-10-20T19:57:15.9178450Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.9278980Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:15.9379910Z     |
+2026-10-20T19:57:15.9480350Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:15.9581130Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:15.9681580Z ----'
+2026-10-20T19:57:15.9782710Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:15.9883080Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:15.9984120Z     |
+2026-10-20T19:57:16.0084470Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:16.0185600Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:16.0286760Z ----'
+2026-10-20T19:57:16.0387210Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:16.0488470Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:16.0589520Z     |
+2026-10-20T19:57:16.0690460Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:16.0791360Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:16.0892030Z ----'
+2026-10-20T19:57:16.0993180Z [22/288] Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+2026-10-20T19:57:18.8624580Z [23/288] Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+2026-10-20T19:57:18.8726330Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:18.8827290Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:18.8928460Z     |
+2026-10-20T19:57:18.9029650Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:18.9130000Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:18.9231280Z ----'
+2026-10-20T19:57:18.9332390Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:18.9434480Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:18.9535620Z     |
+2026-10-20T19:57:18.9636300Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:18.9737340Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:18.9838040Z ----'
+2026-10-20T19:57:18.9939150Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.0040750Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:19.0142190Z     |
+2026-10-20T19:57:19.0244070Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.0370550Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.0470920Z ----'
+2026-10-20T19:57:19.0572200Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.0686000Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:19.0791180Z     |
+2026-10-20T19:57:19.0895190Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.0999190Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1106630Z ----'
+2026-10-20T19:57:19.1207620Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1310810Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:19.1352930Z     |
+2026-10-20T19:57:19.1359690Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1360480Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1360980Z ----'
+2026-10-20T19:57:19.1361270Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1361760Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:19.1362250Z     |
+2026-10-20T19:57:19.1362450Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1363030Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1363520Z ----'
+2026-10-20T19:57:19.1363710Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1364270Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:19.1364740Z     |
+2026-10-20T19:57:19.1364920Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1365320Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1365710Z ----'
+2026-10-20T19:57:19.1365940Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1366400Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:19.1366830Z     |
+2026-10-20T19:57:19.1367030Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1367460Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1368440Z ----'
+2026-10-20T19:57:19.1368630Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1369080Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:19.1369470Z     |
+2026-10-20T19:57:19.1369650Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1370060Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1370530Z ----'
+2026-10-20T19:57:19.1370780Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1371200Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:19.1371590Z     |
+2026-10-20T19:57:19.1371780Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1372270Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1372720Z ----'
+2026-10-20T19:57:19.1372920Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1373420Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:19.1373790Z     |
+2026-10-20T19:57:19.1373920Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:19.1374280Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1374650Z ----'
+2026-10-20T19:57:19.1374870Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1375620Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:19.1376020Z     |
+2026-10-20T19:57:19.1376170Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:19.1376600Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1377340Z ----'
+2026-10-20T19:57:19.1377570Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1378080Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:19.1378560Z     |
+2026-10-20T19:57:19.1378760Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:19.1379150Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1380260Z ----'
+2026-10-20T19:57:19.1380900Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1382490Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:19.1383720Z     |
+2026-10-20T19:57:19.1384190Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:19.1385040Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1385660Z ----'
+2026-10-20T19:57:19.1386600Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1388210Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.1389460Z     |
+2026-10-20T19:57:19.1389890Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.1390600Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1392170Z ----'
+2026-10-20T19:57:19.1392540Z [24/288] Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+2026-10-20T19:57:19.1393290Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1393760Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.1394470Z     |
+2026-10-20T19:57:19.1395390Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.1396040Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1396770Z ----'
+2026-10-20T19:57:19.1396960Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1397880Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.1398300Z     |
+2026-10-20T19:57:19.1399360Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.1401090Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1401550Z ----'
+2026-10-20T19:57:19.1401830Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1402480Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:19.1402870Z     |
+2026-10-20T19:57:19.1403050Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1403520Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1403990Z ----'
+2026-10-20T19:57:19.1404200Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1404690Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:19.1405080Z     |
+2026-10-20T19:57:19.1405240Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1405670Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1406100Z ----'
+2026-10-20T19:57:19.1406290Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1407390Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:19.1407780Z     |
+2026-10-20T19:57:19.1407940Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1408670Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1409060Z ----'
+2026-10-20T19:57:19.1409250Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1409670Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:19.1410010Z     |
+2026-10-20T19:57:19.1410160Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1410570Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1410940Z ----'
+2026-10-20T19:57:19.1411120Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1411540Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:19.1411890Z     |
+2026-10-20T19:57:19.1412060Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1412550Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1412920Z ----'
+2026-10-20T19:57:19.1413150Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1413710Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:19.1414100Z     |
+2026-10-20T19:57:19.1414360Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1414840Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1415670Z ----'
+2026-10-20T19:57:19.1415870Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1416360Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:19.1416750Z     |
+2026-10-20T19:57:19.1416920Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1417320Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1417940Z ----'
+2026-10-20T19:57:19.1418140Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1418550Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:19.1418900Z     |
+2026-10-20T19:57:19.1419060Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1419460Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1419820Z ----'
+2026-10-20T19:57:19.1419990Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1420400Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:19.1420770Z     |
+2026-10-20T19:57:19.1420910Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:19.1421330Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1421710Z ----'
+2026-10-20T19:57:19.1421900Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1422320Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:19.1425700Z     |
+2026-10-20T19:57:19.1425890Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:19.1426330Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1426690Z ----'
+2026-10-20T19:57:19.1426880Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1427300Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:19.1427660Z     |
+2026-10-20T19:57:19.1427810Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:19.1428250Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1428840Z ----'
+2026-10-20T19:57:19.1429060Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1429460Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:19.1429840Z     |
+2026-10-20T19:57:19.1429970Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:19.1430330Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1430690Z ----'
+2026-10-20T19:57:19.1430880Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1431360Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.1431730Z     |
+2026-10-20T19:57:19.1432020Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.1432560Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1433010Z ----'
+2026-10-20T19:57:19.1433740Z [25/288] Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+2026-10-20T19:57:19.1487620Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1488090Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.1488450Z     |
+2026-10-20T19:57:19.1490460Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.1490980Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1491350Z ----'
+2026-10-20T19:57:19.1491600Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1492150Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.1492570Z     |
+2026-10-20T19:57:19.1492860Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.1494100Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1494500Z ----'
+2026-10-20T19:57:19.1494680Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1495100Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:266:34
+2026-10-20T19:57:19.1495470Z     |
+2026-10-20T19:57:19.1495640Z 266 | stepXi = xiA + k1XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1496040Z     |                      ^ variable 'k1XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1496400Z ----'
+2026-10-20T19:57:19.1496590Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1497060Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:267:31
+2026-10-20T19:57:19.1497420Z     |
+2026-10-20T19:57:19.1497580Z 267 | stepV = VA + k1VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1498000Z     |                   ^ variable 'k1VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1498350Z ----'
+2026-10-20T19:57:19.1498530Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1498990Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:269:34
+2026-10-20T19:57:19.1506000Z     |
+2026-10-20T19:57:19.1506170Z 269 | stepXi = xiA + k2XiA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1506590Z     |                      ^ variable 'k2XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1507040Z ----'
+2026-10-20T19:57:19.1507270Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1507740Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:270:31
+2026-10-20T19:57:19.1508080Z     |
+2026-10-20T19:57:19.1508230Z 270 | stepV = VA + k2VA * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1511670Z     |                   ^ variable 'k2VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1512060Z ----'
+2026-10-20T19:57:19.1512320Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1512880Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:272:34
+2026-10-20T19:57:19.1590400Z     |
+2026-10-20T19:57:19.1691590Z 272 | stepXi = xiB + k1XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1710400Z     |                      ^ variable 'k1XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1711640Z ----'
+2026-10-20T19:57:19.1712100Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1713160Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:273:31
+2026-10-20T19:57:19.1714290Z     |
+2026-10-20T19:57:19.1714730Z 273 | stepV = VB + k1VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1715320Z     |                   ^ variable 'k1VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1715810Z ----'
+2026-10-20T19:57:19.1716150Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1720370Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:275:34
+2026-10-20T19:57:19.1720820Z     |
+2026-10-20T19:57:19.1721070Z 275 | stepXi = xiB + k2XiB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1721610Z     |                      ^ variable 'k2XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1722140Z ----'
+2026-10-20T19:57:19.1722420Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1739650Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:276:31
+2026-10-20T19:57:19.1833220Z     |
+2026-10-20T19:57:19.1835860Z 276 | stepV = VB + k2VB * (Real(0.5) * dLambda);
+2026-10-20T19:57:19.1839660Z     |                   ^ variable 'k2VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.1850470Z ----'
+2026-10-20T19:57:19.1952390Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.1985250Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:278:34
+2026-10-20T19:57:19.1994330Z     |
+2026-10-20T19:57:19.1995490Z 278 | stepXi = xiA + k3XiA * dLambda;
+2026-10-20T19:57:19.1996670Z     |                      ^ variable 'k3XiA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.2033110Z ----'
+2026-10-20T19:57:19.2033660Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.2035280Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:279:31
+2026-10-20T19:57:19.2038240Z     |
+2026-10-20T19:57:19.2038560Z 279 | stepV = VA + k3VA * dLambda;
+2026-10-20T19:57:19.2039100Z     |                   ^ variable 'k3VA' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.2039600Z ----'
+2026-10-20T19:57:19.2040120Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.2040780Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:281:34
+2026-10-20T19:57:19.2041330Z     |
+2026-10-20T19:57:19.2041650Z 281 | stepXi = xiB + k3XiB * dLambda;
+2026-10-20T19:57:19.2042220Z     |                      ^ variable 'k3XiB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.2042800Z ----'
+2026-10-20T19:57:19.2043090Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.2043520Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:282:31
+2026-10-20T19:57:19.2043990Z     |
+2026-10-20T19:57:19.2044840Z 282 | stepV = VB + k3VB * dLambda;
+2026-10-20T19:57:19.2045350Z     |                   ^ variable 'k3VB' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.2046310Z ----'
+2026-10-20T19:57:19.2046640Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:57:19.2048700Z    --> /Users/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:57:19.2050040Z     |
+2026-10-20T19:57:19.2050930Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:57:19.2051810Z     |                     ^ variable 'phaseTangent' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:57:19.2052390Z ----'
+2026-10-20T19:57:19.2097070Z [26/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/box.cpp.o
+2026-10-20T19:57:19.6912500Z [27/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color_info.cpp.o
+2026-10-20T19:57:19.7554460Z [28/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color.cpp.o
+2026-10-20T19:57:20.1239740Z [29/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/terminal.cpp.o
+2026-10-20T19:57:20.2977530Z [30/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o
+2026-10-20T19:57:20.3526530Z [31/288] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/screen.cpp.o
+2026-10-20T19:57:20.4505530Z [32/288] Linking CXX static library _deps/ftxui-build/libftxui-screen.a
+2026-10-20T19:57:20.8237290Z [33/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/automerge.cpp.o
+2026-10-20T19:57:20.9539160Z [34/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/blink.cpp.o
+2026-10-20T19:57:21.3447490Z [35/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/bold.cpp.o
+2026-10-20T19:57:21.5117590Z [36/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hyperlink.cpp.o
+2026-10-20T19:57:22.0205820Z [37/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/box_helper.cpp.o
+2026-10-20T19:57:22.3196860Z [38/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/border.cpp.o
+2026-10-20T19:57:22.8679700Z [39/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/clear_under.cpp.o
+2026-10-20T19:57:23.5668860Z [40/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/color.cpp.o
+2026-10-20T19:57:24.3319080Z [41/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/canvas.cpp.o
+2026-10-20T19:57:24.3751240Z [42/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o
+2026-10-20T19:57:25.0386660Z [43/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dbox.cpp.o
+2026-10-20T19:57:25.0455610Z [44/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dim.cpp.o
+2026-10-20T19:57:25.8149620Z [45/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flex.cpp.o
+2026-10-20T19:57:25.8544470Z [46/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox.cpp.o
+2026-10-20T19:57:25.8851450Z [47/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_config.cpp.o
+2026-10-20T19:57:26.9446140Z [48/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_helper.cpp.o
+2026-10-20T19:57:26.9982550Z [49/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/focus.cpp.o
+2026-10-20T19:57:27.7999500Z [50/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gauge.cpp.o
+2026-10-20T19:57:27.8690140Z [51/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/frame.cpp.o
+2026-10-20T19:57:28.4743340Z [52/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/graph.cpp.o
+2026-10-20T19:57:28.6694050Z [53/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gridbox.cpp.o
+2026-10-20T19:57:29.1314970Z [54/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hbox.cpp.o
+2026-10-20T19:57:29.2888380Z [55/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/inverted.cpp.o
+2026-10-20T19:57:29.9374130Z [56/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node.cpp.o
+2026-10-20T19:57:30.5574520Z [57/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/linear_gradient.cpp.o
+2026-10-20T19:57:30.5895890Z [58/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node_decorator.cpp.o
+2026-10-20T19:57:31.4117950Z [59/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/reflect.cpp.o
+2026-10-20T19:57:31.5387800Z [60/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/paragraph.cpp.o
+2026-10-20T19:57:32.2274910Z [61/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/scroll_indicator.cpp.o
+2026-10-20T19:57:32.4782820Z [62/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/separator.cpp.o
+2026-10-20T19:57:33.1702250Z [63/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/size.cpp.o
+2026-10-20T19:57:34.0168520Z [64/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/strikethrough.cpp.o
+2026-10-20T19:57:34.2287360Z [65/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/spinner.cpp.o
+2026-10-20T19:57:35.1704660Z [66/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/text.cpp.o
+2026-10-20T19:57:35.3631230Z [67/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/table.cpp.o
+2026-10-20T19:57:36.0555850Z [68/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined.cpp.o
+2026-10-20T19:57:36.1610160Z [69/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined_double.cpp.o
+2026-10-20T19:57:37.1532380Z [70/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/util.cpp.o
+2026-10-20T19:57:37.1857900Z [71/288] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/vbox.cpp.o
+2026-10-20T19:57:37.4871840Z [72/288] Verifying revision-bound upstream/downstream alignment
+2026-10-20T19:57:37.4974350Z alignment receipt is current: 0/8 domains admitted
+2026-10-20T19:57:37.6808170Z [73/288] Linking CXX static library _deps/ftxui-build/libftxui-dom.a
+2026-10-20T19:57:38.4778220Z [74/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o
+2026-10-20T19:57:39.7919940Z [75/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/button.cpp.o
+2026-10-20T19:57:41.3406220Z [76/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/catch_event.cpp.o
+2026-10-20T19:57:41.5934480Z [77/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o
+2026-10-20T19:57:42.5121610Z [78/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/checkbox.cpp.o
+2026-10-20T19:57:42.7799030Z [79/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/collapsible.cpp.o
+2026-10-20T19:57:43.3326560Z [80/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component.cpp.o
+2026-10-20T19:57:44.2745210Z [81/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/container.cpp.o
+2026-10-20T19:57:44.7357220Z [82/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component_options.cpp.o
+2026-10-20T19:57:45.3784500Z [83/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/event.cpp.o
+2026-10-20T19:57:45.4885510Z [84/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/dropdown.cpp.o
+2026-10-20T19:57:46.5294030Z [85/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/hoverable.cpp.o
+2026-10-20T19:57:46.6037240Z [86/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/input.cpp.o
+2026-10-20T19:57:47.2965540Z [87/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/loop.cpp.o
+2026-10-20T19:57:47.5626790Z [88/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/maybe.cpp.o
+2026-10-20T19:57:48.8891380Z [89/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/modal.cpp.o
+2026-10-20T19:57:49.3060980Z [90/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/menu.cpp.o
+2026-10-20T19:57:49.7066880Z [91/288] Building bounded retained camera and joint transport stages
+2026-10-20T19:57:49.7169970Z Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:49.7270050Z Transport optional FMA32: validated
+2026-10-20T19:57:49.7371940Z Transport 2587 instructions; 459 registers; [85832, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:49.7413770Z Endpoint optional FMA32: validated
+2026-10-20T19:57:49.7515270Z Endpoint 2205 instructions; 612 registers; [99728, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:49.7596520Z Dense 6345 instructions; 815 registers; [78380, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:49.7700590Z Initialize 1961 instructions; 362 registers; [57596, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:49.7759250Z RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:49.7766850Z DopriPhase 2088 instructions; 629 registers; [59228, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:50.1879750Z [92/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/radiobox.cpp.o
+2026-10-20T19:57:50.2721090Z [93/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/renderer.cpp.o
+2026-10-20T19:57:52.4864360Z [94/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_integrator.cpp.o
+2026-10-20T19:57:53.5786680Z [95/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o
+2026-10-20T19:57:54.1044620Z [96/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o
+2026-10-20T19:57:54.8389030Z [97/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/resizable_split.cpp.o
+2026-10-20T19:57:56.2804100Z [98/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/screen_interactive.cpp.o
+2026-10-20T19:57:56.3750190Z [99/288] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_trace_executor.cpp.o
+2026-10-20T19:57:56.7896310Z [100/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/slider.cpp.o
+2026-10-20T19:57:57.0850090Z [101/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/util.cpp.o
+2026-10-20T19:57:57.2189200Z [102/288] Linking CXX static library src/sirius/backend/libsirius_backend_cpu.a
+2026-10-20T19:57:57.3668050Z [103/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/terminal_input_parser.cpp.o
+2026-10-20T19:57:57.4295520Z [104/288] Linking CXX static library src/sirius/backend/libsirius_backend.a
+2026-10-20T19:57:58.0702600Z [105/288] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/window.cpp.o
+2026-10-20T19:57:58.1588250Z [106/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/png_writer.cpp.o
+2026-10-20T19:58:00.3094640Z [107/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_impl.cpp.o
+2026-10-20T19:58:00.8591950Z [108/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_write_impl.cpp.o
+2026-10-20T19:58:01.3382220Z [109/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/exr_writer.cpp.o
+2026-10-20T19:58:02.6348090Z [110/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/memory_governor.cpp.o
+2026-10-20T19:58:02.9477120Z [111/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/render_evidence.cpp.o
+2026-10-20T19:58:03.4305820Z [112/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o
+2026-10-20T19:58:06.0734230Z [113/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/point_source_detector.cpp.o
+2026-10-20T19:58:06.6654940Z [114/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/pixel_shading.cpp.o
+2026-10-20T19:58:07.7357960Z [115/288] Building C object src/sirius/render/CMakeFiles/sirius_render.dir/__/__/__/lib/tinyexr/miniz.c.o
+2026-10-20T19:58:07.8079810Z [116/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/ray_work_queue.cpp.o
+2026-10-20T19:58:08.5062410Z [117/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/render_session.cpp.o
+2026-10-20T19:58:09.0235130Z [118/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/init.c.o
+2026-10-20T19:58:09.0363910Z [119/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/context.c.o
+2026-10-20T19:58:09.4355120Z [120/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/monitor.c.o
+2026-10-20T19:58:09.5286180Z [121/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/input.c.o
+2026-10-20T19:58:09.7782360Z [122/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/platform.c.o
+2026-10-20T19:58:09.8950920Z [123/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o
+2026-10-20T19:58:10.3067060Z [124/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/window.c.o
+2026-10-20T19:58:10.4048590Z [125/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o
+2026-10-20T19:58:10.6577900Z [126/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o
+2026-10-20T19:58:10.7215930Z [127/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_init.c.o
+2026-10-20T19:58:10.9913260Z [128/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o
+2026-10-20T19:58:11.0867490Z [129/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_window.c.o
+2026-10-20T19:58:11.3434500Z [130/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o
+2026-10-20T19:58:11.4105330Z [131/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_time.c.o
+2026-10-20T19:58:11.6965310Z [132/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o
+2026-10-20T19:58:11.7449270Z [133/288] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o
+2026-10-20T19:58:12.6746190Z [134/288] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o
+2026-10-20T19:58:12.8042840Z [135/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_joystick.m.o
+2026-10-20T19:58:12.8260450Z [136/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_init.m.o
+2026-10-20T19:58:13.4327750Z [137/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_monitor.m.o
+2026-10-20T19:58:13.4783810Z [138/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/nsgl_context.m.o
+2026-10-20T19:58:13.5766260Z [139/288] Linking CXX static library _deps/ftxui-build/libftxui-component.a
+2026-10-20T19:58:13.5995390Z [140/288] Linking CXX static library src/sirius/render/libsirius_render.a
+2026-10-20T19:58:13.6189430Z [141/288] Building OBJC object lib/glfw/src/CMakeFiles/glfw.dir/cocoa_window.m.o
+2026-10-20T19:58:16.5983500Z [142/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/command_router.cpp.o
+2026-10-20T19:58:16.9451860Z [143/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/alignment_authority.cpp.o
+2026-10-20T19:58:17.8945960Z [144/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/render_command.cpp.o
+2026-10-20T19:58:20.1854170Z [145/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/cli_output.cpp.o
+2026-10-20T19:58:20.6437840Z [146/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/config_command.cpp.o
+2026-10-20T19:58:22.7903890Z [147/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/info_command.cpp.o
+2026-10-20T19:58:23.7289580Z [148/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/platform_paths.cpp.o
+2026-10-20T19:58:23.8956840Z [149/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/session_config_adapter.cpp.o
+2026-10-20T19:58:25.5319430Z [150/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/config_loader.cpp.o
+2026-10-20T19:58:25.9366000Z [151/288] Building C object src/sirius/app/CMakeFiles/sirius_app_lib.dir/__/__/__/lib/glad/src/glad.c.o
+2026-10-20T19:58:26.0706890Z [152/288] Linking C static library lib/glfw/src/libglfw3.a
+2026-10-20T19:58:27.1197950Z [153/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/viewer/interactive_viewer.cpp.o
+2026-10-20T19:58:27.8028730Z [154/288] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/view_command.cpp.o
+2026-10-20T19:58:27.9354140Z [155/288] Linking CXX static library src/sirius/app/libsirius_app_lib.a
+2026-10-20T19:58:27.9626270Z [156/288] Building CXX object src/sirius/app/CMakeFiles/sirius.dir/main.cpp.o
+2026-10-20T19:58:28.9606550Z [157/288] Building bounded retained camera program and independent witnesses
+2026-10-20T19:58:28.9658620Z program_camera_probe-fp32: compiled and validated
+2026-10-20T19:58:28.9717970Z program_camera_probe-fp32comp: compiled and validated
+2026-10-20T19:58:29.4644220Z [158/288] Linking CXX executable src/sirius/app/sirius; Staging Sirius runtime resources beside the executable; Staging interactive-viewer shaders beside the executable; Staging Vulkan runtime kernels beside the executable
+2026-10-20T19:58:29.7654280Z [159/288] Generating independent exact binary32 arithmetic expectations
+2026-10-20T19:58:29.7710200Z {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+2026-10-20T19:58:30.1952810Z [160/288] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+2026-10-20T19:58:30.3133710Z [161/288] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-20T19:58:30.8130080Z [162/288] Staging exact qualification inputs beside sirius_render_tests
+2026-10-20T19:58:31.7988600Z [163/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/contracts_test.cpp.o
+2026-10-20T19:58:32.5635490Z [164/288] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+2026-10-20T19:58:32.6871990Z [165/288] Linking CXX static library lib/libgtest.a
+2026-10-20T19:58:32.7893240Z [166/288] Linking CXX static library lib/libgtest_main.a
+2026-10-20T19:58:33.4497590Z [167/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/error_test.cpp.o
+2026-10-20T19:58:33.6651980Z [168/288] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/sha256_test.cpp.o
+2026-10-20T19:58:34.5052870Z [169/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o
+2026-10-20T19:58:35.7501630Z [170/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o
+2026-10-20T19:58:36.2170960Z [171/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o
+2026-10-20T19:58:36.8559550Z [172/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o
+2026-10-20T19:58:38.2742490Z [173/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o
+2026-10-20T19:58:38.5161850Z [174/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o
+2026-10-20T19:58:38.5295310Z [175/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o
+2026-10-20T19:58:39.8262660Z [176/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o
+2026-10-20T19:58:40.8711030Z [177/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o
+2026-10-20T19:58:41.7672420Z [178/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o
+2026-10-20T19:58:42.0282740Z [179/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o
+2026-10-20T19:58:42.6015410Z [180/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o
+2026-10-20T19:58:43.9510160Z [181/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o
+2026-10-20T19:58:44.4507000Z [182/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o
+2026-10-20T19:58:44.6806800Z [183/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o
+2026-10-20T19:58:45.1995860Z [184/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o
+2026-10-20T19:58:46.4538820Z [185/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o
+2026-10-20T19:58:46.7198330Z [186/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o
+2026-10-20T19:58:47.0691120Z [187/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o
+2026-10-20T19:58:47.5831720Z [188/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o
+2026-10-20T19:58:48.1543710Z [189/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o
+2026-10-20T19:58:48.4222940Z [190/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o
+2026-10-20T19:58:49.2493800Z [191/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o
+2026-10-20T19:58:49.7801280Z [192/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o
+2026-10-20T19:58:50.2415580Z [193/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o
+2026-10-20T19:58:51.1716050Z [194/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o
+2026-10-20T19:58:52.6033120Z [195/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o
+2026-10-20T19:58:53.7043550Z [196/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o
+2026-10-20T19:58:54.3948650Z [197/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o
+2026-10-20T19:58:54.9061070Z [198/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o
+2026-10-20T19:58:55.3380440Z [199/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o
+2026-10-20T19:58:56.6475010Z [200/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o
+2026-10-20T19:58:56.6883630Z [201/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o
+2026-10-20T19:58:57.3028620Z [202/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o
+2026-10-20T19:58:58.3395100Z [203/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o
+2026-10-20T19:58:58.5652620Z [204/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o
+2026-10-20T19:58:59.1360200Z [205/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o
+2026-10-20T19:58:59.5321450Z [206/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o
+2026-10-20T19:58:59.5499910Z [207/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o
+2026-10-20T19:58:59.9531160Z [208/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o
+2026-10-20T19:59:00.4854390Z [209/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o
+2026-10-20T19:59:00.7977410Z [210/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o
+2026-10-20T19:59:00.9137700Z [211/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o
+2026-10-20T19:59:01.4892890Z [212/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o
+2026-10-20T19:59:02.8085040Z [213/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o
+2026-10-20T19:59:02.8599370Z [214/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o
+2026-10-20T19:59:02.9935320Z [215/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o
+2026-10-20T19:59:04.5053870Z [216/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o
+2026-10-20T19:59:04.7238550Z [217/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o
+2026-10-20T19:59:05.0106220Z [218/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o
+2026-10-20T19:59:05.8093130Z [219/288] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o
+2026-10-20T19:59:06.4227930Z [220/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o
+2026-10-20T19:59:07.1351070Z [221/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o
+2026-10-20T19:59:08.4461800Z [222/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o
+2026-10-20T19:59:08.6307030Z [223/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o
+2026-10-20T19:59:08.9127930Z [224/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o
+2026-10-20T19:59:10.3936650Z [225/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o
+2026-10-20T19:59:10.6785530Z [226/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o
+2026-10-20T19:59:10.9554640Z [227/288] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o
+2026-10-20T19:59:11.9609580Z [228/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o
+2026-10-20T19:59:13.2603440Z [229/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o
+2026-10-20T19:59:16.2150510Z [230/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o
+2026-10-20T19:59:16.3767490Z [231/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o
+2026-10-20T19:59:19.2778610Z [232/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o
+2026-10-20T19:59:20.6478670Z [233/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o
+2026-10-20T19:59:21.4265240Z [234/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o
+2026-10-20T19:59:24.9903040Z [235/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o
+2026-10-20T19:59:28.0642300Z [236/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o
+2026-10-20T19:59:29.4919010Z [237/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o
+2026-10-20T19:59:32.4913060Z [238/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o
+2026-10-20T19:59:34.3378530Z [239/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o
+2026-10-20T19:59:35.7386380Z [240/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o
+2026-10-20T19:59:36.5641910Z [241/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o
+2026-10-20T19:59:42.9317170Z [242/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o
+2026-10-20T19:59:44.6197090Z [243/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o
+2026-10-20T19:59:49.1457190Z [244/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o
+2026-10-20T19:59:49.4780580Z [245/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o
+2026-10-20T19:59:50.6404730Z [246/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o
+2026-10-20T19:59:53.4832410Z [247/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o
+2026-10-20T19:59:56.9078770Z [248/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o
+2026-10-20T19:59:57.4701670Z [249/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o
+2026-10-20T19:59:58.8426250Z [250/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o
+2026-10-20T19:59:59.1516870Z [251/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o
+2026-10-20T20:00:00.8606440Z [252/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o
+2026-10-20T20:00:00.8715150Z [253/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o
+2026-10-20T20:00:03.1527490Z [254/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o
+2026-10-20T20:00:03.9390640Z [255/288] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o
+2026-10-20T20:00:04.6005970Z [256/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o
+2026-10-20T20:00:06.8943710Z [257/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o
+2026-10-20T20:00:08.6331670Z [258/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o
+2026-10-20T20:00:09.7227400Z [259/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o
+2026-10-20T20:00:12.1998870Z [260/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o
+2026-10-20T20:00:12.8763170Z [261/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o
+2026-10-20T20:00:14.7968720Z [262/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o
+2026-10-20T20:00:15.7137180Z [263/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o
+2026-10-20T20:00:18.0099750Z [264/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o
+2026-10-20T20:00:19.9294520Z [265/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o
+2026-10-20T20:00:20.2438900Z [266/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o
+2026-10-20T20:00:20.4639040Z [267/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o
+2026-10-20T20:00:22.2129840Z [268/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o
+2026-10-20T20:00:22.5041190Z [269/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o
+2026-10-20T20:00:25.3881880Z [270/288] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o
+2026-10-20T20:00:26.2699720Z [271/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/alignment_authority_test.cpp.o
+2026-10-20T20:00:26.8728490Z [272/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_validation_test.cpp.o
+2026-10-20T20:00:28.2143820Z [273/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_environment_test.cpp.o
+2026-10-20T20:00:30.1468100Z [274/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_schema_roundtrip_test.cpp.o
+2026-10-20T20:00:30.3776140Z [275/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/render_command_parse_test.cpp.o
+2026-10-20T20:00:31.3943530Z [276/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/platform_paths_test.cpp.o
+2026-10-20T20:00:32.5436770Z [277/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/session_config_adapter_test.cpp.o
+2026-10-20T20:00:33.3331590Z [278/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/command_router_test.cpp.o
+2026-10-20T20:00:33.7705470Z [279/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/viewer_display_contract_test.cpp.o
+2026-10-20T20:00:33.7919550Z [280/288] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_loading_test.cpp.o
+2026-10-20T20:00:33.9159780Z [281/288] Linking CXX executable tests/sirius_base_tests
+2026-10-20T20:00:34.0658450Z [282/288] Linking CXX executable tests/oracle/sirius_oracle_tests
+2026-10-20T20:00:34.1539970Z [283/288] Linking CXX executable tests/core/sirius_core_tests
+2026-10-20T20:00:34.2796050Z [284/288] Linking CXX executable tests/backend/sirius_backend_tests
+2026-10-20T20:00:34.2897640Z ld: warning: ignoring duplicate libraries: 'src/sirius/backend/libsirius_backend.a', 'src/sirius/backend/libsirius_backend_cpu.a'
+2026-10-20T20:00:34.5137310Z [285/288] Linking CXX executable src/sirius/app/sirius_render_tests
+2026-10-20T20:00:34.5240940Z ld: warning: ignoring duplicate libraries: 'src/sirius/render/libsirius_render.a'
+2026-10-20T20:00:34.5320240Z [286/288] Linking CXX executable src/sirius/app/sirius_app_tests
+2026-10-20T20:00:39.3238580Z [287/288] Verifying test-label, operating-model, and repository-structure governance
+2026-10-20T20:00:39.3239370Z CTest label file is up to date
+2026-10-20T20:00:39.3240110Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-20T20:00:39.3242390Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-20T20:00:39.3243600Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-20T20:00:39.3244100Z escaping-copy controls: filesystem symlinks
+2026-10-20T20:00:39.3244580Z build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-20T20:00:39.3559210Z ##[group]Run test ! -e bin/macos/generated/sirius/mandatory_gate.json
+2026-10-20T20:00:39.3559820Z [36;1mtest ! -e bin/macos/generated/sirius/mandatory_gate.json[0m
+2026-10-20T20:00:39.3560310Z [36;1mctest --test-dir bin/macos --output-on-failure --no-tests=error \[0m
+2026-10-20T20:00:39.3562720Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-20T20:00:39.3565210Z [36;1mtest ! -e bin/macos/generated/sirius/mandatory_gate.json[0m
+2026-10-20T20:00:39.3734810Z shell: /bin/bash -e {0}
+2026-10-20T20:00:39.3735100Z env:
+2026-10-20T20:00:39.3735430Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T20:00:39.3736150Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T20:00:39.3736590Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T20:00:39.3737400Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T20:00:39.3738230Z ##[endgroup]
+2026-10-20T20:00:39.5238000Z Test project /Users/runner/work/Sirius/Sirius/bin/macos
+2026-10-20T20:00:39.5612390Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-20T20:00:42.8526800Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    3.29 sec
+2026-10-20T20:00:42.8529410Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-20T20:00:42.9158090Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.06 sec
+2026-10-20T20:00:42.9159560Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-20T20:00:42.9891810Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.07 sec
+2026-10-20T20:00:42.9893060Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-20T20:00:45.5153840Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    2.52 sec
+2026-10-20T20:00:45.5214100Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-20T20:01:10.9290680Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   25.39 sec
+2026-10-20T20:01:10.9292130Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-20T20:01:11.3221210Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.39 sec
+2026-10-20T20:01:11.3223210Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-20T20:01:11.3912520Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.07 sec
+2026-10-20T20:01:11.3913300Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-20T20:01:11.4875200Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.10 sec
+2026-10-20T20:01:11.4876230Z       Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-20T20:01:11.4970300Z  9/10 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.01 sec
+2026-10-20T20:01:11.4971960Z       Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-20T20:01:12.2778440Z 10/10 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.78 sec
+2026-10-20T20:01:12.2781880Z 
+2026-10-20T20:01:12.2782210Z 100% tests passed out of 10
+2026-10-20T20:01:12.2782640Z 
+2026-10-20T20:01:12.2782870Z Label Time Summary:
+2026-10-20T20:01:12.2783320Z Correctness    =   0.79 sec*proc (2 tests)
+2026-10-20T20:01:12.2784010Z Mandatory      =  32.69 sec*proc (10 tests)
+2026-10-20T20:01:12.2784870Z Operational    =  32.69 sec*proc (10 tests)
+2026-10-20T20:01:12.2785440Z 
+2026-10-20T20:01:12.2785820Z Total Test time (real) =  32.74 sec
+2026-10-20T20:01:12.3089000Z ##[group]Run cmake --build --preset macos --target RunNativeBuildEvidence -j3
+2026-10-20T20:01:12.3089940Z [36;1mcmake --build --preset macos --target RunNativeBuildEvidence -j3[0m
+2026-10-20T20:01:12.3620900Z shell: /bin/bash -e {0}
+2026-10-20T20:01:12.3621170Z env:
+2026-10-20T20:01:12.3621640Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T20:01:12.3622050Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T20:01:12.3622400Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T20:01:12.3623170Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T20:01:12.3623790Z ##[endgroup]
+2026-10-20T20:01:12.4566990Z [0/2] Re-checking globbed directories...
+2026-10-20T20:01:13.5607220Z [1/6] Verifying revision-bound upstream/downstream alignment
+2026-10-20T20:01:13.5612790Z alignment receipt is current: 0/8 domains admitted
+2026-10-20T20:01:13.9759530Z [2/6] Staging exact qualification inputs beside sirius_render_tests
+2026-10-20T20:01:13.9833130Z [3/6] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-20T20:01:19.4640870Z [4/6] Verifying test-label, operating-model, and repository-structure governance
+2026-10-20T20:01:19.4641450Z CTest label file is up to date
+2026-10-20T20:01:19.4642130Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-20T20:01:19.4643330Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-20T20:01:19.4644240Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-20T20:01:19.4644750Z escaping-copy controls: filesystem symlinks
+2026-10-20T20:01:19.4645290Z build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-20T20:01:55.2422060Z [5/6] === NATIVE BUILD NON-RENDER EVIDENCE GATE ===
+2026-10-20T20:01:55.2538490Z native build gate bound 7 compiled executables and 9 products and 20 generated test inputs to 9 non-render controls
+2026-10-20T20:01:55.2826850Z ##[group]Run python3 scripts/verify-attestation.py --record-build --domain macos-native-build --platform macos --source-revision 6d2af336b12dc430792bd5a83c04fb5632868c04 --source-root . --artifact bin/macos/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json --native-build-gate bin/macos/generated/sirius/native_build_gate.json --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/macos/src/sirius/app/sirius --test-dir bin/macos --output attestations/macos-build.json
+2026-10-20T20:01:55.2831530Z [36;1mpython3 scripts/verify-attestation.py --record-build --domain macos-native-build --platform macos --source-revision 6d2af336b12dc430792bd5a83c04fb5632868c04 --source-root . --artifact bin/macos/generated/sirius/native_build_gate_junit.xml --alignment-receipt bin/macos/generated/sirius/alignment_receipt.json --native-build-gate bin/macos/generated/sirius/native_build_gate.json --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log --qualification-executable bin/macos/src/sirius/app/sirius --test-dir bin/macos --output attestations/macos-build.json[0m
+2026-10-20T20:01:55.2938530Z shell: /bin/bash -e {0}
+2026-10-20T20:01:55.2939050Z env:
+2026-10-20T20:01:55.2939870Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T20:01:55.2942510Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T20:01:55.2943070Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T20:01:55.2943970Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T20:01:55.2944590Z ##[endgroup]
+2026-10-20T20:01:56.0785510Z build attestation recorded and verified: attestations/macos-build.json
+2026-10-20T20:01:56.0987450Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-20T20:01:56.0987900Z with:
+2026-10-20T20:01:56.0988120Z   name: sirius-macos-native-attestation
+2026-10-20T20:01:56.0988420Z   path: attestations
+2026-10-20T20:01:56.0988770Z   if-no-files-found: warn
+2026-10-20T20:01:56.0989120Z   compression-level: 6
+2026-10-20T20:01:56.0989460Z   overwrite: false
+2026-10-20T20:01:56.0989710Z   include-hidden-files: false
+2026-10-20T20:01:56.0989890Z   archive: true
+2026-10-20T20:01:56.0990030Z env:
+2026-10-20T20:01:56.0990210Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T20:01:56.0990620Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T20:01:56.0991110Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T20:01:56.0991720Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T20:01:56.1000550Z ##[endgroup]
+2026-10-20T20:01:56.4698060Z With the provided path, there will be 40 files uploaded
+2026-10-20T20:01:56.4700840Z Artifact name is valid!
+2026-10-20T20:01:56.4701100Z Root directory input is valid!
+2026-10-20T20:01:56.6868040Z Uploading artifact: sirius-macos-native-attestation.zip
+2026-10-20T20:01:56.6909060Z Beginning upload of artifact content to blob storage
+2026-10-20T20:01:57.6008250Z Uploaded bytes 8388608
+2026-10-20T20:01:58.1665130Z Uploaded bytes 16777216
+2026-10-20T20:01:58.3735840Z Uploaded bytes 25165824
+2026-10-20T20:01:58.5976260Z Uploaded bytes 33554432
+2026-10-20T20:01:58.8218040Z Uploaded bytes 41943040
+2026-10-20T20:01:59.7210460Z Uploaded bytes 50331648
+2026-10-20T20:01:59.8870420Z Uploaded bytes 53658550
+2026-10-20T20:01:59.9071080Z Finished uploading artifact content to blob storage!
+2026-10-20T20:01:59.9172690Z SHA256 digest of uploaded artifact is 6ee22fcba7309133a2ceedcf0047d7f4fcf0689123fca7f249db3b56a66391f8
+2026-10-20T20:01:59.9207810Z Finalizing artifact upload
+2026-10-20T20:02:00.1635390Z Artifact sirius-macos-native-attestation successfully finalized. Artifact ID 12294247807
+2026-10-20T20:02:00.1636340Z Artifact sirius-macos-native-attestation has been successfully uploaded! Final size is 53658550 bytes. Artifact ID is 12294247807
+2026-10-20T20:02:00.1643080Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/39487479545/artifacts/12294247807
+2026-10-20T20:02:00.1750210Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+2026-10-20T20:02:00.1750650Z with:
+2026-10-20T20:02:00.1750960Z   name: sirius-gate-diagnostics-integration-macos-no-render
+2026-10-20T20:02:00.1752080Z   path: bin/**/generated/sirius/*gate*.json
+bin/**/generated/sirius/*gate*.xml
+bin/**/generated/sirius/*gate*.log
+bin/**/Testing/Temporary/LastTest.log
+bin/**/Testing/Temporary/LastTestsFailed.log
+linux-tests.xml
+windows-tests.xml
+macos-tests.xml
+
+2026-10-20T20:02:00.1753030Z   if-no-files-found: ignore
+2026-10-20T20:02:00.1753360Z   compression-level: 6
+2026-10-20T20:02:00.1753550Z   overwrite: false
+2026-10-20T20:02:00.1753810Z   include-hidden-files: false
+2026-10-20T20:02:00.1754160Z   archive: true
+2026-10-20T20:02:00.1754500Z env:
+2026-10-20T20:02:00.1754810Z   VULKAN_SDK: /Users/runner/vulkan-sdk/1.4.357.0/macOS
+2026-10-20T20:02:00.1755230Z   VULKAN_VERSION: 1.4.357.0
+2026-10-20T20:02:00.1755890Z   VK_LAYER_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/share/vulkan/explicit_layer.d
+2026-10-20T20:02:00.1756720Z   DYLD_LIBRARY_PATH: /Users/runner/vulkan-sdk/1.4.357.0/macOS/lib/VulkanLoader/lib:/Users/runner/vulkan-sdk/1.4.357.0/macOS/lib:
+2026-10-20T20:02:00.1766100Z ##[endgroup]
+2026-10-20T20:02:00.4933610Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-20T20:02:00.4937070Z The least common ancestor is /Users/runner/work/Sirius/Sirius. This will be the root directory of the artifact
+2026-10-20T20:02:00.5009220Z With the provided path, there will be 4 files uploaded
+2026-10-20T20:02:00.5010190Z Artifact name is valid!
+2026-10-20T20:02:00.5010520Z Root directory input is valid!
+2026-10-20T20:02:00.7578550Z Uploading artifact: sirius-gate-diagnostics-integration-macos-no-render.zip
+2026-10-20T20:02:00.7780580Z Beginning upload of artifact content to blob storage
+2026-10-20T20:02:00.8083860Z Uploaded bytes 5676
+2026-10-20T20:02:00.8184800Z Finished uploading artifact content to blob storage!
+2026-10-20T20:02:00.8286210Z SHA256 digest of uploaded artifact is 05f5b7051312c106cd92bfbefb1b83af58bdc408fc6be2dfee37808c89dc2a11
+2026-10-20T20:02:00.8387640Z Finalizing artifact upload
+2026-10-20T20:02:00.9829680Z Artifact sirius-gate-diagnostics-integration-macos-no-render successfully finalized. Artifact ID 12294976221
+2026-10-20T20:02:00.9861020Z Artifact sirius-gate-diagnostics-integration-macos-no-render has been successfully uploaded! Final size is 5676 bytes. Artifact ID is 12294976221
+2026-10-20T20:02:00.9865330Z Artifact download URL: https://github.com/sunyaisblank/Sirius/actions/runs/39487479545/artifacts/12294976221
+2026-10-20T20:02:00.9973260Z Post job cleanup.
+2026-10-20T20:02:01.0994800Z [command]/opt/homebrew/bin/git version
+2026-10-20T20:02:01.1052300Z git version 2.55.0
+2026-10-20T20:02:01.1073210Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/cc5aef2e-84da-411e-b9f9-4f95ba9ca542/.gitconfig'
+2026-10-20T20:02:01.1080570Z Temporarily overriding HOME='/Users/runner/work/_temp/cc5aef2e-84da-411e-b9f9-4f95ba9ca542' before making global git config changes
+2026-10-20T20:02:01.1081360Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T20:02:01.1083290Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Sirius/Sirius
+2026-10-20T20:02:01.1180810Z Removing SSH command configuration
+2026-10-20T20:02:01.1184330Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T20:02:01.1271780Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T20:02:01.2719570Z Removing HTTP extra header
+2026-10-20T20:02:01.2724210Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T20:02:01.2819590Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T20:02:01.4339680Z Removing includeIf entries pointing to credentials config files
+2026-10-20T20:02:01.4441240Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T20:02:01.4541400Z includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path
+2026-10-20T20:02:01.4582250Z includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path
+2026-10-20T20:02:01.4583200Z includeif.gitdir:/github/workspace/.git.path
+2026-10-20T20:02:01.4583660Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T20:02:01.4586130Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path
+2026-10-20T20:02:01.4587070Z /Users/runner/work/_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T20:02:01.4588840Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git.path \/Users\/runner\/work\/_temp\/git\-credentials\-df4fb4b4\-003a\-48bc\-b764\-fec6b32cd649\.config
+2026-10-20T20:02:01.4599230Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path
+2026-10-20T20:02:01.4600150Z /Users/runner/work/_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T20:02:01.4601770Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/Users/runner/work/Sirius/Sirius/.git/worktrees/*.path \/Users\/runner\/work\/_temp\/git\-credentials\-df4fb4b4\-003a\-48bc\-b764\-fec6b32cd649\.config
+2026-10-20T20:02:01.4670630Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-20T20:02:01.4755040Z /github/runner_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T20:02:01.4761050Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-df4fb4b4\-003a\-48bc\-b764\-fec6b32cd649\.config
+2026-10-20T20:02:01.4852210Z [command]/opt/homebrew/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T20:02:01.4937840Z /github/runner_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config
+2026-10-20T20:02:01.4944690Z [command]/opt/homebrew/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-df4fb4b4\-003a\-48bc\-b764\-fec6b32cd649\.config
+2026-10-20T20:02:01.5031950Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T20:02:01.6514620Z Removing credentials config '/Users/runner/work/_temp/git-credentials-df4fb4b4-003a-48bc-b764-fec6b32cd649.config'
+2026-10-20T20:02:01.6872890Z Cleaning up orphan processes

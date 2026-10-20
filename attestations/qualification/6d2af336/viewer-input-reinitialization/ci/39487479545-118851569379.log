@@ -1,0 +1,1340 @@
+﻿2026-10-20T19:54:50.3944332Z Current runner version: '2.338.0'
+2026-10-20T19:54:50.3980480Z ##[group]Runner Image Provisioner
+2026-10-20T19:54:50.3982025Z Hosted Compute Agent
+2026-10-20T19:54:50.3983198Z Version: 20261015.610
+2026-10-20T19:54:50.3984412Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-20T19:54:50.3985948Z Build Date: 2026-10-14T17:06:54Z
+2026-10-20T19:54:50.3987264Z Worker ID: {7c7b16b6-08cd-4281-902b-c033f74213f8}
+2026-10-20T19:54:50.3988492Z Region: eastus
+2026-10-20T19:54:50.3989367Z Cloud: Azure
+2026-10-20T19:54:50.3990404Z ##[endgroup]
+2026-10-20T19:54:50.3993235Z ##[group]Operating System
+2026-10-20T19:54:50.3994490Z Ubuntu
+2026-10-20T19:54:50.3995696Z 24.04.5
+2026-10-20T19:54:50.3996725Z LTS
+2026-10-20T19:54:50.3997675Z ##[endgroup]
+2026-10-20T19:54:50.3998628Z ##[group]Runner Image
+2026-10-20T19:54:50.3999873Z Image: ubuntu-24.04
+2026-10-20T19:54:50.4000936Z Version: 20261018.339.1
+2026-10-20T19:54:50.4003406Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-20T19:54:50.4006753Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-20T19:54:50.4008640Z ##[endgroup]
+2026-10-20T19:54:50.4011475Z ##[group]GITHUB_TOKEN Permissions
+2026-10-20T19:54:50.4014880Z Contents: read
+2026-10-20T19:54:50.4016414Z Metadata: read
+2026-10-20T19:54:50.4017536Z Packages: read
+2026-10-20T19:54:50.4018544Z ##[endgroup]
+2026-10-20T19:54:50.4021980Z Secret source: Actions
+2026-10-20T19:54:50.4023602Z Cache mode: write
+2026-10-20T19:54:50.4025825Z Prepare workflow directory
+2026-10-20T19:54:50.4516328Z Prepare all required actions
+2026-10-20T19:54:50.4564666Z Getting action download info
+2026-10-20T19:54:50.6108763Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-10-20T19:54:50.8237052Z Complete job name: integration-no-render
+2026-10-20T19:54:50.9154030Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-10-20T19:54:50.9155157Z with:
+2026-10-20T19:54:50.9155860Z   repository: sunyaisblank/Sirius
+2026-10-20T19:54:50.9160010Z   token: ***
+2026-10-20T19:54:50.9160509Z   ssh-strict: true
+2026-10-20T19:54:50.9160977Z   ssh-user: git
+2026-10-20T19:54:50.9161442Z   persist-credentials: true
+2026-10-20T19:54:50.9161954Z   clean: true
+2026-10-20T19:54:50.9162480Z   sparse-checkout-cone-mode: true
+2026-10-20T19:54:50.9163022Z   fetch-depth: 1
+2026-10-20T19:54:50.9163481Z   fetch-tags: false
+2026-10-20T19:54:50.9163962Z   show-progress: true
+2026-10-20T19:54:50.9164440Z   lfs: false
+2026-10-20T19:54:50.9164888Z   submodules: false
+2026-10-20T19:54:50.9165580Z   set-safe-directory: true
+2026-10-20T19:54:50.9166260Z   allow-unsafe-pr-checkout: false
+2026-10-20T19:54:50.9167159Z ##[endgroup]
+2026-10-20T19:54:51.0241759Z Syncing repository: sunyaisblank/Sirius
+2026-10-20T19:54:51.0244535Z ##[group]Getting Git version info
+2026-10-20T19:54:51.0245894Z Working directory is '/home/runner/work/Sirius/Sirius'
+2026-10-20T19:54:51.0247617Z [command]/usr/bin/git version
+2026-10-20T19:54:51.0328681Z git version 2.55.0
+2026-10-20T19:54:51.0366857Z ##[endgroup]
+2026-10-20T19:54:51.0375995Z Temporarily overriding HOME='/home/runner/work/_temp/cc240efc-3a56-4c04-b922-96d7d06757b0' before making global git config changes
+2026-10-20T19:54:51.0378686Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T19:54:51.0381417Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sirius/Sirius
+2026-10-20T19:54:51.0447213Z Deleting the contents of '/home/runner/work/Sirius/Sirius'
+2026-10-20T19:54:51.0467239Z ##[group]Determining repository object format
+2026-10-20T19:54:51.0477328Z ##[endgroup]
+2026-10-20T19:54:51.0478743Z ##[group]Initializing the repository
+2026-10-20T19:54:51.0480012Z [command]/usr/bin/git init /home/runner/work/Sirius/Sirius
+2026-10-20T19:54:51.0598092Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-20T19:54:51.0600390Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-20T19:54:51.0602082Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-20T19:54:51.0603965Z hint: call:
+2026-10-20T19:54:51.0604783Z hint:
+2026-10-20T19:54:51.0606039Z hint: 	git config --global init.defaultBranch <name>
+2026-10-20T19:54:51.0607183Z hint:
+2026-10-20T19:54:51.0608228Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-20T19:54:51.0609854Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-20T19:54:51.0611101Z hint:
+2026-10-20T19:54:51.0611862Z hint: 	git branch -m <name>
+2026-10-20T19:54:51.0612649Z hint:
+2026-10-20T19:54:51.0613603Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-20T19:54:51.0614663Z Initialized empty Git repository in /home/runner/work/Sirius/Sirius/.git/
+2026-10-20T19:54:51.0619128Z [command]/usr/bin/git remote add origin https://github.com/sunyaisblank/Sirius
+2026-10-20T19:54:51.0681920Z ##[endgroup]
+2026-10-20T19:54:51.0683254Z ##[group]Disabling automatic garbage collection
+2026-10-20T19:54:51.0687915Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-20T19:54:51.0732337Z ##[endgroup]
+2026-10-20T19:54:51.0733565Z ##[group]Setting up auth
+2026-10-20T19:54:51.0734477Z Removing SSH command configuration
+2026-10-20T19:54:51.0740489Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T19:54:51.0780853Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T19:54:51.1195220Z Removing HTTP extra header
+2026-10-20T19:54:51.1202750Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T19:54:51.1253823Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T19:54:51.1506019Z Removing includeIf entries pointing to credentials config files
+2026-10-20T19:54:51.1511095Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T19:54:51.1564269Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T19:54:51.1817882Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-20T19:54:51.1871303Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Sirius/Sirius/.git.path /home/runner/work/_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T19:54:51.1920044Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Sirius/Sirius/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T19:54:51.1972800Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T19:54:51.2020804Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T19:54:51.2065871Z ##[endgroup]
+2026-10-20T19:54:51.2067243Z ##[group]Fetching the repository
+2026-10-20T19:54:51.2144961Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +6d2af336b12dc430792bd5a83c04fb5632868c04:refs/remotes/origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:52.4018410Z From https://github.com/sunyaisblank/Sirius
+2026-10-20T19:54:52.4020243Z  * [new ref]         6d2af336b12dc430792bd5a83c04fb5632868c04 -> origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:52.4037079Z [command]/usr/bin/git branch --list --remote origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:52.4067985Z   origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:52.4075954Z [command]/usr/bin/git rev-parse refs/remotes/origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:52.4109754Z 6d2af336b12dc430792bd5a83c04fb5632868c04
+2026-10-20T19:54:52.4113657Z ##[endgroup]
+2026-10-20T19:54:52.4114411Z ##[group]Determining the checkout info
+2026-10-20T19:54:52.4115042Z ##[endgroup]
+2026-10-20T19:54:52.4120227Z [command]/usr/bin/git sparse-checkout disable
+2026-10-20T19:54:52.4183934Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-20T19:54:52.4227090Z ##[group]Checking out the ref
+2026-10-20T19:54:52.4231777Z [command]/usr/bin/git checkout --progress --force -B development/viewer-input-reinitialization-2026-10-21 refs/remotes/origin/development/viewer-input-reinitialization-2026-10-21
+2026-10-20T19:54:52.5788106Z Switched to a new branch 'development/viewer-input-reinitialization-2026-10-21'
+2026-10-20T19:54:52.5792821Z branch 'development/viewer-input-reinitialization-2026-10-21' set up to track 'origin/development/viewer-input-reinitialization-2026-10-21'.
+2026-10-20T19:54:52.5808899Z ##[endgroup]
+2026-10-20T19:54:52.5867834Z [command]/usr/bin/git log -1 --format=%H
+2026-10-20T19:54:52.5904962Z 6d2af336b12dc430792bd5a83c04fb5632868c04
+2026-10-20T19:54:52.6153568Z ##[group]Run sudo apt-get update
+2026-10-20T19:54:52.6154215Z [36;1msudo apt-get update[0m
+2026-10-20T19:54:52.6154856Z [36;1msudo apt-get install -y clang-format-18 g++-14 gcc-14 ninja-build \[0m
+2026-10-20T19:54:52.6155738Z [36;1m  libvulkan-dev mesa-vulkan-drivers spirv-tools \[0m
+2026-10-20T19:54:52.6156336Z [36;1m  xorg-dev libgl1-mesa-dev libwayland-dev \[0m
+2026-10-20T19:54:52.6156876Z [36;1m  wayland-protocols libxkbcommon-dev[0m
+2026-10-20T19:54:52.6396959Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:54:52.6397543Z ##[endgroup]
+2026-10-20T19:54:52.7307298Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-20T19:54:52.7534320Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-20T19:54:52.7742749Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-20T19:54:52.7755614Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-20T19:54:52.7789590Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-20T19:54:52.7841238Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-20T19:54:52.8484792Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [626 kB]
+2026-10-20T19:54:52.8675186Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [565 kB]
+2026-10-20T19:54:52.9653310Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+2026-10-20T19:54:52.9722018Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1704 kB]
+2026-10-20T19:54:53.0682273Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+2026-10-20T19:54:53.0740537Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-20T19:54:53.0757414Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1222 kB]
+2026-10-20T19:54:55.8852484Z Fetched 7272 kB in 1s (9333 kB/s)
+2026-10-20T19:54:56.9713801Z Reading package lists...
+2026-10-20T19:54:57.0087994Z Reading package lists...
+2026-10-20T19:54:57.2247727Z Building dependency tree...
+2026-10-20T19:54:57.2256134Z Reading state information...
+2026-10-20T19:54:57.3779200Z clang-format-18 is already the newest version (1:18.1.3-1ubuntu1).
+2026-10-20T19:54:57.3780261Z g++-14 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-10-20T19:54:57.3781260Z gcc-14 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-10-20T19:54:57.3782939Z gcc-14 set to manually installed.
+2026-10-20T19:54:57.3783661Z The following additional packages will be installed:
+2026-10-20T19:54:57.3786400Z   bzip2-doc libbrotli-dev libbz2-dev libdmx-dev libdmx1 libdrm-dev
+2026-10-20T19:54:57.3787329Z   libdrm-nouveau2 libdrm-radeon1 libegl-dev libegl-mesa0 libegl1
+2026-10-20T19:54:57.3788230Z   libfontconfig-dev libfontconfig1-dev libfontenc-dev libfreetype-dev
+2026-10-20T19:54:57.3788928Z   libfs-dev libfs6 libgl-dev libgles-dev libgles1 libgles2 libglvnd-core-dev
+2026-10-20T19:54:57.3789623Z   libglvnd-dev libglx-dev libice-dev libopengl-dev libopengl0 libpciaccess-dev
+2026-10-20T19:54:57.3790295Z   libpixman-1-dev libpng-dev libpng-tools libpthread-stubs0-dev libsm-dev
+2026-10-20T19:54:57.3790907Z   libwayland-bin libwayland-server0 libx11-dev libxau-dev libxaw7-dev
+2026-10-20T19:54:57.3791487Z   libxcb1-dev libxcomposite-dev libxcursor-dev libxcvt-dev libxcvt0
+2026-10-20T19:54:57.3792074Z   libxdamage-dev libxdmcp-dev libxext-dev libxfixes-dev libxfont-dev
+2026-10-20T19:54:57.3792639Z   libxft-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev
+2026-10-20T19:54:57.3793431Z   libxmu-headers libxmuu-dev libxpm-dev libxrandr-dev libxrender-dev
+2026-10-20T19:54:57.3794155Z   libxres-dev libxres1 libxss-dev libxt-dev libxtst-dev libxtst6 libxv-dev
+2026-10-20T19:54:57.3794843Z   libxv1 libxvmc-dev libxvmc1 libxxf86dga-dev libxxf86dga1 libxxf86vm-dev
+2026-10-20T19:54:57.3796240Z   mesa-common-dev uuid-dev x11proto-dev xorg-sgml-doctools xserver-common
+2026-10-20T19:54:57.3797161Z   xserver-xorg-dev xtrans-dev xvfb
+2026-10-20T19:54:57.3797479Z Suggested packages:
+2026-10-20T19:54:57.3797834Z   freetype2-doc libice-doc libsm-doc libwayland-doc libx11-doc libxaw-doc
+2026-10-20T19:54:57.3798252Z   libxcb-doc libxext-doc libxt-doc
+2026-10-20T19:54:57.3798519Z Recommended packages:
+2026-10-20T19:54:57.3798795Z   xfonts-base
+2026-10-20T19:54:57.4192187Z The following NEW packages will be installed:
+2026-10-20T19:54:57.4193491Z   bzip2-doc libbrotli-dev libbz2-dev libdmx-dev libdmx1 libdrm-dev
+2026-10-20T19:54:57.4194351Z   libdrm-nouveau2 libdrm-radeon1 libegl-dev libegl-mesa0 libegl1
+2026-10-20T19:54:57.4195592Z   libfontconfig-dev libfontconfig1-dev libfontenc-dev libfreetype-dev
+2026-10-20T19:54:57.4196617Z   libfs-dev libfs6 libgl-dev libgl1-mesa-dev libgles-dev libgles1 libgles2
+2026-10-20T19:54:57.4197629Z   libglvnd-core-dev libglvnd-dev libglx-dev libice-dev libopengl-dev
+2026-10-20T19:54:57.4198705Z   libopengl0 libpciaccess-dev libpixman-1-dev libpng-dev libpng-tools
+2026-10-20T19:54:57.4199805Z   libpthread-stubs0-dev libsm-dev libvulkan-dev libwayland-bin libwayland-dev
+2026-10-20T19:54:57.4200865Z   libwayland-server0 libx11-dev libxau-dev libxaw7-dev libxcb1-dev
+2026-10-20T19:54:57.4201865Z   libxcomposite-dev libxcursor-dev libxcvt-dev libxcvt0 libxdamage-dev
+2026-10-20T19:54:57.4202930Z   libxdmcp-dev libxext-dev libxfixes-dev libxfont-dev libxft-dev libxi-dev
+2026-10-20T19:54:57.4204055Z   libxinerama-dev libxkbcommon-dev libxkbfile-dev libxmu-dev libxmu-headers
+2026-10-20T19:54:57.4204974Z   libxmuu-dev libxpm-dev libxrandr-dev libxrender-dev libxres-dev libxres1
+2026-10-20T19:54:57.4205929Z   libxss-dev libxt-dev libxtst-dev libxv-dev libxv1 libxvmc-dev libxvmc1
+2026-10-20T19:54:57.4206581Z   libxxf86dga-dev libxxf86dga1 libxxf86vm-dev mesa-common-dev
+2026-10-20T19:54:57.4207152Z   mesa-vulkan-drivers ninja-build spirv-tools uuid-dev wayland-protocols
+2026-10-20T19:54:57.4207693Z   x11proto-dev xorg-dev xorg-sgml-doctools xserver-xorg-dev xtrans-dev
+2026-10-20T19:54:57.4211995Z The following packages will be upgraded:
+2026-10-20T19:54:57.4214134Z   libxtst6 xserver-common xvfb
+2026-10-20T19:54:57.4433247Z 3 upgraded, 85 newly installed, 0 to remove and 40 not upgraded.
+2026-10-20T19:54:57.4433887Z Need to get 34.3 MB of archives.
+2026-10-20T19:54:57.4434254Z After this operation, 193 MB of additional disk space will be used.
+2026-10-20T19:54:57.4434699Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-20T19:54:57.6237830Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 bzip2-doc all 1.0.8-5.1ubuntu0.1 [499 kB]
+2026-10-20T19:54:58.1643378Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libbrotli-dev amd64 1.1.0-2build2 [353 kB]
+2026-10-20T19:54:58.2891025Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libbz2-dev amd64 1.0.8-5.1ubuntu0.1 [33.6 kB]
+2026-10-20T19:54:58.3775236Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libdmx1 amd64 1:1.1.4-2build3 [8630 B]
+2026-10-20T19:54:58.4619538Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xorg-sgml-doctools all 1:1.11-1.1 [10.9 kB]
+2026-10-20T19:54:58.5445046Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 x11proto-dev all 2023.2-1 [602 kB]
+2026-10-20T19:54:58.6980428Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxau-dev amd64 1:1.0.9-1build6 [9570 B]
+2026-10-20T19:54:58.7812355Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxdmcp-dev amd64 1:1.1.3-0ubuntu6 [26.5 kB]
+2026-10-20T19:54:58.8648312Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xtrans-dev all 1.4.0-1 [68.9 kB]
+2026-10-20T19:54:58.9479204Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libpthread-stubs0-dev amd64 0.4-1build3 [4746 B]
+2026-10-20T19:54:59.0301004Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcb1-dev amd64 1.15-1ubuntu2 [85.8 kB]
+2026-10-20T19:54:59.1182717Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libx11-dev amd64 2:1.8.7-1ubuntu0.1 [732 kB]
+2026-10-20T19:54:59.2070494Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libdmx-dev amd64 1:1.1.4-2build3 [33.1 kB]
+2026-10-20T19:54:59.2917534Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libdrm-radeon1 amd64 2.4.125-1ubuntu0.1~24.04.2 [20.8 kB]
+2026-10-20T19:54:59.3744733Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libdrm-nouveau2 amd64 2.4.125-1ubuntu0.1~24.04.2 [17.6 kB]
+2026-10-20T19:54:59.4626727Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libpciaccess-dev amd64 0.17-3ubuntu0.24.04.3 [22.0 kB]
+2026-10-20T19:54:59.5449575Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libdrm-dev amd64 2.4.125-1ubuntu0.1~24.04.2 [314 kB]
+2026-10-20T19:54:59.6296951Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libegl-mesa0 amd64 25.2.8-0ubuntu0.24.04.4 [117 kB]
+2026-10-20T19:54:59.7130844Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libegl1 amd64 1.7.0-1build1 [28.7 kB]
+2026-10-20T19:54:59.7956163Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libglx-dev amd64 1.7.0-1build1 [14.2 kB]
+2026-10-20T19:54:59.8776740Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libgl-dev amd64 1.7.0-1build1 [102 kB]
+2026-10-20T19:54:59.9607948Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libegl-dev amd64 1.7.0-1build1 [18.2 kB]
+2026-10-20T19:55:00.0437848Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libpng-dev amd64 1.6.43-5ubuntu0.7 [265 kB]
+2026-10-20T19:55:00.1280474Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype-dev amd64 2.13.2+dfsg-1ubuntu0.2 [574 kB]
+2026-10-20T19:55:00.2161976Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 uuid-dev amd64 2.39.3-9ubuntu6.6 [33.5 kB]
+2026-10-20T19:55:00.2994396Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libfontconfig-dev amd64 2.15.0-1.1ubuntu2 [161 kB]
+2026-10-20T19:55:00.3833633Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libfontconfig1-dev amd64 2.15.0-1.1ubuntu2 [1840 B]
+2026-10-20T19:55:00.4731639Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libfontenc-dev amd64 1:1.1.8-1build1 [15.6 kB]
+2026-10-20T19:55:00.5586442Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libfs6 amd64 2:1.0.8-1build3 [22.0 kB]
+2026-10-20T19:55:00.6437577Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libfs-dev amd64 2:1.0.8-1build3 [28.7 kB]
+2026-10-20T19:55:00.7282232Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libgles1 amd64 1.7.0-1build1 [11.6 kB]
+2026-10-20T19:55:00.8124054Z Get:33 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libgles2 amd64 1.7.0-1build1 [17.1 kB]
+2026-10-20T19:55:00.8948944Z Get:34 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libgles-dev amd64 1.7.0-1build1 [50.5 kB]
+2026-10-20T19:55:00.9787598Z Get:35 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libice-dev amd64 2:1.0.10-1build3 [51.0 kB]
+2026-10-20T19:55:01.0614526Z Get:36 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libopengl0 amd64 1.7.0-1build1 [32.8 kB]
+2026-10-20T19:55:01.1436291Z Get:37 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libopengl-dev amd64 1.7.0-1build1 [3454 B]
+2026-10-20T19:55:01.2262815Z Get:38 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libpixman-1-dev amd64 0.42.2-1build1 [296 kB]
+2026-10-20T19:55:01.3150382Z Get:39 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libpng-tools amd64 1.6.43-5ubuntu0.7 [28.5 kB]
+2026-10-20T19:55:01.3982334Z Get:40 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libsm-dev amd64 2:1.2.3-1build3 [17.8 kB]
+2026-10-20T19:55:01.4847073Z Get:41 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libvulkan-dev amd64 1.3.275.0-1build1 [1239 kB]
+2026-10-20T19:55:01.5778857Z Get:42 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libwayland-server0 amd64 1.22.0-2.1build1 [33.9 kB]
+2026-10-20T19:55:01.6615721Z Get:43 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxext-dev amd64 2:1.3.4-1build2 [83.5 kB]
+2026-10-20T19:55:01.7443686Z Get:44 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxt-dev amd64 1:1.2.1-1.2build1 [394 kB]
+2026-10-20T19:55:01.8291288Z Get:45 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxmu-headers all 2:1.1.3-3build2 [53.0 kB]
+2026-10-20T19:55:01.9131801Z Get:46 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxmu-dev amd64 2:1.1.3-3build2 [55.4 kB]
+2026-10-20T19:55:01.9959706Z Get:47 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libxpm-dev amd64 1:3.5.17-1ubuntu0.24.04.2 [109 kB]
+2026-10-20T19:55:02.0826331Z Get:48 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxaw7-dev amd64 2:1.0.14-1build2 [253 kB]
+2026-10-20T19:55:02.1723540Z Get:49 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxfixes-dev amd64 1:6.0.0-2build1 [12.1 kB]
+2026-10-20T19:55:02.2546379Z Get:50 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcomposite-dev amd64 1:0.4.5-1build3 [9374 B]
+2026-10-20T19:55:02.3371047Z Get:51 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxrender-dev amd64 1:0.9.10-1.1build1 [26.3 kB]
+2026-10-20T19:55:02.4199566Z Get:52 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcursor-dev amd64 1:1.2.1-1build1 [31.8 kB]
+2026-10-20T19:55:02.5044160Z Get:53 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcvt0 amd64 0.1.2-1build1 [5684 B]
+2026-10-20T19:55:02.5866593Z Get:54 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxcvt-dev amd64 0.1.2-1build1 [3252 B]
+2026-10-20T19:55:02.6691968Z Get:55 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxdamage-dev amd64 1:1.1.6-1build1 [5270 B]
+2026-10-20T19:55:02.7517457Z Get:56 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libxfont-dev amd64 1:2.0.6-1+deb13u1build0.24.04.2 [128 kB]
+2026-10-20T19:55:02.8365831Z Get:57 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxft-dev amd64 2.3.6-1build1 [64.3 kB]
+2026-10-20T19:55:02.9197481Z Get:58 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxi-dev amd64 2:1.8.1-1build1 [194 kB]
+2026-10-20T19:55:03.0075671Z Get:59 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxinerama-dev amd64 2:1.1.4-3build1 [7988 B]
+2026-10-20T19:55:03.0899422Z Get:60 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxkbcommon-dev amd64 1.6.0-1build1 [56.3 kB]
+2026-10-20T19:55:03.1740880Z Get:61 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxkbfile-dev amd64 1:1.1.0-1build4 [84.4 kB]
+2026-10-20T19:55:03.2594714Z Get:62 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxmuu-dev amd64 2:1.1.3-3build2 [7882 B]
+2026-10-20T19:55:03.3415622Z Get:63 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxrandr-dev amd64 2:1.5.2-2build1 [26.4 kB]
+2026-10-20T19:55:03.4286409Z Get:64 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxres1 amd64 2:1.2.1-1build1 [6778 B]
+2026-10-20T19:55:03.5115917Z Get:65 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxres-dev amd64 2:1.2.1-1build1 [8492 B]
+2026-10-20T19:55:03.5936854Z Get:66 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxss-dev amd64 1:1.2.3-1build3 [12.1 kB]
+2026-10-20T19:55:03.6762534Z Get:67 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libxtst6 amd64 2:1.2.3-1.1ubuntu0.1 [12.6 kB]
+2026-10-20T19:55:03.7609606Z Get:68 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libxtst-dev amd64 2:1.2.3-1.1ubuntu0.1 [15.8 kB]
+2026-10-20T19:55:03.8457143Z Get:69 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxv1 amd64 2:1.0.11-1.1build1 [10.7 kB]
+2026-10-20T19:55:03.9279419Z Get:70 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxv-dev amd64 2:1.0.11-1.1build1 [33.3 kB]
+2026-10-20T19:55:04.0112848Z Get:71 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxvmc1 amd64 2:1.0.12-2build3 [13.2 kB]
+2026-10-20T19:55:04.0935260Z Get:72 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxvmc-dev amd64 2:1.0.12-2build3 [24.0 kB]
+2026-10-20T19:55:04.1769899Z Get:73 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxxf86dga1 amd64 2:1.1.5-1build1 [11.6 kB]
+2026-10-20T19:55:04.2594040Z Get:74 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxxf86dga-dev amd64 2:1.1.5-1build1 [16.0 kB]
+2026-10-20T19:55:04.3423553Z Get:75 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libxxf86vm-dev amd64 1:1.1.4-1build4 [13.8 kB]
+2026-10-20T19:55:04.4253928Z Get:76 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-common-dev amd64 25.2.8-0ubuntu0.24.04.4 [3134 kB]
+2026-10-20T19:55:04.5488135Z Get:77 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-vulkan-drivers amd64 25.2.8-0ubuntu0.24.04.4 [17.5 MB]
+2026-10-20T19:55:05.0928860Z Get:78 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 ninja-build amd64 1.11.1-2 [129 kB]
+2026-10-20T19:55:05.1780388Z Get:79 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 spirv-tools amd64 2025.1~rc1-1~ubuntu0.24.04.2 [4410 kB]
+2026-10-20T19:55:05.3767325Z Get:80 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 xserver-xorg-dev amd64 2:21.1.12-1ubuntu1.9 [210 kB]
+2026-10-20T19:55:05.4656881Z Get:81 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xorg-dev all 1:7.7+23ubuntu3 [4060 B]
+2026-10-20T19:55:05.5489444Z Get:82 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 xserver-common all 2:21.1.12-1ubuntu1.9 [35.0 kB]
+2026-10-20T19:55:05.6314287Z Get:83 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 xvfb amd64 2:21.1.12-1ubuntu1.9 [877 kB]
+2026-10-20T19:55:05.7457183Z Get:84 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libglvnd-core-dev amd64 1.7.0-1build1 [13.6 kB]
+2026-10-20T19:55:05.8282021Z Get:85 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libglvnd-dev amd64 1.7.0-1build1 [3198 B]
+2026-10-20T19:55:05.9118403Z Get:86 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgl1-mesa-dev amd64 25.2.8-0ubuntu0.24.04.4 [22.8 kB]
+2026-10-20T19:55:05.9943127Z Get:87 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libwayland-bin amd64 1.22.0-2.1build1 [20.6 kB]
+2026-10-20T19:55:06.0767080Z Get:88 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libwayland-dev amd64 1.22.0-2.1build1 [71.3 kB]
+2026-10-20T19:55:06.1603274Z Get:89 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 wayland-protocols all 1.45-1~ubuntu0.24.04.2 [114 kB]
+2026-10-20T19:55:06.5243336Z Fetched 34.3 MB in 9s (3932 kB/s)
+2026-10-20T19:55:06.5497445Z Selecting previously unselected package bzip2-doc.
+2026-10-20T19:55:06.5790073Z (Reading database ... 
+2026-10-20T19:55:06.5790543Z (Reading database ... 5%
+2026-10-20T19:55:06.5790865Z (Reading database ... 10%
+2026-10-20T19:55:06.5791395Z (Reading database ... 15%
+2026-10-20T19:55:06.5792028Z (Reading database ... 20%
+2026-10-20T19:55:06.5792597Z (Reading database ... 25%
+2026-10-20T19:55:06.5793198Z (Reading database ... 30%
+2026-10-20T19:55:06.5793764Z (Reading database ... 35%
+2026-10-20T19:55:06.5794344Z (Reading database ... 40%
+2026-10-20T19:55:06.5794900Z (Reading database ... 45%
+2026-10-20T19:55:06.5795703Z (Reading database ... 50%
+2026-10-20T19:55:06.5843447Z (Reading database ... 55%
+2026-10-20T19:55:06.7336373Z (Reading database ... 60%
+2026-10-20T19:55:06.9208110Z (Reading database ... 65%
+2026-10-20T19:55:07.0353599Z (Reading database ... 70%
+2026-10-20T19:55:07.1216082Z (Reading database ... 75%
+2026-10-20T19:55:07.3154955Z (Reading database ... 80%
+2026-10-20T19:55:07.4542634Z (Reading database ... 85%
+2026-10-20T19:55:07.5751560Z (Reading database ... 90%
+2026-10-20T19:55:07.7389886Z (Reading database ... 95%
+2026-10-20T19:55:07.7390203Z (Reading database ... 100%
+2026-10-20T19:55:07.7390558Z (Reading database ... 214410 files and directories currently installed.)
+2026-10-20T19:55:07.7433379Z Preparing to unpack .../00-bzip2-doc_1.0.8-5.1ubuntu0.1_all.deb ...
+2026-10-20T19:55:07.7461895Z Unpacking bzip2-doc (1.0.8-5.1ubuntu0.1) ...
+2026-10-20T19:55:07.7735077Z Selecting previously unselected package libbrotli-dev:amd64.
+2026-10-20T19:55:07.7874757Z Preparing to unpack .../01-libbrotli-dev_1.1.0-2build2_amd64.deb ...
+2026-10-20T19:55:07.7882523Z Unpacking libbrotli-dev:amd64 (1.1.0-2build2) ...
+2026-10-20T19:55:07.8183391Z Selecting previously unselected package libbz2-dev:amd64.
+2026-10-20T19:55:07.8323307Z Preparing to unpack .../02-libbz2-dev_1.0.8-5.1ubuntu0.1_amd64.deb ...
+2026-10-20T19:55:07.8332051Z Unpacking libbz2-dev:amd64 (1.0.8-5.1ubuntu0.1) ...
+2026-10-20T19:55:07.8566249Z Selecting previously unselected package libdmx1:amd64.
+2026-10-20T19:55:07.8705860Z Preparing to unpack .../03-libdmx1_1%3a1.1.4-2build3_amd64.deb ...
+2026-10-20T19:55:07.8742253Z Unpacking libdmx1:amd64 (1:1.1.4-2build3) ...
+2026-10-20T19:55:07.8972718Z Selecting previously unselected package xorg-sgml-doctools.
+2026-10-20T19:55:07.9113914Z Preparing to unpack .../04-xorg-sgml-doctools_1%3a1.11-1.1_all.deb ...
+2026-10-20T19:55:07.9122968Z Unpacking xorg-sgml-doctools (1:1.11-1.1) ...
+2026-10-20T19:55:07.9390343Z Selecting previously unselected package x11proto-dev.
+2026-10-20T19:55:07.9530469Z Preparing to unpack .../05-x11proto-dev_2023.2-1_all.deb ...
+2026-10-20T19:55:07.9539225Z Unpacking x11proto-dev (2023.2-1) ...
+2026-10-20T19:55:08.0067477Z Selecting previously unselected package libxau-dev:amd64.
+2026-10-20T19:55:08.0209733Z Preparing to unpack .../06-libxau-dev_1%3a1.0.9-1build6_amd64.deb ...
+2026-10-20T19:55:08.0217773Z Unpacking libxau-dev:amd64 (1:1.0.9-1build6) ...
+2026-10-20T19:55:08.0504562Z Selecting previously unselected package libxdmcp-dev:amd64.
+2026-10-20T19:55:08.0646797Z Preparing to unpack .../07-libxdmcp-dev_1%3a1.1.3-0ubuntu6_amd64.deb ...
+2026-10-20T19:55:08.0654053Z Unpacking libxdmcp-dev:amd64 (1:1.1.3-0ubuntu6) ...
+2026-10-20T19:55:08.0889794Z Selecting previously unselected package xtrans-dev.
+2026-10-20T19:55:08.1028751Z Preparing to unpack .../08-xtrans-dev_1.4.0-1_all.deb ...
+2026-10-20T19:55:08.1038575Z Unpacking xtrans-dev (1.4.0-1) ...
+2026-10-20T19:55:08.1320087Z Selecting previously unselected package libpthread-stubs0-dev:amd64.
+2026-10-20T19:55:08.1460697Z Preparing to unpack .../09-libpthread-stubs0-dev_0.4-1build3_amd64.deb ...
+2026-10-20T19:55:08.1469541Z Unpacking libpthread-stubs0-dev:amd64 (0.4-1build3) ...
+2026-10-20T19:55:08.1703306Z Selecting previously unselected package libxcb1-dev:amd64.
+2026-10-20T19:55:08.1842446Z Preparing to unpack .../10-libxcb1-dev_1.15-1ubuntu2_amd64.deb ...
+2026-10-20T19:55:08.1850868Z Unpacking libxcb1-dev:amd64 (1.15-1ubuntu2) ...
+2026-10-20T19:55:08.2103661Z Selecting previously unselected package libx11-dev:amd64.
+2026-10-20T19:55:08.2242215Z Preparing to unpack .../11-libx11-dev_2%3a1.8.7-1ubuntu0.1_amd64.deb ...
+2026-10-20T19:55:08.2250681Z Unpacking libx11-dev:amd64 (2:1.8.7-1ubuntu0.1) ...
+2026-10-20T19:55:08.2578590Z Selecting previously unselected package libdmx-dev:amd64.
+2026-10-20T19:55:08.2717353Z Preparing to unpack .../12-libdmx-dev_1%3a1.1.4-2build3_amd64.deb ...
+2026-10-20T19:55:08.2725805Z Unpacking libdmx-dev:amd64 (1:1.1.4-2build3) ...
+2026-10-20T19:55:08.2996965Z Selecting previously unselected package libdrm-radeon1:amd64.
+2026-10-20T19:55:08.3137125Z Preparing to unpack .../13-libdrm-radeon1_2.4.125-1ubuntu0.1~24.04.2_amd64.deb ...
+2026-10-20T19:55:08.3147553Z Unpacking libdrm-radeon1:amd64 (2.4.125-1ubuntu0.1~24.04.2) ...
+2026-10-20T19:55:08.3386001Z Selecting previously unselected package libdrm-nouveau2:amd64.
+2026-10-20T19:55:08.3524915Z Preparing to unpack .../14-libdrm-nouveau2_2.4.125-1ubuntu0.1~24.04.2_amd64.deb ...
+2026-10-20T19:55:08.3532963Z Unpacking libdrm-nouveau2:amd64 (2.4.125-1ubuntu0.1~24.04.2) ...
+2026-10-20T19:55:08.3936569Z Selecting previously unselected package libpciaccess-dev:amd64.
+2026-10-20T19:55:08.4076330Z Preparing to unpack .../15-libpciaccess-dev_0.17-3ubuntu0.24.04.3_amd64.deb ...
+2026-10-20T19:55:08.4084216Z Unpacking libpciaccess-dev:amd64 (0.17-3ubuntu0.24.04.3) ...
+2026-10-20T19:55:08.4311728Z Selecting previously unselected package libdrm-dev:amd64.
+2026-10-20T19:55:08.4449851Z Preparing to unpack .../16-libdrm-dev_2.4.125-1ubuntu0.1~24.04.2_amd64.deb ...
+2026-10-20T19:55:08.4459106Z Unpacking libdrm-dev:amd64 (2.4.125-1ubuntu0.1~24.04.2) ...
+2026-10-20T19:55:08.4822816Z Selecting previously unselected package libegl-mesa0:amd64.
+2026-10-20T19:55:08.4963446Z Preparing to unpack .../17-libegl-mesa0_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-20T19:55:08.4973921Z Unpacking libegl-mesa0:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:08.5243206Z Selecting previously unselected package libegl1:amd64.
+2026-10-20T19:55:08.5386260Z Preparing to unpack .../18-libegl1_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:08.5397644Z Unpacking libegl1:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:08.5633717Z Selecting previously unselected package libglx-dev:amd64.
+2026-10-20T19:55:08.5772647Z Preparing to unpack .../19-libglx-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:08.5783197Z Unpacking libglx-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:08.6015274Z Selecting previously unselected package libgl-dev:amd64.
+2026-10-20T19:55:08.6155078Z Preparing to unpack .../20-libgl-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:08.6163634Z Unpacking libgl-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:08.6431830Z Selecting previously unselected package libegl-dev:amd64.
+2026-10-20T19:55:08.6572045Z Preparing to unpack .../21-libegl-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:08.6580087Z Unpacking libegl-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:08.6814821Z Selecting previously unselected package libpng-dev:amd64.
+2026-10-20T19:55:08.6953551Z Preparing to unpack .../22-libpng-dev_1.6.43-5ubuntu0.7_amd64.deb ...
+2026-10-20T19:55:08.6962184Z Unpacking libpng-dev:amd64 (1.6.43-5ubuntu0.7) ...
+2026-10-20T19:55:08.7283293Z Selecting previously unselected package libfreetype-dev:amd64.
+2026-10-20T19:55:08.7423254Z Preparing to unpack .../23-libfreetype-dev_2.13.2+dfsg-1ubuntu0.2_amd64.deb ...
+2026-10-20T19:55:08.7433916Z Unpacking libfreetype-dev:amd64 (2.13.2+dfsg-1ubuntu0.2) ...
+2026-10-20T19:55:08.7812442Z Selecting previously unselected package uuid-dev:amd64.
+2026-10-20T19:55:08.7951793Z Preparing to unpack .../24-uuid-dev_2.39.3-9ubuntu6.6_amd64.deb ...
+2026-10-20T19:55:08.7960487Z Unpacking uuid-dev:amd64 (2.39.3-9ubuntu6.6) ...
+2026-10-20T19:55:08.8208471Z Selecting previously unselected package libfontconfig-dev:amd64.
+2026-10-20T19:55:08.8346813Z Preparing to unpack .../25-libfontconfig-dev_2.15.0-1.1ubuntu2_amd64.deb ...
+2026-10-20T19:55:08.8355880Z Unpacking libfontconfig-dev:amd64 (2.15.0-1.1ubuntu2) ...
+2026-10-20T19:55:08.8617722Z Selecting previously unselected package libfontconfig1-dev:amd64.
+2026-10-20T19:55:08.8766531Z Preparing to unpack .../26-libfontconfig1-dev_2.15.0-1.1ubuntu2_amd64.deb ...
+2026-10-20T19:55:08.8776323Z Unpacking libfontconfig1-dev:amd64 (2.15.0-1.1ubuntu2) ...
+2026-10-20T19:55:08.9040612Z Selecting previously unselected package libfontenc-dev:amd64.
+2026-10-20T19:55:08.9185794Z Preparing to unpack .../27-libfontenc-dev_1%3a1.1.8-1build1_amd64.deb ...
+2026-10-20T19:55:08.9195929Z Unpacking libfontenc-dev:amd64 (1:1.1.8-1build1) ...
+2026-10-20T19:55:08.9435417Z Selecting previously unselected package libfs6:amd64.
+2026-10-20T19:55:08.9573674Z Preparing to unpack .../28-libfs6_2%3a1.0.8-1build3_amd64.deb ...
+2026-10-20T19:55:08.9582482Z Unpacking libfs6:amd64 (2:1.0.8-1build3) ...
+2026-10-20T19:55:08.9802346Z Selecting previously unselected package libfs-dev:amd64.
+2026-10-20T19:55:08.9941453Z Preparing to unpack .../29-libfs-dev_2%3a1.0.8-1build3_amd64.deb ...
+2026-10-20T19:55:08.9952654Z Unpacking libfs-dev:amd64 (2:1.0.8-1build3) ...
+2026-10-20T19:55:09.0200258Z Selecting previously unselected package libgles1:amd64.
+2026-10-20T19:55:09.0345217Z Preparing to unpack .../30-libgles1_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:09.0354261Z Unpacking libgles1:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:09.0633477Z Selecting previously unselected package libgles2:amd64.
+2026-10-20T19:55:09.0772367Z Preparing to unpack .../31-libgles2_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:09.0780221Z Unpacking libgles2:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:09.1004969Z Selecting previously unselected package libgles-dev:amd64.
+2026-10-20T19:55:09.1143401Z Preparing to unpack .../32-libgles-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:09.1152787Z Unpacking libgles-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:09.1426064Z Selecting previously unselected package libice-dev:amd64.
+2026-10-20T19:55:09.1563781Z Preparing to unpack .../33-libice-dev_2%3a1.0.10-1build3_amd64.deb ...
+2026-10-20T19:55:09.1612143Z Unpacking libice-dev:amd64 (2:1.0.10-1build3) ...
+2026-10-20T19:55:09.1861926Z Selecting previously unselected package libopengl0:amd64.
+2026-10-20T19:55:09.2000450Z Preparing to unpack .../34-libopengl0_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:09.2009257Z Unpacking libopengl0:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:09.2240435Z Selecting previously unselected package libopengl-dev:amd64.
+2026-10-20T19:55:09.2380087Z Preparing to unpack .../35-libopengl-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:09.2389145Z Unpacking libopengl-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:09.2607418Z Selecting previously unselected package libpixman-1-dev:amd64.
+2026-10-20T19:55:09.2746885Z Preparing to unpack .../36-libpixman-1-dev_0.42.2-1build1_amd64.deb ...
+2026-10-20T19:55:09.2755567Z Unpacking libpixman-1-dev:amd64 (0.42.2-1build1) ...
+2026-10-20T19:55:09.3024696Z Selecting previously unselected package libpng-tools.
+2026-10-20T19:55:09.3167050Z Preparing to unpack .../37-libpng-tools_1.6.43-5ubuntu0.7_amd64.deb ...
+2026-10-20T19:55:09.3175838Z Unpacking libpng-tools (1.6.43-5ubuntu0.7) ...
+2026-10-20T19:55:09.3395248Z Selecting previously unselected package libsm-dev:amd64.
+2026-10-20T19:55:09.3533311Z Preparing to unpack .../38-libsm-dev_2%3a1.2.3-1build3_amd64.deb ...
+2026-10-20T19:55:09.3541442Z Unpacking libsm-dev:amd64 (2:1.2.3-1build3) ...
+2026-10-20T19:55:09.3767823Z Selecting previously unselected package libvulkan-dev:amd64.
+2026-10-20T19:55:09.3916594Z Preparing to unpack .../39-libvulkan-dev_1.3.275.0-1build1_amd64.deb ...
+2026-10-20T19:55:09.3924030Z Unpacking libvulkan-dev:amd64 (1.3.275.0-1build1) ...
+2026-10-20T19:55:09.4886394Z Selecting previously unselected package libwayland-server0:amd64.
+2026-10-20T19:55:09.5028770Z Preparing to unpack .../40-libwayland-server0_1.22.0-2.1build1_amd64.deb ...
+2026-10-20T19:55:09.5036012Z Unpacking libwayland-server0:amd64 (1.22.0-2.1build1) ...
+2026-10-20T19:55:09.5259045Z Selecting previously unselected package libxext-dev:amd64.
+2026-10-20T19:55:09.5398835Z Preparing to unpack .../41-libxext-dev_2%3a1.3.4-1build2_amd64.deb ...
+2026-10-20T19:55:09.5406452Z Unpacking libxext-dev:amd64 (2:1.3.4-1build2) ...
+2026-10-20T19:55:09.5707431Z Selecting previously unselected package libxt-dev:amd64.
+2026-10-20T19:55:09.5845774Z Preparing to unpack .../42-libxt-dev_1%3a1.2.1-1.2build1_amd64.deb ...
+2026-10-20T19:55:09.5852598Z Unpacking libxt-dev:amd64 (1:1.2.1-1.2build1) ...
+2026-10-20T19:55:09.6397007Z Selecting previously unselected package libxmu-headers.
+2026-10-20T19:55:09.6537381Z Preparing to unpack .../43-libxmu-headers_2%3a1.1.3-3build2_all.deb ...
+2026-10-20T19:55:09.6545026Z Unpacking libxmu-headers (2:1.1.3-3build2) ...
+2026-10-20T19:55:09.6831839Z Selecting previously unselected package libxmu-dev:amd64.
+2026-10-20T19:55:09.6973182Z Preparing to unpack .../44-libxmu-dev_2%3a1.1.3-3build2_amd64.deb ...
+2026-10-20T19:55:09.6980741Z Unpacking libxmu-dev:amd64 (2:1.1.3-3build2) ...
+2026-10-20T19:55:09.7226957Z Selecting previously unselected package libxpm-dev:amd64.
+2026-10-20T19:55:09.7369414Z Preparing to unpack .../45-libxpm-dev_1%3a3.5.17-1ubuntu0.24.04.2_amd64.deb ...
+2026-10-20T19:55:09.7391629Z Unpacking libxpm-dev:amd64 (1:3.5.17-1ubuntu0.24.04.2) ...
+2026-10-20T19:55:09.7681506Z Selecting previously unselected package libxaw7-dev:amd64.
+2026-10-20T19:55:09.7826366Z Preparing to unpack .../46-libxaw7-dev_2%3a1.0.14-1build2_amd64.deb ...
+2026-10-20T19:55:09.7833170Z Unpacking libxaw7-dev:amd64 (2:1.0.14-1build2) ...
+2026-10-20T19:55:09.8184825Z Selecting previously unselected package libxfixes-dev:amd64.
+2026-10-20T19:55:09.8327236Z Preparing to unpack .../47-libxfixes-dev_1%3a6.0.0-2build1_amd64.deb ...
+2026-10-20T19:55:09.8337453Z Unpacking libxfixes-dev:amd64 (1:6.0.0-2build1) ...
+2026-10-20T19:55:09.8562821Z Selecting previously unselected package libxcomposite-dev:amd64.
+2026-10-20T19:55:09.8706102Z Preparing to unpack .../48-libxcomposite-dev_1%3a0.4.5-1build3_amd64.deb ...
+2026-10-20T19:55:09.8714898Z Unpacking libxcomposite-dev:amd64 (1:0.4.5-1build3) ...
+2026-10-20T19:55:09.8954859Z Selecting previously unselected package libxrender-dev:amd64.
+2026-10-20T19:55:09.9099232Z Preparing to unpack .../49-libxrender-dev_1%3a0.9.10-1.1build1_amd64.deb ...
+2026-10-20T19:55:09.9106838Z Unpacking libxrender-dev:amd64 (1:0.9.10-1.1build1) ...
+2026-10-20T19:55:09.9334637Z Selecting previously unselected package libxcursor-dev:amd64.
+2026-10-20T19:55:09.9474996Z Preparing to unpack .../50-libxcursor-dev_1%3a1.2.1-1build1_amd64.deb ...
+2026-10-20T19:55:09.9482273Z Unpacking libxcursor-dev:amd64 (1:1.2.1-1build1) ...
+2026-10-20T19:55:09.9768106Z Selecting previously unselected package libxcvt0:amd64.
+2026-10-20T19:55:09.9907932Z Preparing to unpack .../51-libxcvt0_0.1.2-1build1_amd64.deb ...
+2026-10-20T19:55:09.9916284Z Unpacking libxcvt0:amd64 (0.1.2-1build1) ...
+2026-10-20T19:55:10.0144439Z Selecting previously unselected package libxcvt-dev:amd64.
+2026-10-20T19:55:10.0288315Z Preparing to unpack .../52-libxcvt-dev_0.1.2-1build1_amd64.deb ...
+2026-10-20T19:55:10.0296681Z Unpacking libxcvt-dev:amd64 (0.1.2-1build1) ...
+2026-10-20T19:55:10.0551510Z Selecting previously unselected package libxdamage-dev:amd64.
+2026-10-20T19:55:10.0697865Z Preparing to unpack .../53-libxdamage-dev_1%3a1.1.6-1build1_amd64.deb ...
+2026-10-20T19:55:10.0705694Z Unpacking libxdamage-dev:amd64 (1:1.1.6-1build1) ...
+2026-10-20T19:55:10.0942756Z Selecting previously unselected package libxfont-dev.
+2026-10-20T19:55:10.1085968Z Preparing to unpack .../54-libxfont-dev_1%3a2.0.6-1+deb13u1build0.24.04.2_amd64.deb ...
+2026-10-20T19:55:10.1095688Z Unpacking libxfont-dev (1:2.0.6-1+deb13u1build0.24.04.2) ...
+2026-10-20T19:55:10.1344531Z Selecting previously unselected package libxft-dev:amd64.
+2026-10-20T19:55:10.1483652Z Preparing to unpack .../55-libxft-dev_2.3.6-1build1_amd64.deb ...
+2026-10-20T19:55:10.1491438Z Unpacking libxft-dev:amd64 (2.3.6-1build1) ...
+2026-10-20T19:55:10.1788780Z Selecting previously unselected package libxi-dev:amd64.
+2026-10-20T19:55:10.1927808Z Preparing to unpack .../56-libxi-dev_2%3a1.8.1-1build1_amd64.deb ...
+2026-10-20T19:55:10.1935052Z Unpacking libxi-dev:amd64 (2:1.8.1-1build1) ...
+2026-10-20T19:55:10.2268955Z Selecting previously unselected package libxinerama-dev:amd64.
+2026-10-20T19:55:10.2408335Z Preparing to unpack .../57-libxinerama-dev_2%3a1.1.4-3build1_amd64.deb ...
+2026-10-20T19:55:10.2417363Z Unpacking libxinerama-dev:amd64 (2:1.1.4-3build1) ...
+2026-10-20T19:55:10.2654063Z Selecting previously unselected package libxkbcommon-dev:amd64.
+2026-10-20T19:55:10.2793790Z Preparing to unpack .../58-libxkbcommon-dev_1.6.0-1build1_amd64.deb ...
+2026-10-20T19:55:10.2801608Z Unpacking libxkbcommon-dev:amd64 (1.6.0-1build1) ...
+2026-10-20T19:55:10.3038826Z Selecting previously unselected package libxkbfile-dev:amd64.
+2026-10-20T19:55:10.3179546Z Preparing to unpack .../59-libxkbfile-dev_1%3a1.1.0-1build4_amd64.deb ...
+2026-10-20T19:55:10.3187758Z Unpacking libxkbfile-dev:amd64 (1:1.1.0-1build4) ...
+2026-10-20T19:55:10.3436479Z Selecting previously unselected package libxmuu-dev:amd64.
+2026-10-20T19:55:10.3576948Z Preparing to unpack .../60-libxmuu-dev_2%3a1.1.3-3build2_amd64.deb ...
+2026-10-20T19:55:10.3583882Z Unpacking libxmuu-dev:amd64 (2:1.1.3-3build2) ...
+2026-10-20T19:55:10.3823935Z Selecting previously unselected package libxrandr-dev:amd64.
+2026-10-20T19:55:10.3965906Z Preparing to unpack .../61-libxrandr-dev_2%3a1.5.2-2build1_amd64.deb ...
+2026-10-20T19:55:10.3973194Z Unpacking libxrandr-dev:amd64 (2:1.5.2-2build1) ...
+2026-10-20T19:55:10.4220769Z Selecting previously unselected package libxres1:amd64.
+2026-10-20T19:55:10.4360741Z Preparing to unpack .../62-libxres1_2%3a1.2.1-1build1_amd64.deb ...
+2026-10-20T19:55:10.4369086Z Unpacking libxres1:amd64 (2:1.2.1-1build1) ...
+2026-10-20T19:55:10.4587580Z Selecting previously unselected package libxres-dev:amd64.
+2026-10-20T19:55:10.4727813Z Preparing to unpack .../63-libxres-dev_2%3a1.2.1-1build1_amd64.deb ...
+2026-10-20T19:55:10.4734935Z Unpacking libxres-dev:amd64 (2:1.2.1-1build1) ...
+2026-10-20T19:55:10.4966127Z Selecting previously unselected package libxss-dev:amd64.
+2026-10-20T19:55:10.5106093Z Preparing to unpack .../64-libxss-dev_1%3a1.2.3-1build3_amd64.deb ...
+2026-10-20T19:55:10.5113114Z Unpacking libxss-dev:amd64 (1:1.2.3-1build3) ...
+2026-10-20T19:55:10.5494831Z Preparing to unpack .../65-libxtst6_2%3a1.2.3-1.1ubuntu0.1_amd64.deb ...
+2026-10-20T19:55:10.5516817Z Unpacking libxtst6:amd64 (2:1.2.3-1.1ubuntu0.1) over (2:1.2.3-1.1build1) ...
+2026-10-20T19:55:10.5768550Z Selecting previously unselected package libxtst-dev:amd64.
+2026-10-20T19:55:10.5914033Z Preparing to unpack .../66-libxtst-dev_2%3a1.2.3-1.1ubuntu0.1_amd64.deb ...
+2026-10-20T19:55:10.5920880Z Unpacking libxtst-dev:amd64 (2:1.2.3-1.1ubuntu0.1) ...
+2026-10-20T19:55:10.6224962Z Selecting previously unselected package libxv1:amd64.
+2026-10-20T19:55:10.6365788Z Preparing to unpack .../67-libxv1_2%3a1.0.11-1.1build1_amd64.deb ...
+2026-10-20T19:55:10.6374170Z Unpacking libxv1:amd64 (2:1.0.11-1.1build1) ...
+2026-10-20T19:55:10.6596341Z Selecting previously unselected package libxv-dev:amd64.
+2026-10-20T19:55:10.6736121Z Preparing to unpack .../68-libxv-dev_2%3a1.0.11-1.1build1_amd64.deb ...
+2026-10-20T19:55:10.6743747Z Unpacking libxv-dev:amd64 (2:1.0.11-1.1build1) ...
+2026-10-20T19:55:10.7014604Z Selecting previously unselected package libxvmc1:amd64.
+2026-10-20T19:55:10.7156031Z Preparing to unpack .../69-libxvmc1_2%3a1.0.12-2build3_amd64.deb ...
+2026-10-20T19:55:10.7165657Z Unpacking libxvmc1:amd64 (2:1.0.12-2build3) ...
+2026-10-20T19:55:10.7396125Z Selecting previously unselected package libxvmc-dev:amd64.
+2026-10-20T19:55:10.7540332Z Preparing to unpack .../70-libxvmc-dev_2%3a1.0.12-2build3_amd64.deb ...
+2026-10-20T19:55:10.7549587Z Unpacking libxvmc-dev:amd64 (2:1.0.12-2build3) ...
+2026-10-20T19:55:10.7789677Z Selecting previously unselected package libxxf86dga1:amd64.
+2026-10-20T19:55:10.7930123Z Preparing to unpack .../71-libxxf86dga1_2%3a1.1.5-1build1_amd64.deb ...
+2026-10-20T19:55:10.7938013Z Unpacking libxxf86dga1:amd64 (2:1.1.5-1build1) ...
+2026-10-20T19:55:10.8162048Z Selecting previously unselected package libxxf86dga-dev:amd64.
+2026-10-20T19:55:10.8302090Z Preparing to unpack .../72-libxxf86dga-dev_2%3a1.1.5-1build1_amd64.deb ...
+2026-10-20T19:55:10.8309534Z Unpacking libxxf86dga-dev:amd64 (2:1.1.5-1build1) ...
+2026-10-20T19:55:10.8550536Z Selecting previously unselected package libxxf86vm-dev:amd64.
+2026-10-20T19:55:10.8691146Z Preparing to unpack .../73-libxxf86vm-dev_1%3a1.1.4-1build4_amd64.deb ...
+2026-10-20T19:55:10.8699926Z Unpacking libxxf86vm-dev:amd64 (1:1.1.4-1build4) ...
+2026-10-20T19:55:10.8961192Z Selecting previously unselected package mesa-common-dev:amd64.
+2026-10-20T19:55:10.9103387Z Preparing to unpack .../74-mesa-common-dev_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-20T19:55:10.9110378Z Unpacking mesa-common-dev:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:11.0121792Z Selecting previously unselected package mesa-vulkan-drivers:amd64.
+2026-10-20T19:55:11.0264204Z Preparing to unpack .../75-mesa-vulkan-drivers_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-20T19:55:11.0274060Z Unpacking mesa-vulkan-drivers:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:11.3344123Z Selecting previously unselected package ninja-build.
+2026-10-20T19:55:11.3490549Z Preparing to unpack .../76-ninja-build_1.11.1-2_amd64.deb ...
+2026-10-20T19:55:11.3500006Z Unpacking ninja-build (1.11.1-2) ...
+2026-10-20T19:55:11.3824807Z Selecting previously unselected package spirv-tools.
+2026-10-20T19:55:11.3970442Z Preparing to unpack .../77-spirv-tools_2025.1~rc1-1~ubuntu0.24.04.2_amd64.deb ...
+2026-10-20T19:55:11.3979573Z Unpacking spirv-tools (2025.1~rc1-1~ubuntu0.24.04.2) ...
+2026-10-20T19:55:11.5349198Z Selecting previously unselected package xserver-xorg-dev.
+2026-10-20T19:55:11.5499371Z Preparing to unpack .../78-xserver-xorg-dev_2%3a21.1.12-1ubuntu1.9_amd64.deb ...
+2026-10-20T19:55:11.5505536Z Unpacking xserver-xorg-dev (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T19:55:11.6013079Z Selecting previously unselected package xorg-dev.
+2026-10-20T19:55:11.6162616Z Preparing to unpack .../79-xorg-dev_1%3a7.7+23ubuntu3_all.deb ...
+2026-10-20T19:55:11.6170487Z Unpacking xorg-dev (1:7.7+23ubuntu3) ...
+2026-10-20T19:55:11.6547485Z Preparing to unpack .../80-xserver-common_2%3a21.1.12-1ubuntu1.9_all.deb ...
+2026-10-20T19:55:11.6871782Z Unpacking xserver-common (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-20T19:55:11.7273095Z Preparing to unpack .../81-xvfb_2%3a21.1.12-1ubuntu1.9_amd64.deb ...
+2026-10-20T19:55:11.7289809Z Unpacking xvfb (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-20T19:55:11.7666163Z Selecting previously unselected package libglvnd-core-dev:amd64.
+2026-10-20T19:55:11.7808485Z Preparing to unpack .../82-libglvnd-core-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:11.7814842Z Unpacking libglvnd-core-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:11.8043723Z Selecting previously unselected package libglvnd-dev:amd64.
+2026-10-20T19:55:11.8184477Z Preparing to unpack .../83-libglvnd-dev_1.7.0-1build1_amd64.deb ...
+2026-10-20T19:55:11.8191289Z Unpacking libglvnd-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:11.8408987Z Selecting previously unselected package libgl1-mesa-dev:amd64.
+2026-10-20T19:55:11.8550646Z Preparing to unpack .../84-libgl1-mesa-dev_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-20T19:55:11.8557916Z Unpacking libgl1-mesa-dev:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:11.8784259Z Selecting previously unselected package libwayland-bin.
+2026-10-20T19:55:11.8927280Z Preparing to unpack .../85-libwayland-bin_1.22.0-2.1build1_amd64.deb ...
+2026-10-20T19:55:11.8943130Z Unpacking libwayland-bin (1.22.0-2.1build1) ...
+2026-10-20T19:55:11.9169654Z Selecting previously unselected package libwayland-dev:amd64.
+2026-10-20T19:55:11.9310789Z Preparing to unpack .../86-libwayland-dev_1.22.0-2.1build1_amd64.deb ...
+2026-10-20T19:55:11.9317181Z Unpacking libwayland-dev:amd64 (1.22.0-2.1build1) ...
+2026-10-20T19:55:11.9584774Z Selecting previously unselected package wayland-protocols.
+2026-10-20T19:55:11.9726419Z Preparing to unpack .../87-wayland-protocols_1.45-1~ubuntu0.24.04.2_all.deb ...
+2026-10-20T19:55:11.9733311Z Unpacking wayland-protocols (1.45-1~ubuntu0.24.04.2) ...
+2026-10-20T19:55:12.0323011Z Setting up mesa-vulkan-drivers:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:12.0348173Z Setting up bzip2-doc (1.0.8-5.1ubuntu0.1) ...
+2026-10-20T19:55:12.0368297Z Setting up libwayland-server0:amd64 (1.22.0-2.1build1) ...
+2026-10-20T19:55:12.0388943Z Setting up libvulkan-dev:amd64 (1.3.275.0-1build1) ...
+2026-10-20T19:55:12.0410739Z Setting up libdrm-nouveau2:amd64 (2.4.125-1ubuntu0.1~24.04.2) ...
+2026-10-20T19:55:12.0429371Z Setting up libpixman-1-dev:amd64 (0.42.2-1build1) ...
+2026-10-20T19:55:12.0446805Z Setting up libpciaccess-dev:amd64 (0.17-3ubuntu0.24.04.3) ...
+2026-10-20T19:55:12.0465881Z Setting up libglvnd-core-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.0484783Z Setting up libpng-tools (1.6.43-5ubuntu0.7) ...
+2026-10-20T19:55:12.0500979Z Setting up libdrm-radeon1:amd64 (2.4.125-1ubuntu0.1~24.04.2) ...
+2026-10-20T19:55:12.0521739Z Setting up libxtst6:amd64 (2:1.2.3-1.1ubuntu0.1) ...
+2026-10-20T19:55:12.0561456Z Setting up libxkbcommon-dev:amd64 (1.6.0-1build1) ...
+2026-10-20T19:55:12.0581908Z Setting up libpng-dev:amd64 (1.6.43-5ubuntu0.7) ...
+2026-10-20T19:55:12.0602514Z Setting up libfontenc-dev:amd64 (1:1.1.8-1build1) ...
+2026-10-20T19:55:12.0620381Z Setting up libxxf86dga1:amd64 (2:1.1.5-1build1) ...
+2026-10-20T19:55:12.0639190Z Setting up libxvmc1:amd64 (2:1.0.12-2build3) ...
+2026-10-20T19:55:12.0664466Z Setting up libpthread-stubs0-dev:amd64 (0.4-1build3) ...
+2026-10-20T19:55:12.0683003Z Setting up libopengl0:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.0715061Z Setting up ninja-build (1.11.1-2) ...
+2026-10-20T19:55:12.0733411Z Setting up xtrans-dev (1.4.0-1) ...
+2026-10-20T19:55:12.0752092Z Setting up libwayland-bin (1.22.0-2.1build1) ...
+2026-10-20T19:55:12.0771035Z Setting up libegl-mesa0:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:12.0793941Z Setting up libgles2:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.0815203Z Setting up spirv-tools (2025.1~rc1-1~ubuntu0.24.04.2) ...
+2026-10-20T19:55:12.0831601Z Setting up libdmx1:amd64 (1:1.1.4-2build3) ...
+2026-10-20T19:55:12.0856358Z Setting up uuid-dev:amd64 (2.39.3-9ubuntu6.6) ...
+2026-10-20T19:55:12.0872341Z Setting up libgles1:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.0892235Z Setting up libxv1:amd64 (2:1.0.11-1.1build1) ...
+2026-10-20T19:55:12.0918718Z Setting up libfs6:amd64 (2:1.0.8-1build3) ...
+2026-10-20T19:55:12.0935794Z Setting up wayland-protocols (1.45-1~ubuntu0.24.04.2) ...
+2026-10-20T19:55:12.0955205Z Setting up libegl1:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.0974542Z Setting up libxcvt0:amd64 (0.1.2-1build1) ...
+2026-10-20T19:55:12.1000696Z Setting up xorg-sgml-doctools (1:1.11-1.1) ...
+2026-10-20T19:55:12.1021002Z Setting up xserver-common (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T19:55:12.1040537Z Setting up libopengl-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.1059933Z Setting up libbrotli-dev:amd64 (1.1.0-2build2) ...
+2026-10-20T19:55:12.1085438Z Setting up libxres1:amd64 (2:1.2.1-1build1) ...
+2026-10-20T19:55:12.1104304Z Setting up libbz2-dev:amd64 (1.0.8-5.1ubuntu0.1) ...
+2026-10-20T19:55:12.1124676Z Setting up libdrm-dev:amd64 (2.4.125-1ubuntu0.1~24.04.2) ...
+2026-10-20T19:55:12.1146371Z Setting up libxcvt-dev:amd64 (0.1.2-1build1) ...
+2026-10-20T19:55:12.1166157Z Setting up xvfb (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T19:55:12.1188022Z Setting up libwayland-dev:amd64 (1.22.0-2.1build1) ...
+2026-10-20T19:55:12.1205620Z Setting up libfreetype-dev:amd64 (2.13.2+dfsg-1ubuntu0.2) ...
+2026-10-20T19:55:12.1227625Z Setting up libfontconfig-dev:amd64 (2.15.0-1.1ubuntu2) ...
+2026-10-20T19:55:12.1247711Z Setting up libfontconfig1-dev:amd64 (2.15.0-1.1ubuntu2) ...
+2026-10-20T19:55:12.1454746Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-20T19:55:12.1832953Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-20T19:55:12.1855790Z Not building database; man-db/auto-update is not 'true'.
+2026-10-20T19:55:12.1899068Z Processing triggers for sgml-base (1.31) ...
+2026-10-20T19:55:12.2021152Z Processing triggers for install-info (7.1-3build2) ...
+2026-10-20T19:55:12.3102272Z Setting up x11proto-dev (2023.2-1) ...
+2026-10-20T19:55:12.3122987Z Setting up libxau-dev:amd64 (1:1.0.9-1build6) ...
+2026-10-20T19:55:12.3146142Z Setting up libice-dev:amd64 (2:1.0.10-1build3) ...
+2026-10-20T19:55:12.3174245Z Setting up libsm-dev:amd64 (2:1.2.3-1build3) ...
+2026-10-20T19:55:12.3220965Z Setting up libxdmcp-dev:amd64 (1:1.1.3-0ubuntu6) ...
+2026-10-20T19:55:12.3248296Z Setting up libfs-dev:amd64 (2:1.0.8-1build3) ...
+2026-10-20T19:55:12.3306664Z Setting up libxcb1-dev:amd64 (1.15-1ubuntu2) ...
+2026-10-20T19:55:12.3341558Z Setting up libx11-dev:amd64 (2:1.8.7-1ubuntu0.1) ...
+2026-10-20T19:55:12.3375798Z Setting up libxfixes-dev:amd64 (1:6.0.0-2build1) ...
+2026-10-20T19:55:12.3399906Z Setting up libxt-dev:amd64 (1:1.2.1-1.2build1) ...
+2026-10-20T19:55:12.3420522Z Setting up libdmx-dev:amd64 (1:1.1.4-2build3) ...
+2026-10-20T19:55:12.3439996Z Setting up libxpm-dev:amd64 (1:3.5.17-1ubuntu0.24.04.2) ...
+2026-10-20T19:55:12.3460959Z Setting up libxext-dev:amd64 (2:1.3.4-1build2) ...
+2026-10-20T19:55:12.3487737Z Setting up libglx-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.3506408Z Setting up libxres-dev:amd64 (2:1.2.1-1build1) ...
+2026-10-20T19:55:12.3535299Z Setting up libxi-dev:amd64 (2:1.8.1-1build1) ...
+2026-10-20T19:55:12.3557556Z Setting up libxrender-dev:amd64 (1:0.9.10-1.1build1) ...
+2026-10-20T19:55:12.3576976Z Setting up libgl-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.3601489Z Setting up libxft-dev:amd64 (2.3.6-1build1) ...
+2026-10-20T19:55:12.3620864Z Setting up libxtst-dev:amd64 (2:1.2.3-1.1ubuntu0.1) ...
+2026-10-20T19:55:12.3641104Z Setting up libxkbfile-dev:amd64 (1:1.1.0-1build4) ...
+2026-10-20T19:55:12.3658707Z Setting up libxdamage-dev:amd64 (1:1.1.6-1build1) ...
+2026-10-20T19:55:12.3679281Z Setting up libxmu-headers (2:1.1.3-3build2) ...
+2026-10-20T19:55:12.3710709Z Setting up libegl-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.3730890Z Setting up libxcomposite-dev:amd64 (1:0.4.5-1build3) ...
+2026-10-20T19:55:12.3755320Z Setting up libxcursor-dev:amd64 (1:1.2.1-1build1) ...
+2026-10-20T19:55:12.3778965Z Setting up libxxf86dga-dev:amd64 (2:1.1.5-1build1) ...
+2026-10-20T19:55:12.3801439Z Setting up libxxf86vm-dev:amd64 (1:1.1.4-1build4) ...
+2026-10-20T19:55:12.3823290Z Setting up libxfont-dev (1:2.0.6-1+deb13u1build0.24.04.2) ...
+2026-10-20T19:55:12.3853918Z Setting up libxmu-dev:amd64 (2:1.1.3-3build2) ...
+2026-10-20T19:55:12.3894571Z Setting up libxss-dev:amd64 (1:1.2.3-1build3) ...
+2026-10-20T19:55:12.3914064Z Setting up libxv-dev:amd64 (2:1.0.11-1.1build1) ...
+2026-10-20T19:55:12.3939320Z Setting up libxrandr-dev:amd64 (2:1.5.2-2build1) ...
+2026-10-20T19:55:12.3958725Z Setting up libxinerama-dev:amd64 (2:1.1.4-3build1) ...
+2026-10-20T19:55:12.3984088Z Setting up libxaw7-dev:amd64 (2:1.0.14-1build2) ...
+2026-10-20T19:55:12.4005932Z Setting up mesa-common-dev:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:12.4354446Z Setting up libgles-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.4377821Z Setting up libxmuu-dev:amd64 (2:1.1.3-3build2) ...
+2026-10-20T19:55:12.4397904Z Setting up libxvmc-dev:amd64 (2:1.0.12-2build3) ...
+2026-10-20T19:55:12.4424154Z Setting up xserver-xorg-dev (2:21.1.12-1ubuntu1.9) ...
+2026-10-20T19:55:12.4447347Z Setting up libglvnd-dev:amd64 (1.7.0-1build1) ...
+2026-10-20T19:55:12.4472692Z Setting up xorg-dev (1:7.7+23ubuntu3) ...
+2026-10-20T19:55:12.4504800Z Setting up libgl1-mesa-dev:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-20T19:55:13.1260450Z 
+2026-10-20T19:55:13.1261022Z Running kernel seems to be up-to-date.
+2026-10-20T19:55:13.1261402Z 
+2026-10-20T19:55:13.1261578Z No services need to be restarted.
+2026-10-20T19:55:13.1261871Z 
+2026-10-20T19:55:13.1262057Z No containers need to be restarted.
+2026-10-20T19:55:13.1262359Z 
+2026-10-20T19:55:13.1262918Z No user sessions are running outdated binaries.
+2026-10-20T19:55:13.1263297Z 
+2026-10-20T19:55:13.1263632Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-20T19:55:14.0038661Z ##[group]Run TAG=v2026.12.0.1
+2026-10-20T19:55:14.0038987Z [36;1mTAG=v2026.12.0.1[0m
+2026-10-20T19:55:14.0039262Z [36;1marchive="$RUNNER_TEMP/slang-${TAG#v}.tgz"[0m
+2026-10-20T19:55:14.0039630Z [36;1mcurl --fail --location --silent --show-error \[0m
+2026-10-20T19:55:14.0040225Z [36;1m  "https://github.com/shader-slang/slang/releases/download/${TAG}/slang-${TAG#v}-linux-x86_64.tar.gz" \[0m
+2026-10-20T19:55:14.0040759Z [36;1m  --output "$archive"[0m
+2026-10-20T19:55:14.0041203Z [36;1mecho "bbd36968b5aefdf91c2ede0d2e131f8b552cba6ed2444da59f1a0bc0bfc6792d  $archive" \[0m
+2026-10-20T19:55:14.0041679Z [36;1m  | sha256sum --check -[0m
+2026-10-20T19:55:14.0042044Z [36;1msudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang[0m
+2026-10-20T19:55:14.0096285Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:55:14.0096585Z ##[endgroup]
+2026-10-20T19:55:14.5441718Z /home/runner/work/_temp/slang-2026.12.0.1.tgz: OK
+2026-10-20T19:55:16.0811994Z ##[group]Run find src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \
+2026-10-20T19:55:16.0812679Z [36;1mfind src/sirius tests -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) \[0m
+2026-10-20T19:55:16.0813200Z [36;1m  -print0 | xargs -0 clang-format-18 --dry-run --Werror[0m
+2026-10-20T19:55:16.0863253Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:55:16.0863512Z ##[endgroup]
+2026-10-20T19:55:22.2133998Z ##[group]Run cmake --preset linux-ci -DSIRIUS_ALIGNMENT_MODE=qualification
+2026-10-20T19:55:22.2134566Z [36;1mcmake --preset linux-ci -DSIRIUS_ALIGNMENT_MODE=qualification[0m
+2026-10-20T19:55:22.2186619Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:55:22.2186886Z ##[endgroup]
+2026-10-20T19:55:23.7190918Z Preset CMake variables:
+2026-10-20T19:55:23.7191255Z 
+2026-10-20T19:55:23.7191403Z   BUILD_TESTS="ON"
+2026-10-20T19:55:23.7191818Z   CMAKE_BUILD_TYPE="Release"
+2026-10-20T19:55:23.7192229Z   CMAKE_CXX_COMPILER="g++-14"
+2026-10-20T19:55:23.7192650Z   CMAKE_C_COMPILER="gcc-14"
+2026-10-20T19:55:23.7193095Z   CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+2026-10-20T19:55:23.7193384Z   SIRIUS_CONTRACT_MODE="2"
+2026-10-20T19:55:23.7193631Z   SIRIUS_MANDATORY_TESTS="ON"
+2026-10-20T19:55:23.7193884Z   SIRIUS_REQUIRE_VULKAN_RUNTIME="ON"
+2026-10-20T19:55:23.7194141Z   SIRIUS_WERROR="ON"
+2026-10-20T19:55:23.7194276Z 
+2026-10-20T19:55:23.7194400Z -- The CXX compiler identification is GNU 14.2.0
+2026-10-20T19:55:25.6935823Z -- The C compiler identification is GNU 14.2.0
+2026-10-20T19:55:25.7111772Z -- Detecting CXX compiler ABI info
+2026-10-20T19:55:25.8628657Z -- Detecting CXX compiler ABI info - done
+2026-10-20T19:55:25.8800993Z -- Check for working CXX compiler: /usr/bin/g++-14 - skipped
+2026-10-20T19:55:25.8809948Z -- Detecting CXX compile features
+2026-10-20T19:55:25.8821603Z -- Detecting CXX compile features - done
+2026-10-20T19:55:25.8986436Z -- Detecting C compiler ABI info
+2026-10-20T19:55:25.9968941Z -- Detecting C compiler ABI info - done
+2026-10-20T19:55:26.0133112Z -- Check for working C compiler: /usr/bin/gcc-14 - skipped
+2026-10-20T19:55:26.0136981Z -- Detecting C compile features
+2026-10-20T19:55:26.0141359Z -- Detecting C compile features - done
+2026-10-20T19:55:26.2227798Z -- Found Python3: /usr/bin/python3.12 (found version "3.12.3") found components: Interpreter
+2026-10-20T19:55:30.6780409Z -- ┌─ FTXUI options ─────────────────────
+2026-10-20T19:55:30.6780886Z -- │ FTXUI_ENABLE_INSTALL     : OFF
+2026-10-20T19:55:30.6781204Z -- │ FTXUI_BUILD_EXAMPLES     : OFF
+2026-10-20T19:55:30.6781501Z -- │ FTXUI_QUIET              : OFF
+2026-10-20T19:55:30.6781774Z -- │ FTXUI_BUILD_DOCS         : OFF
+2026-10-20T19:55:30.6786275Z -- │ FTXUI_BUILD_TESTS        : OFF
+2026-10-20T19:55:30.6789237Z -- │ FTXUI_BUILD_TESTS_FUZZER : OFF
+2026-10-20T19:55:30.6789750Z -- │ FTXUI_ENABLE_COVERAGE    : OFF
+2026-10-20T19:55:30.6790383Z -- │ FTXUI_DEV_WARNINGS       : OFF
+2026-10-20T19:55:30.6809506Z -- │ FTXUI_CLANG_TIDY         : OFF
+2026-10-20T19:55:30.6810074Z -- └─────────────────────────────────────
+2026-10-20T19:55:30.6810454Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+2026-10-20T19:55:31.0463332Z -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+2026-10-20T19:55:31.0473726Z -- Found Threads: TRUE
+2026-10-20T19:55:48.4666291Z -- Using the multi-header code from /home/runner/work/Sirius/Sirius/bin/linux-ci/_deps/json-src/include/
+2026-10-20T19:55:49.9023217Z -- alignment receipt generated: 0/8 domains admitted
+2026-10-20T19:55:50.0049002Z -- Including Wayland support
+2026-10-20T19:55:50.0049622Z -- Including X11 support
+2026-10-20T19:55:50.0130621Z -- Looking for memfd_create
+2026-10-20T19:55:50.0718010Z -- Looking for memfd_create - found
+2026-10-20T19:55:50.0788699Z -- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+2026-10-20T19:55:50.0796532Z -- Checking for modules 'wayland-client>=0.2.7;wayland-cursor>=0.2.7;wayland-egl>=0.2.7;xkbcommon>=0.5.0'
+2026-10-20T19:55:50.0953086Z --   Found wayland-client, version 1.22.0
+2026-10-20T19:55:50.1035775Z --   Found wayland-cursor, version 1.22.0
+2026-10-20T19:55:50.1121879Z --   Found wayland-egl, version 18.1.0
+2026-10-20T19:55:50.1202535Z --   Found xkbcommon, version 1.6.0
+2026-10-20T19:55:50.2744340Z -- Found X11: /usr/include
+2026-10-20T19:55:50.2747680Z -- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so
+2026-10-20T19:55:50.3341208Z -- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found
+2026-10-20T19:55:50.3342212Z -- Looking for gethostbyname
+2026-10-20T19:55:50.3900411Z -- Looking for gethostbyname - found
+2026-10-20T19:55:50.3900983Z -- Looking for connect
+2026-10-20T19:55:50.4449470Z -- Looking for connect - found
+2026-10-20T19:55:50.4449988Z -- Looking for remove
+2026-10-20T19:55:50.4998434Z -- Looking for remove - found
+2026-10-20T19:55:50.4998946Z -- Looking for shmat
+2026-10-20T19:55:50.5555602Z -- Looking for shmat - found
+2026-10-20T19:55:50.5556227Z -- Looking for IceConnectionNumber in ICE
+2026-10-20T19:55:50.6536759Z -- Looking for IceConnectionNumber in ICE - found
+2026-10-20T19:55:52.7672810Z -- Mandatory test gating: ENABLED
+2026-10-20T19:55:52.7678327Z -- Release packaging: DISABLED (configure SIRIUS_ALIGNMENT_MODE=release with the complete attestation set)
+2026-10-20T19:55:52.7695344Z -- Configuring done (30.5s)
+2026-10-20T19:55:52.8890028Z -- Generating done (0.1s)
+2026-10-20T19:55:52.8898518Z -- Build files have been written to: /home/runner/work/Sirius/Sirius/bin/linux-ci
+2026-10-20T19:55:52.9080655Z ##[group]Run cmake --build --preset linux-ci --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j"$(nproc)"
+2026-10-20T19:55:52.9082343Z [36;1mcmake --build --preset linux-ci --target SiriusAlignmentGate SiriusSourceGovernance sirius sirius_base_tests sirius_core_tests sirius_oracle_tests sirius_backend_tests sirius_app_tests sirius_render_tests -j"$(nproc)"[0m
+2026-10-20T19:55:52.9134305Z shell: /usr/bin/bash -e {0}
+2026-10-20T19:55:52.9134591Z ##[endgroup]
+2026-10-20T19:55:52.9406833Z [0/2] Re-checking globbed directories...
+2026-10-20T19:55:53.5494348Z [1/311] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/contracts.cpp.o
+2026-10-20T19:55:54.4219024Z [2/311] Compiling camera_frame_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:54.4236332Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:54.4266746Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:55:54.4267680Z     |
+2026-10-20T19:55:54.4296365Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:55:54.4326443Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:54.4327721Z ----'
+2026-10-20T19:55:54.4328167Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:54.4329077Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:55:54.4329866Z     |
+2026-10-20T19:55:54.4330477Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:55:54.4331507Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:54.4332240Z ----'
+2026-10-20T19:55:54.5747239Z [3/311] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/tensor.cpp.o
+2026-10-20T19:55:55.2553736Z [4/311] Building CXX object src/sirius/CMakeFiles/sirius_base.dir/base/resource_locator.cpp.o
+2026-10-20T19:55:55.3016956Z [5/311] Compiling camera_frame_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:55.3018201Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:55.3021510Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:55:55.3026037Z     |
+2026-10-20T19:55:55.3027023Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:55:55.3028638Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:55.3030875Z ----'
+2026-10-20T19:55:55.3031536Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:55.3032657Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:55:55.3035241Z     |
+2026-10-20T19:55:55.3036299Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:55:55.3037564Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:55.3040411Z ----'
+2026-10-20T19:55:55.4441044Z [6/311] Compiling camera_frame_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:55.4442230Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:55.4443456Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:55:55.4444514Z     |
+2026-10-20T19:55:55.4445284Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:55:55.4446807Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:55.4447752Z ----'
+2026-10-20T19:55:55.4448701Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:55.4449771Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:55:55.4450711Z     |
+2026-10-20T19:55:55.4451457Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:55:55.4452714Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:55.4453692Z ----'
+2026-10-20T19:55:55.9021549Z [7/311] Linking CXX static library src/sirius/libsirius_base.a
+2026-10-20T19:55:56.4047354Z [8/311] Compiling infinity_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:56.4076510Z warning[E41018]: returning without initializing out parameter
+2026-10-20T19:55:56.4086955Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-20T19:55:56.4105866Z     |
+2026-10-20T19:55:56.4106377Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-20T19:55:56.4107269Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-20T19:55:56.4107903Z ----'
+2026-10-20T19:55:56.4108259Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:56.4109010Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-20T19:55:56.4110094Z     |
+2026-10-20T19:55:56.4110532Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-20T19:55:56.4111414Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:56.4112087Z ----'
+2026-10-20T19:55:56.7876771Z [9/311] Compiling infinity_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:56.7936495Z warning[E41018]: returning without initializing out parameter
+2026-10-20T19:55:56.7996560Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-20T19:55:56.8025974Z     |
+2026-10-20T19:55:56.8026530Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-20T19:55:56.8027445Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-20T19:55:56.8028202Z ----'
+2026-10-20T19:55:56.8028612Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:56.8029470Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-20T19:55:56.8030238Z     |
+2026-10-20T19:55:56.8030742Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-20T19:55:56.8031765Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:56.8032564Z ----'
+2026-10-20T19:55:57.3234974Z [10/311] Compiling infinity_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:57.3236808Z warning[E41018]: returning without initializing out parameter
+2026-10-20T19:55:57.3237884Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:276:79
+2026-10-20T19:55:57.3238827Z     |
+2026-10-20T19:55:57.3239484Z 276 | if (!KIFinite(H) || !KIFinite(D) || !(H.x > Real(0)) || !(D.x > Real(0))) return false;
+2026-10-20T19:55:57.3240643Z     |                                                                           ^^^^^^ returning without initializing out parameter 'derivative'
+2026-10-20T19:55:57.3241525Z ----'
+2026-10-20T19:55:57.3252889Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:55:57.3276186Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_kerr_infinity.slang:375:50
+2026-10-20T19:55:57.3305840Z     |
+2026-10-20T19:55:57.3316253Z 375 | Real3 term = stages[previous][i] * (step * KICoefficient(stage, previous));
+2026-10-20T19:55:57.3336705Z     |                                  ^ variable 'stages' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:55:57.3355901Z ----'
+2026-10-20T19:55:57.8216800Z [11/311] Compiling metric_consistency_probe.slang (fp32) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:58.1117751Z [12/311] Compiling metric_consistency_probe.slang (fp32comp) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:59.1806759Z [13/311] Compiling metric_consistency_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:55:59.7876743Z [14/311] Compiling coupled_probe.slang (fp64) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:10.4751543Z [15/311] Building CXX object src/sirius/core/CMakeFiles/sirius_core.dir/geodesic_integrator.cpp.o
+2026-10-20T19:56:10.5937375Z [16/311] Linking CXX static library src/sirius/core/libsirius_core.a
+2026-10-20T19:56:12.0956540Z [17/311] Emitting Slang kernel trace.slang -> CUDA C++ (portability gate)
+2026-10-20T19:56:12.0976285Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:12.0986113Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:12.1015838Z     |
+2026-10-20T19:56:12.1036602Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:12.1066330Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:12.1075817Z ----'
+2026-10-20T19:56:12.1105789Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:12.1126330Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:12.1155863Z     |
+2026-10-20T19:56:12.1166066Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:12.1186288Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:12.1215757Z ----'
+2026-10-20T19:56:13.6566475Z [18/311] Emitting Slang kernel trace.slang -> Metal Shading Language (portability gate)
+2026-10-20T19:56:13.6616071Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:13.6646164Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:13.6675788Z     |
+2026-10-20T19:56:13.6706046Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:13.6736049Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:13.6765687Z ----'
+2026-10-20T19:56:13.6795792Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:13.6826009Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:13.6855655Z     |
+2026-10-20T19:56:13.6885937Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:13.6916021Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:13.6945693Z ----'
+2026-10-20T19:56:14.0216480Z [19/311] Compiling Slang kernel smoke.slang -> SPIR-V (+spirv-val)
+2026-10-20T19:56:19.4066603Z [20/311] Compiling Slang kernel parity_probe.slang -> SPIR-V (+spirv-val)
+2026-10-20T19:56:19.4067479Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:19.4068371Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:19.4069254Z     |
+2026-10-20T19:56:19.4069836Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:19.4070888Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:19.4071616Z ----'
+2026-10-20T19:56:19.4072007Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:19.4073188Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:19.4073963Z     |
+2026-10-20T19:56:19.4074547Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:19.4075838Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:19.4076629Z ----'
+2026-10-20T19:56:21.0096839Z [21/311] Compiling parity_probe.slang (fp64 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:21.0097859Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:21.0156882Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:21.0216466Z     |
+2026-10-20T19:56:21.0266442Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:21.0276586Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:21.0326002Z ----'
+2026-10-20T19:56:21.0356296Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:21.0386417Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:21.0395976Z     |
+2026-10-20T19:56:21.0436182Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:21.0456286Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:21.0457586Z ----'
+2026-10-20T19:56:21.1976874Z [22/311] Compiling parity_probe.slang (compensated fp32 trajectory probe) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:21.2006376Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:21.2036384Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:21.2037243Z     |
+2026-10-20T19:56:21.2037864Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:21.2038989Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:21.2039757Z ----'
+2026-10-20T19:56:21.2040178Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:21.2041067Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:21.2041859Z     |
+2026-10-20T19:56:21.2042473Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:21.2044196Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:21.2044986Z ----'
+2026-10-20T19:56:21.3396750Z [23/311] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/box.cpp.o
+2026-10-20T19:56:22.0774912Z [24/311] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color.cpp.o
+2026-10-20T19:56:22.3896863Z [25/311] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/color_info.cpp.o
+2026-10-20T19:56:24.3286816Z [26/311] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/screen.cpp.o
+2026-10-20T19:56:25.2987623Z [27/311] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o
+2026-10-20T19:56:25.5276485Z [28/311] Compiling Slang kernel trace.slang -> SPIR-V (+spirv-val)
+2026-10-20T19:56:25.5306235Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:25.5336320Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:25.5365965Z     |
+2026-10-20T19:56:25.5392311Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:25.5426491Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:25.5456060Z ----'
+2026-10-20T19:56:25.5486492Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:25.5516731Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:25.5545771Z     |
+2026-10-20T19:56:25.5576036Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:25.5606117Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:25.5635833Z ----'
+2026-10-20T19:56:25.6316777Z [29/311] Building CXX object _deps/ftxui-build/CMakeFiles/screen.dir/src/ftxui/screen/terminal.cpp.o
+2026-10-20T19:56:25.7656687Z [30/311] Linking CXX static library _deps/ftxui-build/libftxui-screen.a
+2026-10-20T19:56:26.3016824Z [31/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/automerge.cpp.o
+2026-10-20T19:56:26.5568945Z [32/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/blink.cpp.o
+2026-10-20T19:56:27.0786581Z [33/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/bold.cpp.o
+2026-10-20T19:56:27.4786759Z [34/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hyperlink.cpp.o
+2026-10-20T19:56:27.7488217Z [35/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/box_helper.cpp.o
+2026-10-20T19:56:28.6128180Z [36/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/border.cpp.o
+2026-10-20T19:56:29.4466780Z [37/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/clear_under.cpp.o
+2026-10-20T19:56:30.3496693Z [38/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/color.cpp.o
+2026-10-20T19:56:30.6246647Z [39/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/canvas.cpp.o
+2026-10-20T19:56:30.8876733Z [40/311] Compiling Slang kernel trace.slang (compensated fp32 rung) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:30.8898886Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:30.8916690Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:30.8945907Z     |
+2026-10-20T19:56:30.8976234Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:30.8977553Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:30.9005908Z ----'
+2026-10-20T19:56:30.9036077Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:30.9066218Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:30.9067116Z     |
+2026-10-20T19:56:30.9096156Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:30.9126296Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:30.9155821Z ----'
+2026-10-20T19:56:31.2576809Z [41/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/composite_decorator.cpp.o
+2026-10-20T19:56:31.4096803Z [42/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dbox.cpp.o
+2026-10-20T19:56:31.5606839Z [43/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/dim.cpp.o
+2026-10-20T19:56:31.5946713Z [44/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_config.cpp.o
+2026-10-20T19:56:32.1716675Z [45/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flex.cpp.o
+2026-10-20T19:56:32.3266954Z [46/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox.cpp.o
+2026-10-20T19:56:32.5396781Z [47/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/flexbox_helper.cpp.o
+2026-10-20T19:56:32.5666917Z [48/311] Compiling Slang kernel trace.slang (fp64 rung) -> SPIR-V (+spirv-val)
+2026-10-20T19:56:32.5696217Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:32.5726777Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:32.5755956Z     |
+2026-10-20T19:56:32.5786250Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:32.5816323Z     |                     ^ variable 'R' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:32.5845907Z ----'
+2026-10-20T19:56:32.5876051Z warning[E41035]: possible use of uninitialized variable
+2026-10-20T19:56:32.5906292Z    --> /home/runner/work/Sirius/Sirius/src/sirius/backend/../kernels/gr_deviation.slang:286:29
+2026-10-20T19:56:32.5935924Z     |
+2026-10-20T19:56:32.5966191Z 286 | GeodesicDeviationRhs(Gamma, R, phaseTangent, stepXi, stepV, stepDXi, stepDV);
+2026-10-20T19:56:32.5996347Z     |                     ^ variable 'Gamma' may be uninitialized on some paths; it is only conditionally assigned
+2026-10-20T19:56:32.6025926Z ----'
+2026-10-20T19:56:33.0246925Z [49/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/focus.cpp.o
+2026-10-20T19:56:33.3830040Z [50/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gauge.cpp.o
+2026-10-20T19:56:33.4692474Z [51/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/frame.cpp.o
+2026-10-20T19:56:33.8186912Z [52/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/graph.cpp.o
+2026-10-20T19:56:34.2576946Z [53/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/hbox.cpp.o
+2026-10-20T19:56:34.4538029Z [54/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/gridbox.cpp.o
+2026-10-20T19:56:34.6146931Z [55/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/inverted.cpp.o
+2026-10-20T19:56:35.0961088Z [56/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node.cpp.o
+2026-10-20T19:56:35.2817017Z [57/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/node_decorator.cpp.o
+2026-10-20T19:56:35.7557047Z [58/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/linear_gradient.cpp.o
+2026-10-20T19:56:36.0806762Z [59/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/reflect.cpp.o
+2026-10-20T19:56:36.1816851Z [60/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/paragraph.cpp.o
+2026-10-20T19:56:36.5187045Z [61/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/scroll_indicator.cpp.o
+2026-10-20T19:56:37.0423759Z [62/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/size.cpp.o
+2026-10-20T19:56:37.1651748Z [63/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/separator.cpp.o
+2026-10-20T19:56:37.8197050Z [64/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/strikethrough.cpp.o
+2026-10-20T19:56:37.9917719Z [65/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/spinner.cpp.o
+2026-10-20T19:56:38.6641040Z [66/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined.cpp.o
+2026-10-20T19:56:38.7676864Z [67/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/text.cpp.o
+2026-10-20T19:56:39.3227323Z [68/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/underlined_double.cpp.o
+2026-10-20T19:56:39.4446877Z [69/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/table.cpp.o
+2026-10-20T19:56:39.7436934Z [70/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/util.cpp.o
+2026-10-20T19:56:39.7566576Z [71/311] Generating wayland-client-protocol.h
+2026-10-20T19:56:39.7656545Z [72/311] Generating wayland-client-protocol-code.h
+2026-10-20T19:56:39.7712154Z [73/311] Generating viewporter-client-protocol.h
+2026-10-20T19:56:39.7757031Z [74/311] Generating viewporter-client-protocol-code.h
+2026-10-20T19:56:39.7811959Z [75/311] Generating xdg-shell-client-protocol.h
+2026-10-20T19:56:39.7922231Z [76/311] Generating xdg-shell-client-protocol-code.h
+2026-10-20T19:56:39.7976991Z [77/311] Generating idle-inhibit-unstable-v1-client-protocol.h
+2026-10-20T19:56:39.8034015Z [78/311] Generating idle-inhibit-unstable-v1-client-protocol-code.h
+2026-10-20T19:56:39.8096791Z [79/311] Generating pointer-constraints-unstable-v1-client-protocol.h
+2026-10-20T19:56:39.8156433Z [80/311] Generating pointer-constraints-unstable-v1-client-protocol-code.h
+2026-10-20T19:56:39.8218422Z [81/311] Generating relative-pointer-unstable-v1-client-protocol.h
+2026-10-20T19:56:39.8295179Z [82/311] Generating relative-pointer-unstable-v1-client-protocol-code.h
+2026-10-20T19:56:39.8357225Z [83/311] Generating fractional-scale-v1-client-protocol.h
+2026-10-20T19:56:39.8416177Z [84/311] Generating fractional-scale-v1-client-protocol-code.h
+2026-10-20T19:56:39.8479908Z [85/311] Generating xdg-activation-v1-client-protocol.h
+2026-10-20T19:56:39.8531538Z [86/311] Generating xdg-activation-v1-client-protocol-code.h
+2026-10-20T19:56:39.8585274Z [87/311] Generating xdg-decoration-unstable-v1-client-protocol.h
+2026-10-20T19:56:39.8645309Z [88/311] Generating xdg-decoration-unstable-v1-client-protocol-code.h
+2026-10-20T19:56:39.9573108Z [89/311] Verifying revision-bound upstream/downstream alignment
+2026-10-20T19:56:39.9587131Z alignment receipt is current: 0/8 domains admitted
+2026-10-20T19:56:40.1370013Z [90/311] Building CXX object _deps/ftxui-build/CMakeFiles/dom.dir/src/ftxui/dom/vbox.cpp.o
+2026-10-20T19:56:40.3136669Z [91/311] Linking CXX static library _deps/ftxui-build/libftxui-dom.a
+2026-10-20T19:56:40.7066980Z [92/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/animation.cpp.o
+2026-10-20T19:56:41.7158175Z [93/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/catch_event.cpp.o
+2026-10-20T19:56:42.1056817Z [94/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/button.cpp.o
+2026-10-20T19:56:42.9386779Z [95/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/checkbox.cpp.o
+2026-10-20T19:56:43.3934716Z [96/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/collapsible.cpp.o
+2026-10-20T19:56:44.3656916Z [97/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component.cpp.o
+2026-10-20T19:56:45.4250099Z [98/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/component_options.cpp.o
+2026-10-20T19:56:46.3033910Z [99/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/container.cpp.o
+2026-10-20T19:56:46.8807028Z [100/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/dropdown.cpp.o
+2026-10-20T19:56:46.9486890Z [101/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/event.cpp.o
+2026-10-20T19:56:48.4983232Z [102/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/hoverable.cpp.o
+2026-10-20T19:56:49.5086929Z [103/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/loop.cpp.o
+2026-10-20T19:56:49.7446848Z [104/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/input.cpp.o
+2026-10-20T19:56:50.5786936Z [105/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/maybe.cpp.o
+2026-10-20T19:56:51.8047900Z [106/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/modal.cpp.o
+2026-10-20T19:56:53.1676443Z [107/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/menu.cpp.o
+2026-10-20T19:56:53.4836824Z [108/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/radiobox.cpp.o
+2026-10-20T19:56:54.1922673Z [109/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/renderer.cpp.o
+2026-10-20T19:56:55.2187375Z [110/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/resizable_split.cpp.o
+2026-10-20T19:56:57.3857165Z [111/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/screen_interactive.cpp.o
+2026-10-20T19:56:58.5446925Z [112/311] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend_cpu.dir/cpu/geodesic_tracer.cpp.o
+2026-10-20T19:56:58.9757030Z [113/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/terminal_input_parser.cpp.o
+2026-10-20T19:56:59.4597083Z [114/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/slider.cpp.o
+2026-10-20T19:56:59.4836970Z [115/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/util.cpp.o
+2026-10-20T19:56:59.5587246Z [116/311] Linking CXX static library src/sirius/backend/libsirius_backend_cpu.a
+2026-10-20T19:57:00.2697364Z [117/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/init.c.o
+2026-10-20T19:57:00.3147916Z [118/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/context.c.o
+2026-10-20T19:57:00.5727017Z [119/311] Building CXX object _deps/ftxui-build/CMakeFiles/component.dir/src/ftxui/component/window.cpp.o
+2026-10-20T19:57:00.6473131Z [120/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/monitor.c.o
+2026-10-20T19:57:00.6966828Z [121/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/platform.c.o
+2026-10-20T19:57:00.8197422Z [122/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/vulkan.c.o
+2026-10-20T19:57:00.8756434Z [123/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/input.c.o
+2026-10-20T19:57:01.0666380Z [124/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/window.c.o
+2026-10-20T19:57:01.0750527Z [125/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/osmesa_context.c.o
+2026-10-20T19:57:01.1152869Z [126/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/egl_context.c.o
+2026-10-20T19:57:01.2056635Z [127/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_init.c.o
+2026-10-20T19:57:01.2167266Z [128/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_monitor.c.o
+2026-10-20T19:57:01.3056765Z [129/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_joystick.c.o
+2026-10-20T19:57:01.3245974Z [130/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_module.c.o
+2026-10-20T19:57:01.3622639Z [131/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/null_window.c.o
+2026-10-20T19:57:01.4026712Z [132/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_time.c.o
+2026-10-20T19:57:01.4438174Z [133/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_thread.c.o
+2026-10-20T19:57:01.6897098Z [134/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/x11_monitor.c.o
+2026-10-20T19:57:01.8026611Z [135/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/xkb_unicode.c.o
+2026-10-20T19:57:01.8651033Z [136/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/x11_init.c.o
+2026-10-20T19:57:02.0686585Z [137/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/glx_context.c.o
+2026-10-20T19:57:02.2001383Z [138/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/wl_init.c.o
+2026-10-20T19:57:02.2416631Z [139/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/wl_monitor.c.o
+2026-10-20T19:57:02.4333965Z [140/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/x11_window.c.o
+2026-10-20T19:57:02.4946929Z [141/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/linux_joystick.c.o
+2026-10-20T19:57:02.5787478Z [142/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/posix_poll.c.o
+2026-10-20T19:57:02.6446799Z [143/311] Linking CXX static library _deps/ftxui-build/libftxui-component.a
+2026-10-20T19:57:03.1943902Z [144/311] Building C object lib/glfw/src/CMakeFiles/glfw.dir/wl_window.c.o
+2026-10-20T19:57:03.3537931Z [145/311] Linking C static library lib/glfw/src/libglfw3.a
+2026-10-20T19:57:04.8686803Z [146/311] Building bounded retained camera program and independent witnesses
+2026-10-20T19:57:04.8726449Z program_camera_probe-fp32: compiled and validated
+2026-10-20T19:57:04.8727218Z program_camera_probe-fp32comp: compiled and validated
+2026-10-20T19:57:05.6343704Z [147/311] Generating independent exact binary32 arithmetic expectations
+2026-10-20T19:57:05.6381101Z {"bytes": 4182444, "categories": {"primitive/declared-halfway-boundary": 24, "primitive/edge-cross": 38332, "primitive/raw-fixed-seed": 28672, "primitive/subnormal-fixed-seed": 28672, "primitive/unary-edge": 468, "primitive/unary-fixed-seed": 24576, "residual/analytic-selfcheck": 16, "residual/bounded-raw-fixed-seed": 16384, "residual/edge-cross": 4356, "residual/product-rounding-boundaries": 8192, "residual/scaled-mantissa-fixed-seed": 16384, "residual/subnormal-input-fixed-seed": 8192}, "fixture_sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e", "magic": "PB32", "negative_zero_residuals": 9635, "nonzero_rounded_residuals": 31239, "primitive_cases": 120744, "records": 174268, "residual_cases": 53524, "subnormal_residuals": 5517, "version": 1}
+2026-10-20T19:57:05.7616671Z [148/311] Staging exact qualification inputs beside sirius_backend_tests
+2026-10-20T19:57:05.8816623Z [149/311] Staging exact qualification inputs beside sirius_render_tests
+2026-10-20T19:57:06.3027092Z [150/311] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+2026-10-20T19:57:08.6370470Z [151/311] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/contracts_test.cpp.o
+2026-10-20T19:57:12.2866811Z [152/311] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/error_test.cpp.o
+2026-10-20T19:57:12.9686829Z [153/311] Building CXX object tests/CMakeFiles/sirius_base_tests.dir/base/sha256_test.cpp.o
+2026-10-20T19:57:15.7951656Z [154/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/autodiff_dual_test.cpp.o
+2026-10-20T19:57:16.7107430Z [155/311] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+2026-10-20T19:57:16.8526631Z [156/311] Linking CXX static library lib/libgtest.a
+2026-10-20T19:57:16.9792508Z [157/311] Linking CXX static library lib/libgtest_main.a
+2026-10-20T19:57:18.0090352Z [158/311] Building bounded retained camera and joint transport stages
+2026-10-20T19:57:18.0122890Z Optional retained FMA32 unavailable in configured toolset: spirv-dis exit 252 error: 47: Invalid opcode: 4427
+2026-10-20T19:57:18.0167714Z Camera 5292 instructions; 613 registers; [47720, 61048, 512324, 512324] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:18.0169238Z Transport optional FMA32: integer fallback
+2026-10-20T19:57:18.0196684Z Transport 2587 instructions; 459 registers; [85832, 98008, 99740, 99740] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:18.0247305Z Endpoint optional FMA32: integer fallback
+2026-10-20T19:57:18.0405922Z Endpoint 2205 instructions; 612 registers; [99728, 111960, 145344, 145344] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:18.0412262Z Dense 6345 instructions; 815 registers; [78380, 90628, 116204, 116204] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:18.0436521Z Initialize 1961 instructions; 362 registers; [57596, 70468, 77444, 77444] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:18.0456600Z RayCamera 6115 instructions; 660 registers; [45368, 58728, 475256, 475256] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:18.0466635Z DopriPhase 2088 instructions; 629 registers; [59228, 72100, 92844, 92844] native/native-wide/portable/portable-wide shader bytes
+2026-10-20T19:57:21.8226930Z [159/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/retained_arithmetic_test.cpp.o
+2026-10-20T19:57:21.9313307Z [160/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_planck_test.cpp.o
+2026-10-20T19:57:22.2316959Z [161/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/dopri_segment_test.cpp.o
+2026-10-20T19:57:26.7297475Z [162/311] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/vulkan/vulkan_device.cpp.o
+2026-10-20T19:57:28.2332017Z [163/311] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_integrator.cpp.o
+2026-10-20T19:57:29.3425105Z [164/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/png_writer.cpp.o
+2026-10-20T19:57:31.9036988Z [165/311] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o
+2026-10-20T19:57:36.8297005Z [166/311] Building CXX object src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_trace_executor.cpp.o
+2026-10-20T19:57:36.9946807Z [167/311] Linking CXX static library src/sirius/backend/libsirius_backend.a
+2026-10-20T19:57:37.0156893Z [168/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/exr_writer.cpp.o
+2026-10-20T19:57:38.0046314Z [169/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_impl.cpp.o
+2026-10-20T19:57:42.0578780Z [170/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/stb_write_impl.cpp.o
+2026-10-20T19:57:42.3706913Z [171/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/memory_governor.cpp.o
+2026-10-20T19:57:43.6387040Z [172/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/dispatch_governor.cpp.o
+2026-10-20T19:57:45.4256756Z [173/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/render_evidence.cpp.o
+2026-10-20T19:57:49.5797031Z [174/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/point_source_detector.cpp.o
+2026-10-20T19:57:53.4806689Z [175/311] Building C object src/sirius/render/CMakeFiles/sirius_render.dir/__/__/__/lib/tinyexr/miniz.c.o
+2026-10-20T19:57:53.4849826Z /home/runner/work/Sirius/Sirius/lib/tinyexr/miniz.c:3206:9: note: ‘#pragma message: Using fopen, ftello, fseeko, stat() etc. path for file I/O - this path may not support large files.’
+2026-10-20T19:57:53.4876928Z  3206 | #pragma message("Using fopen, ftello, fseeko, stat() etc. path for file I/O - this path may not support large files.")
+2026-10-20T19:57:53.4886033Z       |         ^~~~~~~
+2026-10-20T19:57:53.9587077Z [176/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/ray_work_queue.cpp.o
+2026-10-20T19:57:56.8611746Z [177/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/pixel_shading.cpp.o
+2026-10-20T19:58:00.4796892Z [178/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/session/render_session.cpp.o
+2026-10-20T19:58:03.6966994Z [179/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/alignment_authority.cpp.o
+2026-10-20T19:58:05.7821941Z [180/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/command_router.cpp.o
+2026-10-20T19:58:11.8111809Z [181/311] Building CXX object src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o
+2026-10-20T19:58:11.9746785Z [182/311] Linking CXX static library src/sirius/render/libsirius_render.a
+2026-10-20T19:58:17.3977032Z [183/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/config_command.cpp.o
+2026-10-20T19:58:17.6576848Z [184/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/render_command.cpp.o
+2026-10-20T19:58:18.6746248Z [185/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/cli_output.cpp.o
+2026-10-20T19:58:20.9936824Z [186/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/platform_paths.cpp.o
+2026-10-20T19:58:23.0497050Z [187/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/info_command.cpp.o
+2026-10-20T19:58:30.0097101Z [188/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/session_config_adapter.cpp.o
+2026-10-20T19:58:30.3987149Z [189/311] Building C object src/sirius/app/CMakeFiles/sirius_app_lib.dir/__/__/__/lib/glad/src/glad.c.o
+2026-10-20T19:58:31.8237058Z [190/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/config/config_loader.cpp.o
+2026-10-20T19:58:35.4997157Z [191/311] Building CXX object src/sirius/app/CMakeFiles/sirius.dir/main.cpp.o
+2026-10-20T19:58:36.4786778Z [192/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/cli/view_command.cpp.o
+2026-10-20T19:58:36.8939340Z [193/311] Building CXX object src/sirius/app/CMakeFiles/sirius_app_lib.dir/viewer/interactive_viewer.cpp.o
+2026-10-20T19:58:37.0648756Z [194/311] Linking CXX static library src/sirius/app/libsirius_app_lib.a
+2026-10-20T19:58:37.3736741Z [195/311] Linking CXX executable src/sirius/app/sirius
+2026-10-20T19:58:39.7997188Z [196/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cpu_geodesic_reference_test.cpp.o
+2026-10-20T19:58:40.5986947Z [197/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_sampling_test.cpp.o
+2026-10-20T19:58:41.5582224Z [198/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/blackbody_test.cpp.o
+2026-10-20T19:58:43.9377097Z [199/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/render_pipeline_integration_test.cpp.o
+2026-10-20T19:58:46.1894253Z [200/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_continuous_projection_test.cpp.o
+2026-10-20T19:58:47.2406899Z [201/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_test.cpp.o
+2026-10-20T19:58:47.7657039Z [202/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/cie1931_observer_authority_test.cpp.o
+2026-10-20T19:58:51.3203423Z [203/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/coordinates_test.cpp.o
+2026-10-20T19:58:51.8577057Z [204/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/camera_film_differential_test.cpp.o
+2026-10-20T19:58:54.6726977Z [205/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_equation_test.cpp.o
+2026-10-20T19:58:56.2966993Z [206/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_conservation_test.cpp.o
+2026-10-20T19:58:56.8387564Z [207/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_determinism_test.cpp.o
+2026-10-20T19:59:00.4046761Z [208/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_stability_test.cpp.o
+2026-10-20T19:59:02.2753251Z [209/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_live_path_test.cpp.o
+2026-10-20T19:59:03.1314913Z [210/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_naninf_test.cpp.o
+2026-10-20T19:59:04.1444397Z [211/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/geodesic_path_test.cpp.o
+2026-10-20T19:59:05.6286701Z [212/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/christoffel_test.cpp.o
+2026-10-20T19:59:09.3132800Z [213/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/killing_vector_conservation_test.cpp.o
+2026-10-20T19:59:11.3686806Z [214/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_orbit_authority_test.cpp.o
+2026-10-20T19:59:14.0715039Z [215/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_schild_field_equation_test.cpp.o
+2026-10-20T19:59:14.7086792Z [216/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/horizon_authority_test.cpp.o
+2026-10-20T19:59:18.6397514Z [217/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_test.cpp.o
+2026-10-20T19:59:21.2071794Z [218/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_derivative_test.cpp.o
+2026-10-20T19:59:24.7696937Z [219/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_registry_test.cpp.o
+2026-10-20T19:59:25.1122758Z [220/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/metric_loader_test.cpp.o
+2026-10-20T19:59:27.5416803Z [221/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/morris_thorne_cartesian_test.cpp.o
+2026-10-20T19:59:29.6547990Z [222/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/reissner_nordstrom_test.cpp.o
+2026-10-20T19:59:34.4850381Z [223/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/schwarzschild_test.cpp.o
+2026-10-20T19:59:36.9089321Z [224/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/rk45_integrator_test.cpp.o
+2026-10-20T19:59:37.1506937Z [225/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/warp_drive_test.cpp.o
+2026-10-20T19:59:37.7246957Z [226/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/walker_penrose_test.cpp.o
+2026-10-20T19:59:38.9136899Z [227/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/stokes_test.cpp.o
+2026-10-20T19:59:41.5796978Z [228/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/turbulence_test.cpp.o
+2026-10-20T19:59:42.0906802Z [229/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/novikov_thorne_disk_test.cpp.o
+2026-10-20T19:59:42.1337150Z [230/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/volumetric_disk_test.cpp.o
+2026-10-20T19:59:45.0432042Z [231/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_inverse_test.cpp.o
+2026-10-20T19:59:45.2117157Z [232/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/srgb_transfer_authority_test.cpp.o
+2026-10-20T19:59:45.3986951Z [233/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/xyz_srgb_authority_test.cpp.o
+2026-10-20T19:59:46.5929589Z [234/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/postprocess_test.cpp.o
+2026-10-20T19:59:49.3523108Z [235/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/spectral_radiance_test.cpp.o
+2026-10-20T19:59:52.9816971Z [236/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_transfer_test.cpp.o
+2026-10-20T19:59:53.8616893Z [237/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/starfield_test.cpp.o
+2026-10-20T19:59:54.4057273Z [238/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/point_source_response_test.cpp.o
+2026-10-20T19:59:58.2704894Z [239/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/tensor_test.cpp.o
+2026-10-20T19:59:59.4016943Z [240/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_differential_test.cpp.o
+2026-10-20T20:00:03.8356025Z [241/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_benchmarks_test.cpp.o
+2026-10-20T20:00:04.0707016Z [242/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/source_sky_map_test.cpp.o
+2026-10-20T20:00:05.2939858Z [243/311] Building CXX object tests/core/CMakeFiles/sirius_core_tests.dir/kerr_infinity_test.cpp.o
+2026-10-20T20:00:08.0354683Z [244/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/analytic_solutions_test.cpp.o
+2026-10-20T20:00:09.5477004Z [245/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/transport_types_test.cpp.o
+2026-10-20T20:00:10.0443388Z [246/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/polarisation_transport_test.cpp.o
+2026-10-20T20:00:15.3247403Z [247/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/symplectic_integrator_test.cpp.o
+2026-10-20T20:00:15.7586944Z [248/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/beam_propagation_test.cpp.o
+2026-10-20T20:00:17.1826970Z [249/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/metric_invariants_test.cpp.o
+2026-10-20T20:00:18.9681586Z [250/311] Building CXX object tests/oracle/CMakeFiles/sirius_oracle_tests.dir/kerr_metric_test.cpp.o
+2026-10-20T20:00:19.5117123Z [251/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o
+2026-10-20T20:00:26.2337027Z [252/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o
+2026-10-20T20:00:33.1937482Z [253/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o
+2026-10-20T20:00:34.6348285Z [254/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o
+2026-10-20T20:00:39.4077069Z [255/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o
+2026-10-20T20:00:42.0086987Z [256/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o
+2026-10-20T20:00:43.0287144Z [257/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o
+2026-10-20T20:00:48.7377125Z [258/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o
+2026-10-20T20:00:55.5457083Z [259/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o
+2026-10-20T20:00:57.3877081Z [260/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o
+2026-10-20T20:00:57.4697145Z [261/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o
+2026-10-20T20:01:04.9607105Z [262/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o
+2026-10-20T20:01:05.9413109Z [263/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o
+2026-10-20T20:01:11.7970470Z [264/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o
+2026-10-20T20:01:22.8876923Z [265/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o
+2026-10-20T20:01:25.0806899Z [266/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o
+2026-10-20T20:01:28.5476883Z [267/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o
+2026-10-20T20:01:30.7817027Z [268/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o
+2026-10-20T20:01:31.6696942Z [269/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o
+2026-10-20T20:01:41.8547026Z [270/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/alcubierre_acceptance_test.cpp.o
+2026-10-20T20:01:45.6866831Z [271/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/geodesic_tracer_test.cpp.o
+2026-10-20T20:01:46.9166830Z [272/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/exr_writer_test.cpp.o
+2026-10-20T20:01:50.3057167Z [273/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o
+2026-10-20T20:01:51.2387269Z [274/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/png_writer_test.cpp.o
+2026-10-20T20:01:52.4433329Z [275/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/film_pipeline_test.cpp.o
+2026-10-20T20:01:54.7975888Z [276/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/spectral_emission_test.cpp.o
+2026-10-20T20:01:58.4317047Z [277/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/tile_scheduler_test.cpp.o
+2026-10-20T20:01:59.3496978Z [278/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/progress_tracker_test.cpp.o
+2026-10-20T20:02:05.5976835Z [279/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/memory_governor_test.cpp.o
+2026-10-20T20:02:14.0137091Z [280/311] Building CXX object tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_compute_test.cpp.o
+2026-10-20T20:02:15.9867119Z [281/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_evidence_test.cpp.o
+2026-10-20T20:02:19.3077014Z [282/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/dispatch_governor_test.cpp.o
+2026-10-20T20:02:19.7287660Z [283/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/render_session_probe_test.cpp.o
+2026-10-20T20:02:26.4636936Z [284/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_bundle_test.cpp.o
+2026-10-20T20:02:31.0353468Z [285/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/starfield_point_test.cpp.o
+2026-10-20T20:02:31.8026918Z [286/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_test.cpp.o
+2026-10-20T20:02:40.2136955Z [287/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/vulkan_render_test.cpp.o
+2026-10-20T20:02:41.5643402Z [288/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/ray_work_queue_test.cpp.o
+2026-10-20T20:02:41.5816836Z [289/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/doppler_toggle_test.cpp.o
+2026-10-20T20:02:44.3153306Z [290/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/camera_aberration_test.cpp.o
+2026-10-20T20:02:45.1777202Z [291/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/point_source_detector_physics_test.cpp.o
+2026-10-20T20:02:46.1198869Z [292/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/pixel_sampling_test.cpp.o
+2026-10-20T20:02:53.1913583Z [293/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_environment_test.cpp.o
+2026-10-20T20:02:54.2977213Z [294/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/alignment_authority_test.cpp.o
+2026-10-20T20:02:56.6597090Z [295/311] Building CXX object tests/render/CMakeFiles/sirius_render_tests.dir/shadow_boundary_test.cpp.o
+2026-10-20T20:03:00.7576448Z [296/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_validation_test.cpp.o
+2026-10-20T20:03:04.7706850Z [297/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/platform_paths_test.cpp.o
+2026-10-20T20:03:06.1597139Z [298/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_schema_roundtrip_test.cpp.o
+2026-10-20T20:03:09.3656925Z [299/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/render_command_parse_test.cpp.o
+2026-10-20T20:03:12.6027551Z [300/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/command_router_test.cpp.o
+2026-10-20T20:03:14.4376032Z [301/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/viewer_display_contract_test.cpp.o
+2026-10-20T20:03:14.5439776Z [302/311] Linking CXX executable tests/sirius_base_tests
+2026-10-20T20:03:15.0636509Z [303/311] Linking CXX executable tests/core/sirius_core_tests
+2026-10-20T20:03:15.2586775Z [304/311] Linking CXX executable tests/oracle/sirius_oracle_tests
+2026-10-20T20:03:15.5836720Z [305/311] Linking CXX executable tests/backend/sirius_backend_tests
+2026-10-20T20:03:15.9598206Z [306/311] Linking CXX executable src/sirius/app/sirius_render_tests
+2026-10-20T20:03:16.3793231Z [307/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/session_config_adapter_test.cpp.o
+2026-10-20T20:03:19.2457691Z [308/311] Building CXX object tests/app/CMakeFiles/sirius_app_tests.dir/config_loading_test.cpp.o
+2026-10-20T20:03:19.4558094Z [309/311] Linking CXX executable src/sirius/app/sirius_app_tests
+2026-10-20T20:03:21.2520389Z [310/311] Verifying test-label, operating-model, and repository-structure governance
+2026-10-20T20:03:21.2521547Z CTest label file is up to date
+2026-10-20T20:03:21.2523309Z operating model requires 10 P/E acceptance criteria across 1139 governed source GoogleTests, covers 24 operating dimensions, and defines 30 capability contracts with Mandatory evidence
+2026-10-20T20:03:21.2524822Z repository structure owns 34 first-party translation units exactly once, enforces 6 dependency layers, and permits 4 live vendor directories with immutable build inputs and strict test-volume identity
+2026-10-20T20:03:21.2526561Z strict qualification/release policy rejected every weakened configuration and product
+2026-10-20T20:03:21.2527359Z escaping-copy controls: filesystem symlinks
+2026-10-20T20:03:21.2528516Z build-gate receipt rejected missing, stale, skipped, and tampered evidence
+2026-10-20T20:03:21.2573332Z ##[group]Run test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
+2026-10-20T20:03:21.2573888Z [36;1mtest ! -e bin/linux-ci/generated/sirius/mandatory_gate.json[0m
+2026-10-20T20:03:21.2574389Z [36;1mctest --test-dir bin/linux-ci --output-on-failure --no-tests=error \[0m
+2026-10-20T20:03:21.2577762Z [36;1m  -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'[0m
+2026-10-20T20:03:21.2580776Z [36;1mtest ! -e bin/linux-ci/generated/sirius/mandatory_gate.json[0m
+2026-10-20T20:03:21.2630230Z shell: /usr/bin/bash -e {0}
+2026-10-20T20:03:21.2630497Z ##[endgroup]
+2026-10-20T20:03:21.5633872Z Internal ctest changing into directory: /home/runner/work/Sirius/Sirius/bin/linux-ci
+2026-10-20T20:03:21.6253459Z Test project /home/runner/work/Sirius/Sirius/bin/linux-ci
+2026-10-20T20:03:21.7137862Z       Start   14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims
+2026-10-20T20:03:26.6403387Z  1/10 Test   #14: OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims .............   Passed    4.92 sec
+2026-10-20T20:03:26.6456707Z       Start   15: OperationalBuildPolicy.ReleaseCannotWeakenGates
+2026-10-20T20:03:26.6743335Z  2/10 Test   #15: OperationalBuildPolicy.ReleaseCannotWeakenGates ...............................   Passed    0.03 sec
+2026-10-20T20:03:26.6744669Z       Start   16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls
+2026-10-20T20:03:26.7358764Z  3/10 Test   #16: OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls ..........   Passed    0.06 sec
+2026-10-20T20:03:26.7359781Z       Start   17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate
+2026-10-20T20:03:29.9833771Z  4/10 Test   #17: OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate ..................   Passed    3.25 sec
+2026-10-20T20:03:29.9834777Z       Start   18: OperationalAttestation.FalseExternalEvidenceIsRejected
+2026-10-20T20:03:55.8494272Z  5/10 Test   #18: OperationalAttestation.FalseExternalEvidenceIsRejected ........................   Passed   25.87 sec
+2026-10-20T20:03:55.8496334Z       Start   19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice
+2026-10-20T20:03:56.2692870Z  6/10 Test   #19: OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice .........   Passed    0.42 sec
+2026-10-20T20:03:56.2695200Z       Start   20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected
+2026-10-20T20:03:56.3240294Z  7/10 Test   #20: OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected ............   Passed    0.05 sec
+2026-10-20T20:03:56.3241784Z       Start   21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness
+2026-10-20T20:03:56.6858674Z  8/10 Test   #21: OperationalAlignment.InstalledReceiptTamperingBlocksReadiness .................   Passed    0.36 sec
+2026-10-20T20:03:56.6860976Z       Start 1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority
+2026-10-20T20:03:56.6889602Z  9/10 Test #1056: AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority ............   Passed    0.00 sec
+2026-10-20T20:03:56.6891104Z       Start 1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation
+2026-10-20T20:03:57.3107886Z 10/10 Test #1057: BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation ...   Passed    0.62 sec
+2026-10-20T20:03:57.3110284Z 
+2026-10-20T20:03:57.3110869Z 100% tests passed, 0 tests failed out of 10
+2026-10-20T20:03:57.3111483Z 
+2026-10-20T20:03:57.3111613Z Label Time Summary:
+2026-10-20T20:03:57.3111980Z Correctness    =   0.62 sec*proc (2 tests)
+2026-10-20T20:03:57.3112432Z Mandatory      =  35.58 sec*proc (10 tests)
+2026-10-20T20:03:57.3112850Z Operational    =  35.58 sec*proc (10 tests)
+2026-10-20T20:03:57.3113144Z 
+2026-10-20T20:03:57.3113278Z Total Test time (real) =  35.69 sec
+2026-10-20T20:03:57.3159184Z ##[group]Run python3 scripts/generate-ctest-labels.py --check
+2026-10-20T20:03:57.3159664Z [36;1mpython3 scripts/generate-ctest-labels.py --check[0m
+2026-10-20T20:03:57.3209687Z shell: /usr/bin/bash -e {0}
+2026-10-20T20:03:57.3209957Z ##[endgroup]
+2026-10-20T20:03:58.5115135Z CTest label file is up to date
+2026-10-20T20:03:58.5332911Z Post job cleanup.
+2026-10-20T20:03:58.6196163Z [command]/usr/bin/git version
+2026-10-20T20:03:58.6248558Z git version 2.55.0
+2026-10-20T20:03:58.6299319Z Temporarily overriding HOME='/home/runner/work/_temp/aa2ef653-de16-4378-8ade-1502c6bf6d21' before making global git config changes
+2026-10-20T20:03:58.6300839Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-20T20:03:58.6304295Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sirius/Sirius
+2026-10-20T20:03:58.6355026Z Removing SSH command configuration
+2026-10-20T20:03:58.6356231Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-20T20:03:58.6400308Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-20T20:03:58.6665597Z Removing HTTP extra header
+2026-10-20T20:03:58.6671525Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-20T20:03:58.6717162Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-20T20:03:58.7008193Z Removing includeIf entries pointing to credentials config files
+2026-10-20T20:03:58.7015830Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-20T20:03:58.7057112Z includeif.gitdir:/home/runner/work/Sirius/Sirius/.git.path
+2026-10-20T20:03:58.7058103Z includeif.gitdir:/home/runner/work/Sirius/Sirius/.git/worktrees/*.path
+2026-10-20T20:03:58.7059086Z includeif.gitdir:/github/workspace/.git.path
+2026-10-20T20:03:58.7059890Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T20:03:58.7067077Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Sirius/Sirius/.git.path
+2026-10-20T20:03:58.7105127Z /home/runner/work/_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T20:03:58.7117062Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Sirius/Sirius/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-df765530\-c1dd\-4404\-b4e1\-da26dbb9df50\.config
+2026-10-20T20:03:58.7179114Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Sirius/Sirius/.git/worktrees/*.path
+2026-10-20T20:03:58.7216722Z /home/runner/work/_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T20:03:58.7237249Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Sirius/Sirius/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-df765530\-c1dd\-4404\-b4e1\-da26dbb9df50\.config
+2026-10-20T20:03:58.7290341Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-20T20:03:58.7328773Z /github/runner_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T20:03:58.7338635Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-df765530\-c1dd\-4404\-b4e1\-da26dbb9df50\.config
+2026-10-20T20:03:58.7387756Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-20T20:03:58.7424903Z /github/runner_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config
+2026-10-20T20:03:58.7433561Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-df765530\-c1dd\-4404\-b4e1\-da26dbb9df50\.config
+2026-10-20T20:03:58.7480519Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-20T20:03:58.7729529Z Removing credentials config '/home/runner/work/_temp/git-credentials-df765530-c1dd-4404-b4e1-da26dbb9df50.config'
+2026-10-20T20:03:58.7900195Z Cleaning up orphan processes
