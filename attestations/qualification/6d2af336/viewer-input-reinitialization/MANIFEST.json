@@ -1,0 +1,1427 @@
+{
+  "schema": "sirius-viewer-input-reinitialization-preservation-v2",
+  "source_revision": "6d2af336b12dc430792bd5a83c04fb5632868c04",
+  "baseline_revision": "9b7707141b183ae296ea8dcdc6807b259b348b5e",
+  "roots": [
+    "out/viewer-input-recovery",
+    "out/viewer-input-build",
+    "out/native-stage-state-close"
+  ],
+  "files": {
+    "out/viewer-input-recovery/actions.json": {
+      "bytes": 878,
+      "sha256": "a873e55418c60d62de12f7e75e0b7811231ca0706d38dc514c528ee10ffe4df0",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/actions.json"
+    },
+    "out/viewer-input-recovery/baseline-commands.json": {
+      "bytes": 4002,
+      "sha256": "142ac1ce8749a9829558750e0b707f2619d34dab9a1f1f1e4e75f93f2a024ed2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-commands.json"
+    },
+    "out/viewer-input-recovery/baseline-counterexample/inputs-after.json": {
+      "bytes": 130043,
+      "sha256": "ba1413e5113edc4902420076485c33285ae1e6f95ea158a84e8cc7dfc4e4ec2f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/inputs-after.json"
+    },
+    "out/viewer-input-recovery/baseline-counterexample/inputs-before.json": {
+      "bytes": 130043,
+      "sha256": "ba1413e5113edc4902420076485c33285ae1e6f95ea158a84e8cc7dfc4e4ec2f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/inputs-after.json"
+    },
+    "out/viewer-input-recovery/baseline-counterexample/owner.json": {
+      "bytes": 2312,
+      "sha256": "635f2cd18db8e959b8390e8ea51bfa013515ae28268cc79132630cbba9b7dba2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/owner.json"
+    },
+    "out/viewer-input-recovery/baseline-counterexample/samples.jsonl": {
+      "bytes": 9684,
+      "sha256": "a973aea09f9e134abd512a14797eacd2a9204e238ce2d290400d2e99a1d26568",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/samples.jsonl"
+    },
+    "out/viewer-input-recovery/baseline-counterexample/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-recovery/baseline-counterexample/stdout.log": {
+      "bytes": 37,
+      "sha256": "20a2e5acd6ea7fbeb55afc319f9444badc2d7ed83747bfabe00d7086c48a0f84",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stdout.log"
+    },
+    "out/viewer-input-recovery/baseline-probe": {
+      "bytes": 8149856,
+      "sha256": "b7704ab4841b53873f7b364382a3bab8fa1a25d92ddfafecdc8a9da369ecb909",
+      "mode": 493,
+      "backing_member": "out/viewer-input-recovery/baseline-probe"
+    },
+    "out/viewer-input-recovery/baseline-probe.cpp": {
+      "bytes": 571,
+      "sha256": "0f3d48ab92dccebb6b8fade3cd3c80edcbd2cca4f7fe752f6cb2df04c28a94a5",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-probe.cpp"
+    },
+    "out/viewer-input-recovery/baseline-probe.o": {
+      "bytes": 240104,
+      "sha256": "94ec4440afcd64c5fb58be371a4c1537f73a2f4604efe272d18e07f078a097eb",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-probe.o"
+    },
+    "out/viewer-input-recovery/interactive_viewer.cpp": {
+      "bytes": 21112,
+      "sha256": "1d58704b50514ad787251eda8dd1290527239d6a10513e0df8e7d4ae5a416e1c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/interactive_viewer.cpp"
+    },
+    "out/viewer-input-recovery/issue-body.md": {
+      "bytes": 1389,
+      "sha256": "ba6809aa6eec5049879cb46e64f665f5e82075609ee889cfa7c179bc45d26851",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue-body.md"
+    },
+    "out/viewer-input-recovery/issue-created.json": {
+      "bytes": 1475,
+      "sha256": "400e61d7c1c02c35ea66816a6d60195217ae97cb6b562d507c81054fdbd1f091",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue-created.json"
+    },
+    "out/viewer-input-recovery/issue44-updated.json": {
+      "bytes": 18948,
+      "sha256": "bd959af233d386d438b08566144c13e57fac3c4f46ce74c0def457efb438e47e",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue44-updated.json"
+    },
+    "out/viewer-input-recovery/issue44-updated.md": {
+      "bytes": 18803,
+      "sha256": "77abff904d8b05056a070bb43bb990dd70781eb66c74dc65409aa7c0d8dbe6ef",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue44-updated.md"
+    },
+    "out/viewer-input-recovery/issue48-updated.json": {
+      "bytes": 8661,
+      "sha256": "82e9832b35ccd76c0131bd6910b99b87c2c2ca4d37c2740586b948ab751b6864",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue48-updated.json"
+    },
+    "out/viewer-input-recovery/issue48-updated.md": {
+      "bytes": 8537,
+      "sha256": "7f057ffac170a87927714a9d425a0c4bbf18ebe6d987b0f1e59dfc232fcdf046",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue48-updated.md"
+    },
+    "out/viewer-input-recovery/issue53-updated.json": {
+      "bytes": 8226,
+      "sha256": "9089d7d0017dac6db8d7bf39cefae723308ec43168f6d46bf9d1af1d7588ba13",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue53-updated.json"
+    },
+    "out/viewer-input-recovery/issue53-updated.md": {
+      "bytes": 8109,
+      "sha256": "8002682e2a7a7856ac6c978e9f520a18480e3677dd9a1549f86cb4874965b802",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/issue53-updated.md"
+    },
+    "out/viewer-input-recovery/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/owned_guard.py"
+    },
+    "out/viewer-input-recovery/pr62-body.md": {
+      "bytes": 7566,
+      "sha256": "115bae592a068b6e2d258fdc2b0f4da364b43b7a5091af7716726890a0e5ffdd",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/pr62-body.md"
+    },
+    "out/viewer-input-recovery/pr62-updated.json": {
+      "bytes": 7771,
+      "sha256": "2b3470baa8d7405d2b109bb1789712e6d50257b17392f2d802aa3080fe05182f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/pr62-updated.json"
+    },
+    "out/viewer-input-recovery/preserve.py": {
+      "bytes": 5143,
+      "sha256": "c800542926ce13f906c72955ca51870d23abdb4048062d9ffa896bb767d656d7",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/preserve.py"
+    },
+    "out/viewer-input-recovery/render_command_parse_test.cpp": {
+      "bytes": 17889,
+      "sha256": "231f95a1bcdf4a59fd7a5243f0a3d335f7b569d81644c9846adc1701f54187f4",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/render_command_parse_test.cpp"
+    },
+    "out/viewer-input-recovery/run_baseline.py": {
+      "bytes": 362,
+      "sha256": "3a63186e3927ac61c6e733411558eb80eb3eef47ad03feb525e00f5815a2d277",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/run_baseline.py"
+    },
+    "out/viewer-input-recovery/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/run_owned.py"
+    },
+    "out/viewer-input-recovery/source.patch": {
+      "bytes": 2459,
+      "sha256": "b3550a92475b7538939874f9d576bd038695cf21166504f8180ea6a9347b17c4",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/source.patch"
+    },
+    "out/viewer-input-build/actions.json": {
+      "bytes": 5253,
+      "sha256": "bd167eb69066356ddda911d1db8da54d68e5c0d7a976001dd4c25f5ede2b6184",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/actions.json"
+    },
+    "out/viewer-input-build/linux-clang-build/inputs-after.json": {
+      "bytes": 130213,
+      "sha256": "14d5151a52174cf8083ae65f91b2621ac7c7178328518b1ef1dbed5e6242e3ac",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-build/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-clang-build/inputs-before.json": {
+      "bytes": 130213,
+      "sha256": "14d5151a52174cf8083ae65f91b2621ac7c7178328518b1ef1dbed5e6242e3ac",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-build/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-clang-build/owner.json": {
+      "bytes": 5896,
+      "sha256": "1a5ada8741c80074c0b8e04657e2d351f45f869bc499eba82bbdc24ec02663ca",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-build/owner.json"
+    },
+    "out/viewer-input-build/linux-clang-build/samples.jsonl": {
+      "bytes": 103761,
+      "sha256": "725cdbf6f47f5cc5896e6927d98a77697b0e94614ea6fb0e8ca7269924f882ef",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-build/samples.jsonl"
+    },
+    "out/viewer-input-build/linux-clang-build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-clang-build/stdout.log": {
+      "bytes": 1646,
+      "sha256": "745f7d4231e2bd9275c53807c41fcdd920eb73ce934395991951080386102d82",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-build/stdout.log"
+    },
+    "out/viewer-input-build/linux-clang-configure/inputs-after.json": {
+      "bytes": 129522,
+      "sha256": "c3a99a5b299c01240a7ce3219195243717fb28b76d98204a3ab639d6eb11cf5b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-configure/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-clang-configure/inputs-before.json": {
+      "bytes": 129522,
+      "sha256": "c3a99a5b299c01240a7ce3219195243717fb28b76d98204a3ab639d6eb11cf5b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-configure/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-clang-configure/owner.json": {
+      "bytes": 3290,
+      "sha256": "621ac15e6aeb81e0f831a4d7874cf5fd6cfb778882c3964d3293e14e90189e91",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-configure/owner.json"
+    },
+    "out/viewer-input-build/linux-clang-configure/samples.jsonl": {
+      "bytes": 8495,
+      "sha256": "ff087927456bffb112727d64b7b58a980eaf3f15fced41dc0fcbd15919038ca9",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-configure/samples.jsonl"
+    },
+    "out/viewer-input-build/linux-clang-configure/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-clang-configure/stdout.log": {
+      "bytes": 1287,
+      "sha256": "5f443db6c185a98084cdfd333d822b44dcc3ecdc317ab9a09d0eaa58cdcd3bc5",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-configure/stdout.log"
+    },
+    "out/viewer-input-build/linux-clang-input-control/gtest.xml": {
+      "bytes": 612,
+      "sha256": "5d207ba8f24b00b8cf6125fecf1f792144138dea8fa782c816dc4c24663aaa09",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-input-control/gtest.xml"
+    },
+    "out/viewer-input-build/linux-clang-input-control/inputs-after.json": {
+      "bytes": 129539,
+      "sha256": "02b6b9b619cd1d50f3fe3a32ede5b232b90b9006da87a7fd2a2f6c159e2676fe",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-input-control/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-clang-input-control/inputs-before.json": {
+      "bytes": 129539,
+      "sha256": "02b6b9b619cd1d50f3fe3a32ede5b232b90b9006da87a7fd2a2f6c159e2676fe",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-input-control/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-clang-input-control/owner.json": {
+      "bytes": 1831,
+      "sha256": "55aa6b3c22c1ccadcb8dae107287a6a78caf74a1ef54dab54e0c451c2b2b405a",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-input-control/owner.json"
+    },
+    "out/viewer-input-build/linux-clang-input-control/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-clang-input-control/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-clang-input-control/stdout.log": {
+      "bytes": 719,
+      "sha256": "a7efc90862b2db754d4434361c537073e2905fc8f7293e14df45e2f7baeca748",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-input-control/stdout.log"
+    },
+    "out/viewer-input-build/linux-clang-registration.json": {
+      "bytes": 991320,
+      "sha256": "0889f766f6f8fbc6256175be2a6dc4791f66c94a9fbaf57af6001a4e2f0eb0d1",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-registration.json"
+    },
+    "out/viewer-input-build/linux-gcc-build/inputs-after.json": {
+      "bytes": 130204,
+      "sha256": "510853b24a4551b30a88a3e883fb7d67376f3493551ab40751cf97fd3c964e69",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-build/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-gcc-build/inputs-before.json": {
+      "bytes": 130204,
+      "sha256": "510853b24a4551b30a88a3e883fb7d67376f3493551ab40751cf97fd3c964e69",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-build/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-gcc-build/owner.json": {
+      "bytes": 7424,
+      "sha256": "279ea46dc57bc643f386037deb99144ef0602e6613b80021e141bfc3b5870543",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-build/owner.json"
+    },
+    "out/viewer-input-build/linux-gcc-build/samples.jsonl": {
+      "bytes": 149685,
+      "sha256": "7f98ce474104de00ea8881a0b4eb28875c882d40615d6ceb9c484e946e29e80a",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-build/samples.jsonl"
+    },
+    "out/viewer-input-build/linux-gcc-build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-gcc-build/stdout.log": {
+      "bytes": 1646,
+      "sha256": "745f7d4231e2bd9275c53807c41fcdd920eb73ce934395991951080386102d82",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-clang-build/stdout.log"
+    },
+    "out/viewer-input-build/linux-gcc-configure/inputs-after.json": {
+      "bytes": 129525,
+      "sha256": "6582d0ecfb170d87db3b5f9e2081455e7cc6fdd21893caf0eab9b692b2469dbb",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-configure/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-gcc-configure/inputs-before.json": {
+      "bytes": 129525,
+      "sha256": "6582d0ecfb170d87db3b5f9e2081455e7cc6fdd21893caf0eab9b692b2469dbb",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-configure/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-gcc-configure/owner.json": {
+      "bytes": 2514,
+      "sha256": "32b166d1f2e53903668b91d5cd96150bf91118a2822a8a76cc207c6876ffca7c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-configure/owner.json"
+    },
+    "out/viewer-input-build/linux-gcc-configure/samples.jsonl": {
+      "bytes": 5955,
+      "sha256": "95f1324a0a31d1720459028fdc44302f91119fcc4284e5f987bb74da5084c22a",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-configure/samples.jsonl"
+    },
+    "out/viewer-input-build/linux-gcc-configure/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-gcc-configure/stdout.log": {
+      "bytes": 1277,
+      "sha256": "97a5caae72fbfc26beee6d82e7a0b38f3717e719dd7bd3fd564375fdfcf4eea6",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-configure/stdout.log"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/gtest.xml": {
+      "bytes": 612,
+      "sha256": "58610bca4edc34381828890a17d30b4ede6879eab9a885b1354027fab1b1afe9",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-input-control/gtest.xml"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/inputs-after.json": {
+      "bytes": 129531,
+      "sha256": "b8a10bc78e1ddf2ac9e5348d6208514ade5e96a97c24af2f8c67fdc2e5228bf6",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-input-control/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/inputs-before.json": {
+      "bytes": 129531,
+      "sha256": "b8a10bc78e1ddf2ac9e5348d6208514ade5e96a97c24af2f8c67fdc2e5228bf6",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-input-control/inputs-after.json"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/owner.json": {
+      "bytes": 1825,
+      "sha256": "9b87be0642b4e4e43ace68f65d300e5d1777f9ce6b1c53ddac9eaa80cf93f616",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-input-control/owner.json"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/baseline-counterexample/stderr.log"
+    },
+    "out/viewer-input-build/linux-gcc-input-control/stdout.log": {
+      "bytes": 717,
+      "sha256": "9d76f08876da91164517a64d9223d55cbb745dd79fd56c7daf63c7689ec9f3d8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-input-control/stdout.log"
+    },
+    "out/viewer-input-build/linux-gcc-registration.json": {
+      "bytes": 986718,
+      "sha256": "b7ea88adced53af8ee4a081f6fd5977124299b8c8b56696474c462cd3e608a6f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/linux-gcc-registration.json"
+    },
+    "out/viewer-input-build/local-review.json": {
+      "bytes": 644,
+      "sha256": "aaf028da51a96774dc63977d73dfe1676010be87dcdad016a17f107429847bc9",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/local-review.json"
+    },
+    "out/viewer-input-build/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/owned_guard.py"
+    },
+    "out/viewer-input-build/product-review.json": {
+      "bytes": 41302,
+      "sha256": "9ab40db62f3aa3e52891c50cbe5ff9b96d726d1aa6119ff42e47000b5d3c59df",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/product-review.json"
+    },
+    "out/viewer-input-build/products/linux-clang/alignment": {
+      "bytes": 1240,
+      "sha256": "e41408f575ff1674bd032cf01db2c430b6438bd41accae162a50b959a275b532",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/alignment"
+    },
+    "out/viewer-input-build/products/linux-clang/build_ninja": {
+      "bytes": 471287,
+      "sha256": "735219714c8aff9838145676786d9ab55a48990c6dd2594ed3e963d7c22caa87",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/build_ninja"
+    },
+    "out/viewer-input-build/products/linux-clang/cache": {
+      "bytes": 58147,
+      "sha256": "bd131d381d69cb85027d227cdbb316e4f6bff404dea03cd1dea4cae712279ffa",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/cache"
+    },
+    "out/viewer-input-build/products/linux-clang/compile_commands": {
+      "bytes": 215386,
+      "sha256": "e7a74b1cfdec0e8d5228b7163617d5ccc8c080d6fbf4e883b88720fff58b5149",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/compile_commands"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-app": {
+      "bytes": 10296856,
+      "sha256": "c2982beddb635d4cfe7bee69774c76c6664c85a918c3547756c757f4ba27e773",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-app"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-backend": {
+      "bytes": 12457328,
+      "sha256": "2414bf5fc34b039096b39cc2d593467c0dc2bd0463be37010eabe9f865c754ea",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-backend"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-base": {
+      "bytes": 688928,
+      "sha256": "83db3f5f1d3930de831ec04b5b2a98af3cc35242a5a63a19cbf278d55fa2442f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-base"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-core": {
+      "bytes": 3804952,
+      "sha256": "93ab82df819321c31bb9a718b9e259e87427d501d565de74a1f63a34b3aa75f4",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-core"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-oracle": {
+      "bytes": 1335528,
+      "sha256": "0875b0bc13df892fe3137c5deeb8d92c0bf200b497d0e015ced865fa805a3d50",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-oracle"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-render": {
+      "bytes": 10799104,
+      "sha256": "b41f48a07efc4cc1745a5b5c118c4cfc5869ad95459f70821f748cf33fa9db62",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-render"
+    },
+    "out/viewer-input-build/products/linux-clang/executable-sirius": {
+      "bytes": 8922888,
+      "sha256": "7b2a0f16ed206c07e0f289fe2023baa98af0b2876f59a41bd7824e98d3b22492",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/executable-sirius"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/assets/Starfield.png"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/coupled_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe_fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe_fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/portability/trace.cu"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/portability/trace.metal"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/smoke.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/trace.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/trace_fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/trace_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "e41408f575ff1674bd032cf01db2c430b6438bd41accae162a50b959a275b532",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/alignment"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/model/operating_model.json": {
+      "bytes": 130827,
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/model/operating_model.json"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.frag"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.vert"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+      "mode": 384,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/portable_binary32_reference.bin"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_fixture.h"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dense.spv": {
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase.spv": {
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable_normal_sum.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint.spv": {
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_fma.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_normal_sum.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_stage7_owner.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_initialize.spv": {
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_kernels.h"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_owner_kernels.h"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_owner_layout.h"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport.spv": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_fma.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_normal_sum.spv"
+    },
+    "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_stage7_owner.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/alignment": {
+      "bytes": 1240,
+      "sha256": "e41408f575ff1674bd032cf01db2c430b6438bd41accae162a50b959a275b532",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/alignment"
+    },
+    "out/viewer-input-build/products/linux-gcc/build_ninja": {
+      "bytes": 488456,
+      "sha256": "aa7526eb017f9b3c8b875e1b3faee31f4fd32c2824aa2eeb612fcf0e6a0f0263",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/build_ninja"
+    },
+    "out/viewer-input-build/products/linux-gcc/cache": {
+      "bytes": 60324,
+      "sha256": "e495eb24cd37e87de7a3ea6346cc967d8884556dfcd90d3a1a3341226e3d0e0f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/cache"
+    },
+    "out/viewer-input-build/products/linux-gcc/compile_commands": {
+      "bytes": 212248,
+      "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/compile_commands"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-app": {
+      "bytes": 11273136,
+      "sha256": "ecad30e8aa845f91897b9dbbc12c77db4763da943dcfd258a8b3c3df0a587495",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-app"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-backend": {
+      "bytes": 13522608,
+      "sha256": "cd4cbc8bba1b17679b542ab3f84a011ce5249a9cf02b96c15cc623e27fb07f47",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-backend"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-base": {
+      "bytes": 783520,
+      "sha256": "de4d48ae280b210c07feebd700894364d3fd2bf12061edc20918aa84177042e3",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-base"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-core": {
+      "bytes": 5199120,
+      "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-core"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-oracle": {
+      "bytes": 1678696,
+      "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-oracle"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-render": {
+      "bytes": 12227616,
+      "sha256": "10bb1dbec4619ad27b296b0578b169139b9d9afbb777308254a7638df728017b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-render"
+    },
+    "out/viewer-input-build/products/linux-gcc/executable-sirius": {
+      "bytes": 9725064,
+      "sha256": "2c3a9e5bbc2348ea9ed7e065f4b93c68999ec3e55a445b76cf85d29282ff51d1",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/executable-sirius"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/assets/Starfield.png": {
+      "bytes": 29984397,
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/assets/Starfield.png"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/camera_frame_probe.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "bytes": 36660,
+      "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/camera_frame_probe_fp64.spv": {
+      "bytes": 37728,
+      "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/camera_frame_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/coupled_probe_fp64.spv": {
+      "bytes": 878700,
+      "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/coupled_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/infinity_probe.spv": {
+      "bytes": 99692,
+      "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/infinity_probe_fp32comp.spv": {
+      "bytes": 100040,
+      "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe_fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/infinity_probe_fp64.spv": {
+      "bytes": 100568,
+      "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/infinity_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/metric_consistency_probe.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "bytes": 65616,
+      "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "bytes": 66064,
+      "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/metric_consistency_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/parity_probe.spv": {
+      "bytes": 3377936,
+      "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/parity_probe_fp32comp.spv": {
+      "bytes": 3382160,
+      "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe_fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/parity_probe_fp64.spv": {
+      "bytes": 3427652,
+      "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/parity_probe_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/portability/trace.cu": {
+      "bytes": 336030,
+      "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/portability/trace.cu"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/portability/trace.metal": {
+      "bytes": 358529,
+      "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/portability/trace.metal"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/smoke.spv": {
+      "bytes": 1404,
+      "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/smoke.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/trace.spv": {
+      "bytes": 2325528,
+      "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/trace.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/trace_fp32comp.spv": {
+      "bytes": 2328852,
+      "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/trace_fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/kernels/trace_fp64.spv": {
+      "bytes": 2336860,
+      "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/kernels/trace_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/model/alignment_receipt.json": {
+      "bytes": 1240,
+      "sha256": "e41408f575ff1674bd032cf01db2c430b6438bd41accae162a50b959a275b532",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/alignment"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/model/operating_model.json": {
+      "bytes": 130827,
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/model/operating_model.json"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD003A.frag": {
+      "bytes": 1167,
+      "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.frag"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD003A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.vert"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD004A.frag": {
+      "bytes": 2386,
+      "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD004A.frag"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD004A.vert": {
+      "bytes": 198,
+      "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/shaders/RDSD003A.vert"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD005A.frag": {
+      "bytes": 3799,
+      "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD005A.frag"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD005A.vert": {
+      "bytes": 577,
+      "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-gcc/resources/shaders/RDSD005A.vert"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+      "mode": 384,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/portable_binary32_reference.bin"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+      "bytes": 35160,
+      "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+      "bytes": 35196,
+      "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/resources/tests/backend/retained_camera/program_fixture.h": {
+      "bytes": 416303,
+      "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/resources/tests/backend/retained_camera/program_fixture.h"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dense.spv": {
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dense_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dopri_phase.spv": {
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_dopri_phase_portable_normal_sum.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint.spv": {
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_fma.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_normal_sum.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_endpoint_portable_stage7_owner.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_initialize.spv": {
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_initialize_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_kernels.h"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_owner_kernels.h"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_owner_layout.h"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_ray_camera_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport.spv": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_fma.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_fp64.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_normal_sum.spv"
+    },
+    "out/viewer-input-build/products/linux-gcc/retained/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/products/linux-clang/retained/retained_transport_portable_stage7_owner.spv"
+    },
+    "out/viewer-input-build/review_products.py": {
+      "bytes": 2845,
+      "sha256": "938d2d6fd6ce953f664292be25601f9fc447ffa37ac639c4557392ffa62ffacd",
+      "mode": 420,
+      "backing_member": "out/viewer-input-build/review_products.py"
+    },
+    "out/viewer-input-build/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": 420,
+      "backing_member": "out/viewer-input-recovery/run_owned.py"
+    },
+    "out/native-stage-state-close/issue102-body.md": {
+      "bytes": 4844,
+      "sha256": "a5f778c9e2ff634cc4cb8f22f063cb4771a42a95cbab59394397794d56750ada",
+      "mode": 420,
+      "backing_member": "out/native-stage-state-close/issue102-body.md"
+    },
+    "out/native-stage-state-close/issue44-comment.md": {
+      "bytes": 944,
+      "sha256": "32eea887a91460b980a87ba88a58abc90202659ad21856bd2297c8e494ca0161",
+      "mode": 420,
+      "backing_member": "out/native-stage-state-close/issue44-comment.md"
+    }
+  },
+  "archives": {
+    "owned-payloads.zip": {
+      "bytes": 79523107,
+      "sha256": "dbef534ce5ad2aa9cebeb2d3a4616f37334680e6a365bfa0f15919685076ec11",
+      "members": 138
+    }
+  },
+  "local_checks_passed": true,
+  "platform_CI_status_at_local_capture": "running; terminal metadata must be recorded separately",
+  "scope": "Source/input counterexample; current clean incremental strict GCC/Clang all-seven-role builds; one existing non-rendering input case per compiler; actual local outputs and full owned controls. Current CI/native-build artifact contents are not backed up by this local bundle. No full Mandatory, scientific/provider/native-window/frame/release qualification.",
+  "deduplication": "Every original logical file and mode is retained; backing_member selects its exact regular ZIP member. Identical current source/math/resource bytes are stored once, without replacing any recorded execution input."
+}
