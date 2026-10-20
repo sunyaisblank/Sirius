@@ -15,7 +15,6 @@
 #include <fstream>
 #include <iterator>
 #include <optional>
-#include <regex>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -23,15 +22,56 @@
 namespace sirius::app::test {
 namespace {
 
-std::optional<double> ShaderConstant(const std::string& source, std::string_view name) {
-    const std::regex declaration(
-        "const\\s+float\\s+" + std::string(name) +
-        R"(\s*=\s*([0-9]+(?:\.[0-9]+)?)(?:\s*/\s*([0-9]+(?:\.[0-9]+)?))?\s*;)");
-    std::smatch match;
-    if (!std::regex_search(source, match, declaration)) return std::nullopt;
-    const double numerator = std::stod(match[1].str());
-    if (!match[2].matched) return numerator;
-    return numerator / std::stod(match[2].str());
+std::optional<double> ShaderConstant(std::string_view source, std::string_view name) {
+    // These fixed shader identifiers use unsigned decimal literals, optionally
+    // divided by another decimal. Keep conversion until the whole declaration
+    // matches, so a malformed candidate cannot throw before a later valid one.
+    for (auto start = source.find("const"); start != std::string_view::npos;
+         start = source.find("const", start + 5)) {
+        auto remaining = source.substr(start + 5);
+        const auto whitespace = [&]() {
+            const auto count = remaining.find_first_not_of(" \t\n\r\f\v");
+            const auto size = count == std::string_view::npos ? remaining.size() : count;
+            remaining.remove_prefix(size);
+            return size;
+        };
+        const auto consume = [&](std::string_view token) {
+            if (!remaining.starts_with(token)) return false;
+            remaining.remove_prefix(token.size());
+            return true;
+        };
+        const auto decimal = [&]() -> std::optional<std::string_view> {
+            const auto literal = remaining;
+            const auto digits = [&]() {
+                const auto count = remaining.find_first_not_of("0123456789");
+                const auto size = count == std::string_view::npos ? remaining.size() : count;
+                remaining.remove_prefix(size);
+                return size;
+            };
+            if (digits() == 0) return std::nullopt;
+            if (consume(".") && digits() == 0) return std::nullopt;
+            return literal.substr(0, literal.size() - remaining.size());
+        };
+        if (whitespace() == 0 || !consume("float") || whitespace() == 0 || !consume(name))
+            continue;
+        whitespace();
+        if (!consume("=")) continue;
+        whitespace();
+        const auto numerator = decimal();
+        if (!numerator) continue;
+        whitespace();
+        std::optional<std::string_view> denominator;
+        if (consume("/")) {
+            whitespace();
+            denominator = decimal();
+            if (!denominator) continue;
+            whitespace();
+        }
+        if (!consume(";")) continue;
+        const double value = std::stod(std::string(*numerator));
+        return denominator ? value / std::stod(std::string(*denominator)) : value;
+    }
+    return std::nullopt;
 }
 
 double MirrorEncode(double linear, double breakpoint, double slope, double scale, double offset,
@@ -42,6 +82,22 @@ double MirrorEncode(double linear, double breakpoint, double slope, double scale
 }
 
 TEST(ViewerDisplayContract, LiveShaderAppliesOnlyExactSrgbTransfer) {
+    EXPECT_EQ(ShaderConstant("const \tfloat\nkProbe = 0012.50 /\v2.5\f;", "kProbe"), 5.0);
+    EXPECT_EQ(ShaderConstant("const float kProbe=12;", "kProbe"), 12.0);
+    EXPECT_EQ(ShaderConstant("const float kProbe=1e0; const float kProbe=2;", "kProbe"), 2.0);
+    EXPECT_EQ(ShaderConstant("const float kProbe=" + std::string(400, '9') +
+                                "x; const float kProbe=3;",
+                            "kProbe"),
+              3.0);
+    for (const auto* declaration : {
+             "constfloat kProbe=1;", "const floatkProbe=1;", "const float kProbeExtra=1;",
+             "const float kProbe=.5;", "const float kProbe=1.;", "const float kProbe=-1;",
+             "const float kProbe=+1;", "const float kProbe=1e0;", "const float kProbe=0x1;",
+             "const float kProbe=1/;", "const float kProbe=1/.5;", "const float kProbe=1/2.;",
+             "const float kProbe=1/2/3;", "const float kProbe=1"}) {
+        EXPECT_FALSE(ShaderConstant(declaration, "kProbe").has_value()) << declaration;
+    }
+
     const auto path = base::ResolveResource("shaders/RDSD003A.frag");
     ASSERT_TRUE(path.has_value());
     std::ifstream input(*path, std::ios::binary);
