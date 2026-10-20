@@ -2441,11 +2441,19 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             std::vector<RetainedEndpointOutput> outputs;
             std::vector<std::byte> raw;
             std::size_t endpoint_calls = 0;
+            std::size_t inactive_tail_checks = 0;
+            std::size_t nonzero_inactive_tail_witnesses = 0;
             const auto endpoint = [&](std::span<const RetainedEndpointInput> rows) {
                 probe.readbacks.clear();
                 const auto call = endpoint_calls++;
                 std::clog << "[FactoredEndpoint] begin: call=" << call << ";rows=" << rows.size()
                           << ";wide=" << wide << ";decline_rte32=" << decline_rte32 << std::endl;
+                // Observe all allocated output bytes outside the original Endpoint
+                // call. No seeds, packet changes, dispatches or probe reads added.
+                std::vector<std::byte> allocation_before(probe.allocations[5].bytes);
+                const auto before_read =
+                    (*opened)->ReadBuffer(*probe.capture_output, std::span(allocation_before));
+                ASSERT_TRUE(before_read) << before_read.error().Description();
                 DispatchTiming timing;
                 const auto returned = instance.Endpoint(rows, &timing);
                 std::clog << "[FactoredEndpoint] returned: call=" << call
@@ -2468,6 +2476,35 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                                    ";bytes=" + std::to_string(raw.size()) + ";sha256=" + *digest);
                 EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
                 EXPECT_EQ(probe.allocations.size(), 14U);
+                std::vector<std::byte> allocation_after(allocation_before.size());
+                const auto after_read =
+                    (*opened)->ReadBuffer(*probe.capture_output, std::span(allocation_after));
+                ASSERT_TRUE(after_read) << after_read.error().Description();
+                const auto inactive_offset = rows.size() * row_bytes;
+                ASSERT_LE(inactive_offset, allocation_before.size());
+                const auto inactive_before = std::span(allocation_before).subspan(inactive_offset);
+                const auto inactive_after = std::span(allocation_after).subspan(inactive_offset);
+                EXPECT_TRUE(std::equal(inactive_before.begin(), inactive_before.end(),
+                                       inactive_after.begin(), inactive_after.end()))
+                    << "inactive Endpoint allocation changed after call " << call;
+                if (!inactive_before.empty()) {
+                    ++inactive_tail_checks;
+                    const bool nonzero =
+                        std::any_of(inactive_before.begin(), inactive_before.end(),
+                                    [](std::byte value) { return value != std::byte{}; });
+                    if (nonzero) ++nonzero_inactive_tail_witnesses;
+                    const auto tail_digest = sirius::base::Sha256Hex(
+                        std::span(reinterpret_cast<const std::uint8_t*>(inactive_after.data()),
+                                  inactive_after.size()));
+                    ASSERT_TRUE(tail_digest) << tail_digest.error();
+                    RecordProperty("inactive_tail_check_" + std::to_string(decline_rte32) + "_" +
+                                       std::to_string(wide) + "_" + std::to_string(call),
+                                   "active_rows=" + std::to_string(rows.size()) +
+                                       ";capacity=" + std::to_string(capacity) +
+                                       ";bytes=" + std::to_string(inactive_after.size()) +
+                                       ";nonzero_before=" + std::to_string(nonzero) +
+                                       ";sha256=" + *tail_digest);
+                }
             };
             const auto agrees_item = [&](std::size_t row, const auto& item) {
                 SCOPED_TRACE(item.name);
@@ -2522,7 +2559,7 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
                     << "raw row " << row << " reference row " << reference_row;
             };
             // Compare every active status, stored root, input and scratch word
-            // within this arithmetic route; inactive capacity is not observed.
+            // within this arithmetic route; inactive capacity is checked separately.
             ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
             EXPECT_EQ(raw, initial_raw);
             auto reordered = inputs;
@@ -2784,6 +2821,11 @@ TEST_F(RetainedComputeTest, FactoredEndpointsPreserveIndependentRootsAndBoundary
             same_selection_row(0, 0);
             ASSERT_NO_FATAL_FAILURE(endpoint(inputs));
             EXPECT_EQ(raw, initial_raw);
+            EXPECT_GT(inactive_tail_checks, 0U);
+            EXPECT_GT(nonzero_inactive_tail_witnesses, 0U);
+            RecordProperty("inactive_tail_nonzero_witnesses_" + std::to_string(decline_rte32) +
+                               "_" + std::to_string(wide),
+                           std::to_string(nonzero_inactive_tail_witnesses));
         }
     }
 #else
