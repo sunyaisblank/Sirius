@@ -1,0 +1,241 @@
+{
+  "passed": true,
+  "module_summaries": {
+    "stock": {
+      "module": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "execution_invocations": 16,
+      "control_barriers": 10,
+      "native_scalar_PB32Add_operations": 0,
+      "NoContraction_float_operations": 10,
+      "complete_descriptor_interface": [
+        [
+          "inputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 0",
+            "DescriptorSet 0",
+            "NonWritable"
+          ]
+        ],
+        [
+          "outputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 1",
+            "DescriptorSet 0"
+          ]
+        ]
+      ],
+      "instructions": 10248
+    },
+    "candidate": {
+      "module": {
+        "bytes": 154184,
+        "sha256": "c609748c80cd2550d4fb426c0487e7fd604fcde4411f097304e22cca1788e0d9"
+      },
+      "execution_invocations": 16,
+      "control_barriers": 10,
+      "native_scalar_PB32Add_operations": 0,
+      "NoContraction_float_operations": 10,
+      "complete_descriptor_interface": [
+        [
+          "inputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 0",
+            "DescriptorSet 0",
+            "NonWritable"
+          ]
+        ],
+        [
+          "outputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 1",
+            "DescriptorSet 0"
+          ]
+        ]
+      ],
+      "instructions": 10478
+    }
+  },
+  "both_original_RTMultiply_functions_reviewed": {
+    "stock": [
+      {
+        "function": "%RTMultiply",
+        "call_sites": {
+          "RPUpMultiply": 6,
+          "RPUpAdd": 6,
+          "RTCenterUpper": 2
+        },
+        "loop_merges": 2
+      },
+      {
+        "function": "%RTMultiply_0",
+        "call_sites": {
+          "RPUpMultiply": 6,
+          "RPUpAdd": 6,
+          "RTCenterUpper": 2
+        },
+        "loop_merges": 2
+      }
+    ],
+    "candidate": [
+      {
+        "function": "%RTMultiply",
+        "call_sites": {
+          "RPUpMultiply": 1,
+          "RPUpAdd": 3,
+          "RTCenterUpper": 1
+        },
+        "loop_merges": 3
+      },
+      {
+        "function": "%RTMultiply_0",
+        "call_sites": {
+          "RPUpMultiply": 1,
+          "RPUpAdd": 3,
+          "RTCenterUpper": 1
+        },
+        "loop_merges": 3
+      }
+    ]
+  },
+  "all_frozen_current_inputs_rehashed": 589,
+  "all_scalar_arithmetic_functions_unchanged": true,
+  "original_six_products_and_ordered_rounding_preserved_in_source": true,
+  "same_interfaces_barriers_workgroup_and_program": true,
+  "actual_driver_code_cost_or_runtime_benefit_observed": false,
+  "production_adopted": false
+}

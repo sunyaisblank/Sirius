@@ -1,0 +1,38 @@
+{
+  "schema": "sirius-ordered-upward-radius-loop-source-v1",
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "private_scope": "Only the portable normal-sum Endpoint module, excluding stage-seven-owner, native and all other modules. No production edit.",
+  "precondition": "Reach original RTMultiply radius construction after identical operand admission, exact-one/zero/sign bypasses, three full and three rounded products and r.valid check. Original bounded operands and RPScalar functions.",
+  "original_ordered_products": [
+    [
+      "abs(a.lo)",
+      "abs(b.tail)"
+    ],
+    [
+      "abs(a.tail)",
+      "abs(b.lo)"
+    ],
+    [
+      "abs(a.tail)",
+      "abs(b.tail)"
+    ],
+    [
+      "a.error",
+      "RTCenterUpper(b)"
+    ],
+    [
+      "b.error",
+      "RTCenterUpper(a)"
+    ],
+    [
+      "a.error",
+      "b.error"
+    ]
+  ],
+  "loop_invariant": "Before i, precisely products [0,i) have been computed with the same operands. For each entered cohort of three, its accumulator is the first product followed by exactly the original upward left-associated additions. No seed addition or reordered rounding. i advances from0 through5, then exits.",
+  "postcondition": "Both radius words equal the original expressions. The original nested final error addition and normalization/refusal remain textually unchanged. All hi/lo/tail/error/valid words and failure results preserved.",
+  "frame": "Scalar functions, fallback, programs/ABI/register plan, resources, barriers, all40/four-column physical data, original tests and all thresholds unchanged. Six products and four cohort additions still occur; no zero-term skip, new native approximation or changed enclosure.",
+  "cost_premise": "Current Vulkan frontends inline helpers. Original RTMultiply has six RPUpMultiply and two RTCenterUpper call sites plus four nested cohort-add call sites; this loop shares each body without dropping their dynamic work. Source site count is not JIT or speed evidence.",
+  "next_decision": "Compile one module and inspect actual emitted bodies/interfaces; only if the duplication really disappears inspect ordinary actual-called driver code before any integrated timing trial.",
+  "production_adopted": false
+}

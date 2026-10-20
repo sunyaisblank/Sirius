@@ -1,0 +1,226 @@
+{
+  "passed": true,
+  "independent_raw_XML_Decimal_decisions": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_median_ms": "36.318308999999999",
+      "candidate_median_ms": "94.992171999999997",
+      "improvement_percent": "-161.55450133980632087123057793815017299485441181059",
+      "minimum_percent": "5",
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_median_ms": "5.5772350000000000",
+      "candidate_median_ms": "7.3875050000000000",
+      "improvement_percent": "-32.458198372491028260419365509970442342845513950909",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_median_ms": "7.4087269999999998",
+      "candidate_median_ms": "16.071961999999999",
+      "improvement_percent": "-116.93284149895116170248523124016208729206059934891",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_median_ms": "21.6336889999999995",
+      "candidate_median_ms": "75.935059000000000",
+      "improvement_percent": "-251.00374697999958192529593496512735126440837170968",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_median_ms": "49.048558",
+      "candidate_median_ms": "48.262138",
+      "improvement_percent": "1.6033498884921346719306202641064391740120066322847",
+      "minimum_percent": "5",
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_median_ms": "2.6563639999999999",
+      "candidate_median_ms": "2.798349",
+      "improvement_percent": "-5.3450882484478823438763756942904791616049492573487",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_median_ms": "6.3382269999999999",
+      "candidate_median_ms": "6.2860650000000002",
+      "improvement_percent": "0.82297462681598025477747368177220940142209614411427",
+      "minimum_percent": "-5",
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_median_ms": "6.5864600000000002",
+      "candidate_median_ms": "6.4507759999999998",
+      "improvement_percent": "2.0600443941054890772875142609083156266791490145445",
+      "minimum_percent": "-5",
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_median_ms": "12.5032980000000000",
+      "candidate_median_ms": "11.8163379999999995",
+      "improvement_percent": "5.4942304022506741821237884596528052038750096174625",
+      "minimum_percent": "-5",
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_median_ms": "16.0948080000000005",
+      "candidate_median_ms": "16.2611110000000005",
+      "improvement_percent": "-1.0332711020845976841329482748536769083250861130597",
+      "minimum_percent": "-5",
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "scope": "Create plus all11 separate raw numerical API windows",
+      "baseline_ms": "21054.7146850000009958",
+      "candidate_ms": "22690.9821210000009940",
+      "improvement_percent": "-7.7715013500787314079501598143646022037382387286303",
+      "minimum_percent": "0",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_median_ms": "33.261341999999999",
+      "candidate_median_ms": "33.785393999999997",
+      "improvement_percent": "-1.5755587973569978498028972299733982412043756374412",
+      "minimum_percent": "5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_median_ms": "5.5379060000000000",
+      "candidate_median_ms": "4.9189029999999998",
+      "improvement_percent": "11.177564227345140925107793451170893836045610019383",
+      "minimum_percent": "-5",
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_median_ms": "7.0576930000000004",
+      "candidate_median_ms": "7.1430509999999998",
+      "improvement_percent": "-1.2094320339521624865557607024186239579556264394825",
+      "minimum_percent": "-5",
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_median_ms": "19.3081510000000005",
+      "candidate_median_ms": "20.4258749999999996",
+      "improvement_percent": "-5.7888712388876546027408000152978241484438355775801",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_median_ms": "40.680039999999998",
+      "candidate_median_ms": "46.209417000000002",
+      "improvement_percent": "-13.592358807906787387247348228113216567503288006266",
+      "minimum_percent": "5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_median_ms": "2.616136",
+      "candidate_median_ms": "2.7826919999999999",
+      "improvement_percent": "-6.3664885923361744190668986627606515869205576468502",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_median_ms": "5.5104069999999998",
+      "candidate_median_ms": "6.0047010000000003",
+      "improvement_percent": "-8.9701904051733477752256922282999341146921535305807",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_median_ms": "4.9623469999999998",
+      "candidate_median_ms": "6.3232939999999998",
+      "improvement_percent": "-27.425470246236308239849822925978704828574983812245",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_median_ms": "10.9178420000000002",
+      "candidate_median_ms": "12.2912190000000003",
+      "improvement_percent": "-12.579198343408890464265770773951657035048303978906",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_median_ms": "12.5765789999999997",
+      "candidate_median_ms": "15.7993309999999995",
+      "improvement_percent": "-25.625028873114062869362857891181605173303278049975",
+      "minimum_percent": "-5",
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "Create plus all11 separate raw numerical API windows",
+      "baseline_ms": "10339.4840649999989964",
+      "candidate_ms": "13265.5078660000000060",
+      "improvement_percent": "-28.299514585111953491017139801390711228375156326112",
+      "minimum_percent": "0",
+      "pass": false
+    }
+  ],
+  "all22_original_decisions_agree": true,
+  "no_order_pooling_or_cost_subtraction": true,
+  "raw_API_terms_per_instance": 12
+}

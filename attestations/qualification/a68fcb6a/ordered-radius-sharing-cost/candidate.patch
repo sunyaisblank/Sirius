@@ -1,0 +1,47 @@
+--- a/src/sirius/kernels/retained_triple.slang
++++ b/src/sirius/kernels/retained_triple.slang
+@@ -191,10 +191,33 @@
+     r=RTAccumulateRoundedProduct(r,a.tail,b.hi);
+ #endif
+     if(r.valid==0) return r;
++#if defined(SIRIUS_RETAINED_ORDERED_RADIUS_LOOP)
++    RPScalar omitted=RPZero(),uncertainty=RPZero();
++    // Six unchanged upward products and the original left-associated adds.
++    // The first product seeds each sum without an additional upward addition.
++    [loop] for(uint i=0;i<6;++i) {
++        RPScalar left,right;
++        if(i<3) {
++            left=RPAbs(i==0?a.lo:a.tail);
++            right=RPAbs(i==1?b.lo:b.tail);
++        } else if(i<5) {
++            left=i==3?a.error:b.error;
++            right=RTCenterUpper(i==3?b:a);
++        } else {
++            left=a.error;right=b.error;
++        }
++        RPScalar product=RPUpMultiply(left,right);
++        RPScalar accumulated=i<3?omitted:uncertainty;
++        accumulated=(i==0||i==3)?product:RPUpAdd(accumulated,product);
++        if(i<3) omitted=accumulated;
++        else uncertainty=accumulated;
++    }
++#else
+     RPScalar omitted=RPUpAdd(RPUpAdd(RPUpMultiply(RPAbs(a.lo),RPAbs(b.tail)),
+         RPUpMultiply(RPAbs(a.tail),RPAbs(b.lo))),RPUpMultiply(RPAbs(a.tail),RPAbs(b.tail)));
+     RPScalar uncertainty=RPUpAdd(RPUpAdd(RPUpMultiply(a.error,RTCenterUpper(b)),
+         RPUpMultiply(b.error,RTCenterUpper(a))),RPUpMultiply(a.error,b.error));
++#endif
+     return RTFinishAccumulation(r.hi,r.lo,r.tail,RPUpAdd(RPUpAdd(r.error,omitted),uncertainty));
+ }
+ #ifdef SIRIUS_RETAINED_PORTABLE
+--- a/scripts/build-retained-kernels.py
++++ b/scripts/build-retained-kernels.py
+@@ -326,6 +326,8 @@
+         if not portable or source.stem not in ("retained_transport", "retained_endpoint", "retained_dopri_phase"):
+             raise ValueError("guarded normal sums are qualified only for portable Transport, Endpoint and DopriPhase")
+         definitions.append("-DSIRIUS_RETAINED_NORMAL_SUM32=1")
++        if source.stem == "retained_endpoint" and not stage_seven_owner:
++            definitions.append("-DSIRIUS_RETAINED_ORDERED_RADIUS_LOOP=1")
+         if source.stem == "retained_dopri_phase":
+             definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
+     if fma:
