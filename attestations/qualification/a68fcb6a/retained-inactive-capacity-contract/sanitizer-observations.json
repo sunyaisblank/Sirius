@@ -1,0 +1,641 @@
+{
+  "numerical_and_full_tail_observations_passed": true,
+  "test_and_sanitizer_process_exit": 0,
+  "preset_sanitizers_enabled": {
+    "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+    "LSAN_OPTIONS": "suppressions=/home/astra/.project/Sirius/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+    "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+  },
+  "sanitizer_diagnostics_found": false,
+  "governed_run_passed": false,
+  "resource_envelope_accepted": false,
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "all4_original_precision_routes_exercised": true,
+  "original56_complete_active_readbacks_equal": true,
+  "full_inactive_tail_checks": 56,
+  "nonzero_tail_witnesses": 36,
+  "routes": [
+    {
+      "decline_rte32": false,
+      "wide": false,
+      "full_inactive_tail_checks": 14,
+      "nonzero_tail_witnesses": 9,
+      "checks": [
+        {
+          "call": 0,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 1,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 2,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 3,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+        },
+        {
+          "call": 4,
+          "active_rows": "8",
+          "capacity": "32",
+          "bytes": "367584",
+          "nonzero_before": "1",
+          "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+        },
+        {
+          "call": 5,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 6,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 7,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 8,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 9,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 10,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 11,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+        },
+        {
+          "call": 12,
+          "active_rows": "1",
+          "capacity": "32",
+          "bytes": "474796",
+          "nonzero_before": "1",
+          "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+        },
+        {
+          "call": 13,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        }
+      ]
+    },
+    {
+      "decline_rte32": false,
+      "wide": true,
+      "full_inactive_tail_checks": 14,
+      "nonzero_tail_witnesses": 9,
+      "checks": [
+        {
+          "call": 0,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 1,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 2,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 3,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+        },
+        {
+          "call": 4,
+          "active_rows": "8",
+          "capacity": "32",
+          "bytes": "367584",
+          "nonzero_before": "1",
+          "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+        },
+        {
+          "call": 5,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 6,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 7,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 8,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 9,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 10,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 11,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+        },
+        {
+          "call": 12,
+          "active_rows": "1",
+          "capacity": "32",
+          "bytes": "474796",
+          "nonzero_before": "1",
+          "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+        },
+        {
+          "call": 13,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        }
+      ]
+    },
+    {
+      "decline_rte32": true,
+      "wide": false,
+      "full_inactive_tail_checks": 14,
+      "nonzero_tail_witnesses": 9,
+      "checks": [
+        {
+          "call": 0,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 1,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 2,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 3,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+        },
+        {
+          "call": 4,
+          "active_rows": "8",
+          "capacity": "32",
+          "bytes": "367584",
+          "nonzero_before": "1",
+          "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+        },
+        {
+          "call": 5,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 6,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 7,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 8,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 9,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 10,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 11,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+        },
+        {
+          "call": 12,
+          "active_rows": "1",
+          "capacity": "32",
+          "bytes": "474796",
+          "nonzero_before": "1",
+          "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+        },
+        {
+          "call": 13,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        }
+      ]
+    },
+    {
+      "decline_rte32": true,
+      "wide": true,
+      "full_inactive_tail_checks": 14,
+      "nonzero_tail_witnesses": 9,
+      "checks": [
+        {
+          "call": 0,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 1,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 2,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 3,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+        },
+        {
+          "call": 4,
+          "active_rows": "8",
+          "capacity": "32",
+          "bytes": "367584",
+          "nonzero_before": "1",
+          "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+        },
+        {
+          "call": 5,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        },
+        {
+          "call": 6,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 7,
+          "active_rows": "27",
+          "capacity": "32",
+          "bytes": "76580",
+          "nonzero_before": "1",
+          "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+        },
+        {
+          "call": 8,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 9,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 10,
+          "active_rows": "23",
+          "capacity": "32",
+          "bytes": "137844",
+          "nonzero_before": "1",
+          "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+        },
+        {
+          "call": 11,
+          "active_rows": "4",
+          "capacity": "32",
+          "bytes": "428848",
+          "nonzero_before": "1",
+          "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+        },
+        {
+          "call": 12,
+          "active_rows": "1",
+          "capacity": "32",
+          "bytes": "474796",
+          "nonzero_before": "1",
+          "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+        },
+        {
+          "call": 13,
+          "active_rows": "29",
+          "capacity": "32",
+          "bytes": "45948",
+          "nonzero_before": "0",
+          "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+        }
+      ]
+    }
+  ],
+  "execution_context": {
+    "profile": "linux-gcc-sanitize",
+    "executable": "bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests",
+    "bytes": 162861288,
+    "sha256": "8027e29c09f212d3df6baeccb3659c3c6a0e613c7ef2834870f4780e8d5cceb6",
+    "test_preset_environment": {
+      "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1:strict_string_checks=1",
+      "LSAN_OPTIONS": "suppressions=/home/astra/.project/Sirius/tests/sanitizers/lsan-vulkan.supp:print_suppressions=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    },
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/retained-inactive-lsan-guard/gcc-sanitize/gtest.xml",
+    "original_filter": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+    "extra_suppressions": false
+  },
+  "seconds": 170.8351420739782,
+  "shared_VM_samples": 17,
+  "peak_before_terminal_uncertain_sample_kib": 3171856,
+  "last_confirmed_shared_VM_sample": {
+    "elapsed_seconds": 170.15583407797385,
+    "rss_kib": 2382304,
+    "raw_process_rss_kib": 4736968,
+    "address_space_accounting": {
+      "raw_process_rss_kib": 4709328,
+      "unique_address_space_rss_kib": 2354664,
+      "groups": [
+        {
+          "members": [
+            {
+              "pid": 33270,
+              "start_ticks": "36885815",
+              "rss_kib": 2354664
+            },
+            {
+              "pid": 36197,
+              "start_ticks": "36902761",
+              "rss_kib": 2354664
+            }
+          ],
+          "rss_kib": 2354664
+        }
+      ],
+      "comparisons": [
+        {
+          "a": 33270,
+          "a_start_ticks": "36885815",
+          "b": 36197,
+          "b_start_ticks": "36902761",
+          "kcmp_return": 0,
+          "errno": 0,
+          "identities_stable": true
+        }
+      ],
+      "method": "Sum max sampled RSS per KCMP_VM-equal address space; every distinct or unproven address space remains separately counted."
+    },
+    "available_kib": 13102600,
+    "members": [
+      {
+        "pid": 33270,
+        "state": "t",
+        "ppid": 33260,
+        "pgrp": 33270,
+        "session": 33270,
+        "start_ticks": "36885815",
+        "rss_kib": 2354664
+      },
+      {
+        "pid": 36197,
+        "state": "R",
+        "ppid": 33270,
+        "pgrp": 33270,
+        "session": 33270,
+        "start_ticks": "36902761",
+        "rss_kib": 2354664
+      }
+    ]
+  },
+  "terminal_uncertain_sample": {
+    "elapsed_seconds": 170.1992379130097,
+    "rss_kib": 4736968,
+    "raw_process_rss_kib": 4736968,
+    "address_space_accounting": {
+      "raw_process_rss_kib": 4709328,
+      "unique_address_space_rss_kib": 4709328,
+      "groups": [
+        {
+          "members": [
+            {
+              "pid": 33270,
+              "start_ticks": "36885815",
+              "rss_kib": 2354664
+            }
+          ],
+          "rss_kib": 2354664
+        },
+        {
+          "members": [
+            {
+              "pid": 36197,
+              "start_ticks": "36902761",
+              "rss_kib": 2354664
+            }
+          ],
+          "rss_kib": 2354664
+        }
+      ],
+      "comparisons": [
+        {
+          "a": 33270,
+          "a_start_ticks": "36885815",
+          "b": 36197,
+          "b_start_ticks": "36902761",
+          "kcmp_return": null,
+          "errno": 2,
+          "identities_stable": false,
+          "refusal": "FileNotFoundError"
+        }
+      ],
+      "method": "Sum max sampled RSS per KCMP_VM-equal address space; every distinct or unproven address space remains separately counted."
+    },
+    "available_kib": 13102096,
+    "members": [
+      {
+        "pid": 33270,
+        "state": "t",
+        "ppid": 33260,
+        "pgrp": 33270,
+        "session": 33270,
+        "start_ticks": "36885815",
+        "rss_kib": 2354664
+      },
+      {
+        "pid": 36197,
+        "state": "R",
+        "ppid": 33270,
+        "pgrp": 33270,
+        "session": 33270,
+        "start_ticks": "36902761",
+        "rss_kib": 2354664
+      }
+    ]
+  },
+  "verdict": "Actual child process completed with exit 0 and enabled ASan/UBSan/LSan. Conservative resource owner failed at the terminal procfs disappearance race. Preserve the failure; do not infer complete governed acceptance or repair it retroactively. No further unchanged C1 rerun."
+}

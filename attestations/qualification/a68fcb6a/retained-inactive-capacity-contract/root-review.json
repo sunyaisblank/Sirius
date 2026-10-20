@@ -1,0 +1,1837 @@
+{
+  "schema": "sirius-inactive-endpoint-capacity-finite-review-v1",
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "source_change": {
+    "parent_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+    "prototype_evidence_commit": "8cebd8e1cd32aac9a23a2b0378fcbf1984ba31c2",
+    "source_file": "tests/backend/retained_compute_test.cpp",
+    "only_original_C1_region_changed": true,
+    "C8_timing_body_unchanged": true,
+    "rendering_implementation_and_all_shader_program_sources_unchanged": true,
+    "purpose": "Require full inactive output allocation byte equality during original Endpoint batch shrink/reorder/refusal/recovery calls, with nonzero witnesses per exercised precision route. Preserve every original assertion, active readback and deadline.",
+    "all_first_party_CXX_format_passed": true,
+    "original_case_boundaries_unchanged_after_format": true
+  },
+  "review_completed": true,
+  "owners": {
+    "out/retained-inactive-capacity-contract/clang-build/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 48.974385309033096,
+      "peak_charged_rss_kib": 981668
+    },
+    "out/retained-inactive-capacity-contract/clang-configure/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 6.978621968009975,
+      "peak_charged_rss_kib": 98708
+    },
+    "out/retained-inactive-capacity-contract/gcc-build/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 61.155357517011,
+      "peak_charged_rss_kib": 1660732
+    },
+    "out/retained-inactive-capacity-contract/gcc-configure/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 6.675924475013744,
+      "peak_charged_rss_kib": 98708
+    },
+    "out/retained-inactive-capacity-contract/gcc-sanitize-build/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 157.8974124600063,
+      "peak_charged_rss_kib": 2378848
+    },
+    "out/retained-inactive-capacity-contract/gcc-sanitize-configure/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 6.67007009597728,
+      "peak_charged_rss_kib": 98448
+    },
+    "out/retained-inactive-capacity-check/clang/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 79.34213934798026,
+      "peak_charged_rss_kib": 2243196
+    },
+    "out/retained-inactive-capacity-check/gcc/owner.json": {
+      "governed_run_passed": true,
+      "child_exit": 0,
+      "stop_reason": null,
+      "seconds": 78.43739711702801,
+      "peak_charged_rss_kib": 2765036
+    },
+    "out/retained-inactive-capacity-check/gcc-sanitize/owner.json": {
+      "governed_run_passed": false,
+      "child_exit": -15,
+      "stop_reason": "diagnostic_sampled_rss_guard",
+      "seconds": 140.3043055459857,
+      "peak_charged_rss_kib": 5037736
+    },
+    "out/retained-inactive-lsan-guard/gcc-sanitize/owner.json": {
+      "governed_run_passed": false,
+      "child_exit": 0,
+      "stop_reason": "diagnostic_sampled_rss_guard",
+      "seconds": 170.8351420739782,
+      "peak_charged_rss_kib": 4736968
+    }
+  },
+  "accepted_governed_build_and_control_commands": 8,
+  "failed_sanitizer_resource_owners_preserved": 2,
+  "final_input_union_rehashed": 5826,
+  "all7_executables_built_each_profile": {
+    "linux-gcc": {
+      "bin/linux-gcc/src/sirius/app/sirius": {
+        "bytes": 9725048,
+        "sha256": "cb6aca8d42233245d41031b506db4a4536874e0331f2f5c2981ca9b60ea8c4f5",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc/tests/sirius_base_tests": {
+        "bytes": 783520,
+        "sha256": "de4d48ae280b210c07feebd700894364d3fd2bf12061edc20918aa84177042e3",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc/tests/core/sirius_core_tests": {
+        "bytes": 5199120,
+        "sha256": "c0c076aac164a3b8c917bd4c66e7d388a4a9f70a2f8a56b40e2a088429886f58",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc/tests/oracle/sirius_oracle_tests": {
+        "bytes": 1678696,
+        "sha256": "be9a6f6136937567e9537e4ff25ee71589c1f98c46aa04b25790a922832abba4",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc/tests/backend/sirius_backend_tests": {
+        "bytes": 13514416,
+        "sha256": "041f239a07d3f9e44f63b2bd1f894adb72c8dd489f99d05084f1f9730286706d",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc/src/sirius/app/sirius_app_tests": {
+        "bytes": 11268992,
+        "sha256": "7f156730998c03b9b2890f9bb4ac4c65ce82900664f2c0b0a1e26b60b8e1ec89",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc/src/sirius/app/sirius_render_tests": {
+        "bytes": 12212608,
+        "sha256": "6ad333d45a5fbc4595b75def9c1fd571b2839d5290e2a6d83c26a856ffcb607c",
+        "mode": "0o755"
+      }
+    },
+    "linux-clang": {
+      "bin/linux-clang/src/sirius/app/sirius": {
+        "bytes": 8922888,
+        "sha256": "e77015416addeaf57f65b7814d38afd4decdbea6cc3d84c8dc4aa1d228373976",
+        "mode": "0o755"
+      },
+      "bin/linux-clang/tests/sirius_base_tests": {
+        "bytes": 688928,
+        "sha256": "83db3f5f1d3930de831ec04b5b2a98af3cc35242a5a63a19cbf278d55fa2442f",
+        "mode": "0o755"
+      },
+      "bin/linux-clang/tests/core/sirius_core_tests": {
+        "bytes": 3804952,
+        "sha256": "93ab82df819321c31bb9a718b9e259e87427d501d565de74a1f63a34b3aa75f4",
+        "mode": "0o755"
+      },
+      "bin/linux-clang/tests/oracle/sirius_oracle_tests": {
+        "bytes": 1335528,
+        "sha256": "0875b0bc13df892fe3137c5deeb8d92c0bf200b497d0e015ced865fa805a3d50",
+        "mode": "0o755"
+      },
+      "bin/linux-clang/tests/backend/sirius_backend_tests": {
+        "bytes": 12445064,
+        "sha256": "5990ab7a2d709732be4271439e86681668a2aa9bf43a568929a5e0ad9524b2f4",
+        "mode": "0o755"
+      },
+      "bin/linux-clang/src/sirius/app/sirius_app_tests": {
+        "bytes": 10288656,
+        "sha256": "3eec1e2925bd5b880700f85335ac27882cd9abd9f36f4e81a4da3e05ba9a6aa8",
+        "mode": "0o755"
+      },
+      "bin/linux-clang/src/sirius/app/sirius_render_tests": {
+        "bytes": 10788624,
+        "sha256": "1c551ca9ea5f9eeee8ab67d5adbae94174d06447dc8e6499ff2ecc5ba96da0d2",
+        "mode": "0o755"
+      }
+    },
+    "linux-gcc-sanitize": {
+      "bin/linux-gcc-sanitize/src/sirius/app/sirius": {
+        "bytes": 127434984,
+        "sha256": "75bcb752d08465ef786b504133f8cffa89b28f344d986f9fd9ba0e94ac8c8ae8",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc-sanitize/tests/sirius_base_tests": {
+        "bytes": 9543880,
+        "sha256": "5fa283be99595c9e94998a397ac34bd112f1f57986a1f45c7dc531a6f50fac23",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc-sanitize/tests/core/sirius_core_tests": {
+        "bytes": 104933712,
+        "sha256": "07a2ad4c28466ef79906ff3775e7f624162685a1042f139c2b21574f5919c399",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc-sanitize/tests/oracle/sirius_oracle_tests": {
+        "bytes": 23352592,
+        "sha256": "9c17cbb675c8feceaed0139bc051bbab75122453155a63d093b9801992a3b5d7",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc-sanitize/tests/backend/sirius_backend_tests": {
+        "bytes": 162861288,
+        "sha256": "8027e29c09f212d3df6baeccb3659c3c6a0e613c7ef2834870f4780e8d5cceb6",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/app/sirius_app_tests": {
+        "bytes": 161955848,
+        "sha256": "6b4f80310cfa622f5738973284b86ff4c5b813d9171dea86cc608dc00b4a216a",
+        "mode": "0o755"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/app/sirius_render_tests": {
+        "bytes": 191021744,
+        "sha256": "ac7b867b18c11ea5de3bc2d5d29b12e1a1991067320d1f0d8a6bbde3db64af1e",
+        "mode": "0o755"
+      }
+    }
+  },
+  "all35_SPVs_and3_headers_each_profile_unchanged": {
+    "linux-gcc": {
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv": {
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv": {
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+        "bytes": 96752,
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv": {
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv": {
+        "bytes": 97468,
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv": {
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv": {
+        "bytes": 83532,
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+        "bytes": 7955767,
+        "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_owner_kernels.h": {
+        "bytes": 432942,
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.h": {
+        "bytes": 88895,
+        "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+        "mode": "0o644"
+      }
+    },
+    "linux-clang": {
+      "bin/linux-clang/src/sirius/backend/retained/retained_camera.spv": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_camera_fp64.spv": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_camera_portable.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dense.spv": {
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dense_fp64.spv": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dense_portable.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dopri_phase.spv": {
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+        "bytes": 96752,
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint.spv": {
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint_fma.spv": {
+        "bytes": 97468,
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint_portable.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_initialize.spv": {
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_initialize_fp64.spv": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_initialize_portable.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_ray_camera.spv": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport.spv": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport_fma.spv": {
+        "bytes": 83532,
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport_fp64.spv": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport_portable.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_kernels.h": {
+        "bytes": 7955767,
+        "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_owner_kernels.h": {
+        "bytes": 432942,
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+        "mode": "0o644"
+      },
+      "bin/linux-clang/src/sirius/backend/retained/retained_owner_layout.h": {
+        "bytes": 88895,
+        "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+        "mode": "0o644"
+      }
+    },
+    "linux-gcc-sanitize": {
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera.spv": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera_fp64.spv": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera_portable.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense.spv": {
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense_fp64.spv": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense_portable.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase.spv": {
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+        "bytes": 96752,
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint.spv": {
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_fma.spv": {
+        "bytes": 97468,
+        "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize.spv": {
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize_fp64.spv": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize_portable.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera.spv": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport.spv": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_fma.spv": {
+        "bytes": 83532,
+        "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_fp64.spv": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_kernels.h": {
+        "bytes": 7955767,
+        "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_owner_kernels.h": {
+        "bytes": 432942,
+        "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302",
+        "mode": "0o644"
+      },
+      "bin/linux-gcc-sanitize/src/sirius/backend/retained/retained_owner_layout.h": {
+        "bytes": 88895,
+        "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75",
+        "mode": "0o644"
+      }
+    }
+  },
+  "registration_only_count_each_profile": 1152,
+  "registration_names_equal_previous_revision_and_all_profiles": true,
+  "governed_C1_passed_profiles": {
+    "gcc": {
+      "passed": true,
+      "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+      "selected_canonical_normal_endpoint_sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "profile": "gcc",
+      "execution_context": {
+        "profile": "linux-gcc",
+        "executable": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "bytes": 13514416,
+        "sha256": "041f239a07d3f9e44f63b2bd1f894adb72c8dd489f99d05084f1f9730286706d",
+        "test_preset_environment": {},
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/retained-inactive-capacity-check/gcc/gtest.xml",
+        "original_filter": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+        "extra_suppressions": false
+      },
+      "all4original_precision_routes_exercised": true,
+      "original56_complete_active_readbacks_equal": true,
+      "capacity": 32,
+      "full_inactive_tail_checks": 56,
+      "nonzero_tail_witnesses": 36,
+      "all_inactive_byte_comparisons_passed": true,
+      "all_shrink_calls_observed": true,
+      "routes": [
+        {
+          "decline_rte32": false,
+          "wide": false,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        },
+        {
+          "decline_rte32": false,
+          "wide": true,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        },
+        {
+          "decline_rte32": true,
+          "wide": false,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        },
+        {
+          "decline_rte32": true,
+          "wide": true,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        }
+      ],
+      "original_limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "seconds": 78.43739711702801,
+      "peak_rss_kib": 2765036,
+      "canonical_original_C1_case_passed": true,
+      "performance_acceptance": false,
+      "production_adopted": false,
+      "scope": "Canonical original C1 numerical and active-row assertions plus exact full inactive allocation comparisons before/after every shrink call, with positive nonzero witnesses per exercised precision route. No altered buffers/packets/programs/dispatches; extra reads stay outside Endpoint calls. No benefit, all8, frame or qualification claim."
+    },
+    "clang": {
+      "passed": true,
+      "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+      "selected_canonical_normal_endpoint_sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "profile": "clang",
+      "execution_context": {
+        "profile": "linux-clang",
+        "executable": "bin/linux-clang/tests/backend/sirius_backend_tests",
+        "bytes": 12445064,
+        "sha256": "5990ab7a2d709732be4271439e86681668a2aa9bf43a568929a5e0ad9524b2f4",
+        "test_preset_environment": {},
+        "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/retained-inactive-capacity-check/clang/gtest.xml",
+        "original_filter": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+        "extra_suppressions": false
+      },
+      "all4original_precision_routes_exercised": true,
+      "original56_complete_active_readbacks_equal": true,
+      "capacity": 32,
+      "full_inactive_tail_checks": 56,
+      "nonzero_tail_witnesses": 36,
+      "all_inactive_byte_comparisons_passed": true,
+      "all_shrink_calls_observed": true,
+      "routes": [
+        {
+          "decline_rte32": false,
+          "wide": false,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        },
+        {
+          "decline_rte32": false,
+          "wide": true,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        },
+        {
+          "decline_rte32": true,
+          "wide": false,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        },
+        {
+          "decline_rte32": true,
+          "wide": true,
+          "full_inactive_tail_checks": 14,
+          "nonzero_tail_witnesses": 9,
+          "checks": [
+            {
+              "call": 0,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 1,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 2,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 3,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+            },
+            {
+              "call": 4,
+              "active_rows": "8",
+              "capacity": "32",
+              "bytes": "367584",
+              "nonzero_before": "1",
+              "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+            },
+            {
+              "call": 5,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            },
+            {
+              "call": 6,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 7,
+              "active_rows": "27",
+              "capacity": "32",
+              "bytes": "76580",
+              "nonzero_before": "1",
+              "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+            },
+            {
+              "call": 8,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 9,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 10,
+              "active_rows": "23",
+              "capacity": "32",
+              "bytes": "137844",
+              "nonzero_before": "1",
+              "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+            },
+            {
+              "call": 11,
+              "active_rows": "4",
+              "capacity": "32",
+              "bytes": "428848",
+              "nonzero_before": "1",
+              "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+            },
+            {
+              "call": 12,
+              "active_rows": "1",
+              "capacity": "32",
+              "bytes": "474796",
+              "nonzero_before": "1",
+              "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+            },
+            {
+              "call": 13,
+              "active_rows": "29",
+              "capacity": "32",
+              "bytes": "45948",
+              "nonzero_before": "0",
+              "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+            }
+          ]
+        }
+      ],
+      "original_limits": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "seconds": 79.34213934798026,
+      "peak_rss_kib": 2243196,
+      "canonical_original_C1_case_passed": true,
+      "performance_acceptance": false,
+      "production_adopted": false,
+      "scope": "Canonical original C1 numerical and active-row assertions plus exact full inactive allocation comparisons before/after every shrink call, with positive nonzero witnesses per exercised precision route. No altered buffers/packets/programs/dispatches; extra reads stay outside Endpoint calls. No benefit, all8, frame or qualification claim."
+    }
+  },
+  "sanitizer_functional_observations": "sanitizer-observations.json",
+  "totals_in_final3_C1_executions": {
+    "precision_routes": 12,
+    "complete_original_active_readbacks_equal": 168,
+    "full_inactive_tail_comparisons": 168,
+    "positive_nonzero_tail_witnesses": 108,
+    "does_not_imply_all3_governed_runs_passed": true
+  },
+  "shader_or_rendering_implementation_changed": false,
+  "rejected_eight_ray_prototype_evidence": "8cebd8e1cd32aac9a23a2b0378fcbf1984ba31c2",
+  "prototype_benefit_gate": "12/20 whole-and-stage plus 1/2 API: rejected, no unchanged retry",
+  "full_Mandatory_execution": false,
+  "all8_integrated_controls": false,
+  "scientific_qualification": false,
+  "original_software_frame": false,
+  "native_scene_and_window_qualification": false,
+  "external_domain_admission": false,
+  "installed_release_qualification": false,
+  "ultimate_goal_complete": false
+}
