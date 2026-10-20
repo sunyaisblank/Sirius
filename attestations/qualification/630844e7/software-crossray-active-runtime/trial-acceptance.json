@@ -1,0 +1,986 @@
+{
+  "passed": true,
+  "experiment_valid": true,
+  "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "candidate_module_sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f",
+  "disposition": "REJECT_CORRECTED_ACTIVE_BOUND_ENDPOINT_COST",
+  "performance_acceptance": false,
+  "original_interval_and_stage_checks_passed": 12,
+  "original_interval_and_stage_checks_required": 20,
+  "provisioning_inclusive_API_checks_passed": 1,
+  "provisioning_inclusive_API_checks_required": 2,
+  "complete_call_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        35.725632,
+        31.697311,
+        33.347614
+      ],
+      "candidate_samples_ms": [
+        38.567621,
+        36.58558,
+        38.758526
+      ],
+      "baseline_median_ms": 33.347614,
+      "candidate_median_ms": 38.567621,
+      "improvement_percent": -15.65331480687045,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        45.951232000000005,
+        47.810914000000004,
+        45.678214
+      ],
+      "candidate_samples_ms": [
+        46.299490000000006,
+        43.924564000000004,
+        43.475086999999995
+      ],
+      "baseline_median_ms": 45.951232000000005,
+      "candidate_median_ms": 43.924564000000004,
+      "improvement_percent": 4.410475871463034,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        108.820739,
+        72.32335,
+        60.099567
+      ],
+      "candidate_samples_ms": [
+        39.187261,
+        38.212798,
+        41.003661
+      ],
+      "baseline_median_ms": 72.32335,
+      "candidate_median_ms": 39.187261,
+      "improvement_percent": 45.816584823573585,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        48.137694999999994,
+        46.245712,
+        50.736112999999996
+      ],
+      "candidate_samples_ms": [
+        48.893832,
+        46.031271000000004,
+        45.912431
+      ],
+      "baseline_median_ms": 48.137694999999994,
+      "candidate_median_ms": 46.031271000000004,
+      "improvement_percent": 4.37583062504341,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "accounting_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 12884.569418,
+      "candidate_ms": 13110.541063,
+      "improvement_percent": -1.7538160389303703,
+      "minimum_percent": 0,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 15122.636441,
+      "candidate_ms": 12865.540149,
+      "improvement_percent": 14.925283040466635,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        35.725632,
+        31.697311,
+        33.347614
+      ],
+      "candidate_samples_ms": [
+        38.567621,
+        36.58558,
+        38.758526
+      ],
+      "baseline_median_ms": 33.347614,
+      "candidate_median_ms": 38.567621,
+      "improvement_percent": -15.65331480687045,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.72679,
+        4.837891,
+        4.788543
+      ],
+      "candidate_samples_ms": [
+        7.538043,
+        7.847023999999999,
+        8.701497
+      ],
+      "baseline_median_ms": 4.788543,
+      "candidate_median_ms": 7.847023999999999,
+      "improvement_percent": -63.87080579625158,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        7.974086,
+        6.634079,
+        7.026925
+      ],
+      "candidate_samples_ms": [
+        8.728105,
+        8.016657,
+        8.827422
+      ],
+      "baseline_median_ms": 7.026925,
+      "candidate_median_ms": 8.728105,
+      "improvement_percent": -24.20945150261315,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        45.951232000000005,
+        47.810914000000004,
+        45.678214
+      ],
+      "candidate_samples_ms": [
+        46.299490000000006,
+        43.924564000000004,
+        43.475086999999995
+      ],
+      "baseline_median_ms": 45.951232000000005,
+      "candidate_median_ms": 43.924564000000004,
+      "improvement_percent": 4.410475871463034,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.973276,
+        6.5562830000000005,
+        6.209077000000001
+      ],
+      "candidate_samples_ms": [
+        7.372642,
+        7.227072,
+        7.146032999999999
+      ],
+      "baseline_median_ms": 6.209077000000001,
+      "candidate_median_ms": 7.227072,
+      "improvement_percent": -16.395270987942315,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        48.137694999999994,
+        46.245712,
+        50.736112999999996
+      ],
+      "candidate_samples_ms": [
+        48.893832,
+        46.031271000000004,
+        45.912431
+      ],
+      "baseline_median_ms": 48.137694999999994,
+      "candidate_median_ms": 46.031271000000004,
+      "improvement_percent": 4.37583062504341,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.635709,
+        2.492164,
+        2.506974
+      ],
+      "candidate_samples_ms": [
+        2.694789,
+        3.232111,
+        2.942529
+      ],
+      "baseline_median_ms": 2.506974,
+      "candidate_median_ms": 2.942529,
+      "improvement_percent": -17.37373423098923,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.179358,
+        6.411214,
+        6.546513
+      ],
+      "candidate_samples_ms": [
+        7.511347000000001,
+        7.188366,
+        7.7965219999999995
+      ],
+      "baseline_median_ms": 6.411214,
+      "candidate_median_ms": 7.511347000000001,
+      "improvement_percent": -17.159511443542524,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 12884.569418,
+      "candidate_ms": 13110.541063,
+      "improvement_percent": -1.7538160389303703,
+      "minimum_percent": 0,
+      "pass": false
+    }
+  ],
+  "original_controls_completed": [
+    1,
+    8
+  ],
+  "original_controls_required": 8,
+  "C1_four_precision_routes_and56_complete_readbacks_passed": true,
+  "C8_complete_original_control_and_cost_use_identical_executions": true,
+  "no_extra_standalone_C8_execution": true,
+  "all32_complete_readbacks_equal_across_four_current_slots": true,
+  "all54_actual_command_module_joins_per_slot_verified": true,
+  "unmodified_original_reader_comparator_launcher": {
+    "software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    }
+  },
+  "terminal_owners": {
+    "out/software-crossray-active/compile-endpoint": {
+      "owner": {
+        "bytes": 2227,
+        "sha256": "33c77f67d221e7cc973beeb5eca1506a9cff07a4a4215b1a25517482d3bc29e6"
+      },
+      "seconds": 0.7907950789667666,
+      "peak_rss_kib": 242560
+    },
+    "out/software-crossray-active-jit/capture-candidate-endpoint-normal": {
+      "owner": {
+        "bytes": 3800,
+        "sha256": "3c75778ce687640559b1e70289f7929ea7556da2701bb7f4d4e44ed0b9a68b6d"
+      },
+      "seconds": 38.96299953700509,
+      "peak_rss_kib": 1931784
+    },
+    "out/software-crossray-active-producer/build": {
+      "owner": {
+        "bytes": 3518,
+        "sha256": "e642f3462dacdd9fe1bc2329eca84d337d2f4606db9762e9110f5029a078fec5"
+      },
+      "seconds": 65.7382698750007,
+      "peak_rss_kib": 1292908
+    },
+    "out/software-crossray-active-control/control-1": {
+      "owner": {
+        "bytes": 3028,
+        "sha256": "19d3486eef6fbc3be4594fc027895cc0f019d2df10fceef4d224e53458f7a555"
+      },
+      "seconds": 217.4666412289953,
+      "peak_rss_kib": 2497512
+    },
+    "out/software-crossray-active-benefit/benefit/a1": {
+      "owner": {
+        "bytes": 3221,
+        "sha256": "190de9137e28929909905ebf796d9e8a2ce40cac138e2f074ccef7ea2a1f6f64"
+      },
+      "seconds": 82.65371462900657,
+      "peak_rss_kib": 2340236
+    },
+    "out/software-crossray-active-benefit/benefit/b1": {
+      "owner": {
+        "bytes": 3223,
+        "sha256": "b1d6114c7c4e842e240ca82bf76b5dfd2d13282e1bd186218e9bb73f53025aa6"
+      },
+      "seconds": 136.93805193796288,
+      "peak_rss_kib": 2343656
+    },
+    "out/software-crossray-active-benefit/benefit/b2": {
+      "owner": {
+        "bytes": 3222,
+        "sha256": "57b47f85c5726a88d9c5d3b517e3b7dcdc25d446cba004b8352fdecd5f93cd80"
+      },
+      "seconds": 96.43857853900408,
+      "peak_rss_kib": 2344872
+    },
+    "out/software-crossray-active-benefit/benefit/a2": {
+      "owner": {
+        "bytes": 3222,
+        "sha256": "d3617a1382a42110462fb54f3eb7b60aa349366f5be95bb19bb8e923e10d0486"
+      },
+      "seconds": 106.43371572904289,
+      "peak_rss_kib": 2339704
+    }
+  },
+  "current_frozen_inputs_rehashed": 5871,
+  "full_inactive_tail_acceptance": {
+    "passed": true,
+    "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+    "candidate_module_sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f",
+    "all4original_precision_routes_exercised": true,
+    "original56_complete_active_readbacks_equal": true,
+    "capacity": 32,
+    "full_inactive_tail_checks": 56,
+    "nonzero_tail_witnesses": 36,
+    "all_inactive_byte_comparisons_passed": true,
+    "all_shrink_calls_observed": true,
+    "routes": [
+      {
+        "decline_rte32": false,
+        "wide": false,
+        "full_inactive_tail_checks": 14,
+        "nonzero_tail_witnesses": 9,
+        "checks": [
+          {
+            "call": 0,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 1,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 2,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 3,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+          },
+          {
+            "call": 4,
+            "active_rows": "8",
+            "capacity": "32",
+            "bytes": "367584",
+            "nonzero_before": "1",
+            "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+          },
+          {
+            "call": 5,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 6,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 7,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 8,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 9,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 10,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 11,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+          },
+          {
+            "call": 12,
+            "active_rows": "1",
+            "capacity": "32",
+            "bytes": "474796",
+            "nonzero_before": "1",
+            "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+          },
+          {
+            "call": 13,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          }
+        ]
+      },
+      {
+        "decline_rte32": false,
+        "wide": true,
+        "full_inactive_tail_checks": 14,
+        "nonzero_tail_witnesses": 9,
+        "checks": [
+          {
+            "call": 0,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 1,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 2,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 3,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+          },
+          {
+            "call": 4,
+            "active_rows": "8",
+            "capacity": "32",
+            "bytes": "367584",
+            "nonzero_before": "1",
+            "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+          },
+          {
+            "call": 5,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 6,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 7,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 8,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 9,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 10,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 11,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+          },
+          {
+            "call": 12,
+            "active_rows": "1",
+            "capacity": "32",
+            "bytes": "474796",
+            "nonzero_before": "1",
+            "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+          },
+          {
+            "call": 13,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          }
+        ]
+      },
+      {
+        "decline_rte32": true,
+        "wide": false,
+        "full_inactive_tail_checks": 14,
+        "nonzero_tail_witnesses": 9,
+        "checks": [
+          {
+            "call": 0,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 1,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 2,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 3,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+          },
+          {
+            "call": 4,
+            "active_rows": "8",
+            "capacity": "32",
+            "bytes": "367584",
+            "nonzero_before": "1",
+            "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+          },
+          {
+            "call": 5,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 6,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 7,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 8,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 9,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 10,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 11,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+          },
+          {
+            "call": 12,
+            "active_rows": "1",
+            "capacity": "32",
+            "bytes": "474796",
+            "nonzero_before": "1",
+            "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+          },
+          {
+            "call": 13,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          }
+        ]
+      },
+      {
+        "decline_rte32": true,
+        "wide": true,
+        "full_inactive_tail_checks": 14,
+        "nonzero_tail_witnesses": 9,
+        "checks": [
+          {
+            "call": 0,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 1,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 2,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 3,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "7d858eb0b93203c4bbc18505f9b6529f09c72d68c4fd236aa673851415e0a02e"
+          },
+          {
+            "call": 4,
+            "active_rows": "8",
+            "capacity": "32",
+            "bytes": "367584",
+            "nonzero_before": "1",
+            "sha256": "a52cb5d7a3ccf9cce155374109fafd464009573889b8958e26989b636315f518"
+          },
+          {
+            "call": 5,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          },
+          {
+            "call": 6,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 7,
+            "active_rows": "27",
+            "capacity": "32",
+            "bytes": "76580",
+            "nonzero_before": "1",
+            "sha256": "2e77d66193debf7b467919696fabc4537ce9cbe03e277b4240041435a4c58f30"
+          },
+          {
+            "call": 8,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 9,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 10,
+            "active_rows": "23",
+            "capacity": "32",
+            "bytes": "137844",
+            "nonzero_before": "1",
+            "sha256": "8d21f90e6f7064db3cf30e579ef3c256e3bbf4d6b1031e44e58d5f4d1c0d1fe5"
+          },
+          {
+            "call": 11,
+            "active_rows": "4",
+            "capacity": "32",
+            "bytes": "428848",
+            "nonzero_before": "1",
+            "sha256": "076f45940bb73f57a370f601375e105ca4e164fd9707d184a020c8a64d8cee62"
+          },
+          {
+            "call": 12,
+            "active_rows": "1",
+            "capacity": "32",
+            "bytes": "474796",
+            "nonzero_before": "1",
+            "sha256": "da5325a364141112d8ebcab2110bbdb3e063bd83eeb7936c242acef5fa15e5a6"
+          },
+          {
+            "call": 13,
+            "active_rows": "29",
+            "capacity": "32",
+            "bytes": "45948",
+            "nonzero_before": "0",
+            "sha256": "47de8ede660e6b7b1ab0500cabfa1c4990d9e90c00d9006f9ae721ec61f189fe"
+          }
+        ]
+      }
+    ],
+    "original_limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "seconds": 217.4666412289953,
+    "peak_rss_kib": 2497512,
+    "original_controls_completed": [
+      1
+    ],
+    "original_controls_required": 8,
+    "performance_acceptance": false,
+    "production_adopted": false,
+    "scope": "Original C1 numerical and active-row assertions plus exact full inactive allocation comparisons before/after every shrink call, with positive nonzero witnesses per exercised precision route. No altered buffers/packets/programs/dispatches; extra reads stay outside Endpoint calls. No benefit, all8, frame or qualification claim."
+  },
+  "geometry_admission": {
+    "passed": true,
+    "actual_module_sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f",
+    "actual_called_entry_PC": 138102600474624,
+    "observed_SysV_integer_arguments_2_3_4": [
+      8,
+      1,
+      1
+    ],
+    "actual_llvm_vector_alloca_bytes": 100480,
+    "actual_llvm_vector_allocas": [
+      [
+        "80",
+        "8",
+        "32"
+      ],
+      [
+        "3060",
+        "8",
+        "32"
+      ]
+    ],
+    "coroutine_resume_functions": 0,
+    "dynamic_allocator_calls": 0,
+    "jit_executable_bytes": 923713,
+    "stock_jit_executable_bytes": 922597,
+    "text_growth_percent": 0.12096289062288879,
+    "all55production_feature_fields_equal_stock": true,
+    "all_defined_relocations_and_uncovered_bytes_exact": true,
+    "undefined_callbacks_independently_resolved": false,
+    "corrected_NumWorkgroups_active_bound_emission": {
+      "passed": true,
+      "candidate_module": {
+        "bytes": 150488,
+        "sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f"
+      },
+      "NumWorkgroups_builtin": "%gl_NumWorkGroups",
+      "active_count_x_extract": "%807",
+      "mapped_row_value": "%row",
+      "row_ge_active_condition": "%808",
+      "inactive_condition_abstract_CFG_states": 53,
+      "inactive_return_blocks": [
+        "%786",
+        "%825"
+      ],
+      "all_inactive_paths_return_before_every_OpStore_OpFunctionCall_OpAtomic_OpCopyMemory": true,
+      "capacity_layout_still_independent_of_active_dispatch_rows": true,
+      "descriptor_interface_equal": true,
+      "no_workgroup_storage_barriers_or_atomics": true,
+      "actual_driver_JIT_numerical_cost_and_runtime_tail_witnesses": false,
+      "scope": "Actual emitted ComputeMain CFG is explored with mapped row>=dispatch active count, all other branch conditions unconstrained and predecessor-specific boolean phis. Every possible path returns before any store/call. This closes the emitted static inactive-store obligation; complete allocation before/after runtime witnesses remain required."
+    },
+    "short_input_before_retained_arithmetic_only": true,
+    "numerical_tail_or_performance_result": false,
+    "scope": "Exact corrected whole module, ordinary successful driver passes, called entry and full allocated-code binding. Stack/private geometry and ordinary feature policy; no retained arithmetic or throughput/causal JIT timing claim."
+  },
+  "emission_admission": {
+    "passed": true,
+    "descriptor_interface_equal": true,
+    "private_storage_bytes": {
+      "retainedProjectionTerms": 320,
+      "retainedProjection": 28,
+      "retainedStatus": 4,
+      "retainedScratch": 12240
+    },
+    "total_per_invocation_bytes": 12592,
+    "workgroup_storage_bytes": 0,
+    "workgroup_rays": 8,
+    "unchanged_serial_expression_stride": 1,
+    "actual_complete_current_program_sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+    "canonical_header_join_current": true,
+    "barriers_and_atomics": 0,
+    "corrected_emitted_active_bound_review": {
+      "passed": true,
+      "candidate_module": {
+        "bytes": 150488,
+        "sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f"
+      },
+      "NumWorkgroups_builtin": "%gl_NumWorkGroups",
+      "active_count_x_extract": "%807",
+      "mapped_row_value": "%row",
+      "row_ge_active_condition": "%808",
+      "inactive_condition_abstract_CFG_states": 53,
+      "inactive_return_blocks": [
+        "%786",
+        "%825"
+      ],
+      "all_inactive_paths_return_before_every_OpStore_OpFunctionCall_OpAtomic_OpCopyMemory": true,
+      "capacity_layout_still_independent_of_active_dispatch_rows": true,
+      "descriptor_interface_equal": true,
+      "no_workgroup_storage_barriers_or_atomics": true,
+      "actual_driver_JIT_numerical_cost_and_runtime_tail_witnesses": false,
+      "scope": "Actual emitted ComputeMain CFG is explored with mapped row>=dispatch active count, all other branch conditions unconstrained and predecessor-specific boolean phis. Every possible path returns before any store/call. This closes the emitted static inactive-store obligation; complete allocation before/after runtime witnesses remain required."
+    },
+    "all_arithmetic_source_bytes_unchanged": true,
+    "scope": "Source and actual emitted ownership admission; private footprint is declared storage, not measured runtime/JIT memory. No numerical or speed result."
+  },
+  "benefit_slots_executed_once": 4,
+  "extra_warmups_retries_order_pooling_or_cost_subtraction": false,
+  "production_adopted": false,
+  "full_scientific_runtime_frame_installed_release_qualification": false,
+  "scope": "Distinct software eight-private-ray Endpoint. Exact original complete C1/C8 assertions and ABI, one fixed ABBA20+2 decision. Remaining6 original controls and original arithmetic/provider admission are required before adoption if benefit passes. Current source remains unchanged; no speed result beyond this original finite trial."
+}

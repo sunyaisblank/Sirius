@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "actual_module_sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f",
+  "actual_called_entry_PC": 138102600474624,
+  "observed_SysV_integer_arguments_2_3_4": [
+    8,
+    1,
+    1
+  ],
+  "actual_llvm_vector_alloca_bytes": 100480,
+  "actual_llvm_vector_allocas": [
+    [
+      "80",
+      "8",
+      "32"
+    ],
+    [
+      "3060",
+      "8",
+      "32"
+    ]
+  ],
+  "coroutine_resume_functions": 0,
+  "dynamic_allocator_calls": 0,
+  "jit_executable_bytes": 923713,
+  "stock_jit_executable_bytes": 922597,
+  "text_growth_percent": 0.12096289062288879,
+  "all55production_feature_fields_equal_stock": true,
+  "all_defined_relocations_and_uncovered_bytes_exact": true,
+  "undefined_callbacks_independently_resolved": false,
+  "corrected_NumWorkgroups_active_bound_emission": {
+    "passed": true,
+    "candidate_module": {
+      "bytes": 150488,
+      "sha256": "11cfc5021961123e24e701baaaee68c7c62bd627fb47ade746749ebc77653b6f"
+    },
+    "NumWorkgroups_builtin": "%gl_NumWorkGroups",
+    "active_count_x_extract": "%807",
+    "mapped_row_value": "%row",
+    "row_ge_active_condition": "%808",
+    "inactive_condition_abstract_CFG_states": 53,
+    "inactive_return_blocks": [
+      "%786",
+      "%825"
+    ],
+    "all_inactive_paths_return_before_every_OpStore_OpFunctionCall_OpAtomic_OpCopyMemory": true,
+    "capacity_layout_still_independent_of_active_dispatch_rows": true,
+    "descriptor_interface_equal": true,
+    "no_workgroup_storage_barriers_or_atomics": true,
+    "actual_driver_JIT_numerical_cost_and_runtime_tail_witnesses": false,
+    "scope": "Actual emitted ComputeMain CFG is explored with mapped row>=dispatch active count, all other branch conditions unconstrained and predecessor-specific boolean phis. Every possible path returns before any store/call. This closes the emitted static inactive-store obligation; complete allocation before/after runtime witnesses remain required."
+  },
+  "short_input_before_retained_arithmetic_only": true,
+  "numerical_tail_or_performance_result": false,
+  "scope": "Exact corrected whole module, ordinary successful driver passes, called entry and full allocated-code binding. Stack/private geometry and ordinary feature policy; no retained arithmetic or throughput/causal JIT timing claim."
+}
