@@ -1,0 +1,193 @@
+{
+  "schema": "sirius-viewer-input-CI-review-v1",
+  "passed": true,
+  "source_revision": "6d2af336b12dc430792bd5a83c04fb5632868c04",
+  "runs": {
+    "39487479545": {
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "integration-windows-no-render",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "integration-macos-no-render",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "integration-no-render",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "linux-gate",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "linux-sanitizers",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "macos-build",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "windows-build",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "macos-retained-diagnostic",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    },
+    "39487799597": {
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "name": "integration-no-render",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "integration-macos-no-render",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "integration-windows-no-render",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "macos-build",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "linux-gate",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "linux-sanitizers",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "windows-build",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "macos-retained-diagnostic",
+          "status": "completed",
+          "conclusion": "skipped"
+        }
+      ]
+    }
+  },
+  "integration_jobs_per_run": 3,
+  "original_authority_controls_per_run": 30,
+  "unrequested_full_qualification_jobs_per_run": 5,
+  "PR_merge_tree_equals_source": true,
+  "PR_merge_commit": "fc3d5ec8af294d5241b7e5bb9d57dce37ffb77fe",
+  "native_build_domains_admitted": 0,
+  "CI_artifact_bytes_downloaded_or_backed_up": false,
+  "files": {
+    "ci/39487799597-118852676353.json": {
+      "bytes": 4316,
+      "sha256": "d511c37560d062448870878938bb0c1f68482ad18e2fb90dff3a93bd1f6f4a21"
+    },
+    "ci/PR-merge-commit.json": {
+      "bytes": 2813,
+      "sha256": "9acbc26c0d02a8f536204d385a87353345230fcfa9918cc12071cbd41acf0a93"
+    },
+    "ci/39487799597-118852676698.log": {
+      "bytes": 152312,
+      "sha256": "d5d2e5a167dd0eaa60f5334367b183c874bdf88b09a056d54b9909396df3f681"
+    },
+    "ci/PR-merge-ref.json": {
+      "bytes": 385,
+      "sha256": "0c0282ecc9bc5565594193cb82a02a64af34c6d8c8b0cbd4b357b55bba3e4eee"
+    },
+    "ci/source-commit.json": {
+      "bytes": 1303,
+      "sha256": "d25506dc1e7d02568930657972f330d988b339cdb5224036cdc8a8091397b256"
+    },
+    "ci/39487479545-118851569379.log": {
+      "bytes": 134798,
+      "sha256": "5fb7450970c2fb49c8272088d2ee6eb6aff66acaf2272b5b887def550c3fd15e"
+    },
+    "ci/39487799597-118852676353.log": {
+      "bytes": 156734,
+      "sha256": "59d9491e3c645b1f8a99229ea21bf4a87d913e60168b23f7f8d3f5c623a38074"
+    },
+    "ci/39487479545-118851569347.log": {
+      "bytes": 164490,
+      "sha256": "00dd089790ad18773fdc8a2cb384492ab2d6a2bfcd3fb650b0e4a62ad5c5176f"
+    },
+    "ci/39487479545-118851569379.json": {
+      "bytes": 3543,
+      "sha256": "756e7caab7d88e554be2127b7f6bff7fab6698b0879f386cf04ddff70d714a48"
+    },
+    "ci/jobs-39487799597.json": {
+      "bytes": 19606,
+      "sha256": "650bd9afaf4866a00905d5c08f4ae065fdf7d95ec3ab6526687e2087749f871a"
+    },
+    "ci/run-39487479545.json": {
+      "bytes": 13484,
+      "sha256": "b3c8d73850ca268c0e31a423550dfecfa9a8eda47ec0ef21be192bc9fbfaff75"
+    },
+    "ci/artifacts-39487479545.json": {
+      "bytes": 4644,
+      "sha256": "cc5fa64e7524b027a1cd157d31f235a802fcbd449c8f19c41d4aba026e91f84d"
+    },
+    "ci/39487479545-118851569027.json": {
+      "bytes": 4596,
+      "sha256": "8380c2f8a712c5d07a657ddc37ed4929fee47e0a04d995f0ffbfba49dd2ba8c0"
+    },
+    "ci/39487479545-118851569347.json": {
+      "bytes": 4318,
+      "sha256": "6bff7c38e89733e87c58bedca1fbee70ff43ce67a77454aea254aa48efe10066"
+    },
+    "ci/artifacts-39487799597.json": {
+      "bytes": 1896,
+      "sha256": "ebbb1e3c8d8a9a8eaa24f1b9a3aa3ce7ed4b419e809782e5b16f00ee9cf7ce40"
+    },
+    "ci/39487479545-118851569027.log": {
+      "bytes": 177733,
+      "sha256": "c6f17b137db21f27aaa05772e573dc969c8461e2cbaa46a66d1687a6d2244d99"
+    },
+    "ci/39487799597-118852676698.json": {
+      "bytes": 4594,
+      "sha256": "d7e87da5bb9d77fa23e5fcf3c7635b79132c6562c1dee1803346c4a7062d3de4"
+    },
+    "ci/jobs-39487479545.json": {
+      "bytes": 19622,
+      "sha256": "25ae5258aa264bbdcb0ee6daf7d9a344bf44a1bf2ded4a17a2ffccd3e5c9afbf"
+    },
+    "ci/39487799597-118852676064.json": {
+      "bytes": 3541,
+      "sha256": "a3d24613a05189e43d52c1d8989ebe0deff32584306f75836d5b533926e7a290"
+    },
+    "ci/39487799597-118852676064.log": {
+      "bytes": 136084,
+      "sha256": "a98131aaf4111d606cee14c4c273d059dd90ce08ab780334e4a4052e92bdba71"
+    },
+    "ci/run-39487799597.json": {
+      "bytes": 14249,
+      "sha256": "bb67ab936ccad9532b42be32ec255f86479c9187121aa70a6376cd8fcd144f6f"
+    }
+  },
+  "scope": "Terminal exact-source and PR-merge strict complete-topology integration and original authority controls. No full Mandatory, sanitizer/scientific/provider/native-window/frame/installed-release qualification; build artifacts remain available in GitHub with API identities only."
+}
