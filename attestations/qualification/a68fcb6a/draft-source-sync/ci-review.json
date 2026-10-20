@@ -1,0 +1,233 @@
+{
+  "schema": "sirius-draft-source-integration-ci-v1",
+  "passed": true,
+  "run_id": 39449825818,
+  "url": "https://github.com/sunyaisblank/Sirius/actions/runs/39449825818",
+  "development_source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "actual_merge_checkout": {
+    "passed": true,
+    "merge_commit": "e291d911e916fbbce667b10d81d51182d7eec725",
+    "merge_tree": "23a0b6f945fa3c9ec267c275d8a8d6d4144bbba4",
+    "development_source_tree": "23a0b6f945fa3c9ec267c275d8a8d6d4144bbba4",
+    "complete_tree_equal": true,
+    "parents": [
+      "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+      "a68fcb6abade554e92ce92a7cc2a948250574f44"
+    ],
+    "scope": "GitHub PR merge-checkout tree identity only; compiled receipts still bind the actual merge revision, not a68fcb6a."
+  },
+  "jobs": {
+    "linux": {
+      "job_id": 118721350485,
+      "conclusion": "success",
+      "actual_merge_checkout": "e291d911e916fbbce667b10d81d51182d7eec725",
+      "original_authority_cases": [
+        {
+          "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+          "seconds": "3.79"
+        },
+        {
+          "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "seconds": "0.02"
+        },
+        {
+          "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+          "seconds": "0.05"
+        },
+        {
+          "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "seconds": "2.73"
+        },
+        {
+          "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+          "seconds": "23.02"
+        },
+        {
+          "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+          "seconds": "0.35"
+        },
+        {
+          "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+          "seconds": "0.04"
+        },
+        {
+          "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+          "seconds": "1.03"
+        },
+        {
+          "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+          "seconds": "0.00"
+        },
+        {
+          "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+          "seconds": "0.62"
+        }
+      ],
+      "zero_failures_errors_skips": true,
+      "controls": 10
+    },
+    "windows": {
+      "job_id": 118721351032,
+      "conclusion": "success",
+      "actual_merge_checkout": "e291d911e916fbbce667b10d81d51182d7eec725",
+      "original_authority_cases": [
+        {
+          "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+          "seconds": "6.94"
+        },
+        {
+          "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "seconds": "0.07"
+        },
+        {
+          "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+          "seconds": "0.10"
+        },
+        {
+          "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "seconds": "8.13"
+        },
+        {
+          "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+          "seconds": "33.25"
+        },
+        {
+          "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+          "seconds": "0.54"
+        },
+        {
+          "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+          "seconds": "0.10"
+        },
+        {
+          "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+          "seconds": "0.18"
+        },
+        {
+          "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+          "seconds": "0.01"
+        },
+        {
+          "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+          "seconds": "0.70"
+        }
+      ],
+      "zero_failures_errors_skips": true,
+      "controls": 10
+    },
+    "macos": {
+      "job_id": 118721351611,
+      "conclusion": "success",
+      "actual_merge_checkout": "e291d911e916fbbce667b10d81d51182d7eec725",
+      "original_authority_cases": [
+        {
+          "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+          "seconds": "3.47"
+        },
+        {
+          "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "seconds": "0.05"
+        },
+        {
+          "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+          "seconds": "0.08"
+        },
+        {
+          "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "seconds": "2.80"
+        },
+        {
+          "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+          "seconds": "27.58"
+        },
+        {
+          "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+          "seconds": "0.92"
+        },
+        {
+          "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+          "seconds": "0.11"
+        },
+        {
+          "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+          "seconds": "0.16"
+        },
+        {
+          "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+          "seconds": "0.02"
+        },
+        {
+          "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+          "seconds": "0.78"
+        }
+      ],
+      "zero_failures_errors_skips": true,
+      "controls": 10
+    }
+  },
+  "all3_requested_jobs_pass": true,
+  "original_authority_controls_passed": 30,
+  "full_qualification_jobs_unrequested": [
+    {
+      "name": "windows-build",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "linux-gate",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "macos-retained-diagnostic",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "linux-sanitizers",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "macos-build",
+      "conclusion": "skipped"
+    }
+  ],
+  "diagnostic_artifacts": [
+    {
+      "id": 12279565358,
+      "name": "sirius-gate-diagnostics-integration-macos-no-render",
+      "bytes": 1894,
+      "sha256": "356bb75b0ac429c9e9d69f50f7b5504f63b9737d64ac20b18e9e54b99f982c9d",
+      "API_digest_equal": true,
+      "all_member_CRCs_verified": true,
+      "members": [
+        {
+          "path": "bin/macos/Testing/Temporary/LastTest.log",
+          "bytes": 11661,
+          "sha256": "35d82500068f2614b260f689996714d77626b8ca47f83062243b3950dc4afe76",
+          "crc32": 604661104,
+          "mode": "0o644"
+        }
+      ]
+    },
+    {
+      "id": 12279321926,
+      "name": "sirius-gate-diagnostics-integration-windows-no-render",
+      "bytes": 1976,
+      "sha256": "3728f6e167fdef7fe54a16f2399436573db7d406099fdafb4dd0ca9a1f593f35",
+      "API_digest_equal": true,
+      "all_member_CRCs_verified": true,
+      "members": [
+        {
+          "path": "bin/windows-msvc/Testing/Temporary/LastTest.log",
+          "bytes": 12145,
+          "sha256": "edce31d4687eb0f7245f208a2ce45d98dcda727bace90efb3f16592f28a271f9",
+          "crc32": 347065946,
+          "mode": "0o666"
+        }
+      ]
+    }
+  ],
+  "new_runtime_or_science_frame_Mandatory_or_release_admission": false,
+  "current_development_external_domains_admitted": 0,
+  "native_build_domain_attestations_generated": false,
+  "reader_repair": "Initial reader assumed one space before # in CTest lines; changed to whitespace matching. No CI or tests were rerun.",
+  "scope": "Strict non-render pull-request integration at the actual merge checkout. Build-only authority controls and tree equality do not relabel merge-revision products as exact a68 external-domain records. No full renderer/science/Mandatory run."
+}
