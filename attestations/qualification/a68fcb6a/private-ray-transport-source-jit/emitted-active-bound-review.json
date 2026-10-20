@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "candidate_module": {
+    "bytes": 102996,
+    "sha256": "779a95fba29381c298886f204e2458e88c5f3b4281d8669edad76527accfd1f8"
+  },
+  "NumWorkgroups_builtin": "%gl_NumWorkGroups",
+  "active_count_x_extract": "%806",
+  "mapped_row_value": "%row",
+  "row_ge_active_condition": "%807",
+  "inactive_condition_abstract_CFG_states": 53,
+  "inactive_return_blocks": [
+    "%785",
+    "%824"
+  ],
+  "all_inactive_paths_return_before_every_OpStore_OpFunctionCall_OpAtomic_OpCopyMemory": true,
+  "capacity_layout_still_independent_of_active_dispatch_rows": true,
+  "descriptor_interface_equal": true,
+  "no_workgroup_storage_barriers_or_atomics": true,
+  "actual_driver_JIT_numerical_cost_and_runtime_tail_witnesses": false,
+  "scope": "Actual emitted ComputeMain CFG is explored with mapped row>=dispatch active count, all other branch conditions unconstrained and predecessor-specific boolean phis. Every possible path returns before any store/call. This closes the emitted static inactive-store obligation; complete allocation before/after runtime witnesses remain required."
+}

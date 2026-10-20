@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "actual_module_sha256": "779a95fba29381c298886f204e2458e88c5f3b4281d8669edad76527accfd1f8",
+  "actual_called_entry_PC": 133780317773824,
+  "actual_entry_local_size_arguments": [
+    8,
+    1,
+    1
+  ],
+  "actual_private_vector_allocas": [
+    [
+      "2295",
+      "8",
+      "32"
+    ],
+    [
+      "125",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ],
+    [
+      "7",
+      "8",
+      "32"
+    ]
+  ],
+  "actual_private_vector_alloca_bytes": 79456,
+  "coroutine_resume_functions": 0,
+  "dynamic_allocator_calls": 0,
+  "jit_executable_bytes": 906840,
+  "stock_jit_executable_bytes": 879837,
+  "text_growth_percent": 3.0690912066666964,
+  "stock_coroutine_resume_frame_bytes": [
+    89024
+  ],
+  "all55_features_queue_extensions_chain_equal": true,
+  "ordinary_actual_module_optimizer_lookup_called_entry_and_defined_relocation_join": true,
+  "inactive_bound_static_CFG": {
+    "passed": true,
+    "candidate_module": {
+      "bytes": 102996,
+      "sha256": "779a95fba29381c298886f204e2458e88c5f3b4281d8669edad76527accfd1f8"
+    },
+    "NumWorkgroups_builtin": "%gl_NumWorkGroups",
+    "active_count_x_extract": "%806",
+    "mapped_row_value": "%row",
+    "row_ge_active_condition": "%807",
+    "inactive_condition_abstract_CFG_states": 53,
+    "inactive_return_blocks": [
+      "%785",
+      "%824"
+    ],
+    "all_inactive_paths_return_before_every_OpStore_OpFunctionCall_OpAtomic_OpCopyMemory": true,
+    "capacity_layout_still_independent_of_active_dispatch_rows": true,
+    "descriptor_interface_equal": true,
+    "no_workgroup_storage_barriers_or_atomics": true,
+    "actual_driver_JIT_numerical_cost_and_runtime_tail_witnesses": false,
+    "scope": "Actual emitted ComputeMain CFG is explored with mapped row>=dispatch active count, all other branch conditions unconstrained and predecessor-specific boolean phis. Every possible path returns before any store/call. This closes the emitted static inactive-store obligation; complete allocation before/after runtime witnesses remain required."
+  },
+  "scope": "Actual ordinary called complete-module JIT and private allocation geometry. Short-input canary executes no retained arithmetic. Original full-allocation C1 and unchanged benefit remain mandatory; no adoption or frame/science/release qualification."
+}

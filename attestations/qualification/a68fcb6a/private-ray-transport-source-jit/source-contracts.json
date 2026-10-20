@@ -1,0 +1,20 @@
+{
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "production_changed": false,
+  "changed_stage": "ordinary portable-normal Transport only",
+  "row_mapping": "r=8*g+l; r<NumWorkgroups.x=active_rows and r<inputs[0]=capacity before every output clear/store. Capacity still locates program tail and row stride.",
+  "row_ownership_argument": "For 0<=active<=capacity<=65536, each active row r has unique g=floor(r/8)<active and l=r mod8. No invocation with r>=active can write. For admitted dispatch limits arithmetic is bounded below524288.",
+  "source_composition_argument": "All arithmetic/guard/write functions and immutable programs remain exact. Setting the expression-owner lane to0 and execution stride1 evaluates the original complete independent layer in order. Scratch, refusal status and25 full coefficient tuples are private; every original coefficient producer,40 roots,7 RHS stages,weighted sums and final error outputs remain. Each removed barrier joined only the invocations now replaced by one ray owner. No cross-ray storage is shared.",
+  "old_failure_avoided": "Do not infer active rows from capacity; use the actual unchanged Vulkan dispatch builtin. Current full-allocation C1 including nonzero inactive tails is mandatory before benefit.",
+  "barrier_sites_removed": 9,
+  "scratch_retained_words": 2295,
+  "coefficient_retained_words": 125,
+  "new_inactive_bound": "NumWorkgroups.x",
+  "shared_arithmetic_sources_byte_exact": [
+    "retained_scalar.slang",
+    "retained_pair.slang",
+    "retained_triple.slang",
+    "portable_binary32.h"
+  ],
+  "scope": "Source argument only, not machine-checked shader equivalence or driver/numerical/cost evidence."
+}

@@ -1,0 +1,198 @@
+--- scripts/build-retained-kernels.py
++++ private/scripts/build-retained-kernels.py
+@@ -311,10 +311,13 @@
+                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS={specialized_words}",
+                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS={specialized_layers}",
+                         f"-DSIRIUS_RETAINED_SCHWARZSCHILD_PREFIX={specialized_prefix}"]
++    if source.stem != "retained_transport" or not portable or not normal_sum32 or stage_seven_owner:
++        raise ValueError("private builder admits only ordinary portable-normal Transport")
++    definitions.append("-DSIRIUS_RETAINED_SINGLE_INVOCATION=1")
+     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
+     # Normal Transport, Endpoint and DopriPhase cover complete 64-wide layers
+     # with sixteen invocations and stride over their complete producer sets.
+-    execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
++    execution_lanes = (1 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
+                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
+     if stage_seven_owner:
+         if not portable or not normal_sum32 or source.stem not in ("retained_transport", "retained_endpoint") or execution_lanes != 16:
+@@ -389,13 +392,10 @@
+         elif "OpTypeFloat" in text or re.search(r"OpExecutionMode\S* .* (?:Denorm|RoundingMode|SignedZeroInfNan)", text):
+             raise ValueError("portable retained stage depends on native floating arithmetic")
+         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
+-        if f"OpExecutionMode {entry} LocalSize {execution_lanes} 1 1" not in text:
++        if f"OpExecutionMode {entry} LocalSize 8 1 1" not in text:
+             raise ValueError("portable retained stage lost its declared execution layout")
+-        if portable_parallel:
+-            if "OpControlBarrier" not in text:
+-                raise ValueError("parallel portable retained stage lost its inter-invocation join")
+-        elif "OpControlBarrier" in text:
+-            raise ValueError("serial portable stage retained an inter-invocation barrier")
++        if re.search(r"OpVariable %\S+ Workgroup", text) or any(op in text for op in ("OpControlBarrier", "OpMemoryBarrier", "OpAtomic")):
++            raise ValueError("private-ray Transport retained inter-invocation storage or synchronization")
+         if normal_sum32:
+             assembly.write_text(text)
+             subprocess.run([assembler, "--target-env", "spv1.5", str(assembly), "-o", str(destination)],
+
+--- src/sirius/kernels/retained_transport.slang
++++ private/src/sirius/kernels/retained_transport.slang
+@@ -7,6 +7,13 @@
+ #endif
+ [[vk::binding(0, 0)]] StructuredBuffer<uint> inputs;
+ [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
++// Capacity still locates the immutable program tail. Only dispatched rows may write.
++uint ActiveRowsInDispatch() {
++    return spirv_asm {
++        OpLoad $$uint3 %groups builtin(NumWorkgroups:uint3);
++        OpCompositeExtract $$uint result %groups 0;
++    };
++}
+ RetainedTriple ReadStored(uint base) {
+     RetainedTriple r;
+     r.hi = RPFromBits(outputs[base]);
+@@ -132,7 +139,9 @@
+     if (needed == 0 || needed > count || layers == 0 || layers > SIRIUS_RETAINED_LAYERS) return false;
+     if (lane == 0) retainedStatus = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     GroupMemoryBarrierWithGroupSync();
++#endif
+ #endif
+     uint layerBase = programBase + 43 + 5 * count;
+     if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
+@@ -176,7 +185,9 @@
+             RejectRetainedProgram();
+ #endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+         GroupMemoryBarrierWithGroupSync();
++#endif
+ #endif
+         if (retainedStatus != 0) return false;
+         expected = end;
+@@ -201,14 +212,18 @@
+         else if (ScratchRead(index, 4, rowBase, 2404) == 0)
+             RejectRetainedProgram();
+     }
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     GroupMemoryBarrierWithGroupSync();
++#endif
+     if (retainedStatus != 0) return false;
+     for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES)
+         WriteStored(rowBase + 1004 + stage * 200 + i * 5,
+                     ReadValue(inputs[programBase + 3 + i], rowBase));
+ #endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++#endif
+ #endif
+     return true;
+ }
+@@ -235,7 +250,7 @@
+ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
+ // Six row sums, fourteen nonzero corrections and five embedded-error weights.
+ // Preserve the complete retained value, including its integer validity word.
+-groupshared uint retainedCoefficients[SIRIUS_RETAINED_COEFFICIENTS * 5];
++static uint retainedCoefficients[SIRIUS_RETAINED_COEFFICIENTS * 5];
+ void CacheCoefficient(uint lane) {
+     if (lane >= SIRIUS_RETAINED_COEFFICIENTS) return;
+ #ifdef SIRIUS_RETAINED_PORTABLE
+@@ -475,16 +490,17 @@
+     value.valid = retainedCoefficients[base + 4];
+     return value;
+ }
+-[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
+-                                                                              : SV_GroupID,
+-                                                                                uint lane
+-                                                                              : SV_GroupIndex) {
++#if !defined(SIRIUS_RETAINED_PORTABLE) || !defined(SIRIUS_RETAINED_NORMAL_SUM32) || !defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT) || !defined(SIRIUS_RETAINED_SINGLE_INVOCATION) || SIRIUS_RETAINED_EXECUTION_LANES != 1 || defined(SIRIUS_RETAINED_STAGE7_OWNER)
++#error private ray Transport requires ordinary portable normal-sum arithmetic and one serial owner per ray
++#endif
++[shader("compute")][numthreads(8, 1, 1)] void ComputeMain(uint3 id : SV_GroupID, uint ray_lane : SV_GroupIndex) {
++    const uint lane = 0;
+     uint ni, si, no, so;
+     inputs.GetDimensions(ni, si);
+     outputs.GetDimensions(no, so);
+     if (ni < 1 || id.y != 0 || id.z != 0) return;
+-    uint rows = inputs[0], row = id.x;
+-    if (rows == 0 || rows > 65536 || row >= rows || ni < 1 + 230 * rows + 43 || no % rows != 0)
++    uint rows = inputs[0], row = id.x * 8 + ray_lane;
++    if (rows == 0 || rows > 65536 || row >= rows || row >= ActiveRowsInDispatch() || ni < 1 + 230 * rows + 43 || no % rows != 0)
+         return;
+     uint programBase = 1 + 230 * rows, count = inputs[programBase],
+          registers = inputs[programBase + 1];
+@@ -495,7 +511,9 @@
+ #endif
+     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++#endif
+ #endif
+     uint layers = SIRIUS_RETAINED_LAYERS;
+     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+@@ -591,7 +609,9 @@
+ #else
+         if (stage == 1) CacheCoefficient(lane);
+ #endif
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+         GroupMemoryBarrierWithGroupSync();
++#endif
+ #endif
+         for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
+             RetainedTriple value = ReadOriginal(4 + i, row);
+@@ -617,7 +637,9 @@
+ #endif
+         }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+         AllMemoryBarrierWithGroupSync();
++#endif
+ #endif
+         if (retainedStatus != 0) return;
+         if (lane == 0) outputs[rowBase + 1] = stage + 1;
+@@ -625,7 +647,9 @@
+     }
+     if (lane == 0) retainedStatus = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     GroupMemoryBarrierWithGroupSync();
++#endif
+ #endif
+     for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
+         RetainedTriple first = ReadStored(rowBase + 1004 + i * 5), weighted = RTConstant(RPZero());
+@@ -643,7 +667,9 @@
+         WriteStored(rowBase + 4 + 120 * 5 + i * 5, error);
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++#ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++#endif
+ #endif
+     if (retainedStatus != 0) return;
+     if (lane == 0) outputs[rowBase] = 1;
+
+--- src/sirius/kernels/retained_scratch.slang
++++ private/src/sirius/kernels/retained_scratch.slang
+@@ -1,8 +1,7 @@
+-// One ray owns a workgroup. A layer's disjoint expression results become
+-// visible at its barrier, before any input register can be reused.
+-// The generated register plan plus status fits the portable 16 KiB bound.
+-groupshared uint retainedScratch[SIRIUS_RETAINED_REGISTERS * SIRIUS_RETAINED_TERMS];
+-groupshared uint retainedStatus;
++// Each invocation privately owns every scratch word and refusal status.
++// A complete layer is evaluated sequentially before any slot can be reused.
++static uint retainedScratch[SIRIUS_RETAINED_REGISTERS * SIRIUS_RETAINED_TERMS];
++static uint retainedStatus;
+ uint ScratchAddress(uint index, uint component, uint rowBase, uint prefix) {
+     return index * SIRIUS_RETAINED_TERMS + component;
+ }
+@@ -13,6 +12,5 @@
+     retainedScratch[ScratchAddress(index, component, rowBase, prefix)] = value;
+ }
+ void RejectRetainedProgram() {
+-    uint previous;
+-    InterlockedOr(retainedStatus, 1, previous);
++    retainedStatus |= 1u;
+ }
+
