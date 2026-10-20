@@ -1,0 +1,294 @@
+{
+  "review_passed": true,
+  "canonical_source_revision": "6876a8058a451eb0c8fedf8e3a6f8a8dfb16c210",
+  "runtime_source_revision": "5ef09e1b98742a8e9a06c6e04792f38ea698994f",
+  "format_only_source_reuse": {
+    "passed": true,
+    "numerical_runtime_source_revision": "5ef09e1b98742a8e9a06c6e04792f38ea698994f",
+    "file": "tests/backend/retained_compute_test.cpp",
+    "before_bytes": 346378,
+    "before_sha256": "851d177102b02529df33ffcd063e919d0a7bba00e89694f3df70bfb031d2fca3",
+    "after_bytes": 346270,
+    "after_sha256": "6311fe7e2209e39085472d501452d82ece8b7b17ba4fbd3186b0bfd70356ce28",
+    "raw_lexer": "/usr/lib/llvm-21/bin/clang",
+    "raw_lexer_sha256": "2451bd5e44d0fe575e3088eb29725b4b0820e5c335a3fdb889ae036f55b57f56",
+    "argv": [
+      "/usr/lib/llvm-21/bin/clang",
+      "-cc1",
+      "-std=c++2c",
+      "-x",
+      "c++",
+      "-dump-raw-tokens",
+      "-"
+    ],
+    "raw_lexical_records_before_after": [
+      86871,
+      86872
+    ],
+    "identical_noncomment_nonwhitespace_raw_Cpp_tokens": 65880,
+    "tokens_sha256": "fbe7b12d8faf875a9aa18096dfc9a3214325e18959cd7d2a8f3b440428164f28",
+    "compiler_locations_and_leading_space_start_line_flags_ignored": true,
+    "scope": "Only source layout changes in the newly added RecordProperty expression. Raw C++ tokens and production inputs are identical; completed5ef09e1b GCC/Clang compilation and finite Transport controls are reused. Diagnostic source line locations may differ. No fresh full-source or runtime qualification is claimed."
+  },
+  "current_runtime_inputs_checked": 5734,
+  "only_known_changed_input": "tests/backend/retained_compute_test.cpp",
+  "source_change": "Existing Schwarzschild Transport test now verifies all inactive allocation bytes and requires nonzero witnesses through original shrink/reorder/refusal/header-recovery calls; original independent-field assertions retained.",
+  "stock_and_private_original_Transport_tests_pass": true,
+  "full_inactive_tail_checks_per_arm": 24,
+  "nonzero_tail_witnesses_per_arm": 20,
+  "all4_original_precision_routes_per_arm": true,
+  "private_candidate_disposition": "Retire at prior cost screen. Both existing correctness controls pass, but the private run consumes299.061s of the unchanged300s owner versus160.208s for stock. These observations include compilation/correctness work and unisolated host activity; they are not a formal benchmark or causal timing attribution. No original fixed ABBA or remaining8 controls justified for this unchanged prototype.",
+  "formal_ABBA_launched": false,
+  "original8_controls_complete": false,
+  "formal20_plus2_cost_acceptance": false,
+  "production_shader_or_host_adopted": false,
+  "earlier_actual_private_JIT_evidence_commit": "069d4f0e53959a55c12bfa2fc1aaed8345efac93",
+  "current_strict_three_platform_integration": {
+    "schema": "sirius-draft-source-integration-ci-v1",
+    "passed": true,
+    "run_id": 39467671726,
+    "url": "https://github.com/sunyaisblank/Sirius/actions/runs/39467671726",
+    "development_source_revision": "6876a8058a451eb0c8fedf8e3a6f8a8dfb16c210",
+    "actual_merge_checkout": {
+      "merge_commit": "d2d5f98064ed5d5025a3f30f045147082f96e668",
+      "parents": [
+        "5e706073a3fd2f9afcf8efbcde2f094122050f6a",
+        "6876a8058a451eb0c8fedf8e3a6f8a8dfb16c210"
+      ],
+      "merge_tree": "ca8a8fd99fd6648b9efe780db342b79a1b373ed0",
+      "development_source_revision": "6876a8058a451eb0c8fedf8e3a6f8a8dfb16c210",
+      "development_tree": "ca8a8fd99fd6648b9efe780db342b79a1b373ed0",
+      "whole_source_tree_equal": true,
+      "main_unchanged": "5e706073a3fd2f9afcf8efbcde2f094122050f6a"
+    },
+    "jobs": {
+      "linux": {
+        "job_id": 118783208555,
+        "conclusion": "success",
+        "actual_merge_checkout": "d2d5f98064ed5d5025a3f30f045147082f96e668",
+        "original_authority_cases": [
+          {
+            "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+            "seconds": "3.54"
+          },
+          {
+            "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+            "seconds": "0.02"
+          },
+          {
+            "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+            "seconds": "0.05"
+          },
+          {
+            "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+            "seconds": "2.04"
+          },
+          {
+            "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+            "seconds": "18.98"
+          },
+          {
+            "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+            "seconds": "0.32"
+          },
+          {
+            "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+            "seconds": "0.04"
+          },
+          {
+            "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+            "seconds": "2.15"
+          },
+          {
+            "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+            "seconds": "0.00"
+          },
+          {
+            "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+            "seconds": "0.50"
+          }
+        ],
+        "zero_failures_errors_skips": true,
+        "controls": 10
+      },
+      "windows": {
+        "job_id": 118783209120,
+        "conclusion": "success",
+        "actual_merge_checkout": "d2d5f98064ed5d5025a3f30f045147082f96e668",
+        "original_authority_cases": [
+          {
+            "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+            "seconds": "6.98"
+          },
+          {
+            "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+            "seconds": "0.07"
+          },
+          {
+            "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+            "seconds": "0.10"
+          },
+          {
+            "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+            "seconds": "8.23"
+          },
+          {
+            "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+            "seconds": "33.46"
+          },
+          {
+            "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+            "seconds": "0.61"
+          },
+          {
+            "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+            "seconds": "0.10"
+          },
+          {
+            "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+            "seconds": "0.18"
+          },
+          {
+            "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+            "seconds": "0.01"
+          },
+          {
+            "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+            "seconds": "0.69"
+          }
+        ],
+        "zero_failures_errors_skips": true,
+        "controls": 10
+      },
+      "macos": {
+        "job_id": 118783208660,
+        "conclusion": "success",
+        "actual_merge_checkout": "d2d5f98064ed5d5025a3f30f045147082f96e668",
+        "original_authority_cases": [
+          {
+            "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+            "seconds": "4.32"
+          },
+          {
+            "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+            "seconds": "0.06"
+          },
+          {
+            "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+            "seconds": "0.12"
+          },
+          {
+            "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+            "seconds": "3.78"
+          },
+          {
+            "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+            "seconds": "29.69"
+          },
+          {
+            "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+            "seconds": "0.45"
+          },
+          {
+            "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+            "seconds": "0.09"
+          },
+          {
+            "name": "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+            "seconds": "0.10"
+          },
+          {
+            "name": "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+            "seconds": "0.01"
+          },
+          {
+            "name": "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+            "seconds": "0.89"
+          }
+        ],
+        "zero_failures_errors_skips": true,
+        "controls": 10
+      }
+    },
+    "all3_requested_jobs_pass": true,
+    "original_authority_controls_passed": 30,
+    "full_qualification_jobs_unrequested": [
+      {
+        "name": "linux-gate",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "windows-build",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "macos-build",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "linux-sanitizers",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "macos-retained-diagnostic",
+        "conclusion": "skipped"
+      }
+    ],
+    "diagnostic_artifacts": [
+      {
+        "id": 12287485116,
+        "name": "sirius-gate-diagnostics-integration-windows-no-render",
+        "bytes": 1974,
+        "sha256": "f7ff51923a0403c2e164d70431d8949b34c8826065744d8340a75564f826b7b3",
+        "API_digest_equal": true,
+        "all_member_CRCs_verified": true,
+        "members": [
+          {
+            "path": "bin/windows-msvc/Testing/Temporary/LastTest.log",
+            "bytes": 12145,
+            "sha256": "9833d6e33cbeff3ee10fa7311f765669fa0f77537820e32ad2c9fde5096fe67a",
+            "crc32": 831778602,
+            "mode": "0o666"
+          }
+        ]
+      },
+      {
+        "id": 12286078172,
+        "name": "sirius-gate-diagnostics-integration-macos-no-render",
+        "bytes": 1888,
+        "sha256": "e4b27f614d815e0e15251553247040c4ad21be80517670be16b12fb765ac0d4c",
+        "API_digest_equal": true,
+        "all_member_CRCs_verified": true,
+        "members": [
+          {
+            "path": "bin/macos/Testing/Temporary/LastTest.log",
+            "bytes": 11661,
+            "sha256": "9d37ac6d64bf6db56fed94bfb9a08cf31bc80793b2c9b89cdca2e7cbff4d9b2f",
+            "crc32": 3241088830,
+            "mode": "0o644"
+          }
+        ]
+      }
+    ],
+    "new_runtime_or_science_frame_Mandatory_or_release_admission": false,
+    "current_development_external_domains_admitted": 0,
+    "native_build_domain_attestations_generated": false,
+    "reader_reuse": "Original validated whitespace-tolerant reader reused with current source/run filenames. No CI or tests were rerun.",
+    "scope": "Strict non-render pull-request integration at the actual merge checkout. Build-only authority controls and tree equality do not relabel merge-revision products as exact a68 external-domain records. No full renderer/science/Mandatory run."
+  },
+  "PR62_current_open_draft_source_synchronized": true,
+  "issue44_48_53_current_source_pointers_synchronized": true,
+  "new_runtime_or_scientific_frame_full_Mandatory_external_domain_installed_release_acceptance": false,
+  "renderer_source_findings": {
+    "file": "src/sirius/render/vulkan_renderer.cpp",
+    "cache_admission_line": 440,
+    "cache_admits_only_software": true,
+    "owner_retention_line": 907,
+    "owner_retained_only_after_complete_render": true,
+    "cancelled_or_failed_render_retires_owner": true,
+    "introduced_at": "f6a2f8b8e3d56a929327ab28f4ca2a209ff2dc4b",
+    "native_interaction_latency_or_safe_cancel_reuse_measured": false,
+    "scope": "Concrete source lead for native interactive usability; no change/adoption or cold-cache gate substitution."
+  },
+  "scope": "Canonical test ownership repair, scoped strict builds and four finite Transport test executions, plus exact current PR integration. Private shader stopped before formal benefit; no repeated frame or rejected candidate, pooling or subtraction."
+}
