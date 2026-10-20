@@ -1,0 +1,303 @@
+{
+  "admission_issue": 105,
+  "public_source": "0109ab462edade524667d20303507aa09adcbaf6",
+  "private_revision": "442612671802d1ffb965c5a3e3a27f7897a78267",
+  "private_optional64_disposition": "REJECTED;14/22. No shader adoption, remaining7 controls or cold frame run. No retry.",
+  "benefit": {
+    "whole": {
+      "passed": 1,
+      "total": 4,
+      "checks": [
+        {
+          "direction": "forward",
+          "family": "legacy",
+          "scope": "complete_call_ms",
+          "baseline_ms": "35.418138999999996",
+          "candidate_ms": "32.822625000000002",
+          "improvement_percent": "7.32820547121347706362612346328835217752389116642770841504588",
+          "minimum_percent": "5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "modern",
+          "scope": "complete_call_ms",
+          "baseline_ms": "46.314059999999998",
+          "candidate_ms": "44.087223999999999",
+          "improvement_percent": "4.80812090324190774067835569768263636046400154435332857728308",
+          "minimum_percent": "5",
+          "passed": false
+        },
+        {
+          "direction": "reverse",
+          "family": "legacy",
+          "scope": "complete_call_ms",
+          "baseline_ms": "33.202787999999998",
+          "candidate_ms": "33.884388000000001",
+          "improvement_percent": "-2.05283965912742942266412441795125292876757325024952294774603",
+          "minimum_percent": "5",
+          "passed": false
+        },
+        {
+          "direction": "reverse",
+          "family": "modern",
+          "scope": "complete_call_ms",
+          "baseline_ms": "40.645364000000001",
+          "candidate_ms": "45.195076",
+          "improvement_percent": "-11.1936800467576053398444150541349478419134085221884630701448",
+          "minimum_percent": "5",
+          "passed": false
+        }
+      ]
+    },
+    "stages": {
+      "passed": 13,
+      "total": 16,
+      "checks": [
+        {
+          "direction": "forward",
+          "family": "legacy",
+          "scope": "endpoint inclusive Dispatch",
+          "baseline_ms": "6.1545009999999998",
+          "candidate_ms": "4.9962339999999998",
+          "improvement_percent": "18.8198360841926914568650190874188323916112480091832755120601",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "legacy",
+          "scope": "endpoint+dense inclusive Dispatch",
+          "baseline_ms": "7.1376869999999997",
+          "candidate_ms": "6.5119699999999998",
+          "improvement_percent": "8.76638328354829689644768467214786371751877066679431519701427",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "legacy",
+          "scope": "transport inclusive Dispatch",
+          "baseline_ms": "21.0261870000000002",
+          "candidate_ms": "19.9450560000000001",
+          "improvement_percent": "5.14183099389347240998255181604280024730540239138175412113093",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "modern",
+          "scope": "dopri_phase:rows=12 inclusive Dispatch",
+          "baseline_ms": "2.437907",
+          "candidate_ms": "2.5372889999999999",
+          "improvement_percent": "-4.07652958049670885722876221283256498299565980162491842387753",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "modern",
+          "scope": "dopri_phase:rows=24 inclusive Dispatch",
+          "baseline_ms": "6.2252030000000001",
+          "candidate_ms": "5.8942390000000003",
+          "improvement_percent": "5.31651738907148561554510930693367564808554344438766658556286",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "modern",
+          "scope": "endpoint:rows=12 inclusive Dispatch",
+          "baseline_ms": "5.9388899999999997",
+          "candidate_ms": "6.0322320000000000",
+          "improvement_percent": "-1.57170784439516988385242921127533346395180974602998863180543",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "modern",
+          "scope": "endpoint:rows=24 inclusive Dispatch",
+          "baseline_ms": "12.6439240000000006",
+          "candidate_ms": "11.2859259999999999",
+          "improvement_percent": "10.7403208054714710050303621500032266076403741431903604779478",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "forward",
+          "family": "modern",
+          "scope": "transport:rows=12 inclusive Dispatch",
+          "baseline_ms": "15.5340750000000006",
+          "candidate_ms": "15.5341230000000001",
+          "improvement_percent": "-0.000308998121867571761730333275683099441827082371505244754113172",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "reverse",
+          "family": "legacy",
+          "scope": "endpoint inclusive Dispatch",
+          "baseline_ms": "4.8291269999999997",
+          "candidate_ms": "5.0294159999999999",
+          "improvement_percent": "-4.14751983122415733615122347522589504176780659687941785965496",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "reverse",
+          "family": "legacy",
+          "scope": "endpoint+dense inclusive Dispatch",
+          "baseline_ms": "6.9679909999999996",
+          "candidate_ms": "7.2481749999999998",
+          "improvement_percent": "-4.02101552657000010597117743521770369514986085474012208970194",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "reverse",
+          "family": "legacy",
+          "scope": "transport inclusive Dispatch",
+          "baseline_ms": "20.1955800000000005",
+          "candidate_ms": "20.2742480000000000",
+          "improvement_percent": "-0.389530778516880911824993921519438614167210807527225903707375",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "reverse",
+          "family": "modern",
+          "scope": "dopri_phase:rows=12 inclusive Dispatch",
+          "baseline_ms": "2.532089",
+          "candidate_ms": "2.5856150000000002",
+          "improvement_percent": "-2.11390673866519699741991691445284901123143775751958165767475",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "reverse",
+          "family": "modern",
+          "scope": "dopri_phase:rows=24 inclusive Dispatch",
+          "baseline_ms": "5.9026410000000000",
+          "candidate_ms": "6.0038480000000001",
+          "improvement_percent": "-1.71460537749119589011088426350171050551778432738836734268610",
+          "minimum_percent": "-5",
+          "passed": true
+        },
+        {
+          "direction": "reverse",
+          "family": "modern",
+          "scope": "endpoint:rows=12 inclusive Dispatch",
+          "baseline_ms": "5.3414880000000000",
+          "candidate_ms": "6.1626910000000002",
+          "improvement_percent": "-15.3740493285766101131370135063487926959678651342097932261572",
+          "minimum_percent": "-5",
+          "passed": false
+        },
+        {
+          "direction": "reverse",
+          "family": "modern",
+          "scope": "endpoint:rows=24 inclusive Dispatch",
+          "baseline_ms": "10.5357129999999998",
+          "candidate_ms": "11.6860469999999998",
+          "improvement_percent": "-10.9184257391977175330881875616337979800358563608138904322063",
+          "minimum_percent": "-5",
+          "passed": false
+        },
+        {
+          "direction": "reverse",
+          "family": "modern",
+          "scope": "transport:rows=12 inclusive Dispatch",
+          "baseline_ms": "11.7582520000000001",
+          "candidate_ms": "15.2445959999999996",
+          "improvement_percent": "-29.6501895009564301764395804669228880581945303866349517071540",
+          "minimum_percent": "-5",
+          "passed": false
+        }
+      ]
+    },
+    "API": {
+      "passed": 0,
+      "total": 2,
+      "checks": [
+        {
+          "direction": "forward",
+          "family": "instance",
+          "scope": "observed-instance Create and all11 original numerical API windows",
+          "baseline_ms": "13128.0768969999999897",
+          "candidate_ms": "13308.5006590000009993",
+          "improvement_percent": "-1.37433504857997184034590523471198021849634081386455153169509",
+          "minimum_percent": "0",
+          "passed": false
+        },
+        {
+          "direction": "reverse",
+          "family": "instance",
+          "scope": "observed-instance Create and all11 original numerical API windows",
+          "baseline_ms": "10628.9208079999989892",
+          "candidate_ms": "14777.6617390000000115",
+          "improvement_percent": "-39.0325697777087193520579978817331612825978502535362407086162",
+          "minimum_percent": "0",
+          "passed": false
+        }
+      ]
+    }
+  },
+  "independent_Decimal_rawXML_agrees_all22": true,
+  "cause_of_unchanged_Transport_regression": "Unproved; do not attribute from this trial. Gate fails regardless.",
+  "admission": {
+    "strict_CXX26_GCC14_Clang21_all7_targets": "PASS",
+    "existing_pure_cases_each_compiler": 5,
+    "supported_feature_query_create_module_dispatch": "Actual shaderInt64 support/enablement observed; no feature masks; stock Mesa25.2.8/LLVM20.1.2/loader1.3.275.",
+    "independent_scalar_records": 174268,
+    "output_words": 522804,
+    "mismatches": 0,
+    "CI": {
+      "passed": true,
+      "source_revision": "0109ab462edade524667d20303507aa09adcbaf6",
+      "run_id": 39503255995,
+      "strict_integration_jobs": [
+        {
+          "job": "integration-macos-no-render",
+          "id": 118905749979,
+          "conclusion": "success",
+          "all10_named_authority_cases_passed": true,
+          "log_sha256": "35df11e19de6209281815d9579eac03b5377e50e55de2407d0978b38fb62fbac"
+        },
+        {
+          "job": "integration-windows-no-render",
+          "id": 118905750005,
+          "conclusion": "success",
+          "all10_named_authority_cases_passed": true,
+          "log_sha256": "1ec8eb7e89b6df8f6a7931dd8811812d33578f31ac5efb39fb371e53f0d1d76d"
+        },
+        {
+          "job": "integration-no-render",
+          "id": 118905750176,
+          "conclusion": "success",
+          "all10_named_authority_cases_passed": true,
+          "log_sha256": "1572c7a2c06f76fe6121d6f4297772b0e79e1015b2c794ac1ec58aaf907a674f"
+        }
+      ],
+      "named_authority_cases_passed": 30,
+      "unrequested_jobs": [
+        "macos-build",
+        "macos-retained-diagnostic",
+        "windows-build",
+        "linux-sanitizers",
+        "linux-gate"
+      ],
+      "artifact_metadata_only_not_native_binary_backups": true,
+      "full_runtime_science_sanitizer_render_release_qualification": false
+    }
+  },
+  "partial_default_ALL": "Failed by controlled SIGTERM; preserved as incomplete, not full Mandatory. Explicit7-target builds subsequently pass. LastTestsFailed Oct11 is stale.",
+  "archive_verification": {
+    "all_members_CRC_and_SHA256_verified": true,
+    "late_publication_receipts": [
+      "out/vulkan-int64-source-publication/pr-runs.json"
+    ],
+    "all_live_files_match_manifest": true
+  },
+  "full_goal_complete": false
+}
