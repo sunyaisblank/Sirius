@@ -1,0 +1,728 @@
+{
+  "original_performance_disposition_unchanged": "REJECT_ZERO_DIVIDEND_ENDPOINT_COST",
+  "original_orders_repeats_and_samples_unchanged": true,
+  "no_order_pooling_cost_subtraction_or_new_admission_threshold": true,
+  "observed_quantities": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "device_ms",
+      "baseline_median_ms": "3.5516329999999999",
+      "candidate_median_ms": "4.008821",
+      "gain_percent": "-12.87261380891550767978036607"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "4.7063990000000002",
+      "candidate_median_ms": "4.8244580000000004",
+      "gain_percent": "-2.508478350433105968768123976"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00184999999999999997",
+      "candidate_median_ms": "0.0029230000000000000",
+      "gain_percent": "-58.00000000000000256216216216"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.055236000000000001",
+      "candidate_median_ms": "0.095239999999999998",
+      "gain_percent": "-72.42378159171554108871421552"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "total_ms",
+      "baseline_median_ms": "4.9163960000000002",
+      "candidate_median_ms": "5.1260360000000001",
+      "gain_percent": "-4.264099149051457438981760255"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "device_ms",
+      "baseline_median_ms": "6.2015310000000001",
+      "candidate_median_ms": "13.570214",
+      "gain_percent": "-118.8203848372280938558497113"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "6.9462169999999999",
+      "candidate_median_ms": "15.840322",
+      "gain_percent": "-128.0424294259738823023010860"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.002",
+      "candidate_median_ms": "0.0020170000000000001",
+      "gain_percent": "-0.8500000000000050"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.067420999999999995",
+      "candidate_median_ms": "0.068192000000000003",
+      "gain_percent": "-1.143560611678865720143620806"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "total_ms",
+      "baseline_median_ms": "7.1120390000000002",
+      "candidate_median_ms": "16.021176000000001",
+      "gain_percent": "-125.2683934944676280524222802"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "device_ms",
+      "baseline_median_ms": "17.5308159999999996",
+      "candidate_median_ms": "32.0177389999999991",
+      "gain_percent": "-82.63690064398599489349270779"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "19.7150749999999988",
+      "candidate_median_ms": "40.0129390000000019",
+      "gain_percent": "-102.9560577375435007752833446"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00214299999999999994",
+      "candidate_median_ms": "0.004676",
+      "gain_percent": "-118.1987867475501694316039220"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.086153000000000001",
+      "candidate_median_ms": "0.129540000000000002",
+      "gain_percent": "-50.36040532540944656180974168"
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "total_ms",
+      "baseline_median_ms": "20.1291489999999990",
+      "candidate_median_ms": "40.4461599999999988",
+      "gain_percent": "-100.9332833693068733771747315"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "device_ms",
+      "baseline_median_ms": "1.5041529999999999",
+      "candidate_median_ms": "1.674088",
+      "gain_percent": "-11.29772037817962077645827108"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "2.1280399999999999",
+      "candidate_median_ms": "2.2465030000000001",
+      "gain_percent": "-5.566765662299590494857505606"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.001212",
+      "candidate_median_ms": "0.0022439999999999999",
+      "gain_percent": "-85.14851485148514026402640264"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.019761000000000001",
+      "candidate_median_ms": "0.032074999999999999",
+      "gain_percent": "-62.31466018926166376627396441"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "total_ms",
+      "baseline_median_ms": "2.2359079999999998",
+      "candidate_median_ms": "2.3472420000000001",
+      "gain_percent": "-4.979364088325651590258998879"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "device_ms",
+      "baseline_median_ms": "3.8227299999999997",
+      "candidate_median_ms": "4.2047739999999996",
+      "gain_percent": "-9.994009516758963619769864737"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "4.9050010000000000",
+      "candidate_median_ms": "5.4206430000000001",
+      "gain_percent": "-10.51257685778249790367015216"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00198999999999999995",
+      "candidate_median_ms": "0.0053790000000000001",
+      "gain_percent": "-170.3015075376884540276760688"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.036219999999999998",
+      "candidate_median_ms": "0.079389000000000001",
+      "gain_percent": "-119.1855328547763815121774078"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "total_ms",
+      "baseline_median_ms": "5.1136239999999997",
+      "candidate_median_ms": "5.6672800000000003",
+      "gain_percent": "-10.82707684413247107102967548"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "device_ms",
+      "baseline_median_ms": "4.0102749999999998",
+      "candidate_median_ms": "4.1500210000000002",
+      "gain_percent": "-3.484698680265079251906598937"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "5.1153539999999999",
+      "candidate_median_ms": "5.2578819999999999",
+      "gain_percent": "-2.786278329906395584475254888"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00112600000000000004",
+      "candidate_median_ms": "0.00190500000000000001",
+      "gain_percent": "-69.18294849023090073950449413"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.036895000000000001",
+      "candidate_median_ms": "0.068289000000000002",
+      "gain_percent": "-85.09012061254912630193466289"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "total_ms",
+      "baseline_median_ms": "5.2796140000000001",
+      "candidate_median_ms": "5.5251489999999998",
+      "gain_percent": "-4.650624079714912782437805496"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "device_ms",
+      "baseline_median_ms": "7.1789369999999994",
+      "candidate_median_ms": "7.8165689999999999",
+      "gain_percent": "-8.881983502571488693826133527"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "8.9222969999999999",
+      "candidate_median_ms": "9.6877199999999997",
+      "gain_percent": "-8.578766207849837419430962765"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00153999999999999997",
+      "candidate_median_ms": "0.0035870000000000001",
+      "gain_percent": "-132.9220779220779331088716478"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.056488000000000000",
+      "candidate_median_ms": "0.118811000000000003",
+      "gain_percent": "-110.3296275315111227163291319"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "total_ms",
+      "baseline_median_ms": "9.1933310000000002",
+      "candidate_median_ms": "10.1194710000000000",
+      "gain_percent": "-10.07404171567410963286230604"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "device_ms",
+      "baseline_median_ms": "9.1713849999999994",
+      "candidate_median_ms": "9.3226489999999997",
+      "gain_percent": "-1.649303785633252882697899105"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "10.8847269999999998",
+      "candidate_median_ms": "11.1954279999999997",
+      "gain_percent": "-2.854467548887536689794196012"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00175600000000000001",
+      "candidate_median_ms": "0.00429299999999999997",
+      "gain_percent": "-144.4760820045558055553753872"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.066815000000000002",
+      "candidate_median_ms": "0.140304000000000005",
+      "gain_percent": "-109.9887749756791151690855354"
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "total_ms",
+      "baseline_median_ms": "11.1955449999999996",
+      "candidate_median_ms": "11.6605899999999996",
+      "gain_percent": "-4.153839763941818076881108117"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "device_ms",
+      "baseline_median_ms": "5.5163179999999994",
+      "candidate_median_ms": "3.8301199999999995",
+      "gain_percent": "30.56745459561976092394832157"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "11.6578480000000005",
+      "candidate_median_ms": "5.1894880000000003",
+      "gain_percent": "55.48502605283582289437012505"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.0029709999999999999",
+      "candidate_median_ms": "0.00269399999999999989",
+      "gain_percent": "9.323460114439583282512962452"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.106258999999999999",
+      "candidate_median_ms": "0.075998000000000000",
+      "gain_percent": "28.47852887755390064350811581"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint",
+      "field": "total_ms",
+      "baseline_median_ms": "11.8969540000000001",
+      "candidate_median_ms": "5.4083440000000001",
+      "gain_percent": "54.54009488479151844631747853"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "device_ms",
+      "baseline_median_ms": "13.374834",
+      "candidate_median_ms": "6.0053049999999999",
+      "gain_percent": "55.09996610051384637745784359"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "15.61295",
+      "candidate_median_ms": "6.6175980000000001",
+      "gain_percent": "57.61468524526114475483492870"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00247",
+      "candidate_median_ms": "0.0022439999999999999",
+      "gain_percent": "9.149797570850206477732793522"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.069342000000000001",
+      "candidate_median_ms": "0.051832000000000003",
+      "gain_percent": "25.25165123590320115872557417"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "endpoint+dense",
+      "field": "total_ms",
+      "baseline_median_ms": "15.757130999999999",
+      "candidate_median_ms": "6.801145",
+      "gain_percent": "56.83766924321438698692479254"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "device_ms",
+      "baseline_median_ms": "36.925905999999999",
+      "candidate_median_ms": "16.3994899999999992",
+      "gain_percent": "55.58811745878354441968512455"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "52.315893000000000",
+      "candidate_median_ms": "18.4108019999999994",
+      "gain_percent": "64.80839579666546187025804950"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.0056580000000000002",
+      "candidate_median_ms": "0.0048630000000000002",
+      "gain_percent": "14.05090137857900268466237615"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.211602000000000005",
+      "candidate_median_ms": "0.126908000000000000",
+      "gain_percent": "40.02514153930492292073937063"
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "stage": "transport",
+      "field": "total_ms",
+      "baseline_median_ms": "52.761216000000000",
+      "candidate_median_ms": "18.8991239999999996",
+      "gain_percent": "64.17989304871214567912915426"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "device_ms",
+      "baseline_median_ms": "1.9445839999999999",
+      "candidate_median_ms": "1.7710349999999999",
+      "gain_percent": "8.924736601761611168493446504"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "2.6913130000000001",
+      "candidate_median_ms": "2.4521259999999998",
+      "gain_percent": "8.887372074522743772746905524"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.0020430000000000001",
+      "candidate_median_ms": "0.00095699999999999995",
+      "gain_percent": "53.15712187958884468149183164"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.055370999999999997",
+      "candidate_median_ms": "0.026263999999999999",
+      "gain_percent": "52.56722833252063278072790807"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=12",
+      "field": "total_ms",
+      "baseline_median_ms": "2.8441529999999999",
+      "candidate_median_ms": "2.5741489999999998",
+      "gain_percent": "9.493300817501734593508183895"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "device_ms",
+      "baseline_median_ms": "4.1205739999999997",
+      "candidate_median_ms": "3.6351639999999998",
+      "gain_percent": "11.78015490074926297502398215"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "5.2306470000000002",
+      "candidate_median_ms": "4.7179220000000002",
+      "gain_percent": "9.802324645497965746787170096"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.0040860000000000002",
+      "candidate_median_ms": "0.00281399999999999995",
+      "gain_percent": "31.13069016152717052713215068"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.080090999999999996",
+      "candidate_median_ms": "0.049565999999999998",
+      "gain_percent": "38.11289658014009005320930342"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "dopri_phase:rows=24",
+      "field": "total_ms",
+      "baseline_median_ms": "5.4195989999999998",
+      "candidate_median_ms": "4.9514070000000001",
+      "gain_percent": "8.638867931003746167894264170"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "device_ms",
+      "baseline_median_ms": "3.9917929999999998",
+      "candidate_median_ms": "3.6322309999999995",
+      "gain_percent": "9.007531202144006916567627737"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "5.3597700000000002",
+      "candidate_median_ms": "4.9864839999999999",
+      "gain_percent": "6.964589898447140195769971531"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.0029889999999999999",
+      "candidate_median_ms": "0.00128099999999999991",
+      "gain_percent": "57.14285714285714443435453807"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.113561999999999997",
+      "candidate_median_ms": "0.042980999999999999",
+      "gain_percent": "62.15195223754424883725063589"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=12",
+      "field": "total_ms",
+      "baseline_median_ms": "5.6793960000000001",
+      "candidate_median_ms": "5.1878869999999999",
+      "gain_percent": "8.654247740428739100878900847"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "device_ms",
+      "baseline_median_ms": "8.1925259999999996",
+      "candidate_median_ms": "7.6069699999999996",
+      "gain_percent": "7.147441460667931094631446304"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "10.1071879999999998",
+      "candidate_median_ms": "9.3305460000000001",
+      "gain_percent": "7.684056139056676450147284073"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.00357699999999999975",
+      "candidate_median_ms": "0.00178200000000000002",
+      "gain_percent": "50.18171652222532444658348632"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.114308000000000004",
+      "candidate_median_ms": "0.077511000000000003",
+      "gain_percent": "32.19109773594149115753585975"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "endpoint:rows=24",
+      "field": "total_ms",
+      "baseline_median_ms": "10.4817770000000001",
+      "candidate_median_ms": "9.6125690000000001",
+      "gain_percent": "8.292563369741600033156941139"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "device_ms",
+      "baseline_median_ms": "9.4900349999999993",
+      "candidate_median_ms": "9.2186659999999998",
+      "gain_percent": "2.859515270491621158579572082"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "host_completion_ms",
+      "baseline_median_ms": "11.5050689999999998",
+      "candidate_median_ms": "10.9745450000000000",
+      "gain_percent": "4.611219628495924789520508369"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "pipeline_ms",
+      "baseline_median_ms": "0.0042280000000000003",
+      "candidate_median_ms": "0.00281400000000000015",
+      "gain_percent": "33.44370860927152435356845251"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "setup_ms",
+      "baseline_median_ms": "0.130392000000000001",
+      "candidate_median_ms": "0.073312999999999999",
+      "gain_percent": "43.77492484201484873477724982"
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "stage": "transport:rows=12",
+      "field": "total_ms",
+      "baseline_median_ms": "11.9049709999999998",
+      "candidate_median_ms": "11.3818289999999997",
+      "gain_percent": "4.394315618240482137996230621"
+    }
+  ],
+  "scope": "Read-only decomposition of existing raw timestamp/host observations for each original order/family/stage. Components can overlap and do not partition an exclusive causal cost; no resampling or cause attribution."
+}

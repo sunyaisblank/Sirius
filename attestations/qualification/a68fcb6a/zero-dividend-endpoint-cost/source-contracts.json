@@ -1,0 +1,12 @@
+{
+  "schema": "sirius-retained-exact-zero-dividend-v1",
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "private_scope": "Only portable normal-sum Endpoint excluding the stage-seven owner; no production edit.",
+  "precondition": "Reach the existing division arm after original a.valid/b.valid, absolute-lower and ratio admission and the exact +1 denominator identity. Guard additionally requires RTExact(a,0), bounded nonzero b.hi. Unsupported cases use the entire original sequence.",
+  "proof": "RPDivideSeed(0,b.hi) is canonical +0. Each product b*q returns canonical zero through the original exact-zero multiplication rule; each residual has zero center/radius, so its magnitude and ratio are zero. Every correction seed and updated q are canonical +0. The final residual ratio is zero because both admitted lower and abs(b.hi) are positive and bounded. RTPack of the zero center/radius returns exactly [0,0,0,0,1]. This is also the new RTConstant(0). The extra high-word guard preserves the original refusal for malformed tuples whose lower computation can be positive despite a zero/nonfinite high word.",
+  "identity_boundary": "The existing exact +1 denominator return precedes this guard, preserving all incoming zero signs, radius-zero sign and nonzero validity flag word on that identity path.",
+  "frame": "No native approximation, changed denominator/seed, arithmetic body, error bound, graph, layout, resource, barrier, physical field, trial or acceptance change. The original seven-phase path remains byte-identical after the guarded return.",
+  "cost_premise": "Exact-zero divisions currently execute all correction phases. Zero columns solve a homogeneous variation problem; the existing CPU path already recognizes zero variations. This is a source work-removal premise, not dynamic prevalence or speed evidence.",
+  "required_before_timing": "Directed original/candidate full-word zero/unit/denominator boundary proof, actual Endpoint module/ordinary driver inspection, original exact arithmetic and original C8 correctness. Defer timing while the observed unrelated heavy compilation is active.",
+  "production_adopted": false
+}

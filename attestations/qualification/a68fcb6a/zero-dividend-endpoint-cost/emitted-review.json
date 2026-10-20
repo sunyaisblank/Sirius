@@ -1,0 +1,289 @@
+{
+  "passed": true,
+  "module_summaries": {
+    "stock": {
+      "module": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "execution_invocations": 16,
+      "control_barriers": 10,
+      "native_scalar_PB32Add_operations": 0,
+      "NoContraction_float_operations": 10,
+      "complete_descriptor_interface": [
+        [
+          "inputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 0",
+            "DescriptorSet 0",
+            "NonWritable"
+          ]
+        ],
+        [
+          "outputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 1",
+            "DescriptorSet 0"
+          ]
+        ]
+      ],
+      "instructions": 10248
+    },
+    "candidate": {
+      "module": {
+        "bytes": 153096,
+        "sha256": "e7004340a982b4199632f0eab18542135e341ed1875bb11a6a5b6127e1fd91d9"
+      },
+      "execution_invocations": 16,
+      "control_barriers": 10,
+      "native_scalar_PB32Add_operations": 0,
+      "NoContraction_float_operations": 10,
+      "complete_descriptor_interface": [
+        [
+          "inputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 0",
+            "DescriptorSet 0",
+            "NonWritable"
+          ]
+        ],
+        [
+          "outputs",
+          "StorageBuffer",
+          [
+            [
+              "OpTypePointer",
+              "StorageBuffer",
+              [
+                [
+                  "OpTypeStruct",
+                  [
+                    [
+                      "OpTypeRuntimeArray",
+                      [
+                        [
+                          "OpTypeInt",
+                          "32",
+                          "0"
+                        ],
+                        []
+                      ]
+                    ],
+                    [
+                      "ArrayStride 4"
+                    ]
+                  ]
+                ],
+                [
+                  "0 Offset 0",
+                  "Block"
+                ]
+              ]
+            ],
+            []
+          ],
+          [
+            "Binding 1",
+            "DescriptorSet 0"
+          ]
+        ]
+      ],
+      "instructions": 10368
+    }
+  },
+  "all4_emitted_arithmetic_helpers": {
+    "stock": [
+      {
+        "function": "%RTEvaluateArithmetic",
+        "calls": {
+          "RTExact": 1,
+          "RPBounded": 1,
+          "RPScalarEqual": 4,
+          "RTConstant": 4
+        },
+        "loops": 1
+      },
+      {
+        "function": "%RTEvaluateArithmetic_0",
+        "calls": {
+          "RTExact": 1,
+          "RPBounded": 1,
+          "RPScalarEqual": 4,
+          "RTConstant": 4
+        },
+        "loops": 1
+      },
+      {
+        "function": "%RTEvaluateArithmetic_1",
+        "calls": {
+          "RTExact": 1,
+          "RPBounded": 1,
+          "RPScalarEqual": 4,
+          "RTConstant": 4
+        },
+        "loops": 1
+      },
+      {
+        "function": "%RTEvaluateArithmetic_2",
+        "calls": {
+          "RTExact": 1,
+          "RPBounded": 1,
+          "RPScalarEqual": 4,
+          "RTConstant": 4
+        },
+        "loops": 1
+      }
+    ],
+    "candidate": [
+      {
+        "function": "%RTEvaluateArithmetic",
+        "calls": {
+          "RTExact": 2,
+          "RPBounded": 2,
+          "RPScalarEqual": 5,
+          "RTConstant": 5
+        },
+        "loops": 1
+      },
+      {
+        "function": "%RTEvaluateArithmetic_0",
+        "calls": {
+          "RTExact": 2,
+          "RPBounded": 2,
+          "RPScalarEqual": 5,
+          "RTConstant": 5
+        },
+        "loops": 1
+      },
+      {
+        "function": "%RTEvaluateArithmetic_1",
+        "calls": {
+          "RTExact": 2,
+          "RPBounded": 2,
+          "RPScalarEqual": 5,
+          "RTConstant": 5
+        },
+        "loops": 1
+      },
+      {
+        "function": "%RTEvaluateArithmetic_2",
+        "calls": {
+          "RTExact": 2,
+          "RPBounded": 2,
+          "RPScalarEqual": 5,
+          "RTConstant": 5
+        },
+        "loops": 1
+      }
+    ]
+  },
+  "directed_logical_cases": 23040,
+  "directed_record_rows": 46080,
+  "directed_compared_words_per_arm": 184320,
+  "all5_tuple_words_covered": true,
+  "all_baseline_candidate_expected_bytes_equal": true,
+  "original_denominator_and_unit_checks_precede_added_guard": true,
+  "original_scalar_arithmetic_and_nonzero_fallback_unchanged": true,
+  "interfaces_barriers_workgroup_programs_unchanged": true,
+  "ordinary_driver_or_performance_acceptance": false,
+  "production_adopted": false
+}

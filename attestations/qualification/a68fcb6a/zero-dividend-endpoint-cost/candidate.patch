@@ -1,0 +1,27 @@
+--- a/src/sirius/kernels/retained_triple.slang
++++ b/src/sirius/kernels/retained_triple.slang
+@@ -225,6 +225,13 @@
+            RPScalarGreater(RPRatioUpper(RTAbsoluteUpper(a),lower),RPFromBits(0x5e000000u)))
+             return RTInvalid();
+         if(RTExact(b,RPOne())) return a;
++#if defined(SIRIUS_RETAINED_ZERO_DIVIDEND)
++        // Keep the original denominator admission and exact-unit identity.
++        // Every correction of exact zero is zero for a bounded nonzero high
++        // word. Malformed zero/nonfinite high words retain the old sequence.
++        if(RTExact(a,RPZero())&&RPBounded(b.hi,0x7b800000u)&&
++           !RPScalarEqual(b.hi,RPZero())) return RTConstant(RPZero());
++#endif
+         q=RTConstant(RPDivideSeed(a.hi,b.hi));
+     }
+     [loop] for(uint phase=0;phase<7;++phase) {
+--- a/scripts/build-retained-kernels.py
++++ b/scripts/build-retained-kernels.py
+@@ -326,6 +326,8 @@
+         if not portable or source.stem not in ("retained_transport", "retained_endpoint", "retained_dopri_phase"):
+             raise ValueError("guarded normal sums are qualified only for portable Transport, Endpoint and DopriPhase")
+         definitions.append("-DSIRIUS_RETAINED_NORMAL_SUM32=1")
++        if source.stem == "retained_endpoint" and not stage_seven_owner:
++            definitions.append("-DSIRIUS_RETAINED_ZERO_DIVIDEND=1")
+         if source.stem == "retained_dopri_phase":
+             definitions.append("-DSIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS=1")
+     if fma:
