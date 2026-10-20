@@ -761,9 +761,8 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
 }
 
 Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
-    if (auto precision =
-            ValidateVulkanKernelPrecision(spirv, info_.supports_fp64, info_.fma_fp32_enabled,
-                                          info_.supports_int64);
+    if (auto precision = ValidateVulkanKernelPrecision(
+            spirv, info_.supports_fp64, info_.fma_fp32_enabled, info_.supports_int64);
         !precision) {
         return std::unexpected(precision.error());
     }
