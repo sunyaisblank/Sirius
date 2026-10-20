@@ -1,0 +1,20 @@
+{
+  "schema": "sirius-crossray-active-bound-source-v1",
+  "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "production_changed": false,
+  "prior_version_rejected": "attestations/qualification/630844e7/software-crossray-endpoint",
+  "actual_active_count_source": "SPIR-V NumWorkgroups.x read through inline assembly; ordinary host group count remains active_rows. inputs[0] remains immutable capacity and continues to locate program tail/row stride.",
+  "row_mapping": "r=8*g+l, with r<active_groups and r<capacity before output zeroing. For every 0<=active<=capacity<=65536, valid rows are exactly[0,active). Inactive [active,capacity) has no shader output store.",
+  "proof": "For each valid r<active, unique g=floor(r/8)<active and l=r mod8. The new independent active guard excludes every r>=active; the original capacity guard/layout checks remain. All multiplication/addition is bounded below524288.",
+  "prior_false_assumption_removed": "Active rows are not inferred from capacity. Original host dispatch, all buffer words/descriptors and program admission remain unchanged.",
+  "required_next_runtime_witness": "Complete output allocation before/after original C1 shrink calls, with at least one nonzero inactive-tail witness per precision route. Original active-row assertions/readbacks and counts must remain. No new candidate benefit until active/inactive storage ownership is verified.",
+  "arithmetic_sources_byteexact": [
+    "retained_scalar.slang",
+    "retained_pair.slang",
+    "retained_triple.slang",
+    "portable_binary32.h"
+  ],
+  "compiler_only": true,
+  "actual_driver_JIT_numerical_or_cost_evidence_for_new_module": false,
+  "primary_builtin_syntax_reference": "https://docs.shader-slang.org/en/latest/external/slang/docs/user-guide/a1-04-interop.html"
+}
