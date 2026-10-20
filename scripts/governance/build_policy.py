@@ -297,7 +297,7 @@ WINDOWS_DIAGNOSTIC_BUILD_STAGE = r"""      - name: Stage diagnostic Windows buil
           [IO.File]::WriteAllText((Join-Path $PWD.Path $registrationMetadata), ($registration | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
           $metadataFile = Get-Item -LiteralPath $registrationMetadata
           $files[$registrationMetadata] = @{ bytes = $metadataFile.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $registrationMetadata).Hash.ToLowerInvariant() }
-          $record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }
+          $record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test/render-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }
           $output = "bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json"
           [IO.File]::WriteAllText((Join-Path $PWD.Path $output), ($record | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
 """
@@ -308,6 +308,7 @@ WINDOWS_DIAGNOSTIC_BUILD_UPLOAD = r"""      - name: Preserve diagnostic Windows 
           name: sirius-windows-diagnostic-build-products
           path: |
             bin/windows-msvc/src/sirius/app/Release/sirius.exe
+            bin/windows-msvc/src/sirius/app/Release/sirius_render_tests.exe
             bin/windows-msvc/src/sirius/app/Release/*.dll
             bin/windows-msvc/src/sirius/app/Release/*.manifest
             bin/windows-msvc/src/sirius/app/Release/resources
