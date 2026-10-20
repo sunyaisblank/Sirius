@@ -52,8 +52,7 @@ std::optional<double> ShaderConstant(std::string_view source, std::string_view n
             if (consume(".") && digits() == 0) return std::nullopt;
             return literal.substr(0, literal.size() - remaining.size());
         };
-        if (whitespace() == 0 || !consume("float") || whitespace() == 0 || !consume(name))
-            continue;
+        if (whitespace() == 0 || !consume("float") || whitespace() == 0 || !consume(name)) continue;
         whitespace();
         if (!consume("=")) continue;
         whitespace();
@@ -85,16 +84,16 @@ TEST(ViewerDisplayContract, LiveShaderAppliesOnlyExactSrgbTransfer) {
     EXPECT_EQ(ShaderConstant("const \tfloat\nkProbe = 0012.50 /\v2.5\f;", "kProbe"), 5.0);
     EXPECT_EQ(ShaderConstant("const float kProbe=12;", "kProbe"), 12.0);
     EXPECT_EQ(ShaderConstant("const float kProbe=1e0; const float kProbe=2;", "kProbe"), 2.0);
-    EXPECT_EQ(ShaderConstant("const float kProbe=" + std::string(400, '9') +
-                                "x; const float kProbe=3;",
-                            "kProbe"),
-              3.0);
-    for (const auto* declaration : {
-             "constfloat kProbe=1;", "const floatkProbe=1;", "const float kProbeExtra=1;",
-             "const float kProbe=.5;", "const float kProbe=1.;", "const float kProbe=-1;",
-             "const float kProbe=+1;", "const float kProbe=1e0;", "const float kProbe=0x1;",
-             "const float kProbe=1/;", "const float kProbe=1/.5;", "const float kProbe=1/2.;",
-             "const float kProbe=1/2/3;", "const float kProbe=1"}) {
+    EXPECT_EQ(
+        ShaderConstant("const float kProbe=" + std::string(400, '9') + "x; const float kProbe=3;",
+                       "kProbe"),
+        3.0);
+    for (const auto* declaration :
+         {"constfloat kProbe=1;", "const floatkProbe=1;", "const float kProbeExtra=1;",
+          "const float kProbe=.5;", "const float kProbe=1.;", "const float kProbe=-1;",
+          "const float kProbe=+1;", "const float kProbe=1e0;", "const float kProbe=0x1;",
+          "const float kProbe=1/;", "const float kProbe=1/.5;", "const float kProbe=1/2.;",
+          "const float kProbe=1/2/3;", "const float kProbe=1"}) {
         EXPECT_FALSE(ShaderConstant(declaration, "kProbe").has_value()) << declaration;
     }
 
