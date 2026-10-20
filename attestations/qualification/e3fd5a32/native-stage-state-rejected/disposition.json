@@ -1,0 +1,196 @@
+{
+  "schema": "sirius-native-stage-state-disposition-v1",
+  "audit_passed": true,
+  "candidate_adopted": false,
+  "production_changed": false,
+  "control8_passed": true,
+  "readback_records_equal": 32,
+  "sole_order": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "internal_repeats": 3,
+  "all22_required": true,
+  "checks_passed": 13,
+  "checks_total": 22,
+  "failed_checks": [
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        33.3037,
+        25.9264,
+        21.1086
+      ],
+      "candidate_samples_ms": [
+        34.9592,
+        26.7663,
+        23.3536
+      ],
+      "baseline_median_ms": 25.9264,
+      "candidate_median_ms": 26.7663,
+      "improvement_percent": -3.2395550481362627,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.0717,
+        3.1684,
+        2.6628
+      ],
+      "candidate_samples_ms": [
+        4.310700000000001,
+        3.5328999999999997,
+        3.1126
+      ],
+      "baseline_median_ms": 3.1684,
+      "candidate_median_ms": 3.5328999999999997,
+      "improvement_percent": -11.504229263981808,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        16.7368,
+        15.9502,
+        15.783100000000001
+      ],
+      "candidate_samples_ms": [
+        17.4147,
+        17.4364,
+        17.3881
+      ],
+      "baseline_median_ms": 15.9502,
+      "candidate_median_ms": 17.4147,
+      "improvement_percent": -9.18170305074544,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        0.5928,
+        0.5836,
+        0.53
+      ],
+      "candidate_samples_ms": [
+        0.676,
+        0.6588,
+        0.6298
+      ],
+      "baseline_median_ms": 0.5836,
+      "candidate_median_ms": 0.6588,
+      "improvement_percent": -12.885538039753264,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        1.0534,
+        1.0945,
+        1.1477
+      ],
+      "candidate_samples_ms": [
+        1.2286000000000001,
+        1.2455,
+        1.2189
+      ],
+      "baseline_median_ms": 1.0945,
+      "candidate_median_ms": 1.2286000000000001,
+      "improvement_percent": -12.252169940612161,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.1027,
+        2.2367,
+        2.1311999999999998
+      ],
+      "candidate_samples_ms": [
+        2.2417,
+        2.3059000000000003,
+        2.2923999999999998
+      ],
+      "baseline_median_ms": 2.1311999999999998,
+      "candidate_median_ms": 2.2923999999999998,
+      "improvement_percent": -7.563813813813815,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        3.2197,
+        3.1891999999999996,
+        3.1521999999999997
+      ],
+      "candidate_samples_ms": [
+        3.402,
+        3.5215,
+        3.5353
+      ],
+      "baseline_median_ms": 3.1891999999999996,
+      "candidate_median_ms": 3.5215,
+      "improvement_percent": -10.419540950708658,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        7.4936,
+        6.6465,
+        6.5364
+      ],
+      "candidate_samples_ms": [
+        7.487299999999999,
+        7.2406,
+        7.1513
+      ],
+      "baseline_median_ms": 6.6465,
+      "candidate_median_ms": 7.2406,
+      "improvement_percent": -8.938539080719178,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 149.7655,
+      "candidate_ms": 159.6785,
+      "improvement_percent": -6.619014392500283,
+      "minimum_percent": 0,
+      "pass": false
+    }
+  ],
+  "remaining_seven_executed": false,
+  "retry_or_warmup_executed": false,
+  "source_revision": "9b7707141b183ae296ea8dcdc6807b259b348b5e",
+  "producer_revision": "e3fd5a325ddc60eb5fc43f9d7c3000ea278b02bc",
+  "cause": "The exact original benefit criterion failed. Compiler/driver code changes and forward improvements cannot establish repeatable directional benefit. No causal clock or hardware diagnosis inferred.",
+  "scientific_qualification_claimed": false,
+  "release_qualification_claimed": false
+}
