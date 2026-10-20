@@ -1,0 +1,144 @@
+{
+  "schema": "sirius-software-single-invocation-endpoint-root-completion-v1",
+  "passed": true,
+  "operator_source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "production_source_changed": false,
+  "owners": {
+    "out/software-scalar-cohort/compile-endpoint/owner.json": {
+      "seconds": 1.0407778469962068,
+      "peak_rss_kib": 234928,
+      "passed": true
+    },
+    "out/software-scalar-jit-host/build/owner.json": {
+      "seconds": 3.861094105988741,
+      "peak_rss_kib": 344300,
+      "passed": true
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/owner.json": {
+      "seconds": 22.774420187051874,
+      "peak_rss_kib": 1738916,
+      "passed": true
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/owner.json": {
+      "seconds": 26.70800970500568,
+      "peak_rss_kib": 1733120,
+      "passed": true
+    },
+    "out/software-scalar-nojoin/compile-endpoint/owner.json": {
+      "seconds": 0.7866830740240403,
+      "peak_rss_kib": 238204,
+      "passed": true
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/owner.json": {
+      "seconds": 41.49635997903533,
+      "peak_rss_kib": 1962056,
+      "passed": true
+    },
+    "out/software-scalar-numerics-build/build/owner.json": {
+      "seconds": 5.401679273985792,
+      "peak_rss_kib": 556616,
+      "passed": true
+    },
+    "out/software-scalar-endpoint-control/control-1/owner.json": {
+      "seconds": 118.10794402397005,
+      "peak_rss_kib": 2805360,
+      "passed": true
+    }
+  },
+  "current_frozen_input_union_rehashed": 5837,
+  "actual_called_JIT": {
+    "stock16": {
+      "module_sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "executable_section_bytes": 922597,
+      "functions": [
+        [
+          "cs_co_variant.resume",
+          898262
+        ],
+        [
+          "cs_co_variant.destroy",
+          5
+        ],
+        [
+          "cs_variant",
+          314
+        ],
+        [
+          "cs_co_variant",
+          23997
+        ]
+      ],
+      "resume_frame_dereferenceable_bytes": [
+        89696
+      ]
+    },
+    "width1_with_joins": {
+      "module_sha256": "058b5818f6c90f12c51953778276a42936ee0502e6c33ff5d67fab5308f238bb",
+      "executable_section_bytes": 927829,
+      "functions": [
+        [
+          "cs_co_variant.resume",
+          903491
+        ],
+        [
+          "cs_co_variant.destroy",
+          5
+        ],
+        [
+          "cs_variant",
+          314
+        ],
+        [
+          "cs_co_variant",
+          23998
+        ]
+      ],
+      "resume_frame_dereferenceable_bytes": [
+        89888
+      ]
+    },
+    "width1_without_joins": {
+      "module_sha256": "e5cec157b0894e171edbd8ce14591c8a88c562c378f3dcbc64327b63f4ad93b8",
+      "executable_section_bytes": 973131,
+      "functions": [
+        [
+          "cs_variant",
+          973131
+        ]
+      ],
+      "resume_frame_dereferenceable_bytes": []
+    }
+  },
+  "all55_feature_fields_queue_extensions_and_feature_chain_equal": true,
+  "coroutine_eliminated_only_after_explicit_single_invocation_sync_elision": true,
+  "candidate_code_bytes": 973131,
+  "stock_code_bytes": 922597,
+  "candidate_code_growth_percent": 5.477364439728283,
+  "first_original_control": {
+    "passed": true,
+    "original_tests": 1,
+    "F_E_S_D": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "precision_routes": 4,
+    "complete_active_readback_digests": 56,
+    "original_factor_rows": 29,
+    "original_alternative_roots": 30,
+    "original_additional_rows": 27,
+    "original_required_admissions": 23,
+    "all_original_assertions_and_test_objects_unchanged": true,
+    "XML": {
+      "bytes": 10007,
+      "sha256": "3b477d5fb7e1cb23e58930fcaee56b17e3f1b154f4f165179b19fd2b792390df"
+    }
+  },
+  "original_controls_completed": 1,
+  "original_controls_required": 8,
+  "benefit_trial_or_frame_executed": false,
+  "prototype_adopted": false,
+  "full_scientific_Mandatory_runtime_or_release_qualification": false,
+  "scope": "Endpoint-only private prototype. Called-code structure is changed and the original first numerical prerequisite passes. No throughput/causal speedup claim; original remaining integrated controls and benefit gates remain required before adoption. Current canonical source/build/display evidence at630844e7 remains separate."
+}

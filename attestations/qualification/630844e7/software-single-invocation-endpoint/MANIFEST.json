@@ -1,0 +1,1588 @@
+{
+  "schema": "sirius-software-single-invocation-endpoint-checkpoint-v1",
+  "operator_source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "prototype_branch": "development/software-single-invocation-2026-10-20",
+  "archive": {
+    "path": "closed-prototype.zip",
+    "bytes": 25928022,
+    "sha256": "acdddcf1822dc7ae2be4862a1ff9461e0e007143fcd0fa9c079a8c6ceb14beae",
+    "mode": "0o644"
+  },
+  "archive_backed_files": {
+    "out/software-scalar-cohort/actions.json": {
+      "bytes": 511811,
+      "sha256": "4d5470531b4daaa0b00cc91ca57d0d7bf5e91aa1e77d5a2b37391a4c70f413c1",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/candidate.patch": {
+      "bytes": 1620,
+      "sha256": "adf34c291e613a6e45c5f7557d2c4cb3a0d26516ffbfd078d1ec10f36bbd62ea",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/candidate-endpoint-normal.final.spvasm": {
+      "bytes": 423536,
+      "sha256": "622e241462cf08e00241b62b2b9461fb5c054a43ed0cd28deb7441e949b9a7d2",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/candidate-endpoint-normal.spv": {
+      "bytes": 151752,
+      "sha256": "058b5818f6c90f12c51953778276a42936ee0502e6c33ff5d67fab5308f238bb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-0.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-1.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-2.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-3.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-3.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-4.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-4.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-5.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-5.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-6.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/command-6.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/commands.json": {
+      "bytes": 3853,
+      "sha256": "7c921eaaa9b571a03e30fd3b4b2797f3a4273da14d4d41a15f768842c2ac4c0c",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/inputs-after.json": {
+      "bytes": 1759626,
+      "sha256": "c60b26167726a86dc0abd6c897d13fcc49ebf365ecc0d09bdceb49d6784d3310",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/inputs-before.json": {
+      "bytes": 1759626,
+      "sha256": "c60b26167726a86dc0abd6c897d13fcc49ebf365ecc0d09bdceb49d6784d3310",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/owner.json": {
+      "bytes": 1861,
+      "sha256": "5571b2224752431296d4bf82470088d267cac07ed788793c9ce23368dfa2e100",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/result.json": {
+      "bytes": 11484,
+      "sha256": "19393e2828e648163ce5eefde071071101da40c60a3ad2939a4615b38f849c1d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/samples.jsonl": {
+      "bytes": 1131,
+      "sha256": "597e6cca5153a59936db7b2e01a3655450a02ce00f0a9fbed06346fdefde18fa",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/stdout.log": {
+      "bytes": 578,
+      "sha256": "ca5ed352f11600a7a64c7ea9470705d02842a4ac6ab73bc2d67872253bbc44b0",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/stock-endpoint-normal.final.spvasm": {
+      "bytes": 422552,
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile-endpoint/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/compile_one.py": {
+      "bytes": 5378,
+      "sha256": "37002a09a2fd44553eb0358ee9bf371c62b00f546ca5065f6b2ee61dc1f80bcd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/endpoint-program.bin": {
+      "bytes": 84572,
+      "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/prepare.py": {
+      "bytes": 7075,
+      "sha256": "1e6e87ddbc290b870e7ac5d9956d85ce6c3d977cd0f42eb1a3b9e29f25343ae9",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/recipe.json": {
+      "bytes": 1506,
+      "sha256": "2ab121f033ffd09c87edbca8c1b12da88b06a61dc8a726860c14fb6c137cacb2",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/review_source.py": {
+      "bytes": 3528,
+      "sha256": "6ff779953b104f278baaf231eb21a519c1b44f91bfb977b0761fa1d7eba0fd38",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/scripts/build-retained-kernels.py": {
+      "bytes": 35005,
+      "sha256": "2c1043d736041b37db568c74c6d86badb75979b2b1d4ea5f6ecaa345086905e1",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38915,
+      "sha256": "143b74a81238d7eae01a1d8d29d694b1a9f20ddddd377cfc77bf21cac1633baa",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source-composition-review.json": {
+      "bytes": 1312,
+      "sha256": "162dca97ec2bf1c41c82dcf971516ceffe888014c56872334a40e37dda3fe530",
+      "mode": "0o644"
+    },
+    "out/software-scalar-cohort/source-contracts.json": {
+      "bytes": 1994,
+      "sha256": "f9f11906d936a22eeb878dfedc5bb8f539329239e97c4ed79d75eb18969f385c",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/actions.json": {
+      "bytes": 515921,
+      "sha256": "add6b54ad29a6a5b408af32f516d113c42540d69c78ee0b55bf4e87c16119df4",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/build-result.json": {
+      "bytes": 1821,
+      "sha256": "69e8611cfec522416cb8af86513bbf096192c83cd7cc3d33df2eba7a63e1431c",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/command-0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/command-0.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/command-1.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/commands.json": {
+      "bytes": 1492,
+      "sha256": "8c68831f1c020ad35c136aa68ab9313e9c211e606b2015cb51d70610ac019c73",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/inputs-after.json": {
+      "bytes": 1778796,
+      "sha256": "573fe191d527ef731050b27d186a86e80bc947e1caf8a9620ecd52522beefe4f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/inputs-before.json": {
+      "bytes": 1778796,
+      "sha256": "573fe191d527ef731050b27d186a86e80bc947e1caf8a9620ecd52522beefe4f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/owner.json": {
+      "bytes": 2208,
+      "sha256": "a5b0688cb22ac984143e6365f882ec3800e3e1d91273bcdecc6c4c00d324f8a7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/samples.jsonl": {
+      "bytes": 6765,
+      "sha256": "ac403fdbe41e3721af5ee21612f5b41f600764299b23ef0fb6baa10dca9d185e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/build_probe.py": {
+      "bytes": 2336,
+      "sha256": "b5e8b4ab0fc5d9064de24a74d432b2c164c2611f7cfcbf77a0de4863edcee4d8",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit-host/short_input_jit_probe.cpp": {
+      "bytes": 4212,
+      "sha256": "853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/actions.json": {
+      "bytes": 1033789,
+      "sha256": "1ba3ad4892506c7c943c4bdd59e1655c7feb4c8bb798f44fafe94f985a787c56",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/analyze_capture.py": {
+      "bytes": 11150,
+      "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 4352,
+      "sha256": "39e9ca4834ca7fec55ca3c1fdf4982492593a55082e2b9c02bcb2b033ebd3373",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "ec317042ba62b144cdcb7450cbdd3631528a8dbf1133da02509a896e7cb033eb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/bindings.json": {
+      "bytes": 59769,
+      "sha256": "14a1405718e2c6f781c81eac51ff3d88064267c6d0b697fd38047977951c2803",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/capture-inputs.json": {
+      "bytes": 530,
+      "sha256": "ca58700e1bf12e67eed5b3c05f9c6d34a7e92b00e2ff7d87d559eb351a27b7a3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/capture-verification.json": {
+      "bytes": 1085,
+      "sha256": "f9fd51b3b6436f302826da0a8608f056870dd05094a983f5f96f16581bf24910",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/capture.gdb": {
+      "bytes": 572,
+      "sha256": "d10eee498fa3a02e83e513c939ea2f5039bd71372235fe3a307a6de772f4be71",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/device-features.json": {
+      "bytes": 108076,
+      "sha256": "ca039a8b95efea8e174c8c4aab8a1af6b7eae3bbef1a1a72089f820467e86b8e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/inferior.json": {
+      "bytes": 15,
+      "sha256": "8ffebd361acf02c7fb516439b8bcd6a1b6b60d97f532058b2c25568526543342",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/inputs-after.json": {
+      "bytes": 1781584,
+      "sha256": "4a5a99499b5ad860d87fe841c90f10bfd3a8942569a6d2914be4e489ef24a44a",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/inputs-before.json": {
+      "bytes": 1781584,
+      "sha256": "4a5a99499b5ad860d87fe841c90f10bfd3a8942569a6d2914be4e489ef24a44a",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "8a212765f11339c6a32504d335224189cbd64ed2e63d01db275839a581b3ff7b",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "4988eb263e0e4bb173e47d35a6ac0595dc0de244db879287b67db83a527e9605",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "35cef34163a038d72f067f99c5c0bd3a8395bafd117a478acc3b884b6097bb4d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "53e51d8d3f3b14fce37be53c14ca1cb70176d903f3af9b4c518f97c0534a249c",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "7120a442c5a1e19d81d17eba03e4d3c21ec9ed31fe47755eebd2578e55795774",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1069896,
+      "sha256": "2af034e4585c5baae1fa805858f572330288fd9d7de6590ebc1edf2c10a13776",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "88d6b4b07e84b3e67ea77cd36105cd1c984b88036c2a830ce87ab22842462a0a",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 927829,
+      "sha256": "347e3a17457643e5dad0c0f7f2158fae7c7d1e2ef23c5bb2397784693b926380",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 448,
+      "sha256": "736db79c3794876500d36450b05990445e23a5b5927be02e05c411a5f136b862",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "2688d59ad57b49093b7e62ef7bc861abfea96705e04c142c203f44594a4b77aa",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 13243483,
+      "sha256": "82464c1d0e5c93ce331bcc516b4b60a97fe13dca4c0b4c5a5d484cd5e1755ac5",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "1e64d353d9cfff7c789a825ff85ae4061fa2367b154e02a1e61a99898c260e92",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/owner.json": {
+      "bytes": 3096,
+      "sha256": "d85a0a434bd8baa9c37d5e5c61e6d9e443468fa4cc500154d40ed945f9f00518",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/samples.jsonl": {
+      "bytes": 414260,
+      "sha256": "1f51ee8b20c350deb6d141f54e75af8934bd4aa182a0564618bed0d56112977b",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/stderr.log": {
+      "bytes": 194,
+      "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-candidate-endpoint-normal/stdout.log": {
+      "bytes": 493,
+      "sha256": "dc067f8c7ecde078d3516155a123e8497993372dbe7f386c19ffa31c76778f83",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/actual-code-review.json": {
+      "bytes": 4344,
+      "sha256": "65d91bce22facf1cfd301efdcb40a63eabaa595c255aaf380ce0355a098c5ca8",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "c7b40b07ab72a48cdd9e1da2356f36c601d20de0a2325149e2a9f2b762e76d61",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/bindings.json": {
+      "bytes": 59269,
+      "sha256": "f865526e9594ebba0bb6ff8018acd1029807cd43e57f61bf11294f5db8fe008b",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/capture-inputs.json": {
+      "bytes": 526,
+      "sha256": "b35a34c11f9a0e3d2992ad8b16d470987ac3735c4675f84755915683cc40c7cc",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/capture-verification.json": {
+      "bytes": 1085,
+      "sha256": "a12c569359d2a6395a1ed3418f4fbcd171df6457b240c269a1808139e8b6f2e2",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/capture.gdb": {
+      "bytes": 568,
+      "sha256": "91202dab8aa9ad7ee6d90a9977f1bd526b955cc8db93fd2ddeabff05e744638f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/device-features.json": {
+      "bytes": 108070,
+      "sha256": "5e7354f09c103dc80e43fec7f12a349df409d9e6c17c4c10c4b3cbc9d3cc8060",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/inferior.json": {
+      "bytes": 15,
+      "sha256": "2344494ab6b32f547275dd1597a35f952fc8d50eb53e77fe1548e3d531b4885d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/inputs-after.json": {
+      "bytes": 1781584,
+      "sha256": "4a5a99499b5ad860d87fe841c90f10bfd3a8942569a6d2914be4e489ef24a44a",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/inputs-before.json": {
+      "bytes": 1781584,
+      "sha256": "4a5a99499b5ad860d87fe841c90f10bfd3a8942569a6d2914be4e489ef24a44a",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "a4c494b97c6c1265ce539ecf6f4c12eb111840fd1da108547eee0c5c5ddd8a98",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "7686373b7cba36cdfbb4ddb8a4ed0061ada8c6f4715c0af335e01aad26c07daa",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "01937c982fadeffd32e70458efb6c30db41c04f8c8900244db8f414d5455c195",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "ad030620b9b851b6466a8fb09fa7f156ef10b2faf43a56585cb3b6271b19e015",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "701f660256b706538680d97639784c456505cdc739e7adeff843cd5b166304ca",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf": {
+      "bytes": 1049832,
+      "sha256": "820051fe13b43b5f104802366593299f62891f7ba9215923d6347ced4f9a5431",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "f3fcc34b9235f23def6bd345fa6f3942653d5558cb435192fe16ef803dff5755",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 922597,
+      "sha256": "4159dff6e67672db296313b1f8a4e3955924dcb9578a33a2e0352bf6aab59220",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 452,
+      "sha256": "f92c3d7cb3ec41ede57d3661f360f4bc0bcf16b62bcac1295fadd6d2b91d8be2",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "9209fc88fd8491d91e405438ff3c50cad4fcf5a4a5b2e8c4e7bc0971877f3f7e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimized-05.ll": {
+      "bytes": 13237373,
+      "sha256": "3271b6d61996590a4c74f822659bbe8c33cd3cb0b91f4bdf836ae71a95a290b7",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "5bc498793017ecc53178e634df3b997bec04bcbbbf0c12dcfd39172799f06ee1",
+      "mode": "0o600"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/owner.json": {
+      "bytes": 3211,
+      "sha256": "5bf81163a06a829e7a392eb207e1e4e58f74a375652813ab0a47ce896beff725",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/samples.jsonl": {
+      "bytes": 476006,
+      "sha256": "5821bb2f4678d61aad063933649a1b549167c9bfc75a9f05492c9eb77bf7579b",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/stderr.log": {
+      "bytes": 194,
+      "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture-stock-endpoint-normal/stdout.log": {
+      "bytes": 493,
+      "sha256": "8e3e1e0db1f771aa0729f5ba3c62858264f3979dc6bfa74bb57545fd825bd001",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture_features.py": {
+      "bytes": 6302,
+      "sha256": "8782d766e4eec1958887ce60b753f2a31df2cee3c1c975ed2fa0eff8fd53364f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/capture_jit.py": {
+      "bytes": 15844,
+      "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/feature-layout.json": {
+      "bytes": 2346,
+      "sha256": "b67f1d3d32d063e59bd293f805749ec764fccc4f2da98a9f149f10af25b36db3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/module-inputs/candidate-endpoint-normal.spv": {
+      "bytes": 151752,
+      "sha256": "058b5818f6c90f12c51953778276a42936ee0502e6c33ff5d67fab5308f238bb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/module-inputs/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/observer-source-adaptation.json": {
+      "bytes": 532,
+      "sha256": "a05b9dee8370619c918a74786d1aaf88b6a7bd41d45021683388b25f97e97c22",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/prepare.py": {
+      "bytes": 6542,
+      "sha256": "ec728e27c0c3433dab21e15ca551ffe5fadd13ef2de72cf733147840b2d4d2ca",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/read_features.py": {
+      "bytes": 2692,
+      "sha256": "ae0cf3dca1e1340e2025fe4c32acc8025f5fb6f2b3600cc2c9653389e8880716",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/run_capture.py": {
+      "bytes": 4813,
+      "sha256": "bd5e3311d50085ac482d45d25ffc5396a1cda7703bd4d6143caab0470963e01e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-jit/runtime-context.json": {
+      "bytes": 2623,
+      "sha256": "525f964edc8e4582526670488609a2b1837931c356c4e51206b9fd66b9efb579",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/actions.json": {
+      "bytes": 511941,
+      "sha256": "abb145986f4b8f20e29241f0df6c8fefbaa6eadb2803f0af55207384a3c9972f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/candidate.patch": {
+      "bytes": 8741,
+      "sha256": "e4a17a1a18e7f134220048aecd610c261c8a8f23082b8895dd39a642206e5e72",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/candidate-endpoint-normal.final.spvasm": {
+      "bytes": 422936,
+      "sha256": "682ece1de4f7d10db2d0e59711c5e5775806087ef7ba259ba96a7cf7bc1655ba",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/candidate-endpoint-normal.spv": {
+      "bytes": 151580,
+      "sha256": "e5cec157b0894e171edbd8ce14591c8a88c562c378f3dcbc64327b63f4ad93b8",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-0.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-1.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-2.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-3.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-3.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-4.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-4.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-5.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-5.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-6.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/command-6.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/commands.json": {
+      "bytes": 3901,
+      "sha256": "be59f990f3879f49f514c629852564bcd69f6d74027108fbac94880f2d7a5bb9",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/inputs-after.json": {
+      "bytes": 1759908,
+      "sha256": "3c4802a0de02e6d5bfe0bdab62f0d661d18774a31f70400a74c222a6242c73fe",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/inputs-before.json": {
+      "bytes": 1759908,
+      "sha256": "3c4802a0de02e6d5bfe0bdab62f0d661d18774a31f70400a74c222a6242c73fe",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/owner.json": {
+      "bytes": 1985,
+      "sha256": "54d69879cae4463a01e09d163f54668260a43b7153b03d9ad7adfae072317024",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/result.json": {
+      "bytes": 11502,
+      "sha256": "5344369d0e87e99bf7f6a254cb226fbf9acba29d2ad267d163aedef6e706e57d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/samples.jsonl": {
+      "bytes": 909,
+      "sha256": "3ae5d4c0fdc5d88a3d3c71d632b3d04fc1312e77747c954e72554ebe6b015b4e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/stdout.log": {
+      "bytes": 597,
+      "sha256": "3b4e82a46aa477e22fed83d30345a284f769b5149f1a0b140fff5fa85d0b3015",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/stock-endpoint-normal.final.spvasm": {
+      "bytes": 422552,
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile-endpoint/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/compile_one.py": {
+      "bytes": 5499,
+      "sha256": "7a6016e3b905cba5935a96a6e7c2dabe1818c47877b7a621b68fb93bbb3623e5",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/endpoint-program.bin": {
+      "bytes": 84572,
+      "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/preparation-refusal.json": {
+      "bytes": 608,
+      "sha256": "975c378d5b349f0183980b3bdacb65455e1269b3cb21edc78dfdb789aec25c96",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/prepare_nojoin.py": {
+      "bytes": 6935,
+      "sha256": "a7de6f47a1838078299cb7121bfd0dbf25b3df1dbdbb1ab94494b47b0ba4ecce",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/recipe.json": {
+      "bytes": 1506,
+      "sha256": "2ab121f033ffd09c87edbca8c1b12da88b06a61dc8a726860c14fb6c137cacb2",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/scripts/build-retained-kernels.py": {
+      "bytes": 35428,
+      "sha256": "1befc3b80e5d5158407b99a6204a6b28628bd3608d4660abc4d677529d48d4e0",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 39785,
+      "sha256": "a284e717ec238fe0bde148dedb3b9147fddd82d82d1f23de741f7d239eff1676",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 1139,
+      "sha256": "00c2b22fd80009cb02b38da8cbfa904f636449b4c01d0dfa3e8054f60b59f1fb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin/source-contracts.json": {
+      "bytes": 1313,
+      "sha256": "1e2966517d00f5cb38b5de91cdb17a59ccf263c07e564b40b2275a508a37a162",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/actions.json": {
+      "bytes": 518057,
+      "sha256": "17adeb190df01bbba457e0f18eb59d4ab05e3b5fec7e00991ef24de18185bce4",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/analyze_capture.py": {
+      "bytes": 11150,
+      "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 3722,
+      "sha256": "91b295743b86d7b1857798acd8a4d4ab8e0e9ae81748317902b703b4ad4724a6",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "27c852a1d9cc7741bf6bdcdc9595e3732cbfe51bb2dbc9d38f581ae38ee1a32a",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/bindings.json": {
+      "bytes": 59268,
+      "sha256": "efa9538ac400e0cc5110daa275c606dd92f50ad4bafaa228a276795fb9ef8e81",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/capture-inputs.json": {
+      "bytes": 537,
+      "sha256": "3f8f701803ada4bbe9249cf2ab6ef08ae7304c11d7ab18b6cfbc1511599982ce",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/capture-verification.json": {
+      "bytes": 1088,
+      "sha256": "88195587ce6b94e24beeddeb6d069f53fe0040e9a7346f952afa2f2c333a87eb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/capture.gdb": {
+      "bytes": 593,
+      "sha256": "a4c1a4d4d04ba249373dd4e243eca5b587e535fdeed52167177a33efdcc81087",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/device-features.json": {
+      "bytes": 107870,
+      "sha256": "bf749367c29be3d97154000737ee2133b56b66161546957f98eacad421fee55c",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/inferior.json": {
+      "bytes": 15,
+      "sha256": "77f637b4aefe1f936df0433d579e98fdb1aec75420d28bac473adb737cca94d3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/inputs-after.json": {
+      "bytes": 1786312,
+      "sha256": "05b142998e712f9f5c8a96df59f9c1e6403f7e1fa3461c06bb586c20bfb9ae68",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/inputs-before.json": {
+      "bytes": 1786312,
+      "sha256": "05b142998e712f9f5c8a96df59f9c1e6403f7e1fa3461c06bb586c20bfb9ae68",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "a26c10f437fcd41064cbf95971bfc61d490aaed36d3e1aa395140d61103d3840",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "463085b6f9e06594a4476cbee219e85d915c444b79b774de6e80278516e5b28d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "722c525abddc22c5f69c6ae99daad8f701f3de11555d24cc763db115380c9af5",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "227d80b445cf8cb465c40d02679242eb07255d44219daa3f3e097bfcaabb828d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "80f70a38866ddf57c5e8af06d86de9b916075c8c8216028edca17ba47531fc57",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1154528,
+      "sha256": "67e0791d7b3b2f695797387218d9a24a1ad741add798c75dce7749d33b59d51e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf.live-10.bin": {
+      "bytes": 80,
+      "sha256": "2405758d0359e2a598f9eabc9198536e8e0a581ec03c7765be4e85c76606f2a7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf.live-4.bin": {
+      "bytes": 16,
+      "sha256": "3cda893eb18b58e6bf19bae09cd9cdd08450668b0d367b909b527ddadab7232c",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 440,
+      "sha256": "13a9255a7a057f8f7e159c7b5d8aa6cd84d5789d90d63d8da293d9491f2cdfcf",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 8,
+      "sha256": "da4837c9085dd9df757a5b41745d397367892d6e81fdb9361850f2bbfae49306",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 973131,
+      "sha256": "bb5a754f097693812fd06549346d9d0ea235405a32a1034f9bda6bdb8d520fe3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 15175458,
+      "sha256": "7972b741de3b906466685cadbf6ac5f99217b0a207173c4834899705e4c91282",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "b94e0bea1bd273b5d4b4bfef66b27aad24eddfb13d18765ea01a20e013419375",
+      "mode": "0o600"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/owner.json": {
+      "bytes": 3051,
+      "sha256": "09474b016866324825e7a9c001f1900d21426c64cda401a0351fdcb3b8d0f68f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/samples.jsonl": {
+      "bytes": 757330,
+      "sha256": "30874c84b95c0d56b3ce580eebff9b0fb99bfe8ecd043b8ae86133d8bc4734dc",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/stderr.log": {
+      "bytes": 194,
+      "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/stdout.log": {
+      "bytes": 493,
+      "sha256": "46c6fd42ad1cadb3ff3e12b330f34dc105fc39e77803613453e124ae850aa5de",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture_features.py": {
+      "bytes": 6302,
+      "sha256": "8782d766e4eec1958887ce60b753f2a31df2cee3c1c975ed2fa0eff8fd53364f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/capture_jit.py": {
+      "bytes": 15844,
+      "sha256": "eca9d075648629256e2b78242676cd2506e0e9180a441aab6efaae00d37ded5d",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/feature-layout.json": {
+      "bytes": 2346,
+      "sha256": "b67f1d3d32d063e59bd293f805749ec764fccc4f2da98a9f149f10af25b36db3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/module-inputs/candidate-endpoint-normal.spv": {
+      "bytes": 151580,
+      "sha256": "e5cec157b0894e171edbd8ce14591c8a88c562c378f3dcbc64327b63f4ad93b8",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/prepare.py": {
+      "bytes": 3297,
+      "sha256": "5574d59698128e9f970b13fd018f9b2eedef9eac21f23e0bbff7498970852ca7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/read_features.py": {
+      "bytes": 2692,
+      "sha256": "ae0cf3dca1e1340e2025fe4c32acc8025f5fb6f2b3600cc2c9653389e8880716",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/run_capture.py": {
+      "bytes": 4813,
+      "sha256": "bd5e3311d50085ac482d45d25ffc5396a1cda7703bd4d6143caab0470963e01e",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-nojoin-jit/runtime-context.json": {
+      "bytes": 2895,
+      "sha256": "586acdc33ee6c8e9d58c0194e7047ba45a77ce9ebde25ee0ea90f912a69098cb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/actions.json": {
+      "bytes": 514803,
+      "sha256": "537cfd0c6319eec3d59fd90b84d76947206e9d73ead7c16ef851b78b53256dd7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/commands.json": {
+      "bytes": 3434,
+      "sha256": "f4e41f8370e9198133465cc3e13b39853c04582a96c877767ac89b32a63db012",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/compile.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/compile.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/inputs-after.json": {
+      "bytes": 1767162,
+      "sha256": "30cbb936f5b0abd568ee83baa7b1566970b979223d0c286b9707efdc35bba5a6",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/inputs-before.json": {
+      "bytes": 1767162,
+      "sha256": "30cbb936f5b0abd568ee83baa7b1566970b979223d0c286b9707efdc35bba5a6",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/link.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/link.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/owner.json": {
+      "bytes": 2560,
+      "sha256": "7c2f9fb9395c7005049a43e9981b820844309a047b44689f3b941a0ba34b68f7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/result.json": {
+      "bytes": 858,
+      "sha256": "14583ae91181df105e820c7d5ffeb32ab298ae3d1d9e16ae5bbcbd1a4f6f4ca7",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/samples.jsonl": {
+      "bytes": 9433,
+      "sha256": "3ae5052e6fd4d711cc284294a7f99d12fdd0434e82aa382ab0a7656653b904ee",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/build.py": {
+      "bytes": 2284,
+      "sha256": "2e68977f44cbd117aed5f0982bc0360f88800fd57f5137fed203d3d250bda2c5",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/prepare.py": {
+      "bytes": 6127,
+      "sha256": "ac08994b0e31e8a59e4d771f82c297da610795bebd626328c9894c807c6240b9",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/recipes.json": {
+      "bytes": 3203,
+      "sha256": "e02d87738d5b30e141f872b6272da259bad85fde8142ad312be03ba67d2c27f4",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/retained_compute.cpp": {
+      "bytes": 45584,
+      "sha256": "3f59ef7706d219d452907bb7a1dadc53ad292554f8ee6ae52044f2a37e9f4f76",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/single_endpoint_kernels.h": {
+      "bytes": 7956097,
+      "sha256": "c5f72985ab8f373b8062069c81af099d154943ef2c7213de4cb626038d8692df",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/source-contracts.json": {
+      "bytes": 723,
+      "sha256": "501b6fe9c45793675d32a67b0452407494643166600d8df39d4e85fed473a85f",
+      "mode": "0o644"
+    },
+    "out/software-scalar-numerics-build/source.patch": {
+      "bytes": 569,
+      "sha256": "005753b515a927c93882667e81c32dc26815bf8a94898e1ed26f4e59e3d827b5",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/actions.json": {
+      "bytes": 522746,
+      "sha256": "80f98123bfa4b545ca18748ce7ff4e5affd468cc7569184d84d499054f46b1ed",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/gtest.xml": {
+      "bytes": 10007,
+      "sha256": "3b477d5fb7e1cb23e58930fcaee56b17e3f1b154f4f165179b19fd2b792390df",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/inputs-after.json": {
+      "bytes": 1799131,
+      "sha256": "d47fbd9d47df41d81b56ff8361c1353cba03dc15a918517f87234f64dfa63de3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/inputs-before.json": {
+      "bytes": 1799131,
+      "sha256": "d47fbd9d47df41d81b56ff8361c1353cba03dc15a918517f87234f64dfa63de3",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/owner.json": {
+      "bytes": 2852,
+      "sha256": "878e4918aaf2b2dfa5cdb1a91fe64a226c5765d2d7597cf835acc6c6012da3e8",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/samples.jsonl": {
+      "bytes": 970093,
+      "sha256": "124ded6d8225e48c71e2948e2a4b8d1f6ab8f7cef02a64541dd9800d9bf2d2b6",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/stderr.log": {
+      "bytes": 13726,
+      "sha256": "67b7c823a14e4298064ab8002e2767eaf4508ee5229ee6734a06e5347c72cdcb",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/control-1/stdout.log": {
+      "bytes": 753,
+      "sha256": "f9048e8b2b049e9e5755a69c1f65afa8a639f0f8dae164d0b4c2bbe6cab89087",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/prepare.py": {
+      "bytes": 3552,
+      "sha256": "1461ffb5f4ec38e220eb323afeff80d917bf0bfe0cc2995798db9a7122dfd284",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-scalar-endpoint-control/source-contracts.json": {
+      "bytes": 940,
+      "sha256": "38f235ec2a225ab7db82af1004208eb060e47c953ddc14b85a22193eca10d263",
+      "mode": "0o644"
+    },
+    "out/software-scalar-closure/preserve.py": {
+      "bytes": 5393,
+      "sha256": "c419089e2a4965c7b28e8f032536933be58a7c88307f8ec1ba72fdd2e37f34c9",
+      "mode": "0o644"
+    },
+    "out/software-scalar-closure/review.py": {
+      "bytes": 8971,
+      "sha256": "9c9b090848d3dbe622000bfb52cf33f1bce67433d301110c855ae263abc16687",
+      "mode": "0o644"
+    },
+    "out/software-scalar-closure/root-completion.json": {
+      "bytes": 4335,
+      "sha256": "199856f955e4143a8531f0eb09d054ca920e38e89bed63acd6067451aa90b81c",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-scalar-cohort/probe.d": {
+      "bytes": 274,
+      "sha256": "48e2d7afde8d26712f9b9ca14c5e13e60b5dda5c55fdf4e96defc79611abfcdb",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-scalar-cohort/probe.map": {
+      "bytes": 160355,
+      "sha256": "e27448d313aec9eb5f3d09ab9db5bcba42b9acd5c4e14042d24800576c2df111",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-scalar-cohort/probe.o": {
+      "bytes": 2493584,
+      "sha256": "be7a355fca95c7b77c587f0fd9a3e42bf3be228288a4148c9cd2a3392e842bd7",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-scalar-cohort/short_input_jit_probe": {
+      "bytes": 1405320,
+      "sha256": "55360ecfb604df4c4a5b64c96100aae2bf5b0911aee8caa1f69d9e689316533e",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/software-scalar-endpoint/link.map": {
+      "bytes": 2235940,
+      "sha256": "73951a6dd66fc481b3cb6e07753401ffab14c081f03633b1038edd9c287e1bf1",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-scalar-endpoint/original_endpoint_controls": {
+      "bytes": 18396064,
+      "sha256": "cdae44734a6d4404d347dec229e40a687cd9da7b1355ea8abbed26e9d9a5ac27",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/software-scalar-endpoint/retained_compute.o": {
+      "bytes": 5683688,
+      "sha256": "96dea0d8dd32a4f7de1d3716557ef2e9a3e0b13d4defd9e4d3b0772b51fdf3de",
+      "mode": "0o644"
+    }
+  },
+  "owned_roots": [
+    "out/software-scalar-cohort",
+    "out/software-scalar-jit-host",
+    "out/software-scalar-jit",
+    "out/software-scalar-nojoin",
+    "out/software-scalar-nojoin-jit",
+    "out/software-scalar-numerics-build",
+    "out/software-scalar-endpoint-control",
+    "out/software-scalar-closure",
+    "bin/linux-gcc/software-scalar-cohort",
+    "bin/linux-gcc/software-scalar-endpoint"
+  ],
+  "all_source_inventory_bytes_modes_and_CRC_before_after_verified": true,
+  "outcome": {
+    "schema": "sirius-software-single-invocation-endpoint-root-completion-v1",
+    "passed": true,
+    "operator_source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+    "production_source_changed": false,
+    "owners": {
+      "out/software-scalar-cohort/compile-endpoint/owner.json": {
+        "seconds": 1.0407778469962068,
+        "peak_rss_kib": 234928,
+        "passed": true
+      },
+      "out/software-scalar-jit-host/build/owner.json": {
+        "seconds": 3.861094105988741,
+        "peak_rss_kib": 344300,
+        "passed": true
+      },
+      "out/software-scalar-jit/capture-candidate-endpoint-normal/owner.json": {
+        "seconds": 22.774420187051874,
+        "peak_rss_kib": 1738916,
+        "passed": true
+      },
+      "out/software-scalar-jit/capture-stock-endpoint-normal/owner.json": {
+        "seconds": 26.70800970500568,
+        "peak_rss_kib": 1733120,
+        "passed": true
+      },
+      "out/software-scalar-nojoin/compile-endpoint/owner.json": {
+        "seconds": 0.7866830740240403,
+        "peak_rss_kib": 238204,
+        "passed": true
+      },
+      "out/software-scalar-nojoin-jit/capture-candidate-endpoint-normal/owner.json": {
+        "seconds": 41.49635997903533,
+        "peak_rss_kib": 1962056,
+        "passed": true
+      },
+      "out/software-scalar-numerics-build/build/owner.json": {
+        "seconds": 5.401679273985792,
+        "peak_rss_kib": 556616,
+        "passed": true
+      },
+      "out/software-scalar-endpoint-control/control-1/owner.json": {
+        "seconds": 118.10794402397005,
+        "peak_rss_kib": 2805360,
+        "passed": true
+      }
+    },
+    "current_frozen_input_union_rehashed": 5837,
+    "actual_called_JIT": {
+      "stock16": {
+        "module_sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+        "executable_section_bytes": 922597,
+        "functions": [
+          [
+            "cs_co_variant.resume",
+            898262
+          ],
+          [
+            "cs_co_variant.destroy",
+            5
+          ],
+          [
+            "cs_variant",
+            314
+          ],
+          [
+            "cs_co_variant",
+            23997
+          ]
+        ],
+        "resume_frame_dereferenceable_bytes": [
+          89696
+        ]
+      },
+      "width1_with_joins": {
+        "module_sha256": "058b5818f6c90f12c51953778276a42936ee0502e6c33ff5d67fab5308f238bb",
+        "executable_section_bytes": 927829,
+        "functions": [
+          [
+            "cs_co_variant.resume",
+            903491
+          ],
+          [
+            "cs_co_variant.destroy",
+            5
+          ],
+          [
+            "cs_variant",
+            314
+          ],
+          [
+            "cs_co_variant",
+            23998
+          ]
+        ],
+        "resume_frame_dereferenceable_bytes": [
+          89888
+        ]
+      },
+      "width1_without_joins": {
+        "module_sha256": "e5cec157b0894e171edbd8ce14591c8a88c562c378f3dcbc64327b63f4ad93b8",
+        "executable_section_bytes": 973131,
+        "functions": [
+          [
+            "cs_variant",
+            973131
+          ]
+        ],
+        "resume_frame_dereferenceable_bytes": []
+      }
+    },
+    "all55_feature_fields_queue_extensions_and_feature_chain_equal": true,
+    "coroutine_eliminated_only_after_explicit_single_invocation_sync_elision": true,
+    "candidate_code_bytes": 973131,
+    "stock_code_bytes": 922597,
+    "candidate_code_growth_percent": 5.477364439728283,
+    "first_original_control": {
+      "passed": true,
+      "original_tests": 1,
+      "F_E_S_D": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "precision_routes": 4,
+      "complete_active_readback_digests": 56,
+      "original_factor_rows": 29,
+      "original_alternative_roots": 30,
+      "original_additional_rows": 27,
+      "original_required_admissions": 23,
+      "all_original_assertions_and_test_objects_unchanged": true,
+      "XML": {
+        "bytes": 10007,
+        "sha256": "3b477d5fb7e1cb23e58930fcaee56b17e3f1b154f4f165179b19fd2b792390df"
+      }
+    },
+    "original_controls_completed": 1,
+    "original_controls_required": 8,
+    "benefit_trial_or_frame_executed": false,
+    "prototype_adopted": false,
+    "full_scientific_Mandatory_runtime_or_release_qualification": false,
+    "scope": "Endpoint-only private prototype. Called-code structure is changed and the original first numerical prerequisite passes. No throughput/causal speedup claim; original remaining integrated controls and benefit gates remain required before adoption. Current canonical source/build/display evidence at630844e7 remains separate."
+  },
+  "source_and_binary_scope": "Complete private sources, three ordinary called-code captures, original first-control executable/XML/raw logs and both private host stages. Canonical source remains unchanged. External host/compiler/library hash seals are not backups; exact original references remain in Git.",
+  "remaining": "Unadopted Endpoint-only prototype. Seven original integrated controls and all unchanged benefit gates remain; no numerical speedup or frame success is claimed. A broader three-stage scalar profile would be a distinct changed prototype requiring matching bindings and applicable controls.",
+  "workspace_state": "Closed scoped artifacts retained temporarily as immutable inputs for the continuing prototype. No live owned processes. Retire these exact roots after the prototype decision or after creating a preserved successor; keep canonical preset bins and unrelated work."
+}
