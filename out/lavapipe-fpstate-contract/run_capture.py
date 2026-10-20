@@ -3,7 +3,7 @@ from pathlib import Path
 import collections,hashlib,importlib.util,json,os,re,resource,struct,subprocess,sys
 R=Path.cwd();W=Path(__file__).resolve().parent;B=R/'bin/linux-gcc/lavapipe-fpstate-contract';folder=Path(sys.argv[1]).resolve(strict=True)
 assert folder.parent==W
-assert json.loads((W/'build/owner.json').read_text())['passed']
+assert json.loads((W/'build-complete/owner.json').read_text())['passed']
 module=B/'native.spv';executable=B/'gpu_probe'
 observer=R/'attestations/software-vulkan/b5d2abf/optimized-ir-stage-code-binding/optimizer_observer.so'
 resource.setrlimit(resource.RLIMIT_CORE,(0,0))

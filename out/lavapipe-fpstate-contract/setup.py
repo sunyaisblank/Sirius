@@ -1,6 +1,7 @@
 from pathlib import Path
-import json,shlex,shutil
+import json,shlex,shutil,subprocess
 R=Path.cwd();W=Path(__file__).resolve().parent;B=R/'bin/linux-gcc/lavapipe-fpstate-contract';B.mkdir()
+(W/'word_io.h').write_bytes(subprocess.check_output(['git','show','c41bc441:out/portable-checked-fp64/word_io.h']))
 for name in ['run_owned.py','owned_guard.py','input.bin','expected.bin','portable_binary32.h','oracle-binding.json','corpus.slang','capture_jit.py','capture_features.py','read_features.py','feature-layout.json','properties_capture.py','retained-endpoint-arguments.json']:
     shutil.copyfile(R/'out/lavapipe-native-fp32'/name,W/name)
 source=(R/'out/lavapipe-native-fp32/gpu_probe.cpp').read_text()
