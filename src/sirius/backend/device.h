@@ -59,6 +59,9 @@ struct DeviceInfo {
     std::uint64_t render_memory_bytes = 0;
     // Whether fp64 kernels are available (precision ladder rung one).
     bool supports_fp64 = false;
+    // Report actual shaderInt64 support; the Vulkan factory enables it when
+    // opening a supported device, as it does for shaderFloat64.
+    bool supports_int64 = false;
     bool preserves_fp32_denormals = false;
     bool rounds_fp32_to_nearest = false;
     bool rounds_fp64_to_nearest = false;
