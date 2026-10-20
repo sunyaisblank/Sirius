@@ -1,7 +1,7 @@
 from pathlib import Path
 import hashlib,importlib.util,json,os,resource,struct,subprocess,sys
 R=Path.cwd();W=Path(__file__).resolve().parent;B=R/'bin/linux-gcc/lavapipe-ieee32-staged';label,folder=sys.argv[1:];folder=Path(folder)
-arm='baseline' if label.startswith('baseline') else 'candidate';poison=label.endswith('poison')
+action=json.loads((W/'actions.json').read_text())[label];arm=action['arm'];poison=action['poison']
 module=R/'bin/linux-gcc/lavapipe-native-fp32/native.spv' if arm=='baseline' else B/'native-preserve.spv'
 executable=R/('bin/linux-gcc/lavapipe-fpstate-contract/gpu_probe' if poison else 'bin/linux-gcc/lavapipe-native-fp32/gpu_probe')
 driver=B/arm/'libvulkan_lvp.so';oracle=R/'out/lavapipe-native-fp32'

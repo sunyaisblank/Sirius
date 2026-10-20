@@ -115,7 +115,7 @@ with (folder / 'stdout.log').open('wb') as out, (folder / 'stderr.log').open('wb
                     try:
                         prior = guard.proc(item['pid'])
                         assert prior['start_ticks'] == item['start_ticks'] and prior['session'] == child.pid
-                        provider = '/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so'
+                        provider = action['runtime_provider']
                         lines = [line for line in Path(f"/proc/{item['pid']}/maps").read_text().splitlines() if provider in line]
                         current = guard.proc(item['pid'])
                         assert current['start_ticks'] == item['start_ticks'] and current['session'] == child.pid

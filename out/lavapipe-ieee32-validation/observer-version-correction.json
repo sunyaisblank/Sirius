@@ -1,0 +1,9 @@
+{
+  "first_attempt": "baseline-poison",
+  "stopped_before_shader_module_or_numerical_dispatch": true,
+  "reason": "Initial copied GDB reader still contained LLVM20 prologue and library checks.",
+  "correction": "Reuse exact original qualified LLVM21 reader from pushed43389d91, plus only the already-reviewed per-worker MXCSR readout. Select actual frozen private provider mapping in ownership reader.",
+  "original_qualified_reader_sha256": "5df17c0eee078b5a744a5a8351a56fa030d65a3c845d7514a77871caa41c47e0",
+  "failed_owner_retained": true,
+  "numeric_workloads_repeated": 0
+}

@@ -218,8 +218,8 @@ class ModuleCreate(gdb.Breakpoint):
         try:
             if not optimizer_installed:
                 parent_api = int(gdb.parse_and_eval('(unsigned long)&LLVMGetGlobalParent'))
-                assert memory(parent_api, 16).hex() == 'f30f1efa554889e5488b47285dc36690'
-                Optimizer('*' + hex(parent_api - 0x10cc070 + 0x473aad0), internal=True)
+                assert memory(parent_api, 16).hex() == 'f30f1efa554889e5488b47285dc3cccc'
+                Optimizer('*' + hex(parent_api - 0x45a1e10 + 0x7e5b0c0), internal=True)
                 optimizer_installed = True
             ModuleCreated(gdb.newest_frame(), internal=True)
             return False
@@ -244,7 +244,7 @@ class PassReturned(gdb.FinishBreakpoint):
 class Optimizer(gdb.Breakpoint):
     def stop(self):
         try:
-            if pathlib.Path(gdb.solib_name(reg('rip')) or '').name != 'libLLVM.so.20.1':
+            if pathlib.Path(gdb.solib_name(reg('rip')) or '').name != 'libLLVM.so.21.1':
                 return False
             pipeline = bytearray()
             for i in range(4096):
@@ -274,7 +274,7 @@ class Lookup(gdb.Breakpoint):
             # provider file identity are preserved with this diagnostic.
             function = reg('rsi')
             parent_api = int(gdb.parse_and_eval('(unsigned long)&LLVMGetGlobalParent'))
-            assert memory(parent_api, 16).hex() == 'f30f1efa554889e5488b47285dc36690'
+            assert memory(parent_api, 16).hex() == 'f30f1efa554889e5488b47285dc3cccc'
             module = struct.unpack('<Q', memory(function + 0x28, 8))[0]
             generation = module_generation[module]
             LookupReturned(module, generation)
