@@ -18,10 +18,11 @@
 
 namespace sirius::backend {
 
-// Check instruction framing and device-dependent Float64/FMA requirements before
+// Check instruction framing and device-dependent Float64/Int64/FMA requirements before
 // asking the driver to create a module. Full SPIR-V validity remains spirv-val's gate.
 [[nodiscard]] base::Expected<void> ValidateVulkanKernelPrecision(
-    std::span<const std::uint32_t> spirv, bool supports_fp64, bool fma_fp32_enabled = false);
+    std::span<const std::uint32_t> spirv, bool supports_fp64, bool fma_fp32_enabled = false,
+    bool supports_int64 = false);
 
 namespace detail {
 // Keep the largest compatible coherent host heap and its existing tie order;

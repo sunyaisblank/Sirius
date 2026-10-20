@@ -184,7 +184,7 @@ TEST(VulkanBackend, PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueu
         for (const VkBool32 fp64 : {VK_FALSE, VK_TRUE}) {
             PortabilityProbe probe;
             if (advertised) probe.advertised = {"VK_KHR_portability_subset"};
-            const VkPhysicalDeviceFeatures features{.shaderFloat64 = fp64};
+            const VkPhysicalDeviceFeatures features{.shaderFloat64 = fp64, .shaderInt64 = VK_TRUE};
             const VkDeviceQueueCreateInfo queue{
                 .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
                 .queueFamilyIndex = 3,
@@ -202,6 +202,7 @@ TEST(VulkanBackend, PortabilityDeviceEnablesSubsetWithoutChangingPrecisionOrQueu
             EXPECT_EQ(probe.creates, 1);
             EXPECT_EQ(probe.features, &features);
             EXPECT_EQ(probe.features->shaderFloat64, fp64);
+            EXPECT_EQ(probe.features->shaderInt64, VK_TRUE);
             EXPECT_EQ(probe.queues, &queue);
             EXPECT_EQ(probe.queue_count, 1u);
             const std::vector<std::string> expected =
@@ -247,7 +248,7 @@ TEST(VulkanBackend, Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatCo
                 .preserves_fp32_signed_zero_inf_nan = (mask & 16u) != 0,
                 .fma_fp32_enabled = true,
             };
-            const VkPhysicalDeviceFeatures features{.shaderFloat64 = fp64};
+            const VkPhysicalDeviceFeatures features{.shaderFloat64 = fp64, .shaderInt64 = VK_TRUE};
             const VkDeviceQueueCreateInfo queue{.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
                                                 .queueCount = 1};
             const VkPhysicalDeviceTimelineSemaphoreFeatures caller_chain{
@@ -267,6 +268,7 @@ TEST(VulkanBackend, Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatCo
             EXPECT_EQ(probe.fma.has_value(), admitted);
             EXPECT_EQ(probe.features, &features);
             EXPECT_EQ(probe.features->shaderFloat64, fp64);
+            EXPECT_EQ(probe.features->shaderInt64, VK_TRUE);
             EXPECT_EQ(probe.queues, &queue);
             if (admitted) {
                 EXPECT_EQ(probe.fma->pNext, &caller_chain);
@@ -388,6 +390,22 @@ TEST(VulkanBackend, KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstruc
     const auto unbound = unopened.LoadKernel(fp64);
     ASSERT_FALSE(unbound.has_value());
     EXPECT_EQ(unbound.error().detail(), refused.error().detail());
+    auto int64 = fp32;
+    int64.insert(int64.end(), {0x00020011u, 11u});
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(int64, false, false, true));
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(int64, true, false, true));
+    const auto no_int64 = ValidateVulkanKernelPrecision(int64, true, true);
+    ASSERT_FALSE(no_int64);
+    EXPECT_EQ(no_int64.error().domain(), sirius::base::ErrorDomain::kKernel);
+    EXPECT_NE(no_int64.error().detail().find("shaderInt64"), std::string::npos);
+    const auto unbound_int64 = unopened.LoadKernel(int64);
+    ASSERT_FALSE(unbound_int64);
+    EXPECT_EQ(unbound_int64.error().detail(), no_int64.error().detail());
+    auto both64 = fp64;
+    both64.insert(both64.end(), {0x00020011u, 11u});
+    EXPECT_TRUE(ValidateVulkanKernelPrecision(both64, true, false, true));
+    EXPECT_FALSE(ValidateVulkanKernelPrecision(both64, false, false, true));
+    EXPECT_FALSE(ValidateVulkanKernelPrecision(both64, true, true, false));
     for (std::size_t length = 0; length <= 5; ++length) {
         EXPECT_FALSE(unopened.LoadKernel(std::span(fp32).first(length)).has_value());
     }

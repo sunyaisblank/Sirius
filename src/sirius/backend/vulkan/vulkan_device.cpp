@@ -120,6 +120,7 @@ ProcessPipelineCache& PipelineCacheStore() {
         .device_local_bytes = device_local,
         .render_memory_bytes = render_memory,
         .supports_fp64 = features.shaderFloat64 == VK_TRUE,
+        .supports_int64 = features.shaderInt64 == VK_TRUE,
         .preserves_fp32_denormals = float_controls.shaderDenormPreserveFloat32 == VK_TRUE,
         .rounds_fp32_to_nearest = float_controls.shaderRoundingModeRTEFloat32 == VK_TRUE,
         .rounds_fp64_to_nearest = float_controls.shaderRoundingModeRTEFloat64 == VK_TRUE,
@@ -460,10 +461,11 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         .queueCount = 1,
         .pQueuePriorities = &priority,
     };
-    // fp64 is enabled whenever the hardware offers it so the precision
-    // ladder can select double kernels at run time.
+    // Enable the optional scalar types only when advertised. Kernel admission
+    // then uses the same capabilities as the actual logical device.
     VkPhysicalDeviceFeatures enabled{};
     enabled.shaderFloat64 = device->info_.supports_fp64 ? VK_TRUE : VK_FALSE;
+    enabled.shaderInt64 = device->info_.supports_int64 ? VK_TRUE : VK_FALSE;
     const VkDeviceCreateInfo device_info{
         .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
         .queueCreateInfoCount = 1,
@@ -691,19 +693,22 @@ Expected<VulkanPipelineCacheStats> VulkanDevice::SnapshotPipelineCache() {
 }
 
 Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spirv,
-                                             bool supports_fp64, bool fma_fp32_enabled) {
+                                             bool supports_fp64, bool fma_fp32_enabled,
+                                             bool supports_int64) {
     // SPIR-V binary encoding: five-word header, high 16 bits instruction word
     // count, low 16 bits opcode; OpCapability=17 and Float64=10. Khronos authority:
     // https://github.com/KhronosGroup/SPIRV-Headers/blob/main/include/spirv/unified1/spirv.hpp11
     constexpr std::uint32_t kMagic = 0x07230203u;
     constexpr std::uint32_t kOpCapability = 17u;
     constexpr std::uint32_t kFloat64 = 10u;
+    constexpr std::uint32_t kInt64 = 11u;
     constexpr std::uint32_t kFmaKHR = 6030u;
     constexpr std::uint32_t kOpFmaKHR = 4427u;
     if (spirv.size() <= 5 || spirv[0] != kMagic || spirv[4] != 0) {
         return Fail(ErrorDomain::kKernel, "validate shader module", "malformed SPIR-V header");
     }
     bool needs_fp64 = false;
+    bool needs_int64 = false;
     bool needs_fma = false;
     std::map<std::uint32_t, std::uint32_t> float_widths;
     std::vector<std::uint32_t> fma_types;
@@ -720,6 +725,7 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
                             "malformed SPIR-V OpCapability");
             }
             needs_fp64 = needs_fp64 || spirv[offset + 1] == kFloat64;
+            needs_int64 = needs_int64 || spirv[offset + 1] == kInt64;
             needs_fma = needs_fma || spirv[offset + 1] == kFmaKHR;
         }
         needs_fma = needs_fma || opcode == kOpFmaKHR;
@@ -737,6 +743,10 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
         return Fail(ErrorDomain::kKernel, "load shader precision",
                     "SPIR-V Float64 requested but the device lacks shaderFloat64");
     }
+    if (needs_int64 && !supports_int64) {
+        return Fail(ErrorDomain::kKernel, "load shader precision",
+                    "SPIR-V Int64 requested but the logical device has not enabled shaderInt64");
+    }
     if (needs_fma && !fma_fp32_enabled)
         return Fail(ErrorDomain::kKernel, "load shader precision",
                     "SPIR-V FMAKHR requested but the logical device has not enabled "
@@ -751,8 +761,8 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
 }
 
 Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
-    if (auto precision =
-            ValidateVulkanKernelPrecision(spirv, info_.supports_fp64, info_.fma_fp32_enabled);
+    if (auto precision = ValidateVulkanKernelPrecision(
+            spirv, info_.supports_fp64, info_.fma_fp32_enabled, info_.supports_int64);
         !precision) {
         return std::unexpected(precision.error());
     }
