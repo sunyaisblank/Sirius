@@ -1,0 +1,243 @@
+{
+  "verdict": "REJECTED11/22",
+  "private_runtime_source": "6b355fbfe55e4982f2730906a459be2911f5be05",
+  "public_product_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "whole_call_passed": 0,
+  "whole_call_total": 4,
+  "inclusive_stage_passed": 11,
+  "inclusive_stage_total": 16,
+  "provisioning_inclusive_API_passed": 0,
+  "provisioning_inclusive_API_total": 2,
+  "independent_Decimal_rawXML_agreement": true,
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_ms": "33.261066",
+      "candidate_ms": "31.727070999999999",
+      "improvement_percent": "4.61198387327694488204316722741237457632897273947864449082901",
+      "minimum_percent": "5",
+      "passed": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_ms": "4.5979480000000002",
+      "candidate_ms": "5.0541819999999999",
+      "improvement_percent": "-9.92255675792765990730835764442486486109205043533050564764758",
+      "minimum_percent": "-5",
+      "passed": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_ms": "6.871041",
+      "candidate_ms": "6.5035350000000003",
+      "improvement_percent": "5.34862184638397151174036074009746121439240429506969904560313",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_ms": "20.0169410000000001",
+      "candidate_ms": "18.5504710000000000",
+      "improvement_percent": "7.32614438939496345957084856574756622617387658909737393853598",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_ms": "38.828318000000003",
+      "candidate_ms": "40.187537999999996",
+      "improvement_percent": "-3.50058944093327167811471197902996894317863737775334925566665",
+      "minimum_percent": "5",
+      "passed": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_ms": "2.4760230000000001",
+      "candidate_ms": "2.7083699999999999",
+      "improvement_percent": "-9.38387890580983256682676591413599280674024780319113325117546",
+      "minimum_percent": "-5",
+      "passed": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_ms": "5.3704339999999999",
+      "candidate_ms": "5.4432019999999999",
+      "improvement_percent": "-1.35497429071840378924634937732041375513318620656009840421065",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_ms": "5.3359649999999999",
+      "candidate_ms": "5.4802960000000001",
+      "improvement_percent": "-2.70487156493718011090536697555512659669557381945208779846895",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_ms": "10.0895100000000002",
+      "candidate_ms": "10.5464470000000002",
+      "improvement_percent": "-4.52883242099963220158694681903021650036628500233972709544299",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_ms": "11.9160180000000002",
+      "candidate_ms": "11.8871870000000003",
+      "improvement_percent": "0.241951631828685551801757402033371352716026410276128271776253",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "instance",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": "10363.7225490000010040",
+      "candidate_ms": "10870.2784059999999944",
+      "improvement_percent": "-4.88777902539350333708647592481227949217826667703002687292611",
+      "minimum_percent": "0",
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_ms": "34.577722000000001",
+      "candidate_ms": "36.027650000000001",
+      "improvement_percent": "-4.19324326802095279170665817658685578805167741857442812306498",
+      "minimum_percent": "5",
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_ms": "5.6009049999999996",
+      "candidate_ms": "5.2969569999999999",
+      "improvement_percent": "5.42676585301839116548242493085607882886247353640733623316043",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_ms": "7.1249000000000002",
+      "candidate_ms": "8.0226500000000005",
+      "improvement_percent": "-12.6001768445872963101186867299949105217283967495709267013320",
+      "minimum_percent": "-5",
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_ms": "20.7545050000000000",
+      "candidate_ms": "20.3878430000000001",
+      "improvement_percent": "1.76666222586373368095264136629613667008680765934913889779592",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_ms": "38.774958999999996",
+      "candidate_ms": "39.457543999999999",
+      "improvement_percent": "-1.76037581367914037101891596369093476219185311746529632094292",
+      "minimum_percent": "5",
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_ms": "2.4258850000000001",
+      "candidate_ms": "2.632619",
+      "improvement_percent": "-8.52200331013217409225897723378585166819625688003134245043533",
+      "minimum_percent": "-5",
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_ms": "5.5094819999999997",
+      "candidate_ms": "5.5250810000000001",
+      "improvement_percent": "-0.283130065585120358853884934288941801818298033586921700713318",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_ms": "5.0705369999999999",
+      "candidate_ms": "5.8691270000000003",
+      "improvement_percent": "-15.7496138969107298842235821750384601122836136495692687437960",
+      "minimum_percent": "-5",
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_ms": "10.1040579999999998",
+      "candidate_ms": "9.7720949999999998",
+      "improvement_percent": "3.28544234405621985316082595836682357050654219060942782605844",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_ms": "12.0672399999999995",
+      "candidate_ms": "12.0111099999999999",
+      "improvement_percent": "0.465143645108571656200740397496513544138527015975216542412640",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "instance",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": "9835.6383949999998944",
+      "candidate_ms": "11158.8187210000000057",
+      "improvement_percent": "-13.4529175724134592435500060539650711832498839338136847955143",
+      "minimum_percent": "0",
+      "passed": false
+    }
+  ],
+  "arithmetic": "Original174268 records522804 expected words exact on host and actual supported/enabled Float64 stock Lavapipe.720288 injected estimates produce240096 exact acceptances/480192 refusals; UBSan and float-cast-overflow pass.",
+  "complete_C8": "51 markers54 executed-module joins32 complete readback digests; actual three new modules selected; original assertions pass.",
+  "ordinary_complete_Endpoint": "4 packed vdivpd,2 vsqrtpd,191 fallback integer divides,10 fences.922578\u2192934436 function bytes. No fast-path frequency inferred.",
+  "remaining7_controls_run": false,
+  "cold_frame_run": false,
+  "shader_adopted": false,
+  "retry_or_resampling": false,
+  "next_dependency_review": "Actual Lavapipe denormal/float execution behavior; source review only, no provider code/property change or new trial yet.",
+  "full_goal_complete": false
+}
