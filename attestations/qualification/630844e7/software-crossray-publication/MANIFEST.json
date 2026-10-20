@@ -1,0 +1,112 @@
+{
+  "schema": "sirius-crossray-queue-publication-retirement-v1",
+  "operator_source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "parent_corrected_source_checkpoint": "65a466249d923a4b8c2ce1a02496cafdaa2e733a",
+  "files": {
+    "retirement.json": {
+      "bytes": 1012,
+      "sha256": "570b652a5e99126d26f3745b11bc316aea7f4c3fa09cbcae41b2c25ec36cb6aa",
+      "mode": "0o644"
+    },
+    "issue44-after.json": {
+      "bytes": 16712,
+      "sha256": "fd9d3b7a989108503f5cd198253f7662b28fe1db0d140b5ff1182cd1304be8da",
+      "mode": "0o644"
+    },
+    "source-workspace-before-publication.json": {
+      "bytes": 819,
+      "sha256": "3d64b97c7b7f699951ab5a94051cdeded58e26809b3dd4953e8c183e2b4c2aac",
+      "mode": "0o644"
+    },
+    "pr62-after.json": {
+      "bytes": 94,
+      "sha256": "0325ff659199b4716be18a672b1d534ccfa65a5c07074c31a9132f72e5696143",
+      "mode": "0o644"
+    },
+    "publication-verification.json": {
+      "bytes": 501,
+      "sha256": "0bfdca7883b6fd087eec4ffe4a084c8cb35b840f7b6059c7f414faf712b51065",
+      "mode": "0o644"
+    },
+    "comment-created.json": {
+      "bytes": 5108,
+      "sha256": "1f342d663d9969fce0ec1d4e03f184fa51f7b85b1220af2746fcc1667705a828",
+      "mode": "0o644"
+    },
+    "publish.py": {
+      "bytes": 4095,
+      "sha256": "d7faa6c6c7a79ca70e90eece38edebc896b3c9e992e539d71c702ed5c6d83cf5",
+      "mode": "0o644"
+    },
+    "checkpoint-remote.txt": {
+      "bytes": 308,
+      "sha256": "ba139852f99ea228218c8c418ac54fc58fb40cfec79ad15cdfbdf15ba75db232",
+      "mode": "0o644"
+    },
+    "issue44-before.json": {
+      "bytes": 16712,
+      "sha256": "fd9d3b7a989108503f5cd198253f7662b28fe1db0d140b5ff1182cd1304be8da",
+      "mode": "0o644"
+    },
+    "retire.py": {
+      "bytes": 3387,
+      "sha256": "be90b0eaf031c605c8931f713940e376e6c110f1e4081d66da34b8bc680b2fb0",
+      "mode": "0o644"
+    },
+    "comment-readback.json": {
+      "bytes": 5108,
+      "sha256": "1f342d663d9969fce0ec1d4e03f184fa51f7b85b1220af2746fcc1667705a828",
+      "mode": "0o644"
+    },
+    "comment-payload.json": {
+      "bytes": 3428,
+      "sha256": "9cf71c3b3820e7364fc03e410f95c06e1a802556f0f48ea7844b27a15b1fa502",
+      "mode": "0o644"
+    }
+  },
+  "source_root": "out/software-crossray-publication",
+  "publication": {
+    "comment_url": "https://github.com/sunyaisblank/Sirius/issues/44#issuecomment-6291164644",
+    "comment_exact_readback": true,
+    "issue44_original_body_and_acceptance_unchanged": true,
+    "issue44_state": "open",
+    "PR62_open_draft_source_unchanged": true,
+    "first_version_rejected_for_source_ownership_and_raw_cost": true,
+    "corrected_variant_compiler_only": true,
+    "corrected_tail_observer_source_prepared": true,
+    "corrected_tail_observer_compiled_or_run": false,
+    "main_goal_active": true
+  },
+  "retirement": {
+    "passed": true,
+    "published_checkpoint": "65a466249d923a4b8c2ce1a02496cafdaa2e733a",
+    "branch": "development/software-crossray-endpoint-2026-10-20",
+    "retired_files": 192,
+    "retired_bytes": 121946936,
+    "retired_roots": [
+      "out/software-crossray-endpoint",
+      "out/software-crossray-jit",
+      "out/software-crossray-producer",
+      "out/software-crossray-control",
+      "out/software-crossray-benefit",
+      "out/software-crossray-closeout",
+      "bin/linux-gcc/software-crossray-jit",
+      "bin/linux-gcc/software-crossray-endpoint"
+    ],
+    "all_live_bytes_modes_CRC_and_published_Git_payloads_equal_before_removal": true,
+    "corrected_root": "out/software-crossray-active",
+    "corrected_root_files_retained": 51,
+    "corrected_root_byte_exact_before_after": true,
+    "corrected_compile_frozen_inputs_do_not_depend_on_retired_roots": true,
+    "canonical_preset_bins_and_unrelated_work_preserved": true,
+    "active_owned_runtime_processes": 0,
+    "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d"
+  },
+  "first_variant_disposition": "REJECT_EIGHT_PRIVATE_RAY_ENDPOINT_ACTIVE_BOUND_AND_COST",
+  "corrected_variant_compiler_and_emitted_guard_only": true,
+  "corrected_tail_observer_source_prepared": true,
+  "corrected_tail_observer_compiled_or_run": false,
+  "production_adopted": false,
+  "full_qualification": false,
+  "goal_status": "active"
+}
