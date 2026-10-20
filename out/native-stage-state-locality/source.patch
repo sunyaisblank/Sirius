@@ -1,0 +1,49 @@
+--- /home/astra/.project/Sirius/src/sirius/kernels/retained_transport.slang	2026-10-12 23:41:23.940645900 +1100
++++ /home/astra/.project/Sirius/out/native-stage-state-locality/source/retained_transport.slang	2026-10-21 06:08:42.671012066 +1100
+@@ -30,9 +30,36 @@
+     if (inputs[base + 4] != 1) r.valid = 0;
+     return r;
+ }
++#if !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)
++// Current-trial state only. The original complete output words remain written
++// at the same point; the existing join also publishes this per-workgroup copy.
++groupshared uint retainedStageState[40 * 5];
++RetainedTriple ReadStageState(uint index) {
++    uint base = index * 5;
++    RetainedTriple r;
++    r.hi = RPFromBits(retainedStageState[base]);
++    r.lo = RPFromBits(retainedStageState[base + 1]);
++    r.tail = RPFromBits(retainedStageState[base + 2]);
++    r.error = RPFromBits(retainedStageState[base + 3]);
++    r.valid = retainedStageState[base + 4];
++    return r;
++}
++void WriteStageState(uint index, RetainedTriple r) {
++    uint base = index * 5;
++    retainedStageState[base] = RPBits(r.hi);
++    retainedStageState[base + 1] = RPBits(r.lo);
++    retainedStageState[base + 2] = RPBits(r.tail);
++    retainedStageState[base + 3] = RPBits(r.error);
++    retainedStageState[base + 4] = r.valid;
++}
++#endif
+ RetainedTriple ReadInput(uint index, uint row, uint rowBase) {
++#if !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)
++    return index >= 4 && index < 44 ? ReadStageState(index - 4) : ReadOriginal(index, row);
++#else
+     return index >= 4 && index < 44 ? ReadStored(rowBase + 804 + 5 * (index - 4))
+                                     : ReadOriginal(index, row);
++#endif
+ }
+ RetainedTriple ReadValue(uint index, uint rowBase) {
+     RetainedTriple r;
+@@ -612,6 +639,9 @@
+             }
+             if (value.valid == 0) RejectRetainedProgram();
+             WriteStored(rowBase + 804 + i * 5, value);
++#if !defined(SIRIUS_RETAINED_PORTABLE) && !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)
++            WriteStageState(i, value);
++#endif
+ #ifdef SIRIUS_RETAINED_STAGE7_OWNER
+             if (stage == 6 && i < 4) S7Key(4 + i, value);
+ #endif
