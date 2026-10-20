@@ -1,0 +1,64 @@
+{
+  "schema": "sirius-current-sanitizer-source-completed-compile-stop-v1",
+  "failure_audited": true,
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "complete_sanitizer_build_passed": false,
+  "configure_passed": true,
+  "failed_source": "tests/app/viewer_display_contract_test.cpp",
+  "diagnostic": "GCC14 -g -O1 -fsanitize=address,undefined -Werror reports maybe-uninitialized in std::regex automaton instantiation. No suppression or policy change applied.",
+  "owner": {
+    "wall_seconds": 866.7610828439938,
+    "peak_sampled_rss_kib": 2274608,
+    "minimum_sampled_available_kib": 15592456,
+    "child_exit": 1,
+    "stop_reason": null,
+    "cleanup_errors": [],
+    "remaining_owned_processes": []
+  },
+  "source_inputs_and_current_host_files_unchanged": true,
+  "compiled_executables": {
+    "src/sirius/app/sirius": {
+      "exists": true,
+      "bytes": 127063072,
+      "sha256": "18a47b045d9ce9e44041238275bb8607411859d5c8b7a1192ba1e14185b438fa"
+    },
+    "tests/sirius_base_tests": {
+      "exists": true,
+      "bytes": 9543880,
+      "sha256": "5fa283be99595c9e94998a397ac34bd112f1f57986a1f45c7dc531a6f50fac23"
+    },
+    "tests/backend/sirius_backend_tests": {
+      "exists": true,
+      "bytes": 162118136,
+      "sha256": "f0cf67270c7f13afccea4d23220e4f8a05c0718ebbfec430ba66f53f8b2475c0"
+    },
+    "tests/core/sirius_core_tests": {
+      "exists": true,
+      "bytes": 104933712,
+      "sha256": "07a2ad4c28466ef79906ff3775e7f624162685a1042f139c2b21574f5919c399"
+    },
+    "tests/oracle/sirius_oracle_tests": {
+      "exists": true,
+      "bytes": 23352592,
+      "sha256": "9c17cbb675c8feceaed0139bc051bbab75122453155a63d093b9801992a3b5d7"
+    },
+    "src/sirius/app/sirius_app_tests": {
+      "exists": false
+    },
+    "src/sirius/app/sirius_render_tests": {
+      "exists": true,
+      "bytes": 190641648,
+      "sha256": "5fc6634ac500f7e2d6ce4b7757c5e88c4ff75ef183444066d0b7491ee19c0f53"
+    }
+  },
+  "historical_five_contracts_base_producer_unchanged": {
+    "bytes": 9543880,
+    "sha256": "5fa283be99595c9e94998a397ac34bd112f1f57986a1f45c7dc531a6f50fac23"
+  },
+  "historical_contract_execution_source_still": "5b2df58bb9f24e7db5f7fbc0c38bdd832a58900e",
+  "new_five_contract_execution_claimed": false,
+  "retained_SPV_count": 35,
+  "configured_optional_FMA_scope": "Existing system SPIR-V toolset reports unsupported opcode4427; optional FMA unavailable, distinct from fatal std::regex diagnostic.",
+  "Mandatory_provider_science_or_render_run": false,
+  "next_source_target": "Replace only the small shader-constant test helper, preserving its decimal/fraction grammar and all original4097transfer samples and film-range assertions."
+}
