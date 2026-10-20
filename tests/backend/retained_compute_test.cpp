@@ -2078,8 +2078,18 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
             }
             std::vector<RetainedStepOutput> outputs;
             std::vector<std::byte> raw;
+            std::size_t step_calls = 0;
+            std::size_t inactive_tail_checks = 0;
+            std::size_t nonzero_inactive_tail_witnesses = 0;
             const auto step = [&](std::span<const RetainedStepInput> rows) {
                 probe.readbacks.clear();
+                const auto call = step_calls++;
+                // Observe the complete allocation outside Step, retaining its
+                // original dispatches, active readback and oracle assertions.
+                std::vector<std::byte> allocation_before(probe.allocations[3].bytes);
+                const auto before_read =
+                    (*opened)->ReadBuffer(*probe.capture_output, std::span(allocation_before));
+                ASSERT_TRUE(before_read) << before_read.error().Description();
                 const auto returned = instance.Step(rows);
                 ASSERT_TRUE(returned) << returned.error().Description();
                 ASSERT_EQ(returned->size(), rows.size());
@@ -2088,6 +2098,38 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
                 outputs = *returned;
                 raw = probe.readbacks.front();
                 EXPECT_EQ((*opened)->BufferAllocationBytes(), allocation);
+                std::vector<std::byte> allocation_after(allocation_before.size());
+                const auto after_read =
+                    (*opened)->ReadBuffer(*probe.capture_output, std::span(allocation_after));
+                ASSERT_TRUE(after_read) << after_read.error().Description();
+                ASSERT_LE(raw.size(), allocation_after.size());
+                EXPECT_TRUE(std::equal(raw.begin(), raw.end(), allocation_after.begin()));
+                const auto inactive_offset = rows.size() * row_bytes;
+                ASSERT_LE(inactive_offset, allocation_before.size());
+                const auto inactive_before = std::span(allocation_before).subspan(inactive_offset);
+                const auto inactive_after = std::span(allocation_after).subspan(inactive_offset);
+                EXPECT_TRUE(std::equal(inactive_before.begin(), inactive_before.end(),
+                                       inactive_after.begin(), inactive_after.end()))
+                    << "inactive Transport allocation changed after call " << call;
+                if (!inactive_before.empty()) {
+                    ++inactive_tail_checks;
+                    const bool nonzero =
+                        std::any_of(inactive_before.begin(), inactive_before.end(),
+                                    [](std::byte value) { return value != std::byte{}; });
+                    if (nonzero) ++nonzero_inactive_tail_witnesses;
+                    const auto tail_digest = sirius::base::Sha256Hex(
+                        std::span(reinterpret_cast<const std::uint8_t*>(inactive_after.data()),
+                                  inactive_after.size()));
+                    ASSERT_TRUE(tail_digest) << tail_digest.error();
+                    RecordProperty("schwarzschild_inactive_tail_check_" +
+                                       std::to_string(decline_rte32) + "_" + std::to_string(wide) +
+                                       "_" + std::to_string(call),
+                                   "active_rows=" + std::to_string(rows.size()) +
+                                       ";capacity=" + std::to_string(instance.Capacity()) +
+                                       ";bytes=" + std::to_string(inactive_after.size()) +
+                                       ";nonzero_before=" + std::to_string(nonzero) +
+                                       ";sha256=" + *tail_digest);
+                }
             };
             const auto erased = [](const RetainedStepOutput& output) {
                 EXPECT_FALSE(output.valid);
@@ -2132,8 +2174,8 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
                     std::equal(current.begin(), current.end(), initial.begin(), initial.end()))
                     << "raw row " << row << " reference row " << initial_row;
             };
-            // Smaller reordered batches still own complete active rows; no
-            // claim is made about untouched inactive capacity or cross-route words.
+            // Reordered batches preserve complete active rows and every inactive
+            // capacity byte within this arithmetic route.
             const std::array<std::size_t, 6> order{11, 5, 1, 4, 8, 2};
             std::vector<RetainedStepInput> reordered;
             for (const auto row : order) reordered.push_back(mixed[row]);
@@ -2190,6 +2232,11 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
             ASSERT_TRUE(StepAgrees(outputs[5], sirius::test::retained_transport::cases.back()));
             ASSERT_NO_FATAL_FAILURE(step(std::span(witnesses).first(1)));
             ASSERT_TRUE(SchwarzschildStepAgrees(outputs.front(), fixture::cases.front()));
+            EXPECT_GT(inactive_tail_checks, 0U);
+            EXPECT_GT(nonzero_inactive_tail_witnesses, 0U);
+            RecordProperty("schwarzschild_inactive_tail_nonzero_witnesses_" +
+                               std::to_string(decline_rte32) + "_" + std::to_string(wide),
+                           std::to_string(nonzero_inactive_tail_witnesses));
         }
     }
 #else
