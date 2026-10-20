@@ -114,7 +114,7 @@ void AttemptEllisTwoSheet(
         0.0f, 0.0f, 0.0f, float(b0), wormShape,
         AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
     if (!attempted.accepted) {
-        if (dt <= minStep * Real(1.0001f)) {
+        if (AdaptiveAttemptAlreadyAtMinimumStep(dt, minStep)) {
             failure = kEllisContinuationMinimumStep;
             return;
         }

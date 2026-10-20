@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Kernel-versus-core parity gate (docs/SPECIFICATION.md section 7,
 // docs/ARCHITECTURE.md section 9). The parity_probe Slang kernel evaluates the
 // live device physics at fixed sample points through the Vulkan adapter.
@@ -37,6 +39,7 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <chrono>
 #include <cmath>
 #include <cstddef>
@@ -94,6 +97,7 @@ constexpr std::uint32_t kOpThinLensProjection = 21;
 constexpr std::uint32_t kOpPointStarAngularWeight = 22;
 constexpr std::uint32_t kOpSphericalEscapeEvent = 23;
 constexpr std::uint32_t kOpAffineClock = 24;
+constexpr std::uint32_t kOpAdaptiveMinimumRetry = 25;
 
 std::vector<std::uint32_t> LoadSpirv(const std::string& path) {
     std::ifstream file(path, std::ios::binary | std::ios::ate);
@@ -359,7 +363,7 @@ struct Fixture {
 
 Fixture OpenProbe(const std::string& artefact = "parity_probe.spv") {
     Fixture f;
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     return f;
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -374,7 +378,7 @@ Fixture OpenProbe(const std::string& artefact = "parity_probe.spv") {
     if (!device.has_value()) {
         return f;
     }
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/" + artefact);
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath(std::string("kernels/") + artefact));
     if (spirv.empty()) {
         return f;
     }
@@ -615,6 +619,231 @@ TEST(KernelParity, UnrepresentedKerrStageShrinksBeforeMetricEvaluation) {
     EXPECT_FLOAT_EQ(result[5], crossing.c2) << "rejected tableau mutated z";
     EXPECT_GT(result[6], 1.0f) << "rejection did not exceed the controller envelope";
     EXPECT_FLOAT_EQ(result[7], 0.5f) << "rejection did not request a smaller step";
+}
+
+void CheckAdaptiveMinimumRetry(Fixture& fixture, bool fp64) {
+    constexpr float minimum = 0.02f;
+    const float quantum =
+        fp64 ? static_cast<float>(std::nextafter(static_cast<double>(minimum),
+                                                 std::numeric_limits<double>::infinity()) -
+                                  minimum)
+             : std::nextafter(minimum, std::numeric_limits<float>::infinity()) - minimum;
+    ASSERT_GT(quantum, 0.0f);
+    Sample rejected_neighbour = KerrSchildAt(0.0f, 0.0f, 0.0f, 3.0f, 0.0f, 0.0f);
+    rejected_neighbour.u0 = -0.8f;  // Deliberate finite off-null negative control.
+    rejected_neighbour.u1 = 1.0f;
+    rejected_neighbour.h = minimum;
+    rejected_neighbour.aux0 = 1.0f;
+    rejected_neighbour.aux1 = quantum;
+    Sample rejected_floor = rejected_neighbour;
+    rejected_floor.aux0 = 0.0f;
+    Sample accepted_neighbour = rejected_neighbour;
+    accepted_neighbour.u0 = -1.0f;
+    Sample accepted_floor = accepted_neighbour;
+    accepted_floor.aux0 = 0.0f;
+    const std::vector<Sample> samples{rejected_neighbour, rejected_floor, accepted_neighbour,
+                                      accepted_floor};
+    std::vector<float> values;
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*fixture.device, fixture.kernel, kOpAdaptiveMinimumRetry, samples, values));
+    ASSERT_EQ(values.size(), samples.size() * kResultStride);
+    for (std::size_t index = 0; index < samples.size(); ++index) {
+        SCOPED_TRACE(index);
+        const bool rejected = index < 2;
+        const bool neighbour = index % 2 == 0;
+        const bool retried = rejected && neighbour;
+        const std::size_t base = index * kResultStride;
+        for (std::size_t slot = 0; slot < 30; ++slot) {
+            ASSERT_TRUE(std::isfinite(values[base + slot])) << slot;
+        }
+        EXPECT_FLOAT_EQ(values[base], 1.0f);  // Excludes an unexecuted opcode.
+        EXPECT_FLOAT_EQ(values[base + 1], neighbour ? 1.0f : 0.0f);
+        EXPECT_FLOAT_EQ(values[base + 2], neighbour ? 1.0f : 0.0f)
+            << "rung-sized neighbour gap must survive Real arithmetic before float readback";
+        EXPECT_FLOAT_EQ(values[base + 3], rejected ? 0.0f : 1.0f);
+        EXPECT_LE(values[base + 4], 1.0f);
+        EXPECT_FLOAT_EQ(values[base + 6], 0.0f);  // Projection can repair both tangents.
+        EXPECT_FLOAT_EQ(values[base + 7], neighbour ? 0.0f : 1.0f);
+        EXPECT_FLOAT_EQ(values[base + 9], retried ? 1.0f : 0.0f);
+        EXPECT_FLOAT_EQ(values[base + 10], retried ? 2.0f : 1.0f);
+        EXPECT_FLOAT_EQ(values[base + 11], rejected ? 0.0f : 1.0f);
+        EXPECT_FLOAT_EQ(values[base + 12], rejected ? 1.0f : 0.0f);
+        EXPECT_FLOAT_EQ(values[base + 13], retried ? 1.0f : 0.0f);
+        EXPECT_FLOAT_EQ(values[base + 14], retried ? 1.0f : 0.0f);
+        EXPECT_FLOAT_EQ(values[base + 16], rejected ? 1.0f : 0.0f);
+        const float floorCoarse = fp64 ? 32.0f : 2.0f;
+        const float firstCoarse = neighbour ? 1.0f : floorCoarse;
+        EXPECT_FLOAT_EQ(values[base + 26], firstCoarse);
+        EXPECT_FLOAT_EQ(values[base + 27], firstCoarse * 2.0f);
+        EXPECT_FLOAT_EQ(values[base + 28], retried ? floorCoarse : 0.0f);
+        EXPECT_FLOAT_EQ(values[base + 29], retried ? floorCoarse * 2.0f : 0.0f);
+        if (rejected) {
+            EXPECT_GT(values[base + 5], 0.2f)
+                << "real unprojected null defect must reject despite successful projection";
+            EXPECT_FLOAT_EQ(values[base + 8], 0.5f);
+            if (retried)
+                EXPECT_GT(values[base + 15], 0.2f);
+            else
+                EXPECT_FLOAT_EQ(values[base + 15], 0.0f);
+            EXPECT_FLOAT_EQ(values[base + 17], 0.0f);
+            const std::array<float, 8> unchanged{0, 3, 0, 0, -0.8f, 1, 0, 0};
+            for (std::size_t component = 0; component < unchanged.size(); ++component) {
+                EXPECT_FLOAT_EQ(values[base + 18 + component], unchanged[component]);
+            }
+        } else {
+            EXPECT_FLOAT_EQ(values[base + 5], 0.0f);
+            EXPECT_FLOAT_EQ(values[base + 15], 0.0f);
+            EXPECT_GT(values[base + 17], 0.0f);
+            EXPECT_LT(values[base + 18], 0.0f);
+            EXPECT_GT(values[base + 19], 3.0f);
+            EXPECT_FLOAT_EQ(values[base + 20], 0.0f);
+            EXPECT_FLOAT_EQ(values[base + 21], 0.0f);
+            EXPECT_FLOAT_EQ(values[base + 22], -1.0f);
+            EXPECT_FLOAT_EQ(values[base + 23], 1.0f);
+            EXPECT_FLOAT_EQ(values[base + 24], 0.0f);
+            EXPECT_FLOAT_EQ(values[base + 25], 0.0f);
+        }
+    }
+}
+
+TEST(KernelParity, RejectedNeighbourRetriesExactMinimumFp32) {
+    Fixture fixture = OpenProbe();
+    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+    ASSERT_NO_FATAL_FAILURE(CheckAdaptiveMinimumRetry(fixture, false));
+    RecordProperty("fp32_evidence", "real_adaptive_minimum_retry_controls_executed");
+}
+
+TEST(KernelParity, RejectedNeighbourRetriesExactMinimumFp32Comp) {
+    Fixture fixture = OpenProbe("parity_probe_fp32comp.spv");
+    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+    ASSERT_NO_FATAL_FAILURE(CheckAdaptiveMinimumRetry(fixture, false));
+    RecordProperty("fp32comp_evidence", "real_adaptive_minimum_retry_controls_executed");
+}
+
+TEST(KernelParity, RejectedNeighbourRetriesExactMinimumFp64) {
+#ifndef SIRIUS_TEST_HAS_KERNELS
+    GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
+#else
+    const auto devices = EnumerateVulkanDevices();
+    ASSERT_TRUE(devices.has_value()) << devices.error().Description();
+    if (devices->empty()) GTEST_SKIP() << "no Vulkan device present";
+    const auto selected = ResolveVulkanDeviceIndex(*devices);
+    ASSERT_TRUE(selected.has_value()) << selected.error().Description();
+    auto opened = CreateVulkanDevice(*selected);
+    ASSERT_TRUE(opened.has_value()) << opened.error().Description();
+    Fixture fixture;
+    fixture.device = std::move(*opened);
+    fixture.selected_index = *selected;
+    // LoadKernel creates the pipeline; do not first load an unused fp32 rung.
+    const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
+    ASSERT_FALSE(words.empty());
+    const auto loaded = fixture.device->LoadKernel(words);
+    if (!fixture.device->Info().supports_fp64) {
+        ASSERT_FALSE(loaded.has_value());
+        EXPECT_EQ(loaded.error().domain(), sirius::base::ErrorDomain::kKernel);
+        EXPECT_NE(loaded.error().detail().find("shaderFloat64"), std::string::npos);
+        RecordProperty("fp64_evidence", "unsupported_kernel_declined");
+        return;
+    }
+    ASSERT_TRUE(loaded.has_value()) << loaded.error().Description();
+    fixture.kernel = *loaded;
+    ASSERT_NO_FATAL_FAILURE(CheckAdaptiveMinimumRetry(fixture, true));
+    RecordProperty("fp64_evidence", "real_adaptive_minimum_retry_controls_executed");
+#endif
+}
+
+// Exact captured 02ee failure input; expected endpoints are the two epsilon
+// variants of the independent off-null canonical128 reference, not this shader.
+// attestations/scientific-core/02ee51f/kerr-local-hamiltonian-reference/result.json
+// SHA256 e93e6f2e1925d086238f550dd849da13f1e7b7dc1ae465a3fadcf3118c2275b1.
+// Projection remains enabled in the production candidate; it receives no extra
+// comparison allowance against the unprojected reference.
+void CheckCapturedKerrFloorComposite(Fixture& fixture) {
+    constexpr std::array<std::uint32_t, 8> bits{0xc29e0abbU, 0xbfe818daU, 0xbeae04d2U, 0xbe32b97aU,
+                                                0xc2122a40U, 0xc0018bf7U, 0x4188b6ebU, 0xc0208df9U};
+    std::array<float, 8> initial{};
+    for (std::size_t component = 0; component < initial.size(); ++component)
+        initial[component] = std::bit_cast<float>(bits[component]);
+    Sample sample;
+    sample.metric_id = kKerrSchild;
+    sample.p1 = std::bit_cast<float>(0x3f800000U);
+    sample.p2 = std::bit_cast<float>(0x3f666666U);
+    sample.c0 = initial[1];
+    sample.c1 = initial[2];
+    sample.c2 = initial[3];
+    sample.u0 = initial[4];
+    sample.u1 = initial[5];
+    sample.u2 = initial[6];
+    sample.u3 = initial[7];
+    sample.h = std::bit_cast<float>(0x3ca3d70aU);
+    sample.aux0 = 1.0f;
+    sample.aux1 = sample.h;
+    sample.aux2 = initial[0];
+    std::vector<float> values;
+    ASSERT_NO_FATAL_FAILURE(
+        RunProbe(*fixture.device, fixture.kernel, kOpAdaptiveEventDomain, {sample}, values));
+    ASSERT_EQ(values.size(), kResultStride);
+    for (std::size_t slot = 0; slot < 28; ++slot) ASSERT_TRUE(std::isfinite(values[slot])) << slot;
+    ASSERT_FLOAT_EQ(values[0], 1.0f);
+    ASSERT_FLOAT_EQ(values[1], 1.0f) << "captured floor must satisfy the unchanged controller";
+    EXPECT_GE(values[2], 0.0f);
+    EXPECT_LE(values[2], 1.0f);
+    EXPECT_GE(values[3], 0.0f);
+    EXPECT_LE(values[3], 5.0e-4f);
+    EXPECT_GE(values[4], 0.0f);
+    EXPECT_LE(values[4], 5.0e-4f);
+    EXPECT_FLOAT_EQ(values[5], 2.0f);
+    EXPECT_FLOAT_EQ(values[6], 4.0f);
+    EXPECT_FLOAT_EQ(values[16], 2.0e-5f);
+    EXPECT_FLOAT_EQ(values[17], 5.0e-4f);
+    EXPECT_FLOAT_EQ(values[18], sample.h);
+    EXPECT_FLOAT_EQ(values[19], sample.h);
+    for (std::size_t component = 0; component < bits.size(); ++component)
+        EXPECT_EQ(std::bit_cast<std::uint32_t>(values[20 + component]), bits[component])
+            << component;
+    const std::array<std::array<double, 8>, 2> canonical128{
+        std::array<double, 8>{
+            -79.799570441624162558233223717322650551221380590778090754746988484286709436224728,
+            -1.8202467703823457177515115048451890595945153167812340464465525066590685766780510,
+            0.027685776154266467765886208734832478002396034877743872115989725615299983340500018,
+            -0.22451395158848843637398937574837926557314067465843488360195680327490708320297798,
+            -41.527208595688608227845068424642757348285444160854752470372265234225342648361000,
+            1.578743355263571934110989411977532300521510215311718766146806859820545434146184,
+            19.652929412649440026131701649045888470602855491883871650820960368150502799953964,
+            -2.4881305599974561956563712743011895537656090197619601023708897358317191560546884,
+        },
+        std::array<double, 8>{
+            -79.799570441624162558233223717322650551250822425831738805406763796770892126599222,
+            -1.8202467703823457177515115048451890596145469339551803760914231773612844151040904,
+            0.027685776154266467765886208734832477983058847126457806665347464457854276402565590,
+            -0.22451395158848843637398937574837926554469254685979427289671318849256061010985551,
+            -41.527208595688608227845068424642757352578189797162025407946527668681132986990280,
+            1.578743355263571934110989411977532298149858312302949099142256064449929609435633,
+            19.652929412649440026131701649045888469040723876944046953080799750696348224675452,
+            -2.4881305599974561956563712743011895507918125407324741030252037404664615069161061,
+        },
+    };
+    for (std::size_t epsilon = 0; epsilon < canonical128.size(); ++epsilon) {
+        for (std::size_t component = 0; component < initial.size(); ++component) {
+            const double actual = values[8 + component];
+            const double scale =
+                std::max({1.0, std::abs(double(initial[component])), std::abs(actual)});
+            EXPECT_LE(std::abs(actual - canonical128[epsilon][component]) / scale, double(2.0e-5f))
+                << "epsilon variant " << epsilon << ", component " << component;
+        }
+    }
+}
+
+TEST(KernelParity, CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32) {
+    Fixture fixture = OpenProbe();
+    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+    ASSERT_NO_FATAL_FAILURE(CheckCapturedKerrFloorComposite(fixture));
+}
+
+TEST(KernelParity, CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp) {
+    Fixture fixture = OpenProbe("parity_probe_fp32comp.spv");
+    if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
+    ASSERT_NO_FATAL_FAILURE(CheckCapturedKerrFloorComposite(fixture));
 }
 
 TEST(KernelParity, NullProjectionPreservesConeBranchAndFailsClosed) {
@@ -1031,8 +1260,8 @@ TEST(KernelParity, ActualAffineAndJacobiClocksMatchFp64) {
     // dispatched: this test executes exactly one precision's nine samples.
     Fixture fixture = OpenProbe();
     if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-#ifdef SIRIUS_KERNEL_DIR
-    const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+#ifdef SIRIUS_TEST_HAS_KERNELS
+    const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
     ASSERT_FALSE(words.empty());
     const auto loaded = fixture.device->LoadKernel(words);
     if (!fixture.device->Info().supports_fp64) {
@@ -1112,8 +1341,8 @@ TEST(KernelParity, FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRung
     ASSERT_TRUE(compensated.ready);
     ASSERT_NO_FATAL_FAILURE(check(compensated));
     if (!fp32.device->Info().supports_fp64) {
-#ifdef SIRIUS_KERNEL_DIR
-        const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+#ifdef SIRIUS_TEST_HAS_KERNELS
+        const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
         ASSERT_FALSE(words.empty());
         const auto refused = fp32.device->LoadKernel(words);
         ASSERT_FALSE(refused.has_value());
@@ -1622,13 +1851,13 @@ TEST(KernelParity, NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMom
 }
 
 TEST(KernelParity, PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
-    const auto fp32 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe.spv");
+    const auto fp32 = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe.spv"));
     const auto compensated =
-        LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp32comp.spv");
-    const auto fp64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+        LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp32comp.spv"));
+    const auto fp64 = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
     ASSERT_FALSE(fp32.empty());
     ASSERT_FALSE(compensated.empty());
     ASSERT_FALSE(fp64.empty());
@@ -1685,8 +1914,8 @@ TEST(KernelParity, PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)
     EXPECT_LE(drift_compensated, drift32 * 1.25f + 1.0e-7f)
         << "compensated accumulation regressed the invariant envelope";
     if (!fp32.device->Info().supports_fp64) {
-#ifdef SIRIUS_KERNEL_DIR
-        const auto spirv64 = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/parity_probe_fp64.spv");
+#ifdef SIRIUS_TEST_HAS_KERNELS
+        const auto spirv64 = LoadSpirv(sirius::test::ResourcePath("kernels/parity_probe_fp64.spv"));
         ASSERT_FALSE(spirv64.empty());
         const auto refused = fp32.device->LoadKernel(spirv64);
         ASSERT_FALSE(refused.has_value());
@@ -2248,7 +2477,7 @@ void RunTimedCoupledProbe(ComputeDevice& device, KernelHandle kernel, const Samp
 TEST(KernelParity, FourColumnRK4MapMatchesIndependentNeighboursFp64) {
     Fixture fixture = OpenProbe();
     if (!fixture.ready) GTEST_SKIP() << "no Vulkan device or kernels absent";
-#ifdef SIRIUS_KERNEL_DIR
+#ifdef SIRIUS_TEST_HAS_KERNELS
     // Identity belongs to the actual returned device. The recorded index is
     // the exact factory argument retained by Fixture, not a second inventory.
     ASSERT_NE(fixture.selected_index, std::numeric_limits<std::size_t>::max());
@@ -2273,7 +2502,7 @@ TEST(KernelParity, FourColumnRK4MapMatchesIndependentNeighboursFp64) {
     RecordProperty("coupled_initial_allocated_bytes",
                    std::to_string(fixture.device->BufferAllocationBytes()));
     ASSERT_LE(fixture.device->BufferAllocationBytes(), kCoupledDiagnosticAllocationLimit);
-    const auto words = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/coupled_probe_fp64.spv");
+    const auto words = LoadSpirv(sirius::test::ResourcePath("kernels/coupled_probe_fp64.spv"));
     ASSERT_FALSE(words.empty());
     const auto loaded = fixture.device->LoadKernel(words);
     if (!fixture.device->Info().supports_fp64) {

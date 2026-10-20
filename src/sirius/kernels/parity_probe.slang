@@ -54,6 +54,7 @@ static const uint OP_THIN_LENS_PROJECTION = 21;
 static const uint OP_POINT_STAR_ANGULAR_WEIGHT = 22;
 static const uint OP_SPHERICAL_ESCAPE_EVENT = 23;
 static const uint OP_AFFINE_CLOCK = 24;
+static const uint OP_ADAPTIVE_MINIMUM_RETRY = 25;
 
 // Future-directed null root used by the render kernel, repeated here only for
 // the diagnostic launch boundary. The integration below calls the production
@@ -481,14 +482,14 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
             }
             Real geometricStep = clamp(stepScale * rKerr, minStep, maxStep);
             Real dt = min(geometricStep, adaptiveStep);
-            AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
-                state, dt, false, false, p1, p2, 0.0f, 0.0f,
+            AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStepAtFloor(
+                state, dt, minStep, false, false, p1, p2, 0.0f, 0.0f,
                 0.0f, 0.0f, 0.0f, 0.0f, 0,
                 AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
             if (!attempted.accepted) {
                 lastRejectedError = attempted.errorRatio;
                 lastRejectedNull = attempted.nullResidual;
-                if (dt <= minStep * Real(1.0001f)) {
+                if (AdaptiveAttemptAlreadyAtMinimumStep(dt, minStep)) {
                     termination = 3;
                     break;
                 }
@@ -535,6 +536,48 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 10] = float(lastRejectedError);
         results[rb + 11] = float(lastRejectedNull);
     } else if (opcode == OP_ADAPTIVE_EVENT_DOMAIN) {
+        // Opt-in captured-state floor witness. aux0=1, aux1=the original
+        // floor and aux2=the original time coordinate; the legacy branch below
+        // retains its original tolerances and one-full/two-half tableau.
+        if (samples[sb + 13] == 1.0f) {
+            Real step = Real(samples[sb + 12]);
+            Real minimumStep = Real(samples[sb + 14]);
+            if (minimumStep != Real(0.02f) || step != minimumStep) return;
+            GeodesicStateCart initial;
+            initial.x = MakeVec4Cart(Real(samples[sb + 15]), Real(c0), Real(c1), Real(c2));
+            initial.u = MakeVec4Cart(Real(samples[sb + 8]), Real(samples[sb + 9]),
+                                     Real(samples[sb + 10]), Real(samples[sb + 11]));
+            int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(step, minimumStep);
+            AdaptiveGeodesicStep trial = AttemptAdaptiveGeodesicStepAtFloor(
+                initial, step, minimumStep, false, false, p1, p2, p3, p4,
+                0.0f, 0.0f, 0.0f, 0.0f, 0,
+                AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+            results[rb + 0] = 1.0f;
+            results[rb + 1] = trial.accepted ? 1.0f : 0.0f;
+            results[rb + 2] = float(trial.errorRatio);
+            results[rb + 3] = float(trial.nullResidual);
+            results[rb + 4] = float(trial.projectedNullResidual);
+            results[rb + 5] = float(coarseSubsteps);
+            results[rb + 6] = float(coarseSubsteps * 2);
+            results[rb + 7] = float(trial.stepFactor);
+            results[rb + 8] = float(trial.candidate.x.t);
+            results[rb + 9] = float(trial.candidate.x.x);
+            results[rb + 10] = float(trial.candidate.x.y);
+            results[rb + 11] = float(trial.candidate.x.z);
+            results[rb + 12] = float(trial.candidate.u.t);
+            results[rb + 13] = float(trial.candidate.u.x);
+            results[rb + 14] = float(trial.candidate.u.y);
+            results[rb + 15] = float(trial.candidate.u.z);
+            results[rb + 16] = float(AdaptiveIntegrationTolerance());
+            results[rb + 17] = float(AdaptiveNullTolerance());
+            results[rb + 18] = float(step);
+            results[rb + 19] = float(minimumStep);
+            results[rb + 20] = float(initial.x.t); results[rb + 21] = float(initial.x.x);
+            results[rb + 22] = float(initial.x.y); results[rb + 23] = float(initial.x.z);
+            results[rb + 24] = float(initial.u.t); results[rb + 25] = float(initial.u.x);
+            results[rb + 26] = float(initial.u.y); results[rb + 27] = float(initial.u.z);
+            return;
+        }
         // Direct event-domain witness for the production adaptive RK4
         // authority. c=(x,y,z), u=(t,x,y,z), h=attempted step.
         GeodesicStateCart state;
@@ -553,6 +596,92 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         results[rb + 5] = float(attempted.candidate.x.z);
         results[rb + 6] = float(attempted.errorRatio);
         results[rb + 7] = float(attempted.stepFactor);
+    } else if (opcode == OP_ADAPTIVE_MINIMUM_RETRY) {
+        // Four finite flat-space controller controls: h is the original .02f
+        // floor, aux0 chooses its represented neighbour, and aux1 is one ULP
+        // supplied by host nextafter at this Real rung. No new buffer layout.
+        Real minimumStep = Real(samples[sb + 12]);
+        Real quantum = Real(samples[sb + 14]);
+        float above = samples[sb + 13];
+        if (metricId != kMetricKerrSchild || p1 != 0.0f || p2 != 0.0f ||
+            p3 != 0.0f || p4 != 0.0f || minimumStep != Real(0.02f) ||
+            !isfinite(quantum) || quantum <= Real(0.0f) ||
+            !(above == 0.0f || above == 1.0f)) return;
+        Real initialStep = minimumStep + (above == 1.0f ? quantum : Real(0.0f));
+        Real adaptiveStep = initialStep;
+        GeodesicStateCart initial;
+        initial.x = MakeVec4Cart(Real(0.0f), Real(c0), Real(c1), Real(c2));
+        initial.u = MakeVec4Cart(Real(samples[sb + 8]), Real(samples[sb + 9]),
+                                 Real(samples[sb + 10]), Real(samples[sb + 11]));
+        GeodesicStateCart state = initial;
+        uint attempts = 0, accepted = 0;
+        Real affine = Real(0.0f);
+        bool floorTerminated = false, retrySelected = false, exactFloorRetry = false;
+        bool firstAccepted = false, firstAtFloor = false, secondRejected = false;
+        Real firstError = Real(0.0f), firstNull = Real(0.0f);
+        Real firstProjectedNull = Real(0.0f), firstFactor = Real(0.0f), secondNull = Real(0.0f);
+        int firstCoarseSubsteps = 0, secondCoarseSubsteps = 0;
+        for (int attempt = 0; attempt < 2; ++attempt) {
+            Real dt = adaptiveStep;
+            if (attempt == 1) exactFloorRetry = dt == minimumStep;
+            int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(dt, minimumStep);
+            if (attempt == 0) firstCoarseSubsteps = coarseSubsteps;
+            else secondCoarseSubsteps = coarseSubsteps;
+            ++attempts;
+            AdaptiveGeodesicStep trial = AttemptAdaptiveGeodesicStepAtFloor(
+                state, dt, minimumStep, false, false, p1, p2, p3, p4,
+                0.0f, 0.0f, 0.0f, 0.0f, 0,
+                AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+            if (attempt == 0) {
+                firstAccepted = trial.accepted;
+                firstError = trial.errorRatio; firstNull = trial.nullResidual;
+                firstProjectedNull = trial.projectedNullResidual; firstFactor = trial.stepFactor;
+                firstAtFloor = AdaptiveAttemptAlreadyAtMinimumStep(dt, minimumStep);
+            } else {
+                secondRejected = !trial.accepted;
+                secondNull = trial.nullResidual;
+            }
+            if (trial.accepted) {
+                state = trial.candidate; affine += dt; ++accepted;
+                break;
+            }
+            if (AdaptiveAttemptAlreadyAtMinimumStep(dt, minimumStep)) {
+                floorTerminated = true;
+                break;
+            }
+            adaptiveStep = max(minimumStep, dt * trial.stepFactor);
+            if (attempt == 0) retrySelected = adaptiveStep == minimumStep;
+        }
+        bool unchanged = all(Real4(state.x.t, state.x.x, state.x.y, state.x.z) ==
+                             Real4(initial.x.t, initial.x.x, initial.x.y, initial.x.z)) &&
+                         all(Real4(state.u.t, state.u.x, state.u.y, state.u.z) ==
+                             Real4(initial.u.t, initial.u.x, initial.u.y, initial.u.z));
+        results[rb + 0] = 1.0f;
+        results[rb + 1] = initialStep > minimumStep ? 1.0f : 0.0f;
+        results[rb + 2] = float((initialStep - minimumStep) / quantum);
+        results[rb + 3] = firstAccepted ? 1.0f : 0.0f;
+        results[rb + 4] = float(firstError);
+        results[rb + 5] = float(firstNull);
+        results[rb + 6] = float(firstProjectedNull);
+        results[rb + 7] = firstAtFloor ? 1.0f : 0.0f;
+        results[rb + 8] = float(firstFactor);
+        results[rb + 9] = retrySelected ? 1.0f : 0.0f;
+        results[rb + 10] = float(attempts);
+        results[rb + 11] = float(accepted);
+        results[rb + 12] = floorTerminated ? 1.0f : 0.0f;
+        results[rb + 13] = exactFloorRetry ? 1.0f : 0.0f;
+        results[rb + 14] = secondRejected ? 1.0f : 0.0f;
+        results[rb + 15] = float(secondNull);
+        results[rb + 16] = unchanged ? 1.0f : 0.0f;
+        results[rb + 17] = float(affine / minimumStep);
+        results[rb + 18] = float(state.x.t); results[rb + 19] = float(state.x.x);
+        results[rb + 20] = float(state.x.y); results[rb + 21] = float(state.x.z);
+        results[rb + 22] = float(state.u.t); results[rb + 23] = float(state.u.x);
+        results[rb + 24] = float(state.u.y); results[rb + 25] = float(state.u.z);
+        results[rb + 26] = float(firstCoarseSubsteps);
+        results[rb + 27] = float(firstCoarseSubsteps * 2);
+        results[rb + 28] = float(secondCoarseSubsteps);
+        results[rb + 29] = float(secondCoarseSubsteps * 2);
     } else if (opcode == OP_BEAM_ELLIPSE) {
         // c0,c1,c2,u0 are the row-major transverse Jacobi map.
         float semiMajor, semiMinor, orientation, determinant;

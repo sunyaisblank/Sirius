@@ -67,7 +67,12 @@ constexpr std::array<std::string_view, 9> kProductArtifactNames = {
     "trace_spv",         "viewer_rdsd003a_fragment", "viewer_rdsd003a_vertex",
 };
 
-constexpr std::array<std::pair<std::string_view, std::string_view>, 16> kTestInputArtifacts = {{
+constexpr std::array<std::pair<std::string_view, std::string_view>, 20> kTestInputArtifacts = {{
+    {"portable_binary32_reference", "tests/backend/portable_binary32_reference.bin"},
+    {"retained_camera_fixture", "tests/backend/retained_camera/program_fixture.h"},
+    {"retained_camera_fp32_spv", "tests/backend/retained_camera/program_camera_probe-fp32.spv"},
+    {"retained_camera_fp32comp_spv",
+     "tests/backend/retained_camera/program_camera_probe-fp32comp.spv"},
     {"smoke_spv", "kernels/smoke.spv"},
     {"parity_probe_spv", "kernels/parity_probe.spv"},
     {"parity_probe_fp32comp_spv", "kernels/parity_probe_fp32comp.spv"},

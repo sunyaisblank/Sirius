@@ -1,6 +1,6 @@
 # Sirius
 
-Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with Slang kernels for Vulkan execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar; `docs/SPECIFICATION.md` states that standard as measurable criteria and `docs/ADVERSARIAL_REVIEW.md` records the current scorecard and limits.
+Sirius is a general relativistic ray tracing engine. It renders black holes, wormholes, and warp-drive spacetimes by integrating photon geodesics through analytically specified metric tensor fields, producing gravitational lensing, black hole shadows, and accretion disk emission from the geometry itself rather than from approximations layered on flat space. The engine is written in C++26 with Slang kernels for Vulkan execution, and it targets the fidelity standard of DNGR, the renderer DNEG and Kip Thorne built for Interstellar. [The specification](docs/SPECIFICATION.md) states that target as measurable criteria; the numerical acceptance and backend limitations below distinguish implemented behavior from qualified results.
 
 ## The physics
 
@@ -25,6 +25,12 @@ relative disk and point-source intensities, and CPU polarisation from backend
 admission and performance. Its frozen inputs, refinements, error measures,
 device identity and revision limit each claim. The other registered metrics
 retain their implementation contracts but are not qualified by this profile.
+Separate finite CPU witnesses cover [charged rays](https://github.com/sunyaisblank/Sirius/issues/58),
+[Ellis rays](https://github.com/sunyaisblank/Sirius/issues/59),
+[Kottler rays](https://github.com/sunyaisblank/Sirius/issues/60), and
+[axial Alcubierre escapes](https://github.com/sunyaisblank/Sirius/issues/61);
+their stated input and revision bounds do not establish complete images or
+current-revision scientific and release qualification.
 The broader [specification](docs/SPECIFICATION.md), including DNGR, high-resolution,
 hardware and release requirements, remains in force.
 
@@ -50,7 +56,9 @@ Metric mass `M`, observer distance, thin-lens focus distance and virtual pupil r
 
 ## Backends
 
-The CPU path is the reference implementation and runs without Vulkan or OpenGL. It supports pinhole, thin-lens, and fisheye projection plus the physical thin-disk polarisation output. Thin-lens rays preserve the requested field of view at the aperture centre and launch across an explicit pupil in the moving camera's metric-aware rest frame before reconverging at the requested focus plane; film jitter and pupil position use separate dimensions of the deterministic exact-count camera sequence, rather than sampling only their diagonal. Because the scale-free spacetime has no physical M-to-millimetre conversion, 50 mm-equivalent defines one virtual lens unit for the f-number calculation. The Vulkan path compiles Slang sources from `src/sirius/kernels/` to SPIR-V. Minkowski, Schwarzschild and Kerr use retained camera and transport stages; other represented metrics use the legacy trace shader. That legacy entry point is also emitted as CUDA and Metal source for portability checks; native CUDA and Metal runtime backends remain deferred. A memory governor sizes tiles against the host-visible coherent heap the adapter actually allocates from, and a dispatch governor bounds device occupancy. `SIRIUS_VULKAN_DEVICE=<zero-based-index>` selects one enumerated device strictly; the readiness report, renderer, tests, and hardware attestation use the same identity. Backend `auto` selects Vulkan only when a device, metric, and requested scene semantics are all represented; otherwise it logs the reason and selects CPU. Vulkan represents exact arbitrary sample counts, camera aberration, pinhole and finite-aperture thin lenses, Page-Thorne and the explicitly bounded zero-torque Shakura-Sunyaev temperature substitute, the explicit ZAMO Doppler-suppression diagnostic, dual-vector full-Riemann ray bundles, ellipse-filtered point catalogues (100,000 stars by default), and the bounded phenomenological grey volume with optional procedural density modulation. Volume marching is limited to 128 midpoint samples per accepted geodesic segment; larger explicit requests decline and `auto` uses CPU. Corona, narrowband line transfer, temporal motion blur, diagnostic colour, and polarisation are not represented on Vulkan; requests decline rather than borrowing another model. Both `fp32` and `SIRIUS_PRECISION=fp32-comp` use retained binary32 expansions for Kerr-family rendering. `SIRIUS_PRECISION=fp64` selects exact binary64-assisted products on devices exposing `shaderFloat64` and the required rounding controls. Other metric shaders retain their scalar, compensated and binary64 variants. Devices without that feature reject fp64 at both the render and kernel-loading boundaries. Their Mandatory precision tests execute the supported rungs and verify the refusal; they do not claim fp64 numerical execution.
+For practical rendering on a machine with only software Vulkan, use `--backend cpu`. The retained Kerr path on llvmpipe still exceeds the original 300-second acceptance limit for a 128×128, one-sample-per-pixel frame; its finite numerical checks do not establish usable full-scene performance. [Vulkan performance](https://github.com/sunyaisblank/Sirius/issues/44) and [complete runtime and release qualification](https://github.com/sunyaisblank/Sirius/issues/48) remain open.
+
+The CPU path is the reference implementation and runs without Vulkan or OpenGL. It supports pinhole, thin-lens, and fisheye projection plus the physical thin-disk polarisation output. Thin-lens rays preserve the requested field of view at the aperture centre and launch across an explicit pupil in the moving camera's metric-aware rest frame before reconverging at the requested focus plane; film jitter and pupil position use separate dimensions of the deterministic exact-count camera sequence, rather than sampling only their diagonal. Because the scale-free spacetime has no physical M-to-millimetre conversion, 50 mm-equivalent defines one virtual lens unit for the f-number calculation. The Vulkan path compiles Slang sources from `src/sirius/kernels/` to SPIR-V. Minkowski, Schwarzschild and Kerr use retained camera and transport stages; other represented metrics use the legacy trace shader. That legacy entry point is also emitted as CUDA and Metal source for portability checks; native CUDA and Metal runtime backends remain deferred. A memory governor sizes tiles against the host-visible coherent heap the adapter actually allocates from, and a dispatch governor bounds device occupancy. `SIRIUS_VULKAN_DEVICE=<zero-based-index>` selects one enumerated device strictly; the readiness report, renderer, tests, and hardware attestation use the same identity. Backend `auto` selects Vulkan only when a device, metric, and requested scene semantics are all represented; otherwise it logs the reason and selects CPU. Vulkan represents exact arbitrary sample counts, camera aberration, pinhole and finite-aperture thin lenses, Page-Thorne and the explicitly bounded zero-torque Shakura-Sunyaev temperature substitute, the explicit ZAMO Doppler-suppression diagnostic, dual-vector full-Riemann ray bundles, ellipse-filtered point catalogues (100,000 stars by default), and the bounded phenomenological grey volume with optional procedural density modulation. Volume marching is limited to 128 midpoint samples per accepted geodesic segment; larger explicit requests decline and `auto` uses CPU. Corona, narrowband line transfer, temporal motion blur, diagnostic colour, and polarisation are not represented on Vulkan; requests decline rather than borrowing another model. Both `fp32` and `SIRIUS_PRECISION=fp32-comp` use retained binary32 expansions for Kerr-family rendering. Adapters lacking native binary32 subnormal preservation or round-to-nearest use portable arithmetic for the same retained rounding and enclosure contracts. When binary32 round-to-nearest is available, Transport and Endpoint use native addition and subtraction within a bounded normal-number domain and keep integer arithmetic elsewhere. Their products use exact integer residuals in both retained modes. `SIRIUS_PRECISION=fp64` still requires `shaderFloat64` and its rounding controls; retained product residuals use exact integer words or explicitly admitted native FMA. Other metric shaders retain their scalar, compensated and binary64 variants. Devices without that feature reject fp64 at both the render and kernel-loading boundaries. Their Mandatory precision tests execute the supported rungs and verify the refusal; they do not claim fp64 numerical execution.
 
 ## Building
 
@@ -67,6 +75,26 @@ cmake --preset windows-msvc && cmake --build --preset windows-msvc
 
 Presets exist for GCC and Clang (Release and Debug), MSVC, macOS, required Linux Vulkan CI, and GCC ASan/UBSan/LSan. Every supported preset pins warnings as errors, enforce-mode contracts, Mandatory tests, and source governance; `linux-ci` additionally runs the non-skipping Vulkan/P1 operational profile. Source governance also enforces one CMake owner per first-party translation unit, downward-only layer dependencies, boundary naming, and the closed live-vendor set. `cmake --install` creates a relocatable volume containing the binary, starfield, installed operating model, every compiled backend resource, and viewer shaders when the viewer is compiled, then verifies that exact capability-specific structure before succeeding. A release install additionally requires the deterministic Mandatory-gate receipt emitted only after live CTest registration exactly equals a zero-skip JUnit estate; the receipt binds the revision, model, alignment authority, all test executables, and every installed product hash.
 
+For native macOS runtime attestation, first activate Vulkan SDK **1.4.357.0**
+(including `VULKAN_SDK`, its loader, Slang and SPIR-V tools) on native arm64
+macOS. From a clean committed checkout, fetch the pinned provider sources and
+provision the custom MoltenVK before running the existing full runtime producer:
+
+```sh
+git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
+revision="$(git rev-parse HEAD)"
+python3 -B scripts/macos_moltenvk_provider.py --expected-revision "$revision"
+python3 scripts/validate-native-runtime.py --expected-revision "$revision" --output-root attestations/native-macos-runtime
+```
+
+Provisioning requires fresh `out/macos-moltenvk-integration/observation` and
+`bin/macos/macos-moltenvk-integration` directories; preserve an earlier run's
+evidence before retiring those owned directories. The producer verifies the
+same clean revision and selects that private ICD with the unchanged SDK loader.
+Its receipts identify the custom provider explicitly; provisioning alone grants
+no qualification. Ordinary `cmake --preset macos` builds and relocated installs
+do not bundle or select this provider or its ICD.
+
 The application test executable is structurally non-rendering: it owns parsing, validation, projection, and input-state checks only. Render-session entry, CLI dispatch, CPU/Vulkan output, and progressive-frame cases live in the rendering test executable and carry an explicit `Rendering` label. Both executables remain beside the candidate so strict modes inspect that same product volume without a development resource override; source governance rejects relocation, an unclassified app-side command execution, or restoration of the override.
 
 Remote CI Actions and fetched source dependencies are pinned to immutable commits. Direct qualification-tool downloads use versioned URLs and checked-in SHA-256 values; source governance rejects movable tags, latest-release selection, or unchecked direct downloads.
@@ -75,15 +103,17 @@ Normal presets use `SIRIUS_ALIGNMENT_MODE=development`: they compile and test
 the system while reporting every absent external domain as pending, but their
 artifacts are deliberately inadmissible as external evidence. Hardware, native
 runtime, viewer, and native CI producers reconfigure the exact clean revision in
-`qualification` mode. Qualification enforces the complete release-equivalent
-build/product policy, the zero-skip Mandatory gate, executable-volume resource
-locking, and candidate hashing while allowing external domains to remain
-pending; it cannot package or report top-level readiness. Each record includes
-the copied qualification executable, alignment receipt, product/test gate,
-gate-generated JUnit and log, and an independently rerun JUnit/inventory pair.
-The verifier cross-checks their byte hashes and exact test identities before the
-record can become release input. A distributable package is available only from
-`release` mode. That mode requires
+`qualification` mode. Qualification retains the release-equivalent build/product
+policy, executable-volume resource locking, and candidate hashing while allowing
+external domains to remain pending; it cannot package or report top-level
+readiness. Runtime records require the complete zero-skip Mandatory gate and an
+independently rerun JUnit/inventory pair. The Windows and macOS native build
+domains instead use the fixed non-render authority gate and explicitly report
+`runtime_ready: false`; they establish build compatibility. Each record includes
+the copied qualification executable, alignment receipt, applicable product/test
+gate, and gate-generated JUnit and log. The verifier checks their byte hashes and
+exact test identities before the record can become release input. A distributable
+package is available only from `release` mode. That mode requires
 a clean Git revision plus verified evidence for the physical Radeon, WSL2/Dozen,
 native Windows build and Vulkan, native macOS build and MoltenVK, native viewer
 input, and exact IMAX domain. Configure generates one deterministic receipt;
@@ -191,10 +221,11 @@ cannot be relabelled as the complete estate.
 ## Documentation
 
 `docs/SPECIFICATION.md` defines the target, `docs/ARCHITECTURE.md` describes the
-implementation, and `docs/ADVERSARIAL_REVIEW.md` records evidence boundaries and
-limitations. `docs/SOURCE_CLOSEOUT.md` records the last complete local renderer
-validation. Retired engagement reports and detailed session logs remain in Git
-history.
+implementation, and `docs/STYLE.md` defines the source rules. Development and
+test instructions are in `docs/DEVELOPMENT.md` and `tests/README.md`;
+`docs/ATTESTATION.md` defines the external evidence and release runbooks.
+GitHub issues carry scoped acceptance records and remaining defects. Historical
+reviews, closeout reports and detailed session logs remain in Git history.
 
 ## References
 

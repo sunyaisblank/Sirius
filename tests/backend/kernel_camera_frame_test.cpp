@@ -4,6 +4,8 @@
 
 #include <gtest/gtest.h>
 
+#include "support/test_resource.h"
+
 #include <algorithm>
 #include <array>
 #include <bit>
@@ -116,10 +118,7 @@ std::vector<std::array<double, 24>> CameraCases() {
 template <class Real>
 void CheckCameraFrame(const std::string& artifact) {
     using namespace sirius::backend;
-#ifdef SIRIUS_KERNEL_DIR
-    const std::string directory = SIRIUS_KERNEL_DIR;
-#else
-    const std::string directory;
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "Vulkan kernels are not configured";
 #endif
     constexpr bool wide = std::is_same_v<Real, double>;
@@ -144,7 +143,8 @@ void CheckCameraFrame(const std::string& artifact) {
     ::testing::Test::RecordProperty("camera_driver_name", info.driver_name);
     ::testing::Test::RecordProperty("camera_driver_info", info.driver_info);
     ::testing::Test::RecordProperty("camera_supports_fp64", info.supports_fp64 ? "true" : "false");
-    const auto words = ReadCameraProbe(directory + "/" + artifact);
+    const auto words =
+        ReadCameraProbe(sirius::test::ResourcePath(std::string("kernels/") + artifact));
     ASSERT_FALSE(words.empty()) << artifact;
     const auto kernel = device->LoadKernel(words);
     if constexpr (wide) {

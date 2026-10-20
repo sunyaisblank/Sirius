@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Ray-bundle wiring in the trace kernel (specification P2, Vulkan side).
 //
 // trace.slang propagates two geodesic-deviation vectors through its render loop
@@ -102,7 +104,7 @@ std::vector<float> Dispatch(ComputeDevice& device, KernelHandle kernel,
 }
 
 TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #else
     const auto devices = EnumerateVulkanDevices();
@@ -112,7 +114,7 @@ TEST(KernelBeam, BeamFlagWiresDeviationWithoutMovingDefault) {
     ASSERT_TRUE(selected.has_value()) << selected.error().Description();
     auto device = CreateVulkanDevice(*selected);
     ASSERT_TRUE(device.has_value()) << device.error().Description();
-    const auto spirv = LoadSpirv(std::string(SIRIUS_KERNEL_DIR) + "/trace.spv");
+    const auto spirv = LoadSpirv(sirius::test::ResourcePath("kernels/trace.spv"));
     ASSERT_FALSE(spirv.empty()) << "trace.spv missing";
     const auto kernel = (*device)->LoadKernel(spirv);
     ASSERT_TRUE(kernel.has_value()) << kernel.error().Description();

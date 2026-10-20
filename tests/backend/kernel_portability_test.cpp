@@ -1,3 +1,5 @@
+#include "support/test_resource.h"
+
 // Portability gate (docs/ARCHITECTURE.md section 4): the single Slang trace
 // source emits vendor-native kernel source alongside its SPIR-V artefacts —
 // CUDA C++ for the nvcc toolchain and Metal Shading Language for Apple
@@ -16,10 +18,10 @@
 namespace {
 
 [[nodiscard]] std::string ReadArtefact(const std::string& name) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     return {};
 #else
-    std::ifstream file(std::string(SIRIUS_KERNEL_DIR) + "/portability/" + name);
+    std::ifstream file(sirius::test::ResourcePath("kernels/portability/" + name));
     if (!file) {
         return {};
     }
@@ -30,7 +32,7 @@ namespace {
 }
 
 TEST(KernelPortability, CudaEmissionCarriesTheNativeComputeEntryPoint) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #endif
     const std::string cuda = ReadArtefact("trace.cu");
@@ -40,7 +42,7 @@ TEST(KernelPortability, CudaEmissionCarriesTheNativeComputeEntryPoint) {
 }
 
 TEST(KernelPortability, MetalEmissionCarriesTheNativeComputeEntryPoint) {
-#ifndef SIRIUS_KERNEL_DIR
+#ifndef SIRIUS_TEST_HAS_KERNELS
     GTEST_SKIP() << "kernels not compiled (slangc absent at configure time)";
 #endif
     const std::string metal = ReadArtefact("trace.metal");

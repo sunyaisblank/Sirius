@@ -13,6 +13,10 @@ on:
         description: Run the complete runtime and sanitizer jobs
         type: boolean
         default: false
+      macos_retained_diagnostic:
+        description: Diagnose retained pipeline compilation without qualification
+        type: boolean
+        default: false
 
 jobs:
   # Pull requests prove that the complete strict topology compiles and that the
@@ -21,7 +25,7 @@ jobs:
   # full_qualification additionally runs the complete runtime and sanitizer
   # jobs; native-build attestations still do not claim native runtime readiness.
   integration-no-render:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -59,13 +63,13 @@ jobs:
         run: |
           test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
           ctest --test-dir bin/linux-ci --output-on-failure --no-tests=error \
-            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
+            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
           test ! -e bin/linux-ci/generated/sirius/mandatory_gate.json
       - name: Label file freshness
         run: python3 scripts/generate-ctest-labels.py --check
 
   integration-windows-no-render:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -105,8 +109,137 @@ jobs:
         run: |
           if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "unexpected promotion receipt before integration controls" }
           ctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `
-            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
+            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
           if (Test-Path "bin/windows-msvc/generated/sirius/mandatory_gate.json") { throw "integration controls created a promotion receipt" }
+      - name: Stage diagnostic Windows build products
+        if: github.event_name == 'workflow_dispatch'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $revision = (git rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $revision -ne $env:GITHUB_SHA -or (git status --porcelain)) { throw "diagnostic source identity mismatch" }
+          $alignment = "bin/windows-msvc/generated/sirius/alignment_receipt.json"
+          if ((Get-Content -Raw $alignment | ConvertFrom-Json).source_revision -ne $revision) { throw "diagnostic alignment revision mismatch" }
+          $volumes = @("bin/windows-msvc/src/sirius/app/Release", "bin/windows-msvc/tests/backend/Release")
+          $executables = @("sirius.exe", "sirius_backend_tests.exe")
+          $loader = Get-Item -LiteralPath (Join-Path $env:VULKAN_SDK "runtime/x64/vulkan-1.dll")
+          $cache = Get-Content -Raw "bin/windows-msvc/CMakeCache.txt"
+          if ($cache -notmatch '(?m)^BUILD_SHARED_LIBS:BOOL=OFF\r?$') { throw "diagnostic volumes require the existing static-library topology" }
+          if ($cache -match '(?m)^GLFW_LIBRARY_TYPE:STRING=(?!STATIC\r?$)[^\r\n]+') { throw "diagnostic GLFW DLL topology is not represented" }
+          $instance = [regex]::Match($cache, '(?m)^CMAKE_GENERATOR_INSTANCE:[^=]+=(.+)$')
+          if (-not $instance.Success) { throw "selected Visual Studio instance is absent" }
+          $compiler = @(Get-ChildItem -Path "bin/windows-msvc/CMakeFiles/*/CMakeCXXCompiler.cmake" -File)
+          if ($compiler.Count -ne 1) { throw "selected C++ compiler metadata is ambiguous" }
+          $compilerVersion = [regex]::Match((Get-Content -Raw $compiler[0].FullName), 'set\(CMAKE_CXX_COMPILER_VERSION "(19\.(\d+)\.[^"]+)"\)')
+          if (-not $compilerVersion.Success) { throw "selected MSVC compiler version is absent" }
+          $redistVersionFile = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Auxiliary/Build/Microsoft.VCRedistVersion.default.txt"
+          $redistVersion = (Get-Content -Raw $redistVersionFile).Trim()
+          if ($redistVersion -notmatch ('^14\.' + $compilerVersion.Groups[2].Value + '\.')) { throw "selected MSVC and release CRT versions do not match" }
+          $crtDirectory = Join-Path ($instance.Groups[1].Value.Trim()) "VC/Redist/MSVC/$redistVersion/x64/Microsoft.VC143.CRT"
+          $crtNames = @("concrt140.dll", "msvcp140.dll", "msvcp140_1.dll", "msvcp140_2.dll", "msvcp140_atomic_wait.dll", "msvcp140_codecvt_ids.dll", "vcruntime140.dll", "vcruntime140_1.dll", "Microsoft.VC143.CRT.manifest")
+          $crt = @($crtNames | ForEach-Object { $path = Join-Path $crtDirectory $_; if (Test-Path -LiteralPath $path -PathType Leaf) { Get-Item -LiteralPath $path } })
+          foreach ($name in @("msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll")) {
+            if ($name -notin $crt.Name) { throw "selected release CRT missing: $name" }
+          }
+          $files = @{}
+          $origins = @{}
+          foreach ($dll in @($loader) + @($crt)) { $origins[$dll.Name] = $dll.FullName }
+          for ($index = 0; $index -lt $volumes.Count; $index++) {
+            $volume = $volumes[$index]
+            foreach ($dll in @($loader) + @($crt)) { Copy-Item -LiteralPath $dll.FullName -Destination $volume -Force }
+            $payload = @(Get-Item -LiteralPath (Join-Path $volume $executables[$index]))
+            if ($index -eq 0) {
+              $payload += @(Get-Item -LiteralPath (Join-Path $volume "sirius_render_tests.exe"))
+            }
+            $payload += @(Get-ChildItem -Path "$volume/*.dll", "$volume/*.manifest" -File -Force)
+            $payload += @(Get-ChildItem -LiteralPath "$volume/resources" -Recurse -File -Force)
+            foreach ($file in $payload) {
+              $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')
+              $files[$relative] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }
+            }
+          }
+          $compilerCopy = "bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake"
+          Copy-Item -LiteralPath $compiler[0].FullName -Destination $compilerCopy
+          foreach ($path in @($alignment, "bin/windows-msvc/CMakeCache.txt", $compilerCopy)) {
+            $file = Get-Item -LiteralPath $path
+            $files[$path] = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant() }
+          }
+          $registrationRoot = "bin/windows-msvc/generated/sirius/windows-mandatory-registration"
+          if (Test-Path -LiteralPath $registrationRoot) { throw "registration export already exists" }
+          $registrationFiles = @(Get-ChildItem -LiteralPath "bin/windows-msvc" -Recurse -File | Where-Object {
+            $_.Name -in @("CTestTestfile.cmake", "cmake_install.cmake") -or $_.Name -match '_(tests|include)(-[^.]+)?\.cmake$'
+          })
+          foreach ($target in @("base", "core", "oracle", "backend", "app", "render")) {
+            foreach ($kind in @("tests", "include")) {
+              if (@($registrationFiles | Where-Object { $_.Name -match "^sirius_${target}_tests\[\d+\]_${kind}\.cmake$" }).Count -ne 1) {
+                throw "configured GoogleTest discovery is incomplete: $target/$kind"
+              }
+            }
+          }
+          $registrationFiles += @(Get-Item -LiteralPath @(
+            "bin/windows-msvc/CTestTestfile.cmake", "bin/windows-msvc/cmake_install.cmake",
+            "bin/windows-msvc/tests/evidence_governance.cmake",
+            "bin/windows-msvc/tests/alignment_receipt_integrity.cmake",
+            "bin/windows-msvc/tests/volume_initialization.cmake",
+            "bin/windows-msvc/verify_sirius_install.cmake",
+            "bin/windows-msvc/tests/source-governance-ctest.json",
+            "tests/operational/required_skip_rejection.cmake",
+            "tests/operational/vulkan_runtime_profile.cmake", "tests/operational/p1_burn_in.cmake"))
+          $configuredRoots = @{}
+          foreach ($key in @("CMAKE_HOME_DIRECTORY", "CMAKE_CACHEFILE_DIR", "CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "CMAKE_ROOT", "_Python3_EXECUTABLE")) {
+            $entry = [regex]::Match($cache, "(?m)^${key}:[^=]+=(.+?)\r?$")
+            if (-not $entry.Success) { throw "configured root/tool is absent: $key" }
+            $configuredRoots[$key] = $entry.Groups[1].Value
+          }
+          if ([IO.Path]::GetFullPath($configuredRoots.CMAKE_HOME_DIRECTORY) -ne $PWD.Path -or
+              [IO.Path]::GetFullPath($configuredRoots.CMAKE_CACHEFILE_DIR) -ne (Resolve-Path "bin/windows-msvc").Path) {
+            throw "configured registration roots differ from the exported checkout/build"
+          }
+          $configuredTools = @{}
+          foreach ($key in @("CMAKE_COMMAND", "CMAKE_CTEST_COMMAND", "_Python3_EXECUTABLE")) {
+            $tool = Get-Item -LiteralPath $configuredRoots[$key]
+            $configuredTools[$key] = @{ path = $tool.FullName; bytes = $tool.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $tool.FullName).Hash.ToLowerInvariant() }
+          }
+          $registration = @{ schema = "sirius-windows-configured-mandatory-registration-v1"; source_revision = $revision; configuration = "Release"; configured_roots = $configuredRoots; configured_tools = $configuredTools; files = @{}; execution_claimed = $false; scope = "Unmodified configured registration/install recipes and the preceding governance inventory; no Mandatory execution, qualification, or tool substitution admission." }
+          foreach ($file in @($registrationFiles | Sort-Object -Property FullName -Unique)) {
+            $relative = [IO.Path]::GetRelativePath($PWD.Path, $file.FullName).Replace('\', '/')
+            $destination = "$registrationRoot/$relative"
+            New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+            Copy-Item -LiteralPath $file.FullName -Destination $destination
+            $identity = @{ bytes = $file.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $file.FullName).Hash.ToLowerInvariant() }
+            if ((Get-FileHash -Algorithm SHA256 -LiteralPath $destination).Hash.ToLowerInvariant() -ne $identity.sha256) { throw "registration copy changed: $relative" }
+            $files[$destination] = $identity
+            $registration.files[$relative] = @{ source_path = $file.FullName; artifact_path = $destination; bytes = $identity.bytes; sha256 = $identity.sha256 }
+          }
+          $registrationMetadata = "$registrationRoot/registration-metadata.json"
+          [IO.File]::WriteAllText((Join-Path $PWD.Path $registrationMetadata), ($registration | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
+          $metadataFile = Get-Item -LiteralPath $registrationMetadata
+          $files[$registrationMetadata] = @{ bytes = $metadataFile.Length; sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $registrationMetadata).Hash.ToLowerInvariant() }
+          $record = @{ schema = "sirius-windows-diagnostic-build-products-v1"; source_revision = $revision; repository = $env:GITHUB_REPOSITORY; run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT; msvc_version = $compilerVersion.Groups[1].Value; release_crt_version = $redistVersion; runtime_dll_origins = $origins; files = $files; diagnostic_build_only = $true; qualification_claimed = $false; scope = "Strict compiled CLI/backend-test/render-test volumes and configured CTest/install recipes only; no native runtime, rendering, UI, scientific, release or native-build attestation claim. Windows OS/UCRT and the physical graphics driver remain host dependencies." }
+          $output = "bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json"
+          [IO.File]::WriteAllText((Join-Path $PWD.Path $output), ($record | ConvertTo-Json -Depth 8) + "`n", [Text.UTF8Encoding]::new($false))
+      - name: Preserve diagnostic Windows build products
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-windows-diagnostic-build-products
+          path: |
+            bin/windows-msvc/src/sirius/app/Release/sirius.exe
+            bin/windows-msvc/src/sirius/app/Release/sirius_render_tests.exe
+            bin/windows-msvc/src/sirius/app/Release/*.dll
+            bin/windows-msvc/src/sirius/app/Release/*.manifest
+            bin/windows-msvc/src/sirius/app/Release/resources
+            bin/windows-msvc/tests/backend/Release/sirius_backend_tests.exe
+            bin/windows-msvc/tests/backend/Release/*.dll
+            bin/windows-msvc/tests/backend/Release/*.manifest
+            bin/windows-msvc/tests/backend/Release/resources
+            bin/windows-msvc/generated/sirius/alignment_receipt.json
+            bin/windows-msvc/CMakeCache.txt
+            bin/windows-msvc/generated/sirius/windows-diagnostic-CMakeCXXCompiler.cmake
+            bin/windows-msvc/generated/sirius/windows-diagnostic-build-products.json
+            bin/windows-msvc/generated/sirius/windows-mandatory-registration
+          include-hidden-files: true
+          if-no-files-found: error
       - name: Exact native-build evidence gate
         if: github.event_name == 'workflow_dispatch'
         run: >-
@@ -148,7 +281,7 @@ jobs:
           if-no-files-found: ignore
 
   integration-macos-no-render:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic != true)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -180,7 +313,7 @@ jobs:
         run: |
           test ! -e bin/macos/generated/sirius/mandatory_gate.json
           ctest --test-dir bin/macos --output-on-failure --no-tests=error \
-            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
+            -R '^(OperationalEvidence\.SourceAndIdealGovernanceRejectUncoveredClaims|OperationalBuildPolicy\.ReleaseCannotWeakenGates|OperationalRetainedShaders\.OptionalCapabilitiesPreserveFloatControls|OperationalBuildGate\.ReleaseInstallRequiresExactPassedEstate|OperationalAttestation\.FalseExternalEvidenceIsRejected|OperationalAttestation\.PreflightAndNativeRuntimeRejectFalseHostDevice|OperationalAlignment\.IncompleteOrAmbiguousAttestationSetIsRejected|OperationalAlignment\.InstalledReceiptTamperingBlocksReadiness|AlignmentAuthority\.CompiledReceiptMatchesTheStagedRuntimeAuthority|BuildGateAuthority\.ReleaseReceiptBindsEveryInstalledProductAtInitialisation)$'
           test ! -e bin/macos/generated/sirius/mandatory_gate.json
       - name: Exact native-build evidence gate
         if: github.event_name == 'workflow_dispatch'
@@ -221,7 +354,7 @@ jobs:
           if-no-files-found: ignore
 
   linux-gate:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -232,6 +365,12 @@ jobs:
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
             xorg-dev libgl1-mesa-dev libwayland-dev \
             wayland-protocols libxkbcommon-dev
+      - name: Select required Lavapipe provider
+        run: |
+          set -euo pipefail
+          manifests=(/usr/share/vulkan/icd.d/lvp_icd*.json)
+          test "${#manifests[@]}" -eq 1 && test -f "${manifests[0]}"
+          echo "VK_DRIVER_FILES=${manifests[0]}" >> "$GITHUB_ENV"
       - name: Slang
         run: |
           TAG=v2026.12.0.1
@@ -271,7 +410,7 @@ jobs:
           if-no-files-found: ignore
 
   linux-sanitizers:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: ubuntu-24.04
     # The registration-complete Mandatory estate exceeded 71 minutes under
     # three sanitizers on ubuntu-24.04 before the previous job-level timeout
@@ -286,6 +425,12 @@ jobs:
             libvulkan-dev mesa-vulkan-drivers spirv-tools \
             xorg-dev libgl1-mesa-dev libwayland-dev \
             wayland-protocols libxkbcommon-dev
+      - name: Select required Lavapipe provider
+        run: |
+          set -euo pipefail
+          manifests=(/usr/share/vulkan/icd.d/lvp_icd*.json)
+          test "${#manifests[@]}" -eq 1 && test -f "${manifests[0]}"
+          echo "VK_DRIVER_FILES=${manifests[0]}" >> "$GITHUB_ENV"
       - name: Slang
         run: |
           TAG=v2026.12.0.1
@@ -297,7 +442,7 @@ jobs:
             | sha256sum --check -
           sudo mkdir -p /opt/slang && sudo tar xzf "$archive" -C /opt/slang
       - name: Configure
-        run: cmake --preset linux-gcc-sanitize
+        run: cmake --preset linux-gcc-sanitize -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
       - name: Build and mandatory ASan/UBSan/LSan gate
         run: cmake --build --preset linux-gcc-sanitize -j"$(nproc)"
       - name: Preserve gate diagnostics
@@ -317,7 +462,7 @@ jobs:
           if-no-files-found: ignore
 
   windows-build:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -362,12 +507,73 @@ jobs:
           if ($manifest.ICD.library_path -ne ".\vk_swiftshader.dll") {
             throw "pinned SwiftShader ICD selects an unexpected driver"
           }
+          # Hosted Windows runs elevated; the loader ignores ICD environment overrides.
+          if (-not [Environment]::Is64BitProcess) { throw "qualification requires the 64-bit registry view" }
+          $registry = "HKLM:\SOFTWARE\Khronos\Vulkan\Drivers"
+          New-Item -Path $registry -Force | Out-Null
+          New-ItemProperty -Path $registry -Name $icd -PropertyType DWord -Value 0 -Force | Out-Null
+          $registered = Get-Item -Path $registry
+          if ($registered.GetValueKind($icd) -ne [Microsoft.Win32.RegistryValueKind]::DWord -or
+              $registered.GetValue($icd) -ne 0) {
+            throw "pinned SwiftShader ICD registry enablement failed"
+          }
       - name: Configure
         run: >-
           cmake --preset windows-msvc
           -DSIRIUS_ALIGNMENT_MODE=qualification
           -DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON
           -DCMAKE_CONFIGURATION_TYPES=Release
+      - name: Build Vulkan preflight executables
+        run: >-
+          cmake --build --preset windows-msvc --config Release
+          --target sirius sirius_backend_tests --parallel 2
+      - name: Prove SwiftShader inventory and original dispatch before Mandatory numerics
+        timeout-minutes: 5
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $directory = (Resolve-Path "bin/windows-msvc/generated/sirius").Path
+          $app = (Resolve-Path "bin/windows-msvc/src/sirius/app/Release/sirius.exe").Path
+          $inventoryPath = Join-Path $directory "windows_vulkan_preflight_inventory.json"
+          $identityPath = Join-Path $directory "windows_vulkan_preflight_identity.json"
+          $log = Join-Path $directory "windows_vulkan_preflight.log"
+          $xml = Join-Path $directory "windows_vulkan_preflight.xml"
+          $identityArgs = @("scripts/runtime_identity.py", "--source-root", ".",
+            "--source-revision", $env:GITHUB_SHA, "--source-tree-clean", "true",
+            "--executable", $app, "--require-vulkan", "true")
+          python @identityArgs --output $inventoryPath 2>&1 | Tee-Object -FilePath $log
+          if ($LASTEXITCODE -ne 0) { throw "first-party Vulkan inventory capture failed" }
+          $inventory = Get-Content -Raw $inventoryPath | ConvertFrom-Json
+          $swiftShaderDevices = @($inventory.inventory.backends.vulkan.devices | Where-Object {
+            $_.name -eq "SwiftShader Device (Subzero)" -and $_.driver_id -eq 10 -and $_.kind -eq "software"
+          })
+          if ($swiftShaderDevices.Count -ne 1) { throw "pinned SwiftShader device is absent or ambiguous" }
+          $env:SIRIUS_VULKAN_DEVICE = [string]$swiftShaderDevices[0].index
+          "SIRIUS_VULKAN_DEVICE=$env:SIRIUS_VULKAN_DEVICE" |
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          python @identityArgs --output $identityPath 2>&1 | Tee-Object -FilePath $log -Append
+          if ($LASTEXITCODE -ne 0) { throw "selected first-party Vulkan identity capture failed" }
+          $identity = Get-Content -Raw $identityPath | ConvertFrom-Json
+          if ($identity.selected_device.index -ne $swiftShaderDevices[0].index -or
+              $identity.selected_device.driver_id -ne 10 -or
+              $identity.selected_device.name -ne "SwiftShader Device (Subzero)" -or
+              $identity.selected_device.kind -ne "software") {
+            throw "actual selected Vulkan provider differs from pinned SwiftShader"
+          }
+          # Actual float-control booleans are recorded; portable admission does not require them true.
+          ctest --test-dir bin/windows-msvc -C Release --output-on-failure --no-tests=error `
+            -R '^VulkanBackend\.SlangKernelMatchesCpuReference$' --output-junit $xml `
+            2>&1 | Tee-Object -FilePath $log -Append
+          if ($LASTEXITCODE -ne 0) { throw "original qualification Vulkan dispatch failed" }
+          [xml]$result = Get-Content -Raw $xml
+          $suite = $result.DocumentElement
+          $cases = @($suite.testcase)
+          if ($suite.LocalName -ne "testsuite" -or $suite.tests -ne "1" -or
+              $suite.failures -ne "0" -or $suite.GetAttribute("errors") -notin @("", "0") -or $suite.skipped -ne "0" -or
+              $cases.Count -ne 1 -or $cases[0].name -ne "VulkanBackend.SlangKernelMatchesCpuReference" -or
+              $cases[0].SelectNodes("failure|error|skipped").Count -ne 0) {
+            throw "qualification Vulkan preflight requires the original single case with zero failures/skips"
+          }
       - name: Build
         run: cmake --build --preset windows-msvc
       - name: Full source-available test estate
@@ -407,10 +613,14 @@ jobs:
             linux-tests.xml
             windows-tests.xml
             macos-tests.xml
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight_inventory.json
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight_identity.json
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.xml
+            bin/windows-msvc/generated/sirius/windows_vulkan_preflight.log
           if-no-files-found: ignore
 
   macos-build:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true)
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.full_qualification == true && inputs.macos_retained_diagnostic != true)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -430,6 +640,13 @@ jobs:
           echo "VK_DRIVER_FILES=$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json" >> "$GITHUB_ENV"
           export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
           vulkaninfo --summary
+      - name: Provision pinned custom MoltenVK for current-source qualification
+        if: success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
+          python3 -B scripts/macos_moltenvk_provider.py --expected-revision "${{ github.sha }}"
       - name: Record macOS graphics route
         if: success()
         shell: bash
@@ -489,8 +706,55 @@ jobs:
             macos-tests.xml
             ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-tests.xml
             ${{ runner.temp }}/sirius-macos-runtime/*/native-runtime-transcript.log
+            ${{ runner.temp }}/sirius-macos-runtime/*/native-provider-modules.json
+            ${{ runner.temp }}/sirius-macos-runtime/*/native-provider-bindings.json
+            bin/macos/tests/backend/sirius_backend_tests
             ${{ runner.temp }}/sirius-macos-runtime/producer.log
             ${{ runner.temp }}/sirius-macos-runtime/os-version.txt
             ${{ runner.temp }}/sirius-macos-runtime/metal-displays.json
             ${{ runner.temp }}/sirius-macos-runtime/provider-route.txt
+            out/macos-moltenvk-integration/observation
+            bin/macos/macos-moltenvk-integration
           if-no-files-found: ignore
+
+  macos-retained-diagnostic:
+    if: github.event_name == 'workflow_dispatch' && inputs.macos_retained_diagnostic == true
+    runs-on: macos-15
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Fetch the exported executable's source identity
+        run: git fetch --no-tags --depth=1 origin 4bcd9875cd9308deabed06a5fa2f17d2321b0cbc
+      - name: Vulkan SDK + MoltenVK diagnostic runtime
+        uses: jakoch/install-vulkan-sdk-action@37effcfa045411f8bfbbda26df2fd1b3bf3436fa
+        with:
+          vulkan_version: 1.4.357.0
+          cache: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fetch pinned native export and diagnostic provider sources
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out/macos-moltenvk-integration
+          gh api repos/sunyaisblank/Sirius/actions/artifacts/11778215779/zip \
+            > out/macos-moltenvk-integration/export.zip
+          git fetch --no-tags origin 21f87e4806c36cd1ae9e45f912a5817d6878b774
+      - name: Build diagnostic MoltenVK and exercise original retained controls
+        run: |
+          export VK_DRIVER_FILES="$VULKAN_SDK/share/vulkan/icd.d/MoltenVK_icd.json"
+          python3 -B scripts/macos_moltenvk_integration.py \
+            --archive out/macos-moltenvk-integration/export.zip \
+            --output out/macos-moltenvk-integration/observation
+      - name: Preserve diagnostic inputs and observations
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: sirius-macos-retained-diagnostic
+          path: |
+            out/macos-moltenvk-integration/observation
+            bin/macos/retained-diagnostic
+            bin/macos/macos-moltenvk-integration
+          if-no-files-found: error

@@ -40,9 +40,9 @@
 import gr_types;
 import gr_metrics;
 import gr_integrator;
+import gr_deviation;
 import gr_camera;
 import gr_disk;
-import gr_deviation;
 import gr_trace_event;
 import gr_ellis_topology;
 import gr_point_star;
@@ -748,12 +748,12 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 Real dt = min(geometricStep, adaptiveStep);
 
                 ++attempts;
-                AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStep(
-                    state, dt, isWarp, isWormhole, M, a, Q, Lambda,
+                AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStepAtFloor(
+                    state, dt, Real(minStep), isWarp, isWormhole, M, a, Q, Lambda,
                     warpVs, warpSigma, warpR, throatB0, wormShape,
                     AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
                 if (!attempted.accepted) {
-                    if (dt <= Real(minStep) * Real(1.0001f)) { reason = kTraceMinimumStep; break; }
+                    if (AdaptiveAttemptAlreadyAtMinimumStep(dt, Real(minStep))) { reason = kTraceMinimumStep; break; }
                     adaptiveStep = max(Real(minStep), dt * attempted.stepFactor);
                     continue;
                 }
@@ -1055,12 +1055,13 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     }
                 }
                 if (beamsEnabled && !isWarp && !isWormhole && dt > Real(0.0f)) {
-                    AdvanceJacobiPairAcceptedSegment(
-                        state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
-                        X[0], V[0], X[1], V[1]);
-                    AdvanceJacobiPairAcceptedSegment(
-                        state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
-                        X[2], V[2], X[3], V[3]);
+                    [loop] for (int pair = 0; pair < 2; ++pair) {
+                        const int firstColumn = 2 * pair;
+                        AdvanceJacobiPairAcceptedSegment(
+                            state.x, state.u, next.x, next.u, dt, M, a, Q, Lambda,
+                            X[firstColumn], V[firstColumn],
+                            X[firstColumn + 1], V[firstColumn + 1]);
+                    }
                 }
 
                 affineLength += dt; lastStep = dt; ++accepted;

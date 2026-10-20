@@ -3,6 +3,7 @@
 add_executable(sirius_core_tests
     autodiff_dual_test.cpp
     retained_arithmetic_test.cpp
+    dopri_segment_test.cpp
     blackbody_planck_test.cpp
     cpu_geodesic_reference_test.cpp
     render_pipeline_integration_test.cpp

@@ -281,6 +281,62 @@ TEST(ViewCommandOperational, RelativisticJetsDeclineBeforeViewerInitialisation) 
     EXPECT_EQ(view.Execute({"--jets"}, globals, config), 1);
 }
 
+TEST(ViewCommandOperational, RefinementLadderPreservesRequestedDimensions) {
+    const auto check = [](const ViewerConfig& config) {
+        InteractiveViewer viewer;
+        ASSERT_TRUE(viewer.Initialise(config));
+        int previous_width = config.preview_width;
+        int previous_height = config.preview_height;
+        for (int level = 0; level < config.refinement_levels; ++level) {
+            SCOPED_TRACE(level);
+            int width = 0;
+            int height = 0;
+            viewer.GetResolutionForLevel(level, width, height);
+            EXPECT_GE(width, previous_width);
+            EXPECT_GE(height, previous_height);
+            EXPECT_LE(width, config.final_width);
+            EXPECT_LE(height, config.final_height);
+            if (level == config.refinement_levels - 1) {
+                EXPECT_EQ(width, config.final_width);
+                EXPECT_EQ(height, config.final_height);
+            } else if (level == 0) {
+                EXPECT_EQ(width, config.preview_width);
+                EXPECT_EQ(height, config.preview_height);
+            }
+            const auto session = viewer.CreateSessionConfig(width, height, 1);
+            EXPECT_EQ(session.width, width);
+            EXPECT_EQ(session.height, height);
+            EXPECT_FALSE(render::SessionConfigIssue(session).has_value());
+            previous_width = width;
+            previous_height = height;
+        }
+    };
+    ASSERT_NO_FATAL_FAILURE(check(ViewerConfig{}));
+
+    ViewerConfig config;
+    config.preview_width = 64;
+    config.preview_height = 64;
+    config.final_width = 257;
+    config.final_height = 129;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+
+    config.final_width = 67;
+    config.final_height = 65;
+    config.refinement_levels = 1;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+
+    config.preview_width = 67;
+    config.preview_height = 65;
+    config.final_width = 69;
+    config.final_height = 67;
+    config.refinement_levels = 32;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+
+    config.final_width = 8192;
+    config.final_height = 8192;
+    ASSERT_NO_FATAL_FAILURE(check(config));
+}
+
 TEST(ViewCommandOperational, InputStateHandlesPressRepeatReleaseMouseAndScroll) {
     ViewerConfig config;
     config.move_speed = 2.0f;
@@ -329,6 +385,33 @@ TEST(ViewCommandOperational, InputStateHandlesPressRepeatReleaseMouseAndScroll) 
     viewer.SetCameraPosition(1.0, 0.0, 0.5);
     EXPECT_DOUBLE_EQ(viewer.GetCameraState().r, 5.0);
     EXPECT_DOUBLE_EQ(viewer.GetCameraState().theta, 0.1);
+
+    // A stopped window may never deliver its final key release. Reinitialising
+    // must begin a fresh input epoch without moving the new camera.
+    for (const int key : {87, 83, 65, 68, 81, 69}) {
+        viewer.ProcessKey(key, 1);
+        viewer.Stop();
+        ASSERT_TRUE(viewer.Initialise(config));
+        const auto reset = viewer.GetCameraState();
+        EXPECT_FALSE(reset.move_forward);
+        EXPECT_FALSE(reset.move_backward);
+        EXPECT_FALSE(reset.move_left);
+        EXPECT_FALSE(reset.move_right);
+        EXPECT_FALSE(reset.move_up);
+        EXPECT_FALSE(reset.move_down);
+        viewer.UpdateCamera(0.5f);
+        const auto idle = viewer.GetCameraState();
+        EXPECT_DOUBLE_EQ(idle.r, config.observer_distance);
+        EXPECT_DOUBLE_EQ(idle.theta, config.observer_inclination);
+        EXPECT_DOUBLE_EQ(idle.phi, config.observer_azimuth);
+        EXPECT_FLOAT_EQ(idle.fov, config.observer_fov);
+        EXPECT_FALSE(viewer.GetRefinementState().needs_restart);
+    }
+
+    viewer.ProcessKey(87, 1);
+    viewer.UpdateCamera(0.5f);
+    EXPECT_LT(viewer.GetCameraState().r, config.observer_distance);
+    viewer.ProcessKey(87, 0);
 
     ViewerConfig scaled = config;
     scaled.black_hole_mass = 10.0;

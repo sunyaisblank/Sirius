@@ -54,12 +54,16 @@ struct IncrementHermite {
             start_tangent + end_tangent - secant * 2.0, interval};
 }
 
-struct UnitIntervalPolynomialRoots {
-    std::array<double, 6> values{};
+template <std::size_t Degree>
+struct PolynomialRoots {
+    std::array<double, Degree> values{};
     int count = 0;
 };
 
-[[nodiscard]] inline double EvaluatePolynomial(const std::array<double, 7>& coefficients,
+using UnitIntervalPolynomialRoots = PolynomialRoots<6>;
+
+template <std::size_t Size>
+[[nodiscard]] inline double EvaluatePolynomial(const std::array<double, Size>& coefficients,
                                                int degree, double argument) {
     double value = coefficients[degree];
     for (int power = degree - 1; power >= 0; --power) {
@@ -68,8 +72,8 @@ struct UnitIntervalPolynomialRoots {
     return value;
 }
 
-inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
-                           double fraction_tolerance) {
+template <std::size_t Degree>
+inline void AppendUnitRoot(PolynomialRoots<Degree>& roots, double root, double fraction_tolerance) {
     root = std::clamp(root, 0.0, 1.0);
     if (roots.count > 0 &&
         std::abs(root - roots.values[static_cast<std::size_t>(roots.count - 1)]) <=
@@ -81,14 +85,16 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
     }
 }
 
-// Isolate every real root of a degree-at-most-six polynomial on [0,1].  The
+// Isolate the roots of a bounded-degree polynomial on [0,1]. The
 // derivative roots partition the interval into monotone pieces; sign changes
 // give transverse roots and a zero at a derivative root gives a tangent
 // contact.  The recursion terminates at a linear polynomial and therefore does
 // not assume that a finite sample grid happens to hit a narrow crossing.
-[[nodiscard]] inline UnitIntervalPolynomialRoots FindPolynomialRootsOnUnitInterval(
-    const std::array<double, 7>& coefficients, int degree) {
-    UnitIntervalPolynomialRoots roots;
+template <std::size_t Size>
+[[nodiscard]] inline PolynomialRoots<Size - 1> FindPolynomialRootsOnUnitInterval(
+    const std::array<double, Size>& coefficients, int degree) {
+    static_assert(Size >= 2);
+    PolynomialRoots<Size - 1> roots;
     double scale = 0.0;
     for (int power = 0; power <= degree; ++power) {
         scale = std::max(scale, std::abs(coefficients[power]));
@@ -108,13 +114,13 @@ inline void AppendUnitRoot(UnitIntervalPolynomialRoots& roots, double root,
         return roots;
     }
 
-    std::array<double, 7> derivative{};
+    std::array<double, Size> derivative{};
     for (int power = 1; power <= degree; ++power) {
         derivative[power - 1] = static_cast<double>(power) * coefficients[power];
     }
     const auto critical = FindPolynomialRootsOnUnitInterval(derivative, degree - 1);
 
-    std::array<double, 8> boundaries{};
+    std::array<double, Size + 1> boundaries{};
     int boundary_count = 1;
     boundaries[0] = 0.0;
     for (int index = 0; index < critical.count; ++index) {

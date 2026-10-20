@@ -55,6 +55,8 @@
             "displayName": "Linux / WSL2, GCC 14, ASan + UBSan + LSan",
             "inherits": "linux-gcc-debug",
             "cacheVariables": {
+                "CMAKE_C_FLAGS_DEBUG": "-g -O1",
+                "CMAKE_CXX_FLAGS_DEBUG": "-g -O1",
                 "SIRIUS_SANITIZERS": "address-undefined",
                 "SIRIUS_MANDATORY_TESTS": "ON"
             }

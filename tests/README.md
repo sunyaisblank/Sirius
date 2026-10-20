@@ -90,8 +90,7 @@ rendering or opening a GPU. The verifier consumes those native records before
 mutating source ownership, work coverage, stage counts, budgets and completion
 ordering; a handwritten valid fixture alone cannot establish producer compatibility.
 
-The last completed local renderer run is recorded in
-[SOURCE_CLOSEOUT.md](../docs/SOURCE_CLOSEOUT.md), including its Vulkan exclusions
-and exact tested revision. Reuse that historical evidence only for its stated
+GitHub issues record each completed selection and its exact revision, including
+excluded or unexecuted profiles. Reuse historical evidence only for its stated
 scope. Qualification receipts are revision-bound and cannot be reused after
 changes by renaming them.
