@@ -1,0 +1,46 @@
+{
+  "schema": "sirius-lavapipe-denormal-source-review-v1",
+  "public_Sirius_source": "0109ab462edade524667d20303507aa09adcbaf6",
+  "observed_source_findings": [
+    {
+      "path": "src/sirius/backend/device.h",
+      "finding": "RetainedUsesPortableArithmetic requires both actual binary32 denormal preservation and RTE. The real stock Mesa25.2.8 observations report denorm32=0,RTE32=1; portable arithmetic is the correct current route."
+    },
+    {
+      "path": "lvp_device.c",
+      "finding": "Authenticated25.2.8 source advertises no denormal preserve/flush control for16/32/64; RTE and signed-zero/inf/NaN preserve properties are true."
+    },
+    {
+      "path": "upstream-26.2.4/lvp_device.c",
+      "finding": "Authenticated26.2.4 source still sets shaderDenormPreserveFloat32=false. A release upgrade alone does not remove this route dependency. No upgrade build or benchmark was launched."
+    },
+    {
+      "path": "lp_cs_tpool.c",
+      "finding": "25.2.8 compute worker calls task->work with no explicit per-task floating-environment guard in this function; caller/worker environment still requires actual tracing."
+    },
+    {
+      "path": "upstream-26.2.4/lp_cs_tpool.c",
+      "finding": "26.2.4 explicitly switches flush-to-zero state between OpenCL kernel and graphics/compute jobs; this is actual execution machinery to inspect, not a missing app setting."
+    },
+    {
+      "path": "lp_rast.c",
+      "finding": "25.2.8 raster workers explicitly enable flush-to-zero; synchronous scene path saves/restores FP state. Claiming general Vulkan denormal support requires all supported shader execution paths, not only one compute sample."
+    },
+    {
+      "path": "lp_bld_arit.c",
+      "finding": "Native lp_build_div uses LLVM FDiv and lp_build_sqrt uses llvm.sqrt. Existing lp_build_fpstate_set_denorms_zero can clear DAZ/FTZ on supported x86 SSE targets; its existence alone establishes no full support."
+    }
+  ],
+  "contract_authorities": [
+    "https://docs.vulkan.org/refpages/latest/refpages/source/VkPhysicalDeviceFloatControlsProperties.html",
+    "https://docs.vulkan.org/refpages/latest/refpages/source/VkShaderFloatControlsIndependence.html",
+    "https://docs.mesa3d.org/relnotes/26.2.4.html"
+  ],
+  "new_provider_code_or_advertisement_changed": false,
+  "new_provider_built_or_dispatched": false,
+  "system_installation_changed": false,
+  "Sirius_source_or_shader_changed": false,
+  "correctness_or_benefit_established_for_new_provider": false,
+  "review_in_progress": true,
+  "full_goal_complete": false
+}
