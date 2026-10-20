@@ -1,0 +1,1741 @@
+{
+  "schema": "sirius-native-coefficient-sharing-rejection-Git-v1",
+  "commit": "b9a5703a18f06070fe809a9bfd14a414c4f2f906",
+  "parent": "1b02b28a3a29e30f0463fa9ac1578b92f9d6e30e",
+  "branch": "refs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18",
+  "tag": "refs/tags/evidence/native-coefficient-sharing-rejected-2c8ef086",
+  "bundle": "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome",
+  "files": {
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/MANIFEST.json": {
+      "bytes": 148473,
+      "sha256": "0bdb55c81c690bcdcffeac1f3c05f781c8a0c0f921be7aad0419ffb222f283c4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b674c2b4e061334fbc44d01bf6f25bf1b2465352"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/PRESERVATION.json": {
+      "bytes": 1265,
+      "sha256": "a15eb0c51e6fdff3c6a4ed992b25ffbc44e4fcbf30fef7fc2898c1a619b03c4e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e20cf1b629db0d6694ed695f68888a90cb489c1b"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-cost/cohort-schedule.json": {
+      "bytes": 2011,
+      "sha256": "b9760910a79b182e37b4f6467178d8e2c7d0b79d6352a33a023356763d9ddfa9",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "80ed478512e1880f7638dbbb0e1ca87c9721a43d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-cost/compare_cost.py": {
+      "bytes": 4344,
+      "sha256": "d05b2096eb33ca38e3cbc43427e84ca24b17b9f606622e6fa28ca7eed8e892fc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9a7ea02b5e7d5ccb7cc35569c37d2958cbbc82de"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-cost/derived-LLVM-retirement.json": {
+      "bytes": 861,
+      "sha256": "355eb55434a979c9c53eac75ba13a2285daa6c22113077860fd5b54d6ef44a78",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "acf3338d3dbdb561421dbedd441b6d6359c04d51"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-cost/driver-cost.json": {
+      "bytes": 3447,
+      "sha256": "5d08104af0d9079cfc30f2939cad544a77df9e7d469a7e9b3e015d2c303a604d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ff975603e4102d12e26a8142b230ec3e8e6edc7b"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ABBA-evidence/native-benefit.json": {
+      "bytes": 231659,
+      "sha256": "c2108c8c0e76cae9e506660c17c73632488ab4e21427e4e1a7406235c41f21bc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b59bbe170dece91f16ee9a615c0ae08dbd6318d1"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ABBA-evidence/reader-bindings.json": {
+      "bytes": 173453,
+      "sha256": "2d5ae31bbcbfe46a3e8efaf46018d530e03bbbf3fb56f73f258f817296818109",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8e6f1b3d64f6a0e4359e60951c587845fc38246e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ABBA-evidence/root-admission.json": {
+      "bytes": 372,
+      "sha256": "68d9d29769a7e4957624dc16632ddd8c6433b10cd5da072a12de85c497912b70",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "dddaf684f8db46d659511b027fa904eb74af1aff"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/abba-held-execution-bindings.json": {
+      "bytes": 175293,
+      "sha256": "b17b5400b045cb2076212e12ea6cc7946aed5f5358fd066a3667eb6350ba3159",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "186cdc18ec86224c48db8a65b58ad15e3374786b"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/abba-held-plan.json": {
+      "bytes": 2736,
+      "sha256": "4b0a10aaf6e84f7c18157a85b043cadd7f891e5f7c6584dad758f52b84fbaac2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0ad489ae6ab5e4b1ada1b545579238339536c3e2"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/abba-root-release.json": {
+      "bytes": 1077,
+      "sha256": "aa58ed91663af773132f2cf498acf88a34e42ff8db3c75b07653fb09f8ac0c0e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "78e02bc7af45e2473eeadaf8b62b0ed490ca35b2"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/actual-admission-source-contracts.json": {
+      "bytes": 2070,
+      "sha256": "77c35207230bfb7afb4556759651a10d130a596b5b87b78aa1c52d3ccb07414d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "682caaa3d886703d2dc712d15c617e96437c5ccd"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/actual-download.json": {
+      "bytes": 34164,
+      "sha256": "41f997f13928858e2b17ef434cbe251911f31f515cff38a24d3924d8b67c3fab",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "bd206fe7cef48b7d102ff29d4d3fd244a5c08eec"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/artifacts-first.json": {
+      "bytes": 806,
+      "sha256": "9076da00cf1238c7445d1794039fc500baadad79378482e3a881950cf729ffca",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b99cae7e7d7ad726c2de2da59a743418a5222781"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/baseline-PE-imports.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/baseline-PE-imports.stdout": {
+      "bytes": 1675604,
+      "sha256": "3fbccb9549eaed1cfd01a1bfa715498ff2f6bac3d18537ea27afe7de60affda7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0dce6f1ba3ac24ba9ba39d873e8b65ff714afe30"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/candidate-PE-imports.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/candidate-PE-imports.stdout": {
+      "bytes": 1675357,
+      "sha256": "fcaf7d56fad45ff7439fd6c714cdb165f5b68750279216fabbcc83447102f793",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ac2425e3b48dc23ee79c8403ca0d8843c79daa78"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/check_publication.py": {
+      "bytes": 7043,
+      "sha256": "8c979ea3c7f28b5377996fcc98628587dbbc5250affa97f7a4838af814b4101a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "36d590616de0fa998b79444e36a80f83e5c0c351"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/download.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/fetch_producer.py": {
+      "bytes": 4691,
+      "sha256": "e0890665b7ba8e257ce8c681fd5d5f1ef229a3fb85dae5b307401a58edb4d816",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2b0426609980fc377ec74094496adc1de497eafc"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/jobs-first.json": {
+      "bytes": 2005,
+      "sha256": "c46680a5f8c92d4adbd92ca2853eb7f0be244a273c73d6db5424f73900585e28",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fc42674372b320271a94d3f41d0fb7d23d9eb2e7"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/make_authority.py": {
+      "bytes": 17320,
+      "sha256": "a84e534458059f9067ea3bbf3906a0ff879f090ba3c528e3f6532f503091aa6d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "444c3ce0ab3209ea68ae07255af478f1193a5af5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/matched-array-authority.json": {
+      "bytes": 38003,
+      "sha256": "89bfc621c773b20513c7090eee279c99a6b6ed9f8d685081acedf3b59c2de1b7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "cd4472194599eeca1e3ed895decbb3600ca71055"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/milestone-Git.json": {
+      "bytes": 55815,
+      "sha256": "69c9380d407fbd384ecfb81fb0d27eff4bef022d4d4cee75eb9e42bf4dba7a3b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "469c6b0e58846d4817d3b41c4a509bcdf6605db9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/originals/check_publication.py": {
+      "bytes": 7026,
+      "sha256": "21e8dfa35a72e21f0a4dd1169e35f5c4958e72d257346e57ea446ad9f73b8519",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a5a8920393b86f32d639a8ed96aa914a9235b5b9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/originals/fetch_producer.py": {
+      "bytes": 4674,
+      "sha256": "a701f9ec282d84380c5bfefe3dc77d7d56c5d7b8c74132770db446fe61fc33c1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5ea69097697ea4ba02fa5e69be8e95144d077af7"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/originals/make_authority.py": {
+      "bytes": 17348,
+      "sha256": "0415a6d76e1158c7f9fdf2e2118bf13e92232e1605299a8709e9334a87bc6bfa",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "84c3bb21c19b60ab02026bd1f08994c8ea659089"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/preserve_milestone.py": {
+      "bytes": 6531,
+      "sha256": "43b3218c40afd32df6134a52475e3550de90259db1a8167417c3672c4dea7332",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1e0e73e920421b94d27c85addc77804271e5adc2"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/prior-scratch-retirement.json": {
+      "bytes": 4564,
+      "sha256": "9e38d7b47e9c038ace2ec32feefc848fb0dcb1768cbb75da6cc0e2a7875780d5",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2f513797cd09995c58a779e810e59713ba73f384"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/producer-12250389795.zip": {
+      "bytes": 25862941,
+      "sha256": "d2f372ee86508c1e6cefb8986ac4667cf9b867d62efb460e285f58b6526978de",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9dcb9ab292e99fb5463ccdea62a1fa6b084c5729"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/protocol-before-artifact-finalization.json": {
+      "bytes": 7173,
+      "sha256": "d364d8bcbda40a8edd5c0f798452d2dda9a239a0a344fd92b51d867ceb4d24fa",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "853daa91f02647ab71506b20c9fc78515a468492"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/publish_source.py": {
+      "bytes": 4181,
+      "sha256": "9fce31396f7e182ab27f97cf902233928b3fb95590d51f2d1c3aa67525867869",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a7ee76115f0c32900f2c4b438a5a1a4233c563f4"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/read_selected_commands.py": {
+      "bytes": 3964,
+      "sha256": "0334f944dac5842718645bda62e7aa04dd95f0d14e602efe2af557aa0ea57698",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "557d1a79eeaac7563ae81682647beabbbcd8a242"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/release_phase.py": {
+      "bytes": 4538,
+      "sha256": "b23639582a7d081e17ec77878ee882eea3118565f8e630cdd198bb0e386902ac",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "3b0e5aaeff3f3d8fc29552a629018786feede81a"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/retire_prior_scratch.py": {
+      "bytes": 2748,
+      "sha256": "98569dafe9405ab9ed88561f0f8ec2279ed9737f3e1595238753d48ac270bba3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8830281a0bd152aa0293e5cf6da9881dba6d647d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-actual-producer-eligibility.json": {
+      "bytes": 3818,
+      "sha256": "73972bffaf8ffb86952c95575c4544818c713117ffc3d23a5516f00a9ebcdecc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d5425e461b884d485620b94dfc37a187e799bf1f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-manual-admission.json": {
+      "bytes": 1974,
+      "sha256": "77eed069cdcdd1b0b4c33a6f41636360d28c5b90a4d1e64b58893bb51f525768",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "427f5da8d48b0eca9053721150c6ec9bffda8b37"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-publication-check.json": {
+      "bytes": 10624,
+      "sha256": "310cd82ef49707972885d667f4b69a4ef0adce0f1736cc7aa4cad18c89dddad2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "33d6135a94c1ba2a096ea36c9284ca41e8377ad9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-rejection.json": {
+      "bytes": 3567,
+      "sha256": "85960c9d2d19fb558dbcf10ec40a661104b5be2371efa2202f50956193a5cf29",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "deae2067234b91f2c0e4dd04d1f9ce2afb295523"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-runtime-artifact-finalization.json": {
+      "bytes": 882,
+      "sha256": "798373356dc05eb034360e3eedf5c80a86a51de9d3a196c438b0df81d520c24c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c34737552993199506839c188a5c293d7b86691d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-selected-command-details.json": {
+      "bytes": 13198,
+      "sha256": "26bf7ac0ba82efc7707c0cd47d8e17deeec0829784d29892960c6b91c248b336",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b69b87c9bcf01bce37b35262568d59678abd2762"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/root-source-release.json": {
+      "bytes": 598,
+      "sha256": "a67ad0cfef1c20567f7f716819b361bd92b9846465e50327898c26befe1454a4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ff868d73f04adbd97613403af55c53fc25f58d6e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/run-second.json": {
+      "bytes": 12277,
+      "sha256": "e24369489c90ab958a524008f90471eab2a7df03039535006ceee526946a95cb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "85f95a7e155b93894c077bd4c4020ec3a9a340bd"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/run-third.json": {
+      "bytes": 12280,
+      "sha256": "7ad24251043b4ffe1e62a3b1afff95563d9c9fc7087f6c5ae7a04aaa8bfdc365",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "de728cb3607ef4eb87e25099f2fb0aed51971d11"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/runs-first.json": {
+      "bytes": 12313,
+      "sha256": "b29c6efc78df1a1902f8198a1ea093552dcc4e10d0103008d584ffbbf3d14e20",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4177571948fb0845a1ffe43f38632faf73e1d7e2"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/source-Git.json": {
+      "bytes": 27913,
+      "sha256": "5b3831ff41396e3f9a486e74bb338bc0caf0b1646dc1053b690450f8a451249f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "779b948b87d93d803b790f8fc67326898072bb59"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/timestamp-held-execution-bindings.json": {
+      "bytes": 155787,
+      "sha256": "c09b0d995a2bf08998d8b2ea50c119e1f5dec2146d917b385b934a226bb35697",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "48612b0d34df6c34626aff85a5342478db469c92"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/timestamp-held-plan.json": {
+      "bytes": 1298,
+      "sha256": "3bf755f46134c09418d7dea6845bae0304b23d1e67b2dbc8bcbd37dcb5dde71b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "11f85d4343b68aefbd7206575aceb1ee74ae4e2d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-ci-publication/timestamp-root-release.json": {
+      "bytes": 1059,
+      "sha256": "91abebb5f79da34f619c85d291b3e269d28f7d0bd0b0b6eff9bc5ee46e04a3d2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2d482910af723d8fbc2768c3e71e3fde025506de"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/actual-e1c618f8-audit.json": {
+      "bytes": 41855,
+      "sha256": "34227f3d4f85b12d506f8d60fce21779b65085171eeff7cb07bdeda8f9db7d95",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e8ab3dd75740dce0c0b334821c40617f3f4b2582"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/audit_export_windows_paths.py": {
+      "bytes": 21890,
+      "sha256": "17615ca00038361c58c63797a93c8179a9d35dd45f5ed830c54c1a2b769e45e4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0f785c90584ab471d8a9e7c18d3b555ae49a2c85"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/check_mapped_arrays.py": {
+      "bytes": 5449,
+      "sha256": "75fcb57d0a565c2302890fc6c8d2b6ede2c042bb994f03ae87756b7199af51c7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "4be047826404e56f1f506bcce2e52945eb46d82e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/originals/audit_export_windows_paths.py": {
+      "bytes": 21872,
+      "sha256": "db7b4eb37615e4803e0c6837113868779753a87a9f4ac78fef798b5fb856c3c0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a0999e647c4074cdd08ef3fead0da855eac4024e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/originals/check_mapped_arrays-broad-symbol-refusal.py": {
+      "bytes": 5460,
+      "sha256": "b3ef0fc2f041180609c218d6d61b837e572e2e2ed86183112933ab1a7cc46bb5",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b598023427c998192c8f81635b3059c947125947"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/originals/recompute_rejection-inherited20.py": {
+      "bytes": 6759,
+      "sha256": "318a0d5776cf43050a539c21a512ee0b5ecaf846d1191397ab6f1b364edb2506",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "586a424cdb49e5deddeb1793439afdf11703c61c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/reader-symbol-correction.json": {
+      "bytes": 579,
+      "sha256": "0c815bfad4716e6f08f08f474424267f9061546f7b0d1996ce4f6d3210be948f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "03d8e024b8d17d3aa599f74604b6d36a70ea75ea"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/recompute_rejection.py": {
+      "bytes": 6762,
+      "sha256": "c3cad59ed44f8d7d0341940676fbcb77d176daa283ec0f30fd3483b87be35bdf",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "dea1e88b05d3cea440cdd2be3d99135954f51763"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/root-raw-rejection-check.json": {
+      "bytes": 7126,
+      "sha256": "be4cc6043d1d5e593a02e2c1823304022210fb6c858924c274a4297bc31be2c3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "22723003583fa416be96592123fa34ba183b8aa3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-pe-audit/separate-ROOT-producer-review.json": {
+      "bytes": 30596,
+      "sha256": "c5ce9067ebdb9e75a0f76d50eeea6da59196a115f4638f9428e208a1859c825e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "78727694d38e391ade9abed161e267b15245beed"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/execution-bindings.json": {
+      "bytes": 155786,
+      "sha256": "9a0cc637dc4d3c8a568d1174624006b55bfa70cc7e23c99d8ac40acf25268fe0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "399cb6826c2e690cda5010858cbb134cf8d1427c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/plan.json": {
+      "bytes": 1297,
+      "sha256": "c7d2959c2cb04bb75ca2bb64c10b42f2c87ee5da1a2eef455ea80c25a92c47e2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b5f739a21e3f8ce9bd972bdc3c8fa8bdc17ec2eb"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/preparation.json": {
+      "bytes": 719,
+      "sha256": "0e11326e5b608959c8fe53cc0f38e24c3b31db36700def3ccd92e5b82d73fa38",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9fe31b93777be15a23856417ee9cdda9b388a91b"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/run_system.py": {
+      "bytes": 25711,
+      "sha256": "696303ee73e4e3e71a0eac7fd6a2666b9ecc23fac3e8718e327354712d0bf473",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "282537dd1d9e77749cd504b385e5fe97f3eed7c5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/run_terminal.py": {
+      "bytes": 24297,
+      "sha256": "d1e1f0859925e7eb5ef5fd947197b0923bc34b825ba39a40d87cf2ff16241c13",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "aa18e7c3a524d2e04e173f5d44a5b151fccf9241"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/initial-timestamp/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/execution-bindings.json": {
+      "bytes": 155787,
+      "sha256": "d394b98eee9737594192eccae528c7c86c83785923887df0a34e3fa43984af8a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a3da6294eaae341fad83f7a672063c9d56188b25"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/plan.json": {
+      "bytes": 1298,
+      "sha256": "3bf755f46134c09418d7dea6845bae0304b23d1e67b2dbc8bcbd37dcb5dde71b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "11f85d4343b68aefbd7206575aceb1ee74ae4e2d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/preparation.json": {
+      "bytes": 719,
+      "sha256": "0ce1f3b32c3f123443334cf49e116c3f6c1ad0abf2ac1d0d8b645b068a7a0a35",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0d9aaf5c1dd5e2761642dd0b07393edb613d0173"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/run_system.py": {
+      "bytes": 25717,
+      "sha256": "d4485d0a7aed935ca6f262b3c5fc0d94387e3c88be235000a5da0164aa7f5254",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b31da023eb3002bcf4ac1f29b8d35f4be779c287"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/run_terminal.py": {
+      "bytes": 24297,
+      "sha256": "d1e1f0859925e7eb5ef5fd947197b0923bc34b825ba39a40d87cf2ff16241c13",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "aa18e7c3a524d2e04e173f5d44a5b151fccf9241"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/intermediate-timestamp-held/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/root-stop.json": {
+      "bytes": 1312,
+      "sha256": "58bcd24fec221bb21db70577b814049235b8d4e9749693ada57933b37dda8bf7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "dcb49a1b0b1a1b132ce4e30c2013c4f908829fb3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/source-before-run_system.py": {
+      "bytes": 25711,
+      "sha256": "696303ee73e4e3e71a0eac7fd6a2666b9ecc23fac3e8718e327354712d0bf473",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "282537dd1d9e77749cd504b385e5fe97f3eed7c5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/source-before-run_terminal.py": {
+      "bytes": 24297,
+      "sha256": "d1e1f0859925e7eb5ef5fd947197b0923bc34b825ba39a40d87cf2ff16241c13",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "aa18e7c3a524d2e04e173f5d44a5b151fccf9241"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/source-before-source-contracts.json": {
+      "bytes": 5556,
+      "sha256": "f7beef87b60f032706447013e55557b4288ff81ca9f8ee26d1a7d5bc1635322e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7fb00cdc26765d351c9c73a4e82602dc1a03b880"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/source-before-source-freeze.json": {
+      "bytes": 4173,
+      "sha256": "8547daaa236bdeecf9ebc9830231c51a8605307499988f886b4059e1beeafcd3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "dd31ecc166874b40745162cad5cbae5d492a233f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/timestamp-held-execution-bindings.json": {
+      "bytes": 155787,
+      "sha256": "8d59047c0ffb61fa380fe4777463c669158283084e205a3a9d29050952805d51",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b2e8cc8a8890eb5723e19fe32e93f15f315f0e1d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/timestamp-held-plan.json": {
+      "bytes": 1298,
+      "sha256": "3bf755f46134c09418d7dea6845bae0304b23d1e67b2dbc8bcbd37dcb5dde71b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "11f85d4343b68aefbd7206575aceb1ee74ae4e2d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-precontext-stop/timestamp-root-release.json": {
+      "bytes": 1059,
+      "sha256": "b27abc9a651cf82fc14f80024d8da57c67b90da0ecbb152b163ce724d61364f9",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "92570f8a006d3d940c0f8198872931aeab19b45a"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-preservation/originals/prepare_bundle.py": {
+      "bytes": 14328,
+      "sha256": "0b7a4709ba44d565071e9d5e8cf407354a1e3a8038e6bd8b63434f14141d957d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b81225436ed0ffea575f1e846d7bcf37ffb904a2"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-preservation/prepare_bundle.py": {
+      "bytes": 14610,
+      "sha256": "e4d7b97de62e399dfd4997bc43f249661d5f5ad6c06ed761b7e29709f9361f1d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "487a9c11f8e72686d1872b614843118f3a9e2455"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-preservation/source-contracts.json": {
+      "bytes": 519,
+      "sha256": "ffaa85e3936c0c01140665f6e20a8364da79e56055d66820f888a8366aff851c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f66dda8fcb52c001dd8e8b9cfaa9d671c5b480de"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-preservation/source.patch": {
+      "bytes": 9418,
+      "sha256": "0d31aa64e2026156e4cdce030978f7efcb5ab4f72bb4b2a44f6781515fff2047",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ca2c1437ad6e39daebc2e8e3263f350b79a6dd95"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/compare_native.py": {
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "15c3b60e7bba41c3826554407a00f2cd8281148d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/corrected-candidate-protocol.json": {
+      "bytes": 7069,
+      "sha256": "ff5c7079b0329520ca8de882970856915dbcdd4581b1e326547d918e9bfd4374",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8563435b9d310cbde8ecc73e3be0f03958b5bafc"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6da77e40774b93024f6582d0d0501a59c2c41f28"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/materialize_reader_context.py": {
+      "bytes": 14374,
+      "sha256": "53ebbec6b7e0f9f7e17a11c2ae1d4b8c36f1c4247f0eff1f418d6e842a2b71db",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "202114201bcb1011d487c9ff04c7e9f0653b0161"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/native_evidence.py": {
+      "bytes": 29429,
+      "sha256": "0116b87ac2bc300fec368ec9ade67e1c004132a8f160d59a523a9288e2300e95",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0b479cc05e34e72feae0c5af69ba2f30f948f7b7"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/numeric_gates.py": {
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19864ecc50448e8a6bf9571a29a9456ff2d089e8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/originals/compare_native.py": {
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "15c3b60e7bba41c3826554407a00f2cd8281148d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/originals/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6da77e40774b93024f6582d0d0501a59c2c41f28"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/originals/materialize_reader_context.py": {
+      "bytes": 14458,
+      "sha256": "76b2192f0dd2f1f62c9e655ac8eb3a32c287cb056d9be2ed0399899f51f2b0f7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "811a6e6e1bc3db07405ac39220637c8d4531b094"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/originals/native_evidence.py": {
+      "bytes": 29506,
+      "sha256": "ec5368565ceb7cec93254cab7dc5a08055f024375ece80c76677061ffd5bf201",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0fc5262c31e535f8aa80469a28d406388bcfa0e0"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/originals/numeric_gates.py": {
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19864ecc50448e8a6bf9571a29a9456ff2d089e8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/originals/read_controls_native.py": {
+      "bytes": 3271,
+      "sha256": "c6d772fe7f706df1e038567ba938961e3a7c0b3f3180626e6a975ad88e84b47f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb10de474f5e3c5119743c765729474573ce9261"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/read_controls_native.py": {
+      "bytes": 3271,
+      "sha256": "c6d772fe7f706df1e038567ba938961e3a7c0b3f3180626e6a975ad88e84b47f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb10de474f5e3c5119743c765729474573ce9261"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/source-contracts.json": {
+      "bytes": 2389,
+      "sha256": "64d482422ebba377e8e06adb3d7f66b525c43e54737e93f5cd31abd199112b1f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0f1c99a36f1be1a8e7e62280c3916166bb58d972"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-readers/source.patch": {
+      "bytes": 1648,
+      "sha256": "da27ceb514b8549ea0b8cc52f62244696ce8e298a3d8bd4b1cc033589eadccfe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "49fc8a7139e94f115f5b602d083174f315b08176"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a1-bridge.json": {
+      "bytes": 2867,
+      "sha256": "6593110cd66ee86968643fbe9e701d77fa3712114aa9486780de680ecb7968a7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "29d2be2cabff327daae2205ad08c7701f1588ca8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a1-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a1-bridge.stdout": {
+      "bytes": 131,
+      "sha256": "ca536cf51a1929161a220a377305c81cb3ae27c996933e6cd0563beec2f882e0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "add2c0274ff2d2827c5f895828d58beb07cbe3cb"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a1-inputs-after.json": {
+      "bytes": 149504,
+      "sha256": "22f8799843b9cc91131836786a844f322c8bd67599e9a875ccb634ca7334fc37",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d253f5efda5746b126fa1a4cfcfdbbc2ec222ce9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a1-inputs-before.json": {
+      "bytes": 149504,
+      "sha256": "22f8799843b9cc91131836786a844f322c8bd67599e9a875ccb634ca7334fc37",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d253f5efda5746b126fa1a4cfcfdbbc2ec222ce9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a2-bridge.json": {
+      "bytes": 9554,
+      "sha256": "711fa9ac87c22ec3ce31a38ecdc9efb57dcb3c9ff98ceb6f28c6010dcb636ffb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0ab347686c081b7c42527409c68d562ed8132390"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a2-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a2-bridge.stdout": {
+      "bytes": 129,
+      "sha256": "e524d430b971c5102ed47ec092b4e6988483a43618e3ed4561fb8b7ee22ae14d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "871c86fadb0b7abd1f71ecf3bc5a4745f931c61d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a2-inputs-after.json": {
+      "bytes": 155900,
+      "sha256": "13356081a4912db29d2d8a979a530e5552737de1d65d977e05429b98c7773bca",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0a09aee1dff66d6cc5e57f311f97244e0d490c7c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/a2-inputs-before.json": {
+      "bytes": 155900,
+      "sha256": "13356081a4912db29d2d8a979a530e5552737de1d65d977e05429b98c7773bca",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0a09aee1dff66d6cc5e57f311f97244e0d490c7c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b1-bridge.json": {
+      "bytes": 5102,
+      "sha256": "10f9250cf60d6e102f57d890a9356c5c558db17a1a5389ba08e2bff291cc0cba",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "604e9dba6b285ee0bde65ecbcfc031a22ca1dd3d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b1-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b1-bridge.stdout": {
+      "bytes": 138,
+      "sha256": "7af05b6463c5f1ffa4d3f47ebf0b68e2c2b213ba13300015d4a62f55040014b4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "637732d362fcc1e9b875c7095ec64b5460767957"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b1-inputs-after.json": {
+      "bytes": 151636,
+      "sha256": "497f128da967126a85da258fa3227065049a024d71dda19393e2dbf7fad0fe52",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e0c114048148fa3808ef857a219ee45df520bde5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b1-inputs-before.json": {
+      "bytes": 151636,
+      "sha256": "497f128da967126a85da258fa3227065049a024d71dda19393e2dbf7fad0fe52",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e0c114048148fa3808ef857a219ee45df520bde5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b2-bridge.json": {
+      "bytes": 7330,
+      "sha256": "37ccc4749c0338afbd1315bdc43742cb4fecad703c5b084ecd05bc1c2fb8b5fd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "24c2aa08f1d258752476b6e47b48f4f8c829d30a"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b2-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b2-bridge.stdout": {
+      "bytes": 128,
+      "sha256": "d7321f54e8493cfcc5d79f214382558e002925f2f62002bdc125dd663be13674",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6500dc481da197ea981ef9212430905dc9675789"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b2-inputs-after.json": {
+      "bytes": 153768,
+      "sha256": "1394f096fa885f2f2dacef680039b677dfd1be1c62d5021a312a675f9036b7f3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "da3febdacb888f03ecf69e6a9eaf07d1a7ff14bc"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/b2-inputs-before.json": {
+      "bytes": 153768,
+      "sha256": "1394f096fa885f2f2dacef680039b677dfd1be1c62d5021a312a675f9036b7f3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "da3febdacb888f03ecf69e6a9eaf07d1a7ff14bc"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/execution-bindings.json": {
+      "bytes": 175292,
+      "sha256": "c7423e7f1116116c8d80c018dd6c43721a5b4c0e5c8331f4195a10c82693d493",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "08eca8b525471f5d214faf9c96ccd1d192b575b2"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a1/driver-modules.json": {
+      "bytes": 702,
+      "sha256": "b9814a721baf1f3ecd7e582d47eac891e0d5a60d4a5c2c6a0885f040ca1f90c4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "892a20bc250adc873f9a380cca4b3f87b3107c4f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a1/gtest.xml": {
+      "bytes": 41168,
+      "sha256": "ab360cf36270ce3a378940f016f7e2420000f76190432bb4fc29ca1fec4b74d2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "086ff09f8ff2c3ad1ca148d95f8d96f73d2a6af4"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a1/memory.json": {
+      "bytes": 8625,
+      "sha256": "a0e40e5a086ade1d51e715b0caebdfa70abc27274e8026ed7c1b97b3a37dedd2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c52ca7d0ea44d78bbd28fbc272b0f176d7b0a718"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a1/owner.json": {
+      "bytes": 3608,
+      "sha256": "3b23e8ebf2b303435a5fae9359206a6c28f82fbff400354831b6cf377d0f9428",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b69182c19e28cae595e67bf6147b002f756a3fc5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a1/stdout.log": {
+      "bytes": 714,
+      "sha256": "0cd1af7d45235c8a1ce0073fd27bd7b0d4c02f6edd8b3baaa6ddb0310dcc559b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2ed00daa89157b1b102f6e2cf80f9ddd932985f9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a2/driver-modules.json": {
+      "bytes": 702,
+      "sha256": "b9814a721baf1f3ecd7e582d47eac891e0d5a60d4a5c2c6a0885f040ca1f90c4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "892a20bc250adc873f9a380cca4b3f87b3107c4f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a2/gtest.xml": {
+      "bytes": 41030,
+      "sha256": "5748c75753675c0f173117e70cd1a16160832f0e77a475cf570bee5ff081872f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "8f402c00d888cde565e42b8c3de01c2f960e16b6"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a2/memory.json": {
+      "bytes": 398,
+      "sha256": "dc1973e28687d3b58b4c712523f3747c908510d0d2660b1a4ca5befc1eb0082c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ac65da2bcbc500eb52f131ac93272e5bf0f52601"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a2/owner.json": {
+      "bytes": 3608,
+      "sha256": "fd441d91910b804bf016ff589908c35aff16a91d2a3bafb45fcfc5ba12b6ff8b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e66e9fe166da9c41cf8f99597f115b719cefaa8f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "d92e4a7501c834c55251cd36d088164244c69961d26b637ff05bda98fe5d8f20",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fd911d993e6a2020879f2d81398bd24e3f3a92a0"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b1/driver-modules.json": {
+      "bytes": 703,
+      "sha256": "ef4bac40d1e22ec608a069cb9c440f0600304f8bc74ea7ea3293608e5e92c448",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "81d8289050467664e525d109f9664b2e42db4c1e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b1/gtest.xml": {
+      "bytes": 40865,
+      "sha256": "267387e5eb8ddde0bd69abd3a808a7dfdf39106965b1c466ffaf2af25f942f38",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "25c601e85024f2bfd83fa7b1b678455d6ed78a65"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b1/memory.json": {
+      "bytes": 399,
+      "sha256": "23dc295d21a84bb46c1265137378be08c891d5658df5040a07ab3ffc266ec108",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7906df48cf847850552cfa175f9c50ec73d6d5c5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b1/owner.json": {
+      "bytes": 3621,
+      "sha256": "05a4461aaba14b0b2061b75e18f42d8faf728aeffd9bad4030502a94e46e8113",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1b653ceb682b5bd7d392cd9aafb0d22985fe5047"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b1/stdout.log": {
+      "bytes": 708,
+      "sha256": "4cce599cec2a10a85a0e21e42da9c047a439e125d2f966787e1fd8559ab2492d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "72ef638c246351303abecf91c4c5835ad100f785"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b2/driver-modules.json": {
+      "bytes": 703,
+      "sha256": "ef4bac40d1e22ec608a069cb9c440f0600304f8bc74ea7ea3293608e5e92c448",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "81d8289050467664e525d109f9664b2e42db4c1e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b2/gtest.xml": {
+      "bytes": 40917,
+      "sha256": "fc88f405b9f46b9b988852096974393df39a973df5a5342a26817d4b02f194f2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0e8eee818c8a75094245f287c4db08e47542b625"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b2/memory.json": {
+      "bytes": 410,
+      "sha256": "c2ab33a5fe473a48aaa0e0bf6d26de9ca3d599fb0c2cab7e52056cfb2890d05c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "accc48314b907ee15958a48a5c2d5f0dd79c2963"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b2/owner.json": {
+      "bytes": 3609,
+      "sha256": "5bfd3db5d2f3b39493eab85c0a4f1a2c2c7f4a92b6fbf7ed8b098b89c939efb1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "7fa406978227916946ad026a3ce7f1bac57eabd7"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/native/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "d7f13aebd483a6e15ee86b223d69731698a07a06c6e3633ca52547105f5b4fe0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "1290814579d64ee551804a1575c41ba7d53278b5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/plan.json": {
+      "bytes": 2735,
+      "sha256": "712eecd9c8fcbb009485a651c976b438bf848b7dafacf3cecfb49c3b98c69a0c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "12ab6a0cd84267a5be33c455dd24cfb63ac56bfa"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/preparation.json": {
+      "bytes": 714,
+      "sha256": "bb598e6fb96dfbc32d4a6aeb130201eaba48ee7ed45424c0d7ad1596092faa06",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "66c615259eedeb795766bdd589b8a8d0824bd7d7"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/run_system.py": {
+      "bytes": 25717,
+      "sha256": "d4485d0a7aed935ca6f262b3c5fc0d94387e3c88be235000a5da0164aa7f5254",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b31da023eb3002bcf4ac1f29b8d35f4be779c287"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/run_terminal.py": {
+      "bytes": 24303,
+      "sha256": "4e5685a0008a716f08c819e82713de36b4a032de15f495a67c7b6a0170fac4cc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "02f5bf825d53d34dd8743e68756750e30f11e33e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/temp/terminal-a1/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "64ed63f7d521a5b000031db7778d14d11e65758db7f89da29cf7f071429bd707",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "35442e506e638602e94b13856b268639e7d8345a"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/temp/terminal-a2/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "8793a15f6d2d9d269e346c9385c74c8ad41a90fae6863b3b8256671d4841778d",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "167f3ce14055bdbecddd7137bd4d6bbb7d8c7de5"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/temp/terminal-b1/bootstrap.json": {
+      "bytes": 223,
+      "sha256": "996c22b926ef4fc1ca47ae5e6a00de7181ab09dbfa5b503e41d76aeafc370496",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "3984c47d1ad38524f738cee898a255b9cbffb3ae"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/temp/terminal-b2/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "60bd84a2fa71b23230c287d0fab856f7a67949ee6043aeea98287fbe90952185",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "35a510a2a1c94e8c135326d2664541bbbd9e7b3c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a1-accepted.json": {
+      "bytes": 8993,
+      "sha256": "35d99654058a2f158fcaf88d334d31e8bca0a5a53e668523edf71ff0893723d9",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "69df249bea58883859f8f4ea5ef75145ae4f3481"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a1-bridge.json": {
+      "bytes": 2392,
+      "sha256": "8512e83836b69ae1e30c273633676dc02b0b98f95143ebe82fe046f69638627a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5e5a4ba3cb56d228cb6a3778702a279dba39409d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a1.json": {
+      "bytes": 4084,
+      "sha256": "68182dc74fcb9e6cd706b9689824a53ca4290e7ddff7f3965c2de1140d1b92cd",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a892faa460d4048b7fa684861d5d2cf49b28a276"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a1.stdout": {
+      "bytes": 165,
+      "sha256": "888669907a2e3bc1da7cad6a658aea7923c56c3ae1e73ee32e595151791c8921",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6a957504238e1bd1c2524234d885d750bf7b5f4e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a2-accepted.json": {
+      "bytes": 16259,
+      "sha256": "1f2259ff1c5d0e79cc317b87106c2aeda2565d0c5e5d218db9fe8792930a14ea",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "a4b13f3c51faed509de957053256b0efd523c41c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a2-bridge.json": {
+      "bytes": 2393,
+      "sha256": "a92e00bf620306e0b7b68a66e8b7994ed76f4545de541fc68479c1ef2c348da4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "9d44475239a2f8aad79018d773043a1e97128c47"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a2.json": {
+      "bytes": 4086,
+      "sha256": "7db73d67dad4c09af1199e17e175901e5f32b56b2a795945aa9b31cfa75eefe2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "769eec9c17808165f0200a3dcfee98f4994cecf7"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-a2.stdout": {
+      "bytes": 165,
+      "sha256": "87b7d410b7e468104bdd191fa1233efaa653396247706e2414e8023a7306c83c",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "14ff3166739ca6a2e4fb4253c32cb748ed379b8f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b1-accepted.json": {
+      "bytes": 11437,
+      "sha256": "f15a8160c2929d1ccb61ce196040077c583efa7c3c0a76e3455fe6cdf898f015",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "109496f44a94c60c7c2d3692a590604a03b7efef"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b1-bridge.json": {
+      "bytes": 2394,
+      "sha256": "9362a334dc530e1e05e4b3f0263bdce74c5a7c3c882e6e220d2cba4524ba8ae3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fc579b6a35566a2381b89ea2604b72750fa0d91d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b1.json": {
+      "bytes": 4089,
+      "sha256": "96e5805ea408045a252066b773fae042fd07ef32089c5431b52b64c689980248",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e34663537a797fecc4c3d97dfeedcb4be4e33bcb"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b1.stdout": {
+      "bytes": 165,
+      "sha256": "512927842430c5d4a7eae950fded4e2b7b41e425653829a81bd004df6c06ee87",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "22e95d9f6e9940273c3890e09596ba4256cded14"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b2-accepted.json": {
+      "bytes": 13845,
+      "sha256": "4e8008c8450803463e867d7b50dad1370f84ec67e052954d747b599594023eeb",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fe744bfdefb10e9e571e4d3975a0167549518035"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b2-bridge.json": {
+      "bytes": 2393,
+      "sha256": "ba91e630991e45f57d2b00e3eb6ce0a7897a340b09152da33aea62844940aac4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "09ce580908f4c3a7ea974ba3f7c42ab28086d092"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b2.json": {
+      "bytes": 4087,
+      "sha256": "368982a844c1f3ca5eabc9d89fc20bbe0a5e9bb590889d9a5e0915e5aba2166b",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0f9c025ea4e88e72fd7f26ec6832a41fab78b767"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-abba/terminal-b2.stdout": {
+      "bytes": 165,
+      "sha256": "fc519f1aad3a827c17857497b94bf58ec35442346d897d85370de91b9a420cc1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "853beae53a53a98fd7549433d083daff8e819897"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/compare_native.py": {
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "15c3b60e7bba41c3826554407a00f2cd8281148d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6da77e40774b93024f6582d0d0501a59c2c41f28"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/materialize_phase.py": {
+      "bytes": 14222,
+      "sha256": "0d926bf67ccefbed81445950dafbae0141c03c5b3960bc1353d9db49543d8c49",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5e89172d98b641356ae3b09bd0e6e041c37d64e0"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/materialize_reader_context.py": {
+      "bytes": 14458,
+      "sha256": "76b2192f0dd2f1f62c9e655ac8eb3a32c287cb056d9be2ed0399899f51f2b0f7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "811a6e6e1bc3db07405ac39220637c8d4531b094"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/native_evidence.py": {
+      "bytes": 29506,
+      "sha256": "ec5368565ceb7cec93254cab7dc5a08055f024375ece80c76677061ffd5bf201",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0fc5262c31e535f8aa80469a28d406388bcfa0e0"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/numeric_gates.py": {
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19864ecc50448e8a6bf9571a29a9456ff2d089e8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/compare_native.py": {
+      "bytes": 3902,
+      "sha256": "d3011756300a671006b3cf6a11611eddc4bb75c71ff856ff3a6c37d2d5fcdfbe",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "15c3b60e7bba41c3826554407a00f2cd8281148d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6da77e40774b93024f6582d0d0501a59c2c41f28"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/materialize_phase.py": {
+      "bytes": 14187,
+      "sha256": "2f89f77014eed5952b76790f2434ab9f4076261ab3243dddf57d56934fbf8892",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "c48a1a215d241cfac2a7d78ff4b419b9b81487b8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/materialize_reader_context.py": {
+      "bytes": 14429,
+      "sha256": "d299cba8f37c54c206db507df6d18a3506752fa49c9e291fb4802b5bf3af8577",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fe0c553e6f9717f8db86e1783b423aecf66f31d3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/native_evidence.py": {
+      "bytes": 29506,
+      "sha256": "ec5368565ceb7cec93254cab7dc5a08055f024375ece80c76677061ffd5bf201",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "0fc5262c31e535f8aa80469a28d406388bcfa0e0"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/numeric_gates.py": {
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19864ecc50448e8a6bf9571a29a9456ff2d089e8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/protocol.pending.json": {
+      "bytes": 7145,
+      "sha256": "b3a3b0ab2b7ec9a2709f3afe8f633eafb33cf5314cbf636ca573edf83dabe87e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "19a54a2d93b637c47ae399160eeffe0f9aed3cba"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/read_controls_native.py": {
+      "bytes": 3271,
+      "sha256": "c6d772fe7f706df1e038567ba938961e3a7c0b3f3180626e6a975ad88e84b47f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb10de474f5e3c5119743c765729474573ce9261"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/reader-bindings.pending.json": {
+      "bytes": 3229,
+      "sha256": "f2681fb91cfbda05e3f8edf44d35f1fbde83f09836973dab84845310e97920cc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "683f9963d0fe26e79510d315fcdd92d634878840"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/run_system.py": {
+      "bytes": 25688,
+      "sha256": "e7cf525c30f143fa9ea82f37c58e19f853d17491f080374c9ae84863f11beaf1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6a0fd31a36ee8faee768a9337af424f82ed3bf69"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/run_terminal.py": {
+      "bytes": 24274,
+      "sha256": "d37a679c00f7ce4086a6fbe78c838e1b0411b839cf6cfa8c47edb56db0662f76",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e07c3c706bf7b60e5ed0d463a3694f51e7dfb447"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/originals/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/protocol.pending.json": {
+      "bytes": 7170,
+      "sha256": "501d0d77bc69ee3c3f742ce109a774680e3f8ccb522bae3481761e0a87aa8868",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f34d8cbdac8a2e1db313ef3011027fe85e2d8e6d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/read_controls_native.py": {
+      "bytes": 3271,
+      "sha256": "c6d772fe7f706df1e038567ba938961e3a7c0b3f3180626e6a975ad88e84b47f",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "fb10de474f5e3c5119743c765729474573ce9261"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/reader-bindings.pending.json": {
+      "bytes": 3240,
+      "sha256": "e162e4b15c864dd0f505b17fa9f64ca9678d3e21cef8b646209bb77fcc8c75f3",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "908e683385de6a2ef61649e0e925b43c546f8857"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/run_system.py": {
+      "bytes": 25717,
+      "sha256": "d4485d0a7aed935ca6f262b3c5fc0d94387e3c88be235000a5da0164aa7f5254",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b31da023eb3002bcf4ac1f29b8d35f4be779c287"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/run_terminal.py": {
+      "bytes": 24303,
+      "sha256": "4e5685a0008a716f08c819e82713de36b4a032de15f495a67c7b6a0170fac4cc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "02f5bf825d53d34dd8743e68756750e30f11e33e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/source-contracts.json": {
+      "bytes": 5850,
+      "sha256": "41e2bff6b207295bed01ae437dce65a733aee0aec402c47b6b34c43d171ca83a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "6bf0e3bfa47d60bd047407fdb0ba5a4af739bfe8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/source-freeze.json": {
+      "bytes": 4173,
+      "sha256": "ab054a5f4502ffbb317ed8ed4b4cfcd65f477c5aaf85ab83dfa5ca994a7d7f29",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ddf36d4a446e4ec770f754aba5534f0343c55b40"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/source.patch": {
+      "bytes": 14724,
+      "sha256": "18c8e12cc9e3811dfc7f77d640de4620072180a8e8890a9dbdd8b5e747ba59a4",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "badc350d70754f4105d6be1845ab84b0bab94515"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-source/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/control-8-bridge.json": {
+      "bytes": 2907,
+      "sha256": "615806d17846b054b4f2b69a8cb35d9d2fbb67fbbef072bcc5505a6bec0b6750",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d4e2aeb6169dcd4f34805d0561cfc3ec97115bae"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/control-8-bridge.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/control-8-bridge.stdout": {
+      "bytes": 131,
+      "sha256": "8fd47a128a578cc8d8a9309c17e6e6b0a16e3163f81bb3869ad7a59cd0bda29e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "12c2d52b424688d3bb23f217225ada3c616ccd0a"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/control-8-inputs-after.json": {
+      "bytes": 143099,
+      "sha256": "43920d836e778a20eff21317886d16b4842cb171edb6b1d6e3fa17f34d2d8869",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "77a01b0d829a9f6a30020d1cb4e22e72bc650ab4"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/control-8-inputs-before.json": {
+      "bytes": 143099,
+      "sha256": "43920d836e778a20eff21317886d16b4842cb171edb6b1d6e3fa17f34d2d8869",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "77a01b0d829a9f6a30020d1cb4e22e72bc650ab4"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/emergency_native_cleanup.ps1": {
+      "bytes": 5855,
+      "sha256": "9fbc8a346596ec7e9e2921740d214af01ef1c2428fdf6a8043e1bb7469b392d0",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ba14282f9ea504f68ac1827e895b9d52dafef7c3"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/execution-bindings.json": {
+      "bytes": 155786,
+      "sha256": "ee59c1433e2d4f473bb2c9a8bd17cad4fc5ab65b6a7d6ed1b940a87b480fe8f1",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "110ef53a33e642600e05277a1c6bade4e3415b17"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/native/control-8/driver-modules.json": {
+      "bytes": 703,
+      "sha256": "ef4bac40d1e22ec608a069cb9c440f0600304f8bc74ea7ea3293608e5e92c448",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "81d8289050467664e525d109f9664b2e42db4c1e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/native/control-8/gtest.xml": {
+      "bytes": 40893,
+      "sha256": "59136434c74245cdf9a4ec7f43bf298f06e868f32d9a046535aa483674d6628e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "2252262c423e491cebeb8139674d4955392b79a8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/native/control-8/memory.json": {
+      "bytes": 7488,
+      "sha256": "422937a372b5193c9e5533df70fd3db30f2e5ebb2ddc6ce2212a6a4dc5d7a369",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e0768b28778c4febc957b585152d25a15ef2cd4f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/native/control-8/owner.json": {
+      "bytes": 3650,
+      "sha256": "d47285c0c07e4c91d71a5806cf8c862ba57db8e9ef94a09a4259c9e455639b90",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "13f356fbb367cc4d440883c1e491d85de604656d"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/native/control-8/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/native/control-8/stdout.log": {
+      "bytes": 714,
+      "sha256": "49be525ee3e46a20a2558d639787b99c9a2b6b682f0b10b608d3fdfd1d342639",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e3b28f55a6feb4f5eecc9de110212fb5bd720b9e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/plan.json": {
+      "bytes": 1297,
+      "sha256": "c7d2959c2cb04bb75ca2bb64c10b42f2c87ee5da1a2eef455ea80c25a92c47e2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b5f739a21e3f8ce9bd972bdc3c8fa8bdc17ec2eb"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/preparation.json": {
+      "bytes": 719,
+      "sha256": "bd42ce02232333ab8c7bd323e777e50a90e60a5009c1b06dc82e54708df98879",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f17368ef25e71c85bdfbc79e800e17d2934da158"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/run_native_control.ps1": {
+      "bytes": 15977,
+      "sha256": "bca3a66880ce5bf9d583923ecc7e6eb0aec463fce8238a2e081bfc9499d1f173",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f5075997cd372e66a79e3963ae0d737a1c799d98"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/run_system.py": {
+      "bytes": 25717,
+      "sha256": "d4485d0a7aed935ca6f262b3c5fc0d94387e3c88be235000a5da0164aa7f5254",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "b31da023eb3002bcf4ac1f29b8d35f4be779c287"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/run_terminal.py": {
+      "bytes": 24303,
+      "sha256": "4e5685a0008a716f08c819e82713de36b4a032de15f495a67c7b6a0170fac4cc",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "02f5bf825d53d34dd8743e68756750e30f11e33e"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/temp/terminal-control-8/bootstrap.json": {
+      "bytes": 222,
+      "sha256": "8cdcaf4e1f2da36910cab8dc190da3fd99ec1949a0ec62d0c7896ff4e4ff82e7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "539aef11a6a8e1ff4c49758cc3c06a6619eacd52"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/terminal-audit.ps1": {
+      "bytes": 4813,
+      "sha256": "d2719f296f144acec1203bfc90a4c921d12df311baa23768d4919400e62d2442",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "eae1dcff83570a0e1aecda2b4cc4697407e61c9f"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/terminal-control-8-accepted.json": {
+      "bytes": 9165,
+      "sha256": "34f73bc910a1d6f36b7ad6b7784b46701f069a3b6eff6f512aed94548232f23a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "000a2ed43756bc7eabe082030d7fbf7cff293532"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/terminal-control-8-bridge.json": {
+      "bytes": 2442,
+      "sha256": "6f2620997d5f18a0556294157bdec41560e39946ce977aba726e8751c64ee15a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "f310dd06d80ace2a494de8d560c08f1d17950902"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/terminal-control-8.json": {
+      "bytes": 4096,
+      "sha256": "4ffc1ee75efc8fd5c08df8f0c225e165a48d195edfc13e0298547d7638e149c7",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d8dd81ce29468bdce00273f1c0780494973e9cbf"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/terminal-control-8.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-runtime-timestamp/terminal-control-8.stdout": {
+      "bytes": 172,
+      "sha256": "28c03aaad707443cfe7727ce52977574269bc158b396012d128c48e3ba4cac48",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "16b82df15ae779f6e44fdf4905f533d690831c20"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-timestamp-evidence/reader-bindings.json": {
+      "bytes": 157011,
+      "sha256": "64d83928790af80ba7a1c234923ed2612bafe9ccd84e8fbbad05ec2f5eb5930e",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "5cc3f090fe023106988a2212f4a2e983201e6456"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-timestamp-evidence/root-admission.json": {
+      "bytes": 377,
+      "sha256": "d48497685f1c29a471afd0b12d436aeada1a6593780e6bcfb6f031cd276aa309",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "82da3a2b7e9fe9571f257ae963b82ab839ac6c13"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/out/native-coefficient-sharing-timestamp-evidence/timestamp-acceptance.json": {
+      "bytes": 53130,
+      "sha256": "dbe0231490ba33c3d48d57019532cb28460ee6c295fd1f4019cb89cdacceae5a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "3cc808875a594fd73d6ac7cce2e8d77d033c13c9"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/renders/native-coefficient-sharing-runtime-abba/a1/bootstrap.json": {
+      "bytes": 877,
+      "sha256": "b0a07e3f1ed93543c0b702bbe0fda9d7b77519e3e7cb73bdace385382333a349",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ad3da750d009fbae1b61712be3ea9238fad5754c"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/renders/native-coefficient-sharing-runtime-abba/a2/bootstrap.json": {
+      "bytes": 878,
+      "sha256": "4c78fbe1671cd521eca0a3e12014b8773a5b5425285e822b597649367f02c093",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "614f75366c8982c223cd96001dcb70f0ee966bdb"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/renders/native-coefficient-sharing-runtime-abba/b1/bootstrap.json": {
+      "bytes": 880,
+      "sha256": "71c793e97b7e6a7f98da45a69bd6d7fe226c55dd893136c38ed55a04369b7d41",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "e9a4ee0a845ab4e440b741516e39f196f92c8f47"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/renders/native-coefficient-sharing-runtime-abba/b2/bootstrap.json": {
+      "bytes": 878,
+      "sha256": "dbb7f15990b844c4f2617518fde3f961b71627a2950f75f72c60ac5e7e4644c2",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "cfcd4f9677f6be4444e168683c2bb036f9cedac8"
+    },
+    "attestations/qualification/2c8ef086/native-coefficient-sharing-controls-benefit-outcome/files/renders/native-coefficient-sharing-runtime-timestamp/control-8/bootstrap.json": {
+      "bytes": 897,
+      "sha256": "f861916a9efc205727736abf8520d0ec58abedd60a03acc9a72e366d22ae3db8",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "d5a82739a50c9c3f59273c99dc036f5ec8202e35"
+    },
+    "out/native-coefficient-sharing-preservation/commit_bundle.py": {
+      "bytes": 3962,
+      "sha256": "cf2108401ade77f98c3c76b7178c2c36c5c06cc6309ce0b4b9fc514dbee48203",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "31533fb86a505127bc0e13377d73df453a4c5c28"
+    },
+    "out/native-coefficient-sharing-preservation/root-preparation.json": {
+      "bytes": 1028,
+      "sha256": "a4a133386bfc9167fbf6ce0389149362fc86deb3f857f48036530f8b7d52e20a",
+      "Git_mode": "100644",
+      "physical_mode": "0o644",
+      "blob": "ed2f83e1aa434755cbc94cf9ec34892955486015"
+    }
+  },
+  "full_stored_Git_bytes_verified": true,
+  "Git_exec_modes_verified": true,
+  "full_POSIX_modes_restored_by_manifest": true,
+  "pushed": true,
+  "fresh_remote_verified": true,
+  "remote_refs": {
+    "refs/heads/development/native-fp32-packed-scratch-runtime-2026-10-18": "b9a5703a18f06070fe809a9bfd14a414c4f2f906",
+    "refs/tags/evidence/native-coefficient-sharing-rejected-2c8ef086": "b9a5703a18f06070fe809a9bfd14a414c4f2f906"
+  }
+}
