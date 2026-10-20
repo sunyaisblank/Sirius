@@ -1,0 +1,76 @@
+{
+  "schema": "sirius-native-coefficient-sharing-actual-driver-cost-v1",
+  "passed": true,
+  "baseline": {
+    "module_sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+    "binary_sha256": "bf080bebf607b73c8e6b0de1c2b882cc7779feca8751e882032cce2435664ad3",
+    "text_bytes": 233728,
+    "ISA_encoded_bytes": 233288,
+    "trailing_padding_bytes": 440,
+    "complete_ISA_encoding_equals_text_prefix": true,
+    "text_sha256": "6c7673281bef6827630a28ae5fe2d73010cc97f2dbe0035c0a0aea2f2240bea3",
+    "LLVM_bytes": 2526533,
+    "LLVM_lines": 45330,
+    "coefficient_block_lines": 16005,
+    "coefficient_reciprocal_static_sites": 6,
+    "total_reciprocal_static_sites": 9,
+    "vgprs": 55,
+    "sgprs": 106,
+    "LDS_bytes": 9728,
+    "scratch_bytes": 0,
+    "modules": [
+      {
+        "name": "vulkan-1.dll",
+        "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\constant-original-frame-2c8ef086\\src\\sirius\\app\\Release\\vulkan-1.dll",
+        "bytes": 1685432,
+        "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+        "version": "1.4.357.0"
+      },
+      {
+        "name": "amdvlk64.dll",
+        "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+        "bytes": 103213064,
+        "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+        "version": "9.2.10.395"
+      }
+    ]
+  },
+  "candidate": {
+    "module_sha256": "e634c8a246f3305a5d097e83583456a572e8fd6b1902ba8c402c9f1d1fc9b2e5",
+    "binary_sha256": "51d89fbd827f420221cb2b077d6e13e80adbd1bd926e146631223b4902cd30da",
+    "text_bytes": 182144,
+    "ISA_encoded_bytes": 181684,
+    "trailing_padding_bytes": 460,
+    "complete_ISA_encoding_equals_text_prefix": true,
+    "text_sha256": "51ecf81088f6764995cdf1aee46bcbfa0bdb6055355c64ee109b495db5abee3e",
+    "LLVM_bytes": 1910282,
+    "LLVM_lines": 34819,
+    "coefficient_block_lines": 5499,
+    "coefficient_reciprocal_static_sites": 2,
+    "total_reciprocal_static_sites": 5,
+    "vgprs": 63,
+    "sgprs": 106,
+    "LDS_bytes": 9728,
+    "scratch_bytes": 0,
+    "modules": [
+      {
+        "name": "vulkan-1.dll",
+        "path": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-driver\\vulkan-1.dll",
+        "bytes": 1685432,
+        "sha256": "cd862090370454630b31b174e3d4eb474fda38ea034998d1fe1767b0c99a8696",
+        "version": "1.4.357.0"
+      },
+      {
+        "name": "amdvlk64.dll",
+        "path": "C:\\WINDOWS\\System32\\DriverStore\\FileRepository\\amdvlk.inf_amd64_914ba89eaaafdf60\\amdvlk64.dll",
+        "bytes": 103213064,
+        "sha256": "5c0561968155f4b0aa80fe9a5bbd17072d5942ecb906c687e749dc92058a8650",
+        "version": "9.2.10.395"
+      }
+    ]
+  },
+  "text_reduction_percent": 22.07009857612267,
+  "decision": "Distinct material static code reduction survives driver compilation; one original matched-producer/runtime gate is justified after source/PE admission.",
+  "countercost": "VGPR count increases from55 to63. No dynamic occupancy or performance inference; required original benefit gates may reject this candidate.",
+  "limits": "Saved baseline and one fresh candidate diagnostic Vulkan1.2/default64/no optional features query on exact loader/provider. No dispatches; this is not application Vulkan1.3 pipeline identity, correctness or benefit evidence."
+}

@@ -1,0 +1,53 @@
+{
+  "schema": "sirius-native-coefficient-sharing-one-compiler-recipes-v1",
+  "source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "tools": {
+    "compiler": "/opt/slang/bin/slangc",
+    "assembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-as",
+    "disassembler": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-dis",
+    "validator": "/home/astra/.project/Sirius/bin/linux-gcc/qualification-tools/spirv-tools-v2026.3/build/tools/spirv-val",
+    "optimizer": "/usr/bin/spirv-opt"
+  },
+  "source_directory": "/home/astra/.project/Sirius/out/native-coefficient-sharing-compiler/source/src/sirius/kernels",
+  "profiles": [
+    {
+      "name": "retained_transport",
+      "definitions": [
+        "-DSIRIUS_RETAINED_GENERAL_PROGRAM_WORDS=13096",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS=2871",
+        "-DSIRIUS_RETAINED_SCHWARZSCHILD_LAYERS=42",
+        "-DSIRIUS_RETAINED_COEFFICIENTS=25",
+        "-DSIRIUS_RETAINED_REGISTERS=459",
+        "-DSIRIUS_RETAINED_TERMS=5",
+        "-DSIRIUS_RETAINED_LANES=64",
+        "-DSIRIUS_RETAINED_EXECUTION_LANES=64",
+        "-DSIRIUS_RETAINED_LAYERS=117",
+        "-DSIRIUS_RETAINED_PREFIX=0"
+      ],
+      "general_table": {
+        "instructions": 2587,
+        "registers": 459,
+        "outputs": 40,
+        "layers": 117,
+        "prefix": 0,
+        "words": 13096
+      },
+      "schwarzschild_table": {
+        "instructions": 557,
+        "registers": 459,
+        "outputs": 40,
+        "layers": 42,
+        "prefix": 0,
+        "words": 2871
+      }
+    }
+  ],
+  "optimizer_invoked": false,
+  "expected_products_per_profile": [
+    ".compiler.spv",
+    ".raw.spvasm",
+    ".spvasm",
+    ".spv",
+    ".final.spvasm"
+  ]
+}

@@ -1,0 +1,39 @@
+--- a/src/sirius/kernels/retained_transport.slang
++++ b/src/sirius/kernels/retained_transport.slang
+@@ -444,6 +444,28 @@
+     }
+ #else
+     RetainedTriple value = RTInvalid();
++#if !defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_FMA32) && !defined(SIRIUS_RETAINED_STAGE7_OWNER)
++    // Select integer operands before the sole arithmetic call. This keeps the
++    // complete native quotient and avoids three inlined division bodies.
++    int numerator = 0, denominator = 1;
++    bool selected = false;
++    if (lane < 6) {
++        numerator = cn[lane + 1]; denominator = cd[lane + 1]; selected = true;
++    } else if (lane >= 20) {
++        numerator = en[lane - 18]; denominator = ed[lane - 18]; selected = true;
++    } else {
++        uint index = 6;
++        for (uint stage = 2; stage < 7; ++stage)
++            for (uint previous = 1; previous < stage; ++previous)
++                if (an[stage][previous] != 0) {
++                    if (lane == index) {
++                        numerator = an[stage][previous]; denominator = ad[stage][previous]; selected = true;
++                    }
++                    ++index;
++                }
++    }
++    if (selected) value = Rational(numerator, denominator);
++#else
+     if (lane < 6)
+         value = Rational(cn[lane + 1], cd[lane + 1]);
+     else if (lane >= 20)
+@@ -457,6 +479,7 @@
+                     ++index;
+                 }
+     }
++#endif
+     uint base = lane * 5;
+     retainedCoefficients[base] = RPBits(value.hi);
+     retainedCoefficients[base + 1] = RPBits(value.lo);

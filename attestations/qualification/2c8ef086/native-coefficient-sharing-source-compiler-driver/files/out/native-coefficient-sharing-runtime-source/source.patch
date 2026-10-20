@@ -1,0 +1,218 @@
+--- original/materialize_phase.py
++++ materialize_phase.py
+@@ -9,8 +9,8 @@
+ import sys
+ 
+ ROOT = Path.cwd()
+-AUTH = ROOT / 'out/native-rounded-error-runtime-source'
+-READERS = ROOT / 'out/native-rounded-error-runtime-source'
++AUTH = ROOT / 'out/native-coefficient-sharing-runtime-source'
++READERS = ROOT / 'out/native-coefficient-sharing-runtime-source'
+ 
+ 
+ def identity(path):
+@@ -47,20 +47,20 @@
+ assert type(expected_source) is str and re.fullmatch('[0-9a-f]{40}', expected_source)
+ assert type(expected_run) is str and expected_run.isdigit()
+ assert type(expected_artifact) is int and expected_artifact > 0
+-assert stage_name == 'bin/windows-msvc/native-rounded-error-matched-current'
++assert stage_name == 'bin/windows-msvc/native-coefficient-sharing-matched-current'
+ 
+ stage = ROOT / stage_name
+ assert stage.is_relative_to(ROOT / 'bin/windows-msvc') and stage.resolve(strict=True) == stage
+ artifacts_path, pe_authority_path = ROOT / artifacts_name, ROOT / pe_authority_name
+ artifacts = read(artifacts_path)['artifacts']
+-assert len(artifacts) == 1 and artifacts[0]['name'] == 'sirius-native-rounded-error-matched-producer'
++assert len(artifacts) == 1 and artifacts[0]['name'] == 'sirius-native-coefficient-sharing-matched-producer'
+ artifact = artifacts[0]
+ producer = read(stage / 'producer-result.json')
+ manifest = read(stage / 'manifest.json')
+ assert producer['passed'] is True and manifest['passed'] is True
+ source = producer['source_revision']
+ assert source == manifest['source_revision'] == producer['github_sha'] == expected_source
+-assert producer['producer_profile'] == 'native-rounded-error-five-shader-only'
++assert producer['producer_profile'] == 'native-coefficient-sharing-one-shader-only'
+ assert producer['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert producer['expected_private_compile_objects'] == producer['private_compile_object_count'] == 5
+ assert str(producer['run_id']) == expected_run and producer['run_attempt'] == expected['producer_run_attempt']
+@@ -93,7 +93,7 @@
+         if node.targets[0].id in ('ACTION_NAMES', 'ACTION_ARMS', 'PROFILES'):
+             constants[node.targets[0].id] = ast.literal_eval(node.value)
+ order = constants['PROFILES'][phase]
+-work = ROOT / ('out/native-rounded-error-runtime-' + phase)
++work = ROOT / ('out/native-coefficient-sharing-runtime-' + phase)
+ assert not work.exists()
+ 
+ prior_keys = {'timestamp': [], 'abba': ['timestamp_acceptance'],
+
+--- original/materialize_reader_context.py
++++ materialize_reader_context.py
+@@ -15,7 +15,7 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-SOURCE = ROOT / 'out/native-rounded-error-runtime-source'
++SOURCE = ROOT / 'out/native-coefficient-sharing-runtime-source'
+ 
+ 
+ def identity(path):
+@@ -47,8 +47,8 @@
+     phase, authority_name = sys.argv[1:]
+     assert phase in ('timestamp', 'abba', 'all8')
+     profile = 'remaining' if phase == 'all8' else phase
+-    work = ROOT / ('out/native-rounded-error-runtime-' + profile)
+-    output = ROOT / ('out/native-rounded-error-' +
++    work = ROOT / ('out/native-coefficient-sharing-runtime-' + profile)
++    output = ROOT / ('out/native-coefficient-sharing-' +
+                      {'timestamp': 'timestamp-evidence', 'abba': 'ABBA-evidence',
+                       'all8': 'all8-evidence'}[phase])
+     assert not output.exists()
+@@ -67,10 +67,10 @@
+     assert identity(stage / 'manifest.json') == bindings['manifest_identity']
+     assert identity(stage / 'producer-result.json') == bindings['producer_identity']
+     assert manifest['passed'] is True and produced['passed'] is True
+-    assert produced['producer_profile'] == 'native-rounded-error-five-shader-only'
++    assert produced['producer_profile'] == 'native-coefficient-sharing-one-shader-only'
+     assert produced['canonical_CXX_source_revision'] == runner == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+     assert produced['expected_private_compile_objects'] == produced['private_compile_object_count'] == 5
+-    assert bindings['stage'] == 'bin/windows-msvc/native-rounded-error-matched-current'
++    assert bindings['stage'] == 'bin/windows-msvc/native-coefficient-sharing-matched-current'
+     assert bindings['canonical_CXX_source_revision'] == plan['canonical_CXX_source_revision'] == runner
+     labels = {'timestamp': ['control-8'], 'abba': ['a1', 'b1', 'b2', 'a2'],
+               'all8': ['control-' + str(i) for i in range(1, 8)]}[phase]
+
+--- original/protocol.pending.json
++++ protocol.pending.json
+@@ -1,9 +1,9 @@
+ {
+-  "schema": "sirius-native-rounded-error-retention-protocol-pending-v1",
++  "schema": "sirius-native-coefficient-sharing-retention-protocol-pending-v1",
+   "source_only": true,
+   "runtime_admitted": false,
+   "adapter_complete": true,
+-  "producer_source_revision": "625abe4569c4b377fad6d8586d6f0487f01d9903",
++  "producer_source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+   "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+   "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+   "control_filters": {
+@@ -123,7 +123,7 @@
+     },
+     "pool_subtract_resample_retry": false,
+     "source_exact_math": {
+-      "path": "out/native-rounded-error-runtime-source/numeric_gates.py",
++      "path": "out/native-coefficient-sharing-runtime-source/numeric_gates.py",
+       "bytes": 2890,
+       "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1"
+     }
+@@ -146,15 +146,15 @@
+     "unchanged_other_SPVs": 30,
+     "both_owner_payloads_exact_required": true,
+     "scratch_or_lane_or_arithmetic_mode_change": false,
+-    "native_rounded_error_word_refinement_requires_actual_word_gates": true
++    "native_coefficient_call_sharing_requires_actual_word_gates": true
+   },
+-  "wire_compatibility": "Mature native-packed schemas/decision labels are compatibility identifiers; this guarded rounded-product error candidate keeps canonical VulkanDevice/scratch/lanes/modes and all original controls/gates. No RTConstant/CSE or wave32 allowance transfers.",
++  "wire_compatibility": "Mature native-packed wire IDs retained. Only native Transport coefficient integer selection/call sharing changes; canonical VulkanDevice/scratch/lanes/modes and original8/22/full32/51/54 unchanged. No rounded-error, wave32, RTConstant or CSE waiver inferred.",
+   "historical_unexecuted_wire_draft_origin_commit": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+-  "producer_run_id": "39124065782",
++  "producer_run_id": "39393948651",
+   "producer_run_attempt": "1",
+-  "producer_artifact_id": 12135144562,
+-  "stage": "bin/windows-msvc/native-rounded-error-matched-current",
+-  "producer_profile": "native-rounded-error-five-shader-only",
++  "producer_artifact_id": "ROOT_PENDING",
++  "stage": "bin/windows-msvc/native-coefficient-sharing-matched-current",
++  "producer_profile": "native-coefficient-sharing-one-shader-only",
+   "private_compile_object_count": 5,
+   "finalization_required": {
+     "producer_source_revision": "Actual accepted private producer40hex SHA after ROOT Git publication.",
+
+--- original/reader-bindings.pending.json
++++ reader-bindings.pending.json
+@@ -90,6 +90,6 @@
+   },
+   "context_writer_interface": "materialize_reader_context.py timestamp|abba|all8 ARRAY_AUTHORITY_RELATIVE;actual current producer/runner derived from sealed phase binding+M.",
+   "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+-  "producer_profile": "native-rounded-error-five-shader-only",
+-  "stage": "bin/windows-msvc/native-rounded-error-matched-current"
++  "producer_profile": "native-coefficient-sharing-one-shader-only",
++  "stage": "bin/windows-msvc/native-coefficient-sharing-matched-current"
+ }
+
+--- original/run_system.py
++++ run_system.py
+@@ -37,7 +37,7 @@
+ assert plan['stage'] == binding['stage'] and plan['stage'].startswith('bin/windows-msvc/')
+ assert plan['canonical_CXX_source_revision'] == binding['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert plan['runner_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+-assert plan['stage'] == 'bin/windows-msvc/native-rounded-error-matched-current'
++assert plan['stage'] == 'bin/windows-msvc/native-coefficient-sharing-matched-current'
+ assert plan['windows_checkout_unc']==binding['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'
+ signals = []
+ predecessors = {}
+@@ -69,7 +69,7 @@
+     assert manifest['complete_host_or_sdk_or_tool_dso_backup'] is False
+     assert manifest['source_revision'] == producer['source_revision'] == SOURCE
+     assert producer['schema'] == 'sirius-native-packed-matched-ci-producer-v1'
+-    assert producer['producer_profile'] == 'native-rounded-error-five-shader-only'
++    assert producer['producer_profile'] == 'native-coefficient-sharing-one-shader-only'
+     assert producer['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+     assert type(producer['expected_private_compile_objects']) is int and producer['expected_private_compile_objects'] == 5
+     for key in ['passed','configure_passed','build_passed','source_unchanged','frozen_build_inputs_unchanged']:
+@@ -82,7 +82,7 @@
+     assert artifact['run_id'] == producer['run_id'] and artifact['run_attempt'] == producer['run_attempt']
+     assert type(artifact['run_id']) is str and artifact['run_id'].isdigit()
+     assert type(artifact['run_attempt']) is str and artifact['run_attempt'].isdigit()
+-    assert artifact['name'] == 'sirius-native-rounded-error-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
++    assert artifact['name'] == 'sirius-native-coefficient-sharing-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
+     assert isinstance(manifest['files'],dict) and manifest['files'] and len({k.casefold() for k in manifest['files']}) == len(manifest['files'])
+     for key,row in manifest['files'].items():
+         logical=PurePosixPath(key)
+@@ -109,7 +109,7 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-rounded-error-windows-source/matched-producer.cmake'
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-coefficient-sharing-windows-source/matched-producer.cmake'
+     assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativeRoundedErrorMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+
+--- original/run_terminal.py
++++ run_terminal.py
+@@ -22,7 +22,7 @@
+     assert manifest['complete_host_or_sdk_or_tool_dso_backup'] is False
+     assert manifest['source_revision'] == producer['source_revision'] == bindings['source_revision']
+     assert producer['schema'] == 'sirius-native-packed-matched-ci-producer-v1'
+-    assert producer['producer_profile'] == 'native-rounded-error-five-shader-only'
++    assert producer['producer_profile'] == 'native-coefficient-sharing-one-shader-only'
+     assert producer['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+     assert type(producer['expected_private_compile_objects']) is int and producer['expected_private_compile_objects'] == 5
+     for key in ['passed','configure_passed','build_passed','source_unchanged','frozen_build_inputs_unchanged']:
+@@ -35,7 +35,7 @@
+     assert artifact['run_id'] == producer['run_id'] and artifact['run_attempt'] == producer['run_attempt']
+     assert type(artifact['run_id']) is str and artifact['run_id'].isdigit()
+     assert type(artifact['run_attempt']) is str and artifact['run_attempt'].isdigit()
+-    assert artifact['name'] == 'sirius-native-rounded-error-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
++    assert artifact['name'] == 'sirius-native-coefficient-sharing-matched-producer' and type(artifact['id']) is int and artifact['id'] > 0
+     assert isinstance(manifest['files'],dict) and manifest['files'] and len({k.casefold() for k in manifest['files']}) == len(manifest['files'])
+     for key,row in manifest['files'].items():
+         logical=PurePosixPath(key)
+@@ -62,7 +62,7 @@
+     configure=commands[0]['argv'];build=commands[1]['argv']
+     assert configure[:6]==[tools['cmake'],'--preset','windows-msvc','-DSIRIUS_ALIGNMENT_MODE=qualification','-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON','-DCMAKE_CONFIGURATION_TYPES:STRING=Release'] and len(configure)==7
+     option='-DCMAKE_PROJECT_Sirius_INCLUDE='
+-    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-rounded-error-windows-source/matched-producer.cmake'
++    assert configure[6].startswith(option) and PureWindowsPath(configure[6][len(option):]) == PureWindowsPath(producer['source_root'])/'out/native-coefficient-sharing-windows-source/matched-producer.cmake'
+     assert build[:12]==[tools['cmake'],'--build','--preset','windows-msvc','--config','Release','--target','SiriusNativeRoundedErrorMatchedProducer','--parallel','2','--','/verbosity:normal'] and len(build)==13
+     assert build[12].startswith('/bl:') and PureWindowsPath(build[12][4:])==PureWindowsPath(producer['export_root'])/'build.binlog'
+     assert all(PureWindowsPath(c['cwd'])==PureWindowsPath(producer['source_root']) for c in commands)
+@@ -169,7 +169,7 @@
+ assert plan['stage']==bindings['stage'] and plan['stage'].startswith('bin/windows-msvc/')
+ assert plan['canonical_CXX_source_revision'] == bindings['canonical_CXX_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+ assert plan['runner_source_revision'] == '2c8ef08693d46f57d5dea14efdbddd4874dac684'
+-assert plan['stage'] == 'bin/windows-msvc/native-rounded-error-matched-current'
++assert plan['stage'] == 'bin/windows-msvc/native-coefficient-sharing-matched-current'
+ assert plan['windows_checkout_unc']==bindings['windows_checkout_unc']==r'\\wsl.localhost\Ubuntu\home\astra\.project\Sirius'
+ assert plan['order']==ORDER and set(plan['actions'])==set(ORDER)
+ for action_label in ORDER:
