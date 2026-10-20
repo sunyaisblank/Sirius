@@ -1,0 +1,7 @@
+{
+  "reader_assumption": "Initial reader counted only MFENCE instructions.",
+  "actual_observation": "The unchanged shipped native shader has9 OpControlBarrier instructions and ordinary IR has9 fence seq_cst instructions; LLVM21 lowers these to9 LOCK OR operations on a private stack word. Baseline portable code used9 MFENCE instructions.",
+  "correction": "Count and retain both actual full-fence encodings, while independently requiring9 seq_cst IR fences and9 original shader barriers.",
+  "new_dispatches_or_JIT_captures": 0,
+  "raw_data_unchanged": true
+}
