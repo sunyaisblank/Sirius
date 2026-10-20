@@ -1,0 +1,557 @@
+{
+  "passed": true,
+  "experiment_valid": false,
+  "complete_original_measurement_apparatus_closed": true,
+  "source_frame_condition_valid": false,
+  "ownership_rejection": {
+    "passed": true,
+    "source_semantic_defect_verified": true,
+    "candidate_module_sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+    "initial_row_frame_proof_rejected": true,
+    "supersedes": "out/software-crossray-endpoint/source-contracts.json row_mapping/full_row_domain_bijection as an API-wide proof",
+    "original_invariant": "The header and program tail use fixed allocation capacity; Dispatch/DispatchIndependentPair group count limits execution to requested active rows. Only active output spans are read back.",
+    "counterexample": {
+      "capacity": 24,
+      "active_rows": 12,
+      "host_group_count": 12,
+      "new_visited_rows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "inactive_rows_zeroed_before_value_validation": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "original_visited_rows": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "whole_inactive_allocation_bytes_observed_in_old_C1_C8": false
+    },
+    "cause": "The candidate bounded row by header capacity, incorrectly assuming host group count equals header rows. The two original cases and32/56 active-row digests do not prove inactive allocation preservation.",
+    "proof_scope": "Source and exact compiled-producer/module ownership establish the extra zero stores. Previous inactive bytes were not captured, so no claim about a directly observed byte transition is made.",
+    "next_implementation_constraint": "Read the actual dispatch group count through the NumWorkgroups builtin and bound mapped row by both capacity and active dispatch rows. Preserve original group counts and descriptor/buffer ABI. Require positive full-allocation inactive-tail preservation witnesses before relying on the next candidate.",
+    "source_pins": {
+      "src/sirius/backend/retained_compute.cpp": {
+        "bytes": 45570,
+        "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+      },
+      "tests/backend/retained_compute_test.cpp": {
+        "bytes": 339892,
+        "sha256": "abdc5cef56aa3a4409209797b37794553400b855b534204af6cabe583c4fdee1"
+      },
+      "out/software-crossray-endpoint/source/src/sirius/kernels/retained_endpoint.slang": {
+        "bytes": 40215,
+        "sha256": "f224ebb43d1df67e6abf752e7fe34ea2591170eeed8ef9da33c210a28f25f020"
+      }
+    },
+    "no_new_device_or_timing_run": true
+  },
+  "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "candidate_module_sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+  "disposition": "REJECT_EIGHT_PRIVATE_RAY_ENDPOINT_ACTIVE_BOUND_AND_COST",
+  "performance_acceptance": false,
+  "raw_numeric_gate_verdict": false,
+  "original_interval_and_stage_checks_passed": 10,
+  "original_interval_and_stage_checks_required": 20,
+  "provisioning_inclusive_API_checks_passed": 2,
+  "provisioning_inclusive_API_checks_required": 2,
+  "complete_call_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        35.492254,
+        31.05229,
+        33.407378
+      ],
+      "candidate_samples_ms": [
+        37.194805,
+        39.220477,
+        40.393036
+      ],
+      "baseline_median_ms": 33.407378,
+      "candidate_median_ms": 39.220477,
+      "improvement_percent": -17.400644252895276,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        112.730946,
+        85.954085,
+        88.49942
+      ],
+      "candidate_samples_ms": [
+        43.151385,
+        43.617044,
+        42.620644000000006
+      ],
+      "baseline_median_ms": 88.49942,
+      "candidate_median_ms": 43.151385,
+      "improvement_percent": 51.24105333119697,
+      "minimum_percent": 5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.428309,
+        34.023119,
+        33.217495
+      ],
+      "candidate_samples_ms": [
+        38.910185,
+        37.007058,
+        37.311316
+      ],
+      "baseline_median_ms": 34.023119,
+      "candidate_median_ms": 37.311316,
+      "improvement_percent": -9.664596006027539,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        46.253862,
+        45.700158,
+        44.528490000000005
+      ],
+      "candidate_samples_ms": [
+        47.076236,
+        42.695163,
+        45.414146
+      ],
+      "baseline_median_ms": 45.700158,
+      "candidate_median_ms": 45.414146,
+      "improvement_percent": 0.6258446633816879,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "accounting_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 13684.545712,
+      "candidate_ms": 10271.421357,
+      "improvement_percent": 24.94145166987185,
+      "minimum_percent": 0,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 12047.532102,
+      "candidate_ms": 9824.07517,
+      "improvement_percent": 18.455704564015107,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        35.492254,
+        31.05229,
+        33.407378
+      ],
+      "candidate_samples_ms": [
+        37.194805,
+        39.220477,
+        40.393036
+      ],
+      "baseline_median_ms": 33.407378,
+      "candidate_median_ms": 39.220477,
+      "improvement_percent": -17.400644252895276,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.262542,
+        4.188434,
+        4.407798
+      ],
+      "candidate_samples_ms": [
+        7.126984,
+        8.047116,
+        8.397708
+      ],
+      "baseline_median_ms": 4.407798,
+      "candidate_median_ms": 8.047116,
+      "improvement_percent": -82.5654442422271,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        7.284422,
+        7.168892,
+        5.903912
+      ],
+      "candidate_samples_ms": [
+        8.57332,
+        9.184297,
+        9.260195
+      ],
+      "baseline_median_ms": 7.168892,
+      "candidate_median_ms": 9.184297,
+      "improvement_percent": -28.11320075682548,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.612406999999999,
+        6.543243,
+        16.789161
+      ],
+      "candidate_samples_ms": [
+        7.7562169999999995,
+        7.466168,
+        7.174061999999999
+      ],
+      "baseline_median_ms": 6.612406999999999,
+      "candidate_median_ms": 7.466168,
+      "improvement_percent": -12.911501061565032,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.428309,
+        34.023119,
+        33.217495
+      ],
+      "candidate_samples_ms": [
+        38.910185,
+        37.007058,
+        37.311316
+      ],
+      "baseline_median_ms": 34.023119,
+      "candidate_median_ms": 37.311316,
+      "improvement_percent": -9.664596006027539,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.983318000000001,
+        5.7611989999999995,
+        4.988081
+      ],
+      "candidate_samples_ms": [
+        7.9794279999999995,
+        8.044833,
+        7.7743210000000005
+      ],
+      "baseline_median_ms": 4.988081,
+      "candidate_median_ms": 7.9794279999999995,
+      "improvement_percent": -59.96989623865369,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.371806,
+        7.372522,
+        7.684505
+      ],
+      "candidate_samples_ms": [
+        8.873184,
+        8.010371,
+        8.594732
+      ],
+      "baseline_median_ms": 7.372522,
+      "candidate_median_ms": 8.594732,
+      "improvement_percent": -16.57790916052879,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        46.253862,
+        45.700158,
+        44.528490000000005
+      ],
+      "candidate_samples_ms": [
+        47.076236,
+        42.695163,
+        45.414146
+      ],
+      "baseline_median_ms": 45.700158,
+      "candidate_median_ms": 45.414146,
+      "improvement_percent": 0.6258446633816879,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.032621,
+        5.719274,
+        5.617324999999999
+      ],
+      "candidate_samples_ms": [
+        6.178526,
+        6.233028,
+        7.3246649999999995
+      ],
+      "baseline_median_ms": 5.719274,
+      "candidate_median_ms": 6.233028,
+      "improvement_percent": -8.982853418108654,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.155483,
+        6.12233,
+        5.8680959999999995
+      ],
+      "candidate_samples_ms": [
+        7.291584,
+        7.321,
+        7.928273
+      ],
+      "baseline_median_ms": 6.12233,
+      "candidate_median_ms": 7.321,
+      "improvement_percent": -19.578657145237187,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "original_controls_completed": [
+    1,
+    8
+  ],
+  "original_controls_required": 8,
+  "C1_original_case_and56_active_row_readbacks_passed": true,
+  "inactive_allocation_preservation_proven": false,
+  "C8_complete_original_control_and_cost_use_identical_executions": true,
+  "no_extra_standalone_C8_execution": true,
+  "all32_complete_readbacks_equal_across_four_current_slots": true,
+  "all54_actual_command_module_joins_per_slot_verified": true,
+  "unmodified_original_reader_comparator_launcher": {
+    "software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+    },
+    "compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+    },
+    "run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+    }
+  },
+  "terminal_owners": {
+    "out/software-crossray-endpoint/compile-endpoint": {
+      "owner": {
+        "bytes": 2209,
+        "sha256": "b5310a9dddc37af5e04dd089f67e9f26b884292f71f58deece50870e4dcc808e"
+      },
+      "seconds": 0.7821821289835498,
+      "peak_rss_kib": 244204
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal": {
+      "owner": {
+        "bytes": 3751,
+        "sha256": "d9acdc9481bf5a1d81815fc746ff5a591c5f53cf87547fe4c63d54104f4de4b2"
+      },
+      "seconds": 32.13143700902583,
+      "peak_rss_kib": 1933108
+    },
+    "out/software-crossray-producer/build": {
+      "owner": {
+        "bytes": 2775,
+        "sha256": "d965228cd1c3997a71aea958f4b381b75aea650e2aca279ff6af981e0de803a1"
+      },
+      "seconds": 13.601128952985164,
+      "peak_rss_kib": 561388
+    },
+    "out/software-crossray-control/control-1": {
+      "owner": {
+        "bytes": 3071,
+        "sha256": "27d748ac85075e64aef90b268b5b9dac479785bc4ac52229dcb1d2ecb9092cdb"
+      },
+      "seconds": 111.17293846001849,
+      "peak_rss_kib": 2770908
+    },
+    "out/software-crossray-benefit/benefit/a1": {
+      "owner": {
+        "bytes": 3044,
+        "sha256": "101607f5eff9d56c9f805bb46485bf3761c82aa1559bd168ba86d74f084e3062"
+      },
+      "seconds": 78.66653875703923,
+      "peak_rss_kib": 2339236
+    },
+    "out/software-crossray-benefit/benefit/b1": {
+      "owner": {
+        "bytes": 3173,
+        "sha256": "f67c34d221d8531bf19668159eb44d5cb84d413ddf5b13f1c40d1042cf35052b"
+      },
+      "seconds": 105.26467168901581,
+      "peak_rss_kib": 2345432
+    },
+    "out/software-crossray-benefit/benefit/b2": {
+      "owner": {
+        "bytes": 3172,
+        "sha256": "d531f7f9afa903cc97fc9f598593b2a12310d59c3806125e2ba2e6bb5a7e1ba9"
+      },
+      "seconds": 79.89548192499205,
+      "peak_rss_kib": 2344784
+    },
+    "out/software-crossray-benefit/benefit/a2": {
+      "owner": {
+        "bytes": 3044,
+        "sha256": "03419f8a62ba2d162b095b22a8d5f2ecf1717af5bfd1d28a973faf6d15ba8c3b"
+      },
+      "seconds": 68.73187407600926,
+      "peak_rss_kib": 2340296
+    }
+  },
+  "current_frozen_inputs_rehashed": 5861,
+  "geometry_admission": {
+    "passed": true,
+    "actual_module_sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+    "actual_called_entry_PC": 129171280977920,
+    "observed_SysV_integer_arguments_2_3_4": [
+      8,
+      1,
+      1
+    ],
+    "ordinary_export_entry_mask_product": 8,
+    "initial_active_vector_lanes": 8,
+    "actual_llvm_vector_alloca_bytes": 100480,
+    "actual_llvm_vector_allocas": [
+      [
+        "80",
+        "8",
+        "32"
+      ],
+      [
+        "3060",
+        "8",
+        "32"
+      ]
+    ],
+    "coroutine_resume_functions": 0,
+    "dynamic_allocator_calls": 0,
+    "jit_executable_bytes": 933075,
+    "stock_jit_executable_bytes": 922597,
+    "text_growth_percent": 1.1357071397370744,
+    "all55production_feature_fields_equal_stock": true,
+    "all_defined_relocations_and_uncovered_bytes_exact": true,
+    "undefined_callbacks_independently_resolved": false,
+    "short_input_before_retained_arithmetic_only": true,
+    "numerical_or_performance_result": false,
+    "scope": "Actual called entry dimensions plus exact ordinary LLVM mask prologue establish eight initial active lanes for the one-group canary. Subsequent input/row branches can deactivate lanes. Storage bounds and emitted private classes are independently recorded; no throughput estimate or causal JIT timing claim."
+  },
+  "emission_admission": {
+    "passed": true,
+    "descriptor_interface_equal": true,
+    "private_storage_bytes": {
+      "retainedProjectionTerms": 320,
+      "retainedProjection": 28,
+      "retainedStatus": 4,
+      "retainedScratch": 12240
+    },
+    "total_per_invocation_bytes": 12592,
+    "workgroup_storage_bytes": 0,
+    "workgroup_rays": 8,
+    "unchanged_serial_expression_stride": 1,
+    "actual_complete_current_program_sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+    "canonical_header_join_current": true,
+    "barriers_and_atomics": 0,
+    "all_arithmetic_source_bytes_unchanged": true,
+    "scope": "Source and actual emitted ownership admission; private footprint is declared storage, not measured runtime/JIT memory. No numerical or speed result."
+  },
+  "benefit_slots_executed_once": 4,
+  "extra_warmups_retries_order_pooling_or_cost_subtraction": false,
+  "production_adopted": false,
+  "full_scientific_runtime_frame_installed_release_qualification": false,
+  "scope": "Rejected source ownership for distinct software eight-private-ray Endpoint. The original measurement apparatus completed, but the required active/inactive row workload was not preserved. Raw20+2 observations are not adoption authority. Distinct software eight-private-ray Endpoint. Exact original complete C1/C8 assertions and ABI, one fixed ABBA20+2 decision. Remaining6 original controls and original arithmetic/provider admission are required before adoption if benefit passes. Current source remains unchanged; no speed result beyond this original finite trial."
+}

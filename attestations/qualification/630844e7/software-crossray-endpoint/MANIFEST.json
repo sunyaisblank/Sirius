@@ -1,0 +1,1561 @@
+{
+  "schema": "sirius-software-crossray-endpoint-v1",
+  "operator_source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "prototype_branch": "development/software-crossray-endpoint-2026-10-20",
+  "parent_checkpoint": "c1ae50f252097c4cd8d720cd4e438e3f9fe58ec3",
+  "archive": {
+    "path": "closed-crossray-trial.zip",
+    "bytes": 28423827,
+    "sha256": "c292ea8963edc902b35ba38461aa13d517b2e1e3348e3b41057d7b0bbdd5e82b",
+    "mode": "0o644"
+  },
+  "archive_backed_files": {
+    "out/software-crossray-endpoint/actions.json": {
+      "bytes": 512076,
+      "sha256": "ee53892a6a83f9cdcf7e3563bf8ac001999f31d29d98e0c674b5c1464e94b848",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/candidate.patch": {
+      "bytes": 12514,
+      "sha256": "46c2a9905eea4dc22aeb784e5c3644f018572f514e97b9984c10c8f323dd6773",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/candidate-endpoint-normal.final.spvasm": {
+      "bytes": 418829,
+      "sha256": "6e4c17903139b38cd280717a3fa543432913cd8fdab7798d2e7894ad35366140",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/candidate-endpoint-normal.spv": {
+      "bytes": 150284,
+      "sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-0.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-1.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-2.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-3.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-3.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-4.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-4.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-5.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-5.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-6.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/command-6.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/commands.json": {
+      "bytes": 4003,
+      "sha256": "7ab6581677f3ecd1bddc1dfe4f66bf906f6b7d5f71046d42c563d00bb33fbb33",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/inputs-after.json": {
+      "bytes": 1760298,
+      "sha256": "29d34100b1d6453d13f11c0f9219df46c9d461179abe4a174eb054e038c22523",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/inputs-before.json": {
+      "bytes": 1760298,
+      "sha256": "29d34100b1d6453d13f11c0f9219df46c9d461179abe4a174eb054e038c22523",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/owner.json": {
+      "bytes": 2209,
+      "sha256": "b5310a9dddc37af5e04dd089f67e9f26b884292f71f58deece50870e4dcc808e",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/result.json": {
+      "bytes": 5246,
+      "sha256": "ded550c5affb1f36735fc39d464ea82c83dd87994c8ff69cdfc9176f4ceced99",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/samples.jsonl": {
+      "bytes": 911,
+      "sha256": "fa08dfd63c382c2eb5bc41eb1f193f4ef29b332c3de68b6a06517031e4cb3f11",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/stdout.log": {
+      "bytes": 709,
+      "sha256": "c9623b2b8f82051bd7f6fa5e028edb9809143b66d9810b963e0ad4070fa10359",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/stock-endpoint-normal.final.spvasm": {
+      "bytes": 422552,
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile-endpoint/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/compile_one.py": {
+      "bytes": 5663,
+      "sha256": "37ff2c08b5f838a407bff234015b6332b89a693aeef79d65397a33f467cf41e7",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/prepare.py": {
+      "bytes": 9103,
+      "sha256": "c48989a90c4ed3bb5fca3e944cea23e7395df9c99305f58305ce191292d65beb",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/prior-program-composition.json": {
+      "bytes": 1312,
+      "sha256": "162dca97ec2bf1c41c82dcf971516ceffe888014c56872334a40e37dda3fe530",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/recipe.json": {
+      "bytes": 1506,
+      "sha256": "2ab121f033ffd09c87edbca8c1b12da88b06a61dc8a726860c14fb6c137cacb2",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/scripts/build-retained-kernels.py": {
+      "bytes": 35814,
+      "sha256": "3bd532d4dbb20fc5478113cf043d57d875418697c0d346ae7858ed43ce1e523f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 12797,
+      "sha256": "49d3008fb46cd95fe4cbc2f84d41336ac6b2e5ed0d82334c831357ce9a823a60",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 40215,
+      "sha256": "f224ebb43d1df67e6abf752e7fe34ea2591170eeed8ef9da33c210a28f25f020",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 1066,
+      "sha256": "fb2f1f05fc7f57502c84814d999155d8cd34433171c214e2a9421712ad3fb314",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426",
+      "mode": "0o644"
+    },
+    "out/software-crossray-endpoint/source-contracts.json": {
+      "bytes": 2022,
+      "sha256": "2e16b5facf8c0e39939ceae05b8d7f730c8a7dc49feb8ade8b0b6d76c2e229ea",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/actions.json": {
+      "bytes": 520056,
+      "sha256": "8faccbe5e842a27ef82067270027f5b5d4596733423081de368ee4371318a432",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/analyze_capture.py": {
+      "bytes": 11150,
+      "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 3601,
+      "sha256": "14ae9d022d86ca42420880dea27180c3f37036260a528873a77dc52736044704",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "29df928cc6cd42329d3c68d9786c0a3f93199e07ca9132327470fc1fd871c615",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/bindings.json": {
+      "bytes": 58671,
+      "sha256": "d9303c1acd437dfcb93cc49d622390135b8c02d226960e45f8fe6c9309a9c6b8",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/capture-inputs.json": {
+      "bytes": 532,
+      "sha256": "25ab8a04494f74d1b9dc8abb5239f6f0de981d1dabaca2f535ea842dd84f09fe",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/capture-verification.json": {
+      "bytes": 1165,
+      "sha256": "bd952c638349dccec136cd6721135b9081046311d50b1ea0233d3534cb612b94",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/capture.gdb": {
+      "bytes": 578,
+      "sha256": "27c4176bff0a881fe8b167baeb79cc71ca51a2ce39244f4585cad52bb28db304",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/device-features.json": {
+      "bytes": 107906,
+      "sha256": "78aa27c61bca233a23f85c56e6409d016c60f295d8514615d790e26a5b7e1e87",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/inferior.json": {
+      "bytes": 15,
+      "sha256": "6b8e928383eed3adcfc438262f9153604b007786f4b71ed5a7f43cbb61b06cd0",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/inputs-after.json": {
+      "bytes": 1793731,
+      "sha256": "3381733000781ee3b1c0fe34bf19cac5fb506c18bfe235607dc8159caa0bae74",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/inputs-before.json": {
+      "bytes": 1793731,
+      "sha256": "3381733000781ee3b1c0fe34bf19cac5fb506c18bfe235607dc8159caa0bae74",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "6462181f422bdb67dea26bb03ecae99797700db5cce2c5f27a51ec5a8ba141a7",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "7031fc8238aa4693baba9857d2251ad9137145c69967d28b9209766ac77e927f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "68da21e3786440a5b82c1b7542418fb2be73caa59cdb22157e0bb7510fb7d175",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "5914812351a3899edd8171818b0a3a6c9647ae7446e657fd2b7803de05c30850",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "1018c8e19666be240470b420c8042035c09a76206e7f50c9c638c7428e598642",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1114400,
+      "sha256": "023508852d53063761ee54f2f09595cce25168ed7bacc5a8616db2d23c34e462",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 128,
+      "sha256": "b22a17e14746b795bc70cbdc79655123f25d38f31f492ef8019a6307f4c0821e",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-10.elf.live-4.bin": {
+      "bytes": 32,
+      "sha256": "0e507ffc8513baf3c16d500bb24a71a856ac18c1a3aa128cd3daba7f2afd9c6b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 1112,
+      "sha256": "5bae8aa86507d47396d16f76819e8008f32ad310ade2998f0f0778ad7ea84256",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 933075,
+      "sha256": "064e877f91a53e169c519df4f855f31a2e549ad40fc21892a63145a65392615b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/jit-10.elf.live-9.bin": {
+      "bytes": 80,
+      "sha256": "68ae4a360d5d1d2f28d6ed27fb553c37b07bbe10d39c8074f29cc1911b6e043a",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 14823525,
+      "sha256": "d5a3b2cc5c20522358744a24b4d18fcc8d73ef79fd7a355639d553ea074a39d7",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "05b536bc9971a6aa64325199ed623113b585b112204efab58ef55f2f4cf20e84",
+      "mode": "0o600"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/owner.json": {
+      "bytes": 3751,
+      "sha256": "d9acdc9481bf5a1d81815fc746ff5a591c5f53cf87547fe4c63d54104f4de4b2",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/samples.jsonl": {
+      "bytes": 599783,
+      "sha256": "deb1225302bf2f429475f6649573c9840555a0bed1f7edfe2c26314e24a56dda",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/stderr.log": {
+      "bytes": 194,
+      "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture-candidate-endpoint-normal/stdout.log": {
+      "bytes": 493,
+      "sha256": "f4d745975fa1eb12b15a568d396a07476bc8385d1a6850551c7d5e9dc50ea783",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture_features.py": {
+      "bytes": 6302,
+      "sha256": "8782d766e4eec1958887ce60b753f2a31df2cee3c1c975ed2fa0eff8fd53364f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/capture_jit.py": {
+      "bytes": 15935,
+      "sha256": "10e6e004351f58cdbb6dd618c9736c9aeaaf962d8fc53b0095a606b72e12e5e8",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/emission-admission.json": {
+      "bytes": 744,
+      "sha256": "a032b5f0231fca5103b84271425882793b06f8f33589934c82d57220d1fdecba",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/feature-layout.json": {
+      "bytes": 2346,
+      "sha256": "b67f1d3d32d063e59bd293f805749ec764fccc4f2da98a9f149f10af25b36db3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/geometry-admission.json": {
+      "bytes": 1264,
+      "sha256": "15c6ea47dc17901e5b03a59c614dbf29ad820cbaf01f8131785d4ab098172acc",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/module-inputs/candidate-endpoint-normal.spv": {
+      "bytes": 150284,
+      "sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/prepare.py": {
+      "bytes": 8126,
+      "sha256": "061e8efdf13fddd3eecd8f3af0834a66c6697dff363acd12210dc1d2f9a2c203",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/probe-source.cpp": {
+      "bytes": 4212,
+      "sha256": "853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/read_features.py": {
+      "bytes": 2692,
+      "sha256": "ae0cf3dca1e1340e2025fe4c32acc8025f5fb6f2b3600cc2c9653389e8880716",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/review_geometry.py": {
+      "bytes": 2645,
+      "sha256": "80c2032cc5e49c527ad0cad6a132e10904c0478aac9e1aad42f1d26e1210aaff",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/run_capture.py": {
+      "bytes": 4812,
+      "sha256": "8a712f07f25df8813b85292fb5a76041da51bfae3ae302168453fb36ea4d94a8",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/runtime-context.json": {
+      "bytes": 3047,
+      "sha256": "cdfea093b41c8f22d16c6a2a2bb67fbf5e4cc668d2b4f5b6979f21c754f6c667",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/stock-actual-code-review.json": {
+      "bytes": 4344,
+      "sha256": "65d91bce22facf1cfd301efdcb40a63eabaa595c255aaf380ce0355a098c5ca8",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/stock-feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/stock-owner.json": {
+      "bytes": 3211,
+      "sha256": "5bf81163a06a829e7a392eb207e1e4e58f74a375652813ab0a47ce896beff725",
+      "mode": "0o644"
+    },
+    "out/software-crossray-jit/stock-reuse.json": {
+      "bytes": 1832037,
+      "sha256": "a18ac96af094af00772ac5a31c7648cf65247c7efc6279e164b36deef044d955",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/actions.json": {
+      "bytes": 549256,
+      "sha256": "38af00094ea6dc288bb62851660ef2153db5b953a452d751a50bcc227d88e7a8",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/audited-observer.cpp": {
+      "bytes": 342629,
+      "sha256": "e83fcf0870230cc201961a73b641f48ce33febfbc2a1a75b4d3e28d9a9e61b9e",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/baseline-arrays.json": {
+      "bytes": 7640,
+      "sha256": "66d64f03c4db0d13841cf14c7b65b01a01237c4e2ac6404b269b82b163ac6eb9",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/baseline-create.disassembly": {
+      "bytes": 221093,
+      "sha256": "7a633c48f09931519ab1d55c7b6f50323183c2926b0b0e0dbc581171dfa91e9b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/candidate-create.disassembly": {
+      "bytes": 221051,
+      "sha256": "d2d21afc0f994cf67c9b193fce80328d12b2f1a851276dc4fe2b913773d09114",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/commands.json": {
+      "bytes": 3571,
+      "sha256": "9414d232894714e0eb7de6a2bf186a964887013b61fd6bfcb7c825dbe295ff6c",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/compile.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/compile.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/inputs-after.json": {
+      "bytes": 1796354,
+      "sha256": "7e693d41227efa880bbe13435d355a22fe5f27cf6c545ad7599464ff934238f0",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/inputs-before.json": {
+      "bytes": 1796354,
+      "sha256": "7e693d41227efa880bbe13435d355a22fe5f27cf6c545ad7599464ff934238f0",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/link.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/link.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/owner.json": {
+      "bytes": 2775,
+      "sha256": "d965228cd1c3997a71aea958f4b381b75aea650e2aca279ff6af981e0de803a1",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/result.json": {
+      "bytes": 75087,
+      "sha256": "f71e453320ced09b9372adb805d004a4cc320eb577bfcb8b6be0ca810498281d",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/samples.jsonl": {
+      "bytes": 21755,
+      "sha256": "65d42509fb01ba3bc0d12bb16b679fe9a05bfbe6281bc9a52d65f10f21b4270f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build/stdout.log": {
+      "bytes": 165,
+      "sha256": "30a32cc600f9bcbcda46872f195c9502a9c600d94feccf478593c6b5216188f3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/build.py": {
+      "bytes": 4464,
+      "sha256": "7961f028a68827d72578a3984ebcbd75b6ca1f10d5699f3d2dac32769f8e46be",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/crossray_kernels.h": {
+      "bytes": 7954148,
+      "sha256": "4bd4ffd2d16de5a319bf934f5822d81f91025a0c4f648481c88b68e976dc3d91",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/observer-baseline-reuse.json": {
+      "bytes": 1954486,
+      "sha256": "339bf03c7d3adff4bb492bf772437e599e8a33d8022f87caf982cdded2646104",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/prepare.py": {
+      "bytes": 8298,
+      "sha256": "d0c7da23277d2f0411565cc56226d6f4e22fecd3858274f637545ab664b8f68f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/producer.patch": {
+      "bytes": 564,
+      "sha256": "301fe087a10e6dab21fd17f0dc4413393b7a382b5b57f69c345bc1bf99e5cda6",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/recipes.json": {
+      "bytes": 3332,
+      "sha256": "9a97f24025ff27258125dfb5f3be2b7afd0b970a6f8a52f821651d775ced583c",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/retained_compute.cpp": {
+      "bytes": 45579,
+      "sha256": "319837908334f291c7b91e8ee36c7cff82bf513739784e3af7760aaf8c77d9d1",
+      "mode": "0o644"
+    },
+    "out/software-crossray-producer/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/actions.json": {
+      "bytes": 550002,
+      "sha256": "5bb6232d1a35725588a2052e212de0ff4da6c01968fe29d6b6aafcd5bf09aad4",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/gtest.xml": {
+      "bytes": 10022,
+      "sha256": "c6f690803803054552fc600bb6f50ea468a795643336edcd16c0c04fe07b0657",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/inputs-after.json": {
+      "bytes": 1799338,
+      "sha256": "c05d626b65b2c5590898dfae736e5df15d3557e1b0b5d4c3fa27d0a0822b0e8c",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/inputs-before.json": {
+      "bytes": 1799338,
+      "sha256": "c05d626b65b2c5590898dfae736e5df15d3557e1b0b5d4c3fa27d0a0822b0e8c",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/owner.json": {
+      "bytes": 3071,
+      "sha256": "27d748ac85075e64aef90b268b5b9dac479785bc4ac52229dcb1d2ecb9092cdb",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/samples.jsonl": {
+      "bytes": 973627,
+      "sha256": "c63840858a564b5578866ff84003458f194bf3c5266c23f7485cd57253640002",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/stderr.log": {
+      "bytes": 13714,
+      "sha256": "1d71e4a6860ed76296fc09bae46cafa5ff9319c01d91fe00bbf1aaf634e2d7a9",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/control-1/stdout.log": {
+      "bytes": 753,
+      "sha256": "65c6e65df1ba5a6625468379de2c7244b939bfba62c172125f0fb9d281d650da",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/prepare.py": {
+      "bytes": 1964,
+      "sha256": "e70e3148adcaacc22e3289bd37598cf13fb943664d990e9bb568330d54b90857",
+      "mode": "0o644"
+    },
+    "out/software-crossray-control/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/gtest.xml": {
+      "bytes": 41108,
+      "sha256": "f073c8efa52bc33ced32dab979b1fc5562633ad44acf456c4d9fb103b668931a",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/inputs-after.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/inputs-before.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/owner.json": {
+      "bytes": 3044,
+      "sha256": "101607f5eff9d56c9f805bb46485bf3761c82aa1559bd168ba86d74f084e3062",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/samples.jsonl": {
+      "bytes": 568301,
+      "sha256": "9f4cca6adf80df8870f4329f2cc428ce7eed294f1eacd8d81dd24b49b46ff428",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a1/stdout.log": {
+      "bytes": 708,
+      "sha256": "b1934fee419e84416f8fb5194e999792ac8c6e14917d4092b2b13e94ddc1263f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/gtest.xml": {
+      "bytes": 40892,
+      "sha256": "aac84d311e890f564c5bf4d004a2a768ca436dd234047ae4664164e1dfa0febd",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/inputs-after.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/inputs-before.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/owner.json": {
+      "bytes": 3044,
+      "sha256": "03419f8a62ba2d162b095b22a8d5f2ecf1717af5bfd1d28a973faf6d15ba8c3b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/samples.jsonl": {
+      "bytes": 588997,
+      "sha256": "7e2f1ff0d3183a9dbd22afb2d6d2629256c5b573c1656ff121dbdf7454d38f4e",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "6453f84daccbdea51c1b64915c22d3e810c33801116edf9f8ec0f5e8da659061",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/actions.json": {
+      "bytes": 2204725,
+      "sha256": "de3b3d10852525a515afa0c26485b94ab072f4378af54442c17a68bae82e2b14",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/gtest.xml": {
+      "bytes": 40811,
+      "sha256": "4577b8771c11f049fa833512a7ad9bb8f98e6c029f9b20a3587099766b80834e",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/inputs-after.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/inputs-before.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/owner.json": {
+      "bytes": 3173,
+      "sha256": "f67c34d221d8531bf19668159eb44d5cb84d413ddf5b13f1c40d1042cf35052b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/samples.jsonl": {
+      "bytes": 806648,
+      "sha256": "3c05b00efe0566b1a495cd7b46b51acd7b748e937da86e3b583cf801a78d5b8f",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b1/stdout.log": {
+      "bytes": 711,
+      "sha256": "a8002fdcc27faf540b83f9244561328e3a56e5973feb22df36574703a7e39485",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/gtest.xml": {
+      "bytes": 40903,
+      "sha256": "98d4a72d3671668fa1386afb40ab58ee2813920c2b683461b19128b22f73b8fb",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/inputs-after.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/inputs-before.json": {
+      "bytes": 1804024,
+      "sha256": "966f8f35989a0d02ac16b29ea698563803fa75475be9b9031d4a52ad811bfbb3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/owner.json": {
+      "bytes": 3172,
+      "sha256": "d531f7f9afa903cc97fc9f598593b2a12310d59c3806125e2ba2e6bb5a7e1ba9",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/samples.jsonl": {
+      "bytes": 697799,
+      "sha256": "f053e75a6ad49741c59b3ce1d73cfd9cddfa0b4a103bff68db1ec3fc22b202f8",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "b335d861f191b342e0fbf723bba257f996b475b0bbe65c9050f3cf1873083b0b",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/baseline.json": {
+      "bytes": 7640,
+      "sha256": "66d64f03c4db0d13841cf14c7b65b01a01237c4e2ac6404b269b82b163ac6eb9",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/build-and-arrays.json": {
+      "bytes": 7639,
+      "sha256": "34e68fbae524dc68e381a70a034b77189b8d25c39ae0dd5ae7289431c7a548c4",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/retention-gate-frozen.json": {
+      "bytes": 1852,
+      "sha256": "18fa6ced163ba9c9130ea9347c3b5ba767d1719b9bfdc8fec6d2d712593586c6",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/run_limb_benefit_slot.py": {
+      "bytes": 663,
+      "sha256": "f0d0eda9a59740c96f7b15d4bfae835ada0ca1bbe667f7192b5ea3be6136e815",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/software-comparison.json": {
+      "bytes": 15980,
+      "sha256": "5f5ea4e20ad16251cb1268e605227b9c5ac839d8ed5accfef9cf7a9e27cbebe9",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/software-sequence.json": {
+      "bytes": 837,
+      "sha256": "ebbefe54ce03d52ff2fb4f073436d9bf5c4b66a3bec0611b5eca5251a8777da0",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/benefit/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/finish_trial.py": {
+      "bytes": 5693,
+      "sha256": "a0136586d523f215c67e143a8827b67afe144f5b6db20d11ebf446586194fa66",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/preparation.json": {
+      "bytes": 1945,
+      "sha256": "97089f7718274eb1ebb5b45ef9e3dd8da8c690ee743988a04b958291c35adac6",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/prepare.py": {
+      "bytes": 6724,
+      "sha256": "9db8dd053d787b8347b3f0c8296f287b0bd9339c2fc2824ecc10483a9a2ef1a4",
+      "mode": "0o644"
+    },
+    "out/software-crossray-benefit/trial-acceptance.json": {
+      "bytes": 17038,
+      "sha256": "d3a6c91804dc4dce9fa324dcf37925f67b7c4e4c2d7e59d762ae77ba88eb2813",
+      "mode": "0o644"
+    },
+    "out/software-crossray-closeout/active-bound-rejection.json": {
+      "bytes": 2658,
+      "sha256": "0bfa619c20a0cf494d41672ce7dff221a8e7086c00cc0ef33b10ad3f5318944a",
+      "mode": "0o644"
+    },
+    "out/software-crossray-closeout/audit_active_bound.py": {
+      "bytes": 3235,
+      "sha256": "e8c79e85fd8e9e8a3919736ba44192b81cafd85e21dc97a82e57680ca30c0cf3",
+      "mode": "0o644"
+    },
+    "out/software-crossray-closeout/preserve.py": {
+      "bytes": 5832,
+      "sha256": "8074d8556b05c1a08b27166d701a094a7f84bafb0c016d4891fa291b86eb6bd4",
+      "mode": "0o644"
+    },
+    "out/software-crossray-closeout/review_rejection.py": {
+      "bytes": 6155,
+      "sha256": "54f9434da9c4d84770f4e4c62a6e03f1f27001f4736dcdc65c3d482d4bfeef50",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-crossray-jit/short_input_jit_probe": {
+      "bytes": 1405320,
+      "sha256": "55360ecfb604df4c4a5b64c96100aae2bf5b0911aee8caa1f69d9e689316533e",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/archived-baseline.map": {
+      "bytes": 2233536,
+      "sha256": "43ea74b18c676f7a576eb4c58e6aa42dabc17aee073c6e9d0b0183eddb51fda7",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/candidate.map": {
+      "bytes": 2240040,
+      "sha256": "f6a7e85d6defd6a34d821d5b139e379dbfdf90fdcc1da37b49c24f3a955627cb",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/observer.o": {
+      "bytes": 9333096,
+      "sha256": "6e3f586af0fa8b0a69e9be80f3c8ecdd1ec51781eb781151a2bcffc393c7ee0d",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/original_baseline_controls": {
+      "bytes": 13514888,
+      "sha256": "abd90019ee0b04f9ccc99c2be6ef049cf0af376555fd04036166ecc81ab2bbf0",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/original_candidate_controls": {
+      "bytes": 18400752,
+      "sha256": "70d0c16855d2a24b5b01fe6d6758fabc14c103b8da1cefd24367e84d575683ca",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/retained_compute.d": {
+      "bytes": 15202,
+      "sha256": "9f8592d49d75003bdb5f83e2a225ffe5bc732b12de210d6f008952925b38ed39",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/software-crossray-endpoint/retained_compute.o": {
+      "bytes": 5682568,
+      "sha256": "7d6f4fa6e10fbdd73a7dd6ba6a1dc0f694250697ab4ec3ab33350e246f4bf43f",
+      "mode": "0o644"
+    }
+  },
+  "owned_roots": [
+    "out/software-crossray-endpoint",
+    "out/software-crossray-jit",
+    "out/software-crossray-producer",
+    "out/software-crossray-control",
+    "out/software-crossray-benefit",
+    "out/software-crossray-closeout",
+    "bin/linux-gcc/software-crossray-jit",
+    "bin/linux-gcc/software-crossray-endpoint"
+  ],
+  "prior_immutable_provenance": [
+    {
+      "manifest": "attestations/qualification/630844e7/software-single-invocation-endpoint/MANIFEST.json",
+      "bytes": 64820,
+      "sha256": "d43045266d9f68002d50bdddaefe97cfa35126dac7b081c135b04105cc8a5d16",
+      "mode": "0o644",
+      "archive_sha256": "acdddcf1822dc7ae2be4862a1ff9461e0e007143fcd0fa9c079a8c6ceb14beae"
+    },
+    {
+      "manifest": "attestations/qualification/630844e7/software-single-invocation-endpoint-cost/MANIFEST.json",
+      "bytes": 42213,
+      "sha256": "f5d7371f1c1d492f1286cb67c3e9a02fac25815daf449749b18553237dd7e6be",
+      "mode": "0o644",
+      "archive_sha256": "eca7425c0aac0edd28dd25fde181d83fc14c8bd4f50fb864e9fdbcb64c6aa1bb"
+    }
+  ],
+  "all_bytes_modes_inventory_and_CRC_verified_before_after": true,
+  "outcome": {
+    "passed": true,
+    "experiment_valid": false,
+    "complete_original_measurement_apparatus_closed": true,
+    "source_frame_condition_valid": false,
+    "ownership_rejection": {
+      "passed": true,
+      "source_semantic_defect_verified": true,
+      "candidate_module_sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+      "initial_row_frame_proof_rejected": true,
+      "supersedes": "out/software-crossray-endpoint/source-contracts.json row_mapping/full_row_domain_bijection as an API-wide proof",
+      "original_invariant": "The header and program tail use fixed allocation capacity; Dispatch/DispatchIndependentPair group count limits execution to requested active rows. Only active output spans are read back.",
+      "counterexample": {
+        "capacity": 24,
+        "active_rows": 12,
+        "host_group_count": 12,
+        "new_visited_rows": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "inactive_rows_zeroed_before_value_validation": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "original_visited_rows": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "whole_inactive_allocation_bytes_observed_in_old_C1_C8": false
+      },
+      "cause": "The candidate bounded row by header capacity, incorrectly assuming host group count equals header rows. The two original cases and32/56 active-row digests do not prove inactive allocation preservation.",
+      "proof_scope": "Source and exact compiled-producer/module ownership establish the extra zero stores. Previous inactive bytes were not captured, so no claim about a directly observed byte transition is made.",
+      "next_implementation_constraint": "Read the actual dispatch group count through the NumWorkgroups builtin and bound mapped row by both capacity and active dispatch rows. Preserve original group counts and descriptor/buffer ABI. Require positive full-allocation inactive-tail preservation witnesses before relying on the next candidate.",
+      "source_pins": {
+        "src/sirius/backend/retained_compute.cpp": {
+          "bytes": 45570,
+          "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+        },
+        "tests/backend/retained_compute_test.cpp": {
+          "bytes": 339892,
+          "sha256": "abdc5cef56aa3a4409209797b37794553400b855b534204af6cabe583c4fdee1"
+        },
+        "out/software-crossray-endpoint/source/src/sirius/kernels/retained_endpoint.slang": {
+          "bytes": 40215,
+          "sha256": "f224ebb43d1df67e6abf752e7fe34ea2591170eeed8ef9da33c210a28f25f020"
+        }
+      },
+      "no_new_device_or_timing_run": true
+    },
+    "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+    "candidate_module_sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+    "disposition": "REJECT_EIGHT_PRIVATE_RAY_ENDPOINT_ACTIVE_BOUND_AND_COST",
+    "performance_acceptance": false,
+    "raw_numeric_gate_verdict": false,
+    "original_interval_and_stage_checks_passed": 10,
+    "original_interval_and_stage_checks_required": 20,
+    "provisioning_inclusive_API_checks_passed": 2,
+    "provisioning_inclusive_API_checks_required": 2,
+    "complete_call_checks": [
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          35.492254,
+          31.05229,
+          33.407378
+        ],
+        "candidate_samples_ms": [
+          37.194805,
+          39.220477,
+          40.393036
+        ],
+        "baseline_median_ms": 33.407378,
+        "candidate_median_ms": 39.220477,
+        "improvement_percent": -17.400644252895276,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          112.730946,
+          85.954085,
+          88.49942
+        ],
+        "candidate_samples_ms": [
+          43.151385,
+          43.617044,
+          42.620644000000006
+        ],
+        "baseline_median_ms": 88.49942,
+        "candidate_median_ms": 43.151385,
+        "improvement_percent": 51.24105333119697,
+        "minimum_percent": 5,
+        "pass": true
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          34.428309,
+          34.023119,
+          33.217495
+        ],
+        "candidate_samples_ms": [
+          38.910185,
+          37.007058,
+          37.311316
+        ],
+        "baseline_median_ms": 34.023119,
+        "candidate_median_ms": 37.311316,
+        "improvement_percent": -9.664596006027539,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          46.253862,
+          45.700158,
+          44.528490000000005
+        ],
+        "candidate_samples_ms": [
+          47.076236,
+          42.695163,
+          45.414146
+        ],
+        "baseline_median_ms": 45.700158,
+        "candidate_median_ms": 45.414146,
+        "improvement_percent": 0.6258446633816879,
+        "minimum_percent": 5,
+        "pass": false
+      }
+    ],
+    "accounting_checks": [
+      {
+        "direction": "forward",
+        "scope": "observed-instance Create and all11 original numerical API windows",
+        "baseline_ms": 13684.545712,
+        "candidate_ms": 10271.421357,
+        "improvement_percent": 24.94145166987185,
+        "minimum_percent": 0,
+        "pass": true
+      },
+      {
+        "direction": "reverse",
+        "scope": "observed-instance Create and all11 original numerical API windows",
+        "baseline_ms": 12047.532102,
+        "candidate_ms": 9824.07517,
+        "improvement_percent": 18.455704564015107,
+        "minimum_percent": 0,
+        "pass": true
+      }
+    ],
+    "failed_checks": [
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          35.492254,
+          31.05229,
+          33.407378
+        ],
+        "candidate_samples_ms": [
+          37.194805,
+          39.220477,
+          40.393036
+        ],
+        "baseline_median_ms": 33.407378,
+        "candidate_median_ms": 39.220477,
+        "improvement_percent": -17.400644252895276,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "endpoint inclusive Dispatch",
+        "baseline_samples_ms": [
+          5.262542,
+          4.188434,
+          4.407798
+        ],
+        "candidate_samples_ms": [
+          7.126984,
+          8.047116,
+          8.397708
+        ],
+        "baseline_median_ms": 4.407798,
+        "candidate_median_ms": 8.047116,
+        "improvement_percent": -82.5654442422271,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "endpoint+dense inclusive Dispatch",
+        "baseline_samples_ms": [
+          7.284422,
+          7.168892,
+          5.903912
+        ],
+        "candidate_samples_ms": [
+          8.57332,
+          9.184297,
+          9.260195
+        ],
+        "baseline_median_ms": 7.168892,
+        "candidate_median_ms": 9.184297,
+        "improvement_percent": -28.11320075682548,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "scope": "endpoint:rows=12 inclusive Dispatch",
+        "baseline_samples_ms": [
+          6.612406999999999,
+          6.543243,
+          16.789161
+        ],
+        "candidate_samples_ms": [
+          7.7562169999999995,
+          7.466168,
+          7.174061999999999
+        ],
+        "baseline_median_ms": 6.612406999999999,
+        "candidate_median_ms": 7.466168,
+        "improvement_percent": -12.911501061565032,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          34.428309,
+          34.023119,
+          33.217495
+        ],
+        "candidate_samples_ms": [
+          38.910185,
+          37.007058,
+          37.311316
+        ],
+        "baseline_median_ms": 34.023119,
+        "candidate_median_ms": 37.311316,
+        "improvement_percent": -9.664596006027539,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "endpoint inclusive Dispatch",
+        "baseline_samples_ms": [
+          4.983318000000001,
+          5.7611989999999995,
+          4.988081
+        ],
+        "candidate_samples_ms": [
+          7.9794279999999995,
+          8.044833,
+          7.7743210000000005
+        ],
+        "baseline_median_ms": 4.988081,
+        "candidate_median_ms": 7.9794279999999995,
+        "improvement_percent": -59.96989623865369,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "endpoint+dense inclusive Dispatch",
+        "baseline_samples_ms": [
+          6.371806,
+          7.372522,
+          7.684505
+        ],
+        "candidate_samples_ms": [
+          8.873184,
+          8.010371,
+          8.594732
+        ],
+        "baseline_median_ms": 7.372522,
+        "candidate_median_ms": 8.594732,
+        "improvement_percent": -16.57790916052879,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "baseline_samples_ms": [
+          46.253862,
+          45.700158,
+          44.528490000000005
+        ],
+        "candidate_samples_ms": [
+          47.076236,
+          42.695163,
+          45.414146
+        ],
+        "baseline_median_ms": 45.700158,
+        "candidate_median_ms": 45.414146,
+        "improvement_percent": 0.6258446633816879,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "dopri_phase:rows=24 inclusive Dispatch",
+        "baseline_samples_ms": [
+          6.032621,
+          5.719274,
+          5.617324999999999
+        ],
+        "candidate_samples_ms": [
+          6.178526,
+          6.233028,
+          7.3246649999999995
+        ],
+        "baseline_median_ms": 5.719274,
+        "candidate_median_ms": 6.233028,
+        "improvement_percent": -8.982853418108654,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "endpoint:rows=12 inclusive Dispatch",
+        "baseline_samples_ms": [
+          6.155483,
+          6.12233,
+          5.8680959999999995
+        ],
+        "candidate_samples_ms": [
+          7.291584,
+          7.321,
+          7.928273
+        ],
+        "baseline_median_ms": 6.12233,
+        "candidate_median_ms": 7.321,
+        "improvement_percent": -19.578657145237187,
+        "minimum_percent": -5,
+        "pass": false
+      }
+    ],
+    "original_controls_completed": [
+      1,
+      8
+    ],
+    "original_controls_required": 8,
+    "C1_original_case_and56_active_row_readbacks_passed": true,
+    "inactive_allocation_preservation_proven": false,
+    "C8_complete_original_control_and_cost_use_identical_executions": true,
+    "no_extra_standalone_C8_execution": true,
+    "all32_complete_readbacks_equal_across_four_current_slots": true,
+    "all54_actual_command_module_joins_per_slot_verified": true,
+    "unmodified_original_reader_comparator_launcher": {
+      "software_contracts.py": {
+        "bytes": 11264,
+        "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9"
+      },
+      "compare_software.py": {
+        "bytes": 5596,
+        "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3"
+      },
+      "run_sequence.py": {
+        "bytes": 2177,
+        "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342"
+      }
+    },
+    "terminal_owners": {
+      "out/software-crossray-endpoint/compile-endpoint": {
+        "owner": {
+          "bytes": 2209,
+          "sha256": "b5310a9dddc37af5e04dd089f67e9f26b884292f71f58deece50870e4dcc808e"
+        },
+        "seconds": 0.7821821289835498,
+        "peak_rss_kib": 244204
+      },
+      "out/software-crossray-jit/capture-candidate-endpoint-normal": {
+        "owner": {
+          "bytes": 3751,
+          "sha256": "d9acdc9481bf5a1d81815fc746ff5a591c5f53cf87547fe4c63d54104f4de4b2"
+        },
+        "seconds": 32.13143700902583,
+        "peak_rss_kib": 1933108
+      },
+      "out/software-crossray-producer/build": {
+        "owner": {
+          "bytes": 2775,
+          "sha256": "d965228cd1c3997a71aea958f4b381b75aea650e2aca279ff6af981e0de803a1"
+        },
+        "seconds": 13.601128952985164,
+        "peak_rss_kib": 561388
+      },
+      "out/software-crossray-control/control-1": {
+        "owner": {
+          "bytes": 3071,
+          "sha256": "27d748ac85075e64aef90b268b5b9dac479785bc4ac52229dcb1d2ecb9092cdb"
+        },
+        "seconds": 111.17293846001849,
+        "peak_rss_kib": 2770908
+      },
+      "out/software-crossray-benefit/benefit/a1": {
+        "owner": {
+          "bytes": 3044,
+          "sha256": "101607f5eff9d56c9f805bb46485bf3761c82aa1559bd168ba86d74f084e3062"
+        },
+        "seconds": 78.66653875703923,
+        "peak_rss_kib": 2339236
+      },
+      "out/software-crossray-benefit/benefit/b1": {
+        "owner": {
+          "bytes": 3173,
+          "sha256": "f67c34d221d8531bf19668159eb44d5cb84d413ddf5b13f1c40d1042cf35052b"
+        },
+        "seconds": 105.26467168901581,
+        "peak_rss_kib": 2345432
+      },
+      "out/software-crossray-benefit/benefit/b2": {
+        "owner": {
+          "bytes": 3172,
+          "sha256": "d531f7f9afa903cc97fc9f598593b2a12310d59c3806125e2ba2e6bb5a7e1ba9"
+        },
+        "seconds": 79.89548192499205,
+        "peak_rss_kib": 2344784
+      },
+      "out/software-crossray-benefit/benefit/a2": {
+        "owner": {
+          "bytes": 3044,
+          "sha256": "03419f8a62ba2d162b095b22a8d5f2ecf1717af5bfd1d28a973faf6d15ba8c3b"
+        },
+        "seconds": 68.73187407600926,
+        "peak_rss_kib": 2340296
+      }
+    },
+    "current_frozen_inputs_rehashed": 5861,
+    "geometry_admission": {
+      "passed": true,
+      "actual_module_sha256": "27dd498b14f3c26ab50019fc1580324c0ada26fca6da8d69c8722994e67dda4b",
+      "actual_called_entry_PC": 129171280977920,
+      "observed_SysV_integer_arguments_2_3_4": [
+        8,
+        1,
+        1
+      ],
+      "ordinary_export_entry_mask_product": 8,
+      "initial_active_vector_lanes": 8,
+      "actual_llvm_vector_alloca_bytes": 100480,
+      "actual_llvm_vector_allocas": [
+        [
+          "80",
+          "8",
+          "32"
+        ],
+        [
+          "3060",
+          "8",
+          "32"
+        ]
+      ],
+      "coroutine_resume_functions": 0,
+      "dynamic_allocator_calls": 0,
+      "jit_executable_bytes": 933075,
+      "stock_jit_executable_bytes": 922597,
+      "text_growth_percent": 1.1357071397370744,
+      "all55production_feature_fields_equal_stock": true,
+      "all_defined_relocations_and_uncovered_bytes_exact": true,
+      "undefined_callbacks_independently_resolved": false,
+      "short_input_before_retained_arithmetic_only": true,
+      "numerical_or_performance_result": false,
+      "scope": "Actual called entry dimensions plus exact ordinary LLVM mask prologue establish eight initial active lanes for the one-group canary. Subsequent input/row branches can deactivate lanes. Storage bounds and emitted private classes are independently recorded; no throughput estimate or causal JIT timing claim."
+    },
+    "emission_admission": {
+      "passed": true,
+      "descriptor_interface_equal": true,
+      "private_storage_bytes": {
+        "retainedProjectionTerms": 320,
+        "retainedProjection": 28,
+        "retainedStatus": 4,
+        "retainedScratch": 12240
+      },
+      "total_per_invocation_bytes": 12592,
+      "workgroup_storage_bytes": 0,
+      "workgroup_rays": 8,
+      "unchanged_serial_expression_stride": 1,
+      "actual_complete_current_program_sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+      "canonical_header_join_current": true,
+      "barriers_and_atomics": 0,
+      "all_arithmetic_source_bytes_unchanged": true,
+      "scope": "Source and actual emitted ownership admission; private footprint is declared storage, not measured runtime/JIT memory. No numerical or speed result."
+    },
+    "benefit_slots_executed_once": 4,
+    "extra_warmups_retries_order_pooling_or_cost_subtraction": false,
+    "production_adopted": false,
+    "full_scientific_runtime_frame_installed_release_qualification": false,
+    "scope": "Rejected source ownership for distinct software eight-private-ray Endpoint. The original measurement apparatus completed, but the required active/inactive row workload was not preserved. Raw20+2 observations are not adoption authority. Distinct software eight-private-ray Endpoint. Exact original complete C1/C8 assertions and ABI, one fixed ABBA20+2 decision. Remaining6 original controls and original arithmetic/provider admission are required before adoption if benefit passes. Current source remains unchanged; no speed result beyond this original finite trial."
+  },
+  "production_source_changed": false,
+  "full_qualification": false,
+  "remaining": "This exact version is rejected for a disproved active/inactive row frame condition and failed raw cost gates. Its original frozen pretrial finisher was not executed because it lacked this source check; review_rejection.py supplies the superseding disposition. Do not run its remaining6 controls or frame, or adopt it. A corrected source must bind active dispatch count independently of capacity and include full inactive-tail witnesses. Ultimate scientific/runtime/release requirements remain open."
+}

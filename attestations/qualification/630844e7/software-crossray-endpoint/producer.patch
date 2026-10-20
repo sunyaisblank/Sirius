@@ -1,0 +1,19 @@
+--- src/sirius/backend/retained_compute.cpp
++++ private/retained_compute.cpp
+@@ -1,6 +1,6 @@
+ #include "sirius/backend/retained_compute.h"
+ 
+-#include "retained_kernels.h"
++#include "crossray_kernels.h"
+ #include "retained_owner_kernels.h"
+ #include "retained_owner_layout.h"
+ 
+@@ -15,7 +15,7 @@
+ namespace {
+ using base::ErrorDomain;
+ using base::Fail;
+-using namespace retained_program;
++using namespace crossray_endpoint_program;
+ // One ray owns one workgroup; stay within Vulkan's portable X dispatch bound.
+ constexpr std::size_t kMaximumCapacity = 65535;
+ 

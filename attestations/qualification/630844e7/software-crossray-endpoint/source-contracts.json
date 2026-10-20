@@ -1,0 +1,40 @@
+{
+  "schema": "sirius-crossray-endpoint-source-contract-v1",
+  "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "production_changed": false,
+  "changed_mechanism": "Eight independent rays per workgroup, one serial expression owner per invocation, private scratch/status/projection rather than shared storage. This is distinct from the rejected one-ray/one-invocation group.",
+  "row_mapping": "r=8*g+l, 0<=l<8, original host dispatch groups=rows retained. For each valid r, unique g=floor(r/8)<rows and l=r mod8. Extra invocations return before row writes. Row maximum 65536 and original host group bounds retained; all index arithmetic remains uint32.",
+  "full_row_domain_bijection": "Euclidean quotient/remainder proves uniqueness and coverage for every integer rows in [1,65536]. Empty inputs preserve original early return.",
+  "enumerated_boundaries": [
+    0,
+    1,
+    2,
+    3,
+    7,
+    8,
+    9,
+    12,
+    16,
+    24,
+    31,
+    32,
+    33,
+    65535,
+    65536
+  ],
+  "frame_condition": "Private invocation storage replaces all four shared globals. All helper lane values equal0 and serial strides equal1. One owner initializes/writes/reads its entire row, all16 ordered projection terms and every node of each layer. Other rays write disjoint [r*rowWords,(r+1)*rowWords) ranges. No inter-ray collective or atomic remains. Unchanged dispatch completion still owns CPU readback.",
+  "per_invocation_declared_uint_words": 3148,
+  "per_invocation_declared_bytes": 12592,
+  "eight_ray_declared_private_bytes": 100736,
+  "private_allocation_is_not_runtime_or_JIT_RSS_proof": true,
+  "maximum_emitted_workgroup_storage_bytes_required": 0,
+  "arithmetic_sources_byteexact": [
+    "retained_scalar.slang",
+    "retained_pair.slang",
+    "retained_triple.slang",
+    "portable_binary32.h"
+  ],
+  "ordinary_programs_and_descriptor_buffer_ABI_unchanged": true,
+  "prior_original_program_composition_byteexact_reused": true,
+  "compiler_runtime_numerical_benefit_and_adoption_not_yet_claimed": true
+}
