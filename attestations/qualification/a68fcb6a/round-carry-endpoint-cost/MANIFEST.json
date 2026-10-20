@@ -1,0 +1,1341 @@
+{
+  "schema": "sirius-rejected-integer-round-carry-endpoint-v1",
+  "operator_source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "evidence_branch": "development/round-carry-endpoint-2026-10-21",
+  "evidence_tag": "evidence/round-carry-endpoint-a68fcb6a",
+  "archive": {
+    "path": "closed-candidate.zip",
+    "bytes": 27829825,
+    "sha256": "cc8314e735828b791af5ad8d9163a09088ce1c136e29ceb52bb8cee07f9dfc10",
+    "mode": "0o644"
+  },
+  "archive_backed_files": {
+    "bin/linux-gcc/round-carry-arithmetic/gpu": {
+      "bytes": 250992,
+      "sha256": "6df1a4a9fdf8cbeccfff2ca4bd24bc6c22da15e11fdbfe4b4d13e794d8fc4763",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/round-carry-arithmetic/probe.spv": {
+      "bytes": 29548,
+      "sha256": "9ddf28001a2f69b305d8734d19859e14a8cef69d5ec67154c8e1611e4ec99d23",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-arithmetic/probe.spvasm": {
+      "bytes": 83138,
+      "sha256": "78212c9c4ca43869f216d2133d14fcefd2416c7b539cd75f9d6c367a0b89be69",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-jit/short_input_jit_probe": {
+      "bytes": 1405320,
+      "sha256": "55360ecfb604df4c4a5b64c96100aae2bf5b0911aee8caa1f69d9e689316533e",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/round-carry-producer/baseline.map": {
+      "bytes": 2223625,
+      "sha256": "37a51ec3563ce9934fd932a49ba00f1ab5df36d77f28f8dd4dee11661db04d0b",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-producer/candidate.map": {
+      "bytes": 2232995,
+      "sha256": "7132b729e2b8bb31f1c768c1b684cf07f46333b47b8520ea652d230442926913",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-producer/observer.d": {
+      "bytes": 26151,
+      "sha256": "909eecbfa666a2171c22519062144faaba22c6a52cd361e2fa2057828ee0c928",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-producer/observer.o": {
+      "bytes": 9357944,
+      "sha256": "4ec6036cb6e3645c69743d4487532d3bbfe31117f7389057d39c03ca6419f10e",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-producer/original_baseline_controls": {
+      "bytes": 13523128,
+      "sha256": "cfcaab2404b21cbae3874b39c890397024e23dad548e90d3128e38e8d3bd1bd3",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/round-carry-producer/original_candidate_controls": {
+      "bytes": 18413016,
+      "sha256": "fc33a4c91783b3476df37cfd1b9b2fe03fd64b9e4bacaa08cb9c491c161e2dac",
+      "mode": "0o755"
+    },
+    "bin/linux-gcc/round-carry-producer/retained_compute.d": {
+      "bytes": 15191,
+      "sha256": "3a39521833c1b808f68f49f302d773e96c7d018ad3826ef1fa35f2786c306d9d",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/round-carry-producer/retained_compute.o": {
+      "bytes": 5683240,
+      "sha256": "975ddcace3e502ce94d0063ee589fa759c230d8a0ade91959932b270c0a38dff",
+      "mode": "0o644"
+    },
+    "bin/linux-gcc/tests/backend/portable_binary32_reference.bin": {
+      "bytes": 4182444,
+      "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e",
+      "mode": "0o600"
+    },
+    "out/recovery-and-rounding/candidate-PB32Round.spvasm": {
+      "bytes": 3500,
+      "sha256": "b0a429fdd519fffcde72e0e4d5cb7360f3559bb6197e1ca6a3abba0a82df7633",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/drive-recovery.json": {
+      "bytes": 1340,
+      "sha256": "b0571ef64781c36fe7bfc25504000fe4caef4733b4d8ed80774fd10202ccb7fa",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/issue100-before.json": {
+      "bytes": 8529,
+      "sha256": "c212761bdba1e0e49c4fae7f10dacdfbd34befe5e4067c129c771333af2307c9",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/issue100-comments.jsonl": {
+      "bytes": 19373,
+      "sha256": "6c5581151a776e5d53969e7385dcc81c65d722f55f996efcfd4a84637452011b",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/issue44-before.json": {
+      "bytes": 19606,
+      "sha256": "a97ebf296fd7548bc0f93f7ba2812955b21146d2b880ade08052d36ddaeb8a98",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/prepare_round_carry.py": {
+      "bytes": 5839,
+      "sha256": "9d9b68f3c0ef927f14c5430131ab9cbb38c3bd366b147bb78a808b7d76a921fb",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/preserved-forensic-result-check.json": {
+      "bytes": 2316,
+      "sha256": "b7b9b402af54314023b075c43704ed161dcce52c1140134bfc6563a92e7f9b3c",
+      "mode": "0o644"
+    },
+    "out/recovery-and-rounding/stock-PB32Round.spvasm": {
+      "bytes": 4277,
+      "sha256": "c5919279531e5f167a89f3ce90560c4a745b00e495a675b9649facb0a0934526",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/actions.json": {
+      "bytes": 17666,
+      "sha256": "b650ca8a313a5a7543238f54cd5dac696662bd201a34dfaf79b4f3e82f5109dc",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/command-0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/command-0.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/command-1.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/command-2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/command-2.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/commands.json": {
+      "bytes": 981,
+      "sha256": "17cb1f06eb7eb58ff168e333d0322e5f93cbfaceccdc415eecaea7e28ebdff3f",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/emitted-review.json": {
+      "bytes": 182,
+      "sha256": "3d3c1f3caa82f1289f19ffb4dca8138f27e3f77d3684105f1ebf0e2465575b0e",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/inputs-after.json": {
+      "bytes": 159895,
+      "sha256": "2c40cdb8fa63f403fea00f71181a6fb256dc345d21240c0e761ea4e599c2c1d7",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/inputs-before.json": {
+      "bytes": 159895,
+      "sha256": "2c40cdb8fa63f403fea00f71181a6fb256dc345d21240c0e761ea4e599c2c1d7",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/owner.json": {
+      "bytes": 1906,
+      "sha256": "065674b65f68b6a0e8c1aa0b818ebaca2cb1d16ceb21342032665e7a3a186135",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/samples.jsonl": {
+      "bytes": 568,
+      "sha256": "94aa3bd420e7e3018a62b724fd43c875957fc30cf46b8a8b2050af59f46904ee",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile-probe/stdout.log": {
+      "bytes": 49,
+      "sha256": "a6055b586396ace0c611850356a612b8c7f208573561c424afed9a31b8e6e803",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/compile.py": {
+      "bytes": 1423,
+      "sha256": "3eaa89c32a1f5754daf64d746e6a4d780c0b076f77df9f2bbb395c036d3ae49a",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/gpu.cpp": {
+      "bytes": 4168,
+      "sha256": "8b02baf49c0f94a06292889a93ed33e9344423b1aeafeee77b73df8ff0ab4d83",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/host-reuse.json": {
+      "bytes": 956,
+      "sha256": "2e57ba9a082c891d0f61f3b34b1279023ee6d6eddf2c987db9f67c4ef0aa3eab",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/actual-output.bin": {
+      "bytes": 2788288,
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/inputs-after.json": {
+      "bytes": 160154,
+      "sha256": "63c6b4e3205ffbb7fe3d52d89e8c059a6a77539d16b99267a65041faedbad45d",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/inputs-before.json": {
+      "bytes": 160154,
+      "sha256": "63c6b4e3205ffbb7fe3d52d89e8c059a6a77539d16b99267a65041faedbad45d",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/owner.json": {
+      "bytes": 2980,
+      "sha256": "bf9ff2c6cf9ed7b6db20c2ef9b950e2531b19fa79576cba3f907584a5509c7dc",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/samples.jsonl": {
+      "bytes": 1781,
+      "sha256": "082016900fef059ca75b6f6c1918cf32a500e911bda9bed04bb6588a48f0e4bb",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-corpus/stdout.log": {
+      "bytes": 122,
+      "sha256": "5a9ceead3470c44ec71df522d7c8107fe26c62f265987f2ec3ba5886abd95825",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-expected.bin": {
+      "bytes": 2788288,
+      "sha256": "8ff8c685140f5443bf989b281cdbf744b698ef30b1bc3b063464f0a6e3165414",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/original-input.bin": {
+      "bytes": 2788292,
+      "sha256": "5eda64c4af63a0d7507802c4f56a728b3a56d9458328e7f5dabeed300012f605",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/portable_binary32.h": {
+      "bytes": 13094,
+      "sha256": "a3a53827172c053807a1eaebac69c59e50783d87a334be8f93e979a8802c9af7",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/prepare.py": {
+      "bytes": 3719,
+      "sha256": "c32ae5eb8bafcc7b3ba309b6629d1df1fac996088f8eb27bcbcbf3da1ad4663f",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/probe.slang": {
+      "bytes": 1129,
+      "sha256": "e99028b1a26d22c2a79ccd4dcbbe095a972f4e0ff17d12a28fe5b5c31bb60468",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/round-carry-arithmetic/tools.json": {
+      "bytes": 438,
+      "sha256": "f3651850773230db64f61f21ee0bb5953697d8ad3df55d73489d06c0913a53fc",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/gtest.xml": {
+      "bytes": 40823,
+      "sha256": "cca32e7bc75375d132cb78fef5e0a067f37562f7f9768ddce69ad2045ae92fbc",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/inputs-after.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/inputs-before.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/owner.json": {
+      "bytes": 3131,
+      "sha256": "c5b072f38bc791ab9b077f4c52edc359c6c7e75040008eb52f677cd6f0346724",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/samples.jsonl": {
+      "bytes": 461147,
+      "sha256": "5fbbfae5cccd0f26050305c8b3b9f0cac4d2d7b809d973b35191a2d0d16df229",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a1/stdout.log": {
+      "bytes": 708,
+      "sha256": "e59d61cf28242c30992f4eef9930f3447f432071c6c54b9bc1698a74955fcd5e",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/gtest.xml": {
+      "bytes": 40928,
+      "sha256": "0c93d0f7754aaee47d4938732b316fb80064359a2b677944b47e9ad496f71b22",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/inputs-after.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/inputs-before.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/owner.json": {
+      "bytes": 3131,
+      "sha256": "6c3937ed5bd13790e02220297fe2c1bec5a88c746b35e2bba7bd2adc2ffcfefc",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/samples.jsonl": {
+      "bytes": 458065,
+      "sha256": "f6ab6f902f167ad95976765ce86e76aaecf6555da61f057461081a0f6eae36c1",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/a2/stdout.log": {
+      "bytes": 708,
+      "sha256": "5e28dd919ee545b596fdb05e947aff5584d13ccafa6dddb7510da0f96444af61",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/actions.json": {
+      "bytes": 167573,
+      "sha256": "465672fef7bb72a4ec5a6147d69efe7896f4b6cfda4a37ead846df0b0438c3ed",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/gtest.xml": {
+      "bytes": 41007,
+      "sha256": "506ea4c356f957fd33dea2f2ed869fb3c4450a2afd1ebc19ad008af87de6fbcd",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/inputs-after.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/inputs-before.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/owner.json": {
+      "bytes": 3132,
+      "sha256": "e6dc25f4cedc062705003357f33ee73e8ec3ec3db5ea5ebf2e4fd9ab496f74a7",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/samples.jsonl": {
+      "bytes": 454667,
+      "sha256": "149639f6b981dedb55c5157eb8daa550f6a4ebdb37053a44a5da94f5ae225a21",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b1/stdout.log": {
+      "bytes": 708,
+      "sha256": "74fdae0aa3123dc136b9d0ed33a2cf5489c6fbfab79a832cbd11b159c656d29b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/gtest.xml": {
+      "bytes": 40865,
+      "sha256": "1285093559e32e786f10f8c817cf904d5a4a72dab4738494e0a9c950251156fd",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/inputs-after.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/inputs-before.json": {
+      "bytes": 277745,
+      "sha256": "27c27ea4ba72bca679a8ac8ff7eb01964ea15430fbe85bddcb9828bff54ad31b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/owner.json": {
+      "bytes": 3132,
+      "sha256": "1e7456ca8b3b62a3667d20c97e2450a342bcdff3835c6ff3f4115f0cc8421861",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/samples.jsonl": {
+      "bytes": 469904,
+      "sha256": "be57669aab6b64cefe2a8e7949b1466ecadef775a5883e28e8094caff1c94e2d",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/b2/stdout.log": {
+      "bytes": 708,
+      "sha256": "cab2edbdd7640d454f6fc0454ce5585a227a3fc47a0b90f73084e39658ec5862",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/baseline.json": {
+      "bytes": 7640,
+      "sha256": "1c71d1887f71e29f53d6e94d5463799bbf3a1071971ce4190dd395164b3e639d",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/build-and-arrays.json": {
+      "bytes": 7639,
+      "sha256": "67e8da8eb0cfc9f666a28ec97c52dd69e59d7a02c8f9fbc4463c52439827b2e1",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/compare_software.py": {
+      "bytes": 5596,
+      "sha256": "2aa5e566bc1cb4a2767a73f1676b94cc894682f28d6b107ecec28548c026bac3",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/expected-readback-layout.json": {
+      "bytes": 3455,
+      "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/retention-gate-frozen.json": {
+      "bytes": 1881,
+      "sha256": "ed14b8fe9961d9de71487bb00e0e3fbed4ab7e19d8ca5657a55d9bbd8192094c",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/run_limb_benefit_slot.py": {
+      "bytes": 657,
+      "sha256": "2188b3b4b7ef36505952ebcd8269c8d84b36c4b9ce738d0d194c61600218c69d",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/run_sequence.py": {
+      "bytes": 2177,
+      "sha256": "f8e754bcb137a43e610e3a794cb9065691971c227c557efb9c6e5a057c595342",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/software-comparison.json": {
+      "bytes": 15941,
+      "sha256": "00868addd4ac09910f94dc81c685a8d594a56bd4a1a8e7c3eb4b7406e084292b",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/software-sequence.json": {
+      "bytes": 837,
+      "sha256": "08e4b6c2a6aaa354ec234526f68f43e96a90addd0ad48e225d5078f405a24030",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/benefit/software_contracts.py": {
+      "bytes": 11264,
+      "sha256": "d6d47244f9a93c22d30e1a459f25d0207c9e64682a8814bead93eb455469cdb9",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/finish_trial.py": {
+      "bytes": 8713,
+      "sha256": "b4f148b19850ce42365b3cae42a3a77031a173073034eea3a7c8d36093880d1c",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/independent-raw-decimal-review.json": {
+      "bytes": 7925,
+      "sha256": "3398859224bb859abebf635004c8738e3bce98c94f4194dc18f6f45230047a51",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/original-comparator.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/original-comparator.stdout": {
+      "bytes": 2000,
+      "sha256": "df000092f5663a571edf6c2ad470db13f16a95b79484ab9cce176636d06b035a",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/preparation.json": {
+      "bytes": 1810,
+      "sha256": "aebcfad77aea6d395ee35199c145d8734b3603dd2f2ea789e82ceda2489867e7",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/prepare.py": {
+      "bytes": 4934,
+      "sha256": "23448f8c316ddcf69db58575ca856840ac450e4b4002c9e861388eb2eb0665ee",
+      "mode": "0o644"
+    },
+    "out/round-carry-benefit/trial-review.json": {
+      "bytes": 13283,
+      "sha256": "10e216184bf6a8bd39231ba12200af768a58639189a9603acef4991ae1e28946",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/actions.json": {
+      "bytes": 8049,
+      "sha256": "82b415b6747dbd92dfe14aaecf06d2631465d8edf8e9c29d7c29d7d7676c7fde",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/candidate.patch": {
+      "bytes": 1325,
+      "sha256": "820a07995f2750388e73cf1b329ce7ffbbe35a94521f2f9c9fe611b2bada21d5",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/candidate-endpoint-normal.final.spvasm": {
+      "bytes": 421775,
+      "sha256": "c17f42656c004bbabf93b421c910a933a47db7544ceac248c4e61ddf67b0a8ee",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/candidate-endpoint-normal.spv": {
+      "bytes": 151132,
+      "sha256": "373116783cf989f110f121e169e53e4ab9b71c8c9ce035da4bfe08fea2861f6f",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-0.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-1.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-2.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-3.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-3.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-4.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-4.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-5.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-5.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-6.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/command-6.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/commands.json": {
+      "bytes": 3864,
+      "sha256": "529e49080f0de455908672e94cdc2c0fc7be1a0bbdbe43ad57f8a4e8741b9c41",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/inputs-after.json": {
+      "bytes": 156630,
+      "sha256": "2d5ddebb2ec02249371c7e8204d6012be72860a4c93decf33b085b93d4682efb",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/inputs-before.json": {
+      "bytes": 156630,
+      "sha256": "2d5ddebb2ec02249371c7e8204d6012be72860a4c93decf33b085b93d4682efb",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/owner.json": {
+      "bytes": 1869,
+      "sha256": "e5560e5ff51bf1e7ac7c978a67a8333a72e7025506e18d3b7dfa1a325cda4f29",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/samples.jsonl": {
+      "bytes": 912,
+      "sha256": "43a0feac1adbd2a9f4fbc53dfc3a847ab299fee5c2fb0d6220ae465e42ab2411",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/stderr.log": {
+      "bytes": 892,
+      "sha256": "2a24992070ade03a89aa8ef16ea07e64cf4be14e98263d76db1796ed9eb992ee",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/stock-endpoint-normal.final.spvasm": {
+      "bytes": 422552,
+      "sha256": "0e5a2020b43c219b1a263856a40c4e5d3ff74ddc1670c0868760d057bf716994",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile-endpoint/stock-endpoint-normal.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/compile_one.py": {
+      "bytes": 4412,
+      "sha256": "1b905a9afaf46c69ba7d3f7099dad887d9eb46ca515e895d1f736bdc11daa2a7",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/interface_signature.py": {
+      "bytes": 1096,
+      "sha256": "a7d2fa9db56e8168c0c3a4e095d81edcaaaadecf4ec9c30a07e0c9ce14eaebbc",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/recipe.json": {
+      "bytes": 893,
+      "sha256": "02224217c05584f38533e51b873a8a3ab56c7bba33782db1c02dec10b2edd16c",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/scripts/build-retained-kernels.py": {
+      "bytes": 35163,
+      "sha256": "5510045604a96e36bb17026ce2961129668cb4abef87e3adb6d856ec118e36e1",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/camera_frame_probe.slang": {
+      "bytes": 2470,
+      "sha256": "00120f5858efb20ba53ffa9cb3942860ed5474c012f5db75a2b79c3e9448105c",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/coupled_probe.slang": {
+      "bytes": 6259,
+      "sha256": "748058bbfecfab730d2e652d21c5c10eadd9414c14410829d3180e5965774ddc",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_camera.slang": {
+      "bytes": 7542,
+      "sha256": "06cb1c0e22a26512def78ad4ac6c72e592925bd36222d64227fd0ae88918ba12",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_coupled.slang": {
+      "bytes": 13076,
+      "sha256": "8542f1092485d59c6e8f2ca9640a5ce8732935bfa5c7661def3bd99efff053ce",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_deviation.slang": {
+      "bytes": 18835,
+      "sha256": "9737e7ad54d06c9cb584c14504d574f88551833b3c602ed8335157c100a6a38b",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_disk.slang": {
+      "bytes": 16688,
+      "sha256": "e0badef1c0f70de6798eb8763ec676023f25b531000f3d253adf9c1f4e2100f8",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_ellis_topology.slang": {
+      "bytes": 9393,
+      "sha256": "ebf8f6413fc3d158b2bc135634a8e6c8d6790c8be8a20b217e46424ba9a58ca8",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_integrator.slang": {
+      "bytes": 27452,
+      "sha256": "50336eb422db77a3e6c27f6c02982834604be4530303f27347a6fa9675283a22",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_kerr_infinity.slang": {
+      "bytes": 23616,
+      "sha256": "f9b4d653247d3c09137db6a6c5238626e57504c0b207ec89d786c2b046cdc84c",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_metrics.slang": {
+      "bytes": 30379,
+      "sha256": "4312a5a8548d1e1678a291059a479d98a5efd0cead84c2750264cb2fe89fec2b",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_point_star.slang": {
+      "bytes": 1773,
+      "sha256": "72629a80cd151829b52797b19811add156f8ec5403812e8bf94e19f3796d6eae",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_trace_continuation.slang": {
+      "bytes": 2212,
+      "sha256": "28240c519a6b2f552e39155cb0ef72afccecf4d89b295b25df02dff695a8cbfb",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_trace_event.slang": {
+      "bytes": 15656,
+      "sha256": "345b5ab0953fc4f4c5bbc9a45bb2581e4b318f45fdee0d8bfa990e4e29ccab7c",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/gr_types.slang": {
+      "bytes": 5519,
+      "sha256": "570e3348fa4cfa4c695ac1bdc457b96cb373792eea659e8b35a98235f0f15f9d",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/infinity_probe.slang": {
+      "bytes": 3057,
+      "sha256": "dcddb120fe9cf4306df9e18ded240e629fea31012352e540f275f77955700888",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/metric_consistency_probe.slang": {
+      "bytes": 2352,
+      "sha256": "d21dd5305080cbee5c13aa0e435bb47e45117e35de4aafece4cd94224f64739e",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/parity_probe.slang": {
+      "bytes": 44089,
+      "sha256": "1d81e295c4bc288ba3a5032222c4bbbd95b2381d843526a50520b1222f25dc26",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/portable_binary32.h": {
+      "bytes": 13094,
+      "sha256": "a3a53827172c053807a1eaebac69c59e50783d87a334be8f93e979a8802c9af7",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_camera.slang": {
+      "bytes": 9716,
+      "sha256": "a2ec29ccb7d7dc5aba98319d0ac902f2550ece2837f8d6366620bb5b54ed5929",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_dense.slang": {
+      "bytes": 20082,
+      "sha256": "9230821aa20883ab0994e06f7d17165fb9ada0fc8054e5eceaae4fd421e0193c",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_dopri_phase.slang": {
+      "bytes": 9959,
+      "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_initialize.slang": {
+      "bytes": 8778,
+      "sha256": "79bf6e37634991d94e85f7bd032576b5cc5ae2c9bf3a6a172d20557ffd9c59a6",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_owner.slang": {
+      "bytes": 8042,
+      "sha256": "7d70e581acedccd688dadff476629de52c304d25657389179923b6fb32f8db62",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_program.py": {
+      "bytes": 38341,
+      "sha256": "71a242ed70e984352da250c71bbadf269d3e55af9decb33d3a453e2684dda1d0",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_ray_camera.slang": {
+      "bytes": 9201,
+      "sha256": "e3bfbfedd91096af1374ccd32119c6e1556b2b588f0106e7df1f488055acaf00",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_scratch.slang": {
+      "bytes": 892,
+      "sha256": "cd4a8c27cd2936d78f893c1d825eb988fb9c7f993433a5756d24e1b423626ed8",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_transport.slang": {
+      "bytes": 28933,
+      "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/smoke.slang": {
+      "bytes": 1002,
+      "sha256": "674183f4aef31db29e7a78985ba616c7e5cd401fd21161c798b3028b2142c27e",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source/src/sirius/kernels/trace.slang": {
+      "bytes": 63512,
+      "sha256": "09a3c47abdd769cbf62843aeaba0f4fcd9c4e1514285d57e22a9cc31c7d08a36",
+      "mode": "0o644"
+    },
+    "out/round-carry-endpoint/source-contracts.json": {
+      "bytes": 1628,
+      "sha256": "2b36b14292dcac0423378204b417fee658881183276511c381270d36cf4b392e",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/actions.json": {
+      "bytes": 504186,
+      "sha256": "63d7e1fc918f1c76c1725bab4d9493d5c549fe77c56b8a7d4d4db6dad16a58e3",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/analyze_capture.py": {
+      "bytes": 11150,
+      "sha256": "58d484832210971e160c836a98f33e22bb9767d1e2c7a6883a1332c6acecf708",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/actual-code-review.json": {
+      "bytes": 4430,
+      "sha256": "7e0a2aa83e6eb5fb37611c27535d2253ff6bff0371d376f6e6757754b32a4184",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/actual-loaded-module.json": {
+      "bytes": 154,
+      "sha256": "e68058f12bee2beb6ca21acd1814da571954ebd58da831bc6f5dc3f8f66da7b0",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/bindings.json": {
+      "bytes": 59872,
+      "sha256": "3085804513881e633abd413b7222acd479b9e8f1f37063705a4fce536e0c9c27",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/capture-inputs.json": {
+      "bytes": 526,
+      "sha256": "4f73f378e3a13bda7dff0997b8a827f429686be2fdd57b8bb6368f411f3e8a05",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/capture-verification.json": {
+      "bytes": 1163,
+      "sha256": "7b692a022a450ceb156a11a2b2ca6bc91011bfab421dabf8eb6087c72c51688c",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/capture.gdb": {
+      "bytes": 560,
+      "sha256": "e7451e7eaa561378c90cf9d747ec6db8d85ebbee81382c54bf9b2d38fd54f64a",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/device-features.json": {
+      "bytes": 107786,
+      "sha256": "e976ce7d1799beac73185256a3a8ae1a1956d53c8ed9118b822a1cf128848321",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/inferior-exit.json": {
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/inferior.json": {
+      "bytes": 15,
+      "sha256": "117a7288b7dc7fdf34d25b302ece9b74e3dbeb43bce7aa211db7ca37fd240712",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/inputs-after.json": {
+      "bytes": 1737785,
+      "sha256": "4179ea20c78dea425fa57ca3edbe986a2741ecbdc2e63164221053bccb3e4aeb",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/inputs-before.json": {
+      "bytes": 1737785,
+      "sha256": "4179ea20c78dea425fa57ca3edbe986a2741ecbdc2e63164221053bccb3e4aeb",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-00.elf": {
+      "bytes": 904,
+      "sha256": "e6f5dd70cd9a0bf39234f6a66e0dce07293064b82058c10e91398709ec59456d",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-02.elf": {
+      "bytes": 888,
+      "sha256": "8ed727ae8417cf5a9ed6b029de2b9d678e6c830228ccc0405d07293dc354e4c4",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-04.elf": {
+      "bytes": 1064,
+      "sha256": "a0f0346b05510f6ebdb41622b239b26a2aedba677c1dffb61b453d5f1b5fb3e1",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-06.elf": {
+      "bytes": 1064,
+      "sha256": "95315acd1387d907f8e168172bcf61a809abcb78e2f7043c1852775fdc351b61",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-08.elf": {
+      "bytes": 1064,
+      "sha256": "0d678ab0bbded37be24007ef661352c3884310924b9c38685744da8012bcdc47",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf": {
+      "bytes": 1047912,
+      "sha256": "1ba20701f54a9159c32f8f10758366285a5ca988769e8c67de661cba7553dfdd",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf.live-11.bin": {
+      "bytes": 256,
+      "sha256": "7549810b4d888f1f668d3818aa57bba57e8dfbf6bcca26226f502694a556e433",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf.live-3.bin": {
+      "bytes": 919237,
+      "sha256": "cd74ad6d0a004e05f97b52994210653650632a3ac3d83ce91e493a1ac0c40155",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf.live-5.bin": {
+      "bytes": 96,
+      "sha256": "419638515a2511a96fe30d231d5761cb051690a23876c6a8ebb7a3914218b9bf",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf.live-6.bin": {
+      "bytes": 48,
+      "sha256": "b8b6bb5bb39593fff2f9e61dad2579707e78293f4cb9e21296cb0461c62f2a3f",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf.live-7.bin": {
+      "bytes": 452,
+      "sha256": "f92c3d7cb3ec41ede57d3661f360f4bc0bcf16b62bcac1295fadd6d2b91d8be2",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/jit-10.elf.live-8.bin": {
+      "bytes": 80,
+      "sha256": "36564b5d097f109751163e016bee3b91dea29b00494dd6efbd70d593c7393443",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimized-00.ll": {
+      "bytes": 808,
+      "sha256": "a19631391e1a427d9272694f0723036bb90b96f7e9d802698a8e271b269d97f5",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimized-01.ll": {
+      "bytes": 778,
+      "sha256": "67ab0346ba6f7591c3b1673ff7acef893a2c9d79dcdbd4575e7e0834147ec168",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimized-02.ll": {
+      "bytes": 1038,
+      "sha256": "7fdba5c173edea1d52c8e66095202849bb761760a461f6bc6a413b2e95c9faa8",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimized-03.ll": {
+      "bytes": 1008,
+      "sha256": "24903b13edb1594a75484798920cf9a8f6052023a9e868436cf38a8ef5c06d78",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimized-04.ll": {
+      "bytes": 1010,
+      "sha256": "b8015904b47f4cc4b8945874b37a95b9ed3a2ff279a37eac53c2920656413254",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimized-05.ll": {
+      "bytes": 13216144,
+      "sha256": "4ffee45b428c7941d73d96a8a3049bcd5260017ebd58b2e1e638f7d6315816e3",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/optimizer-exports.tsv": {
+      "bytes": 218,
+      "sha256": "43eb24a922bcd250014f623723c0f78a7e7f92e998529564aeabc26b5d2ed94a",
+      "mode": "0o600"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/owner.json": {
+      "bytes": 3225,
+      "sha256": "3a388371c6034cee1e4e554a2677d08e5e78c0373fcb7149ae757b2321aea6c0",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/samples.jsonl": {
+      "bytes": 473321,
+      "sha256": "c10fe12eb20b91a49176c631c494c29e0b15b11f7689b9917cba54184461a372",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/stderr.log": {
+      "bytes": 194,
+      "sha256": "d93fea6ada55cbd704a710df15eb8e6f00d0895183d9a7a1d527cc8ab71f3b5e",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture-candidate-endpoint-normal/stdout.log": {
+      "bytes": 493,
+      "sha256": "d8eeeadc0db89be3fd4b62449bfc78834e50706f349a3dd01818064fb169d6a2",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture_features.py": {
+      "bytes": 6302,
+      "sha256": "8782d766e4eec1958887ce60b753f2a31df2cee3c1c975ed2fa0eff8fd53364f",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/capture_jit.py": {
+      "bytes": 15935,
+      "sha256": "10e6e004351f58cdbb6dd618c9736c9aeaaf962d8fc53b0095a606b72e12e5e8",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/feature-layout.json": {
+      "bytes": 2346,
+      "sha256": "b67f1d3d32d063e59bd293f805749ec764fccc4f2da98a9f149f10af25b36db3",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/module-inputs/candidate-endpoint-normal.spv": {
+      "bytes": 151132,
+      "sha256": "373116783cf989f110f121e169e53e4ab9b71c8c9ce035da4bfe08fea2861f6f",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/prepare.py": {
+      "bytes": 4089,
+      "sha256": "47f0ab80c79e658fe9df9f153be4d005358e90493bf8d391329d9a5ee3d4705b",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/probe-source.cpp": {
+      "bytes": 4212,
+      "sha256": "853c361fa68e8afd3c532cf7cf5847837f1620cc047bd773a39d0955695241d7",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/read_features.py": {
+      "bytes": 2692,
+      "sha256": "ae0cf3dca1e1340e2025fe4c32acc8025f5fb6f2b3600cc2c9653389e8880716",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/run_capture.py": {
+      "bytes": 4806,
+      "sha256": "a86c75b3f77b15624a149715e102b5676c2c4f64d1c2c8d4c0a424505bc13796",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/runtime-context.json": {
+      "bytes": 1683845,
+      "sha256": "940b0477840b4f8435afc00022a0ac05eb9c3248261b70d940b8e3ffe6582a1a",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/stock-actual-code-review.json": {
+      "bytes": 4344,
+      "sha256": "65d91bce22facf1cfd301efdcb40a63eabaa595c255aaf380ce0355a098c5ca8",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/stock-feature-verification.json": {
+      "bytes": 2161,
+      "sha256": "6984700e634e0cfd4361c4f2016ab07db3abb87f55fc7ec275c9e005c536f54d",
+      "mode": "0o644"
+    },
+    "out/round-carry-jit/stock-owner.json": {
+      "bytes": 3211,
+      "sha256": "5bf81163a06a829e7a392eb207e1e4e58f74a375652813ab0a47ce896beff725",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/actions.json": {
+      "bytes": 39561,
+      "sha256": "3acf7113991d52ed80ce7946f9a76bdb38e12b32c408bc0e63ed7c985c2b7d4e",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/active_endpoint_kernels.h": {
+      "bytes": 7955339,
+      "sha256": "8b0d95e0dbffed82f8e29d7efabe69171011076e11619be7a3df36001248134f",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/audited-observer.cpp": {
+      "bytes": 345729,
+      "sha256": "be4657a8f04e2d86059add3417fa20e155526afb3571f376b16923ad5ab1a87a",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/baseline-create.disassembly": {
+      "bytes": 221084,
+      "sha256": "697c0f2ab67e93548df8c39d0369e4e80057c09ad7d34f5b8cec6f427ee450a3",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/candidate-create.disassembly": {
+      "bytes": 220975,
+      "sha256": "523bf01dd7a741a8289d38d5fa498c167a6c10439eb49b3c70ae2f807c06b306",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/commands.json": {
+      "bytes": 6129,
+      "sha256": "3630a270867c98a307e9baba81e9b4d2c3e8605985d372e168822cbd77a9e7c2",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/compile-compute.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/compile-compute.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/inputs-after.json": {
+      "bytes": 268454,
+      "sha256": "d98a16d2a73308915ba91690953cdc49e54e2ed7b6ce5837290d8ebbac5bc494",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/inputs-before.json": {
+      "bytes": 268454,
+      "sha256": "d98a16d2a73308915ba91690953cdc49e54e2ed7b6ce5837290d8ebbac5bc494",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/link-baseline.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/link-baseline.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/link-candidate.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/link-candidate.stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/owner.json": {
+      "bytes": 2989,
+      "sha256": "b206b42c1e43cb67d1796bb497e0e96eb0607ecaaf211c68d2e349d1ba76e513",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/result.json": {
+      "bytes": 168689,
+      "sha256": "8682017edc64edd262739057dca139fa1a4f1dc930549fa283fb538bb8615132",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/samples.jsonl": {
+      "bytes": 11498,
+      "sha256": "02f0c89ad43413ebaefac87a2d87b7519e7531bdfa81eff115e74ed074ea9dc4",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build/stdout.log": {
+      "bytes": 208,
+      "sha256": "e9e65923cb420700800c78975aa41eca1dc1821c0614f1bf3d980f1331bad430",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/build.py": {
+      "bytes": 4900,
+      "sha256": "7b2f45501288b01f098d0a9c1c32933ef767e5e5b32db65bd686b9575309e05e",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/jit-admission.json": {
+      "bytes": 570,
+      "sha256": "15eada1fb6007656ca539a284d2f23995cfeb4820a59e936db009fa90e6bb7d4",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/observer-reuse.json": {
+      "bytes": 210806,
+      "sha256": "41be9b95ba67399b271055958de73a77b8d5cb2c4905d8bbd4eb8584f069ef61",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/prepare.py": {
+      "bytes": 9519,
+      "sha256": "26834beacd260dfc7bc9dd50df1d0e898d1262946850e7a470145a5ad8883e5a",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/recipes.json": {
+      "bytes": 5728,
+      "sha256": "105620c476f9ae06742f8ca2e133d8e7e796d6d64216e6bf2049c828ade0fd75",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/retained_compute.cpp": {
+      "bytes": 45584,
+      "sha256": "36fb237acd57ffc9beb36da95b0e7c4b349f2b69c0e1a7224557a7c64052af02",
+      "mode": "0o644"
+    },
+    "out/round-carry-producer/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/actions.json": {
+      "bytes": 9994,
+      "sha256": "3b04c0af9304e08ad1835ade594f774d04ca2c93a3d1e47bfb91a2e010f1c36a",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/prepare.py": {
+      "bytes": 1032,
+      "sha256": "579e281500093ca098d7097a7aa00fa7354a56a8e1a46be45b7277a1a2424d46",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/candidate-PB32Round.spvasm": {
+      "bytes": 3500,
+      "sha256": "b0a429fdd519fffcde72e0e4d5cb7360f3559bb6197e1ca6a3abba0a82df7633",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/inputs-after.json": {
+      "bytes": 164903,
+      "sha256": "4ec4858edfcd36f72b545e793d1b0f3d9e048d5f77dda1fae0acf6f778cdac2d",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/inputs-before.json": {
+      "bytes": 164903,
+      "sha256": "4ec4858edfcd36f72b545e793d1b0f3d9e048d5f77dda1fae0acf6f778cdac2d",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/owner.json": {
+      "bytes": 1885,
+      "sha256": "2ad751cc0f5750f5276ea9d1eaceb05ffc1058b22d6a1b8dbdb7d95efd3dd69b",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/result.json": {
+      "bytes": 5359,
+      "sha256": "d0817b3bb204cd732fccc18476148c797568668df1480319b8580ba8e6ca7370",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/stdout.log": {
+      "bytes": 794,
+      "sha256": "9cf985fc7f7fe823f71fe94a2c9e12fbe447f3612d98743c3d9622754caa2109",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review/stock-PB32Round.spvasm": {
+      "bytes": 4277,
+      "sha256": "c5919279531e5f167a89f3ce90560c4a745b00e495a675b9649facb0a0934526",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/review.py": {
+      "bytes": 4931,
+      "sha256": "c35cc831ac7dee5d2b94fab5a2809b69d49b127bdca95b73de43421063cb18ae",
+      "mode": "0o644"
+    },
+    "out/round-carry-review/run_owned.py": {
+      "bytes": 12518,
+      "sha256": "e573fd19525aab4ff2d7f615d5905a8dc37cfedc2af8bb0ad858493625988ccd",
+      "mode": "0o644"
+    }
+  },
+  "owned_roots_for_exact_post_publication_retirement": [
+    "out/recovery-and-rounding",
+    "out/round-carry-endpoint",
+    "out/round-carry-review",
+    "out/round-carry-jit",
+    "out/round-carry-arithmetic",
+    "out/round-carry-producer",
+    "out/round-carry-benefit",
+    "bin/linux-gcc/round-carry-jit",
+    "bin/linux-gcc/round-carry-arithmetic",
+    "bin/linux-gcc/round-carry-producer"
+  ],
+  "preserved_nonowned_extra": [
+    "bin/linux-gcc/tests/backend/portable_binary32_reference.bin"
+  ],
+  "disposition": "REJECT_INTEGER_ROUND_CARRY_ENDPOINT_COST",
+  "original_gates_unchanged": true,
+  "new_source_adopted": false,
+  "source_and_scientific_runtime_frame_release_acceptance": false,
+  "preserved_failure": "Endpoint compilation/validation tool commands all returned zero; stale copied post-reader path failed. Separate reader-only correction passed. No recompile or discarded run.",
+  "reuse": "Same current C1 and admitted passive C8 observer object reused after 518 dependency joins; baseline and candidate share it. No standalone repeated C8 or remaining seven controls after rejection.",
+  "raw_scope": "Full private sources, compiler commands and emitted SPIR-V, ordinary actual-called driver code, 174268 original arithmetic records, same observer and linked-array joins, four original ABBA slots, 32 raw readbacks and 54 command/module joins per slot, independent Decimal reader, governors and frozen inputs."
+}

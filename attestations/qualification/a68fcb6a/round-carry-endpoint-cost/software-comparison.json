@@ -1,0 +1,633 @@
+{
+  "candidate_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "baseline_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "pass": false,
+  "original20_pass": false,
+  "provisioning_accounting_pass": false,
+  "accounting_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 8860.060609,
+      "candidate_ms": 8454.258870000001,
+      "improvement_percent": 4.580123736261888,
+      "minimum_percent": 0,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 7773.078436999999,
+      "candidate_ms": 8342.708905,
+      "improvement_percent": -7.328248037335485,
+      "minimum_percent": 0,
+      "pass": false
+    }
+  ],
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.059386,
+        31.470452,
+        32.107236
+      ],
+      "candidate_samples_ms": [
+        34.820377,
+        32.778485,
+        32.361208
+      ],
+      "baseline_median_ms": 32.107236,
+      "candidate_median_ms": 32.778485,
+      "improvement_percent": -2.090647105219531,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.172294,
+        5.351438,
+        5.844111
+      ],
+      "candidate_samples_ms": [
+        5.158606,
+        5.188294,
+        4.562416
+      ],
+      "baseline_median_ms": 5.351438,
+      "candidate_median_ms": 5.158606,
+      "improvement_percent": 3.603367917184131,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.423632,
+        6.808639,
+        7.295925
+      ],
+      "candidate_samples_ms": [
+        6.955896,
+        7.071951,
+        7.236411
+      ],
+      "baseline_median_ms": 6.808639,
+      "candidate_median_ms": 7.071951,
+      "improvement_percent": -3.8673220888932427,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        20.847075,
+        18.531406,
+        18.136605
+      ],
+      "candidate_samples_ms": [
+        20.801816000000002,
+        19.504804,
+        19.517049
+      ],
+      "baseline_median_ms": 18.531406,
+      "candidate_median_ms": 19.517049,
+      "improvement_percent": -5.318770739791679,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        36.994141,
+        35.946912999999995,
+        39.088207999999995
+      ],
+      "candidate_samples_ms": [
+        38.944194,
+        39.309034999999994,
+        40.073802
+      ],
+      "baseline_median_ms": 36.994141,
+      "candidate_median_ms": 39.309034999999994,
+      "improvement_percent": -6.257461147699025,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.633179,
+        3.162908,
+        2.340487
+      ],
+      "candidate_samples_ms": [
+        2.537768,
+        2.499102,
+        2.836846
+      ],
+      "baseline_median_ms": 2.633179,
+      "candidate_median_ms": 2.537768,
+      "improvement_percent": 3.6234148912778186,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.954474,
+        5.151359,
+        6.2126149999999996
+      ],
+      "candidate_samples_ms": [
+        5.864345,
+        5.765102,
+        6.168366000000001
+      ],
+      "baseline_median_ms": 5.151359,
+      "candidate_median_ms": 5.864345,
+      "improvement_percent": -13.840736007721455,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.048885,
+        4.724364,
+        4.845115
+      ],
+      "candidate_samples_ms": [
+        4.984223,
+        5.235226,
+        5.729436
+      ],
+      "baseline_median_ms": 4.845115,
+      "candidate_median_ms": 5.235226,
+      "improvement_percent": -8.051635513295354,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.534891,
+        9.397725,
+        11.326062
+      ],
+      "candidate_samples_ms": [
+        9.681753,
+        10.255316,
+        10.224826
+      ],
+      "baseline_median_ms": 9.534891,
+      "candidate_median_ms": 10.224826,
+      "improvement_percent": -7.235898134546059,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        11.483155,
+        10.446189,
+        11.159439
+      ],
+      "candidate_samples_ms": [
+        12.200753,
+        11.485943,
+        11.645448
+      ],
+      "baseline_median_ms": 11.159439,
+      "candidate_median_ms": 11.645448,
+      "improvement_percent": -4.355138282488925,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        32.507513,
+        32.875403,
+        31.611209
+      ],
+      "candidate_samples_ms": [
+        32.399652,
+        31.878238,
+        30.870937
+      ],
+      "baseline_median_ms": 32.507513,
+      "candidate_median_ms": 31.878238,
+      "improvement_percent": 1.9357832757,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.113899,
+        4.691423,
+        4.9103449999999995
+      ],
+      "candidate_samples_ms": [
+        4.759766,
+        4.757447,
+        5.273045
+      ],
+      "baseline_median_ms": 4.9103449999999995,
+      "candidate_median_ms": 4.759766,
+      "improvement_percent": 3.0665666058087484,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        7.580987,
+        7.419442,
+        7.094361
+      ],
+      "candidate_samples_ms": [
+        6.998494,
+        6.575966,
+        6.365535
+      ],
+      "baseline_median_ms": 7.419442,
+      "candidate_median_ms": 6.575966,
+      "improvement_percent": 11.3684560105733,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        18.321123,
+        19.70941,
+        18.610373
+      ],
+      "candidate_samples_ms": [
+        19.183735,
+        19.785464,
+        18.312347000000003
+      ],
+      "baseline_median_ms": 18.610373,
+      "candidate_median_ms": 19.183735,
+      "improvement_percent": -3.080873231288806,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.722324,
+        42.458712,
+        39.149107
+      ],
+      "candidate_samples_ms": [
+        41.013662,
+        40.910261,
+        39.180309
+      ],
+      "baseline_median_ms": 39.149107,
+      "candidate_median_ms": 40.910261,
+      "improvement_percent": -4.498580261358191,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.375245,
+        2.575156,
+        2.152558
+      ],
+      "candidate_samples_ms": [
+        2.590055,
+        2.580984,
+        2.641512
+      ],
+      "baseline_median_ms": 2.375245,
+      "candidate_median_ms": 2.590055,
+      "improvement_percent": -9.043698650033994,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.394591999999999,
+        5.493534,
+        5.200258
+      ],
+      "candidate_samples_ms": [
+        5.180032000000001,
+        5.416574,
+        5.5306429999999995
+      ],
+      "baseline_median_ms": 5.394591999999999,
+      "candidate_median_ms": 5.416574,
+      "improvement_percent": -0.4074821599112666,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.2285260000000005,
+        6.261718999999999,
+        5.4471989999999995
+      ],
+      "candidate_samples_ms": [
+        5.924086,
+        6.544066,
+        5.45906
+      ],
+      "baseline_median_ms": 5.4471989999999995,
+      "candidate_median_ms": 5.924086,
+      "improvement_percent": -8.754719627463594,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.558645,
+        10.294489,
+        9.427908
+      ],
+      "candidate_samples_ms": [
+        9.919855,
+        9.768402,
+        10.446978999999999
+      ],
+      "baseline_median_ms": 9.558645,
+      "candidate_median_ms": 9.919855,
+      "improvement_percent": -3.7788828855972767,
+      "minimum_percent": -5,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        11.780301999999999,
+        13.167772,
+        12.251061
+      ],
+      "candidate_samples_ms": [
+        13.250437999999999,
+        12.464673000000001,
+        11.076344
+      ],
+      "baseline_median_ms": 12.251061,
+      "candidate_median_ms": 12.464673000000001,
+      "improvement_percent": -1.7436204096935053,
+      "minimum_percent": -5,
+      "pass": true
+    }
+  ],
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.059386,
+        31.470452,
+        32.107236
+      ],
+      "candidate_samples_ms": [
+        34.820377,
+        32.778485,
+        32.361208
+      ],
+      "baseline_median_ms": 32.107236,
+      "candidate_median_ms": 32.778485,
+      "improvement_percent": -2.090647105219531,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        20.847075,
+        18.531406,
+        18.136605
+      ],
+      "candidate_samples_ms": [
+        20.801816000000002,
+        19.504804,
+        19.517049
+      ],
+      "baseline_median_ms": 18.531406,
+      "candidate_median_ms": 19.517049,
+      "improvement_percent": -5.318770739791679,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        36.994141,
+        35.946912999999995,
+        39.088207999999995
+      ],
+      "candidate_samples_ms": [
+        38.944194,
+        39.309034999999994,
+        40.073802
+      ],
+      "baseline_median_ms": 36.994141,
+      "candidate_median_ms": 39.309034999999994,
+      "improvement_percent": -6.257461147699025,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.954474,
+        5.151359,
+        6.2126149999999996
+      ],
+      "candidate_samples_ms": [
+        5.864345,
+        5.765102,
+        6.168366000000001
+      ],
+      "baseline_median_ms": 5.151359,
+      "candidate_median_ms": 5.864345,
+      "improvement_percent": -13.840736007721455,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.048885,
+        4.724364,
+        4.845115
+      ],
+      "candidate_samples_ms": [
+        4.984223,
+        5.235226,
+        5.729436
+      ],
+      "baseline_median_ms": 4.845115,
+      "candidate_median_ms": 5.235226,
+      "improvement_percent": -8.051635513295354,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.534891,
+        9.397725,
+        11.326062
+      ],
+      "candidate_samples_ms": [
+        9.681753,
+        10.255316,
+        10.224826
+      ],
+      "baseline_median_ms": 9.534891,
+      "candidate_median_ms": 10.224826,
+      "improvement_percent": -7.235898134546059,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        32.507513,
+        32.875403,
+        31.611209
+      ],
+      "candidate_samples_ms": [
+        32.399652,
+        31.878238,
+        30.870937
+      ],
+      "baseline_median_ms": 32.507513,
+      "candidate_median_ms": 31.878238,
+      "improvement_percent": 1.9357832757,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.722324,
+        42.458712,
+        39.149107
+      ],
+      "candidate_samples_ms": [
+        41.013662,
+        40.910261,
+        39.180309
+      ],
+      "baseline_median_ms": 39.149107,
+      "candidate_median_ms": 40.910261,
+      "improvement_percent": -4.498580261358191,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.375245,
+        2.575156,
+        2.152558
+      ],
+      "candidate_samples_ms": [
+        2.590055,
+        2.580984,
+        2.641512
+      ],
+      "baseline_median_ms": 2.375245,
+      "candidate_median_ms": 2.590055,
+      "improvement_percent": -9.043698650033994,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.2285260000000005,
+        6.261718999999999,
+        5.4471989999999995
+      ],
+      "candidate_samples_ms": [
+        5.924086,
+        6.544066,
+        5.45906
+      ],
+      "baseline_median_ms": 5.4471989999999995,
+      "candidate_median_ms": 5.924086,
+      "improvement_percent": -8.754719627463594,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "readback_identity_module_and_completion_prerequisites_pass": true,
+  "scope": "One fixed software default A1/B1/B2/A2 original complete observer. Four complete-call >=5% and sixteen stage >=-5% gates; no pooled orders/retries, frame, science or qualification claim."
+}

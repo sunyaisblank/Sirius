@@ -1,0 +1,10 @@
+{
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "purpose": "Replace PB32Round conditional increment with its exact integer carry predicate, only in the existing ordinary portable normal Endpoint module. Other arithmetic, all native/owner/Transport modules, capabilities, modes, program tables, scratch, buffers, layouts and execution/stream semantics remain untouched.",
+  "proof": "Let r=extended&7 and p=(extended>>3)&1. For p=0, the original condition is r>4. For p=1 it is r>=4, equivalently r>3. Thus the original condition equals r>4-p in both exhaustive parity classes. uint(bool) is0 or1. The same pre-increment sig=extended>>3 receives exactly the same increment. r and p stay in[0,7] and[0,1], so threshold is3 or4 and no subtraction underflows. sig<=0x1fffffff before increment for every uint32 extended, so the addition cannot overflow. Underflow jam, carry normalization, overflow, signed zero and packing are byte-exact surrounding source.",
+  "history_boundary": "Not the rejected computed-zero carry exit in RTAccumulateTerm (#101): no iteration, accumulator, zero-limb or radius path changes. No previously rejected FP32/FP64 estimate or native-add path is revived.",
+  "compiler_decision": "First verify actual complete module control-flow/operation changes and unchanged interface. If actual ordinary driver code has no supported reduction, stop before arithmetic or runtime experiments. No runtime benefit/adoption claim.",
+  "source_changed_in_canonical_checkout": false,
+  "original_PB32Round_signature_and_all_call_sites_unchanged": true,
+  "all_other_header_bytes_identical": true
+}

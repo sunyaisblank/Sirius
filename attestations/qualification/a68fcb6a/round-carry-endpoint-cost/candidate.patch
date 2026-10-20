@@ -1,0 +1,28 @@
+--- src/sirius/kernels/portable_binary32.h
++++ private/src/sirius/kernels/portable_binary32.h
+@@ -114,7 +114,14 @@
+     }
+     uint residue = extended & 7u;
+     uint sig = extended >> 3;
++#if defined(SIRIUS_PB32_ROUND_CARRY)
++    // For even sig, residues 5..7 round up; for odd sig, 4..7 do.
++    // 4 - (sig & 1) is respectively 4 or 3. The predicate is identical,
++    // while its integer carry avoids a conditional increment.
++    sig += uint(residue > 4u - (sig & 1u));
++#else
+     if (residue > 4u || (residue == 4u && (sig & 1u) != 0u)) ++sig;
++#endif
+     if (sig >= 0x01000000u) {
+         sig >>= 1;
+         ++exponent;
+--- scripts/build-retained-kernels.py
++++ private/scripts/build-retained-kernels.py
+@@ -356,6 +356,8 @@
+                     f"-DSIRIUS_RETAINED_EXECUTION_LANES={execution_lanes}",
+                     f"-DSIRIUS_RETAINED_LAYERS={layers}",
+                     f"-DSIRIUS_RETAINED_PREFIX={prefix}"]
++    if portable and normal_sum32 and source.stem == "retained_endpoint" and not stage_seven_owner:
++        definitions.append("-DSIRIUS_PB32_ROUND_CARRY=1")
+     float_controls = [] if portable else ["-denorm-mode-fp32", "preserve"]
+     # Bound inlining to the two portable camera stages.
+     optimization = ("-O1" if portable and source.stem in ("retained_camera", "retained_ray_camera")
