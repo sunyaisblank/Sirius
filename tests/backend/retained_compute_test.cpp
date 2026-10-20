@@ -2121,14 +2121,13 @@ TEST_F(RetainedComputeTest, SchwarzschildStagesPreserveIndependentFieldsAndGener
                         std::span(reinterpret_cast<const std::uint8_t*>(inactive_after.data()),
                                   inactive_after.size()));
                     ASSERT_TRUE(tail_digest) << tail_digest.error();
-                    RecordProperty("schwarzschild_inactive_tail_check_" +
-                                       std::to_string(decline_rte32) + "_" + std::to_string(wide) +
-                                       "_" + std::to_string(call),
-                                   "active_rows=" + std::to_string(rows.size()) +
-                                       ";capacity=" + std::to_string(instance.Capacity()) +
-                                       ";bytes=" + std::to_string(inactive_after.size()) +
-                                       ";nonzero_before=" + std::to_string(nonzero) +
-                                       ";sha256=" + *tail_digest);
+                    RecordProperty(
+                        "schwarzschild_inactive_tail_check_" + std::to_string(decline_rte32) + "_" +
+                            std::to_string(wide) + "_" + std::to_string(call),
+                        "active_rows=" + std::to_string(rows.size()) +
+                            ";capacity=" + std::to_string(instance.Capacity()) +
+                            ";bytes=" + std::to_string(inactive_after.size()) + ";nonzero_before=" +
+                            std::to_string(nonzero) + ";sha256=" + *tail_digest);
                 }
             };
             const auto erased = [](const RetainedStepOutput& output) {
