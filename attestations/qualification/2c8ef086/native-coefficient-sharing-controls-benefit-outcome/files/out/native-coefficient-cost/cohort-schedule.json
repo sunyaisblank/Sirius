@@ -1,0 +1,51 @@
+{
+  "schema": "sirius-native-coefficient-sharing-cohort-schedule-v1",
+  "source_contract_sha256": "7487541c96b8c991dd49a5f8e2748dc6021a185709535893d2ac2b73011c9cea",
+  "original_source_schedule": {
+    "row_sums": {
+      "lanes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "source_Rational_invocations": 1
+    },
+    "embedded_errors": {
+      "lanes": [
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source_Rational_invocations": 1
+    },
+    "corrections": {
+      "lanes": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "distinct_loop_matches": 14,
+      "source_Rational_invocations_per_matching_lane": 1
+    }
+  },
+  "changed_source_schedule": "Select the same integer pair through the original disjoint conditions/loop; call original Rational once after reconvergence for all25 selected lanes. Arithmetic per lane is unchanged.",
+  "actual_diagnostic_pipeline": "Saved default and fresh changed PAL both show one64-lane workgroup/64-lane wave, with unchanged9728B LDS/zero scratch. The three original IR coefficient regions contain6static reciprocal sites; changed single region contains2. Code/ISA joins separately proved.",
+  "inference": "In this observed diagnostic wave geometry, all25 producer lanes share one wave. Original correction-loop source invokes division under14 successive singleton lane masks, in addition to row-sum/error cohorts; moving only integer selection before the sole call enables coefficient arithmetic after reconvergence. This is a source/control-flow scheduling inference, not measured dynamic frequency or runtime application pipeline evidence.",
+  "limits": "No16x speedup claim, exclusive cost, dynamic occupancy, application wave-size equivalence, whole-call/frame benefit or numerical qualification. Higher63vs55VGPR remains a countercost; original gates decide."
+}

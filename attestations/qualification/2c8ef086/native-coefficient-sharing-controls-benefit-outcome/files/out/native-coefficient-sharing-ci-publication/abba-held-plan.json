@@ -1,0 +1,81 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": false,
+  "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "stage": "bin/windows-msvc/native-coefficient-sharing-matched-current",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "abba",
+  "order": [
+    "a1",
+    "b1",
+    "b2",
+    "a2"
+  ],
+  "actions": {
+    "a1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b1": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "b2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    },
+    "a2": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "a1": {
+      "TEMP": "renders/native-coefficient-sharing-runtime-abba/a1",
+      "TMP": "renders/native-coefficient-sharing-runtime-abba/a1"
+    },
+    "b1": {
+      "TEMP": "renders/native-coefficient-sharing-runtime-abba/b1",
+      "TMP": "renders/native-coefficient-sharing-runtime-abba/b1"
+    },
+    "b2": {
+      "TEMP": "renders/native-coefficient-sharing-runtime-abba/b2",
+      "TMP": "renders/native-coefficient-sharing-runtime-abba/b2"
+    },
+    "a2": {
+      "TEMP": "renders/native-coefficient-sharing-runtime-abba/a2",
+      "TMP": "renders/native-coefficient-sharing-runtime-abba/a2"
+    }
+  },
+  "phase_prerequisites": {
+    "timestamp_acceptance": {
+      "path": "out/native-coefficient-sharing-timestamp-evidence/timestamp-acceptance.json",
+      "identity": {
+        "bytes": 53130,
+        "sha256": "dbe0231490ba33c3d48d57019532cb28460ee6c295fd1f4019cb89cdacceae5a"
+      }
+    }
+  }
+}

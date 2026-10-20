@@ -1,0 +1,163 @@
+{
+  "pass": true,
+  "case": "a1",
+  "mode": "native-packed-original-controls",
+  "label": "a1",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-20T08:51:30.5846937Z",
+      "owner_pid": 3532,
+      "owner_start_time_utc": "2026-10-20T08:51:21.4758513Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline\\original_baseline_controls.exe",
+      "test_executable_sha256": "55bc40732f5a277a9bc83ae220a95badfe40ae93f97511298998c2cdd83cc1e6",
+      "arguments": [
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\native\\a1\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline",
+      "outer_guard_seconds": 300,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+      "native_build_gate_authority_used": false,
+      "private_producer_arm": "baseline",
+      "source_private_manifest_sha256": "98fbfd25145a1c424ad6838aa5671c4b45799930e1f6e1c4f12014b9ceae8ea8",
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a1",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a1",
+        "TMPDIR": null
+      },
+      "test_pid": 4928,
+      "test_start_time_utc": "2026-10-20T08:51:32.4031136Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-20T08:52:34.8097530Z",
+      "elapsed_seconds": 64.2110481,
+      "peak_sampled_rss_bytes": 478490624,
+      "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+      "live_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+      "source_build_gate_sha256": "10026e1e9bfcc4760cf34566d898a4c9c52338569a9242e72bf913a9e65afade",
+      "source_build_gate_unchanged": true,
+      "source_private_manifest_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+      "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+      "kind": "a1",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\native\\a1' -Filter 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a1' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current' -ExpectedManifestSha256 '98fbfd25145a1c424ad6838aa5671c4b45799930e1f6e1c4f12014b9ceae8ea8' -ExpectedProducerSha256 '10026e1e9bfcc4760cf34566d898a4c9c52338569a9242e72bf913a9e65afade' -Arm 'baseline' -LiveRevision '2c8ef08693d46f57d5dea14efdbddd4874dac684' -ExecutableName 'original_baseline_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+      ],
+      "binding_sha256": "c7423e7f1116116c8d80c018dd6c43721a5b4c0e5c8331f4195a10c82693d493",
+      "linux_controller_pid": 81193,
+      "linux_controller_birth": "35199582",
+      "predecessor_inputs": {},
+      "bridge_outer_seconds": 1380,
+      "windows_owner_seconds": 300,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 19499620,
+      "linux_child_pid": 81202,
+      "linux_child_birth": "35199757",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": false,
+      "private_producer_authority_used": true,
+      "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+      "mandatory_or_full_runtime_admitted": false,
+      "original_control_identity": {
+        "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+        "arm": "baseline"
+      },
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 72.73234056896763,
+      "signals": []
+    },
+    "stdout_sha256": "0cd1af7d45235c8a1ce0073fd27bd7b0d4c02f6edd8b3baaa6ddb0310dcc559b",
+    "whole_inputs": {
+      "a1-bridge.json": {
+        "bytes": 2867,
+        "sha256": "6593110cd66ee86968643fbe9e701d77fa3712114aa9486780de680ecb7968a7"
+      },
+      "native/a1/owner.json": {
+        "bytes": 3608,
+        "sha256": "3b23e8ebf2b303435a5fae9359206a6c28f82fbff400354831b6cf377d0f9428"
+      },
+      "native/a1/stdout.log": {
+        "bytes": 714,
+        "sha256": "0cd1af7d45235c8a1ce0073fd27bd7b0d4c02f6edd8b3baaa6ddb0310dcc559b"
+      },
+      "native/a1/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/a1/memory.json": {
+        "bytes": 8625,
+        "sha256": "a0e40e5a086ade1d51e715b0caebdfa70abc27274e8026ed7c1b97b3a37dedd2"
+      },
+      "a1-inputs-before.json": {
+        "bytes": 149504,
+        "sha256": "22f8799843b9cc91131836786a844f322c8bd67599e9a875ccb634ca7334fc37"
+      },
+      "a1-inputs-after.json": {
+        "bytes": 149504,
+        "sha256": "22f8799843b9cc91131836786a844f322c8bd67599e9a875ccb634ca7334fc37"
+      },
+      "native/a1/gtest.xml": {
+        "bytes": 41168,
+        "sha256": "ab360cf36270ce3a378940f016f7e2420000f76190432bb4fc29ca1fec4b74d2"
+      },
+      "native/a1/driver-modules.json": {
+        "bytes": 702,
+        "sha256": "b9814a721baf1f3ecd7e582d47eac891e0d5a60d4a5c2c6a0885f040ca1f90c4"
+      }
+    },
+    "original_control_identity": {
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline"
+    }
+  },
+  "terminal_receipt": "out/native-coefficient-sharing-runtime-abba/terminal-a1.json",
+  "terminal_receipt_sha256": "68182dc74fcb9e6cd706b9689824a53ca4290e7ddff7f3965c2de1140d1b92cd",
+  "terminal_bridge_sha256": "8512e83836b69ae1e30c273633676dc02b0b98f95143ebe82fe046f69638627a",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "One original native-AMD control process only: exact case,completed zero-FESD XML,private producer+manifest authority,staged SDK+AMD and held-birth teardown. Full numerical/routes/timestamps/readbacks/performance remain separate readers; no frame/fullscience/UI/Mandatory/release qualification."
+}

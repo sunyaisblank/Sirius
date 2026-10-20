@@ -1,0 +1,205 @@
+{
+  "schema": "sirius-native-coefficient-sharing-root-raw-rejection-check-v1",
+  "passed": true,
+  "producer_source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "raw_XML": {
+    "out/native-coefficient-sharing-runtime-abba/native/a1/gtest.xml": {
+      "bytes": 41168,
+      "sha256": "ab360cf36270ce3a378940f016f7e2420000f76190432bb4fc29ca1fec4b74d2"
+    },
+    "out/native-coefficient-sharing-runtime-abba/native/b1/gtest.xml": {
+      "bytes": 40865,
+      "sha256": "267387e5eb8ddde0bd69abd3a808a7dfdf39106965b1c466ffaf2af25f942f38"
+    },
+    "out/native-coefficient-sharing-runtime-abba/native/b2/gtest.xml": {
+      "bytes": 40917,
+      "sha256": "fc88f405b9f46b9b988852096974393df39a973df5a5342a26817d4b02f194f2"
+    },
+    "out/native-coefficient-sharing-runtime-abba/native/a2/gtest.xml": {
+      "bytes": 41030,
+      "sha256": "5748c75753675c0f173117e70cd1a16160832f0e77a475cf570bee5ff081872f"
+    }
+  },
+  "implementation": "Standalone Decimal45 XML property arithmetic; no original reader or numeric helper imported.",
+  "all22_outcomes_and_improvements_reproduced": true,
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "18.2867383074109657869530885186655869411753739",
+      "minimum_percent": 5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "raw_XML_improvement_percent": "19.1773220190062249598999265642003320400539606",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "raw_XML_improvement_percent": "11.9708942962209431693343919996319103530966278",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "raw_XML_improvement_percent": "19.0584833441976298922446335430483104398501049",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "42.0196261977134267320041018582631878023111744",
+      "minimum_percent": 5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "41.7647058823529365250439616540922396377976523",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "raw_XML_improvement_percent": "38.4310180302345402019146923461856392189794611",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "43.0160567775708461267428398852368248854884985",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "raw_XML_improvement_percent": "40.6866720735333863998153567439407001861205181",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "50.9832677314934457309437648556463529830942974",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "raw_XML_improvement_percent": "91.7952496145682930380189233510674440850112409",
+      "minimum_percent": 0,
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "-3.11780771473286881586952946217552951063578029",
+      "minimum_percent": 5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "raw_XML_improvement_percent": "-7.32771325826799210045392913989270765784354183",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "raw_XML_improvement_percent": "-5.49518681677272347823049872884473670944680887",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "raw_XML_improvement_percent": "-2.18618989547950089930698743704690026973884565",
+      "minimum_percent": -5,
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "-13.2987685559056767798457328603246081811950778",
+      "minimum_percent": 5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-19.5213036835851294871026096476068230930307009",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-10.7886133482178439581262526769623152709213992",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-15.7415750585691070463146512885204541358803388",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-15.1497460447194786619183840270885632552980326",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-9.12506938810368556158500295222884903055940061",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "raw_XML_improvement_percent": "-7.31564538506118532925831218128394444223834211",
+      "minimum_percent": 0,
+      "passed": false
+    }
+  ],
+  "same_complete32_readback_properties_across_control8_and_four_slots": true,
+  "remaining7_not_materialized": true,
+  "benefit_passed": false,
+  "scope": "Separate ROOT arithmetic/raw-data check; original complete957-input ownership/provider/readback audit remains the mature reader evidence. No new workload, retry, sample, adoption or full qualification."
+}

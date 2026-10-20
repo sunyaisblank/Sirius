@@ -1,0 +1,308 @@
+{
+  "pass": true,
+  "case": "a2",
+  "mode": "native-packed-original-controls",
+  "label": "a2",
+  "record": {
+    "owner": {
+      "schema_version": 1,
+      "kind": "bounded-native-Windows-control",
+      "start_utc": "2026-10-20T08:53:43.3806472Z",
+      "owner_pid": 13308,
+      "owner_start_time_utc": "2026-10-20T08:53:34.8036193Z",
+      "test_executable": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline\\original_baseline_controls.exe",
+      "test_executable_sha256": "55bc40732f5a277a9bc83ae220a95badfe40ae93f97511298998c2cdd83cc1e6",
+      "arguments": [
+        "--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+        "--gtest_color=no",
+        "\"--gtest_output=xml:\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\native\\a2\\gtest.xml\""
+      ],
+      "working_directory": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline",
+      "outer_guard_seconds": 300,
+      "rss_guard_bytes": 4294967296,
+      "outer_stop": false,
+      "status": "completed",
+      "numerical_control_passed": true,
+      "expected_cases": [
+        "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+      ],
+      "qualification_claimed": false,
+      "scope": "Original numerical/reference control on actual native driver. Diagnostic RSS/time guard invalidates incomplete runs; no scientific/device budget changes or full runtime/release qualification claim.",
+      "invocation_kind": "Control",
+      "system_inventory_passed": false,
+      "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+      "native_build_gate_authority_used": false,
+      "private_producer_arm": "baseline",
+      "source_private_manifest_sha256": "98fbfd25145a1c424ad6838aa5671c4b45799930e1f6e1c4f12014b9ceae8ea8",
+      "environment": {
+        "VK_DRIVER_FILES": null,
+        "VK_ICD_FILENAMES": null,
+        "VK_ADD_DRIVER_FILES": null,
+        "SIRIUS_VULKAN_DEVICE": null,
+        "SIRIUS_PRECISION": null,
+        "SIRIUS_MEMORY_BUDGET_MB": null,
+        "SIRIUS_DISPATCH_TARGET_MS": null,
+        "TEMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a2",
+        "TMP": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a2",
+        "TMPDIR": null
+      },
+      "test_pid": 16344,
+      "test_start_time_utc": "2026-10-20T08:53:43.8002365Z",
+      "returncode": 0,
+      "exit_code_source": "GetExitCodeProcess on the preacquired owned handle after WaitForExit",
+      "owned_process_absent": true,
+      "end_utc": "2026-10-20T08:53:45.3662806Z",
+      "elapsed_seconds": 1.9623704,
+      "peak_sampled_rss_bytes": 71663616,
+      "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+      "live_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+      "source_build_gate_sha256": "10026e1e9bfcc4760cf34566d898a4c9c52338569a9242e72bf913a9e65afade",
+      "source_build_gate_unchanged": true,
+      "source_private_manifest_unchanged": true,
+      "loaded_driver_modules_recorded": true,
+      "test_executable_unchanged": true,
+      "cleanup_errors": []
+    },
+    "bridge": {
+      "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+      "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+      "kind": "a2",
+      "argv": [
+        "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\native\\a2' -Filter 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a2' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current' -ExpectedManifestSha256 '98fbfd25145a1c424ad6838aa5671c4b45799930e1f6e1c4f12014b9ceae8ea8' -ExpectedProducerSha256 '10026e1e9bfcc4760cf34566d898a4c9c52338569a9242e72bf913a9e65afade' -Arm 'baseline' -LiveRevision '2c8ef08693d46f57d5dea14efdbddd4874dac684' -ExecutableName 'original_baseline_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+      ],
+      "binding_sha256": "c7423e7f1116116c8d80c018dd6c43721a5b4c0e5c8331f4195a10c82693d493",
+      "linux_controller_pid": 83419,
+      "linux_controller_birth": "35211957",
+      "predecessor_inputs": {
+        "out/native-coefficient-sharing-runtime-abba/a1-bridge.json": {
+          "bytes": 2867,
+          "sha256": "6593110cd66ee86968643fbe9e701d77fa3712114aa9486780de680ecb7968a7"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/a1/owner.json": {
+          "bytes": 3608,
+          "sha256": "3b23e8ebf2b303435a5fae9359206a6c28f82fbff400354831b6cf377d0f9428"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/a1/stdout.log": {
+          "bytes": 714,
+          "sha256": "0cd1af7d45235c8a1ce0073fd27bd7b0d4c02f6edd8b3baaa6ddb0310dcc559b"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/a1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/a1/memory.json": {
+          "bytes": 8625,
+          "sha256": "a0e40e5a086ade1d51e715b0caebdfa70abc27274e8026ed7c1b97b3a37dedd2"
+        },
+        "out/native-coefficient-sharing-runtime-abba/a1-inputs-before.json": {
+          "bytes": 149504,
+          "sha256": "22f8799843b9cc91131836786a844f322c8bd67599e9a875ccb634ca7334fc37"
+        },
+        "out/native-coefficient-sharing-runtime-abba/a1-inputs-after.json": {
+          "bytes": 149504,
+          "sha256": "22f8799843b9cc91131836786a844f322c8bd67599e9a875ccb634ca7334fc37"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/a1/gtest.xml": {
+          "bytes": 41168,
+          "sha256": "ab360cf36270ce3a378940f016f7e2420000f76190432bb4fc29ca1fec4b74d2"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/a1/driver-modules.json": {
+          "bytes": 702,
+          "sha256": "b9814a721baf1f3ecd7e582d47eac891e0d5a60d4a5c2c6a0885f040ca1f90c4"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-a1.json": {
+          "bytes": 4084,
+          "sha256": "68182dc74fcb9e6cd706b9689824a53ca4290e7ddff7f3965c2de1140d1b92cd"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-a1-bridge.json": {
+          "bytes": 2392,
+          "sha256": "8512e83836b69ae1e30c273633676dc02b0b98f95143ebe82fe046f69638627a"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-a1-accepted.json": {
+          "bytes": 8993,
+          "sha256": "35d99654058a2f158fcaf88d334d31e8bca0a5a53e668523edf71ff0893723d9"
+        },
+        "out/native-coefficient-sharing-runtime-abba/b1-bridge.json": {
+          "bytes": 5102,
+          "sha256": "10f9250cf60d6e102f57d890a9356c5c558db17a1a5389ba08e2bff291cc0cba"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b1/owner.json": {
+          "bytes": 3621,
+          "sha256": "05a4461aaba14b0b2061b75e18f42d8faf728aeffd9bad4030502a94e46e8113"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b1/stdout.log": {
+          "bytes": 708,
+          "sha256": "4cce599cec2a10a85a0e21e42da9c047a439e125d2f966787e1fd8559ab2492d"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b1/memory.json": {
+          "bytes": 399,
+          "sha256": "23dc295d21a84bb46c1265137378be08c891d5658df5040a07ab3ffc266ec108"
+        },
+        "out/native-coefficient-sharing-runtime-abba/b1-inputs-before.json": {
+          "bytes": 151636,
+          "sha256": "497f128da967126a85da258fa3227065049a024d71dda19393e2dbf7fad0fe52"
+        },
+        "out/native-coefficient-sharing-runtime-abba/b1-inputs-after.json": {
+          "bytes": 151636,
+          "sha256": "497f128da967126a85da258fa3227065049a024d71dda19393e2dbf7fad0fe52"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b1/gtest.xml": {
+          "bytes": 40865,
+          "sha256": "267387e5eb8ddde0bd69abd3a808a7dfdf39106965b1c466ffaf2af25f942f38"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b1/driver-modules.json": {
+          "bytes": 703,
+          "sha256": "ef4bac40d1e22ec608a069cb9c440f0600304f8bc74ea7ea3293608e5e92c448"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-b1.json": {
+          "bytes": 4089,
+          "sha256": "96e5805ea408045a252066b773fae042fd07ef32089c5431b52b64c689980248"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-b1-bridge.json": {
+          "bytes": 2394,
+          "sha256": "9362a334dc530e1e05e4b3f0263bdce74c5a7c3c882e6e220d2cba4524ba8ae3"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-b1-accepted.json": {
+          "bytes": 11437,
+          "sha256": "f15a8160c2929d1ccb61ce196040077c583efa7c3c0a76e3455fe6cdf898f015"
+        },
+        "out/native-coefficient-sharing-runtime-abba/b2-bridge.json": {
+          "bytes": 7330,
+          "sha256": "37ccc4749c0338afbd1315bdc43742cb4fecad703c5b084ecd05bc1c2fb8b5fd"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b2/owner.json": {
+          "bytes": 3609,
+          "sha256": "5bfd3db5d2f3b39493eab85c0a4f1a2c2c7f4a92b6fbf7ed8b098b89c939efb1"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b2/stdout.log": {
+          "bytes": 708,
+          "sha256": "d7f13aebd483a6e15ee86b223d69731698a07a06c6e3633ca52547105f5b4fe0"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b2/memory.json": {
+          "bytes": 410,
+          "sha256": "c2ab33a5fe473a48aaa0e0bf6d26de9ca3d599fb0c2cab7e52056cfb2890d05c"
+        },
+        "out/native-coefficient-sharing-runtime-abba/b2-inputs-before.json": {
+          "bytes": 153768,
+          "sha256": "1394f096fa885f2f2dacef680039b677dfd1be1c62d5021a312a675f9036b7f3"
+        },
+        "out/native-coefficient-sharing-runtime-abba/b2-inputs-after.json": {
+          "bytes": 153768,
+          "sha256": "1394f096fa885f2f2dacef680039b677dfd1be1c62d5021a312a675f9036b7f3"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b2/gtest.xml": {
+          "bytes": 40917,
+          "sha256": "fc88f405b9f46b9b988852096974393df39a973df5a5342a26817d4b02f194f2"
+        },
+        "out/native-coefficient-sharing-runtime-abba/native/b2/driver-modules.json": {
+          "bytes": 703,
+          "sha256": "ef4bac40d1e22ec608a069cb9c440f0600304f8bc74ea7ea3293608e5e92c448"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-b2.json": {
+          "bytes": 4087,
+          "sha256": "368982a844c1f3ca5eabc9d89fc20bbe0a5e9bb590889d9a5e0915e5aba2166b"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-b2-bridge.json": {
+          "bytes": 2393,
+          "sha256": "ba91e630991e45f57d2b00e3eb6ce0a7897a340b09152da33aea62844940aac4"
+        },
+        "out/native-coefficient-sharing-runtime-abba/terminal-b2-accepted.json": {
+          "bytes": 13845,
+          "sha256": "4e8008c8450803463e867d7b50dad1370f84ec67e052954d747b599594023eeb"
+        }
+      },
+      "bridge_outer_seconds": 1380,
+      "windows_owner_seconds": 300,
+      "minimum_wsl_available_kib": 2097152,
+      "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+      "accepted_owner_execution": true,
+      "completed": true,
+      "cleanup_errors": [],
+      "full_qualification_claimed": false,
+      "minimum_sampled_wsl_available_kib": 20375448,
+      "linux_child_pid": 83432,
+      "linux_child_birth": "35212386",
+      "returncode": 0,
+      "linux_child_birth_absent": true,
+      "native_build_gate_authority_used": false,
+      "private_producer_authority_used": true,
+      "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+      "mandatory_or_full_runtime_admitted": false,
+      "original_control_identity": {
+        "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+        "arm": "baseline"
+      },
+      "loaded_provider_evidence_complete": true,
+      "whole_inputs_unchanged": true,
+      "elapsed_seconds": 13.312993329018354,
+      "signals": []
+    },
+    "stdout_sha256": "d92e4a7501c834c55251cd36d088164244c69961d26b637ff05bda98fe5d8f20",
+    "whole_inputs": {
+      "a2-bridge.json": {
+        "bytes": 9554,
+        "sha256": "711fa9ac87c22ec3ce31a38ecdc9efb57dcb3c9ff98ceb6f28c6010dcb636ffb"
+      },
+      "native/a2/owner.json": {
+        "bytes": 3608,
+        "sha256": "fd441d91910b804bf016ff589908c35aff16a91d2a3bafb45fcfc5ba12b6ff8b"
+      },
+      "native/a2/stdout.log": {
+        "bytes": 708,
+        "sha256": "d92e4a7501c834c55251cd36d088164244c69961d26b637ff05bda98fe5d8f20"
+      },
+      "native/a2/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native/a2/memory.json": {
+        "bytes": 398,
+        "sha256": "dc1973e28687d3b58b4c712523f3747c908510d0d2660b1a4ca5befc1eb0082c"
+      },
+      "a2-inputs-before.json": {
+        "bytes": 155900,
+        "sha256": "13356081a4912db29d2d8a979a530e5552737de1d65d977e05429b98c7773bca"
+      },
+      "a2-inputs-after.json": {
+        "bytes": 155900,
+        "sha256": "13356081a4912db29d2d8a979a530e5552737de1d65d977e05429b98c7773bca"
+      },
+      "native/a2/gtest.xml": {
+        "bytes": 41030,
+        "sha256": "5748c75753675c0f173117e70cd1a16160832f0e77a475cf570bee5ff081872f"
+      },
+      "native/a2/driver-modules.json": {
+        "bytes": 702,
+        "sha256": "b9814a721baf1f3ecd7e582d47eac891e0d5a60d4a5c2c6a0885f040ca1f90c4"
+      }
+    },
+    "original_control_identity": {
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "baseline"
+    }
+  },
+  "terminal_receipt": "out/native-coefficient-sharing-runtime-abba/terminal-a2.json",
+  "terminal_receipt_sha256": "7db73d67dad4c09af1199e17e175901e5f32b56b2a795945aa9b31cfa75eefe2",
+  "terminal_bridge_sha256": "a92e00bf620306e0b7b68a66e8b7994ed76f4545de541fc68479c1ef2c348da4",
+  "loaded_provider_evidence_complete": true,
+  "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "scope": "One original native-AMD control process only: exact case,completed zero-FESD XML,private producer+manifest authority,staged SDK+AMD and held-birth teardown. Full numerical/routes/timestamps/readbacks/performance remain separate readers; no frame/fullscience/UI/Mandatory/release qualification."
+}

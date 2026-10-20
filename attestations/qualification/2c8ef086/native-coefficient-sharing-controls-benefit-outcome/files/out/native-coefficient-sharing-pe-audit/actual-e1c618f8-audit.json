@@ -1,0 +1,1460 @@
+{
+  "schema": "sirius-native-packed-static-PE-audit-v1",
+  "audit_completed": true,
+  "array_and_private_compile_checks_passed": true,
+  "full_producer_eligibility_passed": false,
+  "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "run_id": "39393948651",
+  "products": {
+    "baseline": {
+      "PE": {
+        "bytes": 9277952,
+        "sha256": "55bc40732f5a277a9bc83ae220a95badfe40ae93f97511298998c2cdd83cc1e6"
+      },
+      "map": {
+        "bytes": 5360392,
+        "sha256": "7fa264fda4936e1d32d45f368f49813b73b8ad4b49a0f078dc31b540571c1ae8"
+      },
+      "main_arrays": {
+        "kCameraProgram": {
+          "bytes": 107364,
+          "sha256": "4e7ac6f05ee316d019ba9137ebcea0f5883e6dd66031e0839a4d72e6e5e39d49",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7803584,
+              "rva": 7806656
+            }
+          ],
+          "map_rvas": [
+            7806656
+          ]
+        },
+        "kCameraShader": {
+          "bytes": 47720,
+          "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6601040,
+              "rva": 6604112
+            }
+          ],
+          "map_rvas": [
+            6604112
+          ]
+        },
+        "kCameraFp64Shader": {
+          "bytes": 61048,
+          "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6649264,
+              "rva": 6652336
+            }
+          ],
+          "map_rvas": [
+            6652336
+          ]
+        },
+        "kCameraPortableShader": {
+          "bytes": 512324,
+          "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6711200,
+              "rva": 6714272
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 7223536,
+              "rva": 7226608
+            }
+          ],
+          "map_rvas": [
+            6714272
+          ]
+        },
+        "kCameraPortableFp64Shader": {
+          "bytes": 512324,
+          "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6711200,
+              "rva": 6714272
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 7223536,
+              "rva": 7226608
+            }
+          ],
+          "map_rvas": [
+            7226608
+          ]
+        },
+        "kTransportProgram": {
+          "bytes": 63868,
+          "sha256": "8717c2b5cec0664aa7a2c8aeed122cb54b2092ffe8e3d3dd0901d19af7d47436",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7736912,
+              "rva": 7739984
+            }
+          ],
+          "map_rvas": [
+            7739984
+          ]
+        },
+        "kTransportShader": {
+          "bytes": 85832,
+          "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 1844928,
+              "rva": 1848000
+            }
+          ],
+          "map_rvas": [
+            1848000
+          ]
+        },
+        "kTransportFp64Shader": {
+          "bytes": 98008,
+          "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 1931472,
+              "rva": 1934544
+            }
+          ],
+          "map_rvas": [
+            1934544
+          ]
+        },
+        "kTransportPortableShader": {
+          "bytes": 99740,
+          "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2030464,
+              "rva": 2033536
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2130208,
+              "rva": 2133280
+            }
+          ],
+          "map_rvas": [
+            2033536
+          ]
+        },
+        "kTransportPortableFp64Shader": {
+          "bytes": 99740,
+          "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2030464,
+              "rva": 2033536
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2130208,
+              "rva": 2133280
+            }
+          ],
+          "map_rvas": [
+            2133280
+          ]
+        },
+        "kTransportPortableNormalSumShader": {
+          "bytes": 104040,
+          "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2230160,
+              "rva": 2233232
+            }
+          ],
+          "map_rvas": [
+            2233232
+          ]
+        },
+        "kTransportFmaShader": {
+          "bytes": 83532,
+          "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2334256,
+              "rva": 2337328
+            }
+          ],
+          "map_rvas": [
+            2337328
+          ]
+        },
+        "kEndpointProgram": {
+          "bytes": 84572,
+          "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2418208,
+              "rva": 2421280
+            }
+          ],
+          "map_rvas": [
+            2421280
+          ]
+        },
+        "kEndpointShader": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2502848,
+              "rva": 2505920
+            }
+          ],
+          "map_rvas": [
+            2505920
+          ]
+        },
+        "kEndpointFp64Shader": {
+          "bytes": 111960,
+          "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2602784,
+              "rva": 2605856
+            }
+          ],
+          "map_rvas": [
+            2605856
+          ]
+        },
+        "kEndpointPortableShader": {
+          "bytes": 145344,
+          "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2715312,
+              "rva": 2718384
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2860656,
+              "rva": 2863728
+            }
+          ],
+          "map_rvas": [
+            2718384
+          ]
+        },
+        "kEndpointPortableFp64Shader": {
+          "bytes": 145344,
+          "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2715312,
+              "rva": 2718384
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2860656,
+              "rva": 2863728
+            }
+          ],
+          "map_rvas": [
+            2863728
+          ]
+        },
+        "kEndpointPortableNormalSumShader": {
+          "bytes": 151400,
+          "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3007232,
+              "rva": 3010304
+            }
+          ],
+          "map_rvas": [
+            3010304
+          ]
+        },
+        "kEndpointFmaShader": {
+          "bytes": 97468,
+          "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3159488,
+              "rva": 3162560
+            }
+          ],
+          "map_rvas": [
+            3162560
+          ]
+        },
+        "kDenseProgram": {
+          "bytes": 127728,
+          "sha256": "ae332f9d2ef8756b381c7dc641fefae5972b69acc338329c60d13997dfc5c146",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3266736,
+              "rva": 3269808
+            }
+          ],
+          "map_rvas": [
+            3269808
+          ]
+        },
+        "kDenseShader": {
+          "bytes": 78380,
+          "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3402784,
+              "rva": 3405856
+            }
+          ],
+          "map_rvas": [
+            3405856
+          ]
+        },
+        "kDenseFp64Shader": {
+          "bytes": 90628,
+          "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3482096,
+              "rva": 3485168
+            }
+          ],
+          "map_rvas": [
+            3485168
+          ]
+        },
+        "kDensePortableShader": {
+          "bytes": 116204,
+          "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3573296,
+              "rva": 3576368
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 3689504,
+              "rva": 3692576
+            }
+          ],
+          "map_rvas": [
+            3576368
+          ]
+        },
+        "kDensePortableFp64Shader": {
+          "bytes": 116204,
+          "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3573296,
+              "rva": 3576368
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 3689504,
+              "rva": 3692576
+            }
+          ],
+          "map_rvas": [
+            3692576
+          ]
+        },
+        "kInitializeProgram": {
+          "bytes": 39688,
+          "sha256": "a92cf01a58662e08e7d608143c757f58ae6f6b7df8913772c3ad9a4838f8f51e",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7910960,
+              "rva": 7914032
+            }
+          ],
+          "map_rvas": [
+            7914032
+          ]
+        },
+        "kInitializeShader": {
+          "bytes": 57596,
+          "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3807120,
+              "rva": 3810192
+            }
+          ],
+          "map_rvas": [
+            3810192
+          ]
+        },
+        "kInitializeFp64Shader": {
+          "bytes": 70468,
+          "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3865312,
+              "rva": 3868384
+            }
+          ],
+          "map_rvas": [
+            3868384
+          ]
+        },
+        "kInitializePortableShader": {
+          "bytes": 77444,
+          "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3935872,
+              "rva": 3938944
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4013328,
+              "rva": 4016400
+            }
+          ],
+          "map_rvas": [
+            3938944
+          ]
+        },
+        "kInitializePortableFp64Shader": {
+          "bytes": 77444,
+          "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3935872,
+              "rva": 3938944
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4013328,
+              "rva": 4016400
+            }
+          ],
+          "map_rvas": [
+            4016400
+          ]
+        },
+        "kRayCameraProgram": {
+          "bytes": 123848,
+          "sha256": "0c0ce908c9956c51c222e2554de9bc9871a4eb868dad03d118ee64572236df17",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7950656,
+              "rva": 7953728
+            }
+          ],
+          "map_rvas": [
+            7953728
+          ]
+        },
+        "kRayCameraShader": {
+          "bytes": 45368,
+          "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4091232,
+              "rva": 4094304
+            }
+          ],
+          "map_rvas": [
+            4094304
+          ]
+        },
+        "kRayCameraFp64Shader": {
+          "bytes": 58728,
+          "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4137408,
+              "rva": 4140480
+            }
+          ],
+          "map_rvas": [
+            4140480
+          ]
+        },
+        "kRayCameraPortableShader": {
+          "bytes": 475256,
+          "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4196320,
+              "rva": 4199392
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4671584,
+              "rva": 4674656
+            }
+          ],
+          "map_rvas": [
+            4199392
+          ]
+        },
+        "kRayCameraPortableFp64Shader": {
+          "bytes": 475256,
+          "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4196320,
+              "rva": 4199392
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4671584,
+              "rva": 4674656
+            }
+          ],
+          "map_rvas": [
+            4674656
+          ]
+        },
+        "kDopriPhaseProgram": {
+          "bytes": 42756,
+          "sha256": "1b299191be54909e432bafee906992ea15783a3bffe908d4ddd9a34619218b05",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 8074512,
+              "rva": 8077584
+            }
+          ],
+          "map_rvas": [
+            8077584
+          ]
+        },
+        "kDopriPhaseShader": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5147776,
+              "rva": 5150848
+            }
+          ],
+          "map_rvas": [
+            5150848
+          ]
+        },
+        "kDopriPhaseFp64Shader": {
+          "bytes": 72100,
+          "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5207568,
+              "rva": 5210640
+            }
+          ],
+          "map_rvas": [
+            5210640
+          ]
+        },
+        "kDopriPhasePortableShader": {
+          "bytes": 92844,
+          "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5280256,
+              "rva": 5283328
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 5373104,
+              "rva": 5376176
+            }
+          ],
+          "map_rvas": [
+            5283328
+          ]
+        },
+        "kDopriPhasePortableFp64Shader": {
+          "bytes": 92844,
+          "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5280256,
+              "rva": 5283328
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 5373104,
+              "rva": 5376176
+            }
+          ],
+          "map_rvas": [
+            5376176
+          ]
+        },
+        "kDopriPhasePortableNormalSumShader": {
+          "bytes": 96752,
+          "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5466096,
+              "rva": 5469168
+            }
+          ],
+          "map_rvas": [
+            5469168
+          ]
+        }
+      },
+      "owner_arrays": {
+        "kTransportShader": {
+          "bytes": 113452,
+          "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 8117568,
+              "rva": 8120640
+            }
+          ],
+          "map_rvas": [
+            8120640
+          ]
+        },
+        "kEndpointShader": {
+          "bytes": 161620,
+          "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 8231024,
+              "rva": 8234096
+            }
+          ],
+          "map_rvas": [
+            8234096
+          ]
+        }
+      },
+      "canonical_device_map_members": [
+        "sirius_backend:vulkan_device.obj"
+      ],
+      "link_read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_baseline_controls.dir/Release/native_c.C24C4673.tlog/link.read.1.tlog"
+      ],
+      "link_command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_baseline_controls.dir/Release/native_c.C24C4673.tlog/link.command.1.tlog"
+      ]
+    },
+    "candidate": {
+      "PE": {
+        "bytes": 9276416,
+        "sha256": "2a8c41b9bcf7188c4881c874ac88b3558dcf7e71304c9fd406da6c64a689cdcf"
+      },
+      "map": {
+        "bytes": 5360393,
+        "sha256": "65bc4e0c6ab8f7ba671c010ce98a7f74196a176b4616b488ce7d6d8678e3164e"
+      },
+      "main_arrays": {
+        "kCameraProgram": {
+          "bytes": 107364,
+          "sha256": "4e7ac6f05ee316d019ba9137ebcea0f5883e6dd66031e0839a4d72e6e5e39d49",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7802032,
+              "rva": 7805104
+            }
+          ],
+          "map_rvas": [
+            7805104
+          ]
+        },
+        "kCameraShader": {
+          "bytes": 47720,
+          "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6599488,
+              "rva": 6602560
+            }
+          ],
+          "map_rvas": [
+            6602560
+          ]
+        },
+        "kCameraFp64Shader": {
+          "bytes": 61048,
+          "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6647712,
+              "rva": 6650784
+            }
+          ],
+          "map_rvas": [
+            6650784
+          ]
+        },
+        "kCameraPortableShader": {
+          "bytes": 512324,
+          "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6709648,
+              "rva": 6712720
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 7221984,
+              "rva": 7225056
+            }
+          ],
+          "map_rvas": [
+            6712720
+          ]
+        },
+        "kCameraPortableFp64Shader": {
+          "bytes": 512324,
+          "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 6709648,
+              "rva": 6712720
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 7221984,
+              "rva": 7225056
+            }
+          ],
+          "map_rvas": [
+            7225056
+          ]
+        },
+        "kTransportProgram": {
+          "bytes": 63868,
+          "sha256": "8717c2b5cec0664aa7a2c8aeed122cb54b2092ffe8e3d3dd0901d19af7d47436",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7735360,
+              "rva": 7738432
+            }
+          ],
+          "map_rvas": [
+            7738432
+          ]
+        },
+        "kTransportShader": {
+          "bytes": 84276,
+          "sha256": "e634c8a246f3305a5d097e83583456a572e8fd6b1902ba8c402c9f1d1fc9b2e5",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 1844928,
+              "rva": 1848000
+            }
+          ],
+          "map_rvas": [
+            1848000
+          ]
+        },
+        "kTransportFp64Shader": {
+          "bytes": 98008,
+          "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 1929920,
+              "rva": 1932992
+            }
+          ],
+          "map_rvas": [
+            1932992
+          ]
+        },
+        "kTransportPortableShader": {
+          "bytes": 99740,
+          "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2028912,
+              "rva": 2031984
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2128656,
+              "rva": 2131728
+            }
+          ],
+          "map_rvas": [
+            2031984
+          ]
+        },
+        "kTransportPortableFp64Shader": {
+          "bytes": 99740,
+          "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2028912,
+              "rva": 2031984
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2128656,
+              "rva": 2131728
+            }
+          ],
+          "map_rvas": [
+            2131728
+          ]
+        },
+        "kTransportPortableNormalSumShader": {
+          "bytes": 104040,
+          "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2228608,
+              "rva": 2231680
+            }
+          ],
+          "map_rvas": [
+            2231680
+          ]
+        },
+        "kTransportFmaShader": {
+          "bytes": 83532,
+          "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2332704,
+              "rva": 2335776
+            }
+          ],
+          "map_rvas": [
+            2335776
+          ]
+        },
+        "kEndpointProgram": {
+          "bytes": 84572,
+          "sha256": "914538aa1e75c0a240e3b2d5ce7810aaceaecc6a36f20786a93c36b1465d4aa5",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2416656,
+              "rva": 2419728
+            }
+          ],
+          "map_rvas": [
+            2419728
+          ]
+        },
+        "kEndpointShader": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2501296,
+              "rva": 2504368
+            }
+          ],
+          "map_rvas": [
+            2504368
+          ]
+        },
+        "kEndpointFp64Shader": {
+          "bytes": 111960,
+          "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2601232,
+              "rva": 2604304
+            }
+          ],
+          "map_rvas": [
+            2604304
+          ]
+        },
+        "kEndpointPortableShader": {
+          "bytes": 145344,
+          "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2713760,
+              "rva": 2716832
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2859104,
+              "rva": 2862176
+            }
+          ],
+          "map_rvas": [
+            2716832
+          ]
+        },
+        "kEndpointPortableFp64Shader": {
+          "bytes": 145344,
+          "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 2713760,
+              "rva": 2716832
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 2859104,
+              "rva": 2862176
+            }
+          ],
+          "map_rvas": [
+            2862176
+          ]
+        },
+        "kEndpointPortableNormalSumShader": {
+          "bytes": 151400,
+          "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3005680,
+              "rva": 3008752
+            }
+          ],
+          "map_rvas": [
+            3008752
+          ]
+        },
+        "kEndpointFmaShader": {
+          "bytes": 97468,
+          "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3157936,
+              "rva": 3161008
+            }
+          ],
+          "map_rvas": [
+            3161008
+          ]
+        },
+        "kDenseProgram": {
+          "bytes": 127728,
+          "sha256": "ae332f9d2ef8756b381c7dc641fefae5972b69acc338329c60d13997dfc5c146",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3265184,
+              "rva": 3268256
+            }
+          ],
+          "map_rvas": [
+            3268256
+          ]
+        },
+        "kDenseShader": {
+          "bytes": 78380,
+          "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3401232,
+              "rva": 3404304
+            }
+          ],
+          "map_rvas": [
+            3404304
+          ]
+        },
+        "kDenseFp64Shader": {
+          "bytes": 90628,
+          "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3480544,
+              "rva": 3483616
+            }
+          ],
+          "map_rvas": [
+            3483616
+          ]
+        },
+        "kDensePortableShader": {
+          "bytes": 116204,
+          "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3571744,
+              "rva": 3574816
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 3687952,
+              "rva": 3691024
+            }
+          ],
+          "map_rvas": [
+            3574816
+          ]
+        },
+        "kDensePortableFp64Shader": {
+          "bytes": 116204,
+          "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3571744,
+              "rva": 3574816
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 3687952,
+              "rva": 3691024
+            }
+          ],
+          "map_rvas": [
+            3691024
+          ]
+        },
+        "kInitializeProgram": {
+          "bytes": 39688,
+          "sha256": "a92cf01a58662e08e7d608143c757f58ae6f6b7df8913772c3ad9a4838f8f51e",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7909408,
+              "rva": 7912480
+            }
+          ],
+          "map_rvas": [
+            7912480
+          ]
+        },
+        "kInitializeShader": {
+          "bytes": 57596,
+          "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3805568,
+              "rva": 3808640
+            }
+          ],
+          "map_rvas": [
+            3808640
+          ]
+        },
+        "kInitializeFp64Shader": {
+          "bytes": 70468,
+          "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3863760,
+              "rva": 3866832
+            }
+          ],
+          "map_rvas": [
+            3866832
+          ]
+        },
+        "kInitializePortableShader": {
+          "bytes": 77444,
+          "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3934320,
+              "rva": 3937392
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4011776,
+              "rva": 4014848
+            }
+          ],
+          "map_rvas": [
+            3937392
+          ]
+        },
+        "kInitializePortableFp64Shader": {
+          "bytes": 77444,
+          "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 3934320,
+              "rva": 3937392
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4011776,
+              "rva": 4014848
+            }
+          ],
+          "map_rvas": [
+            4014848
+          ]
+        },
+        "kRayCameraProgram": {
+          "bytes": 123848,
+          "sha256": "0c0ce908c9956c51c222e2554de9bc9871a4eb868dad03d118ee64572236df17",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 7949104,
+              "rva": 7952176
+            }
+          ],
+          "map_rvas": [
+            7952176
+          ]
+        },
+        "kRayCameraShader": {
+          "bytes": 45368,
+          "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4089680,
+              "rva": 4092752
+            }
+          ],
+          "map_rvas": [
+            4092752
+          ]
+        },
+        "kRayCameraFp64Shader": {
+          "bytes": 58728,
+          "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4135856,
+              "rva": 4138928
+            }
+          ],
+          "map_rvas": [
+            4138928
+          ]
+        },
+        "kRayCameraPortableShader": {
+          "bytes": 475256,
+          "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4194768,
+              "rva": 4197840
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4670032,
+              "rva": 4673104
+            }
+          ],
+          "map_rvas": [
+            4197840
+          ]
+        },
+        "kRayCameraPortableFp64Shader": {
+          "bytes": 475256,
+          "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 4194768,
+              "rva": 4197840
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 4670032,
+              "rva": 4673104
+            }
+          ],
+          "map_rvas": [
+            4673104
+          ]
+        },
+        "kDopriPhaseProgram": {
+          "bytes": 42756,
+          "sha256": "1b299191be54909e432bafee906992ea15783a3bffe908d4ddd9a34619218b05",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 8072960,
+              "rva": 8076032
+            }
+          ],
+          "map_rvas": [
+            8076032
+          ]
+        },
+        "kDopriPhaseShader": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5146224,
+              "rva": 5149296
+            }
+          ],
+          "map_rvas": [
+            5149296
+          ]
+        },
+        "kDopriPhaseFp64Shader": {
+          "bytes": 72100,
+          "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5206016,
+              "rva": 5209088
+            }
+          ],
+          "map_rvas": [
+            5209088
+          ]
+        },
+        "kDopriPhasePortableShader": {
+          "bytes": 92844,
+          "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5278704,
+              "rva": 5281776
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 5371552,
+              "rva": 5374624
+            }
+          ],
+          "map_rvas": [
+            5281776
+          ]
+        },
+        "kDopriPhasePortableFp64Shader": {
+          "bytes": 92844,
+          "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5278704,
+              "rva": 5281776
+            },
+            {
+              "section": ".rdata",
+              "file_offset": 5371552,
+              "rva": 5374624
+            }
+          ],
+          "map_rvas": [
+            5374624
+          ]
+        },
+        "kDopriPhasePortableNormalSumShader": {
+          "bytes": 96752,
+          "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 5464544,
+              "rva": 5467616
+            }
+          ],
+          "map_rvas": [
+            5467616
+          ]
+        }
+      },
+      "owner_arrays": {
+        "kTransportShader": {
+          "bytes": 113452,
+          "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 8116016,
+              "rva": 8119088
+            }
+          ],
+          "map_rvas": [
+            8119088
+          ]
+        },
+        "kEndpointShader": {
+          "bytes": 161620,
+          "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6",
+          "locations": [
+            {
+              "section": ".rdata",
+              "file_offset": 8229472,
+              "rva": 8232544
+            }
+          ],
+          "map_rvas": [
+            8232544
+          ]
+        }
+      },
+      "canonical_device_map_members": [
+        "sirius_backend:vulkan_device.obj"
+      ],
+      "link_read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_candidate_controls.dir/Release/native_c.6F06D332.tlog/link.read.1.tlog"
+      ],
+      "link_command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_candidate_controls.dir/Release/native_c.6F06D332.tlog/link.command.1.tlog"
+      ]
+    }
+  },
+  "private_compiles": {
+    "native_coefficient_sharing_dopri": {
+      "object": {
+        "bytes": 2347584,
+        "sha256": "da180cd72461364067dcd9afecb9e8c2e6f1604d41efb1cf76c994f5399ef9ec"
+      },
+      "source": "D:\\a\\Sirius\\Sirius\\tests\\backend\\retained_dopri_test.cpp",
+      "command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_dopri.dir/Release/native_c.DEE94EA7.tlog/CL.command.1.tlog"
+      ],
+      "read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_dopri.dir/Release/native_c.DEE94EA7.tlog/CL.read.1.tlog"
+      ]
+    },
+    "native_coefficient_sharing_baseline_compute": {
+      "object": {
+        "bytes": 5818919,
+        "sha256": "1cce7f753c810700c6c3231f64abbed701e0a22004c174422fbca370aff21b8a"
+      },
+      "source": "D:\\a\\Sirius\\Sirius\\src\\sirius\\backend\\retained_compute.cpp",
+      "command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_baseline_compute.dir/Release/native_c.A238CDA6.tlog/CL.command.1.tlog"
+      ],
+      "read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_baseline_compute.dir/Release/native_c.A238CDA6.tlog/CL.read.1.tlog"
+      ]
+    },
+    "native_coefficient_sharing_baseline_controls": {
+      "object": {
+        "bytes": 13428334,
+        "sha256": "0c060fbe5845d8edde4c4c29dbf096bb8852e90558ef04db7fbed87016da3176"
+      },
+      "source": "D:\\a\\Sirius\\Sirius\\out\\native-coefficient-sharing-producer-inputs\\observer\\audited-observer.cpp",
+      "command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_baseline_controls.dir/Release/native_c.C24C4673.tlog/CL.command.1.tlog"
+      ],
+      "read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_baseline_controls.dir/Release/native_c.C24C4673.tlog/CL.read.1.tlog"
+      ]
+    },
+    "native_coefficient_sharing_candidate_compute": {
+      "object": {
+        "bytes": 5817363,
+        "sha256": "545e4c35187c5fd8214a97f591396bdf1b30b70d02ced98b2b46554e8d1c22d7"
+      },
+      "source": "D:\\a\\Sirius\\Sirius\\src\\sirius\\backend\\retained_compute.cpp",
+      "command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_candidate_compute.dir/Release/native_c.EEB1A266.tlog/CL.command.1.tlog"
+      ],
+      "read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_candidate_compute.dir/Release/native_c.EEB1A266.tlog/CL.read.1.tlog"
+      ]
+    },
+    "native_coefficient_sharing_candidate_controls": {
+      "object": {
+        "bytes": 13426778,
+        "sha256": "f3258a7f4283e1b38e602415292dc9dc524f24ba37ed6c93f1da5a8e5660e740"
+      },
+      "source": "D:\\a\\Sirius\\Sirius\\out\\native-coefficient-sharing-producer-inputs\\observer\\audited-observer.cpp",
+      "command_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_candidate_controls.dir/Release/native_c.6F06D332.tlog/CL.command.1.tlog"
+      ],
+      "read_tlogs": [
+        "metadata/private-objects/native_coefficient_sharing_candidate_controls.dir/Release/native_c.6F06D332.tlog/CL.read.1.tlog"
+      ]
+    }
+  },
+  "changed_main_arrays": [
+    "kTransportShader"
+  ],
+  "canonical_device": {
+    "object": {
+      "bytes": 715031,
+      "sha256": "c2ab3641b0922c651bc0a0f7be52d1ed7dc1511e3cf0985dd6d105b68c3a445c"
+    },
+    "archive": {
+      "bytes": 7730556,
+      "sha256": "c47f936a3902f8643b9af5b7aa079ac8488f6d7437930afa1e4874041e909d9b"
+    },
+    "exact_archive_member_label": "/154",
+    "actual_CL_source_records_joined": true
+  },
+  "remaining_manual_gates": [
+    "Independent read of actual source/tool/API provenance, complete MSVC commands and VERBOSE:LIB records; this narrow reader is not that whole admission.",
+    "Actual selected DLL/CRT/SDK imports, command/source/API/ZIP provenance and full current producer admission; no PE/provider execution is performed here."
+  ],
+  "runtime_admitted": false,
+  "scope": "Static PE arrays and selected private build records only; not numerical/performance qualification."
+}

@@ -1,0 +1,43 @@
+{
+  "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "kind": "a1",
+  "argv": [
+    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "-NoProfile",
+    "-NonInteractive",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "$ErrorActionPreference='Stop';foreach($v in Get-ChildItem Env:){if($v.Name -match '^(LVP_|SLANG_|MESA_)'){throw 'Unexpected inherited compiler/cache override'}};& '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\run_native_control.ps1' -Stage '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current\\payload\\baseline' -Output '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\out\\native-coefficient-sharing-runtime-abba\\native\\a1' -Filter 'RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults' -Seconds '300' -RssBytes '4294967296' -TemporaryDirectory '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\renders\\native-coefficient-sharing-runtime-abba\\a1' -BuildRoot '\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius\\bin\\windows-msvc\\native-coefficient-sharing-matched-current' -ExpectedManifestSha256 '98fbfd25145a1c424ad6838aa5671c4b45799930e1f6e1c4f12014b9ceae8ea8' -ExpectedProducerSha256 '10026e1e9bfcc4760cf34566d898a4c9c52338569a9242e72bf913a9e65afade' -Arm 'baseline' -LiveRevision '2c8ef08693d46f57d5dea14efdbddd4874dac684' -ExecutableName 'original_baseline_controls.exe' -InvocationKind 'Control';exit $LASTEXITCODE"
+  ],
+  "binding_sha256": "c7423e7f1116116c8d80c018dd6c43721a5b4c0e5c8331f4195a10c82693d493",
+  "linux_controller_pid": 81193,
+  "linux_controller_birth": "35199582",
+  "predecessor_inputs": {},
+  "bridge_outer_seconds": 1380,
+  "windows_owner_seconds": 300,
+  "minimum_wsl_available_kib": 2097152,
+  "resource_scope": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "accepted_owner_execution": true,
+  "completed": true,
+  "cleanup_errors": [],
+  "full_qualification_claimed": false,
+  "minimum_sampled_wsl_available_kib": 19499620,
+  "linux_child_pid": 81202,
+  "linux_child_birth": "35199757",
+  "returncode": 0,
+  "linux_child_birth_absent": true,
+  "native_build_gate_authority_used": false,
+  "private_producer_authority_used": true,
+  "private_producer_authority_kind": "private-ci-producer-result-and-manifest",
+  "mandatory_or_full_runtime_admitted": false,
+  "original_control_identity": {
+    "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "arm": "baseline"
+  },
+  "loaded_provider_evidence_complete": true,
+  "whole_inputs_unchanged": true,
+  "elapsed_seconds": 72.73234056896763,
+  "signals": []
+}

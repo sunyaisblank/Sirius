@@ -1,0 +1,32 @@
+--- original/native_evidence.py
++++ native_evidence.py
+@@ -165,7 +165,7 @@
+         assert set(self.arms) == {'baseline', 'candidate'}
+         a, b = (self.arms[k]['arrays'] for k in ('baseline', 'candidate'))
+         assert len(a) == len(b) == 40 and set(a) == set(b)
+-        changed = {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
++        changed = {'kTransportShader'}
+         assert {k for k in a if pin(a[k]) != pin(b[k])} == changed
+         for arm in self.arms.values():
+             for row in arm['arrays'].values(): pin(row)
+
+--- original/materialize_reader_context.py
++++ materialize_reader_context.py
+@@ -15,7 +15,7 @@
+ import xml.etree.ElementTree as ET
+ 
+ ROOT = Path(__file__).resolve().parents[2]
+-SOURCE = ROOT / 'out/native-coefficient-sharing-runtime-source'
++SOURCE = ROOT / 'out/native-coefficient-sharing-readers'
+ 
+ 
+ def identity(path):
+@@ -112,7 +112,7 @@
+     assert set(av['arms']) == {'baseline', 'candidate'}
+     left, right = (av['arms'][arm]['arrays'] for arm in ('baseline', 'candidate'))
+     assert len(left) == len(right) == 40 and set(left) == set(right)
+-    assert {name for name in left if pin(left[name]) != pin(right[name])} == {'kTransportShader', 'kEndpointShader', 'kDenseShader', 'kInitializeShader', 'kDopriPhaseShader'}
++    assert {name for name in left if pin(left[name]) != pin(right[name])} == {'kTransportShader'}
+     for arm in ('baseline', 'candidate'):
+         relative = 'payload/' + arm + '/original_' + arm + '_controls.exe'
+         assert av['arms'][arm]['PE'] == pin(manifest['files'][relative]) == identity(stage / relative)

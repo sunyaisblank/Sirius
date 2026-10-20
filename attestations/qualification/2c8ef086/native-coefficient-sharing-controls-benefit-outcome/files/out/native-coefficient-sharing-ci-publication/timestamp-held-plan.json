@@ -1,0 +1,34 @@
+{
+  "schema": "sirius-native-packed-runtime-plan-v1",
+  "admitted": false,
+  "source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "stage": "bin/windows-msvc/native-coefficient-sharing-matched-current",
+  "windows_checkout_unc": "\\\\wsl.localhost\\Ubuntu\\home\\astra\\.project\\Sirius",
+  "control_profile": "timestamp",
+  "order": [
+    "control-8"
+  ],
+  "actions": {
+    "control-8": {
+      "kind": "Control",
+      "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+      "arm": "candidate",
+      "expected_exit": 0,
+      "owner_seconds": 300,
+      "bridge_outer_seconds": 1380
+    }
+  },
+  "owner_rss_bytes": 4294967296,
+  "minimum_wsl_available_kib": 2097152,
+  "terminal_observer_seconds": 60,
+  "resource_semantics": "300s Windows child elapsed/4GiB sampled child WorkingSet; sampled2GiB WSL available reserve; no Windows aggregate/GPU-memory claim",
+  "child_environment": {
+    "control-8": {
+      "TEMP": "renders/native-coefficient-sharing-runtime-timestamp/control-8",
+      "TMP": "renders/native-coefficient-sharing-runtime-timestamp/control-8"
+    }
+  },
+  "phase_prerequisites": {}
+}

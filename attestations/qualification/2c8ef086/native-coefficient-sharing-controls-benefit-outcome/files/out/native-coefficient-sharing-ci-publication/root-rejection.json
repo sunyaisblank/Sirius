@@ -1,0 +1,104 @@
+{
+  "schema": "sirius-native-coefficient-sharing-root-disposition-v1",
+  "decision": "REJECT",
+  "producer_source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "canonical_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "audit_passed": true,
+  "control8_passed": true,
+  "benefit_passed": false,
+  "checks_passed": 12,
+  "checks_total": 22,
+  "whole_calls_passed": 2,
+  "whole_calls_total": 4,
+  "stages_passed": 9,
+  "stages_total": 16,
+  "inclusive_API_passed": 1,
+  "inclusive_API_total": 2,
+  "failed_conditions": [
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "-3.11780771473286881586952946217552951063578029",
+      "minimum_percent": 5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "raw_XML_improvement_percent": "-7.32771325826799210045392913989270765784354183",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "raw_XML_improvement_percent": "-5.49518681677272347823049872884473670944680887",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "raw_XML_improvement_percent": "-13.2987685559056767798457328603246081811950778",
+      "minimum_percent": 5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-19.5213036835851294871026096476068230930307009",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-10.7886133482178439581262526769623152709213992",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-15.7415750585691070463146512885204541358803388",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-15.1497460447194786619183840270885632552980326",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "raw_XML_improvement_percent": "-9.12506938810368556158500295222884903055940061",
+      "minimum_percent": -5,
+      "passed": false
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "raw_XML_improvement_percent": "-7.31564538506118532925831218128394444223834211",
+      "minimum_percent": 0,
+      "passed": false
+    }
+  ],
+  "remaining7_state": "not materialized or run",
+  "source_adopted": false,
+  "unchanged_retry_or_pooling_or_resampling": false,
+  "frame_run_performed": false,
+  "cause_of_forward_reverse_difference": "Unproved; no noise/cache/thermal/causal attribution.",
+  "scope": "Coefficient-call sharing is not admitted for adoption after sole originalABBA benefit refusal. Preserve negative outcome; pursue a distinct supported cost premise."
+}

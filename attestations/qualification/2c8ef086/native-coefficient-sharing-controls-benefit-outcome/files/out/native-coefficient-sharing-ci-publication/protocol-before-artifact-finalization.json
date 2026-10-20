@@ -1,0 +1,166 @@
+{
+  "schema": "sirius-native-coefficient-sharing-retention-protocol-pending-v1",
+  "source_only": true,
+  "runtime_admitted": false,
+  "adapter_complete": true,
+  "producer_source_revision": "e1c618f83861c478fe18c5a22f5d9aa27f6280fd",
+  "canonical_CXX_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "runner_source_revision": "2c8ef08693d46f57d5dea14efdbddd4874dac684",
+  "control_filters": {
+    "control-1": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission",
+    "control-2": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal",
+    "control-3": "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+    "control-4": "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+    "control-5": "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+    "control-6": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+    "control-7": "RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+    "control-8": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+  },
+  "fixed_order": [
+    "control-8",
+    "a1",
+    "b1",
+    "b2",
+    "a2",
+    "ORIGINAL22_NUMERIC_DECISION",
+    "control-1..control-7 ONLY IF ALL22 PASS",
+    "BOTH_NATIVE_APPLICABLE_COMPLETE_CONTROL_READERS"
+  ],
+  "ABBA": {
+    "labels": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "producer_roles": [
+      "baseline",
+      "candidate",
+      "candidate",
+      "baseline"
+    ],
+    "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+    "process_launches_per_slot": 1,
+    "GTest_internal_repeats_per_family": 3,
+    "outer_repeat_or_warmup": false,
+    "shape_source": {
+      "path": "attestations/qualification/5b2df58b/packed-retained-scratch-rejected/files/out/packed-retained-scratch-controls/benefit/run_limb_benefit_slot.py",
+      "bytes": 669,
+      "sha256": "635e579cdd22bce7783c7b8c13ede0b5b348a242cafbbceae25300e425312d7d"
+    }
+  },
+  "all_actions": {
+    "control-1": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.FactoredEndpointsPreserveIndependentRootsAndBoundaryAdmission"
+    },
+    "control-2": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.MixedIndependentTransportLayersPreserveWordsAndRefusal"
+    },
+    "control-3": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation"
+    },
+    "control-4": {
+      "arm": "candidate",
+      "filter": "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection"
+    },
+    "control-5": {
+      "arm": "candidate",
+      "filter": "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets"
+    },
+    "control-6": {
+      "arm": "candidate",
+      "filter": "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates"
+    },
+    "control-7": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement"
+    },
+    "control-8": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+    },
+    "a1": {
+      "arm": "baseline",
+      "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+    },
+    "b1": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+    },
+    "b2": {
+      "arm": "candidate",
+      "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+    },
+    "a2": {
+      "arm": "baseline",
+      "filter": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults"
+    }
+  },
+  "limits": {
+    "native_child_elapsed_seconds": 300,
+    "native_child_sampled_WorkingSet_bytes": 4294967296,
+    "minimum_sampled_WSL_available_kib": 2097152,
+    "mature_bridge_outer_seconds": 1380,
+    "terminal_or_emergency_cleanup_seconds": 60,
+    "scope": "Windows single child sampled WorkingSet,not Windows aggregate/GPU-budget accounting. Original device physical deadlines/settings remain unchanged."
+  },
+  "cache_policy": "Default native policy;no inherited software LVP_JIT_OPTIMIZATION_LEVEL=0,no cold-frame MESA_SHADER_CACHE_DISABLE=true injection,new driver knob,cache purge or cache performance claim. Actual approved owner/prelude/source environment still requires concrete review.",
+  "numeric_gates": {
+    "whole": {
+      "count": 4,
+      "minimum_improvement_percent": 5
+    },
+    "inclusive_stage": {
+      "count": 16,
+      "minimum_improvement_percent": -5
+    },
+    "Create_plus_all11_original_API_windows": {
+      "count": 2,
+      "minimum_improvement_percent": 0
+    },
+    "pool_subtract_resample_retry": false,
+    "source_exact_math": {
+      "path": "out/native-coefficient-sharing-runtime-source/numeric_gates.py",
+      "bytes": 2890,
+      "sha256": "051b1d0a83c5669099ca00b0496302d662d001b0f341d291a7cf89f68e3abdf1"
+    }
+  },
+  "ROOT_PENDING": [
+    "Actual CI artifact/source/manifest/result/2PE and accepted matched-array/selector proof",
+    "Current observed native device/driver/timestamp identity and staged SDK/AMD pins",
+    "Concrete separately frozen timestamp/ABBA/remaining phase plans+bindings and reviewed root release",
+    "Concrete native data-reader bindings+ROOT admission; no runtime evidence exists in this source packet"
+  ],
+  "candidate_scope": {
+    "changed_main_array": [
+      "kTransportShader",
+      "kEndpointShader",
+      "kDenseShader",
+      "kInitializeShader",
+      "kDopriPhaseShader"
+    ],
+    "unchanged_main_arrays": 35,
+    "unchanged_other_SPVs": 30,
+    "both_owner_payloads_exact_required": true,
+    "scratch_or_lane_or_arithmetic_mode_change": false,
+    "native_coefficient_call_sharing_requires_actual_word_gates": true
+  },
+  "wire_compatibility": "Mature native-packed wire IDs retained. Only native Transport coefficient integer selection/call sharing changes; canonical VulkanDevice/scratch/lanes/modes and original8/22/full32/51/54 unchanged. No rounded-error, wave32, RTConstant or CSE waiver inferred.",
+  "historical_unexecuted_wire_draft_origin_commit": "898e52ca3ecbab002a33ad0bb9420732717685d3",
+  "producer_run_id": "39393948651",
+  "producer_run_attempt": "1",
+  "producer_artifact_id": "ROOT_PENDING",
+  "stage": "bin/windows-msvc/native-coefficient-sharing-matched-current",
+  "producer_profile": "native-coefficient-sharing-one-shader-only",
+  "private_compile_object_count": 5,
+  "finalization_required": {
+    "producer_source_revision": "Actual accepted private producer40hex SHA after ROOT Git publication.",
+    "producer_run_id": "Actual successful API/producer run id as decimal string.",
+    "producer_artifact_id": "Actual matching artifact id as positive JSON integer.",
+    "producer_run_attempt": "Actual original attempt1 string; no unchanged retry authority.",
+    "actual_phase_source_and_data": "ROOT independently seals stage/M/result/API/PE/host+SDK+AMD/array proof; materializer emits both admitted:false, ROOT flips only both totrue after concrete review."
+  }
+}
