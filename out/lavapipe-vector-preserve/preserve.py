@@ -28,16 +28,24 @@ for root in OUT:
 assert len(owners)==17,len(owners)
 upstream=R/'out/lavapipe-vector-workgroup/upstream/mesa-25.2.8';archive=R/'out/lavapipe-vector-workgroup/mesa-25.2.8.tar.xz'
 admission=json.loads((R/'out/lavapipe-vector-workgroup/upstream-admission.json').read_text());assert digest(archive)==admission['archive_sha256'] and archive.stat().st_size==admission['archive_bytes']
-derived={};changed=set(admission['changed_files'])
+derived={};links={};regular=0;changed=set(admission['changed_files'])
 with tarfile.open(archive,'r:xz') as source:
  for member in source:
-  if not member.isfile():continue
   rel=Path(member.name).relative_to('mesa-25.2.8');p=upstream/rel
+  if member.issym():
+   assert p.is_symlink() and os.readlink(p)==member.linkname and p.resolve(strict=True).is_relative_to(upstream),str(rel)
+   links[str(p.relative_to(R))]={'target':member.linkname,'link_mode':stat.S_IMODE(p.lstat().st_mode),'resolved_path':str(p.resolve(strict=True))}
+   if p.is_file():derived[str(p.relative_to(R))]=identity(p)
+   continue
+  if not member.isfile():continue
+  regular+=1
   raw=(R/'out/lavapipe-vector-workgroup/candidate'/rel).read_bytes() if str(rel) in changed else source.extractfile(member).read()
   assert p.read_bytes()==raw,str(rel);derived[str(p.relative_to(R))]=identity(p)
-assert len(derived)==11100 and set(derived)=={str(p.relative_to(R)) for p in upstream.rglob('*') if p.is_file()}
+assert regular==11092 and len(links)==10 and len(derived)==11100
+assert set(derived)=={str(p.relative_to(R)) for p in upstream.rglob('*') if p.is_file()}
+assert set(links)=={str(p.relative_to(R)) for p in upstream.rglob('*') if p.is_symlink()}
 shutil.copy2(archive,D/archive.name)
-save(D/'upstream-reconstruction.json',{'archive':identity(D/archive.name),'official_URL':admission['url'],'official_checksum_source':admission['official_checksum_source'],'patched_files':sorted(changed),'all11100_actual_inputs_reconstruct_exactly':True,'files':derived})
+save(D/'upstream-reconstruction.json',{'archive':identity(D/archive.name),'official_URL':admission['url'],'official_checksum_source':admission['official_checksum_source'],'patched_files':sorted(changed),'all11100_actual_inputs_reconstruct_exactly':True,'original_regular_files':regular,'original_symlinks':links,'files':derived})
 files={};archives={}
 def pack(name,paths):
  target=D/name
