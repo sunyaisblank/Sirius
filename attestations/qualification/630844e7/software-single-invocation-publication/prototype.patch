@@ -1,0 +1,186 @@
+--- scripts/build-retained-kernels.py
++++ private/scripts/build-retained-kernels.py
+@@ -314,8 +314,10 @@
+     portable_parallel = portable and source.stem in ("retained_transport", "retained_endpoint", "retained_dense", "retained_dopri_phase")
+     # Normal Transport, Endpoint and DopriPhase cover complete 64-wide layers
+     # with sixteen invocations and stride over their complete producer sets.
+-    execution_lanes = (16 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
++    execution_lanes = (1 if portable and normal_sum32 and source.stem in ("retained_endpoint", "retained_transport", "retained_dopri_phase")
+                        else WORKGROUP_LANES if portable_parallel or not portable else 1)
++    if portable and normal_sum32 and execution_lanes == 1:
++        definitions.append("-DSIRIUS_RETAINED_SINGLE_INVOCATION=1")
+     if stage_seven_owner:
+         if not portable or not normal_sum32 or source.stem not in ("retained_transport", "retained_endpoint") or execution_lanes != 16:
+             raise ValueError("stage-seven ownership requires parallel portable normal-sum Transport or Endpoint")
+@@ -391,7 +393,10 @@
+         entry = re.search(r"OpEntryPoint GLCompute (%\S+)", text)[1]
+         if f"OpExecutionMode {entry} LocalSize {execution_lanes} 1 1" not in text:
+             raise ValueError("portable retained stage lost its declared execution layout")
+-        if portable_parallel:
++        if portable_parallel and normal_sum32 and execution_lanes == 1:
++            if any(operation in text for operation in ("OpControlBarrier", "OpMemoryBarrier", "OpAtomic")):
++                raise ValueError("single-invocation stage retained unnecessary inter-invocation synchronization")
++        elif portable_parallel:
+             if "OpControlBarrier" not in text:
+                 raise ValueError("parallel portable retained stage lost its inter-invocation join")
+         elif "OpControlBarrier" in text:
+
+--- src/sirius/kernels/retained_endpoint.slang
++++ private/src/sirius/kernels/retained_endpoint.slang
+@@ -131,7 +131,9 @@
+     if (needed == 0 || needed > count || first > needed) return false;
+     if (lane == 0) retainedStatus = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     GroupMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     uint layerBase = programBase + 103 + 5 * count;
+     if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
+@@ -172,7 +174,9 @@
+ #endif
+ #endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
++        #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+         GroupMemoryBarrierWithGroupSync();
++        #endif
+ #endif
+         if (retainedStatus != 0) return false;
+         expected = end;
+@@ -188,7 +192,9 @@
+             WriteStored(rowBase + 4 + i * 5, ReadValue(inputs[programBase + 3 + i], rowBase));
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     return true;
+ }
+@@ -558,7 +564,9 @@
+     if (rowWords < 769) return;
+     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+         SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS != 103 + 5 * count + layers + 1 ||
+@@ -575,7 +583,9 @@
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
+     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+@@ -585,7 +595,9 @@
+     for (uint i = 45; i < 53; ++i)
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
+         RTExact(ReadStored(rowBase + 514), RPZero()) &&
+@@ -603,11 +615,16 @@
+ #ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+             // The flat metric is lane-zero-owned; the curved prefix already
+             // joined its outputs. Publish either before the serial projection.
++            #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+             AllMemoryBarrierWithGroupSync();
++            #endif
+             // Every lane joins before lane zero consumes all sixteen terms.
+             // Invalid products retain their original ordered refusal meaning.
+-            CacheProjectionTerm(rowBase, lane);
++            for (uint term = lane; term < 16; term += SIRIUS_RETAINED_EXECUTION_LANES)
++                CacheProjectionTerm(rowBase, term);
++            #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+             GroupMemoryBarrierWithGroupSync();
++            #endif
+             if (lane == 0) {
+                 retainedProjection[0] = Project(rowBase, component, root) ? 1u : 0u;
+                 retainedProjection[1] = component;
+@@ -617,7 +634,9 @@
+                 retainedProjection[5] = RPBits(root.error);
+                 retainedProjection[6] = root.valid;
+             }
++            #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+             GroupMemoryBarrierWithGroupSync();
++            #endif
+             if (retainedProjection[0] == 0) return;
+             component = retainedProjection[1];
+             root.hi = RPFromBits(retainedProjection[2]);
+@@ -668,7 +687,9 @@
+             }
+ #ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+             // Projected inputs 45..52 cross lanes before suffix evaluation.
++            #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+             AllMemoryBarrierWithGroupSync();
++            #endif
+ #endif
+         } else if (flat) {
+ #ifndef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+@@ -714,7 +735,9 @@
+     if (rowWords < 769) return;
+     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+ #ifndef SIRIUS_RETAINED_PORTABLE
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+         SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS != 103 + 5 * count + layers + 1 ||
+@@ -731,7 +754,9 @@
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
+     }
+ #ifndef SIRIUS_RETAINED_PORTABLE
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
+     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+@@ -741,7 +766,9 @@
+     for (uint i = 45; i < 53; ++i)
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
+ #ifndef SIRIUS_RETAINED_PORTABLE
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     if (RTExact(ReadStored(rowBase + 504), RPZero()) &&
+         RTExact(ReadStored(rowBase + 514), RPZero()) &&
+@@ -796,7 +823,9 @@
+                         RTConstant(i == component ? RPOne() : RPZero()));
+     }
+ #ifndef SIRIUS_RETAINED_PORTABLE
++    #ifndef SIRIUS_RETAINED_SINGLE_INVOCATION
+     AllMemoryBarrierWithGroupSync();
++    #endif
+ #endif
+     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 100, lane, layers, prefix)) return;
+     if (lane == 0) outputs[rowBase] = 1;
+
+--- src/sirius/kernels/retained_scratch.slang
++++ private/src/sirius/kernels/retained_scratch.slang
+@@ -12,7 +12,14 @@
+ void ScratchWrite(uint index, uint component, uint rowBase, uint prefix, uint value) {
+     retainedScratch[ScratchAddress(index, component, rowBase, prefix)] = value;
+ }
++#if defined(SIRIUS_RETAINED_SINGLE_INVOCATION) && SIRIUS_RETAINED_EXECUTION_LANES != 1
++#error single-invocation synchronization requires exactly one invocation
++#endif
+ void RejectRetainedProgram() {
++#ifdef SIRIUS_RETAINED_SINGLE_INVOCATION
++    retainedStatus |= 1u;
++#else
+     uint previous;
+     InterlockedOr(retainedStatus, 1, previous);
++#endif
+ }
+

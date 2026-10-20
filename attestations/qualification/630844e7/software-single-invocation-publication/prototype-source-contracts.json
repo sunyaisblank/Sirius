@@ -1,0 +1,17 @@
+{
+  "schema": "sirius-software-single-invocation-nojoin-source-v1",
+  "source_revision": "630844e775a85e74eb5d9ed328a2b8019abb640d",
+  "production_changed": false,
+  "first_version": "out/software-scalar-cohort",
+  "changed_hypothesis": "Width1 with barriers retained still used a903491-byte coroutine resume and89888-byte frame in actual called LVP code. Elide synchronization only when one invocation is proved, rather than expecting the driver to remove it.",
+  "single_invocation_guard": "Preprocessor rejects SINGLE_INVOCATION with EXECUTION_LANES!=1; emitted candidate must have LocalSize1 and no barrier or atomic instructions.",
+  "frame_condition": "One invocation owns the complete row and all workgroup storage. Same-invocation reads follow their source writes. The original disjoint per-layer register dependencies and projection producer partition use the unchanged program proof. No cross-invocation publication remains; dispatch completion still governs CPU readback. Other rows remain disjoint.",
+  "arithmetic_sources_byteexact": [
+    "retained_scalar.slang",
+    "retained_pair.slang",
+    "retained_triple.slang",
+    "portable_binary32.h"
+  ],
+  "original_program_proof": "out/software-scalar-cohort/source-composition-review.json",
+  "arithmetical_and_benefit_controls_not_executed": true
+}
