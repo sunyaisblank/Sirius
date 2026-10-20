@@ -1,0 +1,45 @@
+{
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "programs": [
+    {
+      "name": "transport",
+      "instructions": 2587,
+      "registers": 459,
+      "roots": 40,
+      "layers": 117,
+      "words": 13096,
+      "current_packed_le_word_sha256": "ab3d2ab3b957be0fcdb57130e5ad689f9568fb57f483ed80c8ff61445da077fc",
+      "old_program_digest_not_used_as_byte_identity": "95807f5832b5fdf191ef2e98503a5094945b7bae3a0bf9f9de0532cbe4d2b227",
+      "all_homogeneous": true,
+      "cohorts_equal_previous_review": true
+    },
+    {
+      "name": "schwarzschild_transport",
+      "instructions": 557,
+      "registers": 459,
+      "roots": 40,
+      "layers": 42,
+      "words": 2871,
+      "current_packed_le_word_sha256": "32f61d39584ca4a3f4036a73c3b91dbac63bf85ac045bb6c76169819a7bf99dd",
+      "old_program_digest_not_used_as_byte_identity": "f8a27bf84fdddef4984e1a7e894402820fc01e16e3ff7e7e61e1f58f8cd3f030",
+      "all_homogeneous": true,
+      "cohorts_equal_previous_review": true
+    }
+  ],
+  "complete_modules": {
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    "attestations/retained-scheduling/3dfa903/homogeneous-opcode-carrier-offline-review/candidate-portable-normal.spv": {
+      "bytes": 106608,
+      "sha256": "048fbc3f67d2f9985dc2f34875ca517fcedd1b6a6daf34a9de9bb43c214eac8d"
+    }
+  },
+  "guarded_arithmetic_and_mixed_layer_fallback": "Original arithmetic/guard/write body is unchanged except explicit opcode parameter; classifier chooses common opcode iff every selected instruction shares it, otherwise exact per-node fallback. Existing stage-zero publication barrier is retained. Immutable input and legal independent register ownership are existing assumptions.",
+  "source_review_reference": "attestations/retained-scheduling/3dfa903/homogeneous-opcode-carrier-offline-review/review-disposition.json",
+  "shared_bytes_added": 468,
+  "conservative_shared_bytes": 10156,
+  "control_barrier_sites": 9,
+  "scope": "Source argument and exact current table/module joins only. No machine-checked shader equivalence or executed arithmetic/performance claim."
+}

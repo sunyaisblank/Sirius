@@ -1,0 +1,609 @@
+{
+  "review_passed": true,
+  "experiment_valid": true,
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "candidate_module_sha256": "048fbc3f67d2f9985dc2f34875ca517fcedd1b6a6daf34a9de9bb43c214eac8d",
+  "disposition": "REJECT: uniform-opcode carrier produces real scalar checks but misses all4 required whole-call gains and4 stage gates; both API gates pass. Do not retry unchanged or adopt.",
+  "performance_acceptance": false,
+  "original_interval_and_stage_checks_passed": 12,
+  "original_interval_and_stage_checks_required": 20,
+  "provisioning_inclusive_API_checks_passed": 2,
+  "provisioning_inclusive_API_checks_required": 2,
+  "complete_call_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.694477,
+        33.555588,
+        32.786506
+      ],
+      "candidate_samples_ms": [
+        33.096282,
+        32.141633,
+        32.34125
+      ],
+      "baseline_median_ms": 33.555588,
+      "candidate_median_ms": 32.34125,
+      "improvement_percent": 3.618884580416227,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        45.311856,
+        42.51089,
+        43.510470000000005
+      ],
+      "candidate_samples_ms": [
+        43.392014,
+        38.225097,
+        41.887525
+      ],
+      "baseline_median_ms": 43.510470000000005,
+      "candidate_median_ms": 41.887525,
+      "improvement_percent": 3.7300102710910923,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.543837,
+        33.489719,
+        32.989181
+      ],
+      "candidate_samples_ms": [
+        35.983643,
+        33.467991,
+        31.25204
+      ],
+      "baseline_median_ms": 33.489719,
+      "candidate_median_ms": 33.467991,
+      "improvement_percent": 0.06487961275519534,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        36.079775,
+        36.697522,
+        36.013385
+      ],
+      "candidate_samples_ms": [
+        39.062988000000004,
+        37.948153999999995,
+        39.637643
+      ],
+      "baseline_median_ms": 36.079775,
+      "candidate_median_ms": 39.062988000000004,
+      "improvement_percent": -8.268380276761722,
+      "minimum_percent": 5,
+      "pass": false
+    }
+  ],
+  "accounting_checks": [
+    {
+      "direction": "forward",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 11048.564694,
+      "candidate_ms": 10381.766737,
+      "improvement_percent": 6.035154569553365,
+      "minimum_percent": 0,
+      "pass": true
+    },
+    {
+      "direction": "reverse",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": 9199.055934,
+      "candidate_ms": 8928.568245,
+      "improvement_percent": 2.940385306282013,
+      "minimum_percent": 0,
+      "pass": true
+    }
+  ],
+  "original_controls_completed": [
+    "C8"
+  ],
+  "original_controls_required": 8,
+  "original_C8_correctness_and_cost_share_identical_executions": true,
+  "all32_complete_readbacks_equal_across_four_slots": true,
+  "all54_actual_command_module_joins_per_slot_verified": true,
+  "original174268_scalar_corpus_reused_with_7_current_provider_and_arithmetic_joins": true,
+  "scalar_arithmetic_unchanged": true,
+  "observer_reused_after_518_dependency_joins": true,
+  "independent_raw_Decimal_all22_decisions_agree": true,
+  "terminal_owners": {
+    "out/transport-opcode-carrier-jit/capture-stock-transport-normal": {
+      "passed": true,
+      "seconds": 35.75201602099696,
+      "peak_rss_kib": 1414776,
+      "before_after_exact": true,
+      "all_births_retired": true
+    },
+    "out/transport-opcode-carrier-jit/capture-candidate-transport-normal": {
+      "passed": true,
+      "seconds": 51.16343384399079,
+      "peak_rss_kib": 1986948,
+      "before_after_exact": true,
+      "all_births_retired": true
+    },
+    "out/transport-carrier-producer/build": {
+      "passed": true,
+      "seconds": 7.747896379965823,
+      "peak_rss_kib": 551840,
+      "before_after_exact": true,
+      "all_births_retired": true
+    },
+    "out/transport-carrier-benefit/benefit/a1": {
+      "passed": true,
+      "seconds": 68.06475466198754,
+      "peak_rss_kib": 2338876,
+      "before_after_exact": true,
+      "all_births_retired": true
+    },
+    "out/transport-carrier-benefit/benefit/b1": {
+      "passed": true,
+      "seconds": 72.80088236997835,
+      "peak_rss_kib": 2681016,
+      "before_after_exact": true,
+      "all_births_retired": true
+    },
+    "out/transport-carrier-benefit/benefit/b2": {
+      "passed": true,
+      "seconds": 61.96244961099001,
+      "peak_rss_kib": 2682328,
+      "before_after_exact": true,
+      "all_births_retired": true
+    },
+    "out/transport-carrier-benefit/benefit/a2": {
+      "passed": true,
+      "seconds": 55.590092369995546,
+      "peak_rss_kib": 2339444,
+      "before_after_exact": true,
+      "all_births_retired": true
+    }
+  },
+  "final_current_input_union_rehashed": 5716,
+  "current_births_retired": [
+    {
+      "pid": 15654,
+      "saved_start_ticks": "37893873",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15655,
+      "saved_start_ticks": "37893885",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15656,
+      "saved_start_ticks": "37893892",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15666,
+      "saved_start_ticks": "37893910",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15920,
+      "saved_start_ticks": "37899830",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15921,
+      "saved_start_ticks": "37899833",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15922,
+      "saved_start_ticks": "37899837",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 15932,
+      "saved_start_ticks": "37899848",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16800,
+      "saved_start_ticks": "37915776",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16801,
+      "saved_start_ticks": "37915779",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16802,
+      "saved_start_ticks": "37915779",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16843,
+      "saved_start_ticks": "37916397",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16844,
+      "saved_start_ticks": "37916397",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16847,
+      "saved_start_ticks": "37916405",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16849,
+      "saved_start_ticks": "37916425",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16850,
+      "saved_start_ticks": "37916425",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 16851,
+      "saved_start_ticks": "37916434",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 17351,
+      "saved_start_ticks": "37923036",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 17642,
+      "saved_start_ticks": "37930151",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 18199,
+      "saved_start_ticks": "37937712",
+      "current_start_ticks": null,
+      "absent": true
+    },
+    {
+      "pid": 18393,
+      "saved_start_ticks": "37944162",
+      "current_start_ticks": null,
+      "absent": true
+    }
+  ],
+  "ordinary_driver_lowering": {
+    "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+    "records": {
+      "stock": {
+        "actual_module": {
+          "words": 26010,
+          "bytes": 104040,
+          "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_called_code_review": "capture-stock-transport-normal/actual-code-review.json",
+        "ordinary_IR": {
+          "module": 123851555999440,
+          "module_generation": 5,
+          "function": 123851556002936,
+          "successful_optimizer_pass_ids": [
+            10,
+            11
+          ],
+          "path": "optimized-05.ll",
+          "bytes": 12911571,
+          "sha256": "4097dba5bfa2fd7b7ad442a979b8468146b8b5f211f61b1789e8aec32cdc7ac8",
+          "optimized_module_observed": true
+        },
+        "executable_bytes": 879837,
+        "resume_frame_bytes": [
+          89024
+        ],
+        "opcode_clusters": [
+          {
+            "type": "<8 x i32>",
+            "value": "%ssa_40352",
+            "definition_line": 119813,
+            "definition": "  %ssa_40352 = call <8 x i32> @llvm.masked.gather.v8i32.v8p0(<8 x ptr> %channel_ptr38928, i32 4, <8 x i1> %mask38930, <8 x i32> zeroinitializer) #4",
+            "small_opcode_comparisons": [
+              {
+                "predicate": "eq",
+                "constant": 0,
+                "line": 119854
+              },
+              {
+                "predicate": "eq",
+                "constant": 1,
+                "line": 119912
+              },
+              {
+                "predicate": "ne",
+                "constant": 6,
+                "line": 121379
+              },
+              {
+                "predicate": "eq",
+                "constant": 4,
+                "line": 121533
+              },
+              {
+                "predicate": "eq",
+                "constant": 6,
+                "line": 121534
+              },
+              {
+                "predicate": "eq",
+                "constant": 3,
+                "line": 121545
+              },
+              {
+                "predicate": "eq",
+                "constant": 7,
+                "line": 158286
+              },
+              {
+                "predicate": "eq",
+                "constant": 8,
+                "line": 158337
+              },
+              {
+                "predicate": "eq",
+                "constant": 9,
+                "line": 160348
+              },
+              {
+                "predicate": "eq",
+                "constant": 10,
+                "line": 164085
+              }
+            ]
+          }
+        ],
+        "all_scalar_i32_comparisons": 2824,
+        "all_vector8_i32_comparisons": 13296
+      },
+      "candidate": {
+        "actual_module": {
+          "words": 26652,
+          "bytes": 106608,
+          "sha256": "048fbc3f67d2f9985dc2f34875ca517fcedd1b6a6daf34a9de9bb43c214eac8d",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_called_code_review": "capture-candidate-transport-normal/actual-code-review.json",
+        "ordinary_IR": {
+          "module": 125092868656848,
+          "module_generation": 5,
+          "function": 125092868660344,
+          "successful_optimizer_pass_ids": [
+            10,
+            11
+          ],
+          "path": "optimized-05.ll",
+          "bytes": 15813199,
+          "sha256": "9afab2ffbdd28962682a145e8915095d653b1140473df2b7ce222504bcb283f6",
+          "optimized_module_observed": true
+        },
+        "executable_bytes": 1089117,
+        "resume_frame_bytes": [
+          109536
+        ],
+        "opcode_clusters": [
+          {
+            "type": "i32",
+            "value": "%ssa_41021",
+            "definition_line": 121900,
+            "definition": "  %ssa_41021 = load i32, ptr %52157, align 4",
+            "small_opcode_comparisons": [
+              {
+                "predicate": "ugt",
+                "constant": 11,
+                "line": 122003
+              },
+              {
+                "predicate": "eq",
+                "constant": 0,
+                "line": 122017
+              },
+              {
+                "predicate": "eq",
+                "constant": 1,
+                "line": 122077
+              },
+              {
+                "predicate": "ne",
+                "constant": 6,
+                "line": 123547
+              },
+              {
+                "predicate": "eq",
+                "constant": 4,
+                "line": 123705
+              },
+              {
+                "predicate": "eq",
+                "constant": 6,
+                "line": 123708
+              },
+              {
+                "predicate": "eq",
+                "constant": 3,
+                "line": 123721
+              },
+              {
+                "predicate": "eq",
+                "constant": 7,
+                "line": 160470
+              },
+              {
+                "predicate": "eq",
+                "constant": 8,
+                "line": 160522
+              },
+              {
+                "predicate": "eq",
+                "constant": 9,
+                "line": 162534
+              },
+              {
+                "predicate": "eq",
+                "constant": 10,
+                "line": 166273
+              }
+            ]
+          },
+          {
+            "type": "<8 x i32>",
+            "value": "%ssa_58287",
+            "definition_line": 167156,
+            "definition": "  %ssa_58287 = call <8 x i32> @llvm.masked.gather.v8i32.v8p0(<8 x ptr> %channel_ptr50032, i32 4, <8 x i1> %mask50034, <8 x i32> zeroinitializer) #4",
+            "small_opcode_comparisons": [
+              {
+                "predicate": "eq",
+                "constant": 0,
+                "line": 167197
+              },
+              {
+                "predicate": "eq",
+                "constant": 1,
+                "line": 167255
+              },
+              {
+                "predicate": "ne",
+                "constant": 6,
+                "line": 168721
+              },
+              {
+                "predicate": "eq",
+                "constant": 4,
+                "line": 168875
+              },
+              {
+                "predicate": "eq",
+                "constant": 6,
+                "line": 168876
+              },
+              {
+                "predicate": "eq",
+                "constant": 3,
+                "line": 168887
+              },
+              {
+                "predicate": "eq",
+                "constant": 7,
+                "line": 205628
+              },
+              {
+                "predicate": "eq",
+                "constant": 8,
+                "line": 205679
+              },
+              {
+                "predicate": "eq",
+                "constant": 9,
+                "line": 207690
+              },
+              {
+                "predicate": "eq",
+                "constant": 10,
+                "line": 211427
+              }
+            ]
+          }
+        ],
+        "all_scalar_i32_comparisons": 2932,
+        "all_vector8_i32_comparisons": 16759
+      }
+    },
+    "ordinary_scalar_homogeneous_opcode_checks_present": true,
+    "mixed_vector_opcode_fallback_present": true,
+    "text_change_percent": 23.786224039225456,
+    "frame_change_percent": 23.0409777138749,
+    "all55_enabled_features_and_queue_extension_chain_equal": true,
+    "shaderInt64": 0,
+    "decision": "Proceed to exactly one original integrated C8/fixed ABBA. Scalar opcode lowering exists; extra fallback code and frame costs require real benefit evidence. No adoption or fresh frame justified yet.",
+    "scope": "Original complete short-input shader to actual ordinary optimized module and called JIT entry/relocation joins. Arithmetic was not executed by these canaries."
+  },
+  "source_review": {
+    "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+    "programs": [
+      {
+        "name": "transport",
+        "instructions": 2587,
+        "registers": 459,
+        "roots": 40,
+        "layers": 117,
+        "words": 13096,
+        "current_packed_le_word_sha256": "ab3d2ab3b957be0fcdb57130e5ad689f9568fb57f483ed80c8ff61445da077fc",
+        "old_program_digest_not_used_as_byte_identity": "95807f5832b5fdf191ef2e98503a5094945b7bae3a0bf9f9de0532cbe4d2b227",
+        "all_homogeneous": true,
+        "cohorts_equal_previous_review": true
+      },
+      {
+        "name": "schwarzschild_transport",
+        "instructions": 557,
+        "registers": 459,
+        "roots": 40,
+        "layers": 42,
+        "words": 2871,
+        "current_packed_le_word_sha256": "32f61d39584ca4a3f4036a73c3b91dbac63bf85ac045bb6c76169819a7bf99dd",
+        "old_program_digest_not_used_as_byte_identity": "f8a27bf84fdddef4984e1a7e894402820fc01e16e3ff7e7e61e1f58f8cd3f030",
+        "all_homogeneous": true,
+        "cohorts_equal_previous_review": true
+      }
+    ],
+    "complete_modules": {
+      "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      },
+      "attestations/retained-scheduling/3dfa903/homogeneous-opcode-carrier-offline-review/candidate-portable-normal.spv": {
+        "bytes": 106608,
+        "sha256": "048fbc3f67d2f9985dc2f34875ca517fcedd1b6a6daf34a9de9bb43c214eac8d"
+      }
+    },
+    "guarded_arithmetic_and_mixed_layer_fallback": "Original arithmetic/guard/write body is unchanged except explicit opcode parameter; classifier chooses common opcode iff every selected instruction shares it, otherwise exact per-node fallback. Existing stage-zero publication barrier is retained. Immutable input and legal independent register ownership are existing assumptions.",
+    "source_review_reference": "attestations/retained-scheduling/3dfa903/homogeneous-opcode-carrier-offline-review/review-disposition.json",
+    "shared_bytes_added": 468,
+    "conservative_shared_bytes": 10156,
+    "control_barrier_sites": 9,
+    "scope": "Source argument and exact current table/module joins only. No machine-checked shader equivalence or executed arithmetic/performance claim."
+  },
+  "old_stock_reuse_refused_on_two_changed_external_library_inputs": true,
+  "preparation_reader_failures_preserved_and_corrected_before_any_conclusion": true,
+  "no_extra_standalone_C8_warmups_retries_order_pooling_or_cost_subtraction": true,
+  "production_adopted": false,
+  "all8_integrated_controls_complete": false,
+  "full_scientific_runtime_frame_installed_release_qualification": false,
+  "scope": "One previously offline portable-only Transport carrier, current actual ordinary-driver source/table/module/feature joins and one sole original unchanged ABBA. No shader rebuild or old native retry, fresh scalar run, remaining7 controls or unchanged failed frame."
+}

@@ -1,0 +1,252 @@
+{
+  "source_revision": "a68fcb6abade554e92ce92a7cc2a948250574f44",
+  "records": {
+    "stock": {
+      "actual_module": {
+        "words": 26010,
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_called_code_review": "capture-stock-transport-normal/actual-code-review.json",
+      "ordinary_IR": {
+        "module": 123851555999440,
+        "module_generation": 5,
+        "function": 123851556002936,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 12911571,
+        "sha256": "4097dba5bfa2fd7b7ad442a979b8468146b8b5f211f61b1789e8aec32cdc7ac8",
+        "optimized_module_observed": true
+      },
+      "executable_bytes": 879837,
+      "resume_frame_bytes": [
+        89024
+      ],
+      "opcode_clusters": [
+        {
+          "type": "<8 x i32>",
+          "value": "%ssa_40352",
+          "definition_line": 119813,
+          "definition": "  %ssa_40352 = call <8 x i32> @llvm.masked.gather.v8i32.v8p0(<8 x ptr> %channel_ptr38928, i32 4, <8 x i1> %mask38930, <8 x i32> zeroinitializer) #4",
+          "small_opcode_comparisons": [
+            {
+              "predicate": "eq",
+              "constant": 0,
+              "line": 119854
+            },
+            {
+              "predicate": "eq",
+              "constant": 1,
+              "line": 119912
+            },
+            {
+              "predicate": "ne",
+              "constant": 6,
+              "line": 121379
+            },
+            {
+              "predicate": "eq",
+              "constant": 4,
+              "line": 121533
+            },
+            {
+              "predicate": "eq",
+              "constant": 6,
+              "line": 121534
+            },
+            {
+              "predicate": "eq",
+              "constant": 3,
+              "line": 121545
+            },
+            {
+              "predicate": "eq",
+              "constant": 7,
+              "line": 158286
+            },
+            {
+              "predicate": "eq",
+              "constant": 8,
+              "line": 158337
+            },
+            {
+              "predicate": "eq",
+              "constant": 9,
+              "line": 160348
+            },
+            {
+              "predicate": "eq",
+              "constant": 10,
+              "line": 164085
+            }
+          ]
+        }
+      ],
+      "all_scalar_i32_comparisons": 2824,
+      "all_vector8_i32_comparisons": 13296
+    },
+    "candidate": {
+      "actual_module": {
+        "words": 26652,
+        "bytes": 106608,
+        "sha256": "048fbc3f67d2f9985dc2f34875ca517fcedd1b6a6daf34a9de9bb43c214eac8d",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_called_code_review": "capture-candidate-transport-normal/actual-code-review.json",
+      "ordinary_IR": {
+        "module": 125092868656848,
+        "module_generation": 5,
+        "function": 125092868660344,
+        "successful_optimizer_pass_ids": [
+          10,
+          11
+        ],
+        "path": "optimized-05.ll",
+        "bytes": 15813199,
+        "sha256": "9afab2ffbdd28962682a145e8915095d653b1140473df2b7ce222504bcb283f6",
+        "optimized_module_observed": true
+      },
+      "executable_bytes": 1089117,
+      "resume_frame_bytes": [
+        109536
+      ],
+      "opcode_clusters": [
+        {
+          "type": "i32",
+          "value": "%ssa_41021",
+          "definition_line": 121900,
+          "definition": "  %ssa_41021 = load i32, ptr %52157, align 4",
+          "small_opcode_comparisons": [
+            {
+              "predicate": "ugt",
+              "constant": 11,
+              "line": 122003
+            },
+            {
+              "predicate": "eq",
+              "constant": 0,
+              "line": 122017
+            },
+            {
+              "predicate": "eq",
+              "constant": 1,
+              "line": 122077
+            },
+            {
+              "predicate": "ne",
+              "constant": 6,
+              "line": 123547
+            },
+            {
+              "predicate": "eq",
+              "constant": 4,
+              "line": 123705
+            },
+            {
+              "predicate": "eq",
+              "constant": 6,
+              "line": 123708
+            },
+            {
+              "predicate": "eq",
+              "constant": 3,
+              "line": 123721
+            },
+            {
+              "predicate": "eq",
+              "constant": 7,
+              "line": 160470
+            },
+            {
+              "predicate": "eq",
+              "constant": 8,
+              "line": 160522
+            },
+            {
+              "predicate": "eq",
+              "constant": 9,
+              "line": 162534
+            },
+            {
+              "predicate": "eq",
+              "constant": 10,
+              "line": 166273
+            }
+          ]
+        },
+        {
+          "type": "<8 x i32>",
+          "value": "%ssa_58287",
+          "definition_line": 167156,
+          "definition": "  %ssa_58287 = call <8 x i32> @llvm.masked.gather.v8i32.v8p0(<8 x ptr> %channel_ptr50032, i32 4, <8 x i1> %mask50034, <8 x i32> zeroinitializer) #4",
+          "small_opcode_comparisons": [
+            {
+              "predicate": "eq",
+              "constant": 0,
+              "line": 167197
+            },
+            {
+              "predicate": "eq",
+              "constant": 1,
+              "line": 167255
+            },
+            {
+              "predicate": "ne",
+              "constant": 6,
+              "line": 168721
+            },
+            {
+              "predicate": "eq",
+              "constant": 4,
+              "line": 168875
+            },
+            {
+              "predicate": "eq",
+              "constant": 6,
+              "line": 168876
+            },
+            {
+              "predicate": "eq",
+              "constant": 3,
+              "line": 168887
+            },
+            {
+              "predicate": "eq",
+              "constant": 7,
+              "line": 205628
+            },
+            {
+              "predicate": "eq",
+              "constant": 8,
+              "line": 205679
+            },
+            {
+              "predicate": "eq",
+              "constant": 9,
+              "line": 207690
+            },
+            {
+              "predicate": "eq",
+              "constant": 10,
+              "line": 211427
+            }
+          ]
+        }
+      ],
+      "all_scalar_i32_comparisons": 2932,
+      "all_vector8_i32_comparisons": 16759
+    }
+  },
+  "ordinary_scalar_homogeneous_opcode_checks_present": true,
+  "mixed_vector_opcode_fallback_present": true,
+  "text_change_percent": 23.786224039225456,
+  "frame_change_percent": 23.0409777138749,
+  "all55_enabled_features_and_queue_extension_chain_equal": true,
+  "shaderInt64": 0,
+  "decision": "Proceed to exactly one original integrated C8/fixed ABBA. Scalar opcode lowering exists; extra fallback code and frame costs require real benefit evidence. No adoption or fresh frame justified yet.",
+  "scope": "Original complete short-input shader to actual ordinary optimized module and called JIT entry/relocation joins. Arithmetic was not executed by these canaries."
+}
