@@ -99,10 +99,7 @@ bool InteractiveViewer::Initialise(const ViewerConfig& config) {
     {
         std::lock_guard<std::mutex> lock(state_mutex_);
         config_ = config;
-        camera_.r = config.observer_distance;
-        camera_.theta = config.observer_inclination;
-        camera_.phi = config.observer_azimuth;
-        camera_.fov = config.observer_fov;
+        camera_ = initial_camera;
 
         refinement_.current_level = 0;
         refinement_.current_sample = 0;

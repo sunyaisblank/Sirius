@@ -386,6 +386,33 @@ TEST(ViewCommandOperational, InputStateHandlesPressRepeatReleaseMouseAndScroll) 
     EXPECT_DOUBLE_EQ(viewer.GetCameraState().r, 5.0);
     EXPECT_DOUBLE_EQ(viewer.GetCameraState().theta, 0.1);
 
+    // A stopped window may never deliver its final key release. Reinitialising
+    // must begin a fresh input epoch without moving the new camera.
+    for (const int key : {87, 83, 65, 68, 81, 69}) {
+        viewer.ProcessKey(key, 1);
+        viewer.Stop();
+        ASSERT_TRUE(viewer.Initialise(config));
+        const auto reset = viewer.GetCameraState();
+        EXPECT_FALSE(reset.move_forward);
+        EXPECT_FALSE(reset.move_backward);
+        EXPECT_FALSE(reset.move_left);
+        EXPECT_FALSE(reset.move_right);
+        EXPECT_FALSE(reset.move_up);
+        EXPECT_FALSE(reset.move_down);
+        viewer.UpdateCamera(0.5f);
+        const auto idle = viewer.GetCameraState();
+        EXPECT_DOUBLE_EQ(idle.r, config.observer_distance);
+        EXPECT_DOUBLE_EQ(idle.theta, config.observer_inclination);
+        EXPECT_DOUBLE_EQ(idle.phi, config.observer_azimuth);
+        EXPECT_FLOAT_EQ(idle.fov, config.observer_fov);
+        EXPECT_FALSE(viewer.GetRefinementState().needs_restart);
+    }
+
+    viewer.ProcessKey(87, 1);
+    viewer.UpdateCamera(0.5f);
+    EXPECT_LT(viewer.GetCameraState().r, config.observer_distance);
+    viewer.ProcessKey(87, 0);
+
     ViewerConfig scaled = config;
     scaled.black_hole_mass = 10.0;
     scaled.observer_distance = 50.0;
