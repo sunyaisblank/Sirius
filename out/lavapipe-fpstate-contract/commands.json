@@ -1,0 +1,42 @@
+[
+  {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+      "-I/home/astra/.project/Sirius/src/sirius/..",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++2c",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-Wno-missing-field-initializers",
+      "-Werror",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-fpstate-contract/gpu_probe.o",
+      "-c",
+      "/home/astra/.project/Sirius/out/lavapipe-fpstate-contract/gpu_probe.cpp"
+    ],
+    "cwd": "/home/astra/.project/Sirius/bin/linux-gcc"
+  },
+  {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-DNDEBUG",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-fpstate-contract/gpu_probe.o",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-fpstate-contract/gpu_probe",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/libsirius_backend_cpu.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/core/libsirius_core.a",
+      "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/libsirius_base.a",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+      "-ldl"
+    ],
+    "cwd": "/home/astra/.project/Sirius"
+  }
+]
