@@ -29,7 +29,7 @@ a = {'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True
      'limits': {'seconds': 180, 'rss_kib': 4194304, 'reserve_kib': 2097152},
      'argv': ['/usr/bin/python3', '-B', str(W / ('build_modules.py' if stage == 'modules' else 'build_matched.py'))],
      'frozen_inputs': sorted(inputs), 'software_provider': False,
-     'scope': ('Compile exactly two complete native32 ownership modules with the original builder, controls, programs, LocalSize64 and scalar algorithms; preserve all35 original modules. No Vulkan execution or qualification.' if stage == 'modules' else 'Compile exactly one private two-module selector/object and relink the original audited observer with all other existing strict GCC objects; preserve every other route and archive member. No Vulkan execution or qualification.')}
+     'scope': ('Compile exactly one changed native32 Endpoint module and reuse the prior byte-exact DopriPhase module with the original builder, controls, programs, LocalSize64 and scalar algorithms; preserve all35 original modules. No Vulkan execution or qualification.' if stage == 'modules' else 'Compile exactly one private two-module selector/object and relink the original audited observer with all other existing strict GCC objects; preserve every other route and archive member. No Vulkan execution or qualification.')}
 p = W / 'actions.json'; actions = json.loads(p.read_text()) if p.exists() else {}
 assert stage not in actions
 actions[stage] = a; p.write_text(json.dumps(actions, indent=2) + '\n')

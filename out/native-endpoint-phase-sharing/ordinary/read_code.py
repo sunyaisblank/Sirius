@@ -11,7 +11,8 @@ def normalized_function(text, name):
         token = match[0]
         if token not in ids: ids[token] = '%N' + str(len(ids))
         return ids[token]
-    return re.sub(r'%[A-Za-z0-9_]+', lambda m: rename(m) if m[0] in local_ids or m[0][1:].isdigit() else m[0], body)
+    renamed = re.sub(r'%[A-Za-z0-9_]+', lambda m: rename(m) if m[0] in local_ids or m[0][1:].isdigit() else m[0], body)
+    return '\n'.join(line.strip() for line in renamed.splitlines())
 
 def expanded_fences(text):
     functions = {}
