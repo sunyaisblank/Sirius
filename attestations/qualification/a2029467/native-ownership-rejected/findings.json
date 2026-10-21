@@ -1,0 +1,510 @@
+{
+  "actual_ordinary_called_code_bytes": {
+    "DopriPhase": 111219,
+    "Endpoint": 1287383
+  },
+  "all35_original_modules_and_tables_unchanged": true,
+  "all_original_expanded_shader_IR_machine_fences": {
+    "DopriPhase": 6,
+    "Endpoint": 11
+  },
+  "benefit": {
+    "checks": [
+      {
+        "baseline_median_ms": 31.974922,
+        "baseline_samples_ms": [
+          31.974922,
+          31.470735,
+          32.960785
+        ],
+        "candidate_median_ms": 19.567103,
+        "candidate_samples_ms": [
+          19.861637,
+          19.567103,
+          18.264407
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 38.80484524715963,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 5.239518,
+        "baseline_samples_ms": [
+          5.036199,
+          5.239518,
+          5.333335
+        ],
+        "candidate_median_ms": 4.387816,
+        "candidate_samples_ms": [
+          4.758399,
+          4.063559,
+          4.387816
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 16.255350205877722,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 6.908274,
+        "baseline_samples_ms": [
+          7.10066,
+          6.518524,
+          6.908274
+        ],
+        "candidate_median_ms": 3.080751,
+        "candidate_samples_ms": [
+          3.031198,
+          4.431906,
+          3.080751
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 55.404910112135106,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 18.759224,
+        "baseline_samples_ms": [
+          18.150298,
+          18.759224,
+          19.005694
+        ],
+        "candidate_median_ms": 9.755692,
+        "candidate_samples_ms": [
+          10.335529000000001,
+          9.755692,
+          9.375204
+        ],
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 47.99522624176778,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 48.980289,
+        "baseline_samples_ms": [
+          66.684697,
+          48.980289,
+          37.375985
+        ],
+        "candidate_median_ms": 57.460441,
+        "candidate_samples_ms": [
+          91.905935,
+          57.460441,
+          29.957943
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -17.313397232098822,
+        "minimum_percent": 5,
+        "pass": false,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 2.47727,
+        "baseline_samples_ms": [
+          4.537911,
+          2.47727,
+          2.099465
+        ],
+        "candidate_median_ms": 1.926168,
+        "candidate_samples_ms": [
+          4.31571,
+          1.926168,
+          1.719394
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 22.24634375744266,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 6.295484999999999,
+        "baseline_samples_ms": [
+          19.360868999999997,
+          6.295484999999999,
+          5.037989
+        ],
+        "candidate_median_ms": 4.390568,
+        "candidate_samples_ms": [
+          11.357022,
+          4.390568,
+          4.037837
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 30.258463009601318,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 6.0979659999999996,
+        "baseline_samples_ms": [
+          6.479309,
+          6.0979659999999996,
+          5.069053
+        ],
+        "candidate_median_ms": 5.2832539999999995,
+        "candidate_samples_ms": [
+          10.676611000000001,
+          5.2832539999999995,
+          4.165371
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 13.36038934949785,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 15.877913000000001,
+        "baseline_samples_ms": [
+          16.052988,
+          15.877913000000001,
+          9.790844
+        ],
+        "candidate_median_ms": 22.866805,
+        "candidate_samples_ms": [
+          36.363348,
+          22.866805,
+          8.403731
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -44.01643969204264,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 14.839797,
+        "baseline_samples_ms": [
+          16.845385,
+          14.839797,
+          12.306893
+        ],
+        "candidate_median_ms": 19.073702,
+        "candidate_samples_ms": [
+          25.938412000000003,
+          19.073702,
+          8.720539
+        ],
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": -28.530747421949233,
+        "minimum_percent": -5,
+        "pass": false,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 56.34555,
+        "baseline_samples_ms": [
+          82.384119,
+          56.34555,
+          53.603129
+        ],
+        "candidate_median_ms": 17.79789,
+        "candidate_samples_ms": [
+          20.940608,
+          17.79789,
+          17.74378
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 68.41296251434231,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 12.278156,
+        "baseline_samples_ms": [
+          14.557207,
+          7.521169,
+          12.278156
+        ],
+        "candidate_median_ms": 4.698098,
+        "candidate_samples_ms": [
+          4.868279,
+          4.698098,
+          4.377744
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 61.736127151340966,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 7.015074,
+        "baseline_samples_ms": [
+          16.872158,
+          7.015074,
+          6.61351
+        ],
+        "candidate_median_ms": 3.112849,
+        "candidate_samples_ms": [
+          4.014706,
+          3.112849,
+          2.767026
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 55.62628419885521,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint+dense inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 40.814159,
+        "baseline_samples_ms": [
+          49.13007,
+          40.814159,
+          33.541659
+        ],
+        "candidate_median_ms": 9.434802000000001,
+        "candidate_samples_ms": [
+          9.773989,
+          8.696961,
+          9.434802000000001
+        ],
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 76.88350751022458,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 90.889039,
+        "baseline_samples_ms": [
+          160.571676,
+          90.889039,
+          90.514595
+        ],
+        "candidate_median_ms": 30.925078999999997,
+        "candidate_samples_ms": [
+          31.40224,
+          29.79082,
+          30.925078999999997
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 65.97490815146588,
+        "minimum_percent": 5,
+        "pass": true,
+        "scope": "complete_call_ms"
+      },
+      {
+        "baseline_median_ms": 7.642725,
+        "baseline_samples_ms": [
+          7.642725,
+          2.054944,
+          9.346264
+        ],
+        "candidate_median_ms": 1.89316,
+        "candidate_samples_ms": [
+          1.669555,
+          1.927179,
+          1.89316
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 75.22925396373675,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 9.755579,
+        "baseline_samples_ms": [
+          15.628001999999999,
+          8.956595,
+          9.755579
+        ],
+        "candidate_median_ms": 3.993569,
+        "candidate_samples_ms": [
+          3.993569,
+          4.068475,
+          3.685079
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 59.063741885540566,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "dopri_phase:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 11.372235,
+        "baseline_samples_ms": [
+          26.817781,
+          11.372235,
+          11.186848000000001
+        ],
+        "candidate_median_ms": 5.035738,
+        "candidate_samples_ms": [
+          5.035738,
+          4.912687999999999,
+          5.294112999999999
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 55.71901213789549,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 24.690905,
+        "baseline_samples_ms": [
+          51.553408,
+          24.690905,
+          21.049977
+        ],
+        "candidate_median_ms": 8.316507000000001,
+        "candidate_samples_ms": [
+          8.316507000000001,
+          7.825793,
+          8.497343
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 66.31752866085709,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "endpoint:rows=24 inclusive Dispatch"
+      },
+      {
+        "baseline_median_ms": 40.325773,
+        "baseline_samples_ms": [
+          55.444301,
+          40.325773,
+          35.598728
+        ],
+        "candidate_median_ms": 7.9807570000000005,
+        "candidate_samples_ms": [
+          8.456288,
+          6.942975,
+          7.9807570000000005
+        ],
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 80.20928947846828,
+        "minimum_percent": -5,
+        "pass": true,
+        "scope": "transport:rows=12 inclusive Dispatch"
+      },
+      {
+        "baseline_ms": 9784.455621000001,
+        "candidate_ms": 1566.89795,
+        "direction": "forward",
+        "improvement_percent": 83.98584437710538,
+        "minimum_percent": 0,
+        "pass": true,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      },
+      {
+        "baseline_ms": 12655.648518,
+        "candidate_ms": 1174.203583,
+        "direction": "reverse",
+        "improvement_percent": 90.72190112320247,
+        "minimum_percent": 0,
+        "pass": true,
+        "scope": "observed-instance Create and all11 original numerical API windows"
+      }
+    ],
+    "inclusive_stages_passed": 14,
+    "independent_Decimal_agrees_on_all22": true,
+    "passed": 19,
+    "provisioning_inclusive_API_passed": 2,
+    "total": 22,
+    "whole_call_passed": 3
+  },
+  "decision": "Rejected, unadopted, no unchanged retry or remaining7/cold-frame execution.",
+  "failed": [
+    {
+      "baseline_median_ms": 48.980289,
+      "baseline_samples_ms": [
+        66.684697,
+        48.980289,
+        37.375985
+      ],
+      "candidate_median_ms": 57.460441,
+      "candidate_samples_ms": [
+        91.905935,
+        57.460441,
+        29.957943
+      ],
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": -17.313397232098822,
+      "minimum_percent": 5,
+      "pass": false,
+      "scope": "complete_call_ms"
+    },
+    {
+      "baseline_median_ms": 15.877913000000001,
+      "baseline_samples_ms": [
+        16.052988,
+        15.877913000000001,
+        9.790844
+      ],
+      "candidate_median_ms": 22.866805,
+      "candidate_samples_ms": [
+        36.363348,
+        22.866805,
+        8.403731
+      ],
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": -44.01643969204264,
+      "minimum_percent": -5,
+      "pass": false,
+      "scope": "endpoint:rows=24 inclusive Dispatch"
+    },
+    {
+      "baseline_median_ms": 14.839797,
+      "baseline_samples_ms": [
+        16.845385,
+        14.839797,
+        12.306893
+      ],
+      "candidate_median_ms": 19.073702,
+      "candidate_samples_ms": [
+        25.938412000000003,
+        19.073702,
+        8.720539
+      ],
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": -28.530747421949233,
+      "minimum_percent": -5,
+      "pass": false,
+      "scope": "transport:rows=12 inclusive Dispatch"
+    }
+  ],
+  "full_scientific_Mandatory_runtime_release_qualification": false,
+  "implementation": "One complete lane-zero curved native Endpoint projection with all7 published words; all362 DopriPhase validations distributed across the existing64-lane workgroup.",
+  "next_source_basis": "Endpoint still emits1287383 bytes and has two original Project and EvaluateProgram call sites. Test whether one common phase loop preserves complete ownership and removes duplicated compiled bodies before another integrated trial.",
+  "original_C8_and_all32_complete_cross_arm_readbacks_pass": true,
+  "original_native_Project_function_equal_after_numeric_ID_renaming": true,
+  "provider_implementation_reuse": "Unchanged exact scoped IEEE32 provider and finite primitive/boundary proof preserved at6a6bb1ca; no rebuild or scalar rerun.",
+  "public_source": "0109ab462edade524667d20303507aa09adcbaf6",
+  "trial_source": "a2029467924854a268a2db6b8ce859b379df6222"
+}
