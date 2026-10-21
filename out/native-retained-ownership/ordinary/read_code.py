@@ -4,7 +4,7 @@ import collections, hashlib, json, re, subprocess
 R = Path.cwd(); W = Path(__file__).resolve().parent
 compiler = json.loads((W.parent / 'compiler-result.json').read_text())
 def normalized_function(text, name):
-    body = re.search(r'^%' + name + r' = OpFunction .*?OpFunctionEnd', text, re.M | re.S)[0]
+    body = re.search(r'^[ \t]*%' + name + r' = OpFunction .*?OpFunctionEnd', text, re.M | re.S)[0]
     ids = {}
     def rename(match):
         token = match[0]
@@ -14,7 +14,7 @@ def normalized_function(text, name):
 
 def expanded_fences(text):
     functions = {}
-    for match in re.finditer(r'^(%\S+) = OpFunction .*?OpFunctionEnd', text, re.M | re.S):
+    for match in re.finditer(r'^[ \t]*(%\S+) = OpFunction .*?OpFunctionEnd', text, re.M | re.S):
         body = match[0]
         functions[match[1]] = (body.count('OpControlBarrier'),
             re.findall(r'OpFunctionCall %\S+ (%\S+)', body))
