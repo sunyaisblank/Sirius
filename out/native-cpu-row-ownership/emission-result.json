@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "modules": {
+    "Transport": {
+      "module": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+        "bytes": 86008,
+        "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+        "original_module": {
+          "bytes": 85832,
+          "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+        },
+        "registers": 459,
+        "program_table_equal": true,
+        "compiled_this_candidate": true
+      },
+      "actual_Private_variables_bytes": {
+        "%retainedScratch": 9180,
+        "%retainedStatus": 4,
+        "%retainedCoefficients": 500
+      },
+      "actual_Private_total_bytes": 9684,
+      "Workgroup_variables": 0,
+      "barriers": 0,
+      "atomics": 0,
+      "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "original_capabilities_and_modes_equal": true,
+      "unchanged_scalar_functions": [
+        "ReadOriginal"
+      ],
+      "implicit_Private_initializers": 0
+    },
+    "Endpoint": {
+      "module": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "original_module": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+        },
+        "registers": 612,
+        "program_table_equal": true,
+        "compiled_this_candidate": true
+      },
+      "actual_Private_variables_bytes": {
+        "%nativeProjection": 28,
+        "%retainedStatus": 4,
+        "%retainedScratch": 12240
+      },
+      "actual_Private_total_bytes": 12272,
+      "Workgroup_variables": 0,
+      "barriers": 0,
+      "atomics": 0,
+      "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "original_capabilities_and_modes_equal": true,
+      "unchanged_scalar_functions": [
+        "Project"
+      ],
+      "implicit_Private_initializers": 0
+    },
+    "DopriPhase": {
+      "module": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "original_module": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+        },
+        "registers": 629,
+        "program_table_equal": true,
+        "compiled_this_candidate": true
+      },
+      "actual_Private_variables_bytes": {
+        "%retainedStatus": 4,
+        "%retainedScratch": 12580
+      },
+      "actual_Private_total_bytes": 12584,
+      "Workgroup_variables": 0,
+      "barriers": 0,
+      "atomics": 0,
+      "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "original_capabilities_and_modes_equal": true,
+      "unchanged_scalar_functions": [
+        "ReadOriginal"
+      ],
+      "implicit_Private_initializers": 0
+    }
+  },
+  "scope": "Emitted SPIRV/storage and scalar function identity only. Actual LLVM private lifetime, code, numerical/benefit/frame qualification still required."
+}
