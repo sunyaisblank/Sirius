@@ -1,0 +1,200 @@
+{
+  "candidate_source": "d9dbd65796aab5dd36e17481198ae1f6b6201a2c",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "all8_original_finite_controls_pass": true,
+  "all22_original_benefit_gates_pass": true,
+  "sole_ABBA": {
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": 49.31561101963275
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": 28.157520588825644
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": 45.196486150872495
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": 23.155125052156666
+    }
+  ],
+  "inclusive_stage_checks": 16,
+  "minimum_inclusive_stage_gain_percent": 4.243505822554724,
+  "provisioning_inclusive_API_gains_percent": [
+    85.03805845216287,
+    85.41639745067984
+  ],
+  "all32_control8_readbacks_match_original_baselines": true,
+  "factored_control1_actual_routes": 2,
+  "factored_control1_complete_readbacks": 28,
+  "ordinary_endpoint_called_function_bytes": 662964,
+  "ordinary_endpoint_previous_candidate_bytes": 1287383,
+  "actual_new_builds": {
+    "shader_compilations": 1,
+    "CXX_compilations": 1,
+    "backend_test_links": 1,
+    "frame_test_links": 1
+  },
+  "reused_DopriPhase_not_compiled_again": true,
+  "cold_frame": {
+    "accepted": false,
+    "outcome": "diagnostic_timeout",
+    "owner": {
+      "bytes": 5068,
+      "sha256": "5d484a7e4ddfb090a33d2ad00a3c3feaa502010f0f49ea10e09fb86b813d6e83"
+    },
+    "wall_seconds": 300.25463820795994,
+    "peak_sampled_rss_kib": 1172964,
+    "last_reported_tiles": 1050,
+    "required_tiles": 16384,
+    "completed_frame_or_XML": false,
+    "last_complete_snapshot": "862 work tiles of 1px, 678 camera batches, 178819 accepted intervals, 5065 rejected intervals, 926 phase initializations, 183019 phase reuses, 0 batch subdivisions, 0 safety reductions, 2.85791s coalescing, 234.727s batch execution, 3.22991s summed worker acceleration",
+    "last_complete_snapshot_physical_stages": {
+      "camera": {
+        "kernel_commands_including_shared": 0,
+        "individual_submit_wait_ms": 0.0,
+        "individual_pipeline_setup_ms": 0.0,
+        "individual_command_setup_ms": 0.0,
+        "individual_cleanup_ms": 0.0,
+        "individual_dispatch_total_ms_inclusive": 0.0,
+        "write_buffer_ms": 0.0,
+        "read_buffer_ms": 0.0
+      },
+      "transport": {
+        "kernel_commands_including_shared": 9321,
+        "individual_submit_wait_ms": 73037.988079,
+        "individual_pipeline_setup_ms": 27.088133,
+        "individual_command_setup_ms": 447.907524,
+        "individual_cleanup_ms": 253.401033,
+        "individual_dispatch_total_ms_inclusive": 73766.384769,
+        "write_buffer_ms": 61.909002,
+        "read_buffer_ms": 1351.102924
+      },
+      "endpoint": {
+        "kernel_commands_including_shared": 15007,
+        "individual_submit_wait_ms": 99560.528679,
+        "individual_pipeline_setup_ms": 39.770949,
+        "individual_command_setup_ms": 706.679795,
+        "individual_cleanup_ms": 385.299121,
+        "individual_dispatch_total_ms_inclusive": 100692.278544,
+        "write_buffer_ms": 133.1255,
+        "read_buffer_ms": 2792.937625
+      },
+      "dense": {
+        "kernel_commands_including_shared": 2778,
+        "individual_submit_wait_ms": 3305.806892,
+        "individual_pipeline_setup_ms": 5.290439,
+        "individual_command_setup_ms": 79.975654,
+        "individual_cleanup_ms": 51.569722,
+        "individual_dispatch_total_ms_inclusive": 3442.642707,
+        "write_buffer_ms": 3.814843,
+        "read_buffer_ms": 25.783302
+      },
+      "initialize": {
+        "kernel_commands_including_shared": 682,
+        "individual_submit_wait_ms": 613.162567,
+        "individual_pipeline_setup_ms": 1.243833,
+        "individual_command_setup_ms": 21.171929,
+        "individual_cleanup_ms": 12.352476,
+        "individual_dispatch_total_ms_inclusive": 647.930805,
+        "write_buffer_ms": 4.556208,
+        "read_buffer_ms": 47.882022
+      },
+      "ray_camera": {
+        "kernel_commands_including_shared": 678,
+        "individual_submit_wait_ms": 671.232911,
+        "individual_pipeline_setup_ms": 1.530515,
+        "individual_command_setup_ms": 33.424464,
+        "individual_cleanup_ms": 15.244405,
+        "individual_dispatch_total_ms_inclusive": 721.432295,
+        "write_buffer_ms": 3.893701,
+        "read_buffer_ms": 3.102385
+      },
+      "dopri_phase": {
+        "kernel_commands_including_shared": 8089,
+        "individual_submit_wait_ms": 30363.744624,
+        "individual_pipeline_setup_ms": 26.346521,
+        "individual_command_setup_ms": 419.757546,
+        "individual_cleanup_ms": 204.255018,
+        "individual_dispatch_total_ms_inclusive": 31014.103709,
+        "write_buffer_ms": 535.949656,
+        "read_buffer_ms": 1447.158401
+      }
+    },
+    "scene": {
+      "schema": "sirius-render-scene-v1",
+      "backend": "Vulkan",
+      "metric": "Kerr",
+      "spin": 0,
+      "width": 128,
+      "height": 128,
+      "samples_per_pixel": 1,
+      "field_of_view": 60,
+      "disk_enabled": true,
+      "ray_bundles": false,
+      "point_starfield": false,
+      "point_star_count": 0,
+      "point_brightness_scale": 100,
+      "point_seed": 42,
+      "point_min_distance_pc": 1,
+      "point_max_distance_pc": 10000,
+      "camera_beta": [
+        0,
+        0,
+        0
+      ],
+      "lens": "Pinhole",
+      "focal_length": 50,
+      "aperture": 2.799999952316284,
+      "focus_distance": 50
+    },
+    "same_child_qualified_library_mapping_verified": true,
+    "source_and_inputs_unchanged": true,
+    "owned_processes_reaped": true,
+    "scope": "One original cold frame, failed. Last complete counters cover 862 tiles; final progress covers 1050. Submit/wait includes driver/scheduling/JIT costs. No partial-frame extrapolation, exclusive-time subtraction, retry or scientific/release admission."
+  },
+  "postexecution_OS_library_update": {
+    "historical_path": "/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.5",
+    "historical_identity": {
+      "bytes": 202904,
+      "sha256": "696e868dd0700a19a6d65fc01608ec2d70d3cb91f65710e89180cd2e688f30cb"
+    },
+    "private_restoration": "bin/linux-gcc/native-endpoint-phase-sharing/qualified-libs/liblzma.so.5.4.5",
+    "loader_name": "bin/linux-gcc/native-endpoint-phase-sharing/qualified-libs/liblzma.so.5",
+    "matches_all_original_control_frozen_bytes": true,
+    "system_library_replaced": false,
+    "package": {
+      "path": "out/native-endpoint-phase-sharing/library-restoration/liblzma5_5.6.1+really5.4.5-1ubuntu0.3_amd64.deb",
+      "sha256": "d2eabd41ca77d2c2dd9d5d4ef478cccb64ffde6279c47cf4699a857d46785a52"
+    },
+    "download": {
+      "url": "https://snapshot.ubuntu.com/ubuntu/20261021T000000Z/pool/main/x/xz-utils/liblzma5_5.6.1+really5.4.5-1ubuntu0.3_amd64.deb",
+      "final_url": "https://snapshot.ubuntu.com/ubuntu/20261021T000000Z/pool/main/x/xz-utils/liblzma5_5.6.1+really5.4.5-1ubuntu0.3_amd64.deb",
+      "bytes": 127352,
+      "sha256": "d2eabd41ca77d2c2dd9d5d4ef478cccb64ffde6279c47cf4699a857d46785a52",
+      "status": 200
+    },
+    "system_update_after_execution": "dpkg upgrade0.3to0.4 at2026-10-22 06:04:31; last control7 began2026-10-21 02:15:22.95UTC and ran19.633690s."
+  },
+  "adopted_into_public_source": false,
+  "full_goal_complete": false,
+  "remaining": "Original cold frame; full science, original July image identity, native-window/Radeon scenes, Mandatory and installed-release qualification on exact clean pushed main.",
+  "next_change_basis": "Captured transport/endpoint submit-wait dominates the last complete snapshot. Transport normalized input caching already exists in rejected3045067 history. Endpoint ordered-prefix ownership plus the new actual IEEE32 provider/source context is distinct; no unchanged rejected retry or claimed speedup."
+}
