@@ -44,7 +44,8 @@ def admit(label):
     return owner,old.timestamp_result(props,arm,ctx)
 control_owner,control=admit('control-8');mode,=sys.argv[1:]
 if mode=='control':
-    result={'passed':True,'record':control,'owner':pin(RUN/'control-8/owner.json'),'scope':'Original C8,51 markers54 executed-module joins32 full readbacks and unchanged assertions, under three ownership modules on the actual native route enabled by implemented support. No benefit/adoption/frame/release acceptance.'};output=W/'control-8-acceptance.json'
+    assert control['readbacks'] == doc(W.parent/'previous-control-8-acceptance.json')['record']['readbacks']
+    result={'passed':True,'all32_readbacks_match_preserved_originals':True,'record':control,'owner':pin(RUN/'control-8/owner.json'),'scope':'Original C8,51 markers54 executed-module joins32 full readbacks and unchanged assertions, under three ownership modules on the actual native route enabled by implemented support. No benefit/adoption/frame/release acceptance.'};output=W/'control-8-acceptance.json'
 elif mode=='benefit':
     assert doc(W/'control-8-acceptance.json')['passed'];records={};owners={};last=control_owner['child_start_ticks'];births=set()
     for label in ['a1','b1','b2','a2']:
