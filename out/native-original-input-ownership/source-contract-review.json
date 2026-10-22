@@ -1,0 +1,22 @@
+{
+  "reviewer": "divide_contract_review",
+  "read_only_source_review_pass": true,
+  "shader_contract_blockers": [],
+  "review_scope": [
+    "Exact patch regenerated",
+    "Transport immutable cache and mutable fields4..43 split",
+    "Endpoint first-invalid ordered prefix and unconditional collective joins",
+    "Native32-only selection and unchanged scalar bodies/tables/global ABI",
+    "Conservative source16KiB bound and actual emitted totals assertion"
+  ],
+  "expected_emitted_shared_bytes": {
+    "Transport": 10604,
+    "Endpoint": 13176
+  },
+  "corrections_applied": [
+    "Include nativeProjection7 in Endpoint accounting",
+    "Record extra disassembler calls",
+    "Clarify private shared storage changes while global buffer layout/scalar arithmetic remain unchanged"
+  ],
+  "no_build_or_numerical_acceptance": true
+}

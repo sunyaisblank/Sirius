@@ -1,0 +1,100 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/astra/.project/Sirius/out/lavapipe-ieee32-validation/run_case.py",
+    "candidate-default",
+    "/home/astra/.project/Sirius/out/lavapipe-ieee32-validation/candidate-default"
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "candidate-default",
+  "child_exit": 0,
+  "child_pid": 70975,
+  "child_start_ticks": "40109027",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 70971,
+    "pid": 70971,
+    "ppid": 8849,
+    "rss_kib": 20952,
+    "session": 70971,
+    "start_ticks": "40108990",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 180
+  },
+  "meaning": "Original174268-record native arithmetic corpus under actual new supported DenormPreserve32/RTE32/SignedZeroInfNanPreserve32, with passive real worker/callback-state restoration capture. All522804 expected words exact; no retained/benefit/frame/scientific/release acceptance.",
+  "minimum_sampled_available_kib": 17829748,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 70975,
+      "saved_start_ticks": "40109027"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 70976,
+      "saved_start_ticks": "40109029"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 70977,
+      "saved_start_ticks": "40109033"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 70987,
+      "saved_start_ticks": "40109039"
+    }
+  ],
+  "passed": true,
+  "peak_sampled_rss_kib": 273788,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7a234e4d3000-7a234e538000 r--p 00db1000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so",
+        "7a234e548000-7a234e54f000 r--p 00005000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so"
+      ],
+      "owned_session": 70975,
+      "pid": 70977,
+      "start_ticks": "40109033"
+    },
+    {
+      "maps": [
+        "7f0325c00000-7f0325c5b000 r--p 00000000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so",
+        "7f0325c5b000-7f0326250000 r-xp 0005b000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so",
+        "7f0326250000-7f03268ca000 r--p 00650000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so",
+        "7f03268ca000-7f0326960000 r--p 00cca000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so",
+        "7f0326960000-7f0326965000 rw-p 00d60000 08:30 2966039                    /home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so"
+      ],
+      "owned_session": 70975,
+      "pid": 70987,
+      "start_ticks": "40109039"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "Original174268-record native arithmetic corpus under actual new supported DenormPreserve32/RTE32/SignedZeroInfNanPreserve32, with passive real worker/callback-state restoration capture. All522804 expected words exact; no retained/benefit/frame/scientific/release acceptance.",
+  "source": {
+    "revision": "79d84678e3c0df4d4a78b8b6e4a23fa877e1d0ff",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": null,
+  "wall_seconds": 4.609555668022949,
+  "whole_inputs_unchanged": true
+}

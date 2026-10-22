@@ -1,0 +1,14 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+{"caller_fpstate_before":8064,"caller_fpstate_requested":57280,"caller_fpstate_observed":57280}
+{"scope":"isolated raw-word prototype device identity","device":"llvmpipe (LLVM 21.1.8, 256 bits)","kind":"software","driver":"llvmpipe","driver_info":"Mesa 25.2.8 (LLVM 21.1.8)","resident_driver_path":"/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/baseline/libvulkan_lvp.so","vendor_id":65541,"device_id":0,"api_version":4211006,"driver_id":13,"denorm32":0,"RTE32":1,"fp64":1,"RTE64":1}
+{"dispatch_started":1,"groups":2723,"cases":174268,"complement_initialized_words":522804}
+{"completed_dispatches":1,"cases":174268,"observed_words":522804,"mismatches":27960,"untouched_complement_words":0,"requested_bytes":4182436,"actual_resident_bytes":4182436,"host_dispatch_timing_ms":{"pipeline":12.325817000000001,"command":0.049457000000000001,"submit_wait":4214.6895620000005,"cleanup":0.022451000000000002,"total":4227.0872870000003}}
+[Inferior 1 (process 70156) exited with code 01]
+{"arm": "baseline", "caller_poisoned": true, "diagnostic_completed": true, "numerical_pass": false, "mismatch_words": 27960, "all_observed_callback_states_restored": false}

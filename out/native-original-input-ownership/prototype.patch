@@ -1,0 +1,163 @@
+--- src/sirius/kernels/retained_transport.slang
++++ out/native-original-input-ownership/shaders/retained_transport.slang
+@@ -23,11 +23,35 @@
+     outputs[base + 3] = RPBits(r.error);
+     outputs[base + 4] = r.valid;
+ }
+-RetainedTriple ReadOriginal(uint index, uint row) {
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER)
++#error Complete input ownership belongs only to the existing native binary32 route.
++#endif
++groupshared uint originalTerms[46 * 5];
++RetainedTriple ReadOriginalInput(uint index, uint row) {
+     uint base = 1 + row * 230 + 5 * index;
+     RetainedTriple r = RTPack(RPFromBits(inputs[base]), RPFromBits(inputs[base + 1]),
+                               RPFromBits(inputs[base + 2]), RPFromBits(inputs[base + 3]));
+     if (inputs[base + 4] != 1) r.valid = 0;
++    return r;
++}
++void CacheOriginal(uint index, uint row) {
++    RetainedTriple r = ReadOriginalInput(index, row);
++    uint base = index * 5;
++    originalTerms[base] = RPBits(r.hi);
++    originalTerms[base + 1] = RPBits(r.lo);
++    originalTerms[base + 2] = RPBits(r.tail);
++    originalTerms[base + 3] = RPBits(r.error);
++    originalTerms[base + 4] = r.valid;
++    if (r.valid == 0) RejectRetainedProgram();
++}
++RetainedTriple ReadOriginal(uint index, uint row) {
++    uint base = index * 5;
++    RetainedTriple r;
++    r.hi = RPFromBits(originalTerms[base]);
++    r.lo = RPFromBits(originalTerms[base + 1]);
++    r.tail = RPFromBits(originalTerms[base + 2]);
++    r.error = RPFromBits(originalTerms[base + 3]);
++    r.valid = originalTerms[base + 4];
+     return r;
+ }
+ RetainedTriple ReadInput(uint index, uint row, uint rowBase) {
+@@ -490,6 +514,7 @@
+          registers = inputs[programBase + 1];
+     uint rowWords = no / rows, rowBase = row * rowWords;
+     if (rowWords < 2404) return;
++    if (lane == 0) retainedStatus = 0;
+ #ifdef SIRIUS_RETAINED_STAGE7_OWNER
+     S7ResetTransport(row, rows, lane);
+ #endif
+@@ -511,8 +536,12 @@
+         if (lane == 0 && (i < 4 || i == 44)) S7Key(i, original);
+     }
+ #else
+-    for (uint i = 0; i < 46; ++i)
+-        if (ReadOriginal(i, row).valid == 0) return;
++    // Shape gates and the initial output/status publication precede packing.
++    // Each immutable field has one owner; publish all five words before use.
++    for (uint i = lane; i < 46; i += SIRIUS_RETAINED_EXECUTION_LANES)
++        CacheOriginal(i, row);
++    GroupMemoryBarrierWithGroupSync();
++    if (retainedStatus != 0) return;
+ #endif
+     RetainedTriple chart = ReadOriginal(44, row);
+     if ((!RPScalarEqual(chart.hi, RPOne()) && !RPScalarEqual(chart.hi, RPScalarNegate(RPOne()))) ||
+--- out/native-endpoint-phase-sharing/shaders/retained_endpoint.slang
++++ out/native-original-input-ownership/shaders/retained_endpoint.slang
+@@ -9,10 +9,12 @@
+ [[vk::binding(1, 0)]] RWStructuredBuffer<uint> outputs;
+ // Private native32 candidate: publish one complete curved projection.
+ // The original Project body, ordered flat calculations and expression layers are unchanged.
+-#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER)
+ #error This candidate belongs only to the existing native binary32 route.
+ #endif
+ groupshared uint nativeProjection[7];
++groupshared uint originalTerms[45 * 5];
++groupshared uint firstInvalidOriginal;
+ #if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+ // Lane zero publishes success, component, and all five retained root words.
+ groupshared uint retainedProjection[7];
+@@ -718,6 +720,7 @@
+          prefix = SIRIUS_RETAINED_PREFIX;
+     uint rowWords = no / rows, rowBase = row * rowWords;
+     if (rowWords < 769) return;
++    if (lane == 0) firstInvalidOriginal = 45;
+     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+ #ifndef SIRIUS_RETAINED_PORTABLE
+     AllMemoryBarrierWithGroupSync();
+@@ -728,17 +731,37 @@
+                             SIRIUS_RETAINED_SCHWARZSCHILD_PROGRAM_WORDS ||
+         rowWords != 769 + 5 * registers)
+         return;
+-    for (uint i = 0; i < 45; ++i) {
+-        uint address = 1 + 225 * row + 5 * i;
++    // The initial output join publishes sentinel45. Normalize each immutable
++    // original once, but commit only the original ordered prefix on refusal.
++    for (uint i = lane; i < 45; i += SIRIUS_RETAINED_EXECUTION_LANES) {
++        uint address = 1 + 225 * row + 5 * i, base = 5 * i;
+         RetainedTriple value =
+             RTPack(RPFromBits(inputs[address]), RPFromBits(inputs[address + 1]),
+                    RPFromBits(inputs[address + 2]), RPFromBits(inputs[address + 3]));
+-        if (inputs[address + 4] != 1 || value.valid == 0) return;
+-        if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
+-    }
+-#ifndef SIRIUS_RETAINED_PORTABLE
++        if (inputs[address + 4] != 1) value.valid = 0;
++        originalTerms[base] = RPBits(value.hi);
++        originalTerms[base + 1] = RPBits(value.lo);
++        originalTerms[base + 2] = RPBits(value.tail);
++        originalTerms[base + 3] = RPBits(value.error);
++        originalTerms[base + 4] = value.valid;
++        if (value.valid == 0) {
++            uint previous;
++            InterlockedMin(firstInvalidOriginal, i, previous);
++        }
++    }
++    GroupMemoryBarrierWithGroupSync();
++    for (uint i = lane; i < firstInvalidOriginal; i += SIRIUS_RETAINED_EXECUTION_LANES) {
++        uint base = 5 * i;
++        RetainedTriple value;
++        value.hi = RPFromBits(originalTerms[base]);
++        value.lo = RPFromBits(originalTerms[base + 1]);
++        value.tail = RPFromBits(originalTerms[base + 2]);
++        value.error = RPFromBits(originalTerms[base + 3]);
++        value.valid = originalTerms[base + 4];
++        WriteStored(rowBase + 504 + base, value);
++    }
+     AllMemoryBarrierWithGroupSync();
+-#endif
++    if (firstInvalidOriginal != 45) return;
+     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
+     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+     if (!RPScalarEqual(RTAbsoluteUpper(ReadStored(rowBase + 504 + 5)), RPZero()) &&
+--- scripts/build-retained-kernels.py
++++ out/native-original-input-ownership/builder.py
+@@ -288,7 +288,7 @@
+     return references
+ 
+ 
+-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False):
++def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, complete_inputs=False):
+     raw = destination.with_suffix(".compiler.spv")
+     assembly = destination.with_suffix(".spvasm")
+     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
+@@ -343,12 +343,19 @@
+             definitions.append("-DSIRIUS_RETAINED_PARALLEL_DENSE=1")
+         elif source.stem == "retained_dopri_phase":
+             definitions.append("-DSIRIUS_RETAINED_PARALLEL_DOPRI_PHASE=1")
++    complete_input_words = 0
++    if complete_inputs:
++        if fp64 or portable or fma or stage_seven_owner or source.stem not in ("retained_transport", "retained_endpoint"):
++            raise ValueError("complete input ownership is native32 Transport/Endpoint only")
++        complete_input_words = 230 if source.stem == "retained_transport" else 225 + 1
++        if source.stem == "retained_endpoint":
++            projection_words = 7
+     original_inputs = ({"retained_camera": 32, "retained_ray_camera": 45}.get(source.stem, 0)
+                        if portable else 0)
+     coefficients = 25 if source.stem == "retained_transport" else 0
+     if coefficients:
+         definitions.append(f"-DSIRIUS_RETAINED_COEFFICIENTS={coefficients}")
+-    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words) * 4 + 8 + (20 if stage_seven_owner else 0) > 16384:
++    if (registers * terms + original_inputs * 4 + coefficients * 5 + projection_words + complete_input_words) * 4 + 8 + (20 if stage_seven_owner else 0) > 16384:
+         raise ValueError("retained program exceeds the portable shared-memory bound")
+     definitions += [f"-DSIRIUS_RETAINED_REGISTERS={registers}",
+                     f"-DSIRIUS_RETAINED_TERMS={terms}",
