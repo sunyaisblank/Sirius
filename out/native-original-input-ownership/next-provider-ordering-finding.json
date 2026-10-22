@@ -1,0 +1,28 @@
+{
+  "reviewer": "divide_contract_review",
+  "scope": "One narrow read-only next-cost review, no compiler/profiling/test/dispatch",
+  "release_source_verified_against_git_tar": "43389d91ca54667d12a41ee0a33d35e596fc42bd:attestations/qualification/8c2be67d/lavapipe-vector-workgroup-rejected/mesa-25.2.8.tar.xz",
+  "authentic_tar_sha256": "097842f3e49d996868b38688db87b006f7d4541e93ce86d2f341d8b3e7be7c93",
+  "held_source_files": {
+    "out/retained-function-boundary-source/lp_bld_nir_soa.c": {
+      "bytes": 246649,
+      "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+    },
+    "out/retained-function-boundary-source/lp_state_cs.c": {
+      "bytes": 96209,
+      "sha256": "6675c1ece36b60c45727bfaa77802439c457339fcb43a35e81786815ce372339"
+    }
+  },
+  "finding": "lp_bld_nir_soa.c4573..4590 emits system-scope LLVM seq_cst for every nonzero memory semantic; actual SPIRV264/2376 require acquire-release, mapped by spirv_to_nir.c3022..3081 to NIR_ACQUIRE|RELEASE.",
+  "bounded_candidate": "Map only exact ACQUIRE|RELEASE without availability/visibility extras to system-scope LLVM acquire-release; preserve all coroutine suspend/rendezvous and existing seq_cst atomics; leave every other case unchanged.",
+  "concurrency_contract": "lp_state_cs595..681 cycles all subgroups for a group on one worker; lp_cs_tpool57..79 gives workers complete work iterations with private local_mem;169..184 joins completion under mutex. Different workgroups/SSBO accesses may run concurrently, so no singlethread scope or generic removal.",
+  "history_boundary": "Bounded check found shader-source barrier/fence mechanisms, not this exact driver-order refinement; absence is not exhaustive proof.",
+  "actual_current_observation": "Both current complete Transport/Endpoint ordinary modules carry10 LLVM seq_cst and10 hardware full fences.",
+  "no_claims": [
+    "No exclusive fence cost",
+    "No assumed runtime or frame benefit",
+    "No full installed-binary/source correspondence proof",
+    "No source adoption or qualification"
+  ],
+  "status": "Source-supported next alternative; not implemented or executed."
+}

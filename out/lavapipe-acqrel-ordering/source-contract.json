@@ -1,0 +1,33 @@
+{
+  "status": "Prepared source only; not compiled or executed",
+  "basis_private_provider_preservation": "6a6bb1ca48693e290999a0aab8f305cc26d91262",
+  "prerequisite_patch_sha256": "87a8bdda3ab630fb2de5a62b13c98817d050c311b915cd49f825459f8b55cd7f",
+  "unchanged_release_file": {
+    "bytes": 246649,
+    "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+  },
+  "new_file_sha256": "312a0b139f33054930f6eecfb0bef97071f60f157143ced6240c3139204f520b",
+  "private_feature_guard": "LP_VULKAN_IEEE32_ENABLED from the exact existing x86_64 Vulkan-only IEEE32 prerequisite",
+  "exact_semantics_guard": "nir_semantics == NIR_MEMORY_ACQ_REL (3), not a bit subset",
+  "LLVM_order": "AcquireRelease, system scope (singleThread=false)",
+  "unchanged": [
+    "All original shader SPVs, modes and barriers",
+    "Coroutine suspend/resume",
+    "All sequentially consistent atomics",
+    "Availability/visibility and all other memory semantics",
+    "Actual IEEE32 provider arithmetic/FP-state repair",
+    "Whole-workgroup ownership and host task completion"
+  ],
+  "cost_premise": "Current actual ordinary complete Transport/Endpoint modules each carry10 seq_cst/full fences, despite original acquire-release requests. No exclusive-cost or speed claim.",
+  "validation_required": "Build one candidate only after the current governed controls/frame close, bind actual provider and current source, prove actual driver-code order lowering without shader barrier removal, then original admissibility and whole-path gates.",
+  "adopted": false,
+  "qualification": false,
+  "scope": "Every matching Gallivm barrier in this private IEEE32 provider, not limited to Transport/Endpoint.",
+  "independent_source_review": {
+    "reviewer": "divide_contract_review",
+    "passed": true,
+    "prerequisite_composition": "Exact archived5-file patch; no overlap with the new Gallivm file.",
+    "preserved": "Default seq_cst for every unmatched semantic; system scope, all coroutine rendezvous and atomics byte-exact.",
+    "build_or_execution_claimed": false
+  }
+}

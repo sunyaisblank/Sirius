@@ -1,0 +1,17 @@
+--- a/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c
++++ b/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c
+@@ -4580,6 +4580,14 @@
+ 
+    if (nir_semantics) {
+       LLVMAtomicOrdering ordering = LLVMAtomicOrderingSequentiallyConsistent;
++#if LP_VULKAN_IEEE32_ENABLED
++      /* Match exact acquire-release semantics while retaining system scope,
++       * every coroutine rendezvous, and the separate sequentially consistent
++       * atomic operations. Availability/visibility and other orders retain
++       * the original conservative lowering. */
++      if (nir_semantics == NIR_MEMORY_ACQ_REL)
++         ordering = LLVMAtomicOrderingAcquireRelease;
++#endif
+       LLVMBuildFence(builder, ordering, false, "");
+    }
+    if (exec_scope != SCOPE_NONE) {

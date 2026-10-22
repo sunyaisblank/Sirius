@@ -1,0 +1,234 @@
+{
+  "candidate_source": "08add7e5633bfbb5aa19343e45497cd33a2edaa3",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "all22_original_benefit_gates_pass": true,
+  "independent_Decimal_agrees": true,
+  "sole_ABBA": {
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": 48.6310491978576
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": 23.715394614653487
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": 49.85369977084606
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": 30.766718990834303
+    }
+  ],
+  "minimum_inclusive_stage_gain_percent": 10.217462996372374,
+  "provisioning_inclusive_API_gains_percent": [
+    86.39028727033964,
+    87.89473792108959
+  ],
+  "all32_control8_and_ABBA_readbacks_match_originals": true,
+  "original_controls": {
+    "1": {
+      "passed": true,
+      "wall_seconds": 66.08823408698663,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3450572
+    },
+    "2": {
+      "passed": true,
+      "wall_seconds": 50.86350176401902,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 1444744
+    },
+    "3": {
+      "passed": true,
+      "wall_seconds": 93.06928825704381,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3698020
+    },
+    "4": {
+      "passed": true,
+      "wall_seconds": 172.63528796995524,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3550128
+    },
+    "5": {
+      "passed": true,
+      "wall_seconds": 255.5727020719787,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3430636
+    },
+    "6": {
+      "passed": true,
+      "wall_seconds": 200.81340080697555,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3554776
+    },
+    "7": {
+      "passed": true,
+      "wall_seconds": 52.49348657194059,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 1001224
+    },
+    "8": {
+      "passed": true,
+      "wall_seconds": 22.726922990055755,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 962464
+    }
+  },
+  "all8_original_controls_admitted": true,
+  "cold_frame": {
+    "attempted": true,
+    "accepted": false,
+    "stop_reason": "diagnostic_timeout",
+    "wall_seconds": 300.2748684530379,
+    "peak_sampled_rss_kib": 1160284,
+    "last_progress": [
+      1433,
+      16384
+    ],
+    "XML_present": false,
+    "scene": {
+      "schema": "sirius-render-scene-v1",
+      "backend": "Vulkan",
+      "metric": "Kerr",
+      "spin": 0,
+      "width": 128,
+      "height": 128,
+      "samples_per_pixel": 1,
+      "field_of_view": 60,
+      "disk_enabled": true,
+      "ray_bundles": false,
+      "point_starfield": false,
+      "point_star_count": 0,
+      "point_brightness_scale": 100,
+      "point_seed": 42,
+      "point_min_distance_pc": 1,
+      "point_max_distance_pc": 10000,
+      "camera_beta": [
+        0,
+        0,
+        0
+      ],
+      "lens": "Pinhole",
+      "focal_length": 50,
+      "aperture": 2.799999952316284,
+      "focus_distance": 50
+    },
+    "last_complete_snapshot": "1382 work tiles of 1px, 1123 camera batches, 267831 accepted intervals, 5649 rejected intervals, 1445 phase initializations, 272098 phase reuses, 0 batch subdivisions, 0 safety reductions, 2.89324s coalescing, 233.481s batch execution, 4.1723s summed worker acceleration",
+    "last_complete_snapshot_physical_stages": {
+      "camera": {
+        "kernel_commands_including_shared": 0,
+        "individual_submit_wait_ms": 0.0,
+        "individual_pipeline_setup_ms": 0.0,
+        "individual_command_setup_ms": 0.0,
+        "individual_cleanup_ms": 0.0,
+        "individual_dispatch_total_ms_inclusive": 0.0,
+        "write_buffer_ms": 0.0,
+        "read_buffer_ms": 0.0
+      },
+      "transport": {
+        "kernel_commands_including_shared": 13659,
+        "individual_submit_wait_ms": 67918.62095,
+        "individual_pipeline_setup_ms": 36.239806,
+        "individual_command_setup_ms": 547.338778,
+        "individual_cleanup_ms": 309.321366,
+        "individual_dispatch_total_ms_inclusive": 68811.5209,
+        "write_buffer_ms": 99.335164,
+        "read_buffer_ms": 1729.956242
+      },
+      "endpoint": {
+        "kernel_commands_including_shared": 22482,
+        "individual_submit_wait_ms": 92819.210244,
+        "individual_pipeline_setup_ms": 48.056426,
+        "individual_command_setup_ms": 873.607577,
+        "individual_cleanup_ms": 497.885746,
+        "individual_dispatch_total_ms_inclusive": 94238.759993,
+        "write_buffer_ms": 220.527276,
+        "read_buffer_ms": 3756.771758
+      },
+      "dense": {
+        "kernel_commands_including_shared": 5266,
+        "individual_submit_wait_ms": 4147.072389,
+        "individual_pipeline_setup_ms": 6.508271,
+        "individual_command_setup_ms": 91.504248,
+        "individual_cleanup_ms": 64.39675,
+        "individual_dispatch_total_ms_inclusive": 4309.481658,
+        "write_buffer_ms": 5.753104,
+        "read_buffer_ms": 40.172491
+      },
+      "initialize": {
+        "kernel_commands_including_shared": 1119,
+        "individual_submit_wait_ms": 835.383492,
+        "individual_pipeline_setup_ms": 1.217629,
+        "individual_command_setup_ms": 36.976389,
+        "individual_cleanup_ms": 15.740259,
+        "individual_dispatch_total_ms_inclusive": 889.317769,
+        "write_buffer_ms": 7.577049,
+        "read_buffer_ms": 68.496033
+      },
+      "ray_camera": {
+        "kernel_commands_including_shared": 1123,
+        "individual_submit_wait_ms": 1043.073454,
+        "individual_pipeline_setup_ms": 2.458244,
+        "individual_command_setup_ms": 49.758084,
+        "individual_cleanup_ms": 19.988356,
+        "individual_dispatch_total_ms_inclusive": 1115.278138,
+        "write_buffer_ms": 9.101911,
+        "read_buffer_ms": 3.876099
+      },
+      "dopri_phase": {
+        "kernel_commands_including_shared": 12236,
+        "individual_submit_wait_ms": 31566.997132,
+        "individual_pipeline_setup_ms": 32.812575,
+        "individual_command_setup_ms": 548.434366,
+        "individual_cleanup_ms": 246.362997,
+        "individual_dispatch_total_ms_inclusive": 32394.60707,
+        "write_buffer_ms": 786.769936,
+        "read_buffer_ms": 1799.621596
+      }
+    },
+    "scope": "Single original changed cold frame only. Partial counters are not full-frame output, exclusive costs, a historical speed comparison or an extrapolation."
+  },
+  "actual_new_builds": {
+    "shader_compilations": 2,
+    "CXX_compilations": 1,
+    "backend_links": 1,
+    "frame_links": 1
+  },
+  "initial_metadata_reader_failure_preserved": "modules/owner.json; Transport compiler succeeded, signed array-bound reader stopped before Endpoint. Reused exact Transport bytes; no compiler or workload repeated for correction.",
+  "actual_ordinary_called_function_bytes": {
+    "Transport": 322820,
+    "Endpoint": 654634
+  },
+  "actual_shared_bytes": {
+    "Transport": 10604,
+    "Endpoint": 13176
+  },
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite candidate evidence. Full science, July image identity, original cold-frame acceptance, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain distinct obligations."
+}
