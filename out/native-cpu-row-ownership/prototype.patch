@@ -1,0 +1,550 @@
+--- src/sirius/kernels/retained_transport.slang
++++ out/native-cpu-row-ownership/shaders/retained_transport.slang
+@@ -1,3 +1,10 @@
++#if !defined(SIRIUS_RETAINED_CPU_ROW_OWNER) || SIRIUS_RETAINED_EXECUTION_LANES != 64
++#error Complete row ownership requires its explicit private CPU guard and original LocalSize64.
++#endif
++#define SIRIUS_RETAINED_OWNED_STRIDE 1
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER) || defined(SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS)
++#error This private complete-row owner belongs only to the existing native binary32 CPU route.
++#endif
+ import retained_scratch;
+ import retained_scalar;
+ import retained_triple;
+@@ -132,7 +139,7 @@
+     if (needed == 0 || needed > count || layers == 0 || layers > SIRIUS_RETAINED_LAYERS) return false;
+     if (lane == 0) retainedStatus = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-    GroupMemoryBarrierWithGroupSync();
++
+ #endif
+     uint layerBase = programBase + 43 + 5 * count;
+     if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
+@@ -158,7 +165,7 @@
+         else {
+             // Cover the original complete layer before its publication barrier.
+             for (uint node = start + lane; node < end;
+-                 node += SIRIUS_RETAINED_EXECUTION_LANES)
++                 node += SIRIUS_RETAINED_OWNED_STRIDE)
+                 if (!EvaluateOne(node, row, rowBase, programBase, registers
+ #ifdef SIRIUS_RETAINED_STAGE7_OWNER
+                                  , stage
+@@ -167,16 +174,16 @@
+                     RejectRetainedProgram();
+         }
+ #else
+-        else if (start + lane < end &&
+-                 !EvaluateOne(start + lane, row, rowBase, programBase, registers
+-#ifdef SIRIUS_RETAINED_STAGE7_OWNER
+-                                 , stage
+-#endif
+-                                 ))
+-            RejectRetainedProgram();
+-#endif
+-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-        GroupMemoryBarrierWithGroupSync();
++        else {
++            // The immutable plan excludes all same-layer read/write aliases.
++            // Finish every original node before the original layer-level refusal.
++            for (uint node = start; node < end; node += SIRIUS_RETAINED_OWNED_STRIDE)
++                if (!EvaluateOne(node, row, rowBase, programBase, registers))
++                    RejectRetainedProgram();
++        }
++#endif
++#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++
+ #endif
+         if (retainedStatus != 0) return false;
+         expected = end;
+@@ -194,21 +201,21 @@
+     }
+ #else
+     // Every root must pass before any stage value is published.
+-    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
++    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_OWNED_STRIDE) {
+         uint index = inputs[programBase + 3 + i];
+         if (index >= registers)
+             RejectRetainedProgram();
+         else if (ScratchRead(index, 4, rowBase, 2404) == 0)
+             RejectRetainedProgram();
+     }
+-    GroupMemoryBarrierWithGroupSync();
++
+     if (retainedStatus != 0) return false;
+-    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES)
++    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_OWNED_STRIDE)
+         WriteStored(rowBase + 1004 + stage * 200 + i * 5,
+                     ReadValue(inputs[programBase + 3 + i], rowBase));
+ #endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     return true;
+ }
+@@ -235,7 +242,7 @@
+ static const int ed[7] = {57600, 1, 16695, 1920, 339200, 525, 40};
+ // Six row sums, fourteen nonzero corrections and five embedded-error weights.
+ // Preserve the complete retained value, including its integer validity word.
+-groupshared uint retainedCoefficients[SIRIUS_RETAINED_COEFFICIENTS * 5];
++static uint retainedCoefficients[SIRIUS_RETAINED_COEFFICIENTS * 5];
+ void CacheCoefficient(uint lane) {
+     if (lane >= SIRIUS_RETAINED_COEFFICIENTS) return;
+ #ifdef SIRIUS_RETAINED_PORTABLE
+@@ -475,10 +482,7 @@
+     value.valid = retainedCoefficients[base + 4];
+     return value;
+ }
+-[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
+-                                                                              : SV_GroupID,
+-                                                                                uint lane
+-                                                                              : SV_GroupIndex) {
++void ComputeOwnedRow(uint3 id, uint lane) {
+     uint ni, si, no, so;
+     inputs.GetDimensions(ni, si);
+     outputs.GetDimensions(no, so);
+@@ -493,9 +497,9 @@
+ #ifdef SIRIUS_RETAINED_STAGE7_OWNER
+     S7ResetTransport(row, rows, lane);
+ #endif
+-    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-    AllMemoryBarrierWithGroupSync();
++    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_OWNED_STRIDE) outputs[rowBase + i] = 0;
++#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
++
+ #endif
+     uint layers = SIRIUS_RETAINED_LAYERS;
+     if (inputs[programBase + 2] != 40 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+@@ -569,7 +573,7 @@
+     // The immutable plan leaves never-assigned slots invalid across all stages.
+     // The existing stage-zero barrier publishes this disjoint validity clear.
+     for (uint index = lane; index < SIRIUS_RETAINED_REGISTERS;
+-         index += SIRIUS_RETAINED_EXECUTION_LANES)
++         index += SIRIUS_RETAINED_OWNED_STRIDE)
+         ScratchWrite(index, 4, rowBase, 2404, 0);
+ #endif
+     for (uint stage = 0; stage < 7; ++stage) {
+@@ -586,14 +590,16 @@
+ #if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_NORMAL_SUM32) && defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+         if (stage == 1)
+             for (uint index = lane; index < SIRIUS_RETAINED_COEFFICIENTS;
+-                 index += SIRIUS_RETAINED_EXECUTION_LANES)
++                 index += SIRIUS_RETAINED_OWNED_STRIDE)
+                 CacheCoefficient(index);
+ #else
+-        if (stage == 1) CacheCoefficient(lane);
+-#endif
+-        GroupMemoryBarrierWithGroupSync();
+-#endif
+-        for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
++        if (stage == 1)
++            for (uint index = 0; index < SIRIUS_RETAINED_COEFFICIENTS; ++index)
++                CacheCoefficient(index);
++#endif
++
++#endif
++        for (uint i = lane; i < 40; i += SIRIUS_RETAINED_OWNED_STRIDE) {
+             RetainedTriple value = ReadOriginal(4 + i, row);
+             if (stage != 0) {
+                 RetainedTriple first = ReadStored(rowBase + 1004 + i * 5);
+@@ -617,7 +623,7 @@
+ #endif
+         }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-        AllMemoryBarrierWithGroupSync();
++
+ #endif
+         if (retainedStatus != 0) return;
+         if (lane == 0) outputs[rowBase + 1] = stage + 1;
+@@ -625,9 +631,9 @@
+     }
+     if (lane == 0) retainedStatus = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-    GroupMemoryBarrierWithGroupSync();
+-#endif
+-    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_EXECUTION_LANES) {
++
++#endif
++    for (uint i = lane; i < 40; i += SIRIUS_RETAINED_OWNED_STRIDE) {
+         RetainedTriple first = ReadStored(rowBase + 1004 + i * 5), weighted = RTConstant(RPZero());
+         for (uint j = 1; j < 7; ++j)
+             if (en[j] != 0) {
+@@ -643,7 +649,7 @@
+         WriteStored(rowBase + 4 + 120 * 5 + i * 5, error);
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_TRANSPORT)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     if (retainedStatus != 0) return;
+     if (lane == 0) outputs[rowBase] = 1;
+@@ -653,3 +659,11 @@
+     if (lane == 0) S7Publish();
+ #endif
+ }
++
++// The host preserves its exact dispatch/group counts. One invocation owns
++// every original field and producer in the same logical row; all its scratch,
++// status, coefficients and projection values are private to that invocation.
++[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)]
++void ComputeMain(uint3 id : SV_GroupID, uint lane : SV_GroupIndex) {
++    if (lane == 0) ComputeOwnedRow(id, 0);
++}
+--- out/native-endpoint-phase-sharing/shaders/retained_endpoint.slang
++++ out/native-cpu-row-ownership/shaders/retained_endpoint.slang
+@@ -1,3 +1,10 @@
++#if !defined(SIRIUS_RETAINED_CPU_ROW_OWNER) || SIRIUS_RETAINED_EXECUTION_LANES != 64
++#error Complete row ownership requires its explicit private CPU guard and original LocalSize64.
++#endif
++#define SIRIUS_RETAINED_OWNED_STRIDE 1
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER) || defined(SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS)
++#error This private complete-row owner belongs only to the existing native binary32 CPU route.
++#endif
+ import retained_scratch;
+ import retained_scalar;
+ import retained_triple;
+@@ -12,12 +19,12 @@
+ #if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64)
+ #error This candidate belongs only to the existing native binary32 route.
+ #endif
+-groupshared uint nativeProjection[7];
++static uint nativeProjection[7];
+ #if defined(SIRIUS_RETAINED_PORTABLE) && defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+ // Lane zero publishes success, component, and all five retained root words.
+-groupshared uint retainedProjection[7];
++static uint retainedProjection[7];
+ // Complete weighted terms preserve both retained multiplies and their status.
+-groupshared uint retainedProjectionTerms[16 * 5];
++static uint retainedProjectionTerms[16 * 5];
+ #endif
+ RetainedTriple ReadStored(uint base) {
+     RetainedTriple r;
+@@ -137,7 +144,7 @@
+     if (needed == 0 || needed > count || first > needed) return false;
+     if (lane == 0) retainedStatus = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+-    GroupMemoryBarrierWithGroupSync();
++
+ #endif
+     uint layerBase = programBase + 103 + 5 * count;
+     if (inputs[layerBase] != 0 || inputs[layerBase + layers] != count) return false;
+@@ -167,18 +174,22 @@
+             // All layer destinations are disjoint; inputs live until the join.
+             // Execute the same bounded layer with the declared invocation stride.
+             for (uint node = start + lane; node < end;
+-                 node += SIRIUS_RETAINED_EXECUTION_LANES)
++                 node += SIRIUS_RETAINED_OWNED_STRIDE)
+                 if (!EvaluateOne(node, row, rowBase, programBase, registers))
+                     RejectRetainedProgram();
+         }
+ #else
+-        else if (start + lane < end &&
+-                 !EvaluateOne(start + lane, row, rowBase, programBase, registers))
+-            RejectRetainedProgram();
++        else {
++            // The immutable plan excludes all same-layer read/write aliases.
++            // Finish every original node before the original layer-level refusal.
++            for (uint node = start; node < end; node += SIRIUS_RETAINED_OWNED_STRIDE)
++                if (!EvaluateOne(node, row, rowBase, programBase, registers))
++                    RejectRetainedProgram();
++        }
+ #endif
+ #endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+-        GroupMemoryBarrierWithGroupSync();
++
+ #endif
+         if (retainedStatus != 0) return false;
+         expected = end;
+@@ -194,7 +205,7 @@
+             WriteStored(rowBase + 4 + i * 5, ReadValue(inputs[programBase + 3 + i], rowBase));
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     return true;
+ }
+@@ -546,7 +557,7 @@
+ }
+ 
+ #ifdef SIRIUS_RETAINED_PORTABLE
+-[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
++[shader("compute")][numthreads(1, 1, 1)] void ComputeMain(uint3 id
+                                                                               : SV_GroupID,
+                                                                                 uint lane
+                                                                               : SV_GroupIndex) {
+@@ -562,9 +573,9 @@
+          prefix = SIRIUS_RETAINED_PREFIX;
+     uint rowWords = no / rows, rowBase = row * rowWords;
+     if (rowWords < 769) return;
+-    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
++    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_OWNED_STRIDE) outputs[rowBase + i] = 0;
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+         SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS != 103 + 5 * count + layers + 1 ||
+@@ -581,7 +592,7 @@
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
+     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+@@ -591,7 +602,7 @@
+     for (uint i = 45; i < 53; ++i)
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_ENDPOINT)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
+         RTExact(ReadStored(rowBase + 514), RPZero()) &&
+@@ -609,11 +620,11 @@
+ #ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+             // The flat metric is lane-zero-owned; the curved prefix already
+             // joined its outputs. Publish either before the serial projection.
+-            AllMemoryBarrierWithGroupSync();
++
+             // Every lane joins before lane zero consumes all sixteen terms.
+             // Invalid products retain their original ordered refusal meaning.
+             CacheProjectionTerm(rowBase, lane);
+-            GroupMemoryBarrierWithGroupSync();
++
+             if (lane == 0) {
+                 retainedProjection[0] = Project(rowBase, component, root) ? 1u : 0u;
+                 retainedProjection[1] = component;
+@@ -623,7 +634,7 @@
+                 retainedProjection[5] = RPBits(root.error);
+                 retainedProjection[6] = root.valid;
+             }
+-            GroupMemoryBarrierWithGroupSync();
++
+             if (retainedProjection[0] == 0) return;
+             component = retainedProjection[1];
+             root.hi = RPFromBits(retainedProjection[2]);
+@@ -674,7 +685,7 @@
+             }
+ #ifdef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+             // Projected inputs 45..52 cross lanes before suffix evaluation.
+-            AllMemoryBarrierWithGroupSync();
++
+ #endif
+         } else if (flat) {
+ #ifndef SIRIUS_RETAINED_PARALLEL_ENDPOINT
+@@ -702,10 +713,7 @@
+     if (lane == 0) outputs[rowBase + 1] = component;
+ }
+ #else
+-[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
+-                                                                              : SV_GroupID,
+-                                                                                uint lane
+-                                                                              : SV_GroupIndex) {
++void ComputeOwnedRow(uint3 id, uint lane) {
+     uint ni, si, no, so;
+     inputs.GetDimensions(ni, si);
+     outputs.GetDimensions(no, so);
+@@ -718,9 +726,9 @@
+          prefix = SIRIUS_RETAINED_PREFIX;
+     uint rowWords = no / rows, rowBase = row * rowWords;
+     if (rowWords < 769) return;
+-    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
++    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_OWNED_STRIDE) outputs[rowBase + i] = 0;
+ #ifndef SIRIUS_RETAINED_PORTABLE
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     if (inputs[programBase + 2] != 100 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+         SIRIUS_RETAINED_GENERAL_PROGRAM_WORDS != 103 + 5 * count + layers + 1 ||
+@@ -737,7 +745,7 @@
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, value);
+     }
+ #ifndef SIRIUS_RETAINED_PORTABLE
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     RetainedTriple chart = ReadStored(rowBase + 504 + 5 * 44);
+     if (!RTExact(chart, RPOne()) && !RTExact(chart, RPScalarNegate(RPOne()))) return;
+@@ -747,7 +755,7 @@
+     for (uint i = 45; i < 53; ++i)
+         if (lane == 0) WriteStored(rowBase + 504 + 5 * i, RTConstant(i == 49 ? RPOne() : RPZero()));
+ #ifndef SIRIUS_RETAINED_PORTABLE
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
+                 RTExact(ReadStored(rowBase + 514), RPZero()) &&
+@@ -762,7 +770,7 @@
+     [loop] for (uint phase_index = 0; phase_index < 3; ++phase_index) {
+         if (phase_index == 1) {
+             // Publish lane-zero flat initialization or the complete curved prefix.
+-            AllMemoryBarrierWithGroupSync();
++
+             // The prefix already joined every metric/tangent word. Project has no
+             // writes or lane-dependent inputs; lane zero retains its complete ordered
+             // calculation, both roots and every refusal before publishing all words.
+@@ -775,7 +783,7 @@
+                 nativeProjection[5] = RPBits(root.error);
+                 nativeProjection[6] = root.valid;
+             }
+-            GroupMemoryBarrierWithGroupSync();
++
+             if (nativeProjection[0] == 0) return;
+             component = nativeProjection[1];
+             root.hi = RPFromBits(nativeProjection[2]);
+@@ -819,7 +827,7 @@
+                                 RTConstant(i == component ? RPOne() : RPZero()));
+             }
+         #ifndef SIRIUS_RETAINED_PORTABLE
+-            AllMemoryBarrierWithGroupSync();
++
+         #endif
+         } else if (flat) {
+             if (lane == 0) {
+@@ -841,3 +849,11 @@
+ }
+ 
+ #endif
++
++// The host preserves its exact dispatch/group counts. One invocation owns
++// every original field and producer in the same logical row; all its scratch,
++// status, coefficients and projection values are private to that invocation.
++[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)]
++void ComputeMain(uint3 id : SV_GroupID, uint lane : SV_GroupIndex) {
++    if (lane == 0) ComputeOwnedRow(id, 0);
++}
+--- src/sirius/kernels/retained_dopri_phase.slang
++++ out/native-cpu-row-ownership/shaders/retained_dopri_phase.slang
+@@ -1,3 +1,10 @@
++#if !defined(SIRIUS_RETAINED_CPU_ROW_OWNER) || SIRIUS_RETAINED_EXECUTION_LANES != 64
++#error Complete row ownership requires its explicit private CPU guard and original LocalSize64.
++#endif
++#define SIRIUS_RETAINED_OWNED_STRIDE 1
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER) || defined(SIRIUS_RETAINED_COOPERATIVE_DOPRI_INPUTS)
++#error This private complete-row owner belongs only to the existing native binary32 CPU route.
++#endif
+ import retained_scratch;
+ import retained_scalar;
+ import retained_triple;
+@@ -119,7 +126,7 @@
+     if (lane == 0) retainedStatus = 0;
+ #endif
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
+-    GroupMemoryBarrierWithGroupSync();
++
+ #endif
+     uint layerBase = programBase + 203 + 5 * count;
+     if (inputs[layerBase] != 0 || inputs[layerBase + SIRIUS_RETAINED_LAYERS] != count) return false;
+@@ -141,17 +148,21 @@
+         else {
+             // Cover the complete original layer before its publication barrier.
+             for (uint node = start + lane; node < end;
+-                 node += SIRIUS_RETAINED_EXECUTION_LANES)
++                 node += SIRIUS_RETAINED_OWNED_STRIDE)
+                 if (!EvaluateOne(node, row, rowBase, programBase, registers))
+                     RejectRetainedProgram();
+         }
+ #else
+-        else if (start + lane < end &&
+-                 !EvaluateOne(start + lane, row, rowBase, programBase, registers))
+-            RejectRetainedProgram();
+-#endif
+-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
+-        GroupMemoryBarrierWithGroupSync();
++        else {
++            // The immutable plan excludes all same-layer read/write aliases.
++            // Finish every original node before the original layer-level refusal.
++            for (uint node = start; node < end; node += SIRIUS_RETAINED_OWNED_STRIDE)
++                if (!EvaluateOne(node, row, rowBase, programBase, registers))
++                    RejectRetainedProgram();
++        }
++#endif
++#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
++
+ #endif
+         if (retainedStatus != 0) return false;
+         expected = end;
+@@ -166,15 +177,12 @@
+             WriteStored(rowBase + 4 + i * 5, ReadValue(inputs[programBase + 3 + i], rowBase));
+     }
+ #if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
+-    AllMemoryBarrierWithGroupSync();
++
+ #endif
+     return true;
+ }
+ 
+-[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)] void ComputeMain(uint3 id
+-                                                                              : SV_GroupID,
+-                                                                                uint lane
+-                                                                              : SV_GroupIndex) {
++void ComputeOwnedRow(uint3 id, uint lane) {
+     uint ni, si, no, so;
+     inputs.GetDimensions(ni, si);
+     outputs.GetDimensions(no, so);
+@@ -186,9 +194,9 @@
+          registers = inputs[programBase + 1];
+     uint rowWords = no / rows, rowBase = row * rowWords;
+     if (rowWords < 1004) return;
+-    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
+-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
+-    AllMemoryBarrierWithGroupSync();
++    for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_OWNED_STRIDE) outputs[rowBase + i] = 0;
++#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
++
+ #endif
+     if (inputs[programBase + 2] != 200 || count > 65536 || registers != SIRIUS_RETAINED_REGISTERS ||
+         ni != programBase + 203 + 5 * count + SIRIUS_RETAINED_LAYERS + 1 ||
+@@ -198,10 +206,10 @@
+     // Partition every original field, including the zero-weight RHS. No lane
+     // exits before the join; a failed field leaves the complete output zero.
+     if (lane == 0) retainedStatus = 0;
+-    GroupMemoryBarrierWithGroupSync();
+-    for (uint i = lane; i < 362; i += SIRIUS_RETAINED_EXECUTION_LANES)
++
++    for (uint i = lane; i < 362; i += SIRIUS_RETAINED_OWNED_STRIDE)
+         if (ReadOriginal(i, row).valid == 0) RejectRetainedProgram();
+-    GroupMemoryBarrierWithGroupSync();
++
+     if (retainedStatus != 0) return;
+ #else
+     for (uint i = 0; i < 362; ++i)
+@@ -221,3 +229,11 @@
+     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 200, lane)) return;
+     if (lane == 0) outputs[rowBase] = 1;
+ }
++
++// The host preserves its exact dispatch/group counts. One invocation owns
++// every original field and producer in the same logical row; all its scratch,
++// status, coefficients and projection values are private to that invocation.
++[shader("compute")][numthreads(SIRIUS_RETAINED_EXECUTION_LANES, 1, 1)]
++void ComputeMain(uint3 id : SV_GroupID, uint lane : SV_GroupIndex) {
++    if (lane == 0) ComputeOwnedRow(id, 0);
++}
+--- src/sirius/kernels/retained_scratch.slang
++++ out/native-cpu-row-ownership/shaders/retained_scratch.slang
+@@ -1,8 +1,9 @@
++// Private complete-row scratch: only the owner invocation can read/write it.
+ // One ray owns a workgroup. A layer's disjoint expression results become
+ // visible at its barrier, before any input register can be reused.
+ // The generated register plan plus status fits the portable 16 KiB bound.
+-groupshared uint retainedScratch[SIRIUS_RETAINED_REGISTERS * SIRIUS_RETAINED_TERMS];
+-groupshared uint retainedStatus;
++static uint retainedScratch[SIRIUS_RETAINED_REGISTERS * SIRIUS_RETAINED_TERMS];
++static uint retainedStatus;
+ uint ScratchAddress(uint index, uint component, uint rowBase, uint prefix) {
+     return index * SIRIUS_RETAINED_TERMS + component;
+ }
+@@ -13,6 +14,5 @@
+     retainedScratch[ScratchAddress(index, component, rowBase, prefix)] = value;
+ }
+ void RejectRetainedProgram() {
+-    uint previous;
+-    InterlockedOr(retainedStatus, 1, previous);
++    retainedStatus |= 1;
+ }

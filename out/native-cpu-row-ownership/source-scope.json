@@ -1,0 +1,104 @@
+{
+  "basis_public_source": "0109ab462edade524667d20303507aa09adcbaf6",
+  "basis_Endpoint_phase_source": "d9dbd65796aab5dd36e17481198ae1f6b6201a2c",
+  "latest_finite_evidence": "e4a30cfd64b6dffceb9b43690343a15e484ea8db",
+  "scope": "Private actual-software native32 complete row ownership, three modules only. Preserve LocalSize64, group-row correspondence and all original dispatch/group/field/trial counts.",
+  "owned_state": "Per-invocation Private scratch/status/coefficients/projection; no global output-tail scratch reuse.",
+  "source_modules": {
+    "transport": {
+      "basis_path": "src/sirius/kernels/retained_transport.slang",
+      "basis": {
+        "bytes": 28933,
+        "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+      },
+      "candidate": {
+        "bytes": 29387,
+        "sha256": "b258a8abb16e3552f138425736d1518bb58f0ac733de4258fd6dceeff2c52d4c"
+      },
+      "execution_lanes": 64,
+      "active_complete_row_owners": 1,
+      "global_layout_or_scalar_algorithm_changed": false
+    },
+    "endpoint": {
+      "basis_path": "out/native-endpoint-phase-sharing/shaders/retained_endpoint.slang",
+      "basis": {
+        "bytes": 41138,
+        "sha256": "396e85ff1fecfba3497f815985656dadbc26801b7be72a108f59654d96522d7e"
+      },
+      "candidate": {
+        "bytes": 41288,
+        "sha256": "3c0fe3961397cef7dca40df375e97c9a0a8d14b88816a841851e397ca0beeb2c"
+      },
+      "execution_lanes": 64,
+      "active_complete_row_owners": 1,
+      "global_layout_or_scalar_algorithm_changed": false
+    },
+    "dopri_phase": {
+      "basis_path": "src/sirius/kernels/retained_dopri_phase.slang",
+      "basis": {
+        "bytes": 9959,
+        "sha256": "23251c8dd1fbe880cbc4f18be17a4bbb8082a67743eeff48f4a22627a7212f3f"
+      },
+      "candidate": {
+        "bytes": 10572,
+        "sha256": "78b57d6ec36509508a9448b0b8a06b626988c19b16e03e908d3e50fcf01c8043"
+      },
+      "execution_lanes": 64,
+      "active_complete_row_owners": 1,
+      "global_layout_or_scalar_algorithm_changed": false
+    }
+  },
+  "Private_scratch": {
+    "bytes": 918,
+    "sha256": "434cba4cdb8a767e7f13dc8d356797a68cf92c0f19d16ca433ca8d31fd7bb0d9"
+  },
+  "hardware_and_wide_FMA_portable_owner_routes_unchanged": true,
+  "required_before_build": "Independent concrete source review PASS. Emitted Private/Function lifetime, no Workgroup storage/barriers and original-mode/ABI proof must follow compilation before runtime admission.",
+  "builds_or_dispatches": 0,
+  "adopted": false,
+  "qualified": false,
+  "layer_composition_review": {
+    "reviewer": "divide_contract_review",
+    "safe_to_author": true,
+    "actual_tables_checked_without_regeneration": {
+      "Transport_general": [
+        2587,
+        117
+      ],
+      "Transport_Schwarzschild": [
+        557,
+        42
+      ],
+      "Endpoint_general": [
+        2205,
+        111
+      ],
+      "Endpoint_Schwarzschild": [
+        1943,
+        84
+      ],
+      "DopriPhase": [
+        2088,
+        45
+      ]
+    },
+    "all_layers": "Distinct destinations disjoint from all same-layer reads; no source-before-assignment.",
+    "allocator": "Collect all reads before assignment; forbid destination intersections; release slots only after complete layer; continuous Endpoint prefix/suffix allocation.",
+    "remaining_before_compiler": "Review concrete transformed native per-layer loops, all25 coefficients, complete output clear, Private lifetime and explicit CPU/native32 selector."
+  },
+  "source_corrections_before_any_build": [
+    "Explicit stride1 distinct from LocalSize64",
+    "Native per-layer producer executes every node, not only start+lane0",
+    "Native Transport caches all25 coefficients"
+  ],
+  "host_selector": {
+    "bytes": 46035,
+    "sha256": "0bc5bd4e9f4aa4c9be6f292e09b76c92dc53ae5f75ce91dd62ac482098a160b3"
+  },
+  "concrete_source_review": {
+    "reviewer": "divide_contract_review",
+    "passed": true,
+    "no_missed_work_paths": true,
+    "emission_or_performance_claimed": false
+  }
+}

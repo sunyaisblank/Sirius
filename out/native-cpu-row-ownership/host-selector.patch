@@ -1,0 +1,42 @@
+--- src/sirius/backend/retained_compute.cpp
++++ out/native-cpu-row-ownership/retained_compute.cpp
+@@ -153,6 +153,12 @@
+         return {};
+     };
+     const bool portable = RetainedUsesPortableArithmetic(device.Info());
++    const bool cpu_owned = !fp64_products && !portable &&
++                           device.Info().kind == DeviceKind::kSoftware;
++    const auto cpu_shader = [cpu_owned](std::span<const std::uint32_t> owned,
++                                       std::span<const std::uint32_t> original) {
++        return cpu_owned ? owned : original;
++    };
+     const auto shader = [fp64_products, portable](std::span<const std::uint32_t> narrow,
+                                                   std::span<const std::uint32_t> wide,
+                                                   std::span<const std::uint32_t> integer_narrow,
+@@ -173,7 +179,7 @@
+         normal_sum ? std::span(kTransportPortableNormalSumShader)
+                    : (fma && kTransportFmaAvailable
+                           ? std::span(kTransportFmaShader)
+-                          : shader(kTransportShader, kTransportFp64Shader, kTransportPortableShader,
++                          : shader(cpu_shader(kTransportNativeOwnedShader, kTransportShader), kTransportFp64Shader, kTransportPortableShader,
+                                    kTransportPortableFp64Shader));
+     status = create(result->transport_, KernelStage::kTransport, transport);
+     if (!status) return std::unexpected(status.error());
+@@ -181,7 +187,7 @@
+         normal_sum ? std::span(kEndpointPortableNormalSumShader)
+                    : (fma && kEndpointFmaAvailable
+                           ? std::span(kEndpointFmaShader)
+-                          : shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
++                          : shader(cpu_shader(kEndpointNativeOwnedShader, kEndpointShader), kEndpointFp64Shader, kEndpointPortableShader,
+                                    kEndpointPortableFp64Shader));
+     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
+     if (!status) return std::unexpected(status.error());
+@@ -201,7 +207,7 @@
+     // program or its integer fallback, including on adapters without RTE32.
+     const std::span<const std::uint32_t> dopri_phase =
+         normal_sum ? std::span(kDopriPhasePortableNormalSumShader)
+-                   : shader(kDopriPhaseShader, kDopriPhaseFp64Shader, kDopriPhasePortableShader,
++                   : shader(cpu_shader(kDopriPhaseNativeOwnedShader, kDopriPhaseShader), kDopriPhaseFp64Shader, kDopriPhasePortableShader,
+                             kDopriPhasePortableFp64Shader);
+     status = create(result->dopri_phase_, KernelStage::kDopriPhase, dopri_phase);
+     if (!status) return std::unexpected(status.error());
