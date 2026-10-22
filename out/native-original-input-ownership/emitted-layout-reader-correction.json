@@ -1,0 +1,20 @@
+{
+  "initial_owner": "out/native-original-input-ownership/modules/owner.json",
+  "initial_outcome": "FAIL metadata reader KeyError after one successful Transport compile/validation, before Endpoint compiler",
+  "cause": "Slang uses an int constant for the230-word array length; reader incorrectly accepted only uint constants.",
+  "correction": "Read both actual32-bit integer constant types. Reuse the exact already-produced/validated Transport bytes; compile only Endpoint once. Preserve the failed owner and all seals.",
+  "reused_Transport": {
+    "path": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+    "bytes": 87444,
+    "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f"
+  },
+  "actual_shared_variables_bytes": {
+    "%retainedStatus": 4,
+    "%originalTerms": 920,
+    "%retainedScratch": 9180,
+    "%retainedCoefficients": 500
+  },
+  "actual_shared_bytes": 10604,
+  "shader_or_compiler_changes": false,
+  "workload_dispatches": 0
+}

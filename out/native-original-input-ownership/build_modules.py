@@ -66,8 +66,13 @@ for kind, stem, build in [
     match = re.search(r'k' + kind + r'Program\{\{(.*?)\}\};', text, re.S)
     assert match and [int(x) for x in re.findall(r'(\d+)u', match[1])] == encoded
     destination = B / ('owned-' + stem + '.spv')
-    assert not destination.exists()
-    words = authority.compile_shader(
+    if kind == 'Transport':
+        receipt = json.loads((W / 'emitted-layout-reader-correction.json').read_text())
+        assert pin(destination) == {k: receipt['reused_Transport'][k] for k in ['bytes', 'sha256']}
+        raw = destination.read_bytes(); words = list(struct.unpack('<' + str(len(raw)//4) + 'I', raw))
+    else:
+        assert not destination.exists()
+        words = authority.compile_shader(
         R / ('src/sirius/kernels/retained_' + stem + '.slang'), destination,
         actual_tools['compiler'], actual_tools['assembler'],
         actual_tools['disassembler'], actual_tools['validator'],
@@ -83,7 +88,7 @@ for kind, stem, build in [
     assert re.search(r'OpExecutionMode %\S+ LocalSize 64 1 1', assembly)
     assert 'DenormPreserve 32' in assembly and 'RoundingModeRTE 32' in assembly
     # Count the actually emitted workgroup variables, including every scalar.
-    constants = {k: int(v) for k, v in re.findall(r'(%\S+) = OpConstant %uint (\d+)', assembly)}
+    constants = {k: int(v) for k, v in re.findall(r'(%\S+) = OpConstant %(?:u?int) (\d+)', assembly)}
     types = {k: 4 for k in re.findall(r'(%\S+) = OpTypeInt 32 [01]', assembly)}
     for key, element, length in re.findall(r'(%\S+) = OpTypeArray (%\S+) (%\S+)', assembly):
         if element in types and length in constants: types[key] = types[element] * constants[length]
@@ -118,6 +123,7 @@ assert original == {str(p.relative_to(R)): pin(p) for p in C.iterdir() if p.is_f
     'modules': result, 'commands': commands, 'tools': actual_tools,
     'all35_shipped_modules_and_original_generated_headers_unchanged': True,
     'original_inputs': original, 'global_buffer_layout_or_scalar_arithmetic_changes': False, 'private_shared_input_ownership_added': True,
+    'Transport_compile_reused_after_reader_correction': json.loads((W / 'emitted-layout-reader-correction.json').read_text()),
     'qualification': False}, indent=2) + '\n')
-print(json.dumps({'compiled_modules': 2, 'all35_original_modules_unchanged': True,
+print(json.dumps({'compiled_modules_this_completion': 1, 'total_new_modules_this_candidate': 2, 'all35_original_modules_unchanged': True,
                   'modules': result}))
