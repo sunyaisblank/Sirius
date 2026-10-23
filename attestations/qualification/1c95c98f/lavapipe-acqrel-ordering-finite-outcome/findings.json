@@ -1,0 +1,244 @@
+{
+  "candidate_source": "1c95c98f61696541f520d871f7b492035074089b",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "all22_original_benefit_gates_pass": false,
+  "benefit_checks_passed": 19,
+  "independent_Decimal_agrees": true,
+  "sole_ABBA": {
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        32.546971,
+        29.535573,
+        30.978333
+      ],
+      "candidate_samples_ms": [
+        32.520782,
+        38.596311,
+        32.164572
+      ],
+      "baseline_median_ms": 30.978333,
+      "candidate_median_ms": 32.520782,
+      "improvement_percent": -4.979122020542544,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        18.489271000000002,
+        18.003951,
+        18.179213
+      ],
+      "candidate_samples_ms": [
+        20.455809,
+        21.621111,
+        23.675981999999998
+      ],
+      "baseline_median_ms": 18.179213,
+      "candidate_median_ms": 21.621111,
+      "improvement_percent": -18.933151836660905,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        21.238916,
+        5.709652,
+        6.1230519999999995
+      ],
+      "candidate_samples_ms": [
+        11.380442,
+        10.67569,
+        8.299191
+      ],
+      "baseline_median_ms": 6.1230519999999995,
+      "candidate_median_ms": 10.67569,
+      "improvement_percent": -74.35243078125093,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": -4.979122020542544
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": 22.181816046410137
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": 56.91425882558971
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": 28.625140705592514
+    }
+  ],
+  "minimum_inclusive_stage_gain_percent": -74.35243078125093,
+  "provisioning_inclusive_API_gains_percent": [
+    80.99246908334514,
+    83.40271419268457
+  ],
+  "all32_control8_and_ABBA_readbacks_match_originals": true,
+  "original_controls": {
+    "1": {
+      "status": "not_run"
+    },
+    "2": {
+      "status": "not_run"
+    },
+    "3": {
+      "status": "not_run"
+    },
+    "4": {
+      "status": "not_run"
+    },
+    "5": {
+      "status": "not_run"
+    },
+    "6": {
+      "status": "not_run"
+    },
+    "7": {
+      "status": "not_run"
+    },
+    "8": {
+      "passed": true,
+      "wall_seconds": 23.246268366929144,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 965484
+    }
+  },
+  "all8_original_controls_admitted": false,
+  "cold_frame": {
+    "attempted": false,
+    "accepted": false,
+    "reason": "All22 benefit gates and all8 original controls required first."
+  },
+  "actual_new_builds": {
+    "provider_builds": 1,
+    "shader_compilations": 0,
+    "CXX_compilations": 0,
+    "backend_links": 0,
+    "frame_links": 0
+  },
+  "actual_ordinary_called_function_bytes": {
+    "Transport": 322760,
+    "Endpoint": 654590,
+    "DopriPhase": 111191
+  },
+  "actual_IR_fences_by_order": {
+    "Transport": {
+      "acq_rel": 10
+    },
+    "Endpoint": {
+      "acq_rel": 10
+    },
+    "DopriPhase": {
+      "acq_rel": 6
+    }
+  },
+  "actual_full_fences_zero_and_coroutine_resumes_retained": true,
+  "provider_source_admission": {
+    "passed": true,
+    "official_tar_commit": "43389d91ca54667d12a41ee0a33d35e596fc42bd",
+    "official_tar_member": "attestations/qualification/8c2be67d/lavapipe-vector-workgroup-rejected/mesa-25.2.8.tar.xz",
+    "official_tar_sha256": "097842f3e49d996868b38688db87b006f7d4541e93ce86d2f341d8b3e7be7c93",
+    "original_source_files": 11100,
+    "changed_files": {
+      "src/util/u_math.h": {
+        "before": {
+          "bytes": 18108,
+          "sha256": "5bfe924a00a42bd622a05e3eb7991b793cbbd84038555ed2408d8c3b3e92d23f"
+        },
+        "after": {
+          "bytes": 18704,
+          "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+        }
+      },
+      "src/gallium/frontends/lavapipe/lvp_device.c": {
+        "before": {
+          "bytes": 115232,
+          "sha256": "643e4f421ddd03a100b88bac7038d4713cabef0b1be49637c2a7414a8b52fde8"
+        },
+        "after": {
+          "bytes": 115877,
+          "sha256": "736d880fca57653ee6b819cd4243f4400d13f7367aafca574cd2239f85751e0e"
+        }
+      },
+      "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+        "before": {
+          "bytes": 96209,
+          "sha256": "6675c1ece36b60c45727bfaa77802439c457339fcb43a35e81786815ce372339"
+        },
+        "after": {
+          "bytes": 96490,
+          "sha256": "3c1953896b88b60eccc18109204462590ceaa550ed9fb9991d0d21cc7904cc1e"
+        }
+      },
+      "src/gallium/drivers/llvmpipe/lp_rast.c": {
+        "before": {
+          "bytes": 42996,
+          "sha256": "77dcb88a3da0e582e18ab89e87da3e743c059e26361f3d60799c9b8fa41c436c"
+        },
+        "after": {
+          "bytes": 43484,
+          "sha256": "daa5471828c1261b3003e32bc88caa282faefc475fa18dbb30758ccef4d8f1d8"
+        }
+      },
+      "src/gallium/auxiliary/draw/draw_pt.c": {
+        "before": {
+          "bytes": 20937,
+          "sha256": "42b7ad42770fb1cefc751e1edbe749b2253953ba1143beb5975ebfc078b8d3fd"
+        },
+        "after": {
+          "bytes": 21093,
+          "sha256": "0aa79f9b15610525e16443cf7b725cb871f27528eac37ea4c1226aef8cf9ad2c"
+        }
+      },
+      "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+        "before": {
+          "bytes": 246649,
+          "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+        },
+        "after": {
+          "bytes": 247065,
+          "sha256": "312a0b139f33054930f6eecfb0bef97071f60f157143ced6240c3139204f520b"
+        }
+      }
+    },
+    "prerequisite": "Exact existing private5-file IEEE32 repair, no other changes.",
+    "new_change": "Only exact NIR_MEMORY_ACQ_REL maps to system-scope LLVM acquire-release under LP_VULKAN_IEEE32_ENABLED.",
+    "Sirius_sources_shaders_tables_counts_unchanged": true,
+    "build_or_execution_or_performance_claimed": false
+  },
+  "unchanged_complete_modules_and_ELF_reused": true,
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite evidence. All original workgroups, producers, fields, arithmetic, ordered refusal prefixes, admission and assertions retained. Full science, July image identity, original cold-frame acceptance, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain separate obligations."
+}
