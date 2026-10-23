@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "commands": [],
+  "new_cpp_compilations": 0,
+  "observer_compilations": 0,
+  "changed_archive_members": [
+    "retained_compute.cpp.o"
+  ],
+  "original_backend_archive_unchanged": true,
+  "original_public_source": "0109ab462edade524667d20303507aa09adcbaf6",
+  "same_actual_executable_for_both_provider_arms": true,
+  "executable": "bin/linux-gcc/native-cpu-row-ownership/matched/audited_backend_tests",
+  "executable_sha256": "7f2d1fa88953b954ab116233458a4cb962470f863fda9bbb3a1cad7d4a7d6a26",
+  "scope": "Three software-CPU-only native32 selectors only; all35 original arrays and every wide/FMA/portable/owner route preserved. No numerical, integrated, benefit, frame or release acceptance.",
+  "historical_result": {
+    "path": "out/native-cpu-row-ownership/matched-result.json",
+    "bytes": 4264,
+    "sha256": "e37879e2e52f60eb42267edac1aac5e28d1b47674a969ed4feb73a77085fccda"
+  },
+  "historical_commands": [
+    {
+      "argv": [
+        "/usr/bin/g++-14",
+        "-I/home/astra/.project/Sirius/out/native-cpu-row-ownership/headers",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained",
+        "-I/home/astra/.project/Sirius/src/sirius/..",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++2c",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wno-missing-field-initializers",
+        "-Werror",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-row-ownership/matched/retained_compute.cpp.o",
+        "-c",
+        "/home/astra/.project/Sirius/out/native-cpu-row-ownership/retained_compute.cpp"
+      ],
+      "cwd": "/home/astra/.project/Sirius/bin/linux-gcc"
+    },
+    {
+      "argv": [
+        "/usr/bin/g++-14",
+        "-O3",
+        "-DNDEBUG",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/portable_binary32_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_jacobi_oracle_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/cpu_trace_boundary_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/coupled_transport_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/full_path_acceptance_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/polarisation_acceptance_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_map_trace_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/source_sky_infinity_trace_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/volume_acceptance_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/vulkan_smoke_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_parity_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_metric_consistency_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_camera_frame_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_camera_program_test.cpp.o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-row-ownership/matched/audited-observer.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/retained_dopri_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_infinity_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_trace_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_beam_test.cpp.o",
+        "tests/backend/CMakeFiles/sirius_backend_tests.dir/kernel_portability_test.cpp.o",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-row-ownership/matched/audited_backend_tests",
+        "src/sirius/backend/libsirius_backend_cpu.a",
+        "lib/libgtest_main.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-row-ownership/matched/libsirius_backend.a",
+        "src/sirius/render/libsirius_render.a",
+        "lib/libgtest.a",
+        "src/sirius/backend/libsirius_backend_cpu.a",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-row-ownership/matched/libsirius_backend.a",
+        "/usr/lib/x86_64-linux-gnu/libvulkan.so",
+        "-ldl",
+        "src/sirius/core/libsirius_core.a",
+        "src/sirius/libsirius_base.a"
+      ],
+      "cwd": "/home/astra/.project/Sirius/bin/linux-gcc"
+    }
+  ],
+  "compilation_performed_this_candidate": false,
+  "reuse_scope": "Authenticated existing complete-row products restored exactly; original source/commands remain historical, zero new C++/shader/observer compilation and no old numerical/benefit admission."
+}

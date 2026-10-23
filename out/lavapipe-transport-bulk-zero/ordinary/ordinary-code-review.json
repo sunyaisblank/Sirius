@@ -1,0 +1,878 @@
+{
+  "structural_premise_observed": true,
+  "rows": {
+    "Transport": {
+      "structural_premise_observed": true,
+      "complete_bulk_clear_observed": true,
+      "remaining_optimized_IR_equivalent": true,
+      "original_Default_machine_pipeline_observed": true,
+      "complete_module": {
+        "words": 21502,
+        "bytes": 86008,
+        "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_engine": 123205440925856,
+      "actual_initial_OptLevel": 2,
+      "actual_greedy_factories": [
+        {
+          "pc": 123205623486960,
+          "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+          "thread": 2,
+          "sequence": 40,
+          "allocator": "greedy",
+          "emission_id": 5,
+          "engine": 123205440925856,
+          "module_generation": 5
+        }
+      ],
+      "actual_complete_clear": {
+        "pc": 123205702000256,
+        "library": "/lib/x86_64-linux-gnu/libc.so.6",
+        "thread": 34,
+        "sequence": 43,
+        "symbol": "memset",
+        "address": 123205702000256,
+        "destination": 123203393330784,
+        "bytes": 73440,
+        "caller_return_pc": 123205540595723,
+        "dispatch_id": 0,
+        "jit_file": "jit-10.elf",
+        "module_generation": 5,
+        "completed": true,
+        "complete_zero_bytes_observed": true,
+        "resulting_sha256": "df6b0c6bf974fefdb24cb7b4c1fab6e3aa67c1452a6085750a5e49cad897c8be",
+        "return_sequence": 44
+      },
+      "resolved_libc_binding": {
+        "symbol": "memset",
+        "address": 123205702000256,
+        "relocation_site": 123205540593780,
+        "relocation_kind": 1,
+        "addend": 0,
+        "library": "/lib/x86_64-linux-gnu/libc.so.6",
+        "jit_file": "jit-10.elf",
+        "module_generation": 5,
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 309792,
+            "address": 123205540593664
+          }
+        ]
+      },
+      "libc": {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      "remaining_IR_normalized_sha256": "7a8a4eb014c38d7e2bc8eb20a5c1c60740a518af667db05cb8f992db2f8ebc1a",
+      "IR_equivalence_rule": "One contiguous exact 32-byte-stride full-zero GEP/store span -> one exact complete nonvolatile scratch memset at same position; comments/empty lines and attribute-group numeric labels only. Global bijective local SSA renaming permitted; every operation, constant, flag, type, attribute and control-flow instruction remains exact after substitution.",
+      "functions": [
+        {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 309792,
+          "address": 123205540593664
+        }
+      ],
+      "total_called_function_bytes": 309792,
+      "capture_verification_identity": {
+        "bytes": 3298,
+        "sha256": "f186db5740ef777f0d54e99aa7edc44674754157eb12b7ce3804b1a9f262e098"
+      }
+    }
+  },
+  "complete_bulk_clear_observed": true,
+  "remaining_optimized_IR_equivalent": true,
+  "original_Default_machine_pipeline_observed": true,
+  "remaining_IR_alpha_proof": {
+    "definition_count_each": 62908,
+    "changed_definition_names": 193,
+    "changed_bijection": [
+      {
+        "prior": "%.not32077",
+        "candidate": "%.not31952"
+      },
+      {
+        "prior": "%.032018",
+        "candidate": "%.031893"
+      },
+      {
+        "prior": "%.032019",
+        "candidate": "%.031894"
+      },
+      {
+        "prior": "%ssa_1143.not32078",
+        "candidate": "%ssa_1143.not31953"
+      },
+      {
+        "prior": "%ssa_1220.not32079",
+        "candidate": "%ssa_1220.not31954"
+      },
+      {
+        "prior": "%not.32080",
+        "candidate": "%not.31955"
+      },
+      {
+        "prior": "%not.32081",
+        "candidate": "%not.31956"
+      },
+      {
+        "prior": "%ssa_1331.not32082",
+        "candidate": "%ssa_1331.not31957"
+      },
+      {
+        "prior": "%ssa_1428.not32083",
+        "candidate": "%ssa_1428.not31958"
+      },
+      {
+        "prior": "%narrow32084",
+        "candidate": "%narrow31959"
+      },
+      {
+        "prior": "%narrow32085",
+        "candidate": "%narrow31960"
+      },
+      {
+        "prior": "%ssa_1625.not32087",
+        "candidate": "%ssa_1625.not31962"
+      },
+      {
+        "prior": "%narrow32088",
+        "candidate": "%narrow31963"
+      },
+      {
+        "prior": "%not.32089",
+        "candidate": "%not.31964"
+      },
+      {
+        "prior": "%narrow32090",
+        "candidate": "%narrow31965"
+      },
+      {
+        "prior": "%ssa_1788.not32091",
+        "candidate": "%ssa_1788.not31966"
+      },
+      {
+        "prior": "%narrow32092",
+        "candidate": "%narrow31967"
+      },
+      {
+        "prior": "%not.32095",
+        "candidate": "%not.31970"
+      },
+      {
+        "prior": "%not.32096",
+        "candidate": "%not.31971"
+      },
+      {
+        "prior": "%not.32097",
+        "candidate": "%not.31972"
+      },
+      {
+        "prior": "%not.32098",
+        "candidate": "%not.31973"
+      },
+      {
+        "prior": "%not.32094",
+        "candidate": "%not.31969"
+      },
+      {
+        "prior": "%ssa_1899.not32099",
+        "candidate": "%ssa_1899.not31974"
+      },
+      {
+        "prior": "%narrow32100",
+        "candidate": "%narrow31975"
+      },
+      {
+        "prior": "%not.32103",
+        "candidate": "%not.31978"
+      },
+      {
+        "prior": "%not.32104",
+        "candidate": "%not.31979"
+      },
+      {
+        "prior": "%not.32105",
+        "candidate": "%not.31980"
+      },
+      {
+        "prior": "%not.32106",
+        "candidate": "%not.31981"
+      },
+      {
+        "prior": "%not.32102",
+        "candidate": "%not.31977"
+      },
+      {
+        "prior": "%narrow32107",
+        "candidate": "%narrow31982"
+      },
+      {
+        "prior": "%not.32109",
+        "candidate": "%not.31984"
+      },
+      {
+        "prior": "%not.32111",
+        "candidate": "%not.31986"
+      },
+      {
+        "prior": "%.032020",
+        "candidate": "%.031895"
+      },
+      {
+        "prior": "%ssa_2034.not32112",
+        "candidate": "%ssa_2034.not31987"
+      },
+      {
+        "prior": "%ssa_329232113",
+        "candidate": "%ssa_329231988"
+      },
+      {
+        "prior": "%ssa_330332114",
+        "candidate": "%ssa_330331989"
+      },
+      {
+        "prior": "%ssa_332332115",
+        "candidate": "%ssa_332331990"
+      },
+      {
+        "prior": "%ssa_3605.not32116",
+        "candidate": "%ssa_3605.not31991"
+      },
+      {
+        "prior": "%ssa_3687.not32119",
+        "candidate": "%ssa_3687.not31994"
+      },
+      {
+        "prior": "%ssa_3690.not32118",
+        "candidate": "%ssa_3690.not31993"
+      },
+      {
+        "prior": "%ssa_3693.not32117",
+        "candidate": "%ssa_3693.not31992"
+      },
+      {
+        "prior": "%ssa_3708.not32121",
+        "candidate": "%ssa_3708.not31996"
+      },
+      {
+        "prior": "%not.32123",
+        "candidate": "%not.31998"
+      },
+      {
+        "prior": "%ssa_4195.not32124",
+        "candidate": "%ssa_4195.not31999"
+      },
+      {
+        "prior": "%narrow32125",
+        "candidate": "%narrow32000"
+      },
+      {
+        "prior": "%not.32128",
+        "candidate": "%not.32003"
+      },
+      {
+        "prior": "%not.32129",
+        "candidate": "%not.32004"
+      },
+      {
+        "prior": "%not.32130",
+        "candidate": "%not.32005"
+      },
+      {
+        "prior": "%not.32131",
+        "candidate": "%not.32006"
+      },
+      {
+        "prior": "%not.32127",
+        "candidate": "%not.32002"
+      },
+      {
+        "prior": "%narrow32132",
+        "candidate": "%narrow32007"
+      },
+      {
+        "prior": "%not.32134",
+        "candidate": "%not.32009"
+      },
+      {
+        "prior": "%.not32135",
+        "candidate": "%.not32010"
+      },
+      {
+        "prior": "%narrow32138",
+        "candidate": "%narrow32013"
+      },
+      {
+        "prior": "%.032021",
+        "candidate": "%.031896"
+      },
+      {
+        "prior": "%.032023",
+        "candidate": "%.031898"
+      },
+      {
+        "prior": "%.032024",
+        "candidate": "%.031899"
+      },
+      {
+        "prior": "%.032027",
+        "candidate": "%.031902"
+      },
+      {
+        "prior": "%ssa_5342.not32142",
+        "candidate": "%ssa_5342.not32017"
+      },
+      {
+        "prior": "%ssa_5346.not32141",
+        "candidate": "%ssa_5346.not32016"
+      },
+      {
+        "prior": "%.032025",
+        "candidate": "%.031900"
+      },
+      {
+        "prior": "%ssa_4543.not32143",
+        "candidate": "%ssa_4543.not32018"
+      },
+      {
+        "prior": "%ssa_5820.not32145",
+        "candidate": "%ssa_5820.not32020"
+      },
+      {
+        "prior": "%ssa_5823.not32144",
+        "candidate": "%ssa_5823.not32019"
+      },
+      {
+        "prior": "%.132026",
+        "candidate": "%.131901"
+      },
+      {
+        "prior": "%ssa_6972.not32148",
+        "candidate": "%ssa_6972.not32023"
+      },
+      {
+        "prior": "%ssa_6975.not32147",
+        "candidate": "%ssa_6975.not32022"
+      },
+      {
+        "prior": "%ssa_6978.not32146",
+        "candidate": "%ssa_6978.not32021"
+      },
+      {
+        "prior": "%ssa_7444.not32149",
+        "candidate": "%ssa_7444.not32024"
+      },
+      {
+        "prior": "%.032030",
+        "candidate": "%.031905"
+      },
+      {
+        "prior": "%ssa_8536.not32152",
+        "candidate": "%ssa_8536.not32027"
+      },
+      {
+        "prior": "%ssa_8540.not32151",
+        "candidate": "%ssa_8540.not32026"
+      },
+      {
+        "prior": "%.032028",
+        "candidate": "%.031903"
+      },
+      {
+        "prior": "%ssa_7737.not32153",
+        "candidate": "%ssa_7737.not32028"
+      },
+      {
+        "prior": "%ssa_9014.not32155",
+        "candidate": "%ssa_9014.not32030"
+      },
+      {
+        "prior": "%ssa_9017.not32154",
+        "candidate": "%ssa_9017.not32029"
+      },
+      {
+        "prior": "%.132029",
+        "candidate": "%.131904"
+      },
+      {
+        "prior": "%ssa_10166.not32158",
+        "candidate": "%ssa_10166.not32033"
+      },
+      {
+        "prior": "%ssa_10169.not32157",
+        "candidate": "%ssa_10169.not32032"
+      },
+      {
+        "prior": "%ssa_10172.not32156",
+        "candidate": "%ssa_10172.not32031"
+      },
+      {
+        "prior": "%ssa_10638.not32159",
+        "candidate": "%ssa_10638.not32034"
+      },
+      {
+        "prior": "%.032031",
+        "candidate": "%.031906"
+      },
+      {
+        "prior": "%.032032",
+        "candidate": "%.031907"
+      },
+      {
+        "prior": "%.032035",
+        "candidate": "%.031910"
+      },
+      {
+        "prior": "%ssa_11781.not32162",
+        "candidate": "%ssa_11781.not32037"
+      },
+      {
+        "prior": "%ssa_11785.not32161",
+        "candidate": "%ssa_11785.not32036"
+      },
+      {
+        "prior": "%.032033",
+        "candidate": "%.031908"
+      },
+      {
+        "prior": "%ssa_10982.not32163",
+        "candidate": "%ssa_10982.not32038"
+      },
+      {
+        "prior": "%ssa_12259.not32165",
+        "candidate": "%ssa_12259.not32040"
+      },
+      {
+        "prior": "%ssa_12262.not32164",
+        "candidate": "%ssa_12262.not32039"
+      },
+      {
+        "prior": "%.132034",
+        "candidate": "%.131909"
+      },
+      {
+        "prior": "%ssa_13411.not32168",
+        "candidate": "%ssa_13411.not32043"
+      },
+      {
+        "prior": "%ssa_13414.not32167",
+        "candidate": "%ssa_13414.not32042"
+      },
+      {
+        "prior": "%ssa_13417.not32166",
+        "candidate": "%ssa_13417.not32041"
+      },
+      {
+        "prior": "%ssa_13883.not32169",
+        "candidate": "%ssa_13883.not32044"
+      },
+      {
+        "prior": "%.032036",
+        "candidate": "%.031911"
+      },
+      {
+        "prior": "%ssa_14037.not32170",
+        "candidate": "%ssa_14037.not32045"
+      },
+      {
+        "prior": "%ssa_1531732171",
+        "candidate": "%ssa_1531732046"
+      },
+      {
+        "prior": "%ssa_1532832172",
+        "candidate": "%ssa_1532832047"
+      },
+      {
+        "prior": "%ssa_1534832173",
+        "candidate": "%ssa_1534832048"
+      },
+      {
+        "prior": "%.032037",
+        "candidate": "%.031912"
+      },
+      {
+        "prior": "%ssa_15666.not32176",
+        "candidate": "%ssa_15666.not32051"
+      },
+      {
+        "prior": "%ssa_15669.not32175",
+        "candidate": "%ssa_15669.not32050"
+      },
+      {
+        "prior": "%ssa_15672.not32174",
+        "candidate": "%ssa_15672.not32049"
+      },
+      {
+        "prior": "%ssa_15681.not32179",
+        "candidate": "%ssa_15681.not32054"
+      },
+      {
+        "prior": "%ssa_15684.not32178",
+        "candidate": "%ssa_15684.not32053"
+      },
+      {
+        "prior": "%ssa_15687.not32177",
+        "candidate": "%ssa_15687.not32052"
+      },
+      {
+        "prior": "%ssa_1726232180",
+        "candidate": "%ssa_1726232055"
+      },
+      {
+        "prior": "%ssa_1727332181",
+        "candidate": "%ssa_1727332056"
+      },
+      {
+        "prior": "%ssa_1729332182",
+        "candidate": "%ssa_1729332057"
+      },
+      {
+        "prior": "%ssa_17555.not32185",
+        "candidate": "%ssa_17555.not32060"
+      },
+      {
+        "prior": "%ssa_17558.not32184",
+        "candidate": "%ssa_17558.not32059"
+      },
+      {
+        "prior": "%ssa_17561.not32183",
+        "candidate": "%ssa_17561.not32058"
+      },
+      {
+        "prior": "%ssa_17576.not32187",
+        "candidate": "%ssa_17576.not32062"
+      },
+      {
+        "prior": "%ssa_1913132188",
+        "candidate": "%ssa_1913132063"
+      },
+      {
+        "prior": "%ssa_1914232189",
+        "candidate": "%ssa_1914232064"
+      },
+      {
+        "prior": "%ssa_1916232190",
+        "candidate": "%ssa_1916232065"
+      },
+      {
+        "prior": "%ssa_19422.not32193",
+        "candidate": "%ssa_19422.not32068"
+      },
+      {
+        "prior": "%ssa_19425.not32192",
+        "candidate": "%ssa_19425.not32067"
+      },
+      {
+        "prior": "%ssa_19428.not32191",
+        "candidate": "%ssa_19428.not32066"
+      },
+      {
+        "prior": "%ssa_19443.not32195",
+        "candidate": "%ssa_19443.not32070"
+      },
+      {
+        "prior": "%.032022",
+        "candidate": "%.031897"
+      },
+      {
+        "prior": "%.032038",
+        "candidate": "%.031913"
+      },
+      {
+        "prior": "%.032039",
+        "candidate": "%.031914"
+      },
+      {
+        "prior": "%ssa_20028.not32196",
+        "candidate": "%ssa_20028.not32071"
+      },
+      {
+        "prior": "%.032042",
+        "candidate": "%.031917"
+      },
+      {
+        "prior": "%.032040",
+        "candidate": "%.031915"
+      },
+      {
+        "prior": "%ssa_2133832197",
+        "candidate": "%ssa_2133832072"
+      },
+      {
+        "prior": "%ssa_21551.not32200",
+        "candidate": "%ssa_21551.not32075"
+      },
+      {
+        "prior": "%ssa_21555.not32199",
+        "candidate": "%ssa_21555.not32074"
+      },
+      {
+        "prior": "%.132041",
+        "candidate": "%.131916"
+      },
+      {
+        "prior": "%ssa_2349232201",
+        "candidate": "%ssa_2349232076"
+      },
+      {
+        "prior": "%ssa_23702.not32204",
+        "candidate": "%ssa_23702.not32079"
+      },
+      {
+        "prior": "%ssa_23705.not32203",
+        "candidate": "%ssa_23705.not32078"
+      },
+      {
+        "prior": "%ssa_23708.not32202",
+        "candidate": "%ssa_23708.not32077"
+      },
+      {
+        "prior": "%ssa_24190.not32205",
+        "candidate": "%ssa_24190.not32080"
+      },
+      {
+        "prior": "%ssa_24386.not32208",
+        "candidate": "%ssa_24386.not32083"
+      },
+      {
+        "prior": "%ssa_24389.not32207",
+        "candidate": "%ssa_24389.not32082"
+      },
+      {
+        "prior": "%ssa_24392.not32206",
+        "candidate": "%ssa_24392.not32081"
+      },
+      {
+        "prior": "%ssa_24401.not32211",
+        "candidate": "%ssa_24401.not32086"
+      },
+      {
+        "prior": "%ssa_24404.not32210",
+        "candidate": "%ssa_24404.not32085"
+      },
+      {
+        "prior": "%ssa_24407.not32209",
+        "candidate": "%ssa_24407.not32084"
+      },
+      {
+        "prior": "%ssa_24804.not32214",
+        "candidate": "%ssa_24804.not32089"
+      },
+      {
+        "prior": "%ssa_24807.not32213",
+        "candidate": "%ssa_24807.not32088"
+      },
+      {
+        "prior": "%ssa_24810.not32212",
+        "candidate": "%ssa_24810.not32087"
+      },
+      {
+        "prior": "%ssa_24819.not32217",
+        "candidate": "%ssa_24819.not32092"
+      },
+      {
+        "prior": "%ssa_24822.not32216",
+        "candidate": "%ssa_24822.not32091"
+      },
+      {
+        "prior": "%ssa_24825.not32215",
+        "candidate": "%ssa_24825.not32090"
+      },
+      {
+        "prior": "%ssa_2637732218",
+        "candidate": "%ssa_2637732093"
+      },
+      {
+        "prior": "%ssa_2638832219",
+        "candidate": "%ssa_2638832094"
+      },
+      {
+        "prior": "%ssa_2640832220",
+        "candidate": "%ssa_2640832095"
+      },
+      {
+        "prior": "%.032045",
+        "candidate": "%.031920"
+      },
+      {
+        "prior": "%ssa_2806732221",
+        "candidate": "%ssa_2806732096"
+      },
+      {
+        "prior": "%ssa_2807832222",
+        "candidate": "%ssa_2807832097"
+      },
+      {
+        "prior": "%ssa_2809832223",
+        "candidate": "%ssa_2809832098"
+      },
+      {
+        "prior": "%ssa_28342.not32226",
+        "candidate": "%ssa_28342.not32101"
+      },
+      {
+        "prior": "%ssa_28346.not32225",
+        "candidate": "%ssa_28346.not32100"
+      },
+      {
+        "prior": "%.032043",
+        "candidate": "%.031918"
+      },
+      {
+        "prior": "%ssa_28841.not32228",
+        "candidate": "%ssa_28841.not32103"
+      },
+      {
+        "prior": "%ssa_28844.not32227",
+        "candidate": "%ssa_28844.not32102"
+      },
+      {
+        "prior": "%.132044",
+        "candidate": "%.131919"
+      },
+      {
+        "prior": "%ssa_3033332230",
+        "candidate": "%ssa_3033332105"
+      },
+      {
+        "prior": "%ssa_3034432231",
+        "candidate": "%ssa_3034432106"
+      },
+      {
+        "prior": "%ssa_3036432232",
+        "candidate": "%ssa_3036432107"
+      },
+      {
+        "prior": "%ssa_30611.not32235",
+        "candidate": "%ssa_30611.not32110"
+      },
+      {
+        "prior": "%ssa_30614.not32234",
+        "candidate": "%ssa_30614.not32109"
+      },
+      {
+        "prior": "%ssa_30617.not32233",
+        "candidate": "%ssa_30617.not32108"
+      },
+      {
+        "prior": "%ssa_31109.not32236",
+        "candidate": "%ssa_31109.not32111"
+      },
+      {
+        "prior": "%.032046",
+        "candidate": "%.031921"
+      },
+      {
+        "prior": "%.032047",
+        "candidate": "%.031922"
+      },
+      {
+        "prior": "%.032048",
+        "candidate": "%.031923"
+      },
+      {
+        "prior": "%ssa_31551.not32239",
+        "candidate": "%ssa_31551.not32114"
+      },
+      {
+        "prior": "%ssa_31554.not32238",
+        "candidate": "%ssa_31554.not32113"
+      },
+      {
+        "prior": "%ssa_31557.not32237",
+        "candidate": "%ssa_31557.not32112"
+      },
+      {
+        "prior": "%ssa_31566.not32242",
+        "candidate": "%ssa_31566.not32117"
+      },
+      {
+        "prior": "%ssa_31569.not32241",
+        "candidate": "%ssa_31569.not32116"
+      },
+      {
+        "prior": "%ssa_31572.not32240",
+        "candidate": "%ssa_31572.not32115"
+      },
+      {
+        "prior": "%ssa_3313832243",
+        "candidate": "%ssa_3313832118"
+      },
+      {
+        "prior": "%ssa_3314932244",
+        "candidate": "%ssa_3314932119"
+      },
+      {
+        "prior": "%ssa_3316932245",
+        "candidate": "%ssa_3316932120"
+      },
+      {
+        "prior": "%ssa_33431.not32248",
+        "candidate": "%ssa_33431.not32123"
+      },
+      {
+        "prior": "%ssa_33434.not32247",
+        "candidate": "%ssa_33434.not32122"
+      },
+      {
+        "prior": "%ssa_33437.not32246",
+        "candidate": "%ssa_33437.not32121"
+      },
+      {
+        "prior": "%ssa_33452.not32250",
+        "candidate": "%ssa_33452.not32125"
+      },
+      {
+        "prior": "%ssa_3500932251",
+        "candidate": "%ssa_3500932126"
+      },
+      {
+        "prior": "%ssa_3502032252",
+        "candidate": "%ssa_3502032127"
+      },
+      {
+        "prior": "%ssa_3504032253",
+        "candidate": "%ssa_3504032128"
+      },
+      {
+        "prior": "%ssa_35322.not32256",
+        "candidate": "%ssa_35322.not32131"
+      },
+      {
+        "prior": "%ssa_35325.not32255",
+        "candidate": "%ssa_35325.not32130"
+      },
+      {
+        "prior": "%ssa_35328.not32254",
+        "candidate": "%ssa_35328.not32129"
+      },
+      {
+        "prior": "%ssa_35337.not32259",
+        "candidate": "%ssa_35337.not32134"
+      },
+      {
+        "prior": "%ssa_35340.not32258",
+        "candidate": "%ssa_35340.not32133"
+      },
+      {
+        "prior": "%ssa_35343.not32257",
+        "candidate": "%ssa_35343.not32132"
+      }
+    ],
+    "unmapped_arguments_types_and_block_names_unchanged": true,
+    "remaining_IR_canonical_sha256": "7a8a4eb014c38d7e2bc8eb20a5c1c60740a518af667db05cb8f992db2f8ebc1a",
+    "scope": "Global injective definition-order alpha renaming only. Every use replaced consistently and complete remaining text exact, including flags/constants/attributes/control flow. No Boolean or arithmetic rewrite; source/IR reasoning, not a machine-checked proof or numerical admission."
+  },
+  "actual_provider": {
+    "path": "bin/linux-gcc/lavapipe-transport-bulk-zero/provider/libvulkan_lvp.so",
+    "bytes": 14773096,
+    "sha256": "116e78cdfd2078f4f187bbc7846a6d8df7ddc5487284d7ed6c8d89ac47709478"
+  },
+  "scope": "One full row-T4B guard/canary. Complete clear observed; no retained numerical/benefit/frame/science/release claim. E/DP source/code proof remains separate."
+}
