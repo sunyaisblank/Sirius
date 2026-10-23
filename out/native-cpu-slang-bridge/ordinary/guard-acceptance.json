@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "rows": {
+    "Transport": {
+      "passed": true,
+      "owner": {
+        "bytes": 4050,
+        "sha256": "fb539680fec8a584a59632193e3f9d902bc80ebb2cb53a943a6b88e0fd04273d"
+      },
+      "native_call": {
+        "bytes": 564,
+        "sha256": "ce38eca20a7abe91d5d63a51edf68eb8196b3164dfa8d40f7e88571b5a31536c"
+      },
+      "native_returned_false": true,
+      "output_unchanged": true,
+      "same_worker_real_JIT_called": true,
+      "callback_full_MXCSR_restored": true,
+      "features_properties_match_prior": true,
+      "wall_seconds": 7.187119141919538,
+      "peak_sampled_rss_kib": 736496
+    },
+    "Endpoint": {
+      "passed": true,
+      "owner": {
+        "bytes": 3578,
+        "sha256": "01242c49d4d7a4b1045de2f3660248468d7b1a406ab0376ac06da5a076152e3b"
+      },
+      "native_call": {
+        "bytes": 563,
+        "sha256": "601f443ca21c3c69113926fa323c2e7bf30230819927c81e5f8671a00135d822"
+      },
+      "native_returned_false": true,
+      "output_unchanged": true,
+      "same_worker_real_JIT_called": true,
+      "callback_full_MXCSR_restored": true,
+      "features_properties_match_prior": true,
+      "wall_seconds": 12.443468615994789,
+      "peak_sampled_rss_kib": 1023924
+    },
+    "DopriPhase": {
+      "passed": true,
+      "owner": {
+        "bytes": 4056,
+        "sha256": "be1124a9e892bb00a633056d69e7434d8f6739381e0c9819e3ebfd742c80c58a"
+      },
+      "native_call": {
+        "bytes": 566,
+        "sha256": "bbff6d6a73ec26b8daa1cc23e7a25bb4d82065b544c53dcaae0b0796e6796e78"
+      },
+      "native_returned_false": true,
+      "output_unchanged": true,
+      "same_worker_real_JIT_called": true,
+      "callback_full_MXCSR_restored": true,
+      "features_properties_match_prior": true,
+      "wall_seconds": 2.2625340500380844,
+      "peak_sampled_rss_kib": 429552
+    }
+  },
+  "provider_identity": {
+    "bytes": 15271312,
+    "sha256": "ccb9115a87b918e3ee962bde3159c5d137ec50eb0dd7b1d1d687bd0adfa906a4"
+  },
+  "static_native_proof": {
+    "bytes": 42508,
+    "sha256": "ca61407bcab3fa1cea96ec6eae7e78063ba0d5bc0305aceb9e1e115299debae1"
+  },
+  "scope": "Three finite original4B negative boundary captures only: actual linked native entry returnsfalse beforewrites, sameworker executes ordinary JIT, completecanary holds and FPstate restores. Does not exercise successful native arithmetic. Fresh originalC8 must prove successful native admission/all32 exactoutputs before soleABBA22+Decimal/all8/frame. No performance/numerical/scientific/release adoption."
+}
