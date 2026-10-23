@@ -348,5 +348,65 @@
       "sha256": "1d58704b50514ad787251eda8dd1290527239d6a10513e0df8e7d4ae5a416e1c"
     }
   },
-  "full_goal_complete": false
+  "full_goal_complete": false,
+  "native_gate_source_review": {
+    "observed_public_revision": "0109ab462edade524667d20303507aa09adcbaf6",
+    "production_and_governance_paths_match_that_revision": true,
+    "decision": "Do not launch an unchanged full native Mandatory/frame run; issue the independently defined native compilation domains through the existing non-render producer.",
+    "mandatory_receipt_bootstrap_cycle": false,
+    "source_chain": [
+      "cmake/sirius_testing.cmake179-198 deletes prior promotion receipts, captures runtime identity, executes the full live Mandatory gate, and stages the receipt only after success.",
+      "Info-only queries bypass runtime initialization; required render tests enter rendering directly. tests/operational/volume_initialization.cmake.in separately asserts pre-gate installation refusal.",
+      "tests/CMakeLists.txt218-229 includes the original required 128x128 Kerr dispatch with its unchanged300s limit. Existing native frame failure has no relevant headless numerical-source repair.",
+      "tests/CMakeLists.txt232-244 additionally registers the original three-repeat near-extremal burn-in under28800s. This is a liveness ceiling, not a measured or required eight-hour duration.",
+      "cmake/sirius_testing.cmake201-238 defines RunNativeBuildEvidence separately: complete compiled topology, full registration hashes, exact nine non-render authority cases; no Mandatory promotion or native runtime claim.",
+      ".github/workflows/ci.yml default explicit dispatch already issues Windows and macOS native-build records after their exact gate; no workflow edit, full_qualification, renderer, or physical-provider trial is necessary."
+    ],
+    "pins": {
+      ".github/workflows/ci.yml": {
+        "bytes": 45123,
+        "sha256": "fc7bbfc5326a3a14c97fb69f84b55d5549eda3ec44bcb6e1de956e67fb1bab00"
+      },
+      "cmake/sirius_testing.cmake": {
+        "bytes": 12349,
+        "sha256": "a3b48207c665187909c13e8b4ba53603fb6135b7efc9cd25a5bf39109ab95486"
+      },
+      "tests/CMakeLists.txt": {
+        "bytes": 10200,
+        "sha256": "dfec9ce7aaa2c997d39964e2881cec5322680db5295b30fcfb99a0f9f8267697"
+      },
+      "tests/operational/p1_burn_in.cmake": {
+        "bytes": 1163,
+        "sha256": "a76ea8ea059ede93a7be103d6b066cecaa60c5af2069ee39a9a0939036158d0f"
+      },
+      "tests/operational/vulkan_runtime_profile.cmake": {
+        "bytes": 990,
+        "sha256": "e39e8aee8f82b4f1934a42542cd5b743822bed02f6ed15e1a3eaa6185bc0f8ea"
+      },
+      "tests/operational/volume_initialization.cmake.in": {
+        "bytes": 11883,
+        "sha256": "8ae4df3626a57f2cf2bf8990ac00301055c60c9432d1a6af74de0a97fc576a4f"
+      },
+      "src/sirius/kernels/retained_transport.slang": {
+        "bytes": 28933,
+        "sha256": "3080d6247c9c08760db091e18d3d614cf529c417a039a9c6d727d5c3e994d2ec"
+      },
+      "src/sirius/backend/retained_compute.cpp": {
+        "bytes": 45570,
+        "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+      },
+      "scripts/verify-attestation.py": {
+        "bytes": 170199,
+        "sha256": "5e2e70c6f6e15645e91090a300de0c7c77dab60f6390a7b871cfc91c9973be01"
+      }
+    },
+    "action": {
+      "workflow_run": 39902150418,
+      "head": "0109ab462edade524667d20303507aa09adcbaf6",
+      "full_qualification": false,
+      "macos_retained_diagnostic": false,
+      "url": "https://github.com/sunyaisblank/Sirius/actions/runs/39902150418"
+    },
+    "limits": "Source/build-domain distinction only. No current complete Mandatory, frame, runtime, external-domain admission, or release acceptance inferred."
+  }
 }
