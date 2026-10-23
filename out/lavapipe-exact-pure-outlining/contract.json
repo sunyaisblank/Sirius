@@ -1,0 +1,35 @@
+{
+  "candidate": "Exact post-lowering17-instruction RetainedProduct32 factoring",
+  "source_base": "90d3c4f60c78cd60b4d1c4b0ae9263a64edacb2f",
+  "admission": "Private offline tool build and original/output IR verification only; no provider/runtime/adoption permission inferred.",
+  "independent_reviewer": "divide_contract_review",
+  "reviewed_and_fixed_before_compile": "Reject B defined inside the matched window, preserving input dominance at the first instruction.",
+  "selection": "Original archived actual E/DP LLVM IR; one defined cs_variant; exact8-lane binary32 fmul/fsub sequence and4097literal; optionalflags0/no metadata; two distinct nonconstant external inputs; all private intermediates have no external users except outputs8and16. Every unselected region remains original.",
+  "equivalence": "Clone actual first region; remap/re-expand against EVERY matched source instance with isIdenticalTo plus optional flags before caller mutation; preserve exact operation order, constants, types, input dependencies and original block/position. Replace only high/residual live-outs, read current inputs to preserve earlier RAUW, then reverse erase disjoint regions. Both struct fields overwrite poison; no new noundef/freeze. This is a checked source/IR construction, not a machine-checked compiler correctness proof.",
+  "ABI": "One internal preserve_allcc function and matching calls, two direct vectors and two-vector struct return. No pointer/result-memory API. Original target/denormal attributes copied. LLVM source supports YMM0/1 arguments/results; result registers remain clobbered, callee scratch saves and caller K/high-vector/output-register spills remain unproved costs.",
+  "target_scope": "Actual authenticated saved E/DP modules only. Not a general arbitrary-module/FP-attribute transformer. No coroutine-T scope. Future provider integration additionally requires exact module/owner/target authority and a new cache namespace.",
+  "must_observe_before_next_admission": [
+    "windows>0 and exact_clone_check=true; exit0 alone can mean unchanged fallback",
+    "original and output LLVM verifier success; intact unrelated IR and matched exact helper bodies",
+    "actual emitted caller/callee, direct return registers, all caller/callee spills and complete code footprint",
+    "only subsequently original numerical/provider C8, original22+Decimal, remaining7/all8 and original cold frame; no changed counts/limits/governors or retries"
+  ],
+  "inputs": {
+    "out/lavapipe-owner-bulk-zero/ordinary/endpoint/optimized-05.ll": {
+      "bytes": 8425832,
+      "sha256": "0a1049b35e35bbf93192996054034dd561b186b851a069f80bb9dc15b3a30190"
+    },
+    "out/lavapipe-owner-bulk-zero/ordinary/dopri_phase/optimized-05.ll": {
+      "bytes": 1662382,
+      "sha256": "f8945831465979d084ab80ebb5400b8d24982059425ad9b8b7ba2f64415ce39e"
+    }
+  },
+  "reuse_archive": {
+    "path": "attestations/qualification/337d0bae/lavapipe-owner-bulk-zero-finite-outcome/diagnostics-and-trial.zip",
+    "sha256": "7959c6c6be2671de0059657ffee4ccfae1b2c0dc19a2e257b4f6f05ee605236b"
+  },
+  "history": "Native normalization-loop sharing already closed; stock whole-module iroutliner timed out60s. Neither mechanism is retried. No speedup or JIT/frame cost claimed.",
+  "serialized_inverse": "Independent verify_inverse.cpp reparses emitted file, decodes actual return fields without forward template/index knowledge, expands all calls and projections, verifies IR, then byte-compares the whole restored module after only localSSA/basic-block names and ModuleID are normalized. No general optimization is used. This checks the emitted construction, not merely a forward matcher report.",
+  "inverse_limit": "Helper/call attributes disappear during expansion; their ABI/FP-attribute correctness remains separately reviewed and needs serialized/emitted checks. No machine equivalence/runtime speed inferred.",
+  "independent_inverse_review": "divide_contract_review: no source blocker for first offline build; actual return decoding, every-call/extract coverage, RAUW ordering, allowed normalization and explicit attribute limitation checked."
+}
