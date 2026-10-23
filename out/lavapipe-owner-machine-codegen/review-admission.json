@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "scope": "Independent ROOT source admission only; machine execution, identical optimized IR, allocator selection and all original gates remain unadmitted.",
+  "machine_codegen_patch": {
+    "bytes": 6088,
+    "sha256": "b89c0b18c134625e571934f8a2bcf971525364c8b32cccf9db5bc71906c091e0"
+  },
+  "source_contract": {
+    "bytes": 14102,
+    "sha256": "c20ac5f4d31cd51e08dccffff1cbcf81c60304c5dd1ea10aa470880290e1d997"
+  },
+  "source_files": {
+    "src/gallium/auxiliary/gallivm/lp_bld_init.c": {
+      "bytes": 15510,
+      "sha256": "52b18f3fc93d3a490f8cbf39d96b89ff08f9174c3c78f0c7f80e79eab554da1b"
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_init.h": {
+      "bytes": 4890,
+      "sha256": "c0cefbc50c10d2de3112f98c0b1f9f26826e4bd9ff6a1c32b0eaaba1cb229086"
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_misc.cpp": {
+      "bytes": 24121,
+      "sha256": "d8e636e5db114a1694d3bfa1e56f818d25d249c9735c9c02d46a48e1b4bf693a"
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_misc.h": {
+      "bytes": 3528,
+      "sha256": "50ea8076c2d2ce45fa4602bd27162c962c33d7c0d04ed24cd8dd34e705b2b1a3"
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "bytes": 32370,
+      "sha256": "06af8c63be6b7cf66b8849355e786cc195d390ffad2199e16b635a5b2df7087e"
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 104376,
+      "sha256": "837e993a804e6e3b680615e4aa63bde9dd71b7b06298d6dba918b43f1581d465"
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "bytes": 116202,
+      "sha256": "5e0e4c20eabc8cd14e5f5ebc65c79cf404c40bca74d4e23d0e29b6649167acac"
+    },
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "bytes": 61170,
+      "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+    }
+  },
+  "full_current_source_identity": {
+    "bytes": 1482565,
+    "sha256": "d1465842238547f6814ef2f18e451333ba7a3d6932f38209c1694cbdb9cd798d"
+  },
+  "basis": {
+    "preserved_at_commit": "206ca0d4",
+    "archive": "attestations/qualification/263abe74/lavapipe-intergroup-row-owner-finite-outcome/diagnostics-and-trial.zip",
+    "bytes": 7890408,
+    "sha256": "9c42f070d9d82fc3a33cd4e0c6af4fc493a3f0e53e7dd8b85fd9343f1d5d9c44",
+    "member": "out/lavapipe-intergroup-row-owner/build/inputs-before.json",
+    "member_identity": {
+      "bytes": 4212662,
+      "sha256": "d53f7b1b74402d27e2640117a4d9a82b3cebe08b4d25d025c3cd9eb57c7507c8"
+    },
+    "source_files": 11100
+  },
+  "changed_files": [
+    "src/gallium/auxiliary/gallivm/lp_bld_init.c",
+    "src/gallium/auxiliary/gallivm/lp_bld_init.h",
+    "src/gallium/auxiliary/gallivm/lp_bld_misc.cpp",
+    "src/gallium/auxiliary/gallivm/lp_bld_misc.h",
+    "src/gallium/drivers/llvmpipe/lp_screen.c",
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c",
+    "src/gallium/frontends/lavapipe/lvp_device.c",
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c"
+  ],
+  "exact_reverse_recovers_all_eight_prior_file_pins": true,
+  "unchanged_remaining_source_files": 11092,
+  "reviewed_contracts": [
+    "Only exact E/DP source hashes admit intergroup key1; both Transport hashes use ordinary key0. LocalSize64, original groups/fields/trials and modes remain.",
+    "Per-gallivm MCJIT bool is calloc-zero and set only by admitted key1 with IEEE32, MCJIT0 and LLVM21. Header dependency closure must rebuild all struct consumers.",
+    "Original engine creation, IR pass call/arguments, CPU/features/FP options/attributes and IEEE32 repair retained. Hook at common cached/uncached join follows original IR passes and precedes emission/publication.",
+    "Engine-owned target mutation is mutex-protected, requires Default, sets only CodeGenOptLevel::None; unsupported/unexpected prerequisites refuse before emission. No shared context/global flag/function attribute mutation.",
+    "New private UUID/disk namespace plus existing deterministic variant key isolate old/default/None objects. ORC and other LLVM majors are unchanged and unclaimed.",
+    "Partial12s stack supports examining codegen but does not establish the300s timeout cause. No speed or compilation completion promise; actual new code and unchanged32/22/all8/frame gates remain required."
+  ],
+  "restored_original_barrier_lowering": {
+    "bytes": 246649,
+    "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+  },
+  "original_IEEE32_prerequisite_retained_by_exact_basis_composition": true,
+  "new_Sirius_or_shader_compilations": 0,
+  "runtime_or_benefit_admitted": false
+}

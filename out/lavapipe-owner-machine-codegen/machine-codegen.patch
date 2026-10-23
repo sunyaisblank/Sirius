@@ -1,0 +1,167 @@
+--- a/src/gallium/auxiliary/gallivm/lp_bld_init.h
++++ b/src/gallium/auxiliary/gallivm/lp_bld_init.h
+@@ -65,6 +65,10 @@
+    struct lp_passmgr *passmgr;
+    LLVMMCJITMemoryManagerRef memorymgr;
+    struct lp_generated_code *code;
++   /* Private MCJIT-only policy, false for all ordinary gallivm callers.
++    * Set only from the exact admitted intergroup compute variant key.
++    */
++   bool intergroup_codegen_none_after_ir;
+ #endif
+    LLVMContextRef context;
+    LLVMBuilderRef builder;
+--- a/src/gallium/auxiliary/gallivm/lp_bld_init.c
++++ b/src/gallium/auxiliary/gallivm/lp_bld_init.c
+@@ -32,6 +32,7 @@
+ #include "util/u_cpu_detect.h"
+ #include "util/u_debug.h"
+ #include "util/u_memory.h"
++#include "util/u_math.h"
+ #include "util/os_time.h"
+ #include "lp_bld.h"
+ #include "lp_bld_debug.h"
+@@ -444,6 +445,17 @@
+     */
+  skip_cached:
+ 
++#if LP_VULKAN_IEEE32_ENABLED && !GALLIVM_USE_ORCJIT
++   if (gallivm->intergroup_codegen_none_after_ir &&
++       !lp_set_mcjit_codegen_none_after_ir(gallivm->engine)) {
++      /* Reject an unexpected/non-default engine rather than silently
++       * changing IR optimization or using an unadmitted machine policy.
++       */
++      _debug_printf("intergroup post-IR MCJIT policy prerequisites failed\n");
++      abort();
++   }
++#endif
++
+    ++gallivm->compiled;
+ 
+    lp_init_printf_hook(gallivm);
+--- a/src/gallium/auxiliary/gallivm/lp_bld_misc.h
++++ b/src/gallium/auxiliary/gallivm/lp_bld_misc.h
+@@ -76,6 +76,14 @@
+                                         unsigned OptLevel,
+                                         char **OutError);
+ 
++#if !GALLIVM_USE_ORCJIT
++/* Call only after the original IR passes, before any machine emission.
++ * False means the engine/target/default-level prerequisite was not met.
++ */
++extern bool
++lp_set_mcjit_codegen_none_after_ir(LLVMExecutionEngineRef engine);
++#endif
++
+ extern void
+ lp_free_generated_code(struct lp_generated_code *code);
+ 
+--- a/src/gallium/auxiliary/gallivm/lp_bld_misc.cpp
++++ b/src/gallium/auxiliary/gallivm/lp_bld_misc.cpp
+@@ -41,12 +41,14 @@
+ 
+ 
+ #include <stddef.h>
++#include <mutex>
+ 
+ #include <llvm/Config/llvm-config.h>
+ #include <llvm-c/Core.h>
+ #include <llvm-c/Support.h>
+ #include <llvm-c/ExecutionEngine.h>
+ #include <llvm/Target/TargetOptions.h>
++#include <llvm/Target/TargetMachine.h>
+ #include <llvm/ExecutionEngine/ExecutionEngine.h>
+ #include <llvm/Analysis/TargetLibraryInfo.h>
+ #include <llvm/ExecutionEngine/SectionMemoryManager.h>
+@@ -618,6 +620,34 @@
+ }
+ 
+ 
++#if !GALLIVM_USE_ORCJIT
++extern "C"
++bool
++lp_set_mcjit_codegen_none_after_ir(LLVMExecutionEngineRef engine)
++{
++#if LLVM_VERSION_MAJOR == 21
++   if (!engine)
++      return false;
++   llvm::ExecutionEngine *jit = llvm::unwrap(engine);
++   std::lock_guard<llvm::sys::Mutex> locked(jit->lock);
++   llvm::TargetMachine *target = jit->getTargetMachine();
++   if (!target || target->getOptLevel() != llvm::CodeGenOptLevel::Default)
++      return false;
++
++   /* MCJIT builds its machine-pass pipeline lazily in emitObject.  This
++    * engine owns the target; the shared LLVMContext and memory pool do not
++    * carry this policy. CPU/features/FP options and IR attributes stay put.
++    */
++   target->setOptLevel(llvm::CodeGenOptLevel::None);
++   return true;
++#else
++   /* No unreviewed LLVM-version behavior is admitted by this private hook. */
++   (void)engine;
++   return false;
++#endif
++}
++#endif
++
+ extern "C"
+ void
+ lp_free_generated_code(struct lp_generated_code *code)
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -1429,6 +1429,13 @@
+       return NULL;
+    }
+ 
++#if LP_VULKAN_IEEE32_ENABLED && !GALLIVM_USE_ORCJIT && LLVM_VERSION_MAJOR == 21
++   /* The source/module/shape gate already owns this key.  Machine policy is
++    * per variant; ordinary key0 and every other gallivm caller stay default.
++    */
++   variant->gallivm->intergroup_codegen_none_after_ir = key->intergroup_row_owner;
++#endif
++
+    variant->list_item_global.base = variant;
+    variant->list_item_local.base = variant;
+    variant->no = shader->variants_created++;
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-IWG-25.2.8-1";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-IWG-25.2.8-2";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -837,7 +837,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-intergroup-owner-v1";
++   static const char intergroup_cache_version[] = "Sirius-intergroup-owner-machine-none-v2";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);
+--- a/src/gallium/frontends/lavapipe/lvp_pipeline.c
++++ b/src/gallium/frontends/lavapipe/lvp_pipeline.c
+@@ -275,7 +275,7 @@
+    return pipeline_nir;
+ }
+ 
+-/* These three complete-row shaders have exactly one logical local owner,
++/* These two complete-row shaders have exactly one logical local owner,
+  * no cross-invocation state, and side-effect-free local invocations 1..63.
+  * Hash admission is deliberately independent of application labels/names.
+  */
+@@ -284,7 +284,6 @@
+ {
+ #if LP_VULKAN_IEEE32_ENABLED
+    static const unsigned char owner_sha1[][SHA1_DIGEST_LENGTH] = {
+-      {0xc0,0xf3,0x8b,0x8b,0x39,0xd1,0x21,0x36,0x21,0x6a,0xf9,0x8f,0x34,0x65,0xf3,0x46,0x46,0x30,0x06,0x28},
+       {0xe4,0xf3,0x2b,0xfe,0x7d,0xb7,0x3d,0xad,0x21,0xd7,0x35,0x86,0xf1,0xbf,0x77,0x17,0x2a,0xa3,0x90,0xca},
+       {0xe2,0xbe,0xef,0x14,0xd2,0x7c,0xcb,0x5f,0x80,0xbc,0xe2,0xeb,0xf6,0x3c,0x35,0x84,0x7c,0x0c,0xa4,0x0c},
+    };

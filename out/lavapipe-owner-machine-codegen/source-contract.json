@@ -1,0 +1,251 @@
+{
+  "schema": "sirius-private-lavapipe-owner-machine-codegen-source-v1",
+  "status": "SOURCE_ONLY_UNBUILT_UNADMITTED",
+  "source_basis": {
+    "Mesa": "25.2.8",
+    "composition": "Authentic release + exact five-file IEEE32 prerequisite + prior six-file intergroup prototype + this additive patch",
+    "authentic_archive_git": "43389d91ca54667d12a41ee0a33d35e596fc42bd:attestations/qualification/8c2be67d/lavapipe-vector-workgroup-rejected/mesa-25.2.8.tar.xz",
+    "IEEE32_prerequisite": {
+      "path": "out/lavapipe-acqrel-ordering/ieee32-prerequisite.patch",
+      "bytes": 5653,
+      "sha256": "87a8bdda3ab630fb2de5a62b13c98817d050c311b915cd49f825459f8b55cd7f"
+    },
+    "prior_intergroup_prototype": {
+      "path": "out/lavapipe-intergroup-row-owner/prototype.patch",
+      "bytes": 18764,
+      "sha256": "574bf58ae14a8f625a2252fafa13948b531652dffd4d7e2289eb761555239704"
+    },
+    "prior_intergroup_contract": {
+      "path": "out/lavapipe-intergroup-row-owner/source-contract.json",
+      "bytes": 16468,
+      "sha256": "4e2c31e0bddf596b2dbd93746255e6af0713861756e4a1ec5a0919f8e3db62c4"
+    },
+    "prior_ROOT_admission": {
+      "path": "out/lavapipe-intergroup-row-owner/review-admission.json",
+      "bytes": 4379,
+      "sha256": "c78734fefe9ffdc0c0fab44c12f2906eccae463cbe11d21366ad0871af62b7ab"
+    }
+  },
+  "policy": {
+    "enabled_only": "Exact Endpoint+DopriPhase whitelist only, original structural/shape-admitted intergroup key1, existing LP_VULKAN_IEEE32_ENABLED, MCJIT(GALLIVM_USE_ORCJIT=0), LLVM major21. Policy bool is calloc-zero for every other gallivm caller.",
+    "propagation": "lp_state_cs.c copies the existing intergroup key to per-gallivm intergroup_codegen_none_after_ir; no global or context-wide state.",
+    "placement": "gallivm_compile_module retains original engine creation and lp_passmgr_run call/arguments. The setter is after the existing skip_cached label and the noncached original IR passes, before compiled increment, mappings, debug/profile loops or ordinary JIT pointer lookup.",
+    "uncached": "Original Default TargetMachine is supplied to original IR passes, then that same engine-owned TargetMachine changes only its machine CodeGenOptLevel to None.",
+    "cached": "Cached objects skip the IR passes as before; the common hook still precedes all emission/lookups. New provider UUID/disk namespace and existing variant key separate old-policy and ordinary objects. A cache hit must be admitted only from this new policy namespace.",
+    "bridge_preconditions": "Nonnull engine, owned TargetMachine present, initial level exactly Default. Mutation occurs under the engine mutex before pointer publication. A failed prerequisite aborts before JIT, never silently relaxes IR or policy.",
+    "unchanged": "MCPU/MAttrs, TargetOptions/FP fusion policy, LLVM IR function attributes, original IR pass string/order/options, FPstate repair, NIR lowering, vector width, module bodies, descriptors/buffers/query/masks/dispatches, ordinary coroutine paths and original numerical/assertion/guard rules.",
+    "unsupported": "ORC has no new field/call and stays unchanged/unclaimed; other LLVM majors do not set the policy. Ordinary key0 is always unchanged. The bridge itself refuses unsupported LLVM majors if called.",
+    "not_used": [
+      "GALLIVM_PERF_NO_OPT",
+      "GALLIVM_LLC_OPTIONS",
+      "LLVM global command-line options",
+      "optnone/noinline/fast-math attributes",
+      "CPU/feature/property masks"
+    ],
+    "macro_visibility": "lp_bld_init.c explicitly includes util/u_math.h so LP_VULKAN_IEEE32_ENABLED is defined by the exact existing prerequisite; both caller and carrier are MCJIT guarded.",
+    "narrowed_private_whitelist": "Remove unused row-Transport SHA1c0f38b8b39d12136216af98f3465f34646300628 from old private whitelist. It and cooperative TransportSHA127c1ceb70cb82653aff1ab089e8bd8394e82e3a0 now take unchanged ordinary key0; no third None-policy capture is required for this two-module host composition."
+  },
+  "cache": {
+    "Vulkan_UUID_exact16bytes": "SIR-IWG-25.2.8-2",
+    "LP_disk_salt": "Sirius-intergroup-owner-machine-none-v2",
+    "additional_variant_key_bit_required": false,
+    "reason": "New policy is deterministic from the existing key1 under narrowed two-module hash admission plus fixed build guards and new provider/disk namespace. Key0/key1 are already hashed with serialized NIR. No caller can vary machine policy for the same key/provider."
+  },
+  "LLVM21_primary": {
+    "installed_headers": "/usr/lib/llvm-21/include/llvm/Config/llvm-config.h reports21.1.8; TargetMachine.h289\u2013292 exposes setOptLevel. This is API/source evidence, not a proof of all installed distro library source bytes.",
+    "MCJIT": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/llvm/lib/ExecutionEngine/MCJIT/MCJIT.cpp",
+    "MCJIT_fact": "Constructor59\u201383 owns a unique TargetMachine. emitObject135\u2013158 creates the emission pass manager lazily, after this hook; no engine-global pass pipeline is already fixed at creation.",
+    "TargetPassConfig": "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/llvm/lib/CodeGen/TargetPassConfig.cpp",
+    "allocation_fact": "With LLVM global overrides absent, getOptimizeRegAlloc1239\u20131245 is false at None;1055\u20131060 selects addFastRegAlloc;1269\u20131273 fast rather than greedy;1333\u20131339 omits optimized-path coalescing/scheduling preparation. This is a machine-pipeline policy, not solely allocator substitution."
+  },
+  "actual_evidence_limit": "The bounded12.273s snapshot saw LiveRangeCalc/greedy allocation and an Endpoint call in that separate partial run. It does not establish the cause or phase of the earlier300.154s C8 timeout. No unchanged retry is authorized or implied.",
+  "required_actual_after_ROOT_build": [
+    "Verify actual build is LLVM21/MCJIT0/privateIEEE32 with no global LLVM overrides.",
+    "Bind new provider bytes and both E/DP actual code provenance; verify unchanged optimized-IR body/flags entering codegen, intended None/fast machine path, original ABI/IDs/masks/Private arrays, cooperative T ordinary fallback, and FPstate/features.",
+    "Fresh originalC8/full32 word readbacks and exactly one original ABBA22+Decimal remain mandatory; remaining7/all8 and cold-frame gates unchanged. No speed, bounded compile-time, spill, instruction-count or frame-completion promise."
+  ],
+  "author_scope": {
+    "source_edits_only": true,
+    "builds": 0,
+    "compilers": 0,
+    "helpers_or_project_imports": 0,
+    "tests": 0,
+    "providers": 0,
+    "GDB": 0,
+    "network": 0,
+    "Git_mutations": 0,
+    "additional_agents": 0
+  },
+  "modified_files": {
+    "src/gallium/auxiliary/gallivm/lp_bld_init.h": {
+      "basis": {
+        "bytes": 4697,
+        "sha256": "4b09bf21a6260827529eb90d532dbc489104b094f1b94df2da97e6321d96d67c"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_init.h",
+        "bytes": 4890,
+        "sha256": "c0cefbc50c10d2de3112f98c0b1f9f26826e4bd9ff6a1c32b0eaaba1cb229086"
+      }
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_init.c": {
+      "basis": {
+        "bytes": 15058,
+        "sha256": "951960327ba883955ee6e630ae9e1cc096839bc1c0f6881321e1a440ad5fa0ce"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_init.c",
+        "bytes": 15510,
+        "sha256": "52b18f3fc93d3a490f8cbf39d96b89ff08f9174c3c78f0c7f80e79eab554da1b"
+      }
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_misc.h": {
+      "basis": {
+        "bytes": 3268,
+        "sha256": "e0a535912e25cd412dc402f2585d8c88a7ef81d4b12d32ae32da76d66d8c0d37"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_misc.h",
+        "bytes": 3528,
+        "sha256": "50ea8076c2d2ce45fa4602bd27162c962c33d7c0d04ed24cd8dd34e705b2b1a3"
+      }
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_misc.cpp": {
+      "basis": {
+        "bytes": 23190,
+        "sha256": "14f3be6e8cd982d177ec562817fa50922192ec83ebb05af8bdbe882e8de09143"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_misc.cpp",
+        "bytes": 24121,
+        "sha256": "d8e636e5db114a1694d3bfa1e56f818d25d249c9735c9c02d46a48e1b4bf693a"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "basis": {
+        "bytes": 104043,
+        "sha256": "d10cfd7abb5f7eee3f91ebe9a11e6f5153f90e0107522d8369959619831c8894"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c",
+        "bytes": 104376,
+        "sha256": "837e993a804e6e3b680615e4aa63bde9dd71b7b06298d6dba918b43f1581d465"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 116202,
+        "sha256": "b4426a9676935e9497d9e9aa0d7add011e265a377fef2a70eb86bbef51387caf"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c",
+        "bytes": 116202,
+        "sha256": "5e0e4c20eabc8cd14e5f5ebc65c79cf404c40bca74d4e23d0e29b6649167acac"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32357,
+        "sha256": "bd941272aff848f6a7e01d6fe24a97c755a17a97c8890052faa51c40ed2200a0"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_screen.c",
+        "bytes": 32370,
+        "sha256": "06af8c63be6b7cf66b8849355e786cc195d390ffad2199e16b635a5b2df7087e"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "basis": {
+        "bytes": 61281,
+        "sha256": "01abdf9445446e8bc5c742bd57e7cd6397513d3e0159d98074a52ff826a20dde"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_pipeline.c",
+        "bytes": 61170,
+        "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+      }
+    }
+  },
+  "machine_codegen_patch": {
+    "path": "out/lavapipe-owner-machine-codegen/machine-codegen.patch",
+    "bytes": 6088,
+    "sha256": "b89c0b18c134625e571934f8a2bcf971525364c8b32cccf9db5bc71906c091e0"
+  },
+  "engine_bridge": {
+    "C_symbol": "lp_set_mcjit_codegen_none_after_ir",
+    "source": "src/gallium/auxiliary/gallivm/lp_bld_misc.cpp",
+    "declaration": "src/gallium/auxiliary/gallivm/lp_bld_misc.h",
+    "call": "src/gallium/auxiliary/gallivm/lp_bld_init.c after original lp_passmgr_run, at common skip_cached join",
+    "before": "Require engine-owned TargetMachine CodeGenOptLevel::Default",
+    "after": "Set that same TargetMachine CodeGenOptLevel::None under its engine mutex; return true",
+    "observable_scope": "This named bridge and its actual target-machine state may be bound by ROOT code observers; it is not itself evidence that a workload completed."
+  },
+  "actual_intended_host": {
+    "matched_result": {
+      "path": "out/native-cooperative-transport-intergroup/matched-result.json",
+      "bytes": 4459,
+      "sha256": "7b01a743a5b7886bb2113683adf78046942a17967553dcabc385398a4f71b896"
+    },
+    "executable_sha256": "f958a60563b64c79d3f2fb6da2815bde0effdbbe49f121034cfd212ab17b27ff",
+    "new_host_or_shader_compile": false,
+    "modules": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+        "bytes": 87444,
+        "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+        "original_module": {
+          "bytes": 85832,
+          "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+        },
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "program_table_equal": true,
+        "original_control_barriers": 9,
+        "candidate_control_barriers": 10,
+        "scalar_algorithm_unchanged": true,
+        "actual_shared_variables_bytes": {
+          "%retainedStatus": 4,
+          "%originalTerms": 920,
+          "%retainedScratch": 9180,
+          "%retainedCoefficients": 500
+        },
+        "actual_shared_bytes": 10604,
+        "compiled_this_candidate": false
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "original_module": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+        },
+        "registers": 612,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "original_module": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+        },
+        "registers": 629,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      }
+    },
+    "policy_modules": [
+      "Endpoint",
+      "DopriPhase"
+    ],
+    "ordinary_module": "Transport",
+    "runtime_admission": false
+  },
+  "internal_ABI_and_lifetime": "gallivm_state gains one internal MCJIT-only bool, so its C/C++ struct layout and dependent object offsets change. ROOT must rebuild the existing Ninja header-dependency closure; old layout consumers cannot be reused blindly. Public Vulkan, lp_jit_cs_func and shader ABI remain unchanged. The bool/engine/TargetMachine belong to one variant created by gallivm_create; mutation precedes publication, and existing IR/engine/code-memory teardown remains unchanged. Shared LLVMContext or backing allocator does not carry the policy."
+}
