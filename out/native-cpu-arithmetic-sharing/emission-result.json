@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "modules": {
+    "Endpoint": {
+      "module": {
+        "module": "bin/linux-gcc/native-cpu-arithmetic-sharing/modules/owned-endpoint.spv",
+        "bytes": 85208,
+        "sha256": "361addd85f495317a8db6d1528761584aca5abf085b669f0ea80f072d021e1dc",
+        "original_module": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+        },
+        "registers": 612,
+        "program_table_equal": true,
+        "compiled_this_candidate": true
+      },
+      "actual_Private_variables_bytes": {
+        "%nativeProjection": 28,
+        "%retainedStatus": 4,
+        "%retainedScratch": 12240
+      },
+      "actual_Private_total_bytes": 12272,
+      "Workgroup_variables": 0,
+      "barriers": 0,
+      "atomics": 0,
+      "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "original_capabilities_and_modes_equal": true,
+      "unchanged_scalar_functions": [
+        "Project"
+      ],
+      "implicit_Private_initializers": 0
+    },
+    "DopriPhase": {
+      "module": {
+        "module": "bin/linux-gcc/native-cpu-arithmetic-sharing/modules/owned-dopri_phase.spv",
+        "bytes": 52932,
+        "sha256": "163dd6ed8ebdd0816c5015bf07c9b9580a14f532fb52513465c8c91386a1aceb",
+        "original_module": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+        },
+        "registers": 629,
+        "program_table_equal": true,
+        "compiled_this_candidate": true
+      },
+      "actual_Private_variables_bytes": {
+        "%retainedStatus": 4,
+        "%retainedScratch": 12580
+      },
+      "actual_Private_total_bytes": 12584,
+      "Workgroup_variables": 0,
+      "barriers": 0,
+      "atomics": 0,
+      "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "original_capabilities_and_modes_equal": true,
+      "unchanged_scalar_functions": [
+        "ReadOriginal"
+      ],
+      "implicit_Private_initializers": 0
+    }
+  },
+  "scope": "Emitted SPIRV/storage and scalar function identity only. Actual LLVM private lifetime, code, numerical/benefit/frame qualification still required."
+}

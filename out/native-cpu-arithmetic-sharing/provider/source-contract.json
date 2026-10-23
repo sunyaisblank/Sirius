@@ -1,0 +1,57 @@
+{
+  "scope": "Additional exact two native CPU arithmetic-sharing E/DP hashes only; unchanged existing IEEE32/intergroup/bulk-zero/Default machinery.",
+  "basis_full_source_identity": {
+    "bytes": 1482565,
+    "sha256": "cd6216238681d3309e7a51b630e874ea2051cb45bffffa78fc4f0a195e5cc272"
+  },
+  "basis_review": {
+    "path": "out/lavapipe-owner-bulk-zero/review-admission.json",
+    "bytes": 3002,
+    "sha256": "7b5ee35b5cfc5b604d84b34edd42e382bf24dc736f63e62700f423f679149f43"
+  },
+  "modified_files": {
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "basis": {
+        "bytes": 61170,
+        "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+      },
+      "candidate": {
+        "bytes": 61395,
+        "sha256": "d028e4183964684fca5352a2eaa15a19326d6692182715d57045e99a1dc61a53"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 116202,
+        "sha256": "db0019c24627de70aef4172224b5bc898e90659e8a762f9850405927359d089c"
+      },
+      "candidate": {
+        "bytes": 116202,
+        "sha256": "3a102468b4aa2404ff7c947e8e2ba541ecf73c7a35e7ed81651ff912368f74b0"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32366,
+        "sha256": "71ba795521fce96893a9237d115c9c964db8dee46ab9227193b2c8bff6c01d1e"
+      },
+      "candidate": {
+        "bytes": 32366,
+        "sha256": "9ba8ab4fc0c1943067682e17a2bbf1ce4c350c0aa0689757e59633aea0c1ede1"
+      }
+    }
+  },
+  "SPIRV_SHA1": {
+    "Endpoint": "15affa5ffcd1c19c31a564988b214dc176d4abd6",
+    "DopriPhase": "e7bfca3109354f052ea7319f573a21a1445ad52e"
+  },
+  "program_storage_modes_lane0_guard": "Both emitted modules passed original emitted checks; Endpoint12272B / DP12584B private storage, no shared variables/barriers/atomics, no private initializers, original LocalSize64/NoContraction/denorm/RTE/program tables. Endpoint Project body unchanged.",
+  "preconditions": "Existing exact module hash plus original compute/main/no-specialization/subgroup/one-function/no-barrier structural gates; all new modules retain the original single logical owner.",
+  "unchanged": "Original two hashes remain admitted; both Transport hashes remain excluded. No arithmetic/clear extent/lifetime/mask/ABI/LLVM or machine optimization policy changes. Native bulk-zero shapes3060/3145 vectors remain exact.",
+  "cache_isolation": "New private pipeline UUID SIR-ARITH-25.2-A and disk namespace Sirius-intergroup-cpu-arithmetic-v1.",
+  "provider_patch": {
+    "bytes": 2125,
+    "sha256": "e047f63defad8eb312d07a8a075fe793b072e65b63041c376445dd9267e9ea62"
+  },
+  "admission_limit": "Provider build plus actual4B ordinary called-code screen only, after independent source review. No numerical/performance/frame/release claim."
+}
