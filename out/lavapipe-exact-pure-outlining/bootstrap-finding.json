@@ -1,0 +1,13 @@
+{
+  "source_revision": "18ac425b",
+  "classification": "GUARD_BOOTSTRAP_FAILED_BEFORE_CHILD_SPAWN",
+  "compiler_invocations": 0,
+  "provider_or_numerical_executions": 0,
+  "cause": "The reused acqrel guard path is a Git link restored as a regular link-stub file after the earlier same-checkout branch switches; executing that stub is a Python SyntaxError.",
+  "stub": {
+    "path": "out/lavapipe-acqrel-ordering/runtime/owned_guard.py",
+    "bytes": 56,
+    "sha256": "3e1997fd0cbe20bbbb5d6984aca63fe3f8f7abb2bda7e5e728902bedf8086341"
+  },
+  "repair": "Bind the task wrapper directly to the original regular source implementation at out/native-cpu-row-ownership/cold-frame/owned_guard.py. No repository-wide Git configuration or unrelated link changed."
+}
