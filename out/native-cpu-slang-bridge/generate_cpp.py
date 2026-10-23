@@ -6,11 +6,13 @@ import subprocess
 
 R = Path.cwd()
 W = Path(__file__).resolve().parent
-B = R / 'bin/linux-gcc/native-cpu-slang-bridge'
+B = R / 'bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering'
 authority = json.loads((R / 'out/native-cpu-row-ownership/compiler-result.json').read_text())
 original, = [a for a in authority['commands'] if a[0] == authority['tools']['compiler']
              and Path(a[1]).name == 'retained_dopri_phase.slang']
 args = list(original)
+args[1] = str(W / 'shaders/retained_dopri_phase.slang')
+args[2:2] = ['-DSIRIUS_RETAINED_CPU_CPP=1', '-I', str(W / 'shaders')]
 assert args[args.index('-target') + 1] == 'spirv'
 args[args.index('-target') + 1] = 'cpp'
 index = args.index('-profile')

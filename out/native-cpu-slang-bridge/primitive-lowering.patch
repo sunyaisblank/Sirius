@@ -1,0 +1,62 @@
+--- src/sirius/kernels/retained_scalar.slang
++++ out/native-cpu-slang-bridge/shaders/retained_scalar.slang
+@@ -1,3 +1,6 @@
++#if defined(SIRIUS_RETAINED_CPU_CPP) && (!defined(SIRIUS_RETAINED_CPU_ROW_OWNER) || defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER))
++#error CPU CPP primitive lowering requires the original native32 CPU row owner
++#endif
+ // Scalar words retain the same storage ABI in both arithmetic implementations.
+ // Integer arithmetic establishes RTE and gradual underflow independently of
+ // native float-control properties. Native arithmetic keeps its explicit order.
+@@ -32,32 +35,52 @@
+ RPScalar RPScalarNegate(RPScalar value) { return asfloat(asuint(value) ^ 0x80000000u); }
+ RPScalar RPScalarMax(RPScalar a, RPScalar b) { return max(a, b); }
+ RPScalar OrderedAdd32(RPScalar a, RPScalar b) {
++#ifdef SIRIUS_RETAINED_CPU_CPP
++    precise RPScalar result = a + b;
++    return result;
++#else
+     return spirv_asm {
+         OpFAdd $$float %v $a $b;
+         OpDecorate %v NoContraction;
+         OpCopyObject $$float result %v;
+     };
++#endif
+ }
+ RPScalar OrderedSubtract32(RPScalar a, RPScalar b) {
++#ifdef SIRIUS_RETAINED_CPU_CPP
++    precise RPScalar result = a - b;
++    return result;
++#else
+     return spirv_asm {
+         OpFSub $$float %v $a $b;
+         OpDecorate %v NoContraction;
+         OpCopyObject $$float result %v;
+     };
++#endif
+ }
+ RPScalar OrderedMultiply32(RPScalar a, RPScalar b) {
++#ifdef SIRIUS_RETAINED_CPU_CPP
++    precise RPScalar result = a * b;
++    return result;
++#else
+     return spirv_asm {
+         OpFMul $$float %v $a $b;
+         OpDecorate %v NoContraction;
+         OpCopyObject $$float result %v;
+     };
++#endif
+ }
+ RPScalar OrderedDivide32(RPScalar a, RPScalar b) {
++#ifdef SIRIUS_RETAINED_CPU_CPP
++    precise RPScalar result = a / b;
++    return result;
++#else
+     return spirv_asm {
+         OpFDiv $$float %v $a $b;
+         OpDecorate %v NoContraction;
+         OpCopyObject $$float result %v;
+     };
++#endif
+ }
+ RPScalar OrderedSqrt32(RPScalar value) { return sqrt(value); }
+ #endif
