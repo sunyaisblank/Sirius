@@ -1,0 +1,202 @@
+{
+  "structural_premise_observed": true,
+  "rows": {
+    "Endpoint": {
+      "structural_premise_observed": true,
+      "original_block_arguments": [
+        64,
+        1,
+        1
+      ],
+      "guard_original_dispatch_groups_x": 1,
+      "lane_group_id_definition": "%ssa_1464 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>",
+      "original_first_group_X_def_use": [
+        "%ssa_1464 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>",
+        "%16 = shufflevector <8 x i32> %15, <8 x i32> poison, <8 x i32> zeroinitializer",
+        "%15 = insertelement <8 x i32> poison, i32 %5, i64 0",
+        "%5 = <function argument>"
+      ],
+      "actual_row_address_and_mask_examples": [
+        {
+          "operation": "gather",
+          "line": "%ssa_1560 = call <8 x i32> @llvm.masked.gather.v8i32.v8p0(<8 x ptr> %channel_ptr1511, i32 4, <8 x i1> %mask1513, <8 x i32> zeroinitializer) #5",
+          "tail_mask_path": [
+            "%mask1513 = and <8 x i1> %exec_bitvec1506, %oob_cmp1512",
+            "%exec_bitvec1506 = icmp ne <8 x i32> %146, zeroinitializer",
+            "%146 = and <8 x i32> %maskfull1505, %.051007",
+            "%maskfull1505 = select <8 x i1> %142, <8 x i32> %mask.0, <8 x i32> zeroinitializer",
+            "%mask.0 = phi <8 x i32> [ splat (i32 -1), %entry ], [ %19, %loop_begin1 ]"
+          ],
+          "group_address_path": [
+            "%channel_ptr1511 = getelementptr i32, ptr %154, <8 x i64> %158",
+            "%158 = sext <8 x i32> %152 to <8 x i64>",
+            "%152 = ashr exact <8 x i32> %ssa_1559, splat (i32 2)",
+            "%ssa_1559 = add <8 x i32> %ssa_1558, splat (i32 4)",
+            "%ssa_1558 = shl <8 x i32> %ssa_1557, splat (i32 2)",
+            "%ssa_1557 = add <8 x i32> %151, %ssa_1554",
+            "%ssa_1554 = mul <8 x i32> %ssa_1464, splat (i32 225)",
+            "%ssa_1464 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>"
+          ]
+        },
+        {
+          "operation": "scatter",
+          "line": "call void @llvm.masked.scatter.v8i32.v8p0(<8 x i32> zeroinitializer, <8 x ptr> %channel_ptr, i32 4, <8 x i1> %mask1485) #5",
+          "tail_mask_path": [
+            "%mask1485 = and <8 x i1> %oob_cmp, %109",
+            "%109 = icmp ne <8 x i32> %108, zeroinitializer",
+            "%108 = and <8 x i32> %maskfull1484, %mask.0",
+            "%mask.0 = phi <8 x i32> [ splat (i32 -1), %entry ], [ %19, %loop_begin1 ]"
+          ],
+          "group_address_path": [
+            "%channel_ptr = getelementptr i32, ptr %111, <8 x i64> %115",
+            "%115 = zext nneg <8 x i32> %ssa_1520 to <8 x i64>",
+            "%ssa_1520 = and <8 x i32> %ssa_1519, splat (i32 1073741823)",
+            "%ssa_1519 = add <8 x i32> %reg3.0, %ssa_1512",
+            "%ssa_1512 = mul <8 x i32> %89, %ssa_1464",
+            "%ssa_1464 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>"
+          ]
+        }
+      ],
+      "masked_memory_operations_with_tail_dependence": 384,
+      "row_dependent_gathers": 179,
+      "row_dependent_scatters": 205,
+      "review_limit": "Mask def-use checks bind emitted lowering to the independently reviewed source mask composition. Guard exits before retained arithmetic; no active eight-row or numerical result inferred.",
+      "complete_bulk_clear_observed": true,
+      "original_Default_machine_pipeline_observed": true,
+      "actual_complete_module": {
+        "words": 21302,
+        "bytes": 85208,
+        "sha256": "361addd85f495317a8db6d1528761584aca5abf085b669f0ea80f072d021e1dc",
+        "actual_span_matches_frozen_input": true
+      },
+      "functions": [
+        {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 496583,
+          "address": 136542157869056
+        }
+      ],
+      "total_called_function_bytes": 496583,
+      "prior_best_called_text_bytes": 558029,
+      "reduction_percent": 11.01125568742843,
+      "actual_optimized_IR": {
+        "path": "out/native-cpu-arithmetic-sharing/ordinary/endpoint/optimized-05.ll",
+        "bytes": 7214315,
+        "sha256": "7f6081a06049a4063685e5ec655ec52e76d64e0d12bd3336b87a85a292954eca"
+      },
+      "actual_capture_verification": {
+        "bytes": 3342,
+        "sha256": "6981b2a77d620fad0c5d1daea88b83f1c63921e187962ccc302806e1e200b93b"
+      },
+      "arithmetical_equivalence_basis": "Independent exact source control-flow composition, unchanged lower-level arithmetic and emitted controls; no whole-module inverse or machine-equivalence proof claimed."
+    },
+    "DopriPhase": {
+      "structural_premise_observed": true,
+      "original_block_arguments": [
+        64,
+        1,
+        1
+      ],
+      "guard_original_dispatch_groups_x": 1,
+      "lane_group_id_definition": "%ssa_150 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>",
+      "original_first_group_X_def_use": [
+        "%ssa_150 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>",
+        "%16 = shufflevector <8 x i32> %15, <8 x i32> poison, <8 x i32> zeroinitializer",
+        "%15 = insertelement <8 x i32> poison, i32 %5, i64 0",
+        "%5 = <function argument>"
+      ],
+      "actual_row_address_and_mask_examples": [
+        {
+          "operation": "gather",
+          "line": "%ssa_237 = call <8 x i32> @llvm.masked.gather.v8i32.v8p0(<8 x ptr> %channel_ptr189, i32 4, <8 x i1> %mask191, <8 x i32> zeroinitializer) #5",
+          "tail_mask_path": [
+            "%mask191 = and <8 x i1> %exec_bitvec184, %oob_cmp190",
+            "%exec_bitvec184 = icmp ne <8 x i32> %136, zeroinitializer",
+            "%136 = and <8 x i32> %maskfull183, %mask.0",
+            "%mask.0 = phi <8 x i32> [ splat (i32 -1), %entry ], [ %19, %loop_begin1 ]"
+          ],
+          "group_address_path": [
+            "%channel_ptr189 = getelementptr i32, ptr %144, <8 x i64> %148",
+            "%148 = sext <8 x i32> %142 to <8 x i64>",
+            "%142 = ashr exact <8 x i32> %ssa_236, splat (i32 2)",
+            "%ssa_236 = add <8 x i32> %ssa_235, splat (i32 4)",
+            "%ssa_235 = shl <8 x i32> %ssa_234, splat (i32 2)",
+            "%ssa_234 = add <8 x i32> %141, %135",
+            "%135 = bitcast <8 x float> %134 to <8 x i32>",
+            "%134 = call <8 x float> @llvm.x86.avx.blendv.ps.256(<8 x float> %131, <8 x float> %133, <8 x float> %132) #5",
+            "%133 = bitcast <8 x i32> %ssa_230 to <8 x float>",
+            "%ssa_230 = mul <8 x i32> %ssa_150, splat (i32 1810)",
+            "%ssa_150 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>"
+          ]
+        },
+        {
+          "operation": "scatter",
+          "line": "call void @llvm.masked.scatter.v8i32.v8p0(<8 x i32> zeroinitializer, <8 x ptr> %channel_ptr, i32 4, <8 x i1> %mask171) #5",
+          "tail_mask_path": [
+            "%mask171 = and <8 x i1> %oob_cmp, %97",
+            "%97 = icmp ne <8 x i32> %96, zeroinitializer",
+            "%96 = and <8 x i32> %maskfull170, %mask.0",
+            "%mask.0 = phi <8 x i32> [ splat (i32 -1), %entry ], [ %19, %loop_begin1 ]"
+          ],
+          "group_address_path": [
+            "%channel_ptr = getelementptr i32, ptr %99, <8 x i64> %103",
+            "%103 = zext nneg <8 x i32> %ssa_203 to <8 x i64>",
+            "%ssa_203 = and <8 x i32> %ssa_202, splat (i32 1073741823)",
+            "%ssa_202 = add <8 x i32> %reg3.0, %ssa_195",
+            "%ssa_195 = mul <8 x i32> %77, %ssa_150",
+            "%ssa_150 = add <8 x i32> %16, <i32 0, i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7>"
+          ]
+        }
+      ],
+      "masked_memory_operations_with_tail_dependence": 27,
+      "row_dependent_gathers": 20,
+      "row_dependent_scatters": 7,
+      "review_limit": "Mask def-use checks bind emitted lowering to the independently reviewed source mask composition. Guard exits before retained arithmetic; no active eight-row or numerical result inferred.",
+      "complete_bulk_clear_observed": true,
+      "original_Default_machine_pipeline_observed": true,
+      "actual_complete_module": {
+        "words": 13233,
+        "bytes": 52932,
+        "sha256": "163dd6ed8ebdd0816c5015bf07c9b9580a14f532fb52513465c8c91386a1aceb",
+        "actual_span_matches_frozen_input": true
+      },
+      "functions": [
+        {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 45841,
+          "address": 140072954241024
+        }
+      ],
+      "total_called_function_bytes": 45841,
+      "prior_best_called_text_bytes": 104355,
+      "reduction_percent": 56.07206171242394,
+      "actual_optimized_IR": {
+        "path": "out/native-cpu-arithmetic-sharing/ordinary/dopri_phase/optimized-05.ll",
+        "bytes": 651259,
+        "sha256": "9e58cee5b655d28bc2f1cc0fa76cf3bb4f7893244ce5276e83755f1762e10116"
+      },
+      "actual_capture_verification": {
+        "bytes": 3340,
+        "sha256": "4a77a7818234b99fa5529f2983977162767dbbeddfe5b16552a5dd11eb150bbc"
+      },
+      "arithmetical_equivalence_basis": "Independent exact source control-flow composition, unchanged lower-level arithmetic and emitted controls; no whole-module inverse or machine-equivalence proof claimed."
+    }
+  },
+  "complete_bulk_clear_observed": true,
+  "original_Default_machine_pipeline_observed": true,
+  "actual_provider": {
+    "path": "bin/linux-gcc/native-cpu-arithmetic-sharing/provider/libvulkan_lvp.so",
+    "bytes": 14773096,
+    "sha256": "372cb84b40a6c9935fb902374abc1a17a41c72444fd7267f70ee5b5ac1743e96"
+  },
+  "prior_best_archive": {
+    "path": "attestations/qualification/337d0bae/lavapipe-owner-bulk-zero-finite-outcome/diagnostics-and-trial.zip",
+    "bytes": 6452160,
+    "sha256": "7959c6c6be2671de0059657ffee4ccfae1b2c0dc19a2e257b4f6f05ee605236b"
+  },
+  "scope": "Two original4B guard/canary captures only. Actual called code/source structure and complete clear/engine/allocator/features/FP restore are bound. Guard exits before retained arithmetic; originalC8/all32 and unchanged22+Decimal remain required. No runtime-benefit, active8row, frame, science or release claim."
+}
