@@ -1,0 +1,122 @@
+{
+  "objects": [
+    {
+      "stage": "Transport",
+      "actual_object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.o",
+        "bytes": 93600,
+        "sha256": "02f3696cb3c459e7b88995a1b16d8cc8b03caa021ac71f46e32946ccffc18609"
+      },
+      "function_symbol_bytes": 19413,
+      "primitive_functions": {
+        "RTAdd_0": [
+          {
+            "bytes": 598,
+            "symbol": "_ZN26sirius_generated_transportL7RTAdd_0EPNS_16RetainedTriple_0ES1_"
+          }
+        ],
+        "RTMultiply_0": [
+          {
+            "bytes": 3553,
+            "symbol": "_ZN26sirius_generated_transportL12RTMultiply_0EPNS_16RetainedTriple_0ES1_"
+          }
+        ]
+      },
+      "FMA_mnemonics": [],
+      "inspection_inputs": {
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.symbols.txt": {
+          "bytes": 3266,
+          "sha256": "e727afba54fdc05754fb0d49411cad583cfe18f5df655d8c094fee6ec096b647"
+        },
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.disassembly.txt": {
+          "bytes": 334204,
+          "sha256": "6242cacd7fb3356fed6b9f412cfed72945b3a2e8a635bfa950030da05eb1484b"
+        },
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.undefined.txt": {
+          "bytes": 219,
+          "sha256": "9d2d2977584e66280bdfb544912355daf278e6c92b46de38aae9de7e00e65b5e"
+        }
+      }
+    },
+    {
+      "stage": "Endpoint",
+      "actual_object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.o",
+        "bytes": 117960,
+        "sha256": "70eedd767649af40a8402fb0cebf2945783ffcef247138a2a1a2d4ff797ba3aa"
+      },
+      "function_symbol_bytes": 24051,
+      "primitive_functions": {
+        "RTAdd_0": [
+          {
+            "bytes": 598,
+            "symbol": "_ZN25sirius_generated_endpointL7RTAdd_0EPNS_16RetainedTriple_0ES1_"
+          }
+        ],
+        "RTMultiply_0": [
+          {
+            "bytes": 3553,
+            "symbol": "_ZN25sirius_generated_endpointL12RTMultiply_0EPNS_16RetainedTriple_0ES1_"
+          }
+        ]
+      },
+      "FMA_mnemonics": [],
+      "inspection_inputs": {
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.symbols.txt": {
+          "bytes": 2431,
+          "sha256": "99e457ec6a16cf56dc894abbda28122871fb97fe3a65b5ca36fad42ba44f9b18"
+        },
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.disassembly.txt": {
+          "bytes": 381014,
+          "sha256": "837d0b006439aedff913eae067fb23c031f3a794b12eb7157337b2f164a7a25b"
+        },
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.undefined.txt": {
+          "bytes": 219,
+          "sha256": "9d2d2977584e66280bdfb544912355daf278e6c92b46de38aae9de7e00e65b5e"
+        }
+      }
+    },
+    {
+      "stage": "DopriPhase",
+      "actual_object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.o",
+        "bytes": 65104,
+        "sha256": "872068f2eb257e7d601107981b449efd9e21348de7f6609333aef277ca1afc38"
+      },
+      "function_symbol_bytes": 14575,
+      "primitive_functions": {
+        "RTAdd_0": [
+          {
+            "bytes": 598,
+            "symbol": "_ZN28sirius_generated_dopri_phaseL7RTAdd_0EPNS_16RetainedTriple_0ES1_"
+          }
+        ],
+        "RTMultiply_0": [
+          {
+            "bytes": 3553,
+            "symbol": "_ZN28sirius_generated_dopri_phaseL12RTMultiply_0EPNS_16RetainedTriple_0ES1_"
+          }
+        ]
+      },
+      "FMA_mnemonics": [],
+      "inspection_inputs": {
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.symbols.txt": {
+          "bytes": 1948,
+          "sha256": "bce3e1c869e3b6ec2f6f26ea3fb0779f2f57941503b57c60199d6bfc80eea6a8"
+        },
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.disassembly.txt": {
+          "bytes": 257346,
+          "sha256": "a2a198e82b49a0adbadf6dd1c2b559130455a0ae0dd77a07623563e3f4b388c8"
+        },
+        "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.undefined.txt": {
+          "bytes": 219,
+          "sha256": "9d2d2977584e66280bdfb544912355daf278e6c92b46de38aae9de7e00e65b5e"
+        }
+      }
+    }
+  ],
+  "owned_case": "typed-three-stage-batch",
+  "source_revision": "00e4cd9787ba85d3f7f70e79dc07324e14b1caf4",
+  "independent_source_review": "PASS: exact reconstructed3 generated headers/table word equality/reflectedABI/preparedpins/ownerafterbefore7retiredbirths. Provider wiring and runtime remain separate.",
+  "scope": "Compile/static-machine evidence only. No native kernel execution/numericalFP equivalence/performance/release claim. Scalar native function bytes cannot be directly compared as speed with eight-wide JIT text."
+}

@@ -1,0 +1,205 @@
+{
+  "objects": [
+    {
+      "stage": "Transport",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-g++-14",
+        "-std=c++2c",
+        "-O2",
+        "-fPIC",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-isystem",
+        "/opt/slang/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+        "-I",
+        "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+        "-march=x86-64",
+        "-mtune=znver4",
+        "-mfpmath=sse",
+        "-fexcess-precision=standard",
+        "-fno-fast-math",
+        "-fno-associative-math",
+        "-fno-unsafe-math-optimizations",
+        "-frounding-math",
+        "-ffp-contract=off",
+        "-c",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.cpp",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.o"
+      ],
+      "exit": 0,
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.o",
+        "bytes": 93600,
+        "sha256": "02f3696cb3c459e7b88995a1b16d8cc8b03caa021ac71f46e32946ccffc18609"
+      }
+    },
+    {
+      "stage": "Endpoint",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-g++-14",
+        "-std=c++2c",
+        "-O2",
+        "-fPIC",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-isystem",
+        "/opt/slang/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+        "-I",
+        "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+        "-march=x86-64",
+        "-mtune=znver4",
+        "-mfpmath=sse",
+        "-fexcess-precision=standard",
+        "-fno-fast-math",
+        "-fno-associative-math",
+        "-fno-unsafe-math-optimizations",
+        "-frounding-math",
+        "-ffp-contract=off",
+        "-c",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.cpp",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.o"
+      ],
+      "exit": 0,
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.o",
+        "bytes": 117960,
+        "sha256": "70eedd767649af40a8402fb0cebf2945783ffcef247138a2a1a2d4ff797ba3aa"
+      }
+    },
+    {
+      "stage": "DopriPhase",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-g++-14",
+        "-std=c++2c",
+        "-O2",
+        "-fPIC",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-isystem",
+        "/opt/slang/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+        "-I",
+        "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+        "-march=x86-64",
+        "-mtune=znver4",
+        "-mfpmath=sse",
+        "-fexcess-precision=standard",
+        "-fno-fast-math",
+        "-fno-associative-math",
+        "-fno-unsafe-math-optimizations",
+        "-frounding-math",
+        "-ffp-contract=off",
+        "-c",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.cpp",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.o"
+      ],
+      "exit": 0,
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.o",
+        "bytes": 65104,
+        "sha256": "872068f2eb257e7d601107981b449efd9e21348de7f6609333aef277ca1afc38"
+      }
+    }
+  ],
+  "all_prepared_source_bytes_unchanged": true,
+  "source_inputs": {
+    "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "out/native-cpu-slang-bridge/batch-generation.json": {
+      "bytes": 8521,
+      "sha256": "de6d68848c352c3b9262e01822730d25459b725d42f57e4b1769ba93d2cc2428"
+    },
+    "out/native-cpu-slang-bridge/prepare_batch.py": {
+      "bytes": 8809,
+      "sha256": "5aa607cefd69d77bb033146ceeb539dffc7152fa5189f7744cc694753dbd7d68"
+    },
+    "out/native-cpu-slang-bridge/native_packet.hpp": {
+      "bytes": 2271,
+      "sha256": "02a17ea28db707c1572de4137ece237930c220f261f6613ad3bf3de821bd4ce5"
+    },
+    "out/native-cpu-slang-bridge/native_bridge.h": {
+      "bytes": 1055,
+      "sha256": "57d78d5d8a61cdd04f4d9e3301d600c96fc716c3581c7d2cdfb045956798b243"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/transport.cpp": {
+      "bytes": 87927,
+      "sha256": "1b2e56701b29b5c150c861113edc36389772eaca48e92e8c16f6e406e11d6092"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/transport.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.native.hpp": {
+      "bytes": 88052,
+      "sha256": "74d60b6f50864101d797f434b45ef3a8ef107b0b954fb1c0fd721b040c0761cf"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.cpp": {
+      "bytes": 2925,
+      "sha256": "fe8daf2bfc2d4b0e87370b6b559c70f3687166667609c8fadcc54cbe69452083"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/endpoint.cpp": {
+      "bytes": 100678,
+      "sha256": "1cf56b2406c6a034b5bc75361df1fa62cc09b30407a04b1153dc325df4c229f8"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/endpoint.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.native.hpp": {
+      "bytes": 100795,
+      "sha256": "25b18fe2dc56f2e98b564cdd19e7909d3babeeb197df6469b857ea0f3ed78393"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.cpp": {
+      "bytes": 2909,
+      "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.cpp": {
+      "bytes": 63700,
+      "sha256": "a2d57dc0d8063b42dcca97f38797b68f5dfeb9bd05ca10073819f5607ac572f9"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 63841,
+      "sha256": "24b18109cac98a3a796981e53263506e7a8b43bf9ff526f5fd7c69da12517705"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.cpp": {
+      "bytes": 2866,
+      "sha256": "e481ae98846a7d8d509e2e3e17e8b8d72ea561e30929a165c85e9026c57d93d6"
+    }
+  },
+  "scope": "Strict native C++26 compile-only typedABI/packet adapters. No object execution, driver integration, numerical/FP equivalence or benefit qualification."
+}
