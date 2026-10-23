@@ -35,10 +35,11 @@ class CgEngineReturned(gdb.FinishBreakpoint):
 class CgEngine(gdb.Breakpoint):
     def stop(self):
         try:
-            row = {'id': len(cg_rows['engines']), **cg_boundary(os.environ['SIRIUS_LLVM_LIBRARY']),
-                   'module': reg('rsi'), 'module_generation': module_generation[reg('rsi')],
-                   'initial_OptLevel': struct.unpack('<I', memory(reg('rdx'), 4))[0], 'completed': False}
-            assert reg('rcx') >= 4 and row['initial_OptLevel'] == 2
+            # Actual Mesa helper: OutJIT, OutCode, cache, M, MM, OptLevel.
+            row = {'id': len(cg_rows['engines']), **cg_boundary(os.environ['SIRIUS_ACTUAL_PROVIDER']),
+                   'module': reg('rcx'), 'module_generation': module_generation[reg('rcx')],
+                   'initial_OptLevel': reg('r9d') & 0xffffffff, 'completed': False}
+            assert row['initial_OptLevel'] == 2
             cg_rows['engines'].append(row); CgEngineReturned(row, reg('rdi'))
             cg_write(); return False
         except Exception as error: return failure(error)
@@ -141,12 +142,14 @@ def cg_install(event=None):
     for line in maps.read_text().splitlines():
         fields = line.split(maxsplit=5)
         if len(fields) != 6 or not fields[5].startswith('/'): continue
-        path = str(pathlib.Path(fields[5]).resolve(strict=True))
+        path = str(pathlib.Path(fields[5]).resolve())
+        if path not in {x['library'] for x in cg_offsets.values()}: continue
+        assert pathlib.Path(path).is_file()
         start, end = [int(x, 16) for x in fields[0].split('-')]
         if int(fields[2], 16) == 0: bases.setdefault(path, set()).add(start)
         if 'x' in fields[1]: executable.setdefault(path, []).append((start, end))
     definitions = [
-        ('LLVMCreateMCJITCompilerForModule', CgEngine, None),
+        (os.environ['SIRIUS_ENGINE_CREATOR_SYMBOL'], CgEngine, None),
         (os.environ['SIRIUS_POLICY_BRIDGE_SYMBOL'], CgBridge, None),
         ('LLVMGetPointerToGlobal', CgLookup, None),
         (os.environ['SIRIUS_EMITTER_SYMBOL'], CgEmission, None),

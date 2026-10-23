@@ -37,16 +37,19 @@ codegen_environment = {
     # Avoid the hidden-return-pointer ABI of emitObject's unique_ptr result.
     'SIRIUS_EMITTER_SYMBOL': exact_symbol(llvm_symbols, '_ZN4llvm5MCJIT21generateCodeForModuleEPNS_6ModuleE'),
     'SIRIUS_POLICY_BRIDGE_SYMBOL': exact_symbol(provider_symbols, 'lp_set_mcjit_codegen_none_after_ir'),
+    'SIRIUS_ENGINE_CREATOR_SYMBOL': exact_symbol(provider_symbols, 'lp_build_create_jit_compiler_for_module'),
     'SIRIUS_LLVM_LIBRARY': str(llvm_library),
 }
 offsets = {}
-for symbol in ['LLVMCreateMCJITCompilerForModule', 'LLVMGetPointerToGlobal',
+for symbol in ['LLVMGetPointerToGlobal',
                codegen_environment['SIRIUS_EMITTER_SYMBOL'],
                codegen_environment['SIRIUS_FAST_ALLOCATOR_SYMBOL'],
                codegen_environment['SIRIUS_GREEDY_ALLOCATOR_SYMBOL']]:
     offsets[symbol] = {'library': str(llvm_library), 'offset': symbol_offset(llvm_symbols, symbol)}
 bridge = codegen_environment['SIRIUS_POLICY_BRIDGE_SYMBOL']
 offsets[bridge] = {'library': str(driver.resolve()), 'offset': symbol_offset(provider_symbols, bridge)}
+creator = codegen_environment['SIRIUS_ENGINE_CREATOR_SYMBOL']
+offsets[creator] = {'library': str(driver.resolve()), 'offset': symbol_offset(provider_symbols, creator)}
 codegen_environment['SIRIUS_MACHINE_SYMBOL_OFFSETS'] = json.dumps(offsets, sort_keys=True)
 (folder/'codegen-symbols.json').write_text(json.dumps({
     'provider': {'path': str(driver), 'sha256': hashlib.sha256(driver.read_bytes()).hexdigest()},

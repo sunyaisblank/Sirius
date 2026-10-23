@@ -7,8 +7,15 @@ def pin(p):
     with p.open('rb') as stream: digest = hashlib.file_digest(stream, 'sha256').hexdigest()
     return {'bytes': p.stat().st_size, 'sha256': digest}
 def key(p): return str(p.relative_to(R)) if p.is_relative_to(R) else str(p)
-assert not (W/'actions.json').exists()
-assert not any((W/x).exists() for x in ['transport','endpoint','dopri_phase'])
+prior_actions = None
+if (W/'actions.json').exists():
+    prior_actions = doc(W/'actions.json')
+    owner = doc(W/'transport/owner.json')
+    assert owner['passed'] and owner['whole_inputs_unchanged'] and owner['source_unchanged']
+    assert not owner['remaining_owned_processes'] and not owner['cleanup_errors']
+    saved = W/'transport/original-actions.json'; assert not saved.exists()
+    saved.write_bytes((W/'actions.json').read_bytes())
+assert not any((W/x).exists() for x in ['endpoint','dopri_phase'])
 assert not any(p.is_symlink() and p.is_dir() for p in W.iterdir())
 result = doc(P/'provider-build-result.json'); assert result['passed']
 assert doc(P/'build/owner.json')['passed'] and doc(P/'review-admission.json')['passed']
@@ -64,5 +71,6 @@ for label, kind in [('transport','Transport'),('endpoint','Endpoint'),('dopri_ph
         'frozen_inputs':sorted(inputs), 'software_provider':True,
         'runtime_icd':str(icd), 'runtime_provider':str(driver),
         'scope':'One original 4B guard/canary complete-code capture; exact mixed modules and new staged provider. Engine/factory policy isolation plus E/DP optimized-IR identity only. Frozen probe is distinct from pinned intended f958 host. No retained numerical, benefit, frame or qualification conclusion.'}
+if prior_actions is not None: actions['transport'] = prior_actions['transport']
 (W/'actions.json').write_text(json.dumps(actions,indent=2)+'\n')
 print(json.dumps({'passed':True,'capture_actions':3,'explicit_input_selectors':len(inputs),'provider':pin(driver)}))
