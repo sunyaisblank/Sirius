@@ -13,6 +13,8 @@ def pin(p):
     return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
 dp = R / 'bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.cpp'
 assert pin(dp) == json.loads((W / 'compile-result.json').read_text())['source_inputs'][str(dp.relative_to(R))]
+for module in authority['modules'].values():
+    assert pin(R / module['module']) == {k: module[k] for k in ['bytes', 'sha256']}
 rows = {'DopriPhase': {'source': str(dp.relative_to(R)), **pin(dp),
         'reflection': str(dp.with_suffix('.reflection.json').relative_to(R)),
         'generated_this_batch': False, 'SPIRV': authority['modules']['DopriPhase']}}
