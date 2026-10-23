@@ -1,0 +1,72 @@
+{
+  "source_composition_admitted": true,
+  "scope": "Source-based reuse, not a new three-code capture. Transport complete input/source and ordinary lowering unchanged; E/DP exact same modules/provider as the263abe74 actual code capture. Fresh mixed C8/full readbacks and original22 required.",
+  "Transport": {
+    "proof": "out/native-original-input-ownership/ordinary/ordinary-code-review.json",
+    "bytes": 3372,
+    "sha256": "1e8e55ef75c51e684545c8bab9d735cfbb036c61922114a6cfd5698a9e043a48",
+    "module": {
+      "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+      "bytes": 87444,
+      "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+      "original_module": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "program_table_equal": true,
+      "original_control_barriers": 9,
+      "candidate_control_barriers": 10,
+      "scalar_algorithm_unchanged": true,
+      "actual_shared_variables_bytes": {
+        "%retainedStatus": 4,
+        "%originalTerms": 920,
+        "%retainedScratch": 9180,
+        "%retainedCoefficients": 500
+      },
+      "actual_shared_bytes": 10604,
+      "compiled_this_candidate": false
+    },
+    "fallback_key": 0,
+    "whitelist_sha1_absent": "27c1ceb70cb82653aff1ab089e8bd8394e82e3a0",
+    "ordinary_path_review": "divide_contract_review: original soa barriers restored, key0 retains ordinary NIR options, group scheduler/IDs and coroutine/Workgroup semantics; mode per shader/variant, not sticky."
+  },
+  "Endpoint_DopriPhase": {
+    "proof": "out/lavapipe-intergroup-row-owner/ordinary/ordinary-code-review.json",
+    "bytes": 13381,
+    "sha256": "68dc3e6aaa9b19ba7931bafb47ceec9487e2302bbf426bb7f93e1e18615e17b2",
+    "modules": {
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "original_module": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+        },
+        "registers": 612,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "original_module": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+        },
+        "registers": 629,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      }
+    },
+    "same_actual_provider_sha256": "7dc35fa3ca039ec9972010012a890a0e36548208c69452ddd346de12789b0361"
+  },
+  "no_new_shader_provider_probe_compilation_or_code_capture": true,
+  "cold_frame_prediction": false
+}
