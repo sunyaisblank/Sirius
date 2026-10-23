@@ -1,4 +1,4 @@
-"""Compile the generated shader with two audited target fixes; never execute it."""
+"""Prepare two audited target fixes and typed ABI source; never invoke a compiler."""
 from pathlib import Path
 import hashlib
 import json
@@ -52,15 +52,13 @@ args = [compiler, '-std=c++2c', '-O2', '-fPIC', '-DNDEBUG',
         '-march=znver4', '-mfpmath=sse', '-fexcess-precision=standard',
         '-fno-fast-math', '-fno-associative-math', '-fno-unsafe-math-optimizations',
         '-frounding-math', '-ffp-contract=off', '-c', str(unit), '-o', str(output)]
-result = subprocess.run(args)
 def pin(p):
     data = p.read_bytes()
     return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
-record = {'argv': args, 'exit': result.returncode, 'original_CPP': pin(original),
-          'fixed_generated_header': pin(header), 'typed_assertions_unit': pin(unit),
-          'scope': 'One C++26 compile-only ABI/object screen. Generated code and installed prelude are isolated as compiler-produced system headers; owned typed ABI assertions retain strict warnings. FP policy is explicit and applies to all code. No object execution, provider integration, runtime/FP equivalence or benefit claim.',
-          'target_fixes': 'Exactly four shader-only precise tokens removed under enforced no-fast-math/no-reassociation/FP-contract-off, and one per-invocation KernelContext aggregate zero initialization. No other generated operation/control change.'}
-if output.exists():
-    record['actual_object'] = {'path': str(output.relative_to(R)), **pin(output)}
-(W / 'compile-result.json').write_text(json.dumps(record, indent=2) + '\n')
-raise SystemExit(result.returncode)
+record = {'argv': args,
+          'inputs': {str(p.relative_to(R)): pin(p) for p in [original, header, unit]},
+          'output': str(output.relative_to(R)),
+          'scope': 'Prepared source only. Generated code/prelude use system-header diagnostics; owned typed assertions use strict C++26 warnings. FP flags apply to all code. No compilation/execution by this preparer.',
+          'target_fixes': 'Exactly four shader-only precise tokens removed under mandatory no-fast-math/no-reassociation/FP-contract-off, and one per-invocation aggregate zero initialization.'}
+(W / 'prepared-native-inputs.json').write_text(json.dumps(record, indent=2) + '\n')
+print(json.dumps({'prepared_sources': len(record['inputs']), 'compiler_executed': False}))
