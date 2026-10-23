@@ -1,0 +1,98 @@
+{
+  "source": {
+    "revision": "47dd3cb23d99c1e3fce616b4ef1d8a0392fcb0db",
+    "status": ""
+  },
+  "candidate": "Stock LLVM21.1.8 iroutliner+verify on saved actual coroutine-free Endpoint IR, original cost model and znver4.",
+  "decision": "REJECTED_AT_BOUNDED_OFFLINE_SCREEN_NO_PROVIDER_INTEGRATION",
+  "observed": {
+    "argv": [
+      "/usr/lib/llvm-21/bin/opt",
+      "-mtriple=x86_64-pc-linux-gnu",
+      "-mcpu=znver4",
+      "-passes=iroutliner,verify",
+      "-S",
+      "out/lavapipe-owner-bulk-zero/ordinary/endpoint/optimized-05.ll",
+      "-o",
+      "/home/astra/.project/Sirius/out/lavapipe-ir-outlining/endpoint/outlined.ll"
+    ],
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 60
+    },
+    "wall_seconds": 60.37834550195839,
+    "child_exit": -15,
+    "stop_reason": "diagnostic_timeout",
+    "peak_sampled_rss_kib": 604376,
+    "minimum_sampled_available_kib": 19610840,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 89825,
+        "saved_start_ticks": "58569460"
+      }
+    ],
+    "remaining_owned_processes": [],
+    "cleanup_errors": [],
+    "source_unchanged": true,
+    "whole_inputs_unchanged": true
+  },
+  "completed_output_IR": false,
+  "LLVM_verifier_completed": false,
+  "attempts": 1,
+  "provider_builds_shader_compiles_numerical_or_frame_runs": 0,
+  "input_provenance": {
+    "scope": "Prepared offline IR-only screen; not executed or admitted by this file. No shader/provider/observer/frame workload.",
+    "actual_saved_IR_matches_prior_pushed_archive": true,
+    "archive": "attestations/qualification/337d0bae/lavapipe-owner-bulk-zero-finite-outcome/diagnostics-and-trial.zip",
+    "pins": {
+      "out/lavapipe-owner-bulk-zero/ordinary/endpoint/optimized-05.ll": {
+        "bytes": 8425832,
+        "sha256": "0a1049b35e35bbf93192996054034dd561b186b851a069f80bb9dc15b3a30190"
+      },
+      "/usr/lib/llvm-21/bin/opt": {
+        "bytes": 256064,
+        "sha256": "574021786d1ea12ce085429c0cc7818cee3b89357c2e55664e524fd388cfb2b9"
+      },
+      "/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1": {
+        "bytes": 138493144,
+        "sha256": "fd419f2d3eddfbdece987a7757da8f66794ab933dde48fa685c2ad1c9478225e"
+      },
+      "out/native-cpu-row-ownership/cold-frame/run_owned.py": {
+        "bytes": 12531,
+        "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab"
+      },
+      "out/lavapipe-acqrel-ordering/runtime/owned_guard.py": {
+        "bytes": 20791,
+        "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+      }
+    }
+  },
+  "reuse": {
+    "archive": "attestations/qualification/337d0bae/lavapipe-owner-bulk-zero-finite-outcome/diagnostics-and-trial.zip",
+    "sha256": "7959c6c6be2671de0059657ffee4ccfae1b2c0dc19a2e257b4f6f05ee605236b",
+    "entry": "out/lavapipe-owner-bulk-zero/ordinary/endpoint/optimized-05.ll",
+    "exact_entry_equality_checked_before_run": true
+  },
+  "independent_source_review": {
+    "reviewer": "divide_contract_review",
+    "admitted_scope": "One offline screen only, not driver integration.",
+    "findings": [
+      "CodeExtractor handles already lowered LLVM values and result storage, distinct from unsafe NIR helper retention.",
+      "Stock similarity does not compare all optional arithmetic flags; verifier success alone cannot prove FP/integer-flag preservation across shared regions.",
+      "Outliner permits memory operations; masks, output spills/copybacks and memory order require independent verification if a complete output ever exists.",
+      "Selected Endpoint has one ordinary cs_variant and no coroutine. No extension to cooperative Transport is established."
+    ],
+    "primary_release": "llvmorg-21.1.8",
+    "primary_paths": [
+      "llvm/lib/Passes/PassRegistry.def",
+      "llvm/lib/Transforms/IPO/IROutliner.cpp",
+      "llvm/lib/Transforms/Utils/CodeExtractor.cpp",
+      "llvm/lib/IR/Instruction.cpp"
+    ],
+    "source_binary_limit": "Release source/API correspondence only; no byte-identical distribution implementation proof."
+  },
+  "limits": "Timeout establishes this unchanged screen did not finish within its declared limit. No no-factorization theorem, full optimizer-cost attribution, numerical equivalence, machine/JIT/runtime speed, Mandatory, external-domain or release qualification claim."
+}
