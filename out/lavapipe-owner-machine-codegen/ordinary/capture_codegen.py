@@ -137,12 +137,14 @@ def cg_install(event=None):
     # Retry on ordinary objfile loads; never call the inferior to resolve names.
     maps = pathlib.Path('/proc/'+str(gdb.selected_inferior().pid)+'/maps')
     if not maps.exists(): return
-    bases = {}
+    bases = {}; executable = {}
     for line in maps.read_text().splitlines():
         fields = line.split(maxsplit=5)
-        if len(fields) != 6 or int(fields[2], 16) != 0 or not fields[5].startswith('/'): continue
+        if len(fields) != 6 or not fields[5].startswith('/'): continue
         path = str(pathlib.Path(fields[5]).resolve(strict=True))
-        bases.setdefault(path, set()).add(int(fields[0].split('-')[0], 16))
+        start, end = [int(x, 16) for x in fields[0].split('-')]
+        if int(fields[2], 16) == 0: bases.setdefault(path, set()).add(start)
+        if 'x' in fields[1]: executable.setdefault(path, []).append((start, end))
     definitions = [
         ('LLVMCreateMCJITCompilerForModule', CgEngine, None),
         (os.environ['SIRIUS_POLICY_BRIDGE_SYMBOL'], CgBridge, None),
@@ -158,6 +160,7 @@ def cg_install(event=None):
         if not candidates: continue
         assert len(candidates) == 1, (symbol, candidates)
         address = next(iter(candidates)) + binding['offset']
+        assert any(start <= address < end for start, end in executable.get(binding['library'], [])), symbol
         library = gdb.solib_name(address)
         if not library: continue
         assert str(pathlib.Path(library).resolve(strict=True)) == binding['library'], (symbol, library)

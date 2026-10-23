@@ -1,5 +1,15 @@
 """Run only inside the future owned capture, after nm and its DSOs are sealed."""
 llvm_library = Path('/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1').resolve(strict=True)
+import struct
+for library in [llvm_library, driver]:
+    raw = library.read_bytes()
+    assert raw[:6] == b'\x7fELF\x02\x01' and struct.unpack_from('<HH', raw, 16) == (3, 62)
+    phoff = struct.unpack_from('<Q', raw, 32)[0]
+    phsize, count = struct.unpack_from('<HH', raw, 54)
+    assert phsize == 56
+    loads = [struct.unpack_from('<IIQQQQQQ', raw, phoff + i * phsize) for i in range(count)]
+    loads = [row for row in loads if row[0] == 1]
+    assert loads and loads[0][2] == loads[0][3] == 0
 llvm_symbols = subprocess.check_output(
     ['/usr/bin/nm', '-D', '--defined-only', str(llvm_library)], text=True).splitlines()
 provider_symbols = subprocess.check_output(
@@ -12,6 +22,9 @@ def exact_symbol(rows, expected):
     return expected
 
 def symbol_offset(rows, expected):
+    types = {line.split()[-2] for line in rows
+             if line.split() and line.split()[-1].split('@', 1)[0] == expected}
+    assert types and types <= {'T', 't'}, (expected, types)
     found = {int(line.split()[0], 16) for line in rows
              if line.split() and line.split()[-1].split('@', 1)[0] == expected}
     assert len(found) == 1 and next(iter(found)) > 0, expected
