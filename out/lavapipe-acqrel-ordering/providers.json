@@ -1,0 +1,31 @@
+{
+  "providers": {
+    "baseline": {
+      "library": "/home/astra/.project/Sirius/bin/linux-gcc/native-retained-ownership/providers/baseline/libvulkan_lvp.so",
+      "ICD": "/home/astra/.project/Sirius/bin/linux-gcc/native-retained-ownership/providers/baseline/lvp_icd.json",
+      "library_identity": {
+        "bytes": 14768776,
+        "sha256": "cde2d0f8f243448a3f3b28408121412fb03a8bd9c01f5731f9e87a107150e952"
+      },
+      "ICD_identity": {
+        "bytes": 196,
+        "sha256": "ed2e5d1d9c239238d48fe1162ed4dbcd9dbee874f0afb3e39f867465efb8ee45"
+      },
+      "historical_library": "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/baseline/libvulkan_lvp.so"
+    },
+    "candidate": {
+      "library": "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+      "ICD": "/home/astra/.project/Sirius/out/lavapipe-acqrel-ordering/provider-icd.json",
+      "library_identity": {
+        "bytes": 14768720,
+        "sha256": "20d63b6d238361b69c2a48aff653962ce078ac82dfe5a98eff5ba44a70ce0fe8"
+      },
+      "ICD_identity": {
+        "bytes": 218,
+        "sha256": "0fa196f06b98734e4f1f1949bd7ce9b9cf9b7afd8fb624bf3f1dae4262331ab1"
+      },
+      "historical_library": "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-ieee32-staged/candidate/libvulkan_lvp.so",
+      "historical_identity_only": "historical_library binds the unchanged expected hardware identity from the original provider; new actual library/features/properties/code/boundaries are independently bound below, and observed C8/ABBA identities must match."
+    }
+  }
+}

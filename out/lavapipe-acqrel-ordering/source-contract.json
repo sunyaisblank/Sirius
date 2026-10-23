@@ -1,5 +1,5 @@
 {
-  "status": "Prepared source only; not compiled or executed",
+  "status": "One private provider build and three actual ordinary-code captures pass; original C8/22/8/frame not yet run.",
   "basis_private_provider_preservation": "6a6bb1ca48693e290999a0aab8f305cc26d91262",
   "prerequisite_patch_sha256": "87a8bdda3ab630fb2de5a62b13c98817d050c311b915cd49f825459f8b55cd7f",
   "unchanged_release_file": {
@@ -18,8 +18,8 @@
     "Actual IEEE32 provider arithmetic/FP-state repair",
     "Whole-workgroup ownership and host task completion"
   ],
-  "cost_premise": "Current actual ordinary complete Transport/Endpoint modules each carry10 seq_cst/full fences, despite original acquire-release requests. No exclusive-cost or speed claim.",
-  "validation_required": "Build one candidate only after the current governed controls/frame close, bind actual provider and current source, prove actual driver-code order lowering without shader barrier removal, then original admissibility and whole-path gates.",
+  "cost_premise": "Original exact IEEE32 provider emitted10seq_cst/full fences in each same complete Transport/Endpoint module despite original acquire-release requests. New actual called code retains10acq_rel fences each,6inDopri, cooperative SIMD and coroutine resumes with0fullhardwarefences. No exclusive-cost or speed claim.",
+  "validation_required": "Original C8, then exactly one original A1/B1/B2/A2 with3 repeats/slot and unchanged22 gates; remaining7 only afterall22 PASS, changed original cold frame only afterall8 PASS. Stop rejected mechanisms with no unchanged retry.",
   "adopted": false,
   "qualification": false,
   "scope": "Every matching Gallivm barrier in this private IEEE32 provider, not limited to Transport/Endpoint.",
@@ -67,5 +67,32 @@
       "snapshot_limit": "Inclusive stage wait is not exclusive fixed submission overhead. No causal attribution or frame extrapolation."
     },
     "next_cutoff": "One existing-configuration provider build, then inspect actual executed code for acquire-release order, intact rendezvous/SIMD and unchanged arithmetic admission. Stop if premise fails before another original C8/ABBA."
+  },
+  "actual_build_and_code": {
+    "provider_build_source": "41ffcb582292420e654ea0fbf35cd4e263102e4d",
+    "build_wall_seconds": 172.6130636309972,
+    "build_peak_sampled_rss_kib": 860384,
+    "ordinary_source": "863566c8986673f33f86ecfbd6e95e2ad393e2e1",
+    "actual_provider_sha256": "20d63b6d238361b69c2a48aff653962ce078ac82dfe5a98eff5ba44a70ce0fe8",
+    "IR_order": "acq_rel",
+    "IR_fences": {
+      "Transport": 10,
+      "Endpoint": 10,
+      "DopriPhase": 6
+    },
+    "hardware_full_fences": 0,
+    "coroutine_rendezvous_and_SIMD_retained": true,
+    "new_Sirius_CPP_or_shader_compilations": 0,
+    "global_installation": false,
+    "performance_acceptance": false
+  },
+  "independent_runtime_binding_source_review": {
+    "reviewer": "divide_contract_review",
+    "passed": true,
+    "original_C8_22_8_predicates_limits_order_unchanged": true,
+    "actual_new_provider_features_properties_code_MXCSR_and_fresh_runtime_identity_required": true,
+    "historical_hardware_metadata_is_expectation_only": true,
+    "prelaunch_ABBA_provenance_path_corrected": "RUN.parent/'run_case.py'",
+    "no_workload_execution_by_reviewer": true
   }
 }

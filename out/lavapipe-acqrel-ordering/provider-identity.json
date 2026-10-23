@@ -1,0 +1,33 @@
+{
+  "library": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+  "identity": {
+    "bytes": 14768720,
+    "sha256": "20d63b6d238361b69c2a48aff653962ce078ac82dfe5a98eff5ba44a70ce0fe8"
+  },
+  "ICD": "out/lavapipe-acqrel-ordering/provider-icd.json",
+  "ICD_identity": {
+    "bytes": 218,
+    "sha256": "0fa196f06b98734e4f1f1949bd7ce9b9cf9b7afd8fb624bf3f1dae4262331ab1"
+  },
+  "unchanged_shaders": {
+    "Transport": {
+      "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+      "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f"
+    },
+    "Endpoint": {
+      "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-endpoint.spv",
+      "sha256": "d19b5770c6dd4c34809b4c095b6fd6a473bff9f0db42f686fc4f90eca2174be0"
+    },
+    "DopriPhase": {
+      "module": "bin/linux-gcc/native-retained-ownership/modules/owned-dopri_phase.spv",
+      "sha256": "3467a7e4fd48fecdede78dc87684d8e2127c26d51492979411809b4512f4e8c5"
+    }
+  },
+  "original_precision_proof": "6a6bb1ca48693e290999a0aab8f305cc26d91262; unchanged exact5-file IEEE32 prerequisite, composed with new actual provider observations.",
+  "build_owner": {
+    "bytes": 212826,
+    "sha256": "16ed2c8cffe21736bf29277622465581fdeb847cd6138c5e8c6fe65a00b7484c"
+  },
+  "provider_installed": false,
+  "provider_or_source_adopted": false
+}
