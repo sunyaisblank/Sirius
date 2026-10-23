@@ -1,0 +1,13 @@
+{
+  "disposition": "Rejected in source before any build or workload",
+  "candidate": "Only changing engine CodeGenOptLevel from Default to Less under LLVM21.1.8",
+  "finding": "The reviewed optimized path is guarded by level != None. Less retains live-range preparation/coalescing, greedy allocation, machine scheduling, CSE/LICM and peephole work. No consequential cheaper mechanism was established to justify a fresh compiler trial.",
+  "primary_sources": [
+    "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/llvm/lib/CodeGen/TargetPassConfig.cpp",
+    "https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-21.1.8/llvm/lib/Target/X86/X86TargetMachine.cpp"
+  ],
+  "new_builds": 0,
+  "new_captures": 0,
+  "new_numerical_or_performance_trials": 0,
+  "limits": "Does not establish every lowering choice identical, actual distro binary equal to unmodified upstream source, the original300s timeout cause, or individual causes of the measured CodeGenNone regressions."
+}
