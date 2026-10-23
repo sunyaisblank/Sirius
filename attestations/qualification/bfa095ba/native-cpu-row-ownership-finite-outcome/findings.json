@@ -1,0 +1,470 @@
+{
+  "candidate_source": "bfa095baf0ff9592cf648cfd49a73d5f6814c05c",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "all22_original_benefit_gates_pass": false,
+  "benefit_checks_passed": 9,
+  "independent_Decimal_agrees": true,
+  "sole_ABBA": {
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.252931,
+        33.210706,
+        33.231577
+      ],
+      "candidate_samples_ms": [
+        43.654342,
+        41.272217,
+        42.995268
+      ],
+      "baseline_median_ms": 33.231577,
+      "candidate_median_ms": 42.995268,
+      "improvement_percent": -29.3807633625091,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.524511,
+        4.887987000000001,
+        5.567132
+      ],
+      "candidate_samples_ms": [
+        6.203644000000001,
+        6.022477,
+        5.550999
+      ],
+      "baseline_median_ms": 5.524511,
+      "candidate_median_ms": 6.022477,
+      "improvement_percent": -9.013757054696784,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        22.550942,
+        19.39531,
+        18.841075
+      ],
+      "candidate_samples_ms": [
+        32.112528,
+        30.082754,
+        31.852659000000003
+      ],
+      "baseline_median_ms": 19.39531,
+      "candidate_median_ms": 31.852659000000003,
+      "improvement_percent": -64.22866662095117,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.50327,
+        37.429817,
+        36.656807
+      ],
+      "candidate_samples_ms": [
+        50.066493,
+        48.389506000000004,
+        45.971647
+      ],
+      "baseline_median_ms": 37.429817,
+      "candidate_median_ms": 48.389506000000004,
+      "improvement_percent": -29.280637412680925,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.079172,
+        2.875278,
+        2.25121
+      ],
+      "candidate_samples_ms": [
+        3.186483,
+        3.273124,
+        3.325092
+      ],
+      "baseline_median_ms": 2.25121,
+      "candidate_median_ms": 3.273124,
+      "improvement_percent": -45.393988121943316,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.171399,
+        5.524044,
+        5.237679
+      ],
+      "candidate_samples_ms": [
+        7.446792,
+        7.364564,
+        7.603009
+      ],
+      "baseline_median_ms": 5.237679,
+      "candidate_median_ms": 7.446792,
+      "improvement_percent": -42.17732701832244,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.421054,
+        5.169582999999999,
+        5.3715530000000005
+      ],
+      "candidate_samples_ms": [
+        6.899058999999999,
+        6.350315,
+        5.899191999999999
+      ],
+      "baseline_median_ms": 5.3715530000000005,
+      "candidate_median_ms": 6.350315,
+      "improvement_percent": -18.221210886311642,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.736967,
+        9.728696,
+        9.846144
+      ],
+      "candidate_samples_ms": [
+        11.373694,
+        12.040317,
+        11.477731
+      ],
+      "baseline_median_ms": 9.736967,
+      "candidate_median_ms": 11.477731,
+      "improvement_percent": -17.877887436611424,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        12.431221,
+        11.5059,
+        11.042023
+      ],
+      "candidate_samples_ms": [
+        17.472075,
+        15.120024,
+        13.898337
+      ],
+      "baseline_median_ms": 11.5059,
+      "candidate_median_ms": 15.120024,
+      "improvement_percent": -31.411049983052177,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        59.751624,
+        122.666897,
+        106.66924
+      ],
+      "candidate_samples_ms": [
+        172.519249,
+        131.437095,
+        150.34230100000002
+      ],
+      "baseline_median_ms": 106.66924,
+      "candidate_median_ms": 150.34230100000002,
+      "improvement_percent": -40.94250694951986,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.448573,
+        2.401291,
+        3.565586
+      ],
+      "candidate_samples_ms": [
+        4.642031,
+        8.547167,
+        19.73678
+      ],
+      "baseline_median_ms": 2.448573,
+      "candidate_median_ms": 8.547167,
+      "improvement_percent": -249.06727306067657,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        14.784064,
+        30.248494,
+        10.151572999999999
+      ],
+      "candidate_samples_ms": [
+        45.443596,
+        26.651108,
+        68.706264
+      ],
+      "baseline_median_ms": 14.784064,
+      "candidate_median_ms": 45.443596,
+      "improvement_percent": -207.38230029307232,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        16.318088,
+        16.96535,
+        29.044833
+      ],
+      "candidate_samples_ms": [
+        65.11459099999999,
+        52.487609,
+        29.916275000000002
+      ],
+      "baseline_median_ms": 16.96535,
+      "candidate_median_ms": 52.487609,
+      "improvement_percent": -209.38123292475544,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": -29.3807633625091
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": -29.280637412680925
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": 43.12196314409424
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": -40.94250694951986
+    }
+  ],
+  "minimum_inclusive_stage_gain_percent": -249.06727306067657,
+  "provisioning_inclusive_API_gains_percent": [
+    53.60725765642381,
+    53.02776855109019
+  ],
+  "all32_control8_and_ABBA_readbacks_match_originals": true,
+  "original_controls": {
+    "1": {
+      "status": "not_run"
+    },
+    "2": {
+      "status": "not_run"
+    },
+    "3": {
+      "status": "not_run"
+    },
+    "4": {
+      "status": "not_run"
+    },
+    "5": {
+      "status": "not_run"
+    },
+    "6": {
+      "status": "not_run"
+    },
+    "7": {
+      "status": "not_run"
+    },
+    "8": {
+      "passed": true,
+      "wall_seconds": 39.51528437191155,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 1091076
+    }
+  },
+  "all8_original_controls_admitted": false,
+  "cold_frame": {
+    "attempted": false,
+    "accepted": false,
+    "reason": "All22 benefit gates and all8 original controls required first."
+  },
+  "actual_new_builds": {
+    "shader_compilations": 3,
+    "CXX_compilations": 1,
+    "backend_links": 1,
+    "frame_links": 0
+  },
+  "actual_ordinary_called_function_bytes": {
+    "Transport": 346854,
+    "Endpoint": 739117,
+    "DopriPhase": 132820
+  },
+  "actual_per_invocation_stack_vector_bytes": {
+    "Transport": 73440,
+    "Endpoint": 97920,
+    "DopriPhase": 100640
+  },
+  "actual_fences_and_coroutine_resumes_zero": true,
+  "private_storage_and_lane0_emission": {
+    "passed": true,
+    "modules": {
+      "Transport": {
+        "module": {
+          "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+          "bytes": 86008,
+          "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+          "original_module": {
+            "bytes": 85832,
+            "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+          },
+          "registers": 459,
+          "program_table_equal": true,
+          "compiled_this_candidate": true
+        },
+        "actual_Private_variables_bytes": {
+          "%retainedScratch": 9180,
+          "%retainedStatus": 4,
+          "%retainedCoefficients": 500
+        },
+        "actual_Private_total_bytes": 9684,
+        "Workgroup_variables": 0,
+        "barriers": 0,
+        "atomics": 0,
+        "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "original_capabilities_and_modes_equal": true,
+        "unchanged_scalar_functions": [
+          "ReadOriginal"
+        ],
+        "implicit_Private_initializers": 0
+      },
+      "Endpoint": {
+        "module": {
+          "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+          "bytes": 97044,
+          "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+          "original_module": {
+            "bytes": 99728,
+            "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+          },
+          "registers": 612,
+          "program_table_equal": true,
+          "compiled_this_candidate": true
+        },
+        "actual_Private_variables_bytes": {
+          "%nativeProjection": 28,
+          "%retainedStatus": 4,
+          "%retainedScratch": 12240
+        },
+        "actual_Private_total_bytes": 12272,
+        "Workgroup_variables": 0,
+        "barriers": 0,
+        "atomics": 0,
+        "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "original_capabilities_and_modes_equal": true,
+        "unchanged_scalar_functions": [
+          "Project"
+        ],
+        "implicit_Private_initializers": 0
+      },
+      "DopriPhase": {
+        "module": {
+          "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+          "bytes": 59508,
+          "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+          "original_module": {
+            "bytes": 59228,
+            "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+          },
+          "registers": 629,
+          "program_table_equal": true,
+          "compiled_this_candidate": true
+        },
+        "actual_Private_variables_bytes": {
+          "%retainedStatus": 4,
+          "%retainedScratch": 12580
+        },
+        "actual_Private_total_bytes": 12584,
+        "Workgroup_variables": 0,
+        "barriers": 0,
+        "atomics": 0,
+        "entry_only_lane0_calls_complete_row_with_literal_lane0": true,
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "original_capabilities_and_modes_equal": true,
+        "unchanged_scalar_functions": [
+          "ReadOriginal"
+        ],
+        "implicit_Private_initializers": 0
+      }
+    },
+    "scope": "Emitted SPIRV/storage and scalar function identity only. Actual LLVM private lifetime, code, numerical/benefit/frame qualification still required."
+  },
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite evidence. All original workgroups, producers, fields, arithmetic, ordered refusal prefixes, admission and assertions retained. Full science, July image identity, original cold-frame acceptance, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain separate obligations."
+}
