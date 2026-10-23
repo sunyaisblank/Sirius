@@ -25,7 +25,7 @@ mutable = set()
 for command in commands:
     words = shlex.split(command); outputs = set()
     for i, word in enumerate(words[:-1]):
-        if word == '-o' or word in {'csr', 'csrD', 'csrDT', 'crs', 'crsD', 'rcs', 'rcsD'}:
+        if word in {'-o', '--output', 'csr', 'csrD', 'csrDT', 'crs', 'crsD', 'rcs', 'rcsD'}:
             outputs.add(words[i + 1])
     assert outputs, ('Review unsupported incremental command before compilation', command)
     for output in outputs:
