@@ -1,0 +1,17 @@
+{
+  "scope": "One same-source default-native32 row DP Slang-to-C++ source generation only. No object, provider, workload or performance claim.",
+  "basis": "Original private all-row sources and original native arithmetic bodies; not the failed7-phase E/DP variant. Same complete DP row body andoriginal compile macros.",
+  "material_premise": "Mesa SPIR-V/NIR currently forces arithmetic function inlining. Slang CPU C++ may retain normal typed arithmetic calls and per-invocation context, avoiding both large duplicated machine bodies and extra7-phase interpreter control. Actual generated source must establish this before any native binary or provider step.",
+  "new_target_controls": "Original Slang argument authority; replace SPIR-V target/profile with cpp, request precise FP mode and reflection. This does not itself establish native machine NoContraction/denorm equivalence.",
+  "required_before_any_provider_trial": [
+    "Actual generated RTAdd/RTMultiply call boundaries and complete fields",
+    "Typed reflected buffer/group/context ABI, per-invocation zero initialization, no process-static scratch or reuse",
+    "Actual Vulkan descriptors use constants[1] and binding descriptor_index; byte extent to uint count conversion",
+    "Faithful OOB behavior or complete in-bounds eligibility including malformed metadata and original fallback",
+    "NoContraction/native seeds/bitcasts/RTE/denorm and original MXCSR callback boundary",
+    "Exact complete SPIR-V/source/import/macro/native-object association and cache isolation; all unmatched paths retain ordinary driver execution"
+  ],
+  "original_gates": "No numerical or benefit acceptance without original provider/code/numerical C8/all32, sole ABBA22+Decimal, all8 controls and original frame. No new run authorized by this source record alone.",
+  "primary_CPU_ABI_documentation": "https://raw.githubusercontent.com/shader-slang/slang/v2026.12/docs/cpu-target.md",
+  "adverse_evidence": "E/DP7-phase source sharing shrank JIT11%/56% and passed8/22 but originalframefailed2568/16384at300s; no unchangedretry. AMD304 Transport sharing also regressed. This route changes compiler/ABI function boundaries while preserving original arithmetic source."
+}
