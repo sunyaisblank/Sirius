@@ -1,0 +1,173 @@
+{
+  "scope": "Exact E/DP intergroup-owner private uint array initialization only; restored original Default optimized machine pipeline. All zero bytes retained.",
+  "source_basis": {
+    "prior_intergroup_ROOT_review": {
+      "path": "out/lavapipe-intergroup-row-owner/review-admission.json",
+      "bytes": 4379,
+      "sha256": "c78734fefe9ffdc0c0fab44c12f2906eccae463cbe11d21366ad0871af62b7ab"
+    },
+    "prior_intergroup_contract": {
+      "path": "out/lavapipe-intergroup-row-owner/source-contract.json",
+      "bytes": 16468,
+      "sha256": "4e2c31e0bddf596b2dbd93746255e6af0713861756e4a1ec5a0919f8e3db62c4"
+    },
+    "prior_intergroup_patch": {
+      "path": "out/lavapipe-intergroup-row-owner/prototype.patch",
+      "bytes": 18764,
+      "sha256": "574bf58ae14a8f625a2252fafa13948b531652dffd4d7e2289eb761555239704"
+    },
+    "IEEE32_prerequisite": {
+      "path": "out/lavapipe-acqrel-ordering/ieee32-prerequisite.patch",
+      "bytes": 5653,
+      "sha256": "87a8bdda3ab630fb2de5a62b13c98817d050c311b915cd49f825459f8b55cd7f"
+    }
+  },
+  "removed_rejected_None_policy": {
+    "patch": {
+      "path": "out/lavapipe-owner-machine-codegen/machine-codegen.patch",
+      "bytes": 6088,
+      "sha256": "b89c0b18c134625e571934f8a2bcf971525364c8b32cccf9db5bc71906c091e0"
+    },
+    "complete_11100_file_prior_basis_restored_before_new_edit": true
+  },
+  "modified_files": {
+    "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+      "basis": {
+        "bytes": 246649,
+        "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+        "bytes": 248491,
+        "sha256": "05ee0c984a00c3c2ea191d2016cb42416a2cb80ad554b322b3ce1cb1422bf202"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "basis": {
+        "bytes": 61281,
+        "sha256": "01abdf9445446e8bc5c742bd57e7cd6397513d3e0159d98074a52ff826a20dde"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_pipeline.c",
+        "bytes": 61170,
+        "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 116202,
+        "sha256": "b4426a9676935e9497d9e9aa0d7add011e265a377fef2a70eb86bbef51387caf"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c",
+        "bytes": 116202,
+        "sha256": "db0019c24627de70aef4172224b5bc898e90659e8a762f9850405927359d089c"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32357,
+        "sha256": "bd941272aff848f6a7e01d6fe24a97c755a17a97c8890052faa51c40ed2200a0"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_screen.c",
+        "bytes": 32366,
+        "sha256": "71ba795521fce96893a9237d115c9c964db8dee46ab9227193b2c8bff6c01d1e"
+      }
+    }
+  },
+  "prototype_patch": {
+    "bytes": 4423,
+    "sha256": "4243da4066d7486c197e921577299163cc601a55448be7f9a3b75f15d04ed79c"
+  },
+  "actual_intended_host": {
+    "matched_result": {
+      "path": "out/native-cooperative-transport-intergroup/matched-result.json",
+      "bytes": 4459,
+      "sha256": "7b01a743a5b7886bb2113683adf78046942a17967553dcabc385398a4f71b896"
+    },
+    "executable_sha256": "f958a60563b64c79d3f2fb6da2815bde0effdbbe49f121034cfd212ab17b27ff",
+    "new_host_or_shader_compile": false,
+    "modules": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+        "bytes": 87444,
+        "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+        "original_module": {
+          "bytes": 85832,
+          "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+        },
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "program_table_equal": true,
+        "original_control_barriers": 9,
+        "candidate_control_barriers": 10,
+        "scalar_algorithm_unchanged": true,
+        "actual_shared_variables_bytes": {
+          "%retainedStatus": 4,
+          "%originalTerms": 920,
+          "%retainedScratch": 9180,
+          "%retainedCoefficients": 500
+        },
+        "actual_shared_bytes": 10604,
+        "compiled_this_candidate": false
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "original_module": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+        },
+        "registers": 612,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "original_module": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+        },
+        "registers": 629,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      }
+    },
+    "policy_modules": [
+      "Endpoint",
+      "DopriPhase"
+    ],
+    "ordinary_module": "Transport",
+    "runtime_admission": false
+  },
+  "zero_extent": {
+    "Endpoint": {
+      "vectors": 3060,
+      "vector_bytes": 32,
+      "bytes": 97920
+    },
+    "DopriPhase": {
+      "vectors": 3145,
+      "vector_bytes": 32,
+      "bytes": 100640
+    }
+  },
+  "precondition": "Exact E/DP SPIR-V and existing structural/dispatch gates, LLVM21/MCJIT0/IEEE32, multiple-workgroup NIR option, one flat array of3060or3145 vectors of8xi32.",
+  "postcondition": "Identical complete bitwise-zero array before the original first use; same entry allocation, builder insertion point, extent/alignment and original dataflow. No omitted initialization or undefined payload assumption.",
+  "frame_conditions": [
+    "No shader/host/module/ABI/group/field/arithmetic/mode/count/admission/refusal/rollback change.",
+    "No shared/global optimization mutation; original LLVM pass pipeline and CodeGenDefault restored.",
+    "Ordinary key0 and both Transport hashes use original allocation+aggregate-null store.",
+    "Private UUID3 and disk namespace bulkzero-v3 isolate machine objects."
+  ],
+  "actual_code_gate": "Before C8 require selected actual optimized IR one complete memset for each E/DP scratch array with no expanded prologue-zero stores; compare remaining IR by a narrowly declared equivalent-clear normalization. Actual called Default machine bytes/clear lowering and ordinary T isolation/features/FP-state must be bound. Runtime benefit not predicted.",
+  "builds_or_workloads": 0,
+  "qualified": false
+}

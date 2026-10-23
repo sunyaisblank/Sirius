@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "prototype_patch": {
+    "bytes": 4423,
+    "sha256": "4243da4066d7486c197e921577299163cc601a55448be7f9a3b75f15d04ed79c"
+  },
+  "source_contract": {
+    "bytes": 7177,
+    "sha256": "dc365fb4a97960b453199eb62f2f3a3d56cd16b8ead8dcd18c0d3c4d856efa33"
+  },
+  "source_files": {
+    "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+      "bytes": 248491,
+      "sha256": "05ee0c984a00c3c2ea191d2016cb42416a2cb80ad554b322b3ce1cb1422bf202"
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "bytes": 32366,
+      "sha256": "71ba795521fce96893a9237d115c9c964db8dee46ab9227193b2c8bff6c01d1e"
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "bytes": 116202,
+      "sha256": "db0019c24627de70aef4172224b5bc898e90659e8a762f9850405927359d089c"
+    },
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "bytes": 61170,
+      "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+    }
+  },
+  "full_current_source_identity": {
+    "bytes": 1482565,
+    "sha256": "cd6216238681d3309e7a51b630e874ea2051cb45bffffa78fc4f0a195e5cc272"
+  },
+  "basis": {
+    "preserved_at_commit": "206ca0d4",
+    "archive": "attestations/qualification/263abe74/lavapipe-intergroup-row-owner-finite-outcome/diagnostics-and-trial.zip",
+    "bytes": 7890408,
+    "sha256": "9c42f070d9d82fc3a33cd4e0c6af4fc493a3f0e53e7dd8b85fd9343f1d5d9c44",
+    "member": "out/lavapipe-intergroup-row-owner/build/inputs-before.json",
+    "member_identity": {
+      "bytes": 4212662,
+      "sha256": "d53f7b1b74402d27e2640117a4d9a82b3cebe08b4d25d025c3cd9eb57c7507c8"
+    },
+    "source_files": 11100
+  },
+  "changed_files": [
+    "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+    "src/gallium/drivers/llvmpipe/lp_screen.c",
+    "src/gallium/frontends/lavapipe/lvp_device.c",
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c"
+  ],
+  "unchanged_remaining_files": 11096,
+  "rejected_None_policy_completely_removed": true,
+  "original_Default_machine_pipeline_and_IR_pass_calls_restored": true,
+  "reviewed_contract": "Exact two admitted compute variants and exact array shape only. Same entry allocation, original current-builder store point, all ABI bytes zero/nonvolatile, target-derived alignment. No lifetime/mask/field/math/ABI/fallback change. All other callers retain original aggregate-null initialization.",
+  "independent_source_review": "divide_contract_review reviewed source Hoare contract and concrete patch before build; actual optimizer retention/publication/runtime gates still required.",
+  "actual_code_gate": "Before C8 require selected actual optimized IR one complete memset for each E/DP scratch array with no expanded prologue-zero stores; compare remaining IR by a narrowly declared equivalent-clear normalization. Actual called Default machine bytes/clear lowering and ordinary T isolation/features/FP-state must be bound. Runtime benefit not predicted.",
+  "new_Sirius_CPP_or_shader_compilations": 0,
+  "runtime_or_benefit_admitted": false
+}
