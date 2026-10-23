@@ -1,0 +1,1037 @@
+{
+  "candidate_source": "337d0baee7361c83eb14f3beb319f30b0ba0c1f2",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "source_admission": {
+    "passed": true,
+    "prototype_patch": {
+      "bytes": 4423,
+      "sha256": "4243da4066d7486c197e921577299163cc601a55448be7f9a3b75f15d04ed79c"
+    },
+    "source_contract": {
+      "bytes": 7177,
+      "sha256": "dc365fb4a97960b453199eb62f2f3a3d56cd16b8ead8dcd18c0d3c4d856efa33"
+    },
+    "source_files": {
+      "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+        "bytes": 248491,
+        "sha256": "05ee0c984a00c3c2ea191d2016cb42416a2cb80ad554b322b3ce1cb1422bf202"
+      },
+      "src/gallium/drivers/llvmpipe/lp_screen.c": {
+        "bytes": 32366,
+        "sha256": "71ba795521fce96893a9237d115c9c964db8dee46ab9227193b2c8bff6c01d1e"
+      },
+      "src/gallium/frontends/lavapipe/lvp_device.c": {
+        "bytes": 116202,
+        "sha256": "db0019c24627de70aef4172224b5bc898e90659e8a762f9850405927359d089c"
+      },
+      "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+        "bytes": 61170,
+        "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+      }
+    },
+    "full_current_source_identity": {
+      "bytes": 1482565,
+      "sha256": "cd6216238681d3309e7a51b630e874ea2051cb45bffffa78fc4f0a195e5cc272"
+    },
+    "basis": {
+      "preserved_at_commit": "206ca0d4",
+      "archive": "attestations/qualification/263abe74/lavapipe-intergroup-row-owner-finite-outcome/diagnostics-and-trial.zip",
+      "bytes": 7890408,
+      "sha256": "9c42f070d9d82fc3a33cd4e0c6af4fc493a3f0e53e7dd8b85fd9343f1d5d9c44",
+      "member": "out/lavapipe-intergroup-row-owner/build/inputs-before.json",
+      "member_identity": {
+        "bytes": 4212662,
+        "sha256": "d53f7b1b74402d27e2640117a4d9a82b3cebe08b4d25d025c3cd9eb57c7507c8"
+      },
+      "source_files": 11100
+    },
+    "changed_files": [
+      "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+      "src/gallium/drivers/llvmpipe/lp_screen.c",
+      "src/gallium/frontends/lavapipe/lvp_device.c",
+      "src/gallium/frontends/lavapipe/lvp_pipeline.c"
+    ],
+    "unchanged_remaining_files": 11096,
+    "rejected_None_policy_completely_removed": true,
+    "original_Default_machine_pipeline_and_IR_pass_calls_restored": true,
+    "reviewed_contract": "Exact two admitted compute variants and exact array shape only. Same entry allocation, original current-builder store point, all ABI bytes zero/nonvolatile, target-derived alignment. No lifetime/mask/field/math/ABI/fallback change. All other callers retain original aggregate-null initialization.",
+    "independent_source_review": "divide_contract_review reviewed source Hoare contract and concrete patch before build; actual optimizer retention/publication/runtime gates still required.",
+    "actual_code_gate": "Before C8 require selected actual optimized IR one complete memset for each E/DP scratch array with no expanded prologue-zero stores; compare remaining IR by a narrowly declared equivalent-clear normalization. Actual called Default machine bytes/clear lowering and ordinary T isolation/features/FP-state must be bound. Runtime benefit not predicted.",
+    "new_Sirius_CPP_or_shader_compilations": 0,
+    "runtime_or_benefit_admitted": false
+  },
+  "actual_provider_build": {
+    "passed": true,
+    "library": "bin/linux-gcc/lavapipe-owner-bulk-zero/provider/libvulkan_lvp.so",
+    "library_identity": {
+      "bytes": 14773096,
+      "sha256": "1f2dc14c7371157b95f95e27322701d71959a8c0d8f9635e14a00111a92e6899"
+    },
+    "ICD": "bin/linux-gcc/lavapipe-owner-bulk-zero/provider/lvp_icd.json",
+    "ICD_identity": {
+      "bytes": 198,
+      "sha256": "fba24cecdc679bae37373b138b8bc025e03fd50f7131b1c89277d37c6e0f77e6"
+    },
+    "actual_build_tree_target": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+    "actual_build_tree_target_identity": {
+      "bytes": 14773096,
+      "sha256": "1f2dc14c7371157b95f95e27322701d71959a8c0d8f9635e14a00111a92e6899"
+    },
+    "reused_build_inputs_unchanged": 739,
+    "expected_mutable_build_outputs": [
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_context.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_gs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_pt_fetch_shade_pipeline_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_tess.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_vs_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_arit.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_arit_overflow.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_assert.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_bitarit.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_const.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_conv.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_coro.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_debug.cpp.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_flow.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_aos_array.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_float.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_s3tc.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_srgb.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_yuv.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_gather.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_init.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_init_common.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_intr.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_ir_common.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_jit_sample.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_jit_types.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_logic.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_misc.cpp.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_nir.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_nir_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_nir_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_pack.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_passmgr.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_printf.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_quad.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_sample.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_sample_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_sample_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_struct.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_swizzle.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi_action.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi_info.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_type.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_alpha.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_blend.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_blend_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_blend_logicop.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_depth.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_interp.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_clear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_context.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_draw_arrays.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_fence.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_flush.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_jit.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear_fastpath.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear_interp.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear_sampler.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_query.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_debug.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_linear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_linear_fallback.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_rect.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_tri.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_scene.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_scene_queue.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_screen.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_analysis.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_line.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_point.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_rect.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_tri.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_vbuf.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_blend.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_clip.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_cs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_derived.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_analysis.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_fastpath.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_linear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_linear_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_gs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_rasterizer.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_sampler.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_setup.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_so.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_surface.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_tess.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_vertex.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_vs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_surface.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_tex_sample.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_texture.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_texture_handle.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_acceleration_structure.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_cmd_buffer.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_descriptor_set.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_device.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_device_generated_commands.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_execute.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_formats.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_image.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_pipe_sync.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_pipeline.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_pipeline_cache.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_query.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_ray_tracing_pipeline.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_util.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_wsi.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_lower_exec_graph.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_lower_pipeline_layout.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_lower_ray_queries.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_opt_robustness.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_ray_tracing.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/git_sha1.h",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/loader/libloader.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/loader/libloader.a.p/loader.c.o"
+    ],
+    "new_Sirius_CPP_or_shader_compilations": 0,
+    "provider_builds": 1,
+    "global_installation_performed": false,
+    "provider_or_source_adopted": false,
+    "scope": "One incremental scoped bulk-zero provider build with original optimizing pipeline/configuration and sealed reused artifacts. Staged actual provider bytes are separate from mutable compiler workspace. Compilation is not numerical/performance/scientific/release qualification."
+  },
+  "actual_complete_code_review": {
+    "structural_premise_observed": true,
+    "rows": {
+      "Transport": {
+        "structural_premise_observed": true,
+        "complete_module": {
+          "words": 21861,
+          "bytes": 87444,
+          "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+          "actual_span_matches_frozen_input": true
+        },
+        "ordinary_Default_source_proof_reused": true,
+        "actual_current_provider_Transport_capture_performed": false,
+        "proof_archive": "attestations/qualification/33623035/lavapipe-owner-machine-codegen-finite-outcome/diagnostics-and-trial.zip",
+        "proof_archive_identity": {
+          "bytes": 6765847,
+          "sha256": "f72fe5f5f15f34a3c55d37998707cc1abeeb86402c3977a7f8ad6444a7498b8d"
+        },
+        "proof_member": "out/lavapipe-owner-machine-codegen/ordinary/ordinary-code-review.json",
+        "prior_actual_observation": {
+          "structural_premise_observed": true,
+          "machine_policy_isolation_observed": true,
+          "optimized_IR_unchanged": true,
+          "ordinary_code_source_proof_reused": "out/native-original-input-ownership/ordinary/ordinary-code-review.json",
+          "prior_proof_identity": {
+            "bytes": 3372,
+            "sha256": "1e8e55ef75c51e684545c8bab9d735cfbb036c61922114a6cfd5698a9e043a48"
+          },
+          "actual_complete_module": {
+            "words": 21861,
+            "bytes": 87444,
+            "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+            "actual_span_matches_frozen_input": true
+          },
+          "actual_capture_verification": {
+            "bytes": 3321,
+            "sha256": "b58a588b44e607889cccfddcd8275eb3781a0e5b30abab84caad6c1d9e20de20"
+          },
+          "actual_optimized_IR": {
+            "path": "out/lavapipe-owner-machine-codegen/ordinary/transport/optimized-05.ll",
+            "bytes": 4307332,
+            "sha256": "0ad867e2fee0f996955157fa4da4c01c49d1c47cedc786878b6d9522e65caa45"
+          },
+          "prior_optimized_IR": {
+            "path": "out/native-original-input-ownership/ordinary/transport/optimized-05.ll",
+            "bytes": 4307332,
+            "sha256": "0ad867e2fee0f996955157fa4da4c01c49d1c47cedc786878b6d9522e65caa45"
+          },
+          "actual_engine": 138083295020976,
+          "actual_module_generation": 5,
+          "initial_OptLevel": null,
+          "initial_Default_source_composed_only": true,
+          "post_IR_bridge_successes": 0,
+          "fast_allocator_factories_in_selected_engine_emission": 0,
+          "greedy_allocator_factories_in_selected_engine_emission": 1,
+          "actual_emission_envelopes": [
+            {
+              "id": 5,
+              "pc": 138083549949344,
+              "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+              "thread": 2,
+              "sequence": 27,
+              "engine": 138083295020976,
+              "module": 138083265679056,
+              "module_generation": 5,
+              "completed": true,
+              "return_sequence": 29
+            }
+          ],
+          "actual_allocator_factories": [
+            {
+              "pc": 138083522320880,
+              "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+              "thread": 2,
+              "sequence": 28,
+              "allocator": "greedy",
+              "emission_id": 5,
+              "engine": 138083295020976,
+              "module_generation": 5
+            }
+          ],
+          "actual_original_block_arguments": [
+            64,
+            1,
+            1
+          ],
+          "functions": [
+            {
+              "name": "cs_co_variant.resume",
+              "section": 3,
+              "offset": 10896,
+              "bytes": 311940,
+              "address": 138083584129680
+            },
+            {
+              "name": "cs_co_variant.destroy",
+              "section": 3,
+              "offset": 322848,
+              "bytes": 5,
+              "address": 138083584441632
+            },
+            {
+              "name": "cs_variant",
+              "section": 3,
+              "offset": 0,
+              "bytes": 314,
+              "address": 138083584118784
+            },
+            {
+              "name": "cs_co_variant",
+              "section": 3,
+              "offset": 320,
+              "bytes": 10561,
+              "address": 138083584119104
+            }
+          ],
+          "total_called_function_bytes": 322820,
+          "same_mask_group_address_IR_proof_reused": false,
+          "negative_ordinary_Default_witness": true,
+          "scope": "Original 4B guard exits before retained arithmetic. Exact prior optimized IR/source proof reused; new called machine bytes and allocator factory/engine provenance observed. No active multirow/numerical/benefit/frame claim."
+        },
+        "scope": "Historical cooperative T actual greedy/IR proof plus unchanged ordinary source/type-exclusion composition. Current E/DP provider captures do not retroactively make this a current-provider T code observation."
+      },
+      "Endpoint": {
+        "structural_premise_observed": true,
+        "complete_bulk_clear_observed": true,
+        "remaining_optimized_IR_equivalent": true,
+        "original_Default_machine_pipeline_observed": true,
+        "complete_module": {
+          "words": 24261,
+          "bytes": 97044,
+          "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_engine": 133795629615472,
+        "actual_initial_OptLevel": 2,
+        "actual_greedy_factories": [
+          {
+            "pc": 133795821656560,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 40,
+            "allocator": "greedy",
+            "emission_id": 5,
+            "engine": 133795629615472,
+            "module_generation": 5
+          }
+        ],
+        "actual_complete_clear": {
+          "pc": 133795900169856,
+          "library": "/lib/x86_64-linux-gnu/libc.so.6",
+          "thread": 34,
+          "sequence": 43,
+          "symbol": "memset",
+          "address": 133795900169856,
+          "destination": 133793323048640,
+          "bytes": 97920,
+          "caller_return_pc": 133795883045006,
+          "dispatch_id": 0,
+          "jit_file": "jit-10.elf",
+          "module_generation": 5,
+          "completed": true,
+          "complete_zero_bytes_observed": true,
+          "resulting_sha256": "b722c1ebe97b3a4088415837a11c7423fc405221eb9a6c9751ff0220f1696285",
+          "return_sequence": 44
+        },
+        "resolved_libc_binding": {
+          "symbol": "memset",
+          "address": 133795900169856,
+          "relocation_site": 133795883044980,
+          "relocation_kind": 1,
+          "addend": 0,
+          "library": "/lib/x86_64-linux-gnu/libc.so.6",
+          "jit_file": "jit-10.elf",
+          "module_generation": 5,
+          "functions": [
+            {
+              "name": "cs_variant",
+              "section": 6,
+              "offset": 0,
+              "bytes": 558029,
+              "address": 133795883044864
+            }
+          ]
+        },
+        "libc": {
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        "remaining_IR_normalized_sha256": "2ab99884f116b89535facc0f5df6d63f7408374ed42750ab45821c1ab1d5589a",
+        "IR_equivalence_rule": "One contiguous exact 32-byte-stride full-zero GEP/store span -> one exact complete nonvolatile scratch memset at same position; comments/empty lines and attribute-group numeric labels only. After separately declared verified Boolean-mask identities and one confined SSA bijection, remaining identifiers, operations, constants, flags, types and control flow exact.",
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 558029,
+            "address": 133795883044864
+          }
+        ],
+        "total_called_function_bytes": 558029,
+        "capture_verification_identity": {
+          "bytes": 3327,
+          "sha256": "4f7e58483665f867cc9c182d81521baacbc4a7f3d68e2231c00b8cca337725a0"
+        }
+      },
+      "DopriPhase": {
+        "structural_premise_observed": true,
+        "complete_bulk_clear_observed": true,
+        "remaining_optimized_IR_equivalent": true,
+        "original_Default_machine_pipeline_observed": true,
+        "complete_module": {
+          "words": 14877,
+          "bytes": 59508,
+          "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_engine": 139989362213104,
+        "actual_initial_OptLevel": 2,
+        "actual_greedy_factories": [
+          {
+            "pc": 139989588122096,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 40,
+            "allocator": "greedy",
+            "emission_id": 5,
+            "engine": 139989362213104,
+            "module_generation": 5
+          }
+        ],
+        "actual_complete_clear": {
+          "pc": 139989666635392,
+          "library": "/lib/x86_64-linux-gnu/libc.so.6",
+          "thread": 28,
+          "sequence": 43,
+          "symbol": "memset",
+          "address": 139989666635392,
+          "destination": 139987479585824,
+          "bytes": 100640,
+          "caller_return_pc": 139989667303569,
+          "dispatch_id": 0,
+          "jit_file": "jit-10.elf",
+          "module_generation": 5,
+          "completed": true,
+          "complete_zero_bytes_observed": true,
+          "resulting_sha256": "0e1dee6597922bf375451b62a8540c3e89bc5097f0ff01bc6c1bb1900e5aade2",
+          "return_sequence": 44
+        },
+        "resolved_libc_binding": {
+          "symbol": "memset",
+          "address": 139989666635392,
+          "relocation_site": 139989667303540,
+          "relocation_kind": 1,
+          "addend": 0,
+          "library": "/lib/x86_64-linux-gnu/libc.so.6",
+          "jit_file": "jit-10.elf",
+          "module_generation": 5,
+          "functions": [
+            {
+              "name": "cs_variant",
+              "section": 6,
+              "offset": 0,
+              "bytes": 104355,
+              "address": 139989667303424
+            }
+          ]
+        },
+        "libc": {
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+        },
+        "remaining_IR_normalized_sha256": "a9be73b87d96f6d3f89bea4085afdb7f01e2688a1cfef7f317643dc478de386c",
+        "IR_equivalence_rule": "One contiguous exact 32-byte-stride full-zero GEP/store span -> one exact complete nonvolatile scratch memset at same position; comments/empty lines and attribute-group numeric labels only. After separately declared verified Boolean-mask identities and one confined SSA bijection, remaining identifiers, operations, constants, flags, types and control flow exact.",
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 104355,
+            "address": 139989667303424
+          }
+        ],
+        "total_called_function_bytes": 104355,
+        "capture_verification_identity": {
+          "bytes": 3327,
+          "sha256": "8711daaeb4b86665af5cbb5dcf8dac2d5795b1ba0076d401104e9fb78be1a018"
+        }
+      }
+    },
+    "Boolean_mask_equivalence_review": [
+      {
+        "candidate": true,
+        "vectors": 3060,
+        "simple_selects_canonicalized": 0,
+        "mask_full_definition_verified": true,
+        "exact_local_reassociation_blocks_verified": false,
+        "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+      },
+      {
+        "candidate": false,
+        "vectors": 3060,
+        "simple_selects_canonicalized": 16,
+        "mask_full_definition_verified": true,
+        "exact_local_reassociation_blocks_verified": true,
+        "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+      },
+      {
+        "candidate": true,
+        "vectors": 3145,
+        "simple_selects_canonicalized": 0,
+        "mask_full_definition_verified": true,
+        "exact_local_reassociation_blocks_verified": false,
+        "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+      },
+      {
+        "candidate": false,
+        "vectors": 3145,
+        "simple_selects_canonicalized": 27,
+        "mask_full_definition_verified": true,
+        "exact_local_reassociation_blocks_verified": true,
+        "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+      }
+    ],
+    "complete_bulk_clear_observed": true,
+    "remaining_optimized_IR_equivalent": true,
+    "original_Default_machine_pipeline_observed": true,
+    "actual_provider": {
+      "path": "bin/linux-gcc/lavapipe-owner-bulk-zero/provider/libvulkan_lvp.so",
+      "bytes": 14773096,
+      "sha256": "1f2dc14c7371157b95f95e27322701d71959a8c0d8f9635e14a00111a92e6899"
+    },
+    "scope": "Two 4B guard/canary E/DP captures. All scratch zeros retained and observed; no retained arithmetic acceptance, benefit, active-eight-row/frame/scientific/release claim. T proof explicitly reused, no new T capture."
+  },
+  "actual_new_builds": {
+    "provider_builds": 1,
+    "Sirius_CPP_compilations": 0,
+    "shader_compilations": 0,
+    "probe_compilations": 0,
+    "frame_links": 1
+  },
+  "actual_mixed_host_ELF_reused": "f958a60563b64c79d3f2fb6da2815bde0effdbbe49f121034cfd212ab17b27ff",
+  "original_controls": {
+    "1": {
+      "passed": true,
+      "wall_seconds": 59.32658213900868,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3422176
+    },
+    "2": {
+      "passed": true,
+      "wall_seconds": 43.615363652003,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 1464136
+    },
+    "3": {
+      "passed": true,
+      "wall_seconds": 69.24220592295751,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3641008
+    },
+    "4": {
+      "passed": true,
+      "wall_seconds": 74.43891219701618,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3606992
+    },
+    "5": {
+      "passed": true,
+      "wall_seconds": 93.31911579007283,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3417700
+    },
+    "6": {
+      "passed": true,
+      "wall_seconds": 95.12158081494272,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 3534792
+    },
+    "7": {
+      "passed": true,
+      "wall_seconds": 21.60260359197855,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 1077568
+    },
+    "8": {
+      "passed": true,
+      "wall_seconds": 21.165241151000373,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 987216
+    }
+  },
+  "benefit_attempted": true,
+  "benefit_checks_passed": 22,
+  "all22_original_benefit_gates_pass": true,
+  "independent_Decimal_agrees": true,
+  "failed_checks": [],
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": 40.08930463567754
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": 27.641855881023492
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": 43.89196721047853
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": 23.78744094224887
+    }
+  ],
+  "sole_ABBA": {
+    "attempted": true,
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "all8_original_controls_admitted": true,
+  "cold_frame": {
+    "passed": false,
+    "wall_seconds": 300.23500310606323,
+    "stop_reason": "diagnostic_timeout",
+    "child_exit": -15,
+    "peak_sampled_rss_kib": 1195736,
+    "attempted": true,
+    "owner_passed": false,
+    "accepted": false,
+    "XML_present": false,
+    "disposition_identity": {
+      "bytes": 17526,
+      "sha256": "4fcb3e6121c8d6fea0c588074e96b63b63ce13bc62821b91f6754890d7cb2a9c"
+    },
+    "disposition": {
+      "schema": "sirius-original-cold-frame-disposition-v1",
+      "attempted": true,
+      "accepted": false,
+      "audit_completed": true,
+      "failures": [
+        "ValueError: owned original frame did not pass its limits"
+      ],
+      "scope": "One original software Vulkan 128x128 one-SPP Kerr frame; no full science/Mandatory/release claim.",
+      "limits_meaning": "4GiB sampled controller+owned-session RSS and 2GiB host reserve; not Vulkan residency or a GPU budget.",
+      "output_assertions": "Original completed zero-FESD GTest checks rc0/existence/>1024 bytes and deletes PPM; no new image/golden check.",
+      "source": "337d0baee7361c83eb14f3beb319f30b0ba0c1f2",
+      "stop_reason": "diagnostic_timeout",
+      "child_exit": -15,
+      "wall_seconds": 300.23500310606323,
+      "peak_sampled_rss_kib": 1195736,
+      "minimum_sampled_available_kib": 18598748,
+      "provider": {
+        "library": "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-owner-bulk-zero/provider/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 14773096,
+          "sha256": "1f2dc14c7371157b95f95e27322701d71959a8c0d8f9635e14a00111a92e6899"
+        },
+        "ICD": "/home/astra/.project/Sirius/bin/linux-gcc/lavapipe-owner-bulk-zero/provider/lvp_icd.json",
+        "mapped_owned_births": [
+          [
+            84028,
+            "58142415"
+          ]
+        ],
+        "environment_scope": "Guard-declared inherited launch environment; no invented live-child environment readback."
+      },
+      "host_authority": {
+        "executable": "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/sirius_render_tests",
+        "identity": {
+          "bytes": 12469552,
+          "sha256": "d7886702705718ea1ea13608a01183b4c61e7344ffbad949fc24671195e1b92d"
+        },
+        "test_object": "bin/linux-gcc/tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o",
+        "compile_command": {
+          "directory": "/home/astra/.project/Sirius/bin/linux-gcc",
+          "command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_INTERACTIVE_VIEWER=1 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -DSIRIUS_TEST_HAS_KERNELS=1 -DSIRIUS_TEST_REQUIRE_VULKAN_RUNTIME=1 -DSIRIUS_VERSION=\\\"2.0.0\\\" -I/home/astra/.project/Sirius/tests -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/lib/glad/include -I/home/astra/.project/Sirius/bin/linux-gcc/_deps/json-src/include -I/home/astra/.project/Sirius/lib/glfw/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/ftxui-src/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/include -isystem /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest -O3 -DNDEBUG -include/home/astra/.project/Sirius/tests/support/fail_on_skip.h -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o -c /home/astra/.project/Sirius/tests/render/app_render_execution_test.cpp",
+          "file": "/home/astra/.project/Sirius/tests/render/app_render_execution_test.cpp",
+          "output": "tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o"
+        },
+        "link_recipe": {
+          "bytes": 8442,
+          "sha256": "8d6f321469a75008fb5bf7a5cb65b62a205c6277c4a7bc3ab9eaa7f76bf2b95a"
+        },
+        "link_owner": {
+          "bytes": 2224,
+          "sha256": "14fc004dddf9171a32bd9530dfe26f6e0358bf365954f9901d313de0927dd3b4"
+        },
+        "scope": "Current compile-command/source composition plus actual frozen reused object and link recipe; no new C++ compile or exhaustive historical tool-beforepin claim."
+      },
+      "last_progress": [
+        2827,
+        16384
+      ],
+      "last_complete_snapshot": "2737 work tiles of 1px, 2279 camera batches, 548942 accepted intervals, 7425 rejected intervals, 2801 phase initializations, 553629 phase reuses, 0 batch subdivisions, 0 safety reductions, 3.67731s coalescing, 258.475s batch execution, 9.14088s summed worker acceleration",
+      "scene": {
+        "schema": "sirius-render-scene-v1",
+        "backend": "Vulkan",
+        "metric": "Kerr",
+        "spin": 0,
+        "width": 128,
+        "height": 128,
+        "samples_per_pixel": 1,
+        "field_of_view": 60,
+        "disk_enabled": true,
+        "ray_bundles": false,
+        "point_starfield": false,
+        "point_star_count": 0,
+        "point_brightness_scale": 100,
+        "point_seed": 42,
+        "point_min_distance_pc": 1,
+        "point_max_distance_pc": 10000,
+        "camera_beta": [
+          0,
+          0,
+          0
+        ],
+        "lens": "Pinhole",
+        "focal_length": 50,
+        "aperture": 2.799999952316284,
+        "focus_distance": 50
+      },
+      "XML_present": false,
+      "render_complete_marker": false,
+      "completed_render_evidence_present": false,
+      "inputs_read": {
+        "out/lavapipe-owner-bulk-zero/cold-frame/actions.json": {
+          "bytes": 16561,
+          "sha256": "0e898652af1346fe012cdd5a9cd189af87d20a75c2e66993c425c16c57dc8fdc"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/frame/owner.json": {
+          "bytes": 3691,
+          "sha256": "f58c52c30c935fa8f98275034922834d3e80fdbbb1fe86af1815e8160ef82c1b"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/frame/inputs-before.json": {
+          "bytes": 290037,
+          "sha256": "54bd368f48d286971c2c57da32846c90c737eac99f1f116620f240dac36ea7d0"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/frame/inputs-after.json": {
+          "bytes": 290037,
+          "sha256": "54bd368f48d286971c2c57da32846c90c737eac99f1f116620f240dac36ea7d0"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/read_frame.py": {
+          "bytes": 18745,
+          "sha256": "b4988afed5e2d83953001bd18e63dbce1854dda329d4dfd48b5ce9bd81336c83"
+        },
+        "out/lavapipe-owner-bulk-zero/providers.json": {
+          "bytes": 1945,
+          "sha256": "54755941178e735ce68b90505458de4ecdc23a8da9058eae67f922f82917f759"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/provider/libvulkan_lvp.so": {
+          "bytes": 14773096,
+          "sha256": "1f2dc14c7371157b95f95e27322701d71959a8c0d8f9635e14a00111a92e6899"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/provider/lvp_icd.json": {
+          "bytes": 198,
+          "sha256": "fba24cecdc679bae37373b138b8bc025e03fd50f7131b1c89277d37c6e0f77e6"
+        },
+        "out/lavapipe-owner-bulk-zero/readers/controls-1-8-acceptance.json": {
+          "bytes": 61561,
+          "sha256": "ae8c0b45e549cb9842d29a434e1ecd07ec1fcd42083b6a5b2a373f36a36e41f0"
+        },
+        "out/lavapipe-owner-bulk-zero/readers/control-8-acceptance.json": {
+          "bytes": 52923,
+          "sha256": "b8b90f19f70040dca155f868d8a827547a1fe4d774a53e811b5f16f135bc3bba"
+        },
+        "out/lavapipe-owner-bulk-zero/readers/benefit.json": {
+          "bytes": 234560,
+          "sha256": "cb5c262786ce32413f1b75bcf733b214e6dcaa6ac8ac16d7d9b1f106f399554e"
+        },
+        "out/lavapipe-owner-bulk-zero/readers/decimal-agreement.json": {
+          "bytes": 7963,
+          "sha256": "b2dc7ce9f144005908cc8d9ab815bbd8e55352f6f474bf9d9311fdf40b1cb92d"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/link-recipe.json": {
+          "bytes": 8442,
+          "sha256": "8d6f321469a75008fb5bf7a5cb65b62a205c6277c4a7bc3ab9eaa7f76bf2b95a"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/build-result.json": {
+          "bytes": 5394,
+          "sha256": "45082bd78c3e14c728def58169bef6705df44912bb04effd354e2e7583713839"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/build/owner.json": {
+          "bytes": 2224,
+          "sha256": "14fc004dddf9171a32bd9530dfe26f6e0358bf365954f9901d313de0927dd3b4"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/build/inputs-before.json": {
+          "bytes": 283918,
+          "sha256": "ae4195404fef7a99d6cdf40e53b9bcf874d0594514d93cf0d27b53f0cd6414e8"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/build/inputs-after.json": {
+          "bytes": 283918,
+          "sha256": "ae4195404fef7a99d6cdf40e53b9bcf874d0594514d93cf0d27b53f0cd6414e8"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/sirius_render_tests": {
+          "bytes": 12469552,
+          "sha256": "d7886702705718ea1ea13608a01183b4c61e7344ffbad949fc24671195e1b92d"
+        },
+        "bin/linux-gcc/tests/render/CMakeFiles/sirius_render_tests.dir/app_render_execution_test.cpp.o": {
+          "bytes": 773208,
+          "sha256": "2f9345a83398c3100ddf0b2d1b89f8b442252727d81de4b4e9fef6a992d4cb5a"
+        },
+        "bin/linux-gcc/native-cooperative-transport-intergroup/matched/libsirius_backend.a": {
+          "bytes": 6872972,
+          "sha256": "27480158208f58b74985f36ab11b6690d2699a21e89d1aae359b0a38bf3f0ccb"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/coupled_probe_fp64.spv": {
+          "bytes": 878700,
+          "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/infinity_probe_fp64.spv": {
+          "bytes": 100568,
+          "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/camera_frame_probe_fp64.spv": {
+          "bytes": 37728,
+          "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/parity_probe.spv": {
+          "bytes": 3377936,
+          "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/infinity_probe.spv": {
+          "bytes": 99692,
+          "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/camera_frame_probe.spv": {
+          "bytes": 36660,
+          "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/parity_probe_fp32comp.spv": {
+          "bytes": 3382160,
+          "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/camera_frame_probe_fp32comp.spv": {
+          "bytes": 36660,
+          "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/infinity_probe_fp32comp.spv": {
+          "bytes": 100040,
+          "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/parity_probe_fp64.spv": {
+          "bytes": 3427652,
+          "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/metric_consistency_probe_fp64.spv": {
+          "bytes": 66064,
+          "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+          "bytes": 65616,
+          "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/trace_fp32comp.spv": {
+          "bytes": 2328852,
+          "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/metric_consistency_probe.spv": {
+          "bytes": 65616,
+          "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/trace.spv": {
+          "bytes": 2325528,
+          "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/trace_fp64.spv": {
+          "bytes": 2336860,
+          "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/smoke.spv": {
+          "bytes": 1404,
+          "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/assets/Starfield.png": {
+          "bytes": 29984397,
+          "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/model/operating_model.json": {
+          "bytes": 130827,
+          "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/model/alignment_receipt.json": {
+          "bytes": 1240,
+          "sha256": "01c368b5143ebf70bac15d8a1133f22d7087672876149724a08e19c55e191d1f"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/shaders/RDSD004A.frag": {
+          "bytes": 2386,
+          "sha256": "58f4438f27fcb647f86ce9fbb8e875e6bee0fbea20768ee6e289e952da0b51ec"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/shaders/RDSD004A.vert": {
+          "bytes": 198,
+          "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/shaders/RDSD003A.frag": {
+          "bytes": 1167,
+          "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/shaders/RDSD005A.vert": {
+          "bytes": 577,
+          "sha256": "08467d1bc78904fe7512245db7e2912caf132d5de250955b0719f4f51c94a039"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/shaders/RDSD005A.frag": {
+          "bytes": 3799,
+          "sha256": "bee2ff8435f1d25ce111d6da0623975acf74205511ebce81df011d61d1ab0536"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/shaders/RDSD003A.vert": {
+          "bytes": 198,
+          "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/portability/trace.metal": {
+          "bytes": 358529,
+          "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/kernels/portability/trace.cu": {
+          "bytes": 336030,
+          "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/tests/backend/portable_binary32_reference.bin": {
+          "bytes": 4182444,
+          "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv": {
+          "bytes": 35160,
+          "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/tests/backend/retained_camera/program_fixture.h": {
+          "bytes": 416303,
+          "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+        },
+        "bin/linux-gcc/lavapipe-owner-bulk-zero/frame/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv": {
+          "bytes": 35196,
+          "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+        },
+        "bin/linux-gcc/compile_commands.json": {
+          "bytes": 212248,
+          "sha256": "8753a21abcd11a755d73df7797c91e260193b99b36450072c0fe79eea2d8cf5e"
+        },
+        "tests/render/app_render_execution_test.cpp": {
+          "bytes": 22037,
+          "sha256": "ff65fbb09fcddca268c086ae9df13f72238eecfce70dc89dd69cc231a595399e"
+        },
+        "tests/support/fail_on_skip.h": {
+          "bytes": 427,
+          "sha256": "261d95414a99bc84eb598f8fe5672109cec8597dd1e59194595e11d6b9fb719e"
+        },
+        "src/sirius/render/vulkan_renderer.cpp": {
+          "bytes": 75307,
+          "sha256": "1a558b29974f27b9cd2f6a5d7dc484322a1b6462808ac6ab85a0bfe55588dac0"
+        },
+        "src/sirius/render/render_evidence.cpp": {
+          "bytes": 11699,
+          "sha256": "50f8dfaffc28ad8d70bf1c84cb282e65f25f8a4e11700c18d4ed7271fca6806c"
+        },
+        "src/sirius/render/dispatch_governor.h": {
+          "bytes": 7908,
+          "sha256": "3f938d19476017e45722a71a8aaea81e491bd042a569dc4e49db1daaa94ac90a"
+        },
+        "src/sirius/render/memory_governor.h": {
+          "bytes": 3829,
+          "sha256": "9642ae2ebeda66d3fe68f75e9ad3ca2d824b9de6767c7a3f2af762155584a516"
+        },
+        "src/sirius/render/session/render_session.cpp": {
+          "bytes": 53666,
+          "sha256": "75fb4ac58f2e0ddb89a5f4053ed5372af2753f8592f0fa7eb76e15522530af1e"
+        },
+        "src/sirius/app/cli/render_command.cpp": {
+          "bytes": 30565,
+          "sha256": "b53c3a4493a96559436ed4476c5934e69559b084fb96d7444d451a46ef943fab"
+        },
+        "tests/operational/vulkan_runtime_profile.cmake": {
+          "bytes": 990,
+          "sha256": "e39e8aee8f82b4f1934a42542cd5b743822bed02f6ed15e1a3eaa6185bc0f8ea"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/frame/stdout.log": {
+          "bytes": 511250,
+          "sha256": "761c71b3483dbddb66f84f9c82a482de1143367c5ebd9fb9d2f44ead933f10e0"
+        },
+        "out/lavapipe-owner-bulk-zero/cold-frame/frame/stderr.log": {
+          "bytes": 66300,
+          "sha256": "076d4eb1f3a4b4de0c10f7fb85afa0abacc0983362297dd8f041101602cafc4d"
+        },
+        "out/native-original-input-ownership/cold-frame/result.json": {
+          "bytes": 4050,
+          "sha256": "20305a987d73826d1b97de9d9699bd37e958b8c2e0e760b75c6ad3a62f0ceaa6"
+        }
+      },
+      "accepted_requires": "Owned clean completion, original8/22+Decimal, actual provider/host/resource/source joins, original scene, exact positive XML and completed governed render evidence.",
+      "limits": {
+        "seconds": 300,
+        "rss_kib": 4194304,
+        "reserve_kib": 2097152
+      },
+      "no_raw_framebuffer_or_full_science_claim": true
+    }
+  },
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite evidence only. Exact bulk scratch initialization is only a source contract until emitted retention, resolved publication, full numerical and original benefit gates pass. Original Default machine optimization is retained. Full science, July image identity, original cold frame, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain independent obligations."
+}
