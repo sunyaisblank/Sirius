@@ -1,0 +1,66 @@
+{
+  "admitted_domains": [
+    "macos-native-build",
+    "windows-native-build"
+  ],
+  "alignment_mode": "qualification",
+  "method": "revision-bound-attestation-set",
+  "operating_model": {
+    "external_domains": [
+      "macos-moltenvk",
+      "macos-native-build",
+      "physical-imax-5616x4096",
+      "physical-radeon-780m",
+      "viewer-native-window-input",
+      "windows-native-build",
+      "windows-native-vulkan",
+      "wsl2-dozen"
+    ],
+    "schema_version": 3,
+    "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+  },
+  "pending_domains": [
+    "macos-moltenvk",
+    "physical-imax-5616x4096",
+    "physical-radeon-780m",
+    "viewer-native-window-input",
+    "windows-native-vulkan",
+    "wsl2-dozen"
+  ],
+  "records": [
+    {
+      "completed_utc": "2026-10-23T04:53:38.168979+00:00",
+      "domains": [
+        "macos-native-build"
+      ],
+      "sha256": "d883808fc5ebb90e4277d8f6286cc2bf3bed0b0427ba521f4688240437bcfba7",
+      "source_revision": "0109ab462edade524667d20303507aa09adcbaf6"
+    },
+    {
+      "completed_utc": "2026-10-23T05:01:22.142960+00:00",
+      "domains": [
+        "windows-native-build"
+      ],
+      "sha256": "93db452cb8edb5a8eabbc044ff74bc45331c40f1ec1fb9af9eb69a76a98055dd",
+      "source_revision": "0109ab462edade524667d20303507aa09adcbaf6"
+    }
+  ],
+  "required_domains": [
+    "macos-moltenvk",
+    "macos-native-build",
+    "physical-imax-5616x4096",
+    "physical-radeon-780m",
+    "viewer-native-window-input",
+    "windows-native-build",
+    "windows-native-vulkan",
+    "wsl2-dozen"
+  ],
+  "schema_version": 1,
+  "source_revision": "0109ab462edade524667d20303507aa09adcbaf6",
+  "source_tree_clean": true,
+  "ultimate_ideal": {
+    "required": true,
+    "satisfied": false,
+    "state": "attestation_required"
+  }
+}

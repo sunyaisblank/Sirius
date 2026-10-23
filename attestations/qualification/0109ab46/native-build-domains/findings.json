@@ -1,0 +1,183 @@
+{
+  "source_revision": "0109ab462edade524667d20303507aa09adcbaf6",
+  "scope": "Exactly the Windows and macOS native-build external domains; original producer/verifier gates and counts.",
+  "workflow_run": 39902150418,
+  "url": "https://github.com/sunyaisblank/Sirius/actions/runs/39902150418",
+  "workflow_conclusion": "success",
+  "three_strict_integration_jobs": "all success; complete source/product/test compilation and original non-render authority controls",
+  "unexecuted_jobs": [
+    {
+      "name": "windows-build",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "macos-build",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "linux-sanitizers",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "macos-retained-diagnostic",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "linux-gate",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "build_domains": {
+    "macos": {
+      "gate_source": {
+        "clean": true,
+        "revision": "0109ab462edade524667d20303507aa09adcbaf6"
+      },
+      "ctest": {
+        "errors": 0,
+        "executed": 9,
+        "failures": 0,
+        "inventory_sha256": "ec3c2d5c00241dfcf59c7671432ecc18b58a56b8ef4d91387e90529c534e46cf",
+        "junit": {
+          "bytes": 5163,
+          "path": "generated/sirius/native_build_gate_junit.xml",
+          "root": "build",
+          "sha256": "aebb120e6f2304ce641ec8daa7dcee0d63ab619acb4649a7c3ae3cb6319dea24"
+        },
+        "log": {
+          "bytes": 2923,
+          "path": "generated/sirius/native_build_gate_ctest.log",
+          "root": "build",
+          "sha256": "21ff3d4f56d895dcf99e7192198cb33de7daaff502434801107610b9d8c92f2c"
+        },
+        "registered": 1152,
+        "selected": 9,
+        "selection": [
+          "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+          "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+          "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+          "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+          "OperationalAttestation.FalseExternalEvidenceIsRejected",
+          "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+          "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+        ],
+        "skipped": 0
+      },
+      "tested_artifact_roles": [
+        "sirius",
+        "sirius_app_tests",
+        "sirius_backend_tests",
+        "sirius_base_tests",
+        "sirius_core_tests",
+        "sirius_oracle_tests",
+        "sirius_render_tests"
+      ],
+      "nine_product_roles": [
+        "alignment_receipt",
+        "operating_model",
+        "sirius",
+        "starfield",
+        "trace_fp32comp_spv",
+        "trace_fp64_spv",
+        "trace_spv",
+        "viewer_rdsd003a_fragment",
+        "viewer_rdsd003a_vertex"
+      ],
+      "actual_gate_identity": {
+        "bytes": 9650,
+        "sha256": "5b590bad9da5efb81ddbc6a5f818a1ab005042d0578aca12177dfa7691cceb17"
+      }
+    },
+    "windows": {
+      "gate_source": {
+        "clean": true,
+        "revision": "0109ab462edade524667d20303507aa09adcbaf6"
+      },
+      "ctest": {
+        "errors": 0,
+        "executed": 9,
+        "failures": 0,
+        "inventory_sha256": "1f928b523896e77b14f1c7d41892fe0d9dec5ec4f9efdf061d647cb3a9c9f60c",
+        "junit": {
+          "bytes": 5243,
+          "path": "generated/sirius/native_build_gate_junit.xml",
+          "root": "build",
+          "sha256": "5eef899e5c42847d5b10bba8db33d8abeaa11570c755c2a63aa944f970d11d99"
+        },
+        "log": {
+          "bytes": 2931,
+          "path": "generated/sirius/native_build_gate_ctest.log",
+          "root": "build",
+          "sha256": "938fb20f8e9ede82d09319766342b593c5cd3dd7b87216d4e9f3c15e70981f7c"
+        },
+        "registered": 1152,
+        "selected": 9,
+        "selection": [
+          "AlignmentAuthority.CompiledReceiptMatchesTheStagedRuntimeAuthority",
+          "BuildGateAuthority.ReleaseReceiptBindsEveryInstalledProductAtInitialisation",
+          "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+          "OperationalAlignment.InstalledReceiptTamperingBlocksReadiness",
+          "OperationalAttestation.FalseExternalEvidenceIsRejected",
+          "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+          "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims"
+        ],
+        "skipped": 0
+      },
+      "tested_artifact_roles": [
+        "sirius",
+        "sirius_app_tests",
+        "sirius_backend_tests",
+        "sirius_base_tests",
+        "sirius_core_tests",
+        "sirius_oracle_tests",
+        "sirius_render_tests"
+      ],
+      "nine_product_roles": [
+        "alignment_receipt",
+        "operating_model",
+        "sirius",
+        "starfield",
+        "trace_fp32comp_spv",
+        "trace_fp64_spv",
+        "trace_spv",
+        "viewer_rdsd003a_fragment",
+        "viewer_rdsd003a_vertex"
+      ],
+      "actual_gate_identity": {
+        "bytes": 10012,
+        "sha256": "12c130220db8cb9bef9ad31caae93e77929ac896c2aea74e8fab227aaa0e8578"
+      }
+    }
+  },
+  "source_verification": "Original standalone verifier passed each record, then original alignment verifier admitted both against the exact clean public Git revision and its independently selected model; same checkout, no clone/worktree. See actual context, logs and deterministic receipt.",
+  "admitted_domains": [
+    "macos-native-build",
+    "windows-native-build"
+  ],
+  "pending_domains": [
+    "macos-moltenvk",
+    "physical-imax-5616x4096",
+    "physical-radeon-780m",
+    "viewer-native-window-input",
+    "windows-native-vulkan",
+    "wsl2-dozen"
+  ],
+  "readiness": false,
+  "limits": [
+    "No complete Mandatory execution, renderer, physical GPU, viewer/window input, scientific estate, installed-release or main qualification claimed.",
+    "1152 is live registered count; only the nine original non-render native-build authority cases are executed by each native-build gate.",
+    "Four complete runtime/sanitizer qualification jobs and the separate macOS diagnostic were skipped, not passed.",
+    "The new qualification receipt is a separately verified result; existing locally compiled executable receipts are unchanged.",
+    "Source-only publication on the investigation branch does not admit these records for that different Git revision."
+  ],
+  "actual_artifact_metadata": "GitHub artifact ids/byte counts/SHA256 digests and native run/source identity are retained in verification-and-metadata.zip; both downloaded native artifact ZIPs match that metadata exactly."
+}

@@ -1,0 +1,49 @@
+{
+  "source": {
+    "revision": "0109ab462edade524667d20303507aa09adcbaf6",
+    "clean": true
+  },
+  "macos_verify_argv": [
+    "python3",
+    "-B",
+    "scripts/verify-attestation.py",
+    "/home/astra/.project/Sirius/out/native-build-domains-0109ab46/macos-native-attestation/macos-build.json",
+    "--source-root",
+    "/home/astra/.project/Sirius"
+  ],
+  "macos_verify_exit": 0,
+  "same_workspace_no_clone": true,
+  "windows_verify_argv": [
+    "python3",
+    "-B",
+    "scripts/verify-attestation.py",
+    "/home/astra/.project/Sirius/out/native-build-domains-0109ab46/windows-native-attestation/windows-build.json",
+    "--source-root",
+    "/home/astra/.project/Sirius"
+  ],
+  "windows_verify_exit": 0,
+  "alignment_argv": [
+    "python3",
+    "-B",
+    "scripts/verify-alignment.py",
+    "--mode",
+    "qualification",
+    "--source-revision",
+    "0109ab462edade524667d20303507aa09adcbaf6",
+    "--source-tree-clean",
+    "true",
+    "--source-root",
+    "/home/astra/.project/Sirius",
+    "--operating-model",
+    "tests/operating_model.json",
+    "--attestation-root",
+    "/home/astra/.project/Sirius/out/native-build-domains-0109ab46",
+    "--output",
+    "/home/astra/.project/Sirius/out/native-build-domains-0109ab46/alignment-receipt.json"
+  ],
+  "alignment_exit": 0,
+  "source_after": {
+    "revision": "0109ab462edade524667d20303507aa09adcbaf6",
+    "clean": true
+  }
+}
