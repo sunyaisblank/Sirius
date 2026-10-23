@@ -1,0 +1,164 @@
+{
+  "checkpoint_source": "536ac0506e9abc87101eeaa04dc99fa2853ff394",
+  "ultimate_goal_complete": false,
+  "session_boundary": "User requested bounded session close; no further trials launched.",
+  "completed": [
+    "All3 original shader CPU sources generated/reused with4 native32 primitive lowerings",
+    "All3 strict typed C++26 objects compiled, baseline x86-64 ISA, no FMA observed in native code",
+    "Exact completeSPV/canonical-table and conservative Vulkan descriptor/packet bridge, independently reviewed",
+    "Private provider configured/built once;64 native functions matched actual linked opcodes modulo declared relocations",
+    "Original4B negative-fallback captures pass forT/E/DP, beforewrites/canary/realordinaryJIT/FPstate verified"
+  ],
+  "owned_cases": [
+    {
+      "case": "out/native-cpu-slang-bridge/build/batch-source",
+      "source": {
+        "revision": "3ff1dff5b94bdbfa480db84d9896a67aba150143",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 2069,
+        "sha256": "fa25da75fa65856ebe1ddfcc65f156af15081003e7f4ab689158094cbb4bedc3"
+      },
+      "wall_seconds": 1.043869948014617,
+      "observed_retired_births": 3
+    },
+    {
+      "case": "out/native-cpu-slang-bridge/build/typed-three-stage-batch",
+      "source": {
+        "revision": "00e4cd9787ba85d3f7f70e79dc07324e14b1caf4",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 2466,
+        "sha256": "f61842542547a180abf61fea06798911e96a55776a620bc51b618d907d0db98b"
+      },
+      "wall_seconds": 3.5349670910509303,
+      "observed_retired_births": 7
+    },
+    {
+      "case": "out/native-cpu-slang-bridge/provider/configure",
+      "source": {
+        "revision": "8912f63bd770e07768995c21f9a7772bb824c1f6",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 2286,
+        "sha256": "82b9d5f049216bb1c039c7a8ac6990566cd85da59ed9c1d819ae265639090285"
+      },
+      "wall_seconds": 3.088646244024858,
+      "observed_retired_births": 5
+    },
+    {
+      "case": "out/native-cpu-slang-bridge/provider/build",
+      "source": {
+        "revision": "8912f63bd770e07768995c21f9a7772bb824c1f6",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 105894,
+        "sha256": "2b0fbf57a322ef53cd004d4488a445eb03dfd58cedaf82b99eddc1b53cd8c6cb"
+      },
+      "wall_seconds": 35.6798885029275,
+      "observed_retired_births": 815
+    },
+    {
+      "case": "out/native-cpu-slang-bridge/ordinary/transport",
+      "source": {
+        "revision": "e011a74186028ffe2c292d9834d35caebf2ab27a",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 4050,
+        "sha256": "fb539680fec8a584a59632193e3f9d902bc80ebb2cb53a943a6b88e0fd04273d"
+      },
+      "wall_seconds": 7.187119141919538,
+      "observed_retired_births": 4
+    },
+    {
+      "case": "out/native-cpu-slang-bridge/ordinary/endpoint",
+      "source": {
+        "revision": "e011a74186028ffe2c292d9834d35caebf2ab27a",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 3578,
+        "sha256": "01242c49d4d7a4b1045de2f3660248468d7b1a406ab0376ac06da5a076152e3b"
+      },
+      "wall_seconds": 12.443468615994789,
+      "observed_retired_births": 4
+    },
+    {
+      "case": "out/native-cpu-slang-bridge/ordinary/dopri_phase",
+      "source": {
+        "revision": "e011a74186028ffe2c292d9834d35caebf2ab27a",
+        "status": ""
+      },
+      "owner": {
+        "bytes": 4056,
+        "sha256": "be1124a9e892bb00a633056d69e7434d8f6739381e0c9819e3ebfd742c80c58a"
+      },
+      "wall_seconds": 2.2625340500380844,
+      "observed_retired_births": 4
+    }
+  ],
+  "all_owned_cases_pass": true,
+  "provider": {
+    "passed": true,
+    "library": "bin/linux-gcc/native-cpu-slang-bridge/provider/libvulkan_lvp.so",
+    "library_identity": {
+      "bytes": 15271312,
+      "sha256": "ccb9115a87b918e3ee962bde3159c5d137ec50eb0dd7b1d1d687bd0adfa906a4"
+    },
+    "ICD": "bin/linux-gcc/native-cpu-slang-bridge/provider/lvp_icd.json",
+    "ICD_identity": {
+      "bytes": 197,
+      "sha256": "52301b7c3520b8deba3bba9f3f3a7b13b17cc2d363234e92b7feab0a54a7b9c0"
+    },
+    "actual_build_target": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+    "target_identity": {
+      "bytes": 15271312,
+      "sha256": "ccb9115a87b918e3ee962bde3159c5d137ec50eb0dd7b1d1d687bd0adfa906a4"
+    },
+    "reused_build_inputs_unchanged": 516,
+    "native_objects": [
+      {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.o",
+        "bytes": 93600,
+        "sha256": "02f3696cb3c459e7b88995a1b16d8cc8b03caa021ac71f46e32946ccffc18609"
+      },
+      {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.o",
+        "bytes": 117960,
+        "sha256": "70eedd767649af40a8402fb0cebf2945783ffcef247138a2a1a2d4ff797ba3aa"
+      },
+      {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.o",
+        "bytes": 65104,
+        "sha256": "872068f2eb257e7d601107981b449efd9e21348de7f6609333aef277ca1afc38"
+      }
+    ],
+    "scope": "One private provider build only. No loading/execution/FP equivalence/benefit/scientific/release qualification or adoption."
+  },
+  "source_build_vs_qualification": "Only source/strict-compile/static-link/negative-boundary evidence. Successful native numerical execution and all original performance/scientific/runtime/installed-release qualification remain open.",
+  "unchanged_public_basis": {
+    "revision": "0109ab462edade524667d20303507aa09adcbaf6",
+    "checked_paths": [
+      ".github",
+      "CMakeLists.txt",
+      "CMakePresets.json",
+      "app",
+      "assets",
+      "cmake",
+      "include",
+      "src",
+      "tests",
+      "tools",
+      "scripts"
+    ],
+    "changed_files": []
+  },
+  "earlier_outcome": "Previous7phase candidate passedC8/all32,ABBA22+Decimal andall8controls but failed original300sframe at2568/16384. It was rejected/preserved/retired; no unchanged retry.",
+  "retained_work": "The identified development branch holds the unfinished bridge. Existing private build caches and current staged products remain local for possible later validation; one checkout/worktree only.",
+  "pending": "Successful native admission plus originalC8/all32; soleABBA22+Decimal ifC8 passes; remaining7/all8 and sole original coldframe only on priorpass. OriginalJuly identities absent; Radeon780M/window/large-scene and broader scientific/Mandatory/external-runtime/release-main obligations remain separate."
+}
