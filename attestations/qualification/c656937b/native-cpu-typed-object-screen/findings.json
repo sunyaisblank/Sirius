@@ -1,0 +1,150 @@
+{
+  "scope": "One compile-only typed native DP object screen; no object execution, Vulkan integration, numerical or benefit gate.",
+  "source": {
+    "revision": "c656937b27d5c0ecf01102ee38aeb24c8d7aaae8",
+    "status": ""
+  },
+  "owner": {
+    "passed": true,
+    "child_exit": 0,
+    "wall_seconds": 0.53111645008903,
+    "peak_sampled_rss_kib": 114468,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 29947,
+        "saved_start_ticks": "60698450"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 29948,
+        "saved_start_ticks": "60698452"
+      },
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 29949,
+        "saved_start_ticks": "60698453"
+      }
+    ]
+  },
+  "typed_reflection_and_context_assertions_passed": true,
+  "enforced_FP_compile_policy": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-fPIC",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-isystem",
+    "/opt/slang/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/native-object",
+    "-march=znver4",
+    "-mfpmath=sse",
+    "-fexcess-precision=standard",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-fno-unsafe-math-optimizations",
+    "-frounding-math",
+    "-ffp-contract=off",
+    "-c",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/native-object/typed_dopri.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/native-object/dopri_phase.o"
+  ],
+  "exact_target_fixes": "Four shader precise tokens removed under enforced native strict FP flags; one per-invocation KernelContext aggregate zero initialization. All other generated operations/control intact.",
+  "actual_object": {
+    "bytes": 20184,
+    "sha256": "6f2d6283ef988736abb04228092cb1823e161baf7206095addf8d4dbf3cf9fcd"
+  },
+  "function_symbol_text_bytes": 14134,
+  "functions": [
+    {
+      "symbol": "ComputeMain",
+      "bytes": 251
+    },
+    {
+      "symbol": "ComputeMain_Group",
+      "bytes": 121
+    },
+    {
+      "symbol": "ComputeMain_Thread",
+      "bytes": 9
+    },
+    {
+      "symbol": "_GLOBAL__sub_I_typed_dopri.cpp",
+      "bytes": 1
+    },
+    {
+      "symbol": "_Z12_ComputeMainPvS_S_",
+      "bytes": 5854
+    },
+    {
+      "symbol": "_ZL12RTMultiply_0P16RetainedTriple_0S0_",
+      "bytes": 3625
+    },
+    {
+      "symbol": "_ZL14RPDivideSeed_0ff.part.0",
+      "bytes": 513
+    },
+    {
+      "symbol": "_ZL14RPRatioUpper_0ff",
+      "bytes": 319
+    },
+    {
+      "symbol": "_ZL14ReadOriginal_0jjP15KernelContext_0.isra.0",
+      "bytes": 196
+    },
+    {
+      "symbol": "_ZL15RTCenterUpper_0P16RetainedTriple_0.isra.0",
+      "bytes": 231
+    },
+    {
+      "symbol": "_ZL17RTAbsoluteLower_0P16RetainedTriple_0",
+      "bytes": 363
+    },
+    {
+      "symbol": "_ZL17RTAbsoluteUpper_0P16RetainedTriple_0.isra.0",
+      "bytes": 313
+    },
+    {
+      "symbol": "_ZL18RTAccumulateTerm_0P16RetainedTriple_0f",
+      "bytes": 441
+    },
+    {
+      "symbol": "_ZL21RTAccumulateProduct_0P16RetainedTriple_0ff",
+      "bytes": 457
+    },
+    {
+      "symbol": "_ZL22RTFinishAccumulation_0ffff",
+      "bytes": 359
+    },
+    {
+      "symbol": "_ZL28RTAccumulateRoundedProduct_0P16RetainedTriple_0ff",
+      "bytes": 504
+    },
+    {
+      "symbol": "_ZL7RTAdd_0P16RetainedTriple_0S0_",
+      "bytes": 577
+    }
+  ],
+  "RTAdd_machine_bodies": 1,
+  "RTMultiply_machine_bodies": 1,
+  "FMA_instruction_mnemonics_observed": [],
+  "undefined_symbols": [
+    "                 U __stack_chk_fail",
+    "                 U fmaxf",
+    "                 U memset",
+    "                 U sqrtf"
+  ],
+  "cost_limit": "14134B is sum of function symbol sizes only; excludes alignment, sections and external dependencies. Scalar native CPU object and prior8wide driver JIT have different execution granularity; no runtime speed extrapolation.",
+  "unresolved": "Typed Vulkan descriptors/geometry/tails/query+FP-state adapter, exact module/native association, malformed input and resource OOB semantics, complete FP equivalence, cache isolation and actual code/runtime qualification remain open.",
+  "independent_source_review": "divide_contract_review: exact4primitive branches andoriginalSPIRVelse bodies; originalDP/scratch copies; reflectedbuffers0/16size16; per-threadcontext3145words+status; explicitprecision/contextfixes supportcompile-only screen. No universalboundsorFP/runtimeclaim.",
+  "preparation_correction": "GCC cc1plus resolution uses -print-prog-name; prior misquery spawned no native compiler. Only one native object compilation ran."
+}

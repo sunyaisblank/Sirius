@@ -1,0 +1,51 @@
+{
+  "argv": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-fPIC",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-isystem",
+    "/opt/slang/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/native-object",
+    "-march=znver4",
+    "-mfpmath=sse",
+    "-fexcess-precision=standard",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-fno-unsafe-math-optimizations",
+    "-frounding-math",
+    "-ffp-contract=off",
+    "-c",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/native-object/typed_dopri.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/native-object/dopri_phase.o"
+  ],
+  "exit": 0,
+  "all_prepared_source_bytes_unchanged": true,
+  "source_inputs": {
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.cpp": {
+      "bytes": 63700,
+      "sha256": "a2d57dc0d8063b42dcca97f38797b68f5dfeb9bd05ca10073819f5607ac572f9"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/native-object/dopri_phase.native.hpp": {
+      "bytes": 63670,
+      "sha256": "e03bdc5eb61bf7e6e2d811bba9831eac9de6486d15fdc8c606c758693456d419"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/native-object/typed_dopri.cpp": {
+      "bytes": 1464,
+      "sha256": "c912134ab961dd042d05c41b89d248d9b5ed100d638ec7ce3b0c90df2d17d831"
+    }
+  },
+  "scope": "One strict-policy native C++26 object/typed-ABI screen; no object execution, provider integration, FP/runtime equivalence or benefit qualification.",
+  "actual_object": {
+    "path": "bin/linux-gcc/native-cpu-slang-bridge/native-object/dopri_phase.o",
+    "bytes": 20184,
+    "sha256": "6f2d6283ef988736abb04228092cb1823e161baf7206095addf8d4dbf3cf9fcd"
+  }
+}
