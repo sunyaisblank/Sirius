@@ -63,7 +63,11 @@ inline bool match(Instruction *start, Window &w) {
    for (unsigned i = 0; i < 17; ++i) {
       for (unsigned j = 0; j < 2; ++j) {
          const int ref = operands[i][j];
-         Value *expected = ref == -1 ? a : ref == -2 ? b : ref == -3 ? c : w.body[ref];
+         Value *expected;
+         if (ref == -1) expected = a;
+         else if (ref == -2) expected = b;
+         else if (ref == -3) expected = c;
+         else expected = w.body[ref];
          if (w.body[i]->getOperand(j) != expected)
             return false;
       }
