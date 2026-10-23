@@ -1,0 +1,281 @@
+{
+  "candidate_source": "263abe74feb5d1423ede646f4d660a07197248b3",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "all22_original_benefit_gates_pass": false,
+  "benefit_checks_passed": 18,
+  "independent_Decimal_agrees": true,
+  "sole_ABBA": {
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        32.459071,
+        32.483706,
+        32.954073
+      ],
+      "candidate_samples_ms": [
+        36.266049,
+        34.566951,
+        36.792967
+      ],
+      "baseline_median_ms": 32.483706,
+      "candidate_median_ms": 36.266049,
+      "improvement_percent": -11.643816133540934,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        18.930532,
+        19.627721,
+        18.84378
+      ],
+      "candidate_samples_ms": [
+        27.400955,
+        26.263604,
+        27.016933
+      ],
+      "baseline_median_ms": 18.930532,
+      "candidate_median_ms": 27.016933,
+      "improvement_percent": -42.71618462703532,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        37.137188,
+        34.411864,
+        35.324082
+      ],
+      "candidate_samples_ms": [
+        40.43691,
+        38.835657,
+        39.480103
+      ],
+      "baseline_median_ms": 35.324082,
+      "candidate_median_ms": 39.480103,
+      "improvement_percent": -11.765404122887052,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_samples_ms": [
+        22.027757,
+        20.027354,
+        21.067771
+      ],
+      "candidate_samples_ms": [
+        30.064405999999998,
+        27.822704,
+        28.187133
+      ],
+      "baseline_median_ms": 21.067771,
+      "candidate_median_ms": 28.187133,
+      "improvement_percent": -33.79266843179565,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": -11.643816133540934
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": 16.881283767055848
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": -11.765404122887052
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": 20.74685839818943
+    }
+  ],
+  "minimum_inclusive_stage_gain_percent": -42.71618462703532,
+  "provisioning_inclusive_API_gains_percent": [
+    49.53125488793035,
+    47.8428450522417
+  ],
+  "all32_control8_and_ABBA_readbacks_match_originals": true,
+  "original_controls": {
+    "1": {
+      "status": "not_run"
+    },
+    "2": {
+      "status": "not_run"
+    },
+    "3": {
+      "status": "not_run"
+    },
+    "4": {
+      "status": "not_run"
+    },
+    "5": {
+      "status": "not_run"
+    },
+    "6": {
+      "status": "not_run"
+    },
+    "7": {
+      "status": "not_run"
+    },
+    "8": {
+      "passed": true,
+      "wall_seconds": 57.011908609070815,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 953488
+    }
+  },
+  "all8_original_controls_admitted": false,
+  "cold_frame": {
+    "attempted": false,
+    "accepted": false,
+    "reason": "All22 benefit gates and all8 original controls required first."
+  },
+  "actual_new_builds": {
+    "provider_builds": 1,
+    "shader_compilations": 0,
+    "CXX_compilations": 0,
+    "backend_links": 0,
+    "frame_links": 0
+  },
+  "actual_ordinary_called_function_bytes": {
+    "Transport": 322058,
+    "Endpoint": 573223,
+    "DopriPhase": 127738
+  },
+  "actual_IR_fences": {
+    "Transport": 0,
+    "Endpoint": 0,
+    "DopriPhase": 0
+  },
+  "actual_full_fences_and_coroutine_resumes_absent": true,
+  "all_three_actual_intergroup_row_address_and_tail_masks_bound": true,
+  "provider_source_admission": {
+    "passed": true,
+    "scope": "Independent ROOT source admission only; actual generated code and unchanged runtime gates remain required.",
+    "prototype_patch": {
+      "bytes": 18764,
+      "sha256": "574bf58ae14a8f625a2252fafa13948b531652dffd4d7e2289eb761555239704"
+    },
+    "source_contract": {
+      "bytes": 16468,
+      "sha256": "4e2c31e0bddf596b2dbd93746255e6af0713861756e4a1ec5a0919f8e3db62c4"
+    },
+    "source_files": {
+      "src/compiler/shader_info.h": {
+        "bytes": 19673,
+        "sha256": "53f5107551c927cc78355d54954ec895aeed177ee6bf8dec3684d569e03bbb78"
+      },
+      "src/gallium/auxiliary/draw/draw_pt.c": {
+        "bytes": 21093,
+        "sha256": "0aa79f9b15610525e16443cf7b725cb871f27528eac37ea4c1226aef8cf9ad2c"
+      },
+      "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+        "bytes": 246649,
+        "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+      },
+      "src/gallium/drivers/llvmpipe/lp_rast.c": {
+        "bytes": 43484,
+        "sha256": "daa5471828c1261b3003e32bc88caa282faefc475fa18dbb30758ccef4d8f1d8"
+      },
+      "src/gallium/drivers/llvmpipe/lp_screen.c": {
+        "bytes": 32357,
+        "sha256": "bd941272aff848f6a7e01d6fe24a97c755a17a97c8890052faa51c40ed2200a0"
+      },
+      "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+        "bytes": 104043,
+        "sha256": "d10cfd7abb5f7eee3f91ebe9a11e6f5153f90e0107522d8369959619831c8894"
+      },
+      "src/gallium/drivers/llvmpipe/lp_state_cs.h": {
+        "bytes": 5160,
+        "sha256": "ab69e6b953c080fb04758ce4de56e4ffbfd86955d765d9685427dde130a93cf0"
+      },
+      "src/gallium/frontends/lavapipe/lvp_device.c": {
+        "bytes": 116202,
+        "sha256": "b4426a9676935e9497d9e9aa0d7add011e265a377fef2a70eb86bbef51387caf"
+      },
+      "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+        "bytes": 61281,
+        "sha256": "01abdf9445446e8bc5c742bd57e7cd6397513d3e0159d98074a52ff826a20dde"
+      },
+      "src/util/u_math.h": {
+        "bytes": 18704,
+        "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+      }
+    },
+    "preserved_prior_source": {
+      "commit": "d324d909463615699517b9aa5034bb521ceddbd2",
+      "archive": "attestations/qualification/1c95c98f/lavapipe-acqrel-ordering-finite-outcome/diagnostics-and-trial.zip",
+      "bytes": 7634909,
+      "sha256": "a29355e06f4d6d6e16971ecd1868d855d53e434088669fe4631ddf5f3ee2baf9",
+      "member": "out/lavapipe-acqrel-ordering/build/inputs-before.json",
+      "member_identity": {
+        "bytes": 4021652,
+        "sha256": "eecc5c5b17b70c9e4f0c3c2b9fb7af437370e04db06b69a5e721942dfbb1a92e"
+      },
+      "source_files": 11100
+    },
+    "full_current_source_identity": {
+      "bytes": 1482565,
+      "sha256": "c9fb02dd95414f4a2f99a5b28d1164ac9971cd95da4e8952921288afdc2b7575"
+    },
+    "changed_from_prior_trial": [
+      "src/compiler/shader_info.h",
+      "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+      "src/gallium/drivers/llvmpipe/lp_screen.c",
+      "src/gallium/drivers/llvmpipe/lp_state_cs.c",
+      "src/gallium/drivers/llvmpipe/lp_state_cs.h",
+      "src/gallium/frontends/lavapipe/lvp_device.c",
+      "src/gallium/frontends/lavapipe/lvp_pipeline.c"
+    ],
+    "reverse_patch_recovers_exact_prior_six_file_basis": true,
+    "original_barrier_source_authenticated_from_release": true,
+    "original_IEEE32_prerequisite_retained": true,
+    "original_spirv_entrypoint_is_main_not_debug_ComputeMain": true,
+    "reviewed_contracts": [
+      "Only three exact immutable modules; one function, local0-only observable owner; unsupported source/shape/base/width and binary imports fall back.",
+      "Variant-local options make group IDs divergent; singular-function gate prevents scalar helper-call context, and lp_build_opt_nir has no eligible helper-introducing pass.",
+      "Eight X-bounded independent group owners; original Y/Z/grid/block/query counts; out-of-grid mask precedes the shader prologue and observable accesses.",
+      "Private state, task-pool completion and original scoped IEEE32 save/set/restore retained; failed acquire-release modification removed.",
+      "Private binary UUID, disk-cache salt, serialized shader marker and separate variant key prevent stale/ordinary/intergroup cache aliasing."
+    ],
+    "prebuild_corrections": [
+      "Vulkan entrypoint main verified against all three immutable OpEntryPoint declarations and the actual Vulkan pipeline factory."
+    ],
+    "runtime_or_performance_admitted": false,
+    "new_builds_or_workloads": 0
+  },
+  "unchanged_complete_modules_and_ELF_reused": true,
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite evidence. All original workgroups, producers, fields, arithmetic, ordered refusal prefixes, admission and assertions retained. Full science, July image identity, original cold-frame acceptance, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain separate obligations."
+}
