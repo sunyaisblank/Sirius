@@ -13,7 +13,7 @@ argv = ['/usr/bin/gdb', '-q', '-batch', '-nx',
     '-ex', 'set pagination off', '-ex', 'set confirm off',
     '-ex', 'set print thread-events off', '-ex', 'set debuginfod enabled off',
     '-ex', 'set disable-randomization off', '-ex', 'run',
-    '-ex', 'echo \n=== INTENTIONAL PARTIAL DIAGNOSTIC STACK ===\n',
+    '-ex', r'echo \n=== INTENTIONAL PARTIAL DIAGNOSTIC STACK ===\n',
     '-ex', 'thread apply all bt 16', '-ex', 'kill', '--args', str(exe),
     '--gtest_filter=RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults',
     '--gtest_color=no']
