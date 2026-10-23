@@ -100,7 +100,7 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
         } else {
             if (b >= registers) return false;
             RetainedTriple bv = ReadValue(b, rowBase);
-#if !defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING) && (!defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE))
+#if !defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING) && !defined(SIRIUS_RETAINED_PORTABLE)
             if (op == 2)
                 r = RTAdd(av, bv);
             else if (op == 3)
