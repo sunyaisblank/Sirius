@@ -1,0 +1,948 @@
+{
+  "candidate_source": "33623035d25390f82a3813179f95530da411c2ac",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "source_admission": {
+    "passed": true,
+    "scope": "Independent ROOT source admission only; machine execution, identical optimized IR, allocator selection and all original gates remain unadmitted.",
+    "machine_codegen_patch": {
+      "bytes": 6088,
+      "sha256": "b89c0b18c134625e571934f8a2bcf971525364c8b32cccf9db5bc71906c091e0"
+    },
+    "source_contract": {
+      "bytes": 14102,
+      "sha256": "c20ac5f4d31cd51e08dccffff1cbcf81c60304c5dd1ea10aa470880290e1d997"
+    },
+    "source_files": {
+      "src/gallium/auxiliary/gallivm/lp_bld_init.c": {
+        "bytes": 15510,
+        "sha256": "52b18f3fc93d3a490f8cbf39d96b89ff08f9174c3c78f0c7f80e79eab554da1b"
+      },
+      "src/gallium/auxiliary/gallivm/lp_bld_init.h": {
+        "bytes": 4890,
+        "sha256": "c0cefbc50c10d2de3112f98c0b1f9f26826e4bd9ff6a1c32b0eaaba1cb229086"
+      },
+      "src/gallium/auxiliary/gallivm/lp_bld_misc.cpp": {
+        "bytes": 24121,
+        "sha256": "d8e636e5db114a1694d3bfa1e56f818d25d249c9735c9c02d46a48e1b4bf693a"
+      },
+      "src/gallium/auxiliary/gallivm/lp_bld_misc.h": {
+        "bytes": 3528,
+        "sha256": "50ea8076c2d2ce45fa4602bd27162c962c33d7c0d04ed24cd8dd34e705b2b1a3"
+      },
+      "src/gallium/drivers/llvmpipe/lp_screen.c": {
+        "bytes": 32370,
+        "sha256": "06af8c63be6b7cf66b8849355e786cc195d390ffad2199e16b635a5b2df7087e"
+      },
+      "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+        "bytes": 104376,
+        "sha256": "837e993a804e6e3b680615e4aa63bde9dd71b7b06298d6dba918b43f1581d465"
+      },
+      "src/gallium/frontends/lavapipe/lvp_device.c": {
+        "bytes": 116202,
+        "sha256": "5e0e4c20eabc8cd14e5f5ebc65c79cf404c40bca74d4e23d0e29b6649167acac"
+      },
+      "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+        "bytes": 61170,
+        "sha256": "9a633d294081a080d58a9efe4774f0c27ae1215b448f8e6dea5a4c21558d77ab"
+      }
+    },
+    "full_current_source_identity": {
+      "bytes": 1482565,
+      "sha256": "d1465842238547f6814ef2f18e451333ba7a3d6932f38209c1694cbdb9cd798d"
+    },
+    "basis": {
+      "preserved_at_commit": "206ca0d4",
+      "archive": "attestations/qualification/263abe74/lavapipe-intergroup-row-owner-finite-outcome/diagnostics-and-trial.zip",
+      "bytes": 7890408,
+      "sha256": "9c42f070d9d82fc3a33cd4e0c6af4fc493a3f0e53e7dd8b85fd9343f1d5d9c44",
+      "member": "out/lavapipe-intergroup-row-owner/build/inputs-before.json",
+      "member_identity": {
+        "bytes": 4212662,
+        "sha256": "d53f7b1b74402d27e2640117a4d9a82b3cebe08b4d25d025c3cd9eb57c7507c8"
+      },
+      "source_files": 11100
+    },
+    "changed_files": [
+      "src/gallium/auxiliary/gallivm/lp_bld_init.c",
+      "src/gallium/auxiliary/gallivm/lp_bld_init.h",
+      "src/gallium/auxiliary/gallivm/lp_bld_misc.cpp",
+      "src/gallium/auxiliary/gallivm/lp_bld_misc.h",
+      "src/gallium/drivers/llvmpipe/lp_screen.c",
+      "src/gallium/drivers/llvmpipe/lp_state_cs.c",
+      "src/gallium/frontends/lavapipe/lvp_device.c",
+      "src/gallium/frontends/lavapipe/lvp_pipeline.c"
+    ],
+    "exact_reverse_recovers_all_eight_prior_file_pins": true,
+    "unchanged_remaining_source_files": 11092,
+    "reviewed_contracts": [
+      "Only exact E/DP source hashes admit intergroup key1; both Transport hashes use ordinary key0. LocalSize64, original groups/fields/trials and modes remain.",
+      "Per-gallivm MCJIT bool is calloc-zero and set only by admitted key1 with IEEE32, MCJIT0 and LLVM21. Header dependency closure must rebuild all struct consumers.",
+      "Original engine creation, IR pass call/arguments, CPU/features/FP options/attributes and IEEE32 repair retained. Hook at common cached/uncached join follows original IR passes and precedes emission/publication.",
+      "Engine-owned target mutation is mutex-protected, requires Default, sets only CodeGenOptLevel::None; unsupported/unexpected prerequisites refuse before emission. No shared context/global flag/function attribute mutation.",
+      "New private UUID/disk namespace plus existing deterministic variant key isolate old/default/None objects. ORC and other LLVM majors are unchanged and unclaimed.",
+      "Partial12s stack supports examining codegen but does not establish the300s timeout cause. No speed or compilation completion promise; actual new code and unchanged32/22/all8/frame gates remain required."
+    ],
+    "restored_original_barrier_lowering": {
+      "bytes": 246649,
+      "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+    },
+    "original_IEEE32_prerequisite_retained_by_exact_basis_composition": true,
+    "new_Sirius_or_shader_compilations": 0,
+    "runtime_or_benefit_admitted": false
+  },
+  "actual_provider_build": {
+    "passed": true,
+    "library": "bin/linux-gcc/lavapipe-owner-machine-codegen/provider/libvulkan_lvp.so",
+    "library_identity": {
+      "bytes": 14773192,
+      "sha256": "0b9072cb341b7ee1d3aa9e34397b8052820ec3613ba4f69968b0f1a26a9ade4c"
+    },
+    "ICD": "bin/linux-gcc/lavapipe-owner-machine-codegen/provider/lvp_icd.json",
+    "ICD_identity": {
+      "bytes": 204,
+      "sha256": "41193c3028078fe7db351c51ab869458addd5df32696cf3cabed0553fa05d2e1"
+    },
+    "actual_build_tree_target": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+    "actual_build_tree_target_identity": {
+      "bytes": 14773192,
+      "sha256": "0b9072cb341b7ee1d3aa9e34397b8052820ec3613ba4f69968b0f1a26a9ade4c"
+    },
+    "reused_build_inputs_unchanged": 739,
+    "expected_mutable_build_outputs": [
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_context.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_gs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_pt_fetch_shade_pipeline_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_tess.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/draw_draw_vs_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_arit.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_arit_overflow.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_assert.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_bitarit.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_const.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_conv.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_coro.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_debug.cpp.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_flow.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_aos_array.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_float.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_s3tc.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_srgb.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_format_yuv.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_gather.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_init.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_init_common.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_intr.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_ir_common.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_jit_sample.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_jit_types.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_logic.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_misc.cpp.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_nir.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_nir_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_nir_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_pack.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_passmgr.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_printf.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_quad.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_sample.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_sample_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_sample_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_struct.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_swizzle.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi_action.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi_info.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_tgsi_soa.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/auxiliary/libgallium.a.p/gallivm_lp_bld_type.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_alpha.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_blend.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_blend_aos.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_blend_logicop.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_depth.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_bld_interp.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_clear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_context.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_draw_arrays.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_fence.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_flush.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_jit.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear_fastpath.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear_interp.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_linear_sampler.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_query.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_debug.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_linear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_linear_fallback.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_rect.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_rast_tri.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_scene.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_scene_queue.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_screen.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_analysis.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_line.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_point.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_rect.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_tri.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_setup_vbuf.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_blend.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_clip.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_cs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_derived.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_analysis.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_fastpath.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_linear.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_fs_linear_llvm.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_gs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_rasterizer.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_sampler.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_setup.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_so.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_surface.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_tess.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_vertex.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_state_vs.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_surface.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_tex_sample.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_texture.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/drivers/llvmpipe/libllvmpipe.a.p/lp_texture_handle.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_acceleration_structure.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_cmd_buffer.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_descriptor_set.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_device.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_device_generated_commands.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_execute.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_formats.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_image.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_pipe_sync.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_pipeline.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_pipeline_cache.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_query.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_ray_tracing_pipeline.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_util.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/lvp_wsi.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_lower_exec_graph.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_lower_pipeline_layout.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_lower_ray_queries.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_opt_robustness.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/frontends/lavapipe/liblavapipe_st.a.p/nir_lvp_nir_ray_tracing.c.o",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/git_sha1.h",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/loader/libloader.a",
+      "bin/linux-gcc/lavapipe-acqrel-ordering/src/loader/libloader.a.p/loader.c.o"
+    ],
+    "new_Sirius_CPP_or_shader_compilations": 0,
+    "provider_builds": 1,
+    "global_installation_performed": false,
+    "provider_or_source_adopted": false,
+    "scope": "One incremental scoped post-IR machine-codegen provider build with unchanged original configuration and sealed reused artifacts. Staged actual provider bytes are separate from mutable compiler workspace. Compilation is not numerical/performance/scientific/release qualification."
+  },
+  "actual_complete_code_review": {
+    "structural_premise_observed": true,
+    "machine_policy_isolation_observed": true,
+    "optimized_IR_unchanged": true,
+    "rows": {
+      "Transport": {
+        "structural_premise_observed": true,
+        "machine_policy_isolation_observed": true,
+        "optimized_IR_unchanged": true,
+        "ordinary_code_source_proof_reused": "out/native-original-input-ownership/ordinary/ordinary-code-review.json",
+        "prior_proof_identity": {
+          "bytes": 3372,
+          "sha256": "1e8e55ef75c51e684545c8bab9d735cfbb036c61922114a6cfd5698a9e043a48"
+        },
+        "actual_complete_module": {
+          "words": 21861,
+          "bytes": 87444,
+          "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_capture_verification": {
+          "bytes": 3321,
+          "sha256": "b58a588b44e607889cccfddcd8275eb3781a0e5b30abab84caad6c1d9e20de20"
+        },
+        "actual_optimized_IR": {
+          "path": "out/lavapipe-owner-machine-codegen/ordinary/transport/optimized-05.ll",
+          "bytes": 4307332,
+          "sha256": "0ad867e2fee0f996955157fa4da4c01c49d1c47cedc786878b6d9522e65caa45"
+        },
+        "prior_optimized_IR": {
+          "path": "out/native-original-input-ownership/ordinary/transport/optimized-05.ll",
+          "bytes": 4307332,
+          "sha256": "0ad867e2fee0f996955157fa4da4c01c49d1c47cedc786878b6d9522e65caa45"
+        },
+        "actual_engine": 138083295020976,
+        "actual_module_generation": 5,
+        "initial_OptLevel": null,
+        "initial_Default_source_composed_only": true,
+        "post_IR_bridge_successes": 0,
+        "fast_allocator_factories_in_selected_engine_emission": 0,
+        "greedy_allocator_factories_in_selected_engine_emission": 1,
+        "actual_emission_envelopes": [
+          {
+            "id": 5,
+            "pc": 138083549949344,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 27,
+            "engine": 138083295020976,
+            "module": 138083265679056,
+            "module_generation": 5,
+            "completed": true,
+            "return_sequence": 29
+          }
+        ],
+        "actual_allocator_factories": [
+          {
+            "pc": 138083522320880,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 28,
+            "allocator": "greedy",
+            "emission_id": 5,
+            "engine": 138083295020976,
+            "module_generation": 5
+          }
+        ],
+        "actual_original_block_arguments": [
+          64,
+          1,
+          1
+        ],
+        "functions": [
+          {
+            "name": "cs_co_variant.resume",
+            "section": 3,
+            "offset": 10896,
+            "bytes": 311940,
+            "address": 138083584129680
+          },
+          {
+            "name": "cs_co_variant.destroy",
+            "section": 3,
+            "offset": 322848,
+            "bytes": 5,
+            "address": 138083584441632
+          },
+          {
+            "name": "cs_variant",
+            "section": 3,
+            "offset": 0,
+            "bytes": 314,
+            "address": 138083584118784
+          },
+          {
+            "name": "cs_co_variant",
+            "section": 3,
+            "offset": 320,
+            "bytes": 10561,
+            "address": 138083584119104
+          }
+        ],
+        "total_called_function_bytes": 322820,
+        "same_mask_group_address_IR_proof_reused": false,
+        "negative_ordinary_Default_witness": true,
+        "scope": "Original 4B guard exits before retained arithmetic. Exact prior optimized IR/source proof reused; new called machine bytes and allocator factory/engine provenance observed. No active multirow/numerical/benefit/frame claim."
+      },
+      "Endpoint": {
+        "structural_premise_observed": true,
+        "machine_policy_isolation_observed": true,
+        "optimized_IR_unchanged": true,
+        "ordinary_code_source_proof_reused": "out/lavapipe-intergroup-row-owner/ordinary/ordinary-code-review.json",
+        "prior_proof_identity": {
+          "bytes": 13381,
+          "sha256": "68dc3e6aaa9b19ba7931bafb47ceec9487e2302bbf426bb7f93e1e18615e17b2"
+        },
+        "actual_complete_module": {
+          "words": 24261,
+          "bytes": 97044,
+          "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_capture_verification": {
+          "bytes": 3325,
+          "sha256": "6e4d11b16387004fc4db5c423f584cb3239a982c413786bb0a97c680fad01eb3"
+        },
+        "actual_optimized_IR": {
+          "path": "out/lavapipe-owner-machine-codegen/ordinary/endpoint/optimized-05.ll",
+          "bytes": 8833516,
+          "sha256": "a49785fca05318fd13a241bf9a3594945232d57baefee8477e41d5dce9eff55b"
+        },
+        "prior_optimized_IR": {
+          "path": "out/lavapipe-intergroup-row-owner/ordinary/endpoint/optimized-05.ll",
+          "bytes": 8833516,
+          "sha256": "a49785fca05318fd13a241bf9a3594945232d57baefee8477e41d5dce9eff55b"
+        },
+        "actual_engine": 128434034035056,
+        "actual_module_generation": 5,
+        "initial_OptLevel": 2,
+        "initial_Default_source_composed_only": false,
+        "post_IR_bridge_successes": 1,
+        "fast_allocator_factories_in_selected_engine_emission": 1,
+        "greedy_allocator_factories_in_selected_engine_emission": 0,
+        "actual_emission_envelopes": [
+          {
+            "id": 5,
+            "pc": 128434270481824,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 41,
+            "engine": 128434034035056,
+            "module": 128434017668816,
+            "module_generation": 5,
+            "completed": true,
+            "return_sequence": 43
+          }
+        ],
+        "actual_allocator_factories": [
+          {
+            "pc": 128434242804800,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 42,
+            "allocator": "fast",
+            "emission_id": 5,
+            "engine": 128434034035056,
+            "module_generation": 5
+          }
+        ],
+        "actual_original_block_arguments": [
+          64,
+          1,
+          1
+        ],
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 2102153,
+            "address": 128433688375296
+          }
+        ],
+        "total_called_function_bytes": 2102153,
+        "same_mask_group_address_IR_proof_reused": true,
+        "negative_ordinary_Default_witness": false,
+        "scope": "Original 4B guard exits before retained arithmetic. Exact prior optimized IR/source proof reused; new called machine bytes and allocator factory/engine provenance observed. No active multirow/numerical/benefit/frame claim."
+      },
+      "DopriPhase": {
+        "structural_premise_observed": true,
+        "machine_policy_isolation_observed": true,
+        "optimized_IR_unchanged": true,
+        "ordinary_code_source_proof_reused": "out/lavapipe-intergroup-row-owner/ordinary/ordinary-code-review.json",
+        "prior_proof_identity": {
+          "bytes": 13381,
+          "sha256": "68dc3e6aaa9b19ba7931bafb47ceec9487e2302bbf426bb7f93e1e18615e17b2"
+        },
+        "actual_complete_module": {
+          "words": 14877,
+          "bytes": 59508,
+          "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_capture_verification": {
+          "bytes": 3324,
+          "sha256": "99e5fa8e046ed8392fc7ed710a65a59f589a0bfb391f27ba5e18e23b499f0dff"
+        },
+        "actual_optimized_IR": {
+          "path": "out/lavapipe-owner-machine-codegen/ordinary/dopri_phase/optimized-05.ll",
+          "bytes": 2081892,
+          "sha256": "fa54688ac07a699813b77b508703f13c74eb019ff8dedf2ba8f1655c92439e55"
+        },
+        "prior_optimized_IR": {
+          "path": "out/lavapipe-intergroup-row-owner/ordinary/dopri_phase/optimized-05.ll",
+          "bytes": 2081892,
+          "sha256": "fa54688ac07a699813b77b508703f13c74eb019ff8dedf2ba8f1655c92439e55"
+        },
+        "actual_engine": 137437077897456,
+        "actual_module_generation": 5,
+        "initial_OptLevel": 2,
+        "initial_Default_source_composed_only": false,
+        "post_IR_bridge_successes": 1,
+        "fast_allocator_factories_in_selected_engine_emission": 1,
+        "greedy_allocator_factories_in_selected_engine_emission": 0,
+        "actual_emission_envelopes": [
+          {
+            "id": 5,
+            "pc": 137437331434912,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 41,
+            "engine": 137437077897456,
+            "module": 137437074427600,
+            "module_generation": 5,
+            "completed": true,
+            "return_sequence": 43
+          }
+        ],
+        "actual_allocator_factories": [
+          {
+            "pc": 137437303757888,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 42,
+            "allocator": "fast",
+            "emission_id": 5,
+            "engine": 137437077897456,
+            "module_generation": 5
+          }
+        ],
+        "actual_original_block_arguments": [
+          64,
+          1,
+          1
+        ],
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 442539,
+            "address": 137437364731904
+          }
+        ],
+        "total_called_function_bytes": 442539,
+        "same_mask_group_address_IR_proof_reused": true,
+        "negative_ordinary_Default_witness": false,
+        "scope": "Original 4B guard exits before retained arithmetic. Exact prior optimized IR/source proof reused; new called machine bytes and allocator factory/engine provenance observed. No active multirow/numerical/benefit/frame claim."
+      }
+    },
+    "actual_provider": {
+      "path": "bin/linux-gcc/lavapipe-owner-machine-codegen/provider/libvulkan_lvp.so",
+      "bytes": 14773192,
+      "sha256": "0b9072cb341b7ee1d3aa9e34397b8052820ec3613ba4f69968b0f1a26a9ade4c"
+    },
+    "intended_mixed_host": {
+      "path": "bin/linux-gcc/native-cooperative-transport-intergroup/matched/audited_backend_tests",
+      "bytes": 13781496,
+      "sha256": "f958a60563b64c79d3f2fb6da2815bde0effdbbe49f121034cfd212ab17b27ff"
+    },
+    "frozen_probe_is_intended_matched_host": false,
+    "limits": "Factory selection and actual engine emission observed, not a full machine-pass trace or performance proof. No CPU/arithmetic/IR pipeline change inferred beyond exact saved-IR equality. All original C8/22/8 and changed-program runtime gates remain required."
+  },
+  "observer_incidents": {
+    "renamed_first_failed_capture": {
+      "historical_path": "ordinary/transport",
+      "preserved_path": "ordinary/observer-plt-transport",
+      "raw_case_and_argv_unchanged": true,
+      "reason": "Observer resolved provider PLT instead of actual LLVM body; no dispatch/JIT completed, original failed ownership evidence retained."
+    },
+    "completed_Transport_capture": "Original LLVM C-API creation hook was unused and an unrelated deleted memfd raised a callback warning. Existing completed lookup/emission/greedy/no-fast/no-bridge and exactIR evidence reused; initialDefault is source-composed only. Future E/DP hooks corrected to actual Mesa helper and filtered object mappings; no completed Transport rerun."
+  },
+  "actual_new_builds": {
+    "provider_builds": 1,
+    "Sirius_CPP_compilations": 0,
+    "shader_compilations": 0,
+    "probe_compilations": 0,
+    "frame_links": 0
+  },
+  "actual_mixed_host_ELF_reused": "f958a60563b64c79d3f2fb6da2815bde0effdbbe49f121034cfd212ab17b27ff",
+  "original_controls": {
+    "1": {
+      "status": "not_run"
+    },
+    "2": {
+      "status": "not_run"
+    },
+    "3": {
+      "status": "not_run"
+    },
+    "4": {
+      "status": "not_run"
+    },
+    "5": {
+      "status": "not_run"
+    },
+    "6": {
+      "status": "not_run"
+    },
+    "7": {
+      "status": "not_run"
+    },
+    "8": {
+      "passed": true,
+      "wall_seconds": 18.46598532795906,
+      "stop_reason": null,
+      "child_exit": 0,
+      "peak_sampled_rss_kib": 995624
+    }
+  },
+  "benefit_attempted": true,
+  "benefit_checks_passed": 6,
+  "all22_original_benefit_gates_pass": false,
+  "independent_Decimal_agrees": true,
+  "failed_checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.022708,
+        31.914847,
+        29.295728
+      ],
+      "candidate_samples_ms": [
+        39.848694,
+        39.029468,
+        39.315642
+      ],
+      "baseline_median_ms": 31.914847,
+      "candidate_median_ms": 39.315642,
+      "improvement_percent": -23.189191538345757,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.237223999999999,
+        5.885401,
+        5.006935
+      ],
+      "candidate_samples_ms": [
+        17.591425,
+        18.867755000000002,
+        18.100225000000002
+      ],
+      "baseline_median_ms": 5.237223999999999,
+      "candidate_median_ms": 18.100225000000002,
+      "improvement_percent": -245.6072339086509,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        7.809339,
+        7.174845,
+        6.122479
+      ],
+      "candidate_samples_ms": [
+        9.844885,
+        10.078916,
+        10.002857
+      ],
+      "baseline_median_ms": 7.174845,
+      "candidate_median_ms": 10.002857,
+      "improvement_percent": -39.41565288169988,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        36.091969,
+        36.976455,
+        36.845594
+      ],
+      "candidate_samples_ms": [
+        72.15423799999999,
+        70.984381,
+        68.246803
+      ],
+      "baseline_median_ms": 36.845594,
+      "candidate_median_ms": 70.984381,
+      "improvement_percent": -92.65364808611852,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        1.975409,
+        2.885369,
+        2.442536
+      ],
+      "candidate_samples_ms": [
+        6.050945,
+        6.110412,
+        5.897913
+      ],
+      "baseline_median_ms": 2.442536,
+      "candidate_median_ms": 6.050945,
+      "improvement_percent": -147.73207027450158,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.111352999999999,
+        5.2171140000000005,
+        5.36329
+      ],
+      "candidate_samples_ms": [
+        11.681331,
+        13.199221999999999,
+        12.901198
+      ],
+      "baseline_median_ms": 5.2171140000000005,
+      "candidate_median_ms": 12.901198,
+      "improvement_percent": -147.2861049231433,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.058884,
+        4.896794,
+        5.6422039999999996
+      ],
+      "candidate_samples_ms": [
+        16.579514,
+        15.773899,
+        15.212424
+      ],
+      "baseline_median_ms": 5.058884,
+      "candidate_median_ms": 15.773899,
+      "improvement_percent": -211.80590422709832,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.714339,
+        9.551053,
+        9.092078
+      ],
+      "candidate_samples_ms": [
+        25.208108,
+        24.812594,
+        23.222609
+      ],
+      "baseline_median_ms": 9.551053,
+      "candidate_median_ms": 24.812594,
+      "improvement_percent": -159.78909341200392,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        34.115863,
+        32.775396,
+        30.552415
+      ],
+      "candidate_samples_ms": [
+        38.886063,
+        36.290031,
+        39.197292
+      ],
+      "baseline_median_ms": 32.775396,
+      "candidate_median_ms": 38.886063,
+      "improvement_percent": -18.644067641471057,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.829988,
+        5.397893,
+        4.569106
+      ],
+      "candidate_samples_ms": [
+        17.645868,
+        17.078843,
+        18.288579
+      ],
+      "baseline_median_ms": 4.829988,
+      "candidate_median_ms": 17.645868,
+      "improvement_percent": -265.3397896640737,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_samples_ms": [
+        6.772471,
+        7.329192,
+        6.867081
+      ],
+      "candidate_samples_ms": [
+        9.648313,
+        9.097403,
+        11.110418
+      ],
+      "baseline_median_ms": 6.867081,
+      "candidate_median_ms": 9.648313,
+      "improvement_percent": -40.50093482223379,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_samples_ms": [
+        38.494236,
+        36.743398,
+        36.918891
+      ],
+      "candidate_samples_ms": [
+        72.393505,
+        66.009348,
+        64.56111
+      ],
+      "baseline_median_ms": 36.918891,
+      "candidate_median_ms": 66.009348,
+      "improvement_percent": -78.79558733224137,
+      "minimum_percent": 5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.39014,
+        2.527656,
+        2.690484
+      ],
+      "candidate_samples_ms": [
+        5.864638,
+        5.386899,
+        5.547279
+      ],
+      "baseline_median_ms": 2.527656,
+      "candidate_median_ms": 5.547279,
+      "improvement_percent": -119.46336843304626,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        4.984667,
+        4.888991,
+        5.43308
+      ],
+      "candidate_samples_ms": [
+        13.934505999999999,
+        11.371038,
+        11.376349000000001
+      ],
+      "baseline_median_ms": 4.984667,
+      "candidate_median_ms": 11.376349000000001,
+      "improvement_percent": -128.2268604903798,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        5.921633,
+        5.251783,
+        4.791812
+      ],
+      "candidate_samples_ms": [
+        15.931493,
+        15.274650000000001,
+        15.238745000000002
+      ],
+      "baseline_median_ms": 5.251783,
+      "candidate_median_ms": 15.274650000000001,
+      "improvement_percent": -190.84693712592468,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_samples_ms": [
+        9.669884,
+        9.393677,
+        9.119173
+      ],
+      "candidate_samples_ms": [
+        24.359869,
+        23.260809000000002,
+        22.214073
+      ],
+      "baseline_median_ms": 9.393677,
+      "candidate_median_ms": 23.260809000000002,
+      "improvement_percent": -147.6219801894402,
+      "minimum_percent": -5,
+      "pass": false
+    }
+  ],
+  "whole_call_gains_percent": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "improvement_percent": -23.189191538345757
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "improvement_percent": -92.65364808611852
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "improvement_percent": -18.644067641471057
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "improvement_percent": -78.79558733224137
+    }
+  ],
+  "sole_ABBA": {
+    "attempted": true,
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "all8_original_controls_admitted": false,
+  "cold_frame": {
+    "attempted": false,
+    "accepted": false,
+    "reason": "Original all22 and all8 gates required first."
+  },
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite evidence only. The12s partial stack did not establish the300s timeout cause. No machine-policy selection implies numerical or performance success. Full science, July image identity, original cold frame, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain independent obligations."
+}
