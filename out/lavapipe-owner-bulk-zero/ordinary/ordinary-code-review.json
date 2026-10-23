@@ -1,0 +1,334 @@
+{
+  "structural_premise_observed": true,
+  "rows": {
+    "Transport": {
+      "structural_premise_observed": true,
+      "complete_module": {
+        "words": 21861,
+        "bytes": 87444,
+        "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+        "actual_span_matches_frozen_input": true
+      },
+      "ordinary_Default_source_proof_reused": true,
+      "actual_current_provider_Transport_capture_performed": false,
+      "proof_archive": "attestations/qualification/33623035/lavapipe-owner-machine-codegen-finite-outcome/diagnostics-and-trial.zip",
+      "proof_archive_identity": {
+        "bytes": 6765847,
+        "sha256": "f72fe5f5f15f34a3c55d37998707cc1abeeb86402c3977a7f8ad6444a7498b8d"
+      },
+      "proof_member": "out/lavapipe-owner-machine-codegen/ordinary/ordinary-code-review.json",
+      "prior_actual_observation": {
+        "structural_premise_observed": true,
+        "machine_policy_isolation_observed": true,
+        "optimized_IR_unchanged": true,
+        "ordinary_code_source_proof_reused": "out/native-original-input-ownership/ordinary/ordinary-code-review.json",
+        "prior_proof_identity": {
+          "bytes": 3372,
+          "sha256": "1e8e55ef75c51e684545c8bab9d735cfbb036c61922114a6cfd5698a9e043a48"
+        },
+        "actual_complete_module": {
+          "words": 21861,
+          "bytes": 87444,
+          "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+          "actual_span_matches_frozen_input": true
+        },
+        "actual_capture_verification": {
+          "bytes": 3321,
+          "sha256": "b58a588b44e607889cccfddcd8275eb3781a0e5b30abab84caad6c1d9e20de20"
+        },
+        "actual_optimized_IR": {
+          "path": "out/lavapipe-owner-machine-codegen/ordinary/transport/optimized-05.ll",
+          "bytes": 4307332,
+          "sha256": "0ad867e2fee0f996955157fa4da4c01c49d1c47cedc786878b6d9522e65caa45"
+        },
+        "prior_optimized_IR": {
+          "path": "out/native-original-input-ownership/ordinary/transport/optimized-05.ll",
+          "bytes": 4307332,
+          "sha256": "0ad867e2fee0f996955157fa4da4c01c49d1c47cedc786878b6d9522e65caa45"
+        },
+        "actual_engine": 138083295020976,
+        "actual_module_generation": 5,
+        "initial_OptLevel": null,
+        "initial_Default_source_composed_only": true,
+        "post_IR_bridge_successes": 0,
+        "fast_allocator_factories_in_selected_engine_emission": 0,
+        "greedy_allocator_factories_in_selected_engine_emission": 1,
+        "actual_emission_envelopes": [
+          {
+            "id": 5,
+            "pc": 138083549949344,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 27,
+            "engine": 138083295020976,
+            "module": 138083265679056,
+            "module_generation": 5,
+            "completed": true,
+            "return_sequence": 29
+          }
+        ],
+        "actual_allocator_factories": [
+          {
+            "pc": 138083522320880,
+            "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+            "thread": 2,
+            "sequence": 28,
+            "allocator": "greedy",
+            "emission_id": 5,
+            "engine": 138083295020976,
+            "module_generation": 5
+          }
+        ],
+        "actual_original_block_arguments": [
+          64,
+          1,
+          1
+        ],
+        "functions": [
+          {
+            "name": "cs_co_variant.resume",
+            "section": 3,
+            "offset": 10896,
+            "bytes": 311940,
+            "address": 138083584129680
+          },
+          {
+            "name": "cs_co_variant.destroy",
+            "section": 3,
+            "offset": 322848,
+            "bytes": 5,
+            "address": 138083584441632
+          },
+          {
+            "name": "cs_variant",
+            "section": 3,
+            "offset": 0,
+            "bytes": 314,
+            "address": 138083584118784
+          },
+          {
+            "name": "cs_co_variant",
+            "section": 3,
+            "offset": 320,
+            "bytes": 10561,
+            "address": 138083584119104
+          }
+        ],
+        "total_called_function_bytes": 322820,
+        "same_mask_group_address_IR_proof_reused": false,
+        "negative_ordinary_Default_witness": true,
+        "scope": "Original 4B guard exits before retained arithmetic. Exact prior optimized IR/source proof reused; new called machine bytes and allocator factory/engine provenance observed. No active multirow/numerical/benefit/frame claim."
+      },
+      "scope": "Historical cooperative T actual greedy/IR proof plus unchanged ordinary source/type-exclusion composition. Current E/DP provider captures do not retroactively make this a current-provider T code observation."
+    },
+    "Endpoint": {
+      "structural_premise_observed": true,
+      "complete_bulk_clear_observed": true,
+      "remaining_optimized_IR_equivalent": true,
+      "original_Default_machine_pipeline_observed": true,
+      "complete_module": {
+        "words": 24261,
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_engine": 133795629615472,
+      "actual_initial_OptLevel": 2,
+      "actual_greedy_factories": [
+        {
+          "pc": 133795821656560,
+          "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+          "thread": 2,
+          "sequence": 40,
+          "allocator": "greedy",
+          "emission_id": 5,
+          "engine": 133795629615472,
+          "module_generation": 5
+        }
+      ],
+      "actual_complete_clear": {
+        "pc": 133795900169856,
+        "library": "/lib/x86_64-linux-gnu/libc.so.6",
+        "thread": 34,
+        "sequence": 43,
+        "symbol": "memset",
+        "address": 133795900169856,
+        "destination": 133793323048640,
+        "bytes": 97920,
+        "caller_return_pc": 133795883045006,
+        "dispatch_id": 0,
+        "jit_file": "jit-10.elf",
+        "module_generation": 5,
+        "completed": true,
+        "complete_zero_bytes_observed": true,
+        "resulting_sha256": "b722c1ebe97b3a4088415837a11c7423fc405221eb9a6c9751ff0220f1696285",
+        "return_sequence": 44
+      },
+      "resolved_libc_binding": {
+        "symbol": "memset",
+        "address": 133795900169856,
+        "relocation_site": 133795883044980,
+        "relocation_kind": 1,
+        "addend": 0,
+        "library": "/lib/x86_64-linux-gnu/libc.so.6",
+        "jit_file": "jit-10.elf",
+        "module_generation": 5,
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 558029,
+            "address": 133795883044864
+          }
+        ]
+      },
+      "libc": {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      "remaining_IR_normalized_sha256": "2ab99884f116b89535facc0f5df6d63f7408374ed42750ab45821c1ab1d5589a",
+      "IR_equivalence_rule": "One contiguous exact 32-byte-stride full-zero GEP/store span -> one exact complete nonvolatile scratch memset at same position; comments/empty lines and attribute-group numeric labels only. After separately declared verified Boolean-mask identities and one confined SSA bijection, remaining identifiers, operations, constants, flags, types and control flow exact.",
+      "functions": [
+        {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 558029,
+          "address": 133795883044864
+        }
+      ],
+      "total_called_function_bytes": 558029,
+      "capture_verification_identity": {
+        "bytes": 3327,
+        "sha256": "4f7e58483665f867cc9c182d81521baacbc4a7f3d68e2231c00b8cca337725a0"
+      }
+    },
+    "DopriPhase": {
+      "structural_premise_observed": true,
+      "complete_bulk_clear_observed": true,
+      "remaining_optimized_IR_equivalent": true,
+      "original_Default_machine_pipeline_observed": true,
+      "complete_module": {
+        "words": 14877,
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "actual_span_matches_frozen_input": true
+      },
+      "actual_engine": 139989362213104,
+      "actual_initial_OptLevel": 2,
+      "actual_greedy_factories": [
+        {
+          "pc": 139989588122096,
+          "library": "/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+          "thread": 2,
+          "sequence": 40,
+          "allocator": "greedy",
+          "emission_id": 5,
+          "engine": 139989362213104,
+          "module_generation": 5
+        }
+      ],
+      "actual_complete_clear": {
+        "pc": 139989666635392,
+        "library": "/lib/x86_64-linux-gnu/libc.so.6",
+        "thread": 28,
+        "sequence": 43,
+        "symbol": "memset",
+        "address": 139989666635392,
+        "destination": 139987479585824,
+        "bytes": 100640,
+        "caller_return_pc": 139989667303569,
+        "dispatch_id": 0,
+        "jit_file": "jit-10.elf",
+        "module_generation": 5,
+        "completed": true,
+        "complete_zero_bytes_observed": true,
+        "resulting_sha256": "0e1dee6597922bf375451b62a8540c3e89bc5097f0ff01bc6c1bb1900e5aade2",
+        "return_sequence": 44
+      },
+      "resolved_libc_binding": {
+        "symbol": "memset",
+        "address": 139989666635392,
+        "relocation_site": 139989667303540,
+        "relocation_kind": 1,
+        "addend": 0,
+        "library": "/lib/x86_64-linux-gnu/libc.so.6",
+        "jit_file": "jit-10.elf",
+        "module_generation": 5,
+        "functions": [
+          {
+            "name": "cs_variant",
+            "section": 6,
+            "offset": 0,
+            "bytes": 104355,
+            "address": 139989667303424
+          }
+        ]
+      },
+      "libc": {
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+      },
+      "remaining_IR_normalized_sha256": "a9be73b87d96f6d3f89bea4085afdb7f01e2688a1cfef7f317643dc478de386c",
+      "IR_equivalence_rule": "One contiguous exact 32-byte-stride full-zero GEP/store span -> one exact complete nonvolatile scratch memset at same position; comments/empty lines and attribute-group numeric labels only. After separately declared verified Boolean-mask identities and one confined SSA bijection, remaining identifiers, operations, constants, flags, types and control flow exact.",
+      "functions": [
+        {
+          "name": "cs_variant",
+          "section": 6,
+          "offset": 0,
+          "bytes": 104355,
+          "address": 139989667303424
+        }
+      ],
+      "total_called_function_bytes": 104355,
+      "capture_verification_identity": {
+        "bytes": 3327,
+        "sha256": "8711daaeb4b86665af5cbb5dcf8dac2d5795b1ba0076d401104e9fb78be1a018"
+      }
+    }
+  },
+  "Boolean_mask_equivalence_review": [
+    {
+      "candidate": true,
+      "vectors": 3060,
+      "simple_selects_canonicalized": 0,
+      "mask_full_definition_verified": true,
+      "exact_local_reassociation_blocks_verified": false,
+      "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+    },
+    {
+      "candidate": false,
+      "vectors": 3060,
+      "simple_selects_canonicalized": 16,
+      "mask_full_definition_verified": true,
+      "exact_local_reassociation_blocks_verified": true,
+      "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+    },
+    {
+      "candidate": true,
+      "vectors": 3145,
+      "simple_selects_canonicalized": 0,
+      "mask_full_definition_verified": true,
+      "exact_local_reassociation_blocks_verified": false,
+      "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+    },
+    {
+      "candidate": false,
+      "vectors": 3145,
+      "simple_selects_canonicalized": 27,
+      "mask_full_definition_verified": true,
+      "exact_local_reassociation_blocks_verified": true,
+      "scope": "Source/IR equivalence reasoning, not machine-checked proof or numerical acceptance."
+    }
+  ],
+  "complete_bulk_clear_observed": true,
+  "remaining_optimized_IR_equivalent": true,
+  "original_Default_machine_pipeline_observed": true,
+  "actual_provider": {
+    "path": "bin/linux-gcc/lavapipe-owner-bulk-zero/provider/libvulkan_lvp.so",
+    "bytes": 14773096,
+    "sha256": "1f2dc14c7371157b95f95e27322701d71959a8c0d8f9635e14a00111a92e6899"
+  },
+  "scope": "Two 4B guard/canary E/DP captures. All scratch zeros retained and observed; no retained arithmetic acceptance, benefit, active-eight-row/frame/scientific/release claim. T proof explicitly reused, no new T capture."
+}

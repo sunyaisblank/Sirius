@@ -1,0 +1,144 @@
+--- prior-equivalent-clear
+
++++ candidate-equivalent-clear
+
+@@ -50,5 +50,5 @@
+
+   %ssa_1663 = shufflevector <8 x i1> %35, <8 x i1> poison, <8 x i32> zeroinitializer
+   %36 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %37 = select <8 x i1> %ssa_1663, <8 x i1> %36, <8 x i1> zeroinitializer
++  %37 = and <8 x i1> %ssa_1663, %36
+   %38 = bitcast <8 x i1> %37 to i8
+   %any_active1648.not = icmp eq i8 %38, 0
+@@ -87,5 +87,5 @@
+
+   %52 = and <8 x i1> %ssa_1663, %ssa_1680
+   %53 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %54 = select <8 x i1> %52, <8 x i1> %53, <8 x i1> zeroinitializer
++  %54 = and <8 x i1> %52, %53
+   %55 = bitcast <8 x i1> %54 to i8
+   %any_active1651.not = icmp eq i8 %55, 0
+@@ -149,5 +149,5 @@
+
+   %92 = and <8 x i1> %91, %52
+   %93 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %94 = select <8 x i1> %92, <8 x i1> %93, <8 x i1> zeroinitializer
++  %94 = and <8 x i1> %92, %93
+   %95 = bitcast <8 x i1> %94 to i8
+   %any_active1654.not = icmp eq i8 %95, 0
+@@ -250,5 +250,5 @@
+
+   %142 = and <8 x i1> %141, %92
+   %143 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %144 = select <8 x i1> %142, <8 x i1> %143, <8 x i1> zeroinitializer
++  %144 = and <8 x i1> %142, %143
+   %145 = bitcast <8 x i1> %144 to i8
+   %any_active1681.not = icmp eq i8 %145, 0
+@@ -576,5 +576,5 @@
+
+   %308 = and <8 x i1> %ssa_1846.not, %142
+   %309 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %310 = select <8 x i1> %308, <8 x i1> %309, <8 x i1> zeroinitializer
++  %310 = and <8 x i1> %308, %309
+   %311 = bitcast <8 x i1> %310 to i8
+   %any_active1772.not = icmp eq i8 %311, 0
+@@ -635,5 +635,5 @@
+
+   %332 = and <8 x i1> %ssa_1876, %308
+   %333 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %334 = select <8 x i1> %332, <8 x i1> %333, <8 x i1> zeroinitializer
++  %334 = and <8 x i1> %332, %333
+   %335 = bitcast <8 x i1> %334 to i8
+   %any_active1795.not = icmp eq i8 %335, 0
+@@ -714,5 +714,5 @@
+
+   %354 = and <8 x i1> %ssa_1931, %332
+   %355 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %356 = select <8 x i1> %354, <8 x i1> %355, <8 x i1> zeroinitializer
++  %356 = and <8 x i1> %354, %355
+   %357 = bitcast <8 x i1> %356 to i8
+   %any_active1814.not = icmp eq i8 %357, 0
+@@ -800,5 +800,5 @@
+
+   %378 = and <8 x i1> %ssa_1984.not, %332
+   %379 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %380 = select <8 x i1> %378, <8 x i1> %379, <8 x i1> zeroinitializer
++  %380 = and <8 x i1> %378, %379
+   %381 = bitcast <8 x i1> %380 to i8
+   %any_active1833.not = icmp eq i8 %381, 0
+@@ -1334,5 +1334,5 @@
+
+   %682 = and <8 x i1> %ssa_2090, %378
+   %683 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %684 = select <8 x i1> %682, <8 x i1> %683, <8 x i1> zeroinitializer
++  %684 = and <8 x i1> %682, %683
+   %685 = bitcast <8 x i1> %684 to i8
+   %any_active2016.not = icmp eq i8 %685, 0
+@@ -1390,5 +1390,5 @@
+
+   %702 = and <8 x i1> %ssa_2115, %378
+   %703 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %704 = select <8 x i1> %702, <8 x i1> %703, <8 x i1> zeroinitializer
++  %704 = and <8 x i1> %702, %703
+   %705 = bitcast <8 x i1> %704 to i8
+   %any_active2039.not = icmp eq i8 %705, 0
+@@ -1452,5 +1452,5 @@
+
+   %727 = and <8 x i1> %378, %ssa_2141
+   %728 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %729 = select <8 x i1> %727, <8 x i1> %728, <8 x i1> zeroinitializer
++  %729 = and <8 x i1> %727, %728
+   %730 = bitcast <8 x i1> %729 to i8
+   %any_active2062.not = icmp eq i8 %730, 0
+@@ -1498,5 +1498,5 @@
+
+   %747 = and <8 x i1> %ssa_2157, %727
+   %748 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %749 = select <8 x i1> %747, <8 x i1> %748, <8 x i1> zeroinitializer
++  %749 = and <8 x i1> %747, %748
+   %750 = bitcast <8 x i1> %749 to i8
+   %any_active2085.not = icmp eq i8 %750, 0
+@@ -1555,5 +1555,5 @@
+
+   %769 = and <8 x i1> %ssa_2184.not, %727
+   %770 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %771 = select <8 x i1> %769, <8 x i1> %770, <8 x i1> zeroinitializer
++  %771 = and <8 x i1> %769, %770
+   %772 = bitcast <8 x i1> %771 to i8
+   %any_active2108.not = icmp eq i8 %772, 0
+@@ -1617,5 +1617,5 @@
+
+   %796 = and <8 x i1> %ssa_2212.not, %727
+   %797 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %798 = select <8 x i1> %796, <8 x i1> %797, <8 x i1> zeroinitializer
++  %798 = and <8 x i1> %796, %797
+   %799 = bitcast <8 x i1> %798 to i8
+   %any_active2131.not = icmp eq i8 %799, 0
+@@ -1712,5 +1712,5 @@
+
+   %855 = xor <8 x i1> %796, %727
+   %856 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %857 = select <8 x i1> %855, <8 x i1> %856, <8 x i1> zeroinitializer
++  %857 = and <8 x i1> %855, %856
+   %858 = bitcast <8 x i1> %857 to i8
+   %any_active2146.not = icmp eq i8 %858, 0
+@@ -1753,5 +1753,5 @@
+
+   %875 = and <8 x i1> %ssa_2250.not, %378
+   %876 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %877 = select <8 x i1> %875, <8 x i1> %876, <8 x i1> zeroinitializer
++  %877 = and <8 x i1> %875, %876
+   %878 = bitcast <8 x i1> %877 to i8
+   %any_active2149.not = icmp eq i8 %878, 0
+@@ -119769,7 +119769,7 @@
+
+   %ssa_65680.not = icmp eq <8 x i8> %43053, zeroinitializer
+   %43078 = and <8 x i32> %ssa_1693, splat (i32 1073741823)
+-  %43079 = and <8 x i1> %ssa_65680.not, %875
+-  %43080 = icmp ne <8 x i32> %mask.0, zeroinitializer
+-  %43081 = select <8 x i1> %43079, <8 x i1> %43080, <8 x i1> zeroinitializer
++  %43079 = icmp ne <8 x i32> %mask.0, zeroinitializer
++  %43080 = and <8 x i1> %ssa_65680.not, %43079
++  %43081 = and <8 x i1> %43080, %875
+   %43082 = load i32, ptr %29, align 4
+   %43083 = load ptr, ptr %28, align 8

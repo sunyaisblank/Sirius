@@ -1,0 +1,23 @@
+{
+  "initial_strict_reader": "out/lavapipe-owner-bulk-zero/ordinary/read_code.py",
+  "initial_reader_sha256": "5eb4d91076d7566965ce3734d593eb8c224e8f06cda3306ace3dfcaa371a3978",
+  "original_result": "AssertionError: IR changed outside declared full-clear equivalence, Endpoint",
+  "captured_program_or_guard_repeated": false,
+  "candidate_code_unchanged": true,
+  "passive_diffs": {
+    "endpoint": {
+      "bytes": 5468,
+      "sha256": "92bb9a14d377dd8a40be828e47d804d6ed2a0f3282e6c231aea7756efab23adc"
+    },
+    "dopri_phase": {
+      "bytes": 9895,
+      "sha256": "55748bfd77c5a9af17b1fa5366f2e32d6f8e413893dedeb68e23407ae0813c15"
+    }
+  },
+  "independently_reviewed_observed_deltas": {
+    "Endpoint": "16 select(C,definedMask,false)->AND plus one confined3-conjunct reassociation",
+    "DopriPhase": "27 select(C,definedMask,false)->AND plus one confined4-conjunct reassociation and6temporary-ID bijection"
+  },
+  "proof": "Exact unchanged prologue gives mask.0 only all-ones or inserted defined zeros with bounded valid indices1..7. Thus RHS mask bits are nonpoison. Boolean identities retain identical predicates, leaf multiplicities and consumers. The exact local DP text substitution keeps typed metadata loads/address setup/order/flags; internal numeric IDs have no escaping uses. Every remaining instruction must match under full-clear and attribute-content normalization.",
+  "limits": "Source/IR reasoning, not machine-checked proof. All original runtime correctness/readback/22benefit/8control/frame gates remain."
+}
