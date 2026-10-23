@@ -130,9 +130,19 @@ class CgFactory(gdb.Breakpoint):
         except Exception as error: return failure(error)
 
 cg_installed = set()
+cg_offsets = json.loads(os.environ['SIRIUS_MACHINE_SYMBOL_OFFSETS'])
 def cg_install(event=None):
-    # Numeric entry addresses avoid a source-line breakpoint after an optimized
-    # prologue. LLVM/provider are dlopened, so retry on each ordinary objfile load.
+    # Bind actual frozen ELF symbol values to that object's zero-offset mapping.
+    # GDB's plain &symbol lookup can select a provider PLT stub for LLVM APIs.
+    # Retry on ordinary objfile loads; never call the inferior to resolve names.
+    maps = pathlib.Path('/proc/'+str(gdb.selected_inferior().pid)+'/maps')
+    if not maps.exists(): return
+    bases = {}
+    for line in maps.read_text().splitlines():
+        fields = line.split(maxsplit=5)
+        if len(fields) != 6 or int(fields[2], 16) != 0 or not fields[5].startswith('/'): continue
+        path = str(pathlib.Path(fields[5]).resolve(strict=True))
+        bases.setdefault(path, set()).add(int(fields[0].split('-')[0], 16))
     definitions = [
         ('LLVMCreateMCJITCompilerForModule', CgEngine, None),
         (os.environ['SIRIUS_POLICY_BRIDGE_SYMBOL'], CgBridge, None),
@@ -143,8 +153,14 @@ def cg_install(event=None):
     ]
     for symbol, cls, kind in definitions:
         if symbol in cg_installed: continue
-        try: address = int(gdb.parse_and_eval("(unsigned long)&'"+symbol+"'"))
-        except gdb.error: continue
+        binding = cg_offsets[symbol]
+        candidates = bases.get(binding['library'], set())
+        if not candidates: continue
+        assert len(candidates) == 1, (symbol, candidates)
+        address = next(iter(candidates)) + binding['offset']
+        library = gdb.solib_name(address)
+        if not library: continue
+        assert str(pathlib.Path(library).resolve(strict=True)) == binding['library'], (symbol, library)
         if kind is None: cls('*'+hex(address), internal=True)
         else: cls('*'+hex(address), kind)
         cg_installed.add(symbol)
