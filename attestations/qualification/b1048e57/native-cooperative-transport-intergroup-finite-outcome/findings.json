@@ -1,0 +1,238 @@
+{
+  "candidate_source": "b1048e57c613ff47c959b704932cc0ecaaadaaf1",
+  "public_source_unchanged": "0109ab462edade524667d20303507aa09adcbaf6",
+  "all22_original_benefit_gates_pass": false,
+  "benefit_checks_passed": null,
+  "benefit_attempted": false,
+  "independent_Decimal_agrees": null,
+  "sole_ABBA": {
+    "attempted": false,
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "planned_internal_repeats_per_slot": 3,
+    "extra_retries": 0
+  },
+  "failed_checks": [],
+  "whole_call_gains_percent": [],
+  "minimum_inclusive_stage_gain_percent": null,
+  "provisioning_inclusive_API_gains_percent": [],
+  "all32_control8_and_ABBA_readbacks_match_originals": null,
+  "original_controls": {
+    "1": {
+      "status": "not_run"
+    },
+    "2": {
+      "status": "not_run"
+    },
+    "3": {
+      "status": "not_run"
+    },
+    "4": {
+      "status": "not_run"
+    },
+    "5": {
+      "status": "not_run"
+    },
+    "6": {
+      "status": "not_run"
+    },
+    "7": {
+      "status": "not_run"
+    },
+    "8": {
+      "passed": false,
+      "wall_seconds": 300.1544130690163,
+      "stop_reason": "diagnostic_timeout",
+      "child_exit": -15,
+      "peak_sampled_rss_kib": 671604
+    }
+  },
+  "all8_original_controls_admitted": false,
+  "cold_frame": {
+    "attempted": false,
+    "accepted": false,
+    "reason": "All22 benefit gates and all8 original controls required first."
+  },
+  "actual_new_builds": {
+    "provider_builds": 0,
+    "shader_compilations": 0,
+    "CXX_compilations": 1,
+    "backend_links": 1,
+    "frame_links": 0
+  },
+  "reused_ordinary_called_function_bytes": {
+    "Transport": 322820,
+    "Endpoint": 573223,
+    "DopriPhase": 127738
+  },
+  "reused_IR_fences": {
+    "Transport": 10,
+    "Endpoint": 0,
+    "DopriPhase": 0
+  },
+  "reused_code_proof_scope": {
+    "source_composition_admitted": true,
+    "scope": "Source-based reuse, not a new three-code capture. Transport complete input/source and ordinary lowering unchanged; E/DP exact same modules/provider as the263abe74 actual code capture. Fresh mixed C8/full readbacks and original22 required.",
+    "Transport": {
+      "proof": "out/native-original-input-ownership/ordinary/ordinary-code-review.json",
+      "bytes": 3372,
+      "sha256": "1e8e55ef75c51e684545c8bab9d735cfbb036c61922114a6cfd5698a9e043a48",
+      "module": {
+        "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+        "bytes": 87444,
+        "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+        "original_module": {
+          "bytes": 85832,
+          "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+        },
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "program_table_equal": true,
+        "original_control_barriers": 9,
+        "candidate_control_barriers": 10,
+        "scalar_algorithm_unchanged": true,
+        "actual_shared_variables_bytes": {
+          "%retainedStatus": 4,
+          "%originalTerms": 920,
+          "%retainedScratch": 9180,
+          "%retainedCoefficients": 500
+        },
+        "actual_shared_bytes": 10604,
+        "compiled_this_candidate": false
+      },
+      "fallback_key": 0,
+      "whitelist_sha1_absent": "27c1ceb70cb82653aff1ab089e8bd8394e82e3a0",
+      "ordinary_path_review": "divide_contract_review: original soa barriers restored, key0 retains ordinary NIR options, group scheduler/IDs and coroutine/Workgroup semantics; mode per shader/variant, not sticky."
+    },
+    "Endpoint_DopriPhase": {
+      "proof": "out/lavapipe-intergroup-row-owner/ordinary/ordinary-code-review.json",
+      "bytes": 13381,
+      "sha256": "68dc3e6aaa9b19ba7931bafb47ceec9487e2302bbf426bb7f93e1e18615e17b2",
+      "modules": {
+        "Endpoint": {
+          "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+          "bytes": 97044,
+          "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+          "original_module": {
+            "bytes": 99728,
+            "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+          },
+          "registers": 612,
+          "program_table_equal": true,
+          "compiled_this_candidate": false
+        },
+        "DopriPhase": {
+          "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+          "bytes": 59508,
+          "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+          "original_module": {
+            "bytes": 59228,
+            "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+          },
+          "registers": 629,
+          "program_table_equal": true,
+          "compiled_this_candidate": false
+        }
+      },
+      "same_actual_provider_sha256": "7dc35fa3ca039ec9972010012a890a0e36548208c69452ddd346de12789b0361"
+    },
+    "no_new_shader_provider_probe_compilation_or_code_capture": true,
+    "cold_frame_prediction": false
+  },
+  "Transport_ordinary_coroutine_and_barriers_retained": true,
+  "Endpoint_DopriPhase_actual_intergroup_code_reused": true,
+  "provider_source_admission": {
+    "basis_public_source": "0109ab462edade524667d20303507aa09adcbaf6",
+    "host_selector": {
+      "bytes": 46035,
+      "sha256": "0bc5bd4e9f4aa4c9be6f292e09b76c92dc53ae5f75ce91dd62ac482098a160b3"
+    },
+    "header": {
+      "bytes": 379133,
+      "sha256": "fa6d5a5739eb4d7ee4c9eecb4ea6d6c3694bb3190d03d1e1c05c966955493d2c"
+    },
+    "source_CPP_byte_identical_to": "out/native-cpu-row-ownership/retained_compute.cpp",
+    "composition": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+        "bytes": 87444,
+        "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+        "original_module": {
+          "bytes": 85832,
+          "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+        },
+        "LocalSize": [
+          64,
+          1,
+          1
+        ],
+        "program_table_equal": true,
+        "original_control_barriers": 9,
+        "candidate_control_barriers": 10,
+        "scalar_algorithm_unchanged": true,
+        "actual_shared_variables_bytes": {
+          "%retainedStatus": 4,
+          "%originalTerms": 920,
+          "%retainedScratch": 9180,
+          "%retainedCoefficients": 500
+        },
+        "actual_shared_bytes": 10604,
+        "compiled_this_candidate": false
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "original_module": {
+          "bytes": 99728,
+          "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+        },
+        "registers": 612,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "original_module": {
+          "bytes": 59228,
+          "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+        },
+        "registers": 629,
+        "program_table_equal": true,
+        "compiled_this_candidate": false
+      }
+    },
+    "provider": "bin/linux-gcc/lavapipe-intergroup-row-owner/provider/libvulkan_lvp.so",
+    "provider_sha256": "7dc35fa3ca039ec9972010012a890a0e36548208c69452ddd346de12789b0361",
+    "source_review_passed": true,
+    "reviewer": "divide_contract_review",
+    "reason": "Only failures in the prior18/22 trial are legacy Transport and dependent legacy whole-call gates; retain independently qualified cooperative Transport and require fresh unchanged gates for the composition. No gains are projected or subtracted.",
+    "contracts": [
+      "Transport hash outside exact whitelist, ordinary key0/scheduler/groupIDs/Workgroup/coroutine/barriers retained; mode is per shader/variant.",
+      "E/DP exact prior hashes retain intergroup IDs/private state/masks.",
+      "Independent stage-specific programs/buffers/input230,225,1810; no cross-stage Private state transfer.",
+      "All40 fields,7RHS,3trials,4quartics, ordered prefixes, other routes and all35 public modules/tables/layout unchanged."
+    ],
+    "reuse_code_proof": {
+      "Transport": "out/native-original-input-ownership/ordinary/ordinary-code-review.json",
+      "Endpoint_DopriPhase": "out/lavapipe-intergroup-row-owner/ordinary/ordinary-code-review.json"
+    },
+    "required_actual": "One selector object/finalELF data joins; fresh originalC8 all7module identities/full32readbacks/currentprovider maps, sole22+Decimal; original7/frame only after22/all8.",
+    "single_row_limit": "Single-row E/DP still has one active lane; no cold-frame speed or completion promise.",
+    "adopted": false,
+    "qualified": false
+  },
+  "unchanged_complete_modules_and_ELF_reused": true,
+  "source_or_provider_adopted_publicly": false,
+  "full_goal_complete": false,
+  "scope": "Private finite evidence. All original workgroups, producers, fields, arithmetic, ordered refusal prefixes, admission and assertions retained. Full science, July image identity, original cold-frame acceptance, native-window/Radeon scenes, Mandatory and exact-main installed-release qualification remain separate obligations."
+}
