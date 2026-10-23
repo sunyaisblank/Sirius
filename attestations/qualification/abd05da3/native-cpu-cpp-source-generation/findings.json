@@ -1,0 +1,85 @@
+{
+  "scope": "Compiler source generation only; no native object, provider build/integration, numerical or performance run.",
+  "first_generation": "6fa4a3e1: exit255 in0.531944756s because SPIR-V-only inlineasm is not a C++target operation. NoCPPoutput; partialreflection preserved.",
+  "repaired_generation": "abd05da3: PASS in0.832008335s, originalentry/private scratch andcompositetransforms, four target-specific basicfloat operator lowerings; preciseFPrequested.",
+  "actual_generated_source": {
+    "path": "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.cpp",
+    "bytes": 63700,
+    "sha256": "a2d57dc0d8063b42dcca97f38797b68f5dfeb9bd05ca10073819f5607ac572f9",
+    "one_RTAdd_definition": true,
+    "one_RTMultiply_definition": true,
+    "RTMultiply_direct_call_sites": 5,
+    "regular_cpp_calls_not_post_optimizer_machine_calls": true,
+    "explicit_per_invocation_KernelContext": true,
+    "private_scratch_uint_words": 3145,
+    "private_status_uint_words": 1,
+    "global_buffer_parameters": "Reflection inputs offset0/size16; outputs offset16/size16; logicalLocalSize64."
+  },
+  "concrete_unresolved_gaps": [
+    "Generated precise float tokens have no definition in installed slang-cpp headers; host compilation not attempted and cannot be claimed.",
+    "Generated entry KernelContext is uninitialized; adapter must preserve original full private-word zero initialization.",
+    "Default CPU resource OOB behavior is not Vulkan zero-read/discard-write; exact checked semantics or complete eligibility/in-bounds proof and ordinary fallback are required.",
+    "No native machine FP/NoContraction/seeds/bitcast/denorm/rounding equivalence or emitted-call/code-footprint evidence yet.",
+    "Typed Vulkan descriptor/group/tail/query/FP-state/native-ABI association and integration remain unimplemented."
+  ],
+  "owners": {
+    "out/native-cpu-slang-bridge/build/dopri-cpp/owner.json": {
+      "identity": {
+        "bytes": 1677,
+        "sha256": "800fa5ba2025cf30b2975bf34ebc8d99b081a024eccb6e542e650a71eebbadac"
+      },
+      "source": {
+        "revision": "6fa4a3e1714c89d5c6e10eb1c6440682bf8ae3fc",
+        "status": ""
+      },
+      "passed": false,
+      "child_exit": 255,
+      "wall_seconds": 0.5319447560468689,
+      "peak_sampled_rss_kib": 233400,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 24725,
+          "saved_start_ticks": "60591434"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 24726,
+          "saved_start_ticks": "60591437"
+        }
+      ]
+    },
+    "out/native-cpu-slang-bridge/build/dopri-cpp-native-primitives/owner.json": {
+      "identity": {
+        "bytes": 1975,
+        "sha256": "e20e3485e1ff8bd2e5da656dd0006e3aace715ef2d7696c6bfa915998b09083f"
+      },
+      "source": {
+        "revision": "abd05da363862598e28ea9d09ca96a49bf76abf7",
+        "status": ""
+      },
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.8320083350408822,
+      "peak_sampled_rss_kib": 215520,
+      "observed_births": [
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 25549,
+          "saved_start_ticks": "60611723"
+        },
+        {
+          "absent": true,
+          "current_start_ticks": null,
+          "pid": 25550,
+          "saved_start_ticks": "60611727"
+        }
+      ]
+    }
+  },
+  "public_production_source_changed": false,
+  "original_full_goal_complete": false
+}
