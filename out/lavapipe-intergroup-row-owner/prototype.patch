@@ -1,0 +1,444 @@
+--- a/src/compiler/shader_info.h
++++ b/src/compiler/shader_info.h
+@@ -504,6 +504,11 @@
+ 
+          /** Static workgroup count for overwriting the enqueued workgroup count. (0 if dynamic) */
+          uint32_t workgroup_count[3];
++
++         /* Private lavapipe IEEE32 experiment: exact SPIR-V owner whitelist.
++          * Opaque shader binaries clear this marker on import.
++          */
++         bool llvmpipe_intergroup_row_owner;
+       } cs;
+ 
+       /* Applies to both TCS and TES. */
+--- a/src/gallium/frontends/lavapipe/lvp_pipeline.c
++++ b/src/gallium/frontends/lavapipe/lvp_pipeline.c
+@@ -28,6 +28,8 @@
+ #include "vk_util.h"
+ #include "glsl_types.h"
+ #include "util/os_time.h"
++#include "util/u_math.h"
++#include "util/mesa-sha1.h"
+ #include "spirv/nir_spirv.h"
+ #include "nir/nir_builder.h"
+ #include "nir/nir_serialize.h"
+@@ -273,6 +275,51 @@
+    return pipeline_nir;
+ }
+ 
++/* These three complete-row shaders have exactly one logical local owner,
++ * no cross-invocation state, and side-effect-free local invocations 1..63.
++ * Hash admission is deliberately independent of application labels/names.
++ */
++static bool
++lvp_intergroup_row_owner_spirv(const VkPipelineShaderStageCreateInfo *sinfo)
++{
++#if LP_VULKAN_IEEE32_ENABLED
++   static const unsigned char owner_sha1[][SHA1_DIGEST_LENGTH] = {
++      {0xc0,0xf3,0x8b,0x8b,0x39,0xd1,0x21,0x36,0x21,0x6a,0xf9,0x8f,0x34,0x65,0xf3,0x46,0x46,0x30,0x06,0x28},
++      {0xe4,0xf3,0x2b,0xfe,0x7d,0xb7,0x3d,0xad,0x21,0xd7,0x35,0x86,0xf1,0xbf,0x77,0x17,0x2a,0xa3,0x90,0xca},
++      {0xe2,0xbe,0xef,0x14,0xd2,0x7c,0xcb,0x5f,0x80,0xbc,0xe2,0xeb,0xf6,0x3c,0x35,0x84,0x7c,0x0c,0xa4,0x0c},
++   };
++   if (sinfo->stage != VK_SHADER_STAGE_COMPUTE_BIT ||
++       sinfo->flags || sinfo->pSpecializationInfo ||
++       vk_find_struct_const(sinfo->pNext, PIPELINE_SHADER_STAGE_REQUIRED_SUBGROUP_SIZE_CREATE_INFO) ||
++       !sinfo->pName || strcmp(sinfo->pName, "main"))
++      return false;
++
++   const void *code;
++   size_t size;
++   VK_FROM_HANDLE(vk_shader_module, module, sinfo->module);
++   if (module) {
++      if (module->nir)
++         return false;
++      code = module->data;
++      size = module->size;
++   } else {
++      const VkShaderModuleCreateInfo *minfo =
++         vk_find_struct_const(sinfo->pNext, SHADER_MODULE_CREATE_INFO);
++      if (!minfo)
++         return false;
++      code = minfo->pCode;
++      size = minfo->codeSize;
++   }
++   unsigned char sha1[SHA1_DIGEST_LENGTH];
++   _mesa_sha1_compute(code, size, sha1);
++   for (unsigned i = 0; i < ARRAY_SIZE(owner_sha1); i++) {
++      if (!memcmp(sha1, owner_sha1[i], sizeof(sha1)))
++         return true;
++   }
++#endif
++   return false;
++}
++
+ static VkResult
+ compile_spirv(struct lvp_device *pdevice,
+               VkPipelineCreateFlags2KHR pipeline_flags,
+@@ -305,6 +352,26 @@
+    result = vk_pipeline_shader_stage_to_nir(&pdevice->vk, pipeline_flags, sinfo,
+                                             &spirv_options, pdevice->physical_device->drv_options[stage],
+                                             NULL, nir);
++   if (result == VK_SUCCESS && stage == MESA_SHADER_COMPUTE) {
++      (*nir)->info.cs.llvmpipe_intergroup_row_owner =
++         lvp_intergroup_row_owner_spirv(sinfo);
++      if ((*nir)->info.cs.llvmpipe_intergroup_row_owner) {
++         /* Preserve divergence through frontend optimizations too.  Never
++          * mutate the screen's shared compiler options.
++          */
++         nir_shader_compiler_options *options =
++            ralloc(*nir, nir_shader_compiler_options);
++         if (!options) {
++            ralloc_free(*nir);
++            *nir = NULL;
++            return VK_ERROR_OUT_OF_HOST_MEMORY;
++         }
++         *options = *(*nir)->options;
++         options->divergence_analysis_options |=
++            nir_divergence_multiple_workgroup_per_compute_subgroup;
++         (*nir)->options = options;
++      }
++   }
+    return result;
+ }
+ 
+@@ -1189,6 +1256,11 @@
+       nir = nir_deserialize(NULL, device->pscreen->get_compiler_options(device->pscreen, stage), &blob);
+       if (!nir)
+          goto fail;
++      /* A binary NIR import cannot reverify the original SPIR-V whitelist.
++       * Even new-format binaries use the ordinary execution path.
++       */
++      if (nir->info.stage == MESA_SHADER_COMPUTE)
++         nir->info.cs.llvmpipe_intergroup_row_owner = false;
+    }
+    if (!nir_shader_get_entrypoint(nir))
+       goto fail;
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1552,6 +1552,14 @@
+ void
+ lvp_device_get_cache_uuid(void *uuid)
+ {
++#if LP_VULKAN_IEEE32_ENABLED
++   /* shader_info has a private serialized marker; reject older shader/NIR
++    * binaries before deserialization, independently of release build IDs.
++    */
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-IWG-25.2.8-1";
++   memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
++   return;
++#endif
+    memset(uuid, 'a', VK_UUID_SIZE);
+    if (MESA_GIT_SHA1[0])
+       /* debug build */
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -835,6 +835,11 @@
+       return;
+ 
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
++#if LP_VULKAN_IEEE32_ENABLED
++   /* Version the private NIR info/variant ABI and ID/mask lowering. */
++   static const char intergroup_cache_version[] = "Sirius-intergroup-owner-v1";
++   _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
++#endif
+    update_cache_sha1_cpu(&ctx);
+    _mesa_sha1_final(&ctx, sha1);
+    mesa_bytes_to_hex(cache_id, sha1, 20);
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.h
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.h
+@@ -41,6 +41,7 @@
+    unsigned nr_samplers:8;
+    unsigned nr_sampler_views:8;
+    unsigned nr_images:8;
++   unsigned intergroup_row_owner:1;
+ };
+ 
+ #define LP_CS_MAX_VARIANT_KEY_SIZE                                      \
+@@ -122,6 +123,8 @@
+    unsigned variants_created;
+    unsigned variants_cached;
+    bool zero_initialize_shared_memory;
++   bool intergroup_row_owner_eligible;
++   bool intergroup_row_owner_dispatch;
+ 
+    int max_global_buffers;
+    struct pipe_resource **global_buffers;
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -72,6 +72,7 @@
+    unsigned draw_id;
+    bool zero_initialize_shared_memory;
+    bool use_iters;
++   bool intergroup_row_owner;
+    struct lp_cs_exec *current;
+    struct vertex_header *io;
+    size_t io_stride;
+@@ -319,6 +320,23 @@
+    struct gallivm_state *gallivm = variant->gallivm;
+    struct nir_shader *nir = shader->base.ir.nir;
+    const struct lp_compute_shader_variant_key *key = &variant->key;
++   const bool intergroup = key->intergroup_row_owner;
++   if (shader->intergroup_row_owner_eligible) {
++      /* Keep variant-specific divergence/lowering out of the ordinary
++       * fallback and the original serialized cache key.
++       */
++      nir = nir_shader_clone(NULL, nir);
++      nir_shader_compiler_options *options =
++         ralloc(nir, nir_shader_compiler_options);
++      *options = *nir->options;
++      if (intergroup)
++         options->divergence_analysis_options |=
++            nir_divergence_multiple_workgroup_per_compute_subgroup;
++      else
++         options->divergence_analysis_options &=
++            ~nir_divergence_multiple_workgroup_per_compute_subgroup;
++      nir->options = options;
++   }
+    char func_name[64], func_name_coro[64];
+    LLVMTypeRef arg_types[CS_ARG_MAX];
+    LLVMTypeRef func_type, coro_func_type;
+@@ -340,6 +358,7 @@
+    unsigned i;
+ 
+    bool use_coro = nir->info.uses_control_barrier || is_mesh;
++   assert(!intergroup || (!use_coro && lp_native_vector_width == 256));
+ 
+    LLVMValueRef output_array = NULL;
+ 
+@@ -422,6 +441,8 @@
+       gallivm_stub_func(gallivm, function);
+       if (use_coro)
+          gallivm_stub_func(gallivm, coro);
++      if (shader->intergroup_row_owner_eligible)
++         ralloc_free(nir);
+       return;
+    }
+ 
+@@ -726,13 +747,24 @@
+    struct lp_build_loop_state loop_state;
+ 
+    if (!use_coro) {
+-      LLVMValueRef invocation_count = LLVMBuildMul(gallivm->builder, block_x_size_arg, block_y_size_arg, "");
+-      invocation_count = LLVMBuildMul(gallivm->builder, invocation_count, block_z_size_arg, "");
+-
+-      partials = LLVMBuildURem(gallivm->builder, invocation_count, vec_length, "");
+-
+-      num_subgroup_loop = LLVMBuildAdd(gallivm->builder, invocation_count, lp_build_const_int32(gallivm, cs_type.length - 1), "");
+-      num_subgroup_loop = LLVMBuildUDiv(gallivm->builder, num_subgroup_loop, vec_length, "");
++      if (intergroup) {
++         /* Each packet starts at an original X group and never crosses an
++          * X row. Tail masking precedes the shader prologue.
++          */
++         LLVMValueRef remaining = LLVMBuildSub(builder, grid_size_x_arg, grid_x_arg, "owner_remaining");
++         LLVMValueRef is_tail = LLVMBuildICmp(builder, LLVMIntULT, remaining, vec_length, "owner_tail");
++         partials = LLVMBuildSelect(builder, is_tail, remaining,
++                                   lp_build_const_int32(gallivm, 0), "owner_partials");
++         num_subgroup_loop = lp_build_const_int32(gallivm, 1);
++      } else {
++         LLVMValueRef invocation_count = LLVMBuildMul(gallivm->builder, block_x_size_arg, block_y_size_arg, "");
++         invocation_count = LLVMBuildMul(gallivm->builder, invocation_count, block_z_size_arg, "");
++
++         partials = LLVMBuildURem(gallivm->builder, invocation_count, vec_length, "");
++
++         num_subgroup_loop = LLVMBuildAdd(gallivm->builder, invocation_count, lp_build_const_int32(gallivm, cs_type.length - 1), "");
++         num_subgroup_loop = LLVMBuildUDiv(gallivm->builder, num_subgroup_loop, vec_length, "");
++      }
+ 
+       lp_build_loop_begin(&loop_state, gallivm, lp_build_const_int32(gallivm, 0));
+ 
+@@ -805,9 +837,21 @@
+       system_values.thread_id[2] = LLVMBuildUDiv(gallivm->builder, invocation_index, block_x_size_vec, "");
+       system_values.thread_id[2] = LLVMBuildUDiv(gallivm->builder, system_values.thread_id[2], block_y_size_vec, "");
+ 
+-      system_values.block_id[0] = grid_x_arg;
+-      system_values.block_id[1] = grid_y_arg;
+-      system_values.block_id[2] = grid_z_arg;
++      if (intergroup) {
++         /* NIR's multiple-workgroup option makes row addresses divergent.
++          * Each active vector lane is local zero of a different group.
++          */
++         for (i = 0; i < 3; i++)
++            system_values.thread_id[i] = lp_build_const_int_vec(gallivm, bld.type, 0);
++         system_values.block_id[0] = LLVMBuildAdd(builder,
++            lp_build_broadcast_scalar(&bld, grid_x_arg), invocation_index, "owner_group_x");
++         system_values.block_id[1] = lp_build_broadcast_scalar(&bld, grid_y_arg);
++         system_values.block_id[2] = lp_build_broadcast_scalar(&bld, grid_z_arg);
++      } else {
++         system_values.block_id[0] = grid_x_arg;
++         system_values.block_id[1] = grid_y_arg;
++         system_values.block_id[2] = grid_z_arg;
++      }
+ 
+       system_values.grid_size[0] = grid_size_x_arg;
+       system_values.grid_size[1] = grid_size_y_arg;
+@@ -975,8 +1019,70 @@
+ 
+    gallivm_verify_function(gallivm, coro);
+    gallivm_verify_function(gallivm, function);
+-}
+-
++   if (shader->intergroup_row_owner_eligible)
++      ralloc_free(nir);
++}
++
++
++/* A second, fail-closed gate after exact SPIR-V admission.  The scalar
++ * function-call context and all cross-invocation observability stay outside
++ * this mode.  These checks alone never authorize an arbitrary shader.
++ */
++static bool
++lp_intergroup_row_owner_eligible(const nir_shader *nir)
++{
++#if LP_VULKAN_IEEE32_ENABLED
++   if (lp_native_vector_width != 256 || nir->info.stage != MESA_SHADER_COMPUTE ||
++       !nir->info.cs.llvmpipe_intergroup_row_owner ||
++       nir->info.workgroup_size_variable ||
++       nir->info.workgroup_size[0] != 64 || nir->info.workgroup_size[1] != 1 ||
++       nir->info.workgroup_size[2] != 1 || nir->info.shared_size ||
++       nir->info.task_payload_size || nir->info.ray_queries ||
++       nir->info.uses_control_barrier || nir->info.uses_memory_barrier ||
++       nir->info.uses_wide_subgroup_intrinsics ||
++       nir->info.derivative_group != DERIVATIVE_GROUP_NONE ||
++       nir->info.cs.has_variable_shared_mem || nir->info.cs.has_cooperative_matrix ||
++       !exec_list_is_singular(&nir->functions))
++      return false;
++
++   nir_foreach_variable_with_modes(var, nir, nir_var_mem_shared | nir_var_mem_task_payload)
++      return false;
++   nir_function_impl *impl = nir_shader_get_entrypoint(nir);
++   if (!impl)
++      return false;
++   nir_foreach_block(block, impl) {
++      nir_foreach_instr(instr, block) {
++         if (instr->type == nir_instr_type_call || instr->type == nir_instr_type_tex)
++            return false;
++         if (instr->type == nir_instr_type_alu) {
++            const char *name = nir_op_infos[nir_instr_as_alu(instr)->op].name;
++            if (strstr(name, "ddx") || strstr(name, "ddy"))
++               return false;
++         } else if (instr->type == nir_instr_type_intrinsic) {
++            nir_intrinsic_instr *intr = nir_instr_as_intrinsic(instr);
++            if (nir_intrinsic_has_semantic(intr, NIR_INTRINSIC_SUBGROUP) ||
++                nir_intrinsic_has_semantic(intr, NIR_INTRINSIC_QUADGROUP))
++               return false;
++            const char *name = nir_intrinsic_infos[intr->intrinsic].name;
++            if (strstr(name, "atomic") || strstr(name, "barrier") ||
++                strstr(name, "shared") || strstr(name, "subgroup") ||
++                strstr(name, "shuffle") || strstr(name, "ballot") ||
++                strstr(name, "vote") || strstr(name, "quad") ||
++                strstr(name, "ddx") || strstr(name, "ddy") ||
++                strstr(name, "image") || strstr(name, "payload") ||
++                strstr(name, "ray_query") || strstr(name, "coop") ||
++                !strcmp(name, "reduce") || !strcmp(name, "elect") ||
++                !strcmp(name, "scan") || strstr(name, "_scan") ||
++                strstr(name, "read_invocation") || strstr(name, "read_first_invocation"))
++               return false;
++         }
++      }
++   }
++   return true;
++#else
++   return false;
++#endif
++}
+ 
+ static void *
+ llvmpipe_create_compute_state(struct pipe_context *pipe,
+@@ -998,6 +1104,22 @@
+    }
+ 
+    nir = (struct nir_shader *)shader->base.ir.nir;
++   shader->intergroup_row_owner_eligible = lp_intergroup_row_owner_eligible(nir);
++   if (nir->info.stage == MESA_SHADER_COMPUTE &&
++       nir->info.cs.llvmpipe_intergroup_row_owner &&
++       !shader->intergroup_row_owner_eligible) {
++      /* The frontend conservatively marked workgroup IDs divergent.  If
++       * the post-lowering structural/width gate refuses this shader, put
++       * both its marker and options back on the ordinary path.
++       */
++      nir_shader_compiler_options *options =
++         ralloc(nir, nir_shader_compiler_options);
++      *options = *nir->options;
++      options->divergence_analysis_options &=
++         ~nir_divergence_multiple_workgroup_per_compute_subgroup;
++      nir->options = options;
++      nir->info.cs.llvmpipe_intergroup_row_owner = false;
++   }
+    shader->req_local_mem += nir->info.shared_size;
+    shader->zero_initialize_shared_memory = nir->info.zero_initialize_shared_memory;
+ 
+@@ -1112,6 +1234,7 @@
+    struct nir_shader *nir = (struct nir_shader *)shader->base.ir.nir;
+    /* This value will be the same for all the variants of a given shader:
+     */
++   key->intergroup_row_owner = shader->intergroup_row_owner_dispatch;
+    key->nr_samplers = BITSET_LAST_BIT(nir->info.samplers_used);
+    key->nr_sampler_views = BITSET_LAST_BIT(nir->info.textures_used);
+    struct lp_sampler_static_state *cs_sampler;
+@@ -1719,6 +1842,8 @@
+       grid_x = (iter_idx - (grid_z * (job_info->grid_size[0] * job_info->grid_size[1])) - (grid_y * job_info->grid_size[0]));
+    }
+ 
++   if (job_info->intergroup_row_owner)
++      grid_x *= 8;
+    grid_z += job_info->grid_base[2];
+    grid_y += job_info->grid_base[1];
+    grid_x += job_info->grid_base[0];
+@@ -1790,6 +1915,22 @@
+ 
+    memset(&job_info, 0, sizeof(job_info));
+ 
++   /* The dispatch-dependent mode has its own cache/variant key.  Every
++    * unsupported module, block shape, base, indirect dispatch or extra
++    * shared allocation uses the ordinary scheduler and ordinary IDs.
++    */
++   bool intergroup = llvmpipe->cs->intergroup_row_owner_eligible &&
++      info->block[0] == 64 && info->block[1] == 1 && info->block[2] == 1 &&
++      !info->last_block[0] && !info->last_block[1] && !info->last_block[2] &&
++      !info->grid_base[0] && !info->grid_base[1] && !info->grid_base[2] &&
++      !info->indirect && !info->variable_shared_mem &&
++      /* The existing task-pool ABI takes a signed int task count. */
++      (uint64_t)info->grid[0] * info->grid[1] <= INT_MAX &&
++      info->grid[2] <= INT_MAX / MAX2((uint64_t)info->grid[0] * info->grid[1], 1);
++   if (llvmpipe->cs->intergroup_row_owner_dispatch != intergroup) {
++      llvmpipe->cs->intergroup_row_owner_dispatch = intergroup;
++      llvmpipe->cs_dirty |= LP_CSNEW_CS;
++   }
+    llvmpipe_cs_update_derived(llvmpipe);
+ 
+    fill_grid_size(pipe, 0, info, job_info.grid_size);
+@@ -1806,16 +1947,29 @@
+    job_info.current = &llvmpipe->csctx->cs.current;
+ 
+    int num_tasks = job_info.grid_size[2] * job_info.grid_size[1] * job_info.grid_size[0];
+-   if (num_tasks) {
++   int scheduled_tasks = num_tasks;
++   if (intergroup) {
++      job_info.intergroup_row_owner = true;
++      job_info.use_iters = true;
++      job_info.iter_size[0] = job_info.grid_size[0] / 8 + (job_info.grid_size[0] % 8 != 0);
++      job_info.iter_size[1] = job_info.grid_size[1];
++      job_info.iter_size[2] = job_info.grid_size[2];
++      scheduled_tasks = job_info.iter_size[0] * job_info.iter_size[1] * job_info.iter_size[2];
++   }
++   if (scheduled_tasks) {
+       struct lp_cs_tpool_task *task;
+       mtx_lock(&screen->cs_mutex);
+-      task = lp_cs_tpool_queue_task(screen->cs_tpool, cs_exec_fn, &job_info, num_tasks);
++      task = lp_cs_tpool_queue_task(screen->cs_tpool, cs_exec_fn, &job_info, scheduled_tasks);
+       mtx_unlock(&screen->cs_mutex);
+ 
+       lp_cs_tpool_wait_for_task(screen->cs_tpool, &task);
+    }
+-   if (!llvmpipe->queries_disabled)
+-      llvmpipe->pipeline_statistics.cs_invocations += num_tasks * info->block[0] * info->block[1] * info->block[2];
++   if (!llvmpipe->queries_disabled) {
++      if (intergroup)
++         llvmpipe->pipeline_statistics.cs_invocations += (uint64_t)num_tasks * 64;
++      else
++         llvmpipe->pipeline_statistics.cs_invocations += num_tasks * info->block[0] * info->block[1] * info->block[2];
++   }
+ }
+ 
+ 

@@ -1,0 +1,272 @@
+{
+  "schema": "sirius-private-lavapipe-intergroup-row-owner-source-v1",
+  "status": "SOURCE_ONLY_NOT_BUILT_NOT_RUNTIME_ADMITTED",
+  "scope": "Distinct intergroup SIMD for three exact previously audited complete-row modules; failed acquire-release provider change removed.",
+  "basis": {
+    "release_archive": {
+      "git": "43389d91ca54667d12a41ee0a33d35e596fc42bd:attestations/qualification/8c2be67d/lavapipe-vector-workgroup-rejected/mesa-25.2.8.tar.xz",
+      "bytes": 43813260,
+      "sha256": "097842f3e49d996868b38688db87b006f7d4541e93ce86d2f341d8b3e7be7c93"
+    },
+    "IEEE32_prerequisite": {
+      "path": "out/lavapipe-acqrel-ordering/ieee32-prerequisite.patch",
+      "bytes": 5653,
+      "sha256": "87a8bdda3ab630fb2de5a62b13c98817d050c311b915cd49f825459f8b55cd7f"
+    },
+    "IEEE32_files": {
+      "src/util/u_math.h": {
+        "basis": {
+          "bytes": 18704,
+          "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+        },
+        "current": {
+          "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/util/u_math.h",
+          "bytes": 18704,
+          "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+        },
+        "retained_original_prerequisite": true
+      },
+      "src/gallium/frontends/lavapipe/lvp_device.c": {
+        "basis": {
+          "bytes": 115877,
+          "sha256": "736d880fca57653ee6b819cd4243f4400d13f7367aafca574cd2239f85751e0e"
+        },
+        "current": {
+          "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c",
+          "bytes": 116202,
+          "sha256": "b4426a9676935e9497d9e9aa0d7add011e265a377fef2a70eb86bbef51387caf"
+        },
+        "retained_original_prerequisite": true
+      },
+      "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+        "basis": {
+          "bytes": 96490,
+          "sha256": "3c1953896b88b60eccc18109204462590ceaa550ed9fb9991d0d21cc7904cc1e"
+        },
+        "current": {
+          "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c",
+          "bytes": 104043,
+          "sha256": "d10cfd7abb5f7eee3f91ebe9a11e6f5153f90e0107522d8369959619831c8894"
+        },
+        "retained_original_prerequisite": true
+      },
+      "src/gallium/drivers/llvmpipe/lp_rast.c": {
+        "basis": {
+          "bytes": 43484,
+          "sha256": "daa5471828c1261b3003e32bc88caa282faefc475fa18dbb30758ccef4d8f1d8"
+        },
+        "current": {
+          "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_rast.c",
+          "bytes": 43484,
+          "sha256": "daa5471828c1261b3003e32bc88caa282faefc475fa18dbb30758ccef4d8f1d8"
+        },
+        "retained_original_prerequisite": true
+      },
+      "src/gallium/auxiliary/draw/draw_pt.c": {
+        "basis": {
+          "bytes": 21093,
+          "sha256": "0aa79f9b15610525e16443cf7b725cb871f27528eac37ea4c1226aef8cf9ad2c"
+        },
+        "current": {
+          "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/draw/draw_pt.c",
+          "bytes": 21093,
+          "sha256": "0aa79f9b15610525e16443cf7b725cb871f27528eac37ea4c1226aef8cf9ad2c"
+        },
+        "retained_original_prerequisite": true
+      }
+    },
+    "patch_relative_to": "Authentic release with exactly the five-file IEEE32 prerequisite applied; patch contains only six new/extended source-file deltas."
+  },
+  "restored_original_barrier_lowering": {
+    "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+    "bytes": 246649,
+    "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+  },
+  "modified_files": {
+    "src/compiler/shader_info.h": {
+      "basis": {
+        "bytes": 19472,
+        "sha256": "41d791df0b37735cc84d2719c2df512bd06c454b68781c5b76278e59b6949b14"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/shader_info.h",
+        "bytes": 19673,
+        "sha256": "53f5107551c927cc78355d54954ec895aeed177ee6bf8dec3684d569e03bbb78"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "basis": {
+        "bytes": 58416,
+        "sha256": "67427ba594f80cc78c99d8440d87318accf0966c3e1bf32e5c0b099e9729acd8"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_pipeline.c",
+        "bytes": 61281,
+        "sha256": "01abdf9445446e8bc5c742bd57e7cd6397513d3e0159d98074a52ff826a20dde"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 115877,
+        "sha256": "736d880fca57653ee6b819cd4243f4400d13f7367aafca574cd2239f85751e0e"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c",
+        "bytes": 116202,
+        "sha256": "b4426a9676935e9497d9e9aa0d7add011e265a377fef2a70eb86bbef51387caf"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32081,
+        "sha256": "a31224221b4eb4265f51daedd162bd832f882b03b16de319cd04f13c717bf9f8"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_screen.c",
+        "bytes": 32357,
+        "sha256": "bd941272aff848f6a7e01d6fe24a97c755a17a97c8890052faa51c40ed2200a0"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.h": {
+      "basis": {
+        "bytes": 5046,
+        "sha256": "272adbda783f78e11b4c577aa6ce563d8c97f65329bfdd9e1fed6d8ed1beae30"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.h",
+        "bytes": 5160,
+        "sha256": "ab69e6b953c080fb04758ce4de56e4ffbfd86955d765d9685427dde130a93cf0"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "basis": {
+        "bytes": 96490,
+        "sha256": "3c1953896b88b60eccc18109204462590ceaa550ed9fb9991d0d21cc7904cc1e"
+      },
+      "candidate": {
+        "path": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c",
+        "bytes": 104043,
+        "sha256": "d10cfd7abb5f7eee3f91ebe9a11e6f5153f90e0107522d8369959619831c8894"
+      }
+    }
+  },
+  "prototype_patch": {
+    "path": "out/lavapipe-intergroup-row-owner/prototype.patch",
+    "bytes": 18764,
+    "sha256": "574bf58ae14a8f625a2252fafa13948b531652dffd4d7e2289eb761555239704"
+  },
+  "root_owned_reused_products": {
+    "path": "out/lavapipe-intergroup-row-owner/reused-row-products.json",
+    "bytes": 3212,
+    "sha256": "a333b19b302b6de86a7069f995ef4d05eeb7d00a526485d390c89cbfd0d448c1"
+  },
+  "eligible_modules": {
+    "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv": {
+      "bytes": 59508,
+      "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+      "mode": 420,
+      "sha1_for_original_Vulkan_cache_identity": "e2beef14d27ccb5f80bce2ebf63c35847c0ca40c"
+    },
+    "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv": {
+      "bytes": 97044,
+      "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+      "mode": 420,
+      "sha1_for_original_Vulkan_cache_identity": "e4f32bfe7db73dad21d73586f1bf77172aa390ca"
+    },
+    "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv": {
+      "bytes": 86008,
+      "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+      "mode": 420,
+      "sha1_for_original_Vulkan_cache_identity": "c0f38b8b39d12136216af98f3465f34646300628"
+    }
+  },
+  "eligibility": [
+    "LP_VULKAN_IEEE32_ENABLED (existing x86-64 Vulkan-only FP-state repair), native vector width exactly 256 bits / eight 32-bit lanes.",
+    "SPIR-V SHA-1 exactly one of the three pinned binaries, entry-point string main (debug function identifier ComputeMain), compute stage, no stage flags, specialization or required-subgroup-size pNext. Module bytes are rehashed on every source compile; no name/label-based admission.",
+    "Serialized shader_info.cs marker defaults false and is set only by source admission. Post-lowering gate requires fixed LocalSize(64,1,1), one function, no call/texture instruction, shared/task storage, cooperative matrix, ray query, derivative group, memory/control barrier or wide subgroup use.",
+    "NIR intrinsic semantic flags reject subgroup/quad operations; explicit intrinsic-name exclusions also reject atomics, barriers, shared/payload/image/derivative, shuffle/ballot/vote/reduction/scan/invocation-read operations.",
+    "Only direct dispatch, original full block64x1x1, zero base and last-block overrides, no extra shared memory, and grid product representable by the existing signed-int task ABI. All other source/module/width/dispatch modes use the ordinary variant and scheduler."
+  ],
+  "hooks": {
+    "lvp_pipeline.c": "Hash admission before frontend lowering; per-shader compiler-options copy marks workgroup IDs divergent. Binary NIR import explicitly clears eligibility.",
+    "lp_state_cs.h": "One serialized variant-key mode bit plus eligibility/current-dispatch state; key memset and key size helpers remain in use.",
+    "lp_state_cs.c_generate": "Eligible shader variants clone NIR, own compiler options, select multiple-workgroup divergence only for the intergroup variant, and release clone on normal/cache-hit exits. No scalar function-call context is used in eligible modules.",
+    "lp_state_cs.c_launch": "Dispatch shape selects a separate variant before derived state; scheduler queues ceil(Gx/8)*Gy*Gz X-bounded packets through unchanged task-pool callback/wait/FP-state restoration.",
+    "lp_state_cs.c_ids": "Packet callback passes first original X group. One generated subgroup iteration gives lane l groupID=(8*packetX+l,Y,Z), localID/index=0, original blockSize64 and original gridSize. Frontend global-ID lowering therefore retains GroupID*64+0.",
+    "lp_state_cs.c_mask": "Remaining=originalGx-firstGroupX; final packet mask clears all lanes >=remaining before lp_build_nir_soa_func/prologue. Existing divergent SSBO gathers/stores combine this mask with execution masks. Uniform loads shared by active owners and private inactive-lane calculations retain existing lowering; no out-of-grid lane may issue an observable buffer access.",
+    "lp_state_cs.c_queries": "Task completion waits for all packets; pipeline statistics add original Gx*Gy*Gz*64 once, using uint64_t in this mode. No feature/property masks, skipped producer dispatches or changed public queries."
+  },
+  "cache_and_ABI": [
+    "Internal shader_info has a new serialized bool. Private Vulkan/shader-binary UUID becomes exact16-byte SIR-IWG-25.2.8-1; older binary NIR is rejected before decoding. New opaque binary NIR also clears the marker, because its SPIR-V cannot be reverified.",
+    "llvmpipe disk-cache namespace has explicit Sirius-intergroup-owner-v1 salt. Serialized NIR includes the marker and the compute variant key includes mode. Key zero-initialization prevents padding-derived mode.",
+    "Unsupported dispatches select ordinary variant key zero; variant-local NIR/options prevent divergent-ID lowering from contaminating fallback. A failed structural/width gate clears both frontend marker and its conservative divergence flag.",
+    "Public Vulkan LocalSize64, dispatch group counts, descriptor/buffer ABI, NumWorkgroups, tables, shaders and arithmetic unchanged. C-to-JIT lp_jit_cs_func and thread-data layouts unchanged; only private marked entrypoints receive vector block IDs, with helper calls forbidden."
+  ],
+  "state_and_order": [
+    "Each active vector lane owns a distinct original logical workgroup/local0. Private retained scratch/status/coefficient/projection state follows existing SoA per-invocation storage; no new cross-group shared state or global output-tail reuse.",
+    "Exactly the complete original owner path executes for each logical row. Local1..63 are omitted solely because these exact modules prove they return without side effects. No subgroup observability, atomic synchronization or barriers are permitted.",
+    "Original per-row control, refusal, partial-prefix writes, arithmetic/precision,40fields,7RHS,3trials,4quartics and producer stage/dispatch counts remain unchanged. Reordering independent workgroups is permitted; alias-disjoint row/buffer contract of these three modules is a prerequisite.",
+    "Task-pool worker/local-memory ownership, queue mutex, wait-for-task, FP-state save/set/restore, host cancellation and process guard remain original. A packet is a coarser scheduling unit; no new in-shader cancellation promise."
+  ],
+  "required_actual_review_after_ROOT_build": [
+    "Actual NIR eligibility remains true for exactly these modules; scalar helper/call-context rejection and ordinary unsupported-shape/base fallback are exercised by inspection of actual generated paths.",
+    "LLVM workgroup IDs and row-dependent addresses are <8xi32> divergent; local IDs are0, grid size/block size remain scalar original values, private arrays have eight distinct owner states, masked tail cannot dereference out-of-grid buffers.",
+    "Inspect full/tail and X/Y/Z packet mapping, original queries and absence of coroutine/barrier/atomic/subgroup paths before admitting any workload. Existing original32 readback/control8 and sole22 gates remain required; remaining7/adoption/cold decisions remain ROOT governed."
+  ],
+  "limitations": [
+    "No build, compile, provider query, workload, performance or numerical result produced by this author. No speed/occupancy/stack reduction claim.",
+    "Variant NIR cloning adds transient compiler memory. New vector address/data divergence and masked private state require actual lowering review; original source proof does not establish emitted LLVM behavior.",
+    "Only these three immutable bfa095ba modules are admitted. Any new shader byte, precision route, subgroup semantics, indirect/base/partial-block dispatch falls back; no general intergroup optimizer is claimed."
+  ],
+  "author_operations": {
+    "source_edits_only": true,
+    "authentic_tar_read_in_memory": true,
+    "project_helpers_or_imports": 0,
+    "builds": 0,
+    "tests": 0,
+    "providers": 0,
+    "network": 0,
+    "git_mutations": 0,
+    "additional_agents": 0
+  },
+  "entry_point_contract": {
+    "SPIRV_entry_point_string": "main",
+    "OpName_debug_identifier": "ComputeMain",
+    "actual_three_module_records": {
+      "transport": {
+        "assembly": {
+          "path": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spvasm",
+          "bytes": 248344,
+          "sha256": "75596c383345588e5c8f0ca828dae72355486596a0e2e6e8ce8d78581b571ac1"
+        },
+        "line": 13,
+        "record": "OpEntryPoint GLCompute %ComputeMain \"main\" %inputs %outputs %retainedScratch %retainedStatus %retainedCoefficients %gl_WorkGroupID %gl_LocalInvocationIndex"
+      },
+      "endpoint": {
+        "assembly": {
+          "path": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spvasm",
+          "bytes": 282206,
+          "sha256": "734086a3ec4fdd60c264e23ad89bc15292be7dbfaa2a2f55ca60c7f21a34aaf9"
+        },
+        "line": 13,
+        "record": "OpEntryPoint GLCompute %ComputeMain \"main\" %inputs %outputs %nativeProjection %retainedStatus %retainedScratch %gl_WorkGroupID %gl_LocalInvocationIndex"
+      },
+      "dopri_phase": {
+        "assembly": {
+          "path": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spvasm",
+          "bytes": 172030,
+          "sha256": "24d60773ac8990b74f91c2ed84016189330194441c822bf120158d20bced4f10"
+        },
+        "line": 13,
+        "record": "OpEntryPoint GLCompute %ComputeMain \"main\" %inputs %outputs %retainedStatus %retainedScratch %gl_WorkGroupID %gl_LocalInvocationIndex"
+      }
+    },
+    "public_pipeline_caller": {
+      "path": "src/sirius/backend/vulkan/vulkan_device.cpp",
+      "bytes": 57103,
+      "sha256": "fff818c58ee20e0bca9221f87daa93e5c323cc96221751aef23d9bd6378c4403"
+    },
+    "public_pipeline_pName_line": 978,
+    "prebuild_correction": "The first draft compared the debug identifier ComputeMain; ROOT caught the mismatch before any build and this bounded source-only fix uses the actual entry-point string. All other source/contract findings retained."
+  }
+}

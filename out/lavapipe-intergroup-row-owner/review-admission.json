@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "scope": "Independent ROOT source admission only; actual generated code and unchanged runtime gates remain required.",
+  "prototype_patch": {
+    "bytes": 18764,
+    "sha256": "574bf58ae14a8f625a2252fafa13948b531652dffd4d7e2289eb761555239704"
+  },
+  "source_contract": {
+    "bytes": 16468,
+    "sha256": "4e2c31e0bddf596b2dbd93746255e6af0713861756e4a1ec5a0919f8e3db62c4"
+  },
+  "source_files": {
+    "src/compiler/shader_info.h": {
+      "bytes": 19673,
+      "sha256": "53f5107551c927cc78355d54954ec895aeed177ee6bf8dec3684d569e03bbb78"
+    },
+    "src/gallium/auxiliary/draw/draw_pt.c": {
+      "bytes": 21093,
+      "sha256": "0aa79f9b15610525e16443cf7b725cb871f27528eac37ea4c1226aef8cf9ad2c"
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+      "bytes": 246649,
+      "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+    },
+    "src/gallium/drivers/llvmpipe/lp_rast.c": {
+      "bytes": 43484,
+      "sha256": "daa5471828c1261b3003e32bc88caa282faefc475fa18dbb30758ccef4d8f1d8"
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "bytes": 32357,
+      "sha256": "bd941272aff848f6a7e01d6fe24a97c755a17a97c8890052faa51c40ed2200a0"
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 104043,
+      "sha256": "d10cfd7abb5f7eee3f91ebe9a11e6f5153f90e0107522d8369959619831c8894"
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.h": {
+      "bytes": 5160,
+      "sha256": "ab69e6b953c080fb04758ce4de56e4ffbfd86955d765d9685427dde130a93cf0"
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "bytes": 116202,
+      "sha256": "b4426a9676935e9497d9e9aa0d7add011e265a377fef2a70eb86bbef51387caf"
+    },
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c": {
+      "bytes": 61281,
+      "sha256": "01abdf9445446e8bc5c742bd57e7cd6397513d3e0159d98074a52ff826a20dde"
+    },
+    "src/util/u_math.h": {
+      "bytes": 18704,
+      "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+    }
+  },
+  "preserved_prior_source": {
+    "commit": "d324d909463615699517b9aa5034bb521ceddbd2",
+    "archive": "attestations/qualification/1c95c98f/lavapipe-acqrel-ordering-finite-outcome/diagnostics-and-trial.zip",
+    "bytes": 7634909,
+    "sha256": "a29355e06f4d6d6e16971ecd1868d855d53e434088669fe4631ddf5f3ee2baf9",
+    "member": "out/lavapipe-acqrel-ordering/build/inputs-before.json",
+    "member_identity": {
+      "bytes": 4021652,
+      "sha256": "eecc5c5b17b70c9e4f0c3c2b9fb7af437370e04db06b69a5e721942dfbb1a92e"
+    },
+    "source_files": 11100
+  },
+  "full_current_source_identity": {
+    "bytes": 1482565,
+    "sha256": "c9fb02dd95414f4a2f99a5b28d1164ac9971cd95da4e8952921288afdc2b7575"
+  },
+  "changed_from_prior_trial": [
+    "src/compiler/shader_info.h",
+    "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c",
+    "src/gallium/drivers/llvmpipe/lp_screen.c",
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c",
+    "src/gallium/drivers/llvmpipe/lp_state_cs.h",
+    "src/gallium/frontends/lavapipe/lvp_device.c",
+    "src/gallium/frontends/lavapipe/lvp_pipeline.c"
+  ],
+  "reverse_patch_recovers_exact_prior_six_file_basis": true,
+  "original_barrier_source_authenticated_from_release": true,
+  "original_IEEE32_prerequisite_retained": true,
+  "original_spirv_entrypoint_is_main_not_debug_ComputeMain": true,
+  "reviewed_contracts": [
+    "Only three exact immutable modules; one function, local0-only observable owner; unsupported source/shape/base/width and binary imports fall back.",
+    "Variant-local options make group IDs divergent; singular-function gate prevents scalar helper-call context, and lp_build_opt_nir has no eligible helper-introducing pass.",
+    "Eight X-bounded independent group owners; original Y/Z/grid/block/query counts; out-of-grid mask precedes the shader prologue and observable accesses.",
+    "Private state, task-pool completion and original scoped IEEE32 save/set/restore retained; failed acquire-release modification removed.",
+    "Private binary UUID, disk-cache salt, serialized shader marker and separate variant key prevent stale/ordinary/intergroup cache aliasing."
+  ],
+  "prebuild_corrections": [
+    "Vulkan entrypoint main verified against all three immutable OpEntryPoint declarations and the actual Vulkan pipeline factory."
+  ],
+  "runtime_or_performance_admitted": false,
+  "new_builds_or_workloads": 0
+}
