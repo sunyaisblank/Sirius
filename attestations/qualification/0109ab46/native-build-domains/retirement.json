@@ -1,0 +1,50 @@
+{
+  "preservation_pushed_at": "e139743a7f28e8c23f184ad57688b72738e85594",
+  "owned_files_removed": 118,
+  "bytes_removed": 303794822,
+  "all_raw_bytes_join_pushed_Git_archives": true,
+  "native_artifacts_API_digest_verified": true,
+  "method": "Rehash every preserved bundle file and compare exact bytes with pushed Git; reconstruct an index from original native ZIPs, nested gate diagnostic ZIPs, metadata/publication ZIPs, and CI log ZIP; check every owned raw file against that index before unlink. No source, existing build volume, provider or unrelated file removed.",
+  "archive_authorities": {
+    "alignment-receipt.json": {
+      "bytes": 1808,
+      "sha256": "87d2f842174867af9bc43153554b2821b45def5c1b3873b120479463e35a681e"
+    },
+    "ci-logs.zip": {
+      "bytes": 179291,
+      "sha256": "ba7a033df4a911506d3f780f2589dd8abcd1a5bf61a557834c36ffebeb20665f"
+    },
+    "findings.json": {
+      "bytes": 7053,
+      "sha256": "1c57c71abb6b0284c476d9fcc4a307e81a0cbe4b30a4cd3985e2ea1b18da398c"
+    },
+    "independent-review.json": {
+      "bytes": 1232,
+      "sha256": "8c913bedaaedfa25886b08a86c8a5ebd1e40f750da6428ebe8640b95bf992226"
+    },
+    "macos-native-attestation.zip": {
+      "bytes": 53660237,
+      "sha256": "f454ad572c16d2f4a7feccb02becbf4dd906c9ba17e9642abce009bde907f97a"
+    },
+    "publication-receipts.zip": {
+      "bytes": 21228,
+      "sha256": "ca6edef47a36d92a6bb575b799f552edf65a24442bdd2d39fec6b8728461e7ca"
+    },
+    "publication.json": {
+      "bytes": 887,
+      "sha256": "8a808488a3247891cb58022aae45e145c8d5e64cc4902620479551e1d03443c3"
+    },
+    "verification-and-metadata.zip": {
+      "bytes": 18698,
+      "sha256": "ba923061fcf36ff995b7294cc5b0dd77bbe209038c73abc67cea905044b51a1e"
+    },
+    "verification-context.json": {
+      "bytes": 1388,
+      "sha256": "e9726390b4bd8faeef856090752ebbb7bf667714f133afa3746a9d4925d34e3b"
+    },
+    "windows-native-attestation.zip": {
+      "bytes": 52495129,
+      "sha256": "aaffca012a69caab4c7e19cac996496418181857575c8f0f4b1361817a52051b"
+    }
+  }
+}
