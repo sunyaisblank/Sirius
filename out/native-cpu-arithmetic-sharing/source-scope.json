@@ -1,0 +1,41 @@
+{
+  "source_basis": "f003c8ec",
+  "scope": "Private default-native32 CPU Endpoint and DopriPhase EvaluateOne op2..6 control sharing only; Transport and all public modes/source untouched.",
+  "host_selector": {
+    "sha256": "0bc5bd4e9f4aa4c9be6f292e09b76c92dc53ae5f75ce91dd62ac482098a160b3"
+  },
+  "source_bases_SHA256": {
+    "out/native-cpu-row-ownership/shaders/retained_endpoint.slang": "3c0fe3961397cef7dca40df375e97c9a0a8d14b88816a841851e397ca0beeb2c",
+    "out/native-cpu-row-ownership/shaders/retained_dopri_phase.slang": "78b57d6ec36509508a9448b0b8a06b626988c19b16e03e908d3e50fcf01c8043",
+    "src/sirius/kernels/retained_triple.slang": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+  },
+  "independent_source_review": {
+    "reviewer": "divide_contract_review",
+    "admission": "Source coherent: three refinements/four residuals/final enclosure/invalid capsules and ordered refusals preserved. Only pure native sign-bit clearing moves before a failed-result short circuit.",
+    "boundaries": "Helper visibility plus EvaluateOne routing only. Native RTMultiply/RTAdd/RTDivide/RTSqrt bodies, Endpoint Project guards, full output fields, B-read and bounds ordering, and all rollback remain original."
+  },
+  "material_CPU_premise": {
+    "saved_optimized_DP_multiply_identity_regions": [
+      3136,
+      6624,
+      11733,
+      14524,
+      18193
+    ],
+    "saved_optimized_E_interpreter_multiply_identity_regions": [
+      99537,
+      103026,
+      108137,
+      110926,
+      114595
+    ],
+    "original_interpreter_multiply_sites": 5,
+    "new_shared_multiply_sites": 1,
+    "original_add_source_sites": 8,
+    "new_add_source_sites": 1,
+    "limitation": "Source callsite counts do not guarantee equal surviving clones or machine savings."
+  },
+  "adverse_history": "AMD Transport same seven-phase sharing at3045067 passed numerical checks but regressed every64/128-row block despite21% smaller text. Do not retry that mechanism unchanged on that product. This candidate changes only current IEEE32 Mesa CPU E/DP and must show consequential actual called-code reduction before numerical/performance trial.",
+  "next_gate": "Owned two-module compile, exact ABI/storage/program/control checks, then original4B ordinary called-code captures under exact-hash admitted private provider with unchanged bulk-clear/Default pipeline; reject negligible gain. No runtime benefit claimed.",
+  "qualification": false
+}

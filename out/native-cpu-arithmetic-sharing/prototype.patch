@@ -1,0 +1,58 @@
+--- out/native-cpu-row-ownership/shaders/retained_endpoint.slang
++++ out/native-cpu-arithmetic-sharing/shaders/retained_endpoint.slang
+@@ -78,7 +78,7 @@
+             if ((op == 10 || op == 11) && c >= registers) return false;
+         } else {
+ #endif
+-#ifdef SIRIUS_RETAINED_PORTABLE
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING)
+         if (op >= 2 && op <= 6) {
+             RetainedTriple bv = RTInvalid();
+             if (op != 6) {
+@@ -100,7 +100,7 @@
+         } else {
+             if (b >= registers) return false;
+             RetainedTriple bv = ReadValue(b, rowBase);
+-#ifndef SIRIUS_RETAINED_PORTABLE
++#if !defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING) && (!defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE))
+             if (op == 2)
+                 r = RTAdd(av, bv);
+             else if (op == 3)
+--- out/native-cpu-row-ownership/shaders/retained_dopri_phase.slang
++++ out/native-cpu-arithmetic-sharing/shaders/retained_dopri_phase.slang
+@@ -64,7 +64,7 @@
+     } else {
+         if (a >= registers) return false;
+         RetainedTriple av = ReadValue(a, rowBase);
+-#ifdef SIRIUS_RETAINED_PORTABLE
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING)
+         if (op >= 2 && op <= 6) {
+             RetainedTriple bv = RTInvalid();
+             if (op != 6) {
+@@ -86,7 +86,7 @@
+         } else {
+             if (b >= registers) return false;
+             RetainedTriple bv = ReadValue(b, rowBase);
+-#if !defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE)
++#if !defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING) && (!defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_PARALLEL_DOPRI_PHASE))
+             if (op == 2)
+                 r = RTAdd(av, bv);
+             else if (op == 3)
+--- src/sirius/kernels/retained_triple.slang
++++ out/native-cpu-arithmetic-sharing/shaders/retained_triple.slang
+@@ -1,3 +1,6 @@
++#if defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING) && (!defined(SIRIUS_RETAINED_CPU_ROW_OWNER) || defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_FP64) || defined(SIRIUS_RETAINED_FMA32) || defined(SIRIUS_RETAINED_STAGE7_OWNER))
++#error Private arithmetic sharing requires the existing native32 CPU row owner
++#endif
+ // Three-term expansion for transport's small covariant components. The camera
+ // pair remains a separate authority; no conversion discards its low part.
+ import retained_pair;
+@@ -197,7 +200,7 @@
+         RPUpMultiply(b.error,RTCenterUpper(a))),RPUpMultiply(a.error,b.error));
+     return RTFinishAccumulation(r.hi,r.lo,r.tail,RPUpAdd(RPUpAdd(r.error,omitted),uncertainty));
+ }
+-#ifdef SIRIUS_RETAINED_PORTABLE
++#if defined(SIRIUS_RETAINED_PORTABLE) || defined(SIRIUS_RETAINED_CPU_ARITHMETIC_SHARING)
+ // Caller supplies an arithmetic bytecode opcode in [2,6]. Seven phases retain
+ // three corrections and the final residual while sharing the integer bodies.
+ RetainedTriple RTEvaluateArithmetic(RetainedTriple a,RetainedTriple b,uint op) {
