@@ -1,0 +1,1697 @@
+{
+  "passed": true,
+  "library": "bin/linux-gcc/native-cpu-slang-bridge/provider/libvulkan_lvp.so",
+  "library_identity": {
+    "bytes": 15271312,
+    "sha256": "ccb9115a87b918e3ee962bde3159c5d137ec50eb0dd7b1d1d687bd0adfa906a4"
+  },
+  "objects": [
+    {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.o",
+        "bytes": 93600,
+        "sha256": "02f3696cb3c459e7b88995a1b16d8cc8b03caa021ac71f46e32946ccffc18609"
+      },
+      "all_retained_function_opcodes_match": true,
+      "omitted_private_one_byte_RET_initializers": [
+        "_GLOBAL__sub_I_transport.cpp"
+      ],
+      "functions": [
+        {
+          "symbol": "_ZN26sirius_generated_transportL17ReadCoefficient_0EjPNS_15KernelContext_0E",
+          "bytes": 35,
+          "linked_address": 393808,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL22RTFinishAccumulation_0Effff",
+          "bytes": 360,
+          "linked_address": 393856,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL9RTExact_0EPNS_16RetainedTriple_0Ef",
+          "bytes": 67,
+          "linked_address": 394224,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL12ReadStored_0EjPNS_15KernelContext_0E.isra.0",
+          "bytes": 67,
+          "linked_address": 394304,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL13WriteStored_0EjPNS_16RetainedTriple_0EPNS_15KernelContext_0E.isra.0",
+          "bytes": 51,
+          "linked_address": 394384,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL14RPRatioUpper_0Eff",
+          "bytes": 330,
+          "linked_address": 394448,
+          "relocations": [
+            {
+              "offset": 28,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 117,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 181,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL14ReadOriginal_0EjjPNS_15KernelContext_0E.isra.0",
+          "bytes": 200,
+          "linked_address": 394784,
+          "relocations": [
+            {
+              "offset": 196,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL14RPDivideSeed_0Eff.part.0",
+          "bytes": 506,
+          "linked_address": 394992,
+          "relocations": [
+            {
+              "offset": 230,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 452,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 487,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL15RTCenterUpper_0EPNS_16RetainedTriple_0E.isra.0",
+          "bytes": 230,
+          "linked_address": 395504,
+          "relocations": [
+            {
+              "offset": 46,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL17RTAbsoluteUpper_0EPNS_16RetainedTriple_0E.isra.0",
+          "bytes": 292,
+          "linked_address": 395744,
+          "relocations": [
+            {
+              "offset": 35,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 241,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL17RTAbsoluteLower_0EPNS_16RetainedTriple_0E",
+          "bytes": 363,
+          "linked_address": 396048,
+          "relocations": [
+            {
+              "offset": 40,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 222,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL18RTAccumulateTerm_0EPNS_16RetainedTriple_0Ef",
+          "bytes": 441,
+          "linked_address": 396416,
+          "relocations": [
+            {
+              "offset": 274,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL21RTAccumulateProduct_0EPNS_16RetainedTriple_0Eff",
+          "bytes": 473,
+          "linked_address": 396864,
+          "relocations": [
+            {
+              "offset": 180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 402,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 452,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 462,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 469,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL28RTAccumulateRoundedProduct_0EPNS_16RetainedTriple_0Eff",
+          "bytes": 504,
+          "linked_address": 397344,
+          "relocations": [
+            {
+              "offset": 208,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 224,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 273,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 468,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 483,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 500,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL7RTAdd_0EPNS_16RetainedTriple_0ES1_",
+          "bytes": 598,
+          "linked_address": 397856,
+          "relocations": [
+            {
+              "offset": 328,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 575,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 594,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL12RTSubtract_0EPNS_16RetainedTriple_0ES1_.isra.0",
+          "bytes": 123,
+          "linked_address": 398464,
+          "relocations": [
+            {
+              "offset": 119,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL12RTMultiply_0EPNS_16RetainedTriple_0ES1_",
+          "bytes": 3553,
+          "linked_address": 398592,
+          "relocations": [
+            {
+              "offset": 214,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1085,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1134,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1260,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1406,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1501,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1579,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1628,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1692,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1863,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1962,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 1985,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2092,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2145,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2406,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2713,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2769,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2799,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3101,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3340,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3468,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3535,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL10RTDivide_0EPNS_16RetainedTriple_0ES1_.part.0",
+          "bytes": 1409,
+          "linked_address": 402160,
+          "relocations": [
+            {
+              "offset": 107,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 542,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1011,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1405,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL10Rational_0Eii",
+          "bytes": 270,
+          "linked_address": 403584,
+          "relocations": [
+            {
+              "offset": 266,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transportL13EvaluateOne_0EjjjjjPNS_15KernelContext_0E.constprop.0",
+          "bytes": 3352,
+          "linked_address": 403856,
+          "relocations": [
+            {
+              "offset": 463,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1899,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2912,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 2977,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3057,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 3085,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3319,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN26sirius_generated_transport28sirius_transport_ComputeMainEPvS0_S0_",
+          "bytes": 5314,
+          "linked_address": 407216,
+          "relocations": [
+            {
+              "offset": 87,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 516,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 543,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1750,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 2052,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3415,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3433,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3516,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3534,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 4272,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 5157,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 5180,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_transportComputeMain_Thread",
+          "bytes": 9,
+          "linked_address": 412544,
+          "relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_transportComputeMain_Group",
+          "bytes": 121,
+          "linked_address": 412560,
+          "relocations": [
+            {
+              "offset": 80,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 117,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_transportComputeMain",
+          "bytes": 251,
+          "linked_address": 412688,
+          "relocations": [
+            {
+              "offset": 178,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 247,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_native_transport_try_packet",
+          "bytes": 493,
+          "linked_address": 412944,
+          "relocations": [
+            {
+              "offset": 336,
+              "ELF_type": 42,
+              "bytes": 4
+            },
+            {
+              "offset": 351,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 456,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 489,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.o",
+        "bytes": 117960,
+        "sha256": "70eedd767649af40a8402fb0cebf2945783ffcef247138a2a1a2d4ff797ba3aa"
+      },
+      "all_retained_function_opcodes_match": true,
+      "omitted_private_one_byte_RET_initializers": [
+        "_GLOBAL__sub_I_endpoint.cpp"
+      ],
+      "functions": [
+        {
+          "symbol": "_ZN25sirius_generated_endpointL22RTFinishAccumulation_0Effff",
+          "bytes": 360,
+          "linked_address": 413440,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL12RTConstant_0Ef",
+          "bytes": 84,
+          "linked_address": 413808,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL9RTExact_0EPNS_16RetainedTriple_0Ef",
+          "bytes": 67,
+          "linked_address": 413904,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL12ReadStored_0EjPNS_15KernelContext_0E.isra.0",
+          "bytes": 67,
+          "linked_address": 413984,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL13WriteStored_0EjPNS_16RetainedTriple_0EPNS_15KernelContext_0E.isra.0",
+          "bytes": 51,
+          "linked_address": 414064,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL14RPRatioUpper_0Eff",
+          "bytes": 330,
+          "linked_address": 414128,
+          "relocations": [
+            {
+              "offset": 28,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 117,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 181,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL14RPDivideSeed_0Eff.part.0",
+          "bytes": 506,
+          "linked_address": 414464,
+          "relocations": [
+            {
+              "offset": 230,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 452,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 487,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL15RTCenterUpper_0EPNS_16RetainedTriple_0E.isra.0",
+          "bytes": 230,
+          "linked_address": 414976,
+          "relocations": [
+            {
+              "offset": 46,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL17RTAbsoluteUpper_0EPNS_16RetainedTriple_0E.isra.0",
+          "bytes": 292,
+          "linked_address": 415216,
+          "relocations": [
+            {
+              "offset": 35,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 241,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL17RTAbsoluteLower_0EPNS_16RetainedTriple_0E",
+          "bytes": 363,
+          "linked_address": 415520,
+          "relocations": [
+            {
+              "offset": 40,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 222,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL18RTAccumulateTerm_0EPNS_16RetainedTriple_0Ef",
+          "bytes": 441,
+          "linked_address": 415888,
+          "relocations": [
+            {
+              "offset": 274,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL21RTAccumulateProduct_0EPNS_16RetainedTriple_0Eff",
+          "bytes": 473,
+          "linked_address": 416336,
+          "relocations": [
+            {
+              "offset": 180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 402,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 452,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 462,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 469,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL28RTAccumulateRoundedProduct_0EPNS_16RetainedTriple_0Eff",
+          "bytes": 504,
+          "linked_address": 416816,
+          "relocations": [
+            {
+              "offset": 208,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 224,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 273,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 468,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 483,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 500,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL7RTAdd_0EPNS_16RetainedTriple_0ES1_",
+          "bytes": 598,
+          "linked_address": 417328,
+          "relocations": [
+            {
+              "offset": 328,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 575,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 594,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL12RTMultiply_0EPNS_16RetainedTriple_0ES1_",
+          "bytes": 3553,
+          "linked_address": 417936,
+          "relocations": [
+            {
+              "offset": 214,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1085,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1134,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1260,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1406,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1501,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1579,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1628,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1692,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1863,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1962,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 1985,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2092,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2145,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2406,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2713,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2769,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2799,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3101,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3340,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3468,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3535,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL8RTSqrt_0EPNS_16RetainedTriple_0E.part.0",
+          "bytes": 1644,
+          "linked_address": 421504,
+          "relocations": [
+            {
+              "offset": 603,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1335,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1396,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1621,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 1626,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpointL10RTDivide_0EPNS_16RetainedTriple_0ES1_.part.0",
+          "bytes": 1409,
+          "linked_address": 423152,
+          "relocations": [
+            {
+              "offset": 107,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 542,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1011,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1405,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN25sirius_generated_endpoint27sirius_endpoint_ComputeMainEPvS0_S0_",
+          "bytes": 12204,
+          "linked_address": 424576,
+          "relocations": [
+            {
+              "offset": 103,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 728,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 775,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1585,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 1593,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1642,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2529,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2767,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 4091,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 4545,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 4977,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 6102,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 6304,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 6643,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 6671,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 6718,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 7716,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 7915,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 8073,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 9159,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 10245,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 11878,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_endpointComputeMain_Thread",
+          "bytes": 9,
+          "linked_address": 436784,
+          "relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_endpointComputeMain_Group",
+          "bytes": 121,
+          "linked_address": 436800,
+          "relocations": [
+            {
+              "offset": 80,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 117,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_endpointComputeMain",
+          "bytes": 251,
+          "linked_address": 436928,
+          "relocations": [
+            {
+              "offset": 178,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 247,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_native_endpoint_try_packet",
+          "bytes": 493,
+          "linked_address": 437184,
+          "relocations": [
+            {
+              "offset": 336,
+              "ELF_type": 42,
+              "bytes": 4
+            },
+            {
+              "offset": 351,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 456,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 489,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.o",
+        "bytes": 65104,
+        "sha256": "872068f2eb257e7d601107981b449efd9e21348de7f6609333aef277ca1afc38"
+      },
+      "all_retained_function_opcodes_match": true,
+      "omitted_private_one_byte_RET_initializers": [
+        "_GLOBAL__sub_I_dopri_phase.cpp"
+      ],
+      "functions": [
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL22RTFinishAccumulation_0Effff",
+          "bytes": 360,
+          "linked_address": 437696,
+          "relocations": []
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL14RPRatioUpper_0Eff",
+          "bytes": 330,
+          "linked_address": 438064,
+          "relocations": [
+            {
+              "offset": 28,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 117,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 181,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL14ReadOriginal_0EjjPNS_15KernelContext_0E.isra.0",
+          "bytes": 200,
+          "linked_address": 438400,
+          "relocations": [
+            {
+              "offset": 196,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL14RPDivideSeed_0Eff.part.0",
+          "bytes": 506,
+          "linked_address": 438608,
+          "relocations": [
+            {
+              "offset": 230,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 452,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 487,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL15RTCenterUpper_0EPNS_16RetainedTriple_0E.isra.0",
+          "bytes": 230,
+          "linked_address": 439120,
+          "relocations": [
+            {
+              "offset": 46,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL17RTAbsoluteUpper_0EPNS_16RetainedTriple_0E.isra.0",
+          "bytes": 292,
+          "linked_address": 439360,
+          "relocations": [
+            {
+              "offset": 35,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 241,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL17RTAbsoluteLower_0EPNS_16RetainedTriple_0E",
+          "bytes": 363,
+          "linked_address": 439664,
+          "relocations": [
+            {
+              "offset": 40,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 222,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL18RTAccumulateTerm_0EPNS_16RetainedTriple_0Ef",
+          "bytes": 441,
+          "linked_address": 440032,
+          "relocations": [
+            {
+              "offset": 274,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL21RTAccumulateProduct_0EPNS_16RetainedTriple_0Eff",
+          "bytes": 473,
+          "linked_address": 440480,
+          "relocations": [
+            {
+              "offset": 180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 402,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 452,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 462,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 469,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL28RTAccumulateRoundedProduct_0EPNS_16RetainedTriple_0Eff",
+          "bytes": 504,
+          "linked_address": 440960,
+          "relocations": [
+            {
+              "offset": 208,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 224,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 273,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 468,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 483,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 500,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL7RTAdd_0EPNS_16RetainedTriple_0ES1_",
+          "bytes": 598,
+          "linked_address": 441472,
+          "relocations": [
+            {
+              "offset": 328,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 575,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 594,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phaseL12RTMultiply_0EPNS_16RetainedTriple_0ES1_",
+          "bytes": 3553,
+          "linked_address": 442080,
+          "relocations": [
+            {
+              "offset": 214,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1085,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1134,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1260,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1406,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1501,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1579,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1628,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1692,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1863,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1962,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 1985,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2092,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2145,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2406,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2713,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2769,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2799,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3101,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3340,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3468,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 3535,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "_ZN28sirius_generated_dopri_phase30sirius_dopri_phase_ComputeMainEPvS0_S0_",
+          "bytes": 5850,
+          "linked_address": 445648,
+          "relocations": [
+            {
+              "offset": 99,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 702,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1387,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 1862,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2250,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 2381,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2441,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 2864,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 4197,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 4457,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 4952,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 5693,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_dopri_phaseComputeMain_Thread",
+          "bytes": 9,
+          "linked_address": 451504,
+          "relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_dopri_phaseComputeMain_Group",
+          "bytes": 121,
+          "linked_address": 451520,
+          "relocations": [
+            {
+              "offset": 80,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 117,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_dopri_phaseComputeMain",
+          "bytes": 251,
+          "linked_address": 451648,
+          "relocations": [
+            {
+              "offset": 178,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 247,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "sirius_native_dopri_phase_try_packet",
+          "bytes": 493,
+          "linked_address": 451904,
+          "relocations": [
+            {
+              "offset": 336,
+              "ELF_type": 42,
+              "bytes": 4
+            },
+            {
+              "offset": 351,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 456,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 489,
+              "ELF_type": 4,
+              "bytes": 4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "callback_direct_calls_all3": true,
+  "callback_saved_and_restored_MXCSR_instructions_present": true,
+  "native_FMA_mnemonics": 0,
+  "all3_complete_SPIRV_spans_present_once": true,
+  "linked_runtime_symbols_resolve": true,
+  "scope": "Static ELF/code association only: all retained sealed object function opcodes equal linked code after masking only declared4B PC32/PLT32/REX_GOTPCRELX relocation operands. Three omitted private one-byteRET initializers have no work. Does not alone validate relocation semantics, dynamic native admission, libm/FP equivalence, numerical or benefit/frame acceptance. Callback includes direct native calls and ordinary fallback under existing IEEE32 guard."
+}

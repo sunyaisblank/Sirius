@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "library": "bin/linux-gcc/native-cpu-slang-bridge/provider/libvulkan_lvp.so",
+  "library_identity": {
+    "bytes": 15271312,
+    "sha256": "ccb9115a87b918e3ee962bde3159c5d137ec50eb0dd7b1d1d687bd0adfa906a4"
+  },
+  "ICD": "bin/linux-gcc/native-cpu-slang-bridge/provider/lvp_icd.json",
+  "ICD_identity": {
+    "bytes": 197,
+    "sha256": "52301b7c3520b8deba3bba9f3f3a7b13b17cc2d363234e92b7feab0a54a7b9c0"
+  },
+  "actual_build_target": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+  "target_identity": {
+    "bytes": 15271312,
+    "sha256": "ccb9115a87b918e3ee962bde3159c5d137ec50eb0dd7b1d1d687bd0adfa906a4"
+  },
+  "reused_build_inputs_unchanged": 516,
+  "native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.o",
+      "bytes": 93600,
+      "sha256": "02f3696cb3c459e7b88995a1b16d8cc8b03caa021ac71f46e32946ccffc18609"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.o",
+      "bytes": 117960,
+      "sha256": "70eedd767649af40a8402fb0cebf2945783ffcef247138a2a1a2d4ff797ba3aa"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.o",
+      "bytes": 65104,
+      "sha256": "872068f2eb257e7d601107981b449efd9e21348de7f6609333aef277ca1afc38"
+    }
+  ],
+  "scope": "One private provider build only. No loading/execution/FP equivalence/benefit/scientific/release qualification or adoption."
+}
