@@ -1,0 +1,52 @@
+--- a/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c
++++ b/src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c
+@@ -6106,7 +6106,7 @@
+           LLVMGetTypeKind(type) == LLVMArrayTypeKind) {
+          LLVMTypeRef element = LLVMGetElementType(type);
+          unsigned count = LLVMGetArrayLength(type);
+-         bulk_zero = (count == 3060 || count == 3145) &&
++         bulk_zero = (count == 2295 || count == 3060 || count == 3145) &&
+                      LLVMGetTypeKind(element) == LLVMVectorTypeKind &&
+                      LLVMGetVectorSize(element) == 8 &&
+                      LLVMGetTypeKind(LLVMGetElementType(element)) == LLVMIntegerTypeKind &&
+--- a/src/gallium/frontends/lavapipe/lvp_pipeline.c
++++ b/src/gallium/frontends/lavapipe/lvp_pipeline.c
+@@ -275,7 +275,7 @@
+    return pipeline_nir;
+ }
+ 
+-/* These two complete-row shaders have exactly one logical local owner,
++/* These three complete-row shaders have exactly one logical local owner,
+  * no cross-invocation state, and side-effect-free local invocations 1..63.
+  * Hash admission is deliberately independent of application labels/names.
+  */
+@@ -284,6 +284,7 @@
+ {
+ #if LP_VULKAN_IEEE32_ENABLED
+    static const unsigned char owner_sha1[][SHA1_DIGEST_LENGTH] = {
++      {0xc0,0xf3,0x8b,0x8b,0x39,0xd1,0x21,0x36,0x21,0x6a,0xf9,0x8f,0x34,0x65,0xf3,0x46,0x46,0x30,0x06,0x28},
+       {0xe4,0xf3,0x2b,0xfe,0x7d,0xb7,0x3d,0xad,0x21,0xd7,0x35,0x86,0xf1,0xbf,0x77,0x17,0x2a,0xa3,0x90,0xca},
+       {0xe2,0xbe,0xef,0x14,0xd2,0x7c,0xcb,0x5f,0x80,0xbc,0xe2,0xeb,0xf6,0x3c,0x35,0x84,0x7c,0x0c,0xa4,0x0c},
+    };
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-IWG-25.2.8-3";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-IWG-25.2.8-4";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -837,7 +837,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-intergroup-owner-bulkzero-v3";
++   static const char intergroup_cache_version[] = "Sirius-intergroup-transport-bulkzero-v4";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);
