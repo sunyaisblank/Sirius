@@ -29,5 +29,43 @@
     "prerequisite_composition": "Exact archived5-file patch; no overlap with the new Gallivm file.",
     "preserved": "Default seq_cst for every unmatched semantic; system scope, all coroutine rendezvous and atomics byte-exact.",
     "build_or_execution_claimed": false
+  },
+  "decision_context": {
+    "previous_input_owner": {
+      "source": "08add7e5633bfbb5aa19343e45497cd33a2edaa3",
+      "all8_and_all22": true,
+      "original_cold_frame": "Failed300s, no unchanged retry.",
+      "products": "Retained exact admitted matched ELF and all shader modules; no recompile needed."
+    },
+    "rejected_serial_owner": {
+      "source": "bfa095baf0ff9592cf648cfd49a73d5f6814c05c",
+      "checks_passed": 9,
+      "checks_total": 22,
+      "preserved": "9e01dfdca7798c79927827334798c72c2774eebc",
+      "source_evidence": "No fences/coroutine resumes but sparse8-wide SIMD, larger code and replicated stack state; retain cooperative work for this distinct provider-only change."
+    },
+    "bounded_host_review": {
+      "reviewer": "divide_contract_review",
+      "new_host_patch_justified": false,
+      "contracts": [
+        "Transport decode and40-field error gate before Endpoint admission: retained_integrator.cpp285-310.",
+        "Projection/component admission before next trial: retained_integrator.cpp366-400.",
+        "Sampling662-676 validates all Dopri groups before Endpoint construction."
+      ],
+      "already_reused": [
+        "buffers/kernels",
+        "immutable program upload",
+        "pipeline cache",
+        "primary command buffer"
+      ],
+      "historical_trials": [
+        "Descriptor binding reuse d46ebc4e/#97",
+        "Submission fence c6b271d reverted085bed35",
+        "Endpoint+dense1a603b3",
+        "Batch1288ab6e44"
+      ],
+      "snapshot_limit": "Inclusive stage wait is not exclusive fixed submission overhead. No causal attribution or frame extrapolation."
+    },
+    "next_cutoff": "One existing-configuration provider build, then inspect actual executed code for acquire-release order, intact rendezvous/SIMD and unchanged arithmetic admission. Stop if premise fails before another original C8/ABBA."
   }
 }

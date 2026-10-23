@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "official_tar_commit": "43389d91ca54667d12a41ee0a33d35e596fc42bd",
+  "official_tar_member": "attestations/qualification/8c2be67d/lavapipe-vector-workgroup-rejected/mesa-25.2.8.tar.xz",
+  "official_tar_sha256": "097842f3e49d996868b38688db87b006f7d4541e93ce86d2f341d8b3e7be7c93",
+  "original_source_files": 11100,
+  "changed_files": {
+    "src/util/u_math.h": {
+      "before": {
+        "bytes": 18108,
+        "sha256": "5bfe924a00a42bd622a05e3eb7991b793cbbd84038555ed2408d8c3b3e92d23f"
+      },
+      "after": {
+        "bytes": 18704,
+        "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "before": {
+        "bytes": 115232,
+        "sha256": "643e4f421ddd03a100b88bac7038d4713cabef0b1be49637c2a7414a8b52fde8"
+      },
+      "after": {
+        "bytes": 115877,
+        "sha256": "736d880fca57653ee6b819cd4243f4400d13f7367aafca574cd2239f85751e0e"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "before": {
+        "bytes": 96209,
+        "sha256": "6675c1ece36b60c45727bfaa77802439c457339fcb43a35e81786815ce372339"
+      },
+      "after": {
+        "bytes": 96490,
+        "sha256": "3c1953896b88b60eccc18109204462590ceaa550ed9fb9991d0d21cc7904cc1e"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_rast.c": {
+      "before": {
+        "bytes": 42996,
+        "sha256": "77dcb88a3da0e582e18ab89e87da3e743c059e26361f3d60799c9b8fa41c436c"
+      },
+      "after": {
+        "bytes": 43484,
+        "sha256": "daa5471828c1261b3003e32bc88caa282faefc475fa18dbb30758ccef4d8f1d8"
+      }
+    },
+    "src/gallium/auxiliary/draw/draw_pt.c": {
+      "before": {
+        "bytes": 20937,
+        "sha256": "42b7ad42770fb1cefc751e1edbe749b2253953ba1143beb5975ebfc078b8d3fd"
+      },
+      "after": {
+        "bytes": 21093,
+        "sha256": "0aa79f9b15610525e16443cf7b725cb871f27528eac37ea4c1226aef8cf9ad2c"
+      }
+    },
+    "src/gallium/auxiliary/gallivm/lp_bld_nir_soa.c": {
+      "before": {
+        "bytes": 246649,
+        "sha256": "734425da806076123bdd8fb297a361566db0cd52a70cad9e934a45067b6fbb8e"
+      },
+      "after": {
+        "bytes": 247065,
+        "sha256": "312a0b139f33054930f6eecfb0bef97071f60f157143ced6240c3139204f520b"
+      }
+    }
+  },
+  "prerequisite": "Exact existing private5-file IEEE32 repair, no other changes.",
+  "new_change": "Only exact NIR_MEMORY_ACQ_REL maps to system-scope LLVM acquire-release under LP_VULKAN_IEEE32_ENABLED.",
+  "Sirius_sources_shaders_tables_counts_unchanged": true,
+  "build_or_execution_or_performance_claimed": false
+}
