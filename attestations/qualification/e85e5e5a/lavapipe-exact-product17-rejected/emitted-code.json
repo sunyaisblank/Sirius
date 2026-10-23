@@ -1,0 +1,108 @@
+{
+  "objects": {
+    "outlined": {
+      "path": "out/lavapipe-exact-pure-outlining/build/endpoint-codegen/endpoint.o",
+      "bytes": 668624,
+      "sha256": "8ef8769ad7c057679d868e746724e9ffe7e5fec13eea63b5a66ebf12b14c9553",
+      "text_symbols_bytes": {
+        "__sirius_product17_v1": 109,
+        "cs_variant": 553418
+      },
+      "sum_text_symbol_bytes": 553527
+    },
+    "original": {
+      "path": "out/lavapipe-exact-pure-outlining/build/endpoint-original-codegen/original.o",
+      "bytes": 679840,
+      "sha256": "6fcceb37493976964d03bfb61416c08cb2ccb47f2bcd8c7481d99621e592ceeb",
+      "text_symbols_bytes": {
+        "cs_variant": 555489
+      },
+      "sum_text_symbol_bytes": 555489
+    }
+  },
+  "reduction_bytes": 1962,
+  "reduction_percent": 0.35320231363717375,
+  "direct_calls": 53,
+  "helper_disassembly": [
+    "00000000000871d0 <__sirius_product17_v1>:",
+    "   871d0:      \tvbroadcastss\t(%rip), %ymm16  # 0x871da <__sirius_product17_v1+0xa>",
+    "\t\t00000000000871d6:  R_X86_64_PC32\t.LCPI1_0-0x4",
+    "   871da:      \tvmulps\t%ymm16, %ymm0, %ymm17",
+    "   871e0:      \tvmulps\t%ymm16, %ymm1, %ymm16",
+    "   871e6:      \tvsubps\t%ymm0, %ymm17, %ymm18",
+    "   871ec:      \tvsubps\t%ymm1, %ymm16, %ymm19",
+    "   871f2:      \tvsubps\t%ymm18, %ymm17, %ymm17",
+    "   871f8:      \tvsubps\t%ymm19, %ymm16, %ymm16",
+    "   871fe:      \tvsubps\t%ymm17, %ymm0, %ymm18",
+    "   87204:      \tvsubps\t%ymm16, %ymm1, %ymm19",
+    "   8720a:      \tvmulps\t%ymm1, %ymm0, %ymm0",
+    "   8720e:      \tvmulps\t%ymm17, %ymm16, %ymm1",
+    "   87214:      \tvsubps\t%ymm1, %ymm0, %ymm1",
+    "   87218:      \tvmulps\t%ymm18, %ymm16, %ymm16",
+    "   8721e:      \tvmulps\t%ymm17, %ymm19, %ymm20",
+    "   87224:      \tvmulps\t%ymm19, %ymm18, %ymm17",
+    "   8722a:      \tvsubps\t%ymm16, %ymm1, %ymm1",
+    "   87230:      \tvsubps\t%ymm20, %ymm1, %ymm1",
+    "   87236:      \tvsubps\t%ymm1, %ymm17, %ymm1",
+    "   8723c:      \tretq"
+  ],
+  "first_two_caller_excerpts": [
+    [
+      "    6928:      \tvmovdqa32\t%ymm20, %ymm0 {%k1} {z}",
+      "    692e:      \tvptest\t%ymm2, %ymm0",
+      "    6933:      \tje\t0x6b9b <cs_variant+0x6b9b>",
+      "    6939:      \tvmovdqa\t0x3100(%rsp), %ymm1",
+      "    6942:      \tvmovdqa\t%ymm0, 0x480(%rsp)",
+      "    694b:      \tvmovaps\t%ymm9, %ymm0",
+      "    694f:      \tkmovw\t%k2, 0x700(%rsp)",
+      "    6958:      \tvmovaps\t%ymm7, 0x1220(%rsp)",
+      "    6961:      \tvmovaps\t%ymm14, 0x1ea0(%rsp)",
+      "    696a:      \tvmovdqa64\t%ymm30, %ymm9",
+      "    6970:      \tvmovdqa64\t%ymm20, %ymm5",
+      "    6976:      \tkmovw\t%k1, 0x320(%rsp)",
+      "    697f:      \tcallq\t0x871d0 <__sirius_product17_v1>",
+      "    6984:      \tvmovdqa64\t0x40(%rsp), %ymm16",
+      "    698c:      \tvandps\t(%rsp), %ymm0, %ymm7",
+      "    6991:      \tkmovw\t0x320(%rsp), %k3",
+      "    699a:      \tvpcmpnltud\t%ymm7, %ymm16, %k1 {%k3}",
+      "    69a1:      \tvmovdqa32\t%ymm5, %ymm6 {%k1} {z}",
+      "    69a7:      \tvptest\t%ymm2, %ymm6",
+      "    69ac:      \tje\t0x6bc4 <cs_variant+0x6bc4>",
+      "    69b2:      \tvptestnmd\t%ymm7, %ymm7, %k2",
+      "    69b8:      \tvpxor\t%xmm5, %xmm5, %xmm5",
+      "    69bc:      \tvmovdqa\t(%rsp), %ymm2",
+      "    69c1:      \tvpbroadcastd\t(%rip), %ymm22  # 0x69cb <cs_variant+0x69cb>",
+      "\t\t00000000000069c7:  R_X86_64_PC32\t.LCPI0_29-0x4"
+    ],
+    [
+      "    7078:      \tkmovw\t0x600(%rsp), %k2",
+      "    7081:      \tvmovdqa64\t%ymm31, %ymm12",
+      "    7087:      \tkorb\t%k1, %k2, %k1",
+      "    708b:      \tkandnb\t%k0, %k1, %k1",
+      "    708f:      \tvmovdqa32\t%ymm20, %ymm0 {%k1} {z}",
+      "    7095:      \tvptest\t%ymm12, %ymm0",
+      "    709a:      \tje\t0x72e6 <cs_variant+0x72e6>",
+      "    70a0:      \tvmovdqa\t%ymm0, 0x480(%rsp)",
+      "    70a9:      \tvmovdqa\t%ymm1, 0x1220(%rsp)",
+      "    70b2:      \tvmovdqa\t0x4a00(%rsp), %ymm0",
+      "    70bb:      \tvmovdqa\t0x3400(%rsp), %ymm1",
+      "    70c4:      \tkmovw\t%k1, 0xd20(%rsp)",
+      "    70cd:      \tcallq\t0x871d0 <__sirius_product17_v1>",
+      "    70d2:      \tvmovdqa64\t(%rsp), %ymm24",
+      "    70d9:      \tvmovdqa64\t0x40(%rsp), %ymm23",
+      "    70e1:      \tvmovdqa\t0xe0(%rsp), %ymm2",
+      "    70ea:      \tkmovw\t0x700(%rsp), %k1",
+      "    70f3:      \tkmovw\t0xd20(%rsp), %k2",
+      "    70fc:      \tvpandd\t%ymm0, %ymm24, %ymm21",
+      "    7102:      \tvpcmpltud\t%ymm21, %ymm23, %k0",
+      "    7109:      \tkorb\t%k1, %k0, %k0",
+      "    710d:      \tkandnb\t%k2, %k0, %k1",
+      "    7111:      \tvmovdqa32\t%ymm2, %ymm10 {%k1} {z}",
+      "    7117:      \tvptest\t%ymm12, %ymm10",
+      "    711c:      \tje\t0x7302 <cs_variant+0x7302>"
+    ]
+  ],
+  "observed_caller_cost": "First two calls show K1/K2 stack saves/reloads and live-vector stores/moves/reconstruction. No runtime cost measured.",
+  "ABI_review": "109-byte helper uses YMM0/1 inputs/results and YMM16-20 scratch, 17 unfused FP operations plus broadcast/ret, no helper stack/sret. preserve_allcc LLVM21.1.8 preserves YMM0-15 minus returns, not K/high-vector/upper-ZMM state; actual caller pays needed saves.",
+  "limit": "Matching offline LLC O2/znver4/standard-FP comparison. No exact private-Mesa target-feature/JIT binding or runtime speed claim."
+}

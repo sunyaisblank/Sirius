@@ -1,0 +1,39 @@
+{
+  "source_revision": "e85e5e5a53d6c093be9418af440228f52e165b8a",
+  "candidate": "Exact post-lowering 17-instruction RetainedProduct32 factoring",
+  "decision": "STOP_BEFORE_PROVIDER_INTEGRATION_STATIC_BENEFIT_TOO_SMALL_WITH_CONCRETE_CALLER_SPILLS",
+  "IR_results": {
+    "endpoint": {
+      "windows": 53,
+      "exact_clone_check": true,
+      "original_and_output_verifier_passed": true,
+      "serialized_inverse_matches_original_whole_module": true
+    },
+    "dopri_phase": {
+      "windows": 8,
+      "exact_clone_check": true,
+      "original_and_output_verifier_passed": true,
+      "serialized_inverse_matches_original_whole_module": true
+    }
+  },
+  "static_text_reduction_percent": 0.35320231363717375,
+  "helper_calls": 53,
+  "independent_review": {
+    "reviewer": "divide_contract_review",
+    "conclusion": "No source/serialized-IR/ABI blocker found for offline scope. Emitted helper matches exact 17 unfused ops and direct vector return. Text gain negligible and actual call/spill costs justify stopping before provider integration.",
+    "limits": "Round trip checks restored whole IR after local SSA/block names and ModuleID normalization. Helper/call attrs vanish in inverse and are separately reviewed. No machine-checked equivalence or runtime correctness proof."
+  },
+  "compile_history": "One pre-spawn link-stub guard bootstrap failed; first C++ compile failed with explicit pointer type selection and missing expected_exit acceptance field. Both corrected before successful compilation; raw failures retained.",
+  "counts": {
+    "successful_tool_builds": 1,
+    "endpoint_IR_rewrites": 1,
+    "DP_IR_rewrites": 1,
+    "outlined_endpoint_offline_codegens": 1,
+    "original_endpoint_offline_codegens": 1,
+    "DP_offline_codegens": 0,
+    "provider_integrations": 0,
+    "numerical_or_performance_or_frame_runs": 0
+  },
+  "public_source_or_settings_changed": false,
+  "disposition": "Keep useful exact transformer and independent inverse in pushed Git. No ABI variant, DP codegen, provider build or unchanged candidate retry. Original goal and all scientific/runtime/release gates remain open."
+}
