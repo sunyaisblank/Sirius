@@ -1,0 +1,220 @@
+{
+  "modules": {
+    "Transport": {
+      "module": "bin/linux-gcc/native-original-input-ownership/modules/owned-transport.spv",
+      "bytes": 87444,
+      "sha256": "36b5e823b363f68c519cb10073cc113899d0183be3314434b003341d3531088f",
+      "original_module": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "LocalSize": [
+        64,
+        1,
+        1
+      ],
+      "program_table_equal": true,
+      "original_control_barriers": 9,
+      "candidate_control_barriers": 10,
+      "scalar_algorithm_unchanged": true,
+      "actual_shared_variables_bytes": {
+        "%retainedStatus": 4,
+        "%originalTerms": 920,
+        "%retainedScratch": 9180,
+        "%retainedCoefficients": 500
+      },
+      "actual_shared_bytes": 10604,
+      "compiled_this_candidate": false
+    },
+    "Endpoint": {
+      "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+      "bytes": 97044,
+      "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+      "original_module": {
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      },
+      "registers": 612,
+      "program_table_equal": true,
+      "compiled_this_candidate": false
+    },
+    "DopriPhase": {
+      "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+      "bytes": 59508,
+      "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+      "original_module": {
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      },
+      "registers": 629,
+      "program_table_equal": true,
+      "compiled_this_candidate": false
+    }
+  },
+  "commands": [],
+  "new_shader_compilations": 0,
+  "all35_original_modules_and_generated_headers_unchanged": true,
+  "original_inputs": {
+    "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_fp64.spv": {
+      "bytes": 70468,
+      "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+      "bytes": 72100,
+      "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.h": {
+      "bytes": 88895,
+      "sha256": "e54773c0028250ba7fe9164a3a16f40166762dbe092b06858fb3a6e71df51a75"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+      "bytes": 104040,
+      "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport.spv": {
+      "bytes": 85832,
+      "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+      "bytes": 58728,
+      "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+      "bytes": 151400,
+      "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fp64.spv": {
+      "bytes": 98008,
+      "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase.spv": {
+      "bytes": 59228,
+      "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable.spv": {
+      "bytes": 145344,
+      "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+      "bytes": 113452,
+      "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+      "bytes": 96752,
+      "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_owner_kernels.h": {
+      "bytes": 432942,
+      "sha256": "32834aa059d4d606affdcb7333916eacb0b9b8e9812f211b51211d968b206302"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera.spv": {
+      "bytes": 45368,
+      "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+      "bytes": 111960,
+      "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_fma.spv": {
+      "bytes": 97468,
+      "sha256": "90da568ec0d53f3dbc45d708c6bb11b6061a524d9b054b911fb061c07fee7c3c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_camera.spv": {
+      "bytes": 47720,
+      "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+      "bytes": 475256,
+      "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+      "bytes": 99740,
+      "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_initialize.spv": {
+      "bytes": 57596,
+      "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_initialize_portable.spv": {
+      "bytes": 77444,
+      "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dense_program_identity.slang": {
+      "bytes": 131930,
+      "sha256": "c565c521984aa59c82dcda869ef9a93a2284c0bc53bcf8b48bc1f3eadb4c308e"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_camera_fp64.spv": {
+      "bytes": 61048,
+      "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dense_fp64.spv": {
+      "bytes": 90628,
+      "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dense_portable.spv": {
+      "bytes": 116204,
+      "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint.spv": {
+      "bytes": 99728,
+      "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dense.spv": {
+      "bytes": 78380,
+      "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+      "bytes": 161620,
+      "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_transport_fma.spv": {
+      "bytes": 83532,
+      "sha256": "54a3641d624ff06b26bac3a32ca5fab4d7e71775f083a0a5109c68c1ce5d3ac8"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+      "bytes": 92844,
+      "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+      "bytes": 512324,
+      "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_owner_layout.slang": {
+      "bytes": 1679,
+      "sha256": "b5c0941d5bbbade6a6ab2893b7f26fbf9eb274c2ab8afa730f1c4f7f054ab997"
+    }
+  },
+  "scope": "Composed immutable previous products, not newly compiled shaders. Cooperative complete-input Transport plus intergroup complete-row Endpoint/DopriPhase."
+}
