@@ -26,8 +26,8 @@ line, = [x for x in lines if ' -o tests/backend/sirius_backend_tests ' in x]
 for word in shlex.split(line):
     p = Path(word); p = p if p.is_absolute() else C / p
     if p.is_file(): inputs.add(str(p.relative_to(R)) if p.is_relative_to(R) else str(p.resolve()))
-for tool in ['/usr/bin/g++-14', '/usr/bin/ar', '/usr/bin/ninja', '/usr/bin/as', '/usr/bin/ld',
-             '/usr/lib/gcc/x86_64-linux-gnu/14/cc1plus']:
+frontend = subprocess.check_output(['/usr/bin/g++-14', '-print-prog-name=cc1plus'], text=True).strip()
+for tool in ['/usr/bin/g++-14', '/usr/bin/ar', '/usr/bin/ninja', '/usr/bin/as', '/usr/bin/ld', frontend]:
     p = Path(tool); assert p.is_file(); inputs.add(str(p.resolve()))
     result = subprocess.run(['ldd', str(p)], capture_output=True, text=True)
     inputs |= {str(Path(x).resolve()) for x in re.findall(r'(/[^\s()]+)', result.stdout) if Path(x).is_file()}
