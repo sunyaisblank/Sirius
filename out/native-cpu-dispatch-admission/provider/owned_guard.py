@@ -1,11 +1,5 @@
-"""Reuse sealed prior authority; task-local paths/source-input binding only."""
 from pathlib import Path
 import hashlib
-basis = Path.cwd() / 'out/native-cpu-active-prefix/owned_guard.py'
-assert hashlib.sha256(basis.read_bytes()).hexdigest() == '6fc32fd7fbed8e24370e929829a70b82aa53e54668fb38ded68ace2d1e9a6037'
-source = basis.read_text()
-changes = []
-for before, after in changes:
-    assert before in source, before
-    source = source.replace(before, after)
-exec(compile(source, str(basis), 'exec'))
+basis = Path.cwd() / 'out/native-cpu-row-ownership/cold-frame/owned_guard.py'
+assert hashlib.sha256(basis.read_bytes()).hexdigest() == '747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056'
+exec(compile(basis.read_text(), str(basis), 'exec'))
