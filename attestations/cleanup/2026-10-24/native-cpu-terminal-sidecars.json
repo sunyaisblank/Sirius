@@ -1,0 +1,3602 @@
+{
+  "kind": "backed-terminal-K-L-M-N-owned-phase-sidecars-only",
+  "status": "complete",
+  "created_utc": "2026-10-24T08:19:31.426422+00:00",
+  "operator_HEAD": "abc9dbc1dd1c1d520f3104ca50e1d5ecf7999636",
+  "pushed_reachability": {
+    "remote_ref": "refs/heads/development/native-cpu-slang-bridge-2026-10-23",
+    "remote_tip": "abc9dbc1dd1c1d520f3104ca50e1d5ecf7999636",
+    "all_four_archive_commits_ancestors": true
+  },
+  "archives": {
+    "K": {
+      "archive": "attestations/qualification/7ed79467/native-cpu-simd-structural-uniform-rejected-control4/source-build-and-trial.zip",
+      "bytes": 6176431,
+      "sha256": "99e277a19c47705cbe89f51e9103718450f840eb5e9059e7468251e9428ad823",
+      "git_blob": "e68a396233cac32bc3113076a61eb697fd7d321e",
+      "archive_commit": "8f32b030a83203a9b828c3ed740210c128b0ec4f",
+      "manifest": "attestations/qualification/7ed79467/native-cpu-simd-structural-uniform-rejected-control4/MANIFEST.json",
+      "manifest_identity": {
+        "bytes": 50779,
+        "sha256": "91e957e92ba3e539b12123b1ddbc97212a6ac5d2469b03621a1991fa2cc5fd6c",
+        "git_blob": "03239afc62acf00ac85ce7fc9887bcffeaaa9558"
+      },
+      "pushed_archive_commit_ancestor": true,
+      "member_count": 151
+    },
+    "L": {
+      "archive": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/source-build-and-trial.zip",
+      "bytes": 4776655,
+      "sha256": "01091aa7aec4ddb9d207577e7d4705bb250c5bc1a48eb70bfd050f2e8473625c",
+      "git_blob": "64f2dc8b83a4b6ba5a847adba18964d984482e0e",
+      "archive_commit": "5c0d1e8cb9e2b6ae862810b2a350a036bc6024c9",
+      "manifest": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/MANIFEST.json",
+      "manifest_identity": {
+        "bytes": 38855,
+        "sha256": "7b7345211967ad016225531f82a32d712eccf58e925f0638f61c95f935cc050d",
+        "git_blob": "cd2d5c312121ce09a5fad46a5eb5246df5eac0be"
+      },
+      "pushed_archive_commit_ancestor": true,
+      "member_count": 109
+    },
+    "M": {
+      "archive": "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/source-build-and-trial.zip",
+      "bytes": 8289299,
+      "sha256": "cc34b52a43b9618125753a0f39fb01a5a346e8ba7329f311141f5c26569ec313",
+      "git_blob": "0a77d330b1aec0f138c0071a28261f487c4e5b8c",
+      "archive_commit": "44123763984956cbe885a4019d82ed23032344c1",
+      "manifest": "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/MANIFEST.json",
+      "manifest_identity": {
+        "bytes": 83810,
+        "sha256": "3cdfab3ad1f3a76482492cf4069dc0748b4f9ce1753088bdbe75fab72226ffac",
+        "git_blob": "fb03efe40daa9c07307eca6b1f47a030d5d22bac"
+      },
+      "pushed_archive_commit_ancestor": true,
+      "member_count": 178
+    },
+    "N": {
+      "archive": "attestations/qualification/44123763/native-cpu-medium-tails-rejected-transport12/source-build-and-trial.zip",
+      "bytes": 6316076,
+      "sha256": "c86f4c7dfe18dcdac861e594fa4f68e28ae3b0ba1fbdda266c77e00701483eaa",
+      "git_blob": "6c57e07e272c59d0055dddcdff5311d66fee65e9",
+      "archive_commit": "39cb91afacab9df1915cee9aff5454ef679ad050",
+      "manifest": "attestations/qualification/44123763/native-cpu-medium-tails-rejected-transport12/MANIFEST.json",
+      "manifest_identity": {
+        "bytes": 46153,
+        "sha256": "91f15162bf0dcb7e75a8022cf26b037cdc7c52213999ed23b23750f889720e66",
+        "git_blob": "6b7cb915c902002e4026114b087109ef0563617a"
+      },
+      "pushed_archive_commit_ancestor": true,
+      "member_count": 121
+    }
+  },
+  "protection": {
+    "tracked_paths": 1908,
+    "operational_protected_paths": 15716,
+    "documents": {
+      "out/native-cpu-simd-medium-tails/provider/source-contract.json": {
+        "bytes": 187123,
+        "sha256": "fd7eec72077c7a2007d288f3ff007c4fb59f5ca516af17ad5e1ac4d27920403b"
+      },
+      "out/native-cpu-simd-medium-tails/adapter-compile-result.json": {
+        "bytes": 183373,
+        "sha256": "b2f2707da2580185b8878165729a26e7b362b408a19776e1f49b413bb110813e"
+      },
+      "out/native-cpu-simd-medium-tails/benefit/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/native-cpu-simd-medium-tails/partition-proof.json": {
+        "bytes": 8484,
+        "sha256": "8560a1a0984130e1742bd7b27d2a430cfe307492c23ccfb60bcb725b1d6aebb0"
+      },
+      "out/native-cpu-simd-endpoint-regions/ispc-derivation.json": {
+        "bytes": 17795,
+        "sha256": "22ced710b9ce6ac8f1e6340df81b21e4ef577e96ae4fe66c02b12a51a4548956"
+      },
+      "out/native-cpu-nir-dead-progress/provider/source-contract.json": {
+        "bytes": 31761,
+        "sha256": "8b37fc2e7be7af4b60dcdb2b00d4be77fea2e815c699a9bb83859e4e0435d1b6"
+      },
+      "out/native-cpu-simd-endpoint-regions/ispc-uniform-compile-result.json": {
+        "bytes": 23446,
+        "sha256": "d733dd9383907f8c428eb2531bd5b8d29f5814a232d5061cafa2c284dca7113d"
+      },
+      "out/native-cpu-simd-endpoint-regions/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-endpoint-regions/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-uniform-compile-result.json": {
+        "bytes": 20302,
+        "sha256": "bd7aa0cdc8f29a441d51934c0c93552dceb75f8c36636a855475a8791187e3f8"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-derivation.json": {
+        "bytes": 13757,
+        "sha256": "8f7c959c680ef1d982acf1837c148e1ed8332aa13c845a4c38f6fda76c3c0a72"
+      },
+      "out/native-cpu-simd-structural-uniform/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-structural-uniform/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-output-columns/ispc-uniform-compile-result.json": {
+        "bytes": 16984,
+        "sha256": "c9095ae9489afac4106d76ccbb48ca38d1e477fcc7010e374dc305577fb842f7"
+      },
+      "out/native-cpu-simd-output-columns/ispc-derivation.json": {
+        "bytes": 10391,
+        "sha256": "def37af73efb273b346b4378c1a39b2d089d5213be279144f2f308aa5b3a21dc"
+      },
+      "out/native-cpu-simd-output-columns/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-output-columns/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-rows/adapter-compile-result.json": {
+        "bytes": 12756,
+        "sha256": "c302241b9f90f4843e4171beffbb68ba7d2db126a327cc9a7f8078238df04fc0"
+      },
+      "out/native-cpu-simd-rows/object-code-inspection-uniform.json": {
+        "bytes": 2277,
+        "sha256": "5216cbe7d6d3b710af83437d9783713a55da142ac511f59c834e63bca4bf9bd6"
+      },
+      "out/native-cpu-simd-rows/ispc-uniform-compile-result.json": {
+        "bytes": 12664,
+        "sha256": "19b555751ae288263c2667cc724a47562502800a29265550f5e6108d82196451"
+      },
+      "out/native-cpu-static-program/batch-compile-result.json": {
+        "bytes": 9212,
+        "sha256": "f8434acad86353ab1a345cd35a9f4e6ef338805a2d87974ebacb49d2d9082be2"
+      },
+      "out/native-cpu-static-program/header-preparation.json": {
+        "bytes": 7943,
+        "sha256": "72c76214e8b0267566801b0e7efec605c2e408f2c9ac084a892c95d7a563ef6d"
+      },
+      "out/native-cpu-slang-bridge/batch-generation.json": {
+        "bytes": 8521,
+        "sha256": "de6d68848c352c3b9262e01822730d25459b725d42f57e4b1769ba93d2cc2428"
+      },
+      "out/native-cpu-simd-rows/ispc-uniform-derivation.json": {
+        "bytes": 5828,
+        "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+      },
+      "out/native-cpu-simd-rows/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-rows/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-nir-dead-progress/source-proof.json": {
+        "bytes": 5314,
+        "sha256": "2682493874da45e2c78713d4a30f446c838bd63d048d5b430dffe67d8d34157e"
+      },
+      "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/user-pc-observation.json": {
+        "bytes": 52859,
+        "sha256": "c0637326ef151fdc90da2ed85592204e313dc1f906268c779e56ed3f407c6403"
+      },
+      "out/native-cpu-simd-endpoint-regions/provider/source-contract.json": {
+        "bytes": 30403,
+        "sha256": "80c3a0672e447cfa5c159ef4fb33e9d9d6c5d246f740edb393a31b1423dee3d1"
+      },
+      "out/native-cpu-row-ownership/compiler-result.json": {
+        "bytes": 16890,
+        "sha256": "05b5a01dcaddeba1deacca9ed73af0ee64c1d20cc512d2ad90948aa987a50449"
+      },
+      "out/native-cpu-zero-active-prepare/source-proof.json": {
+        "bytes": 8203,
+        "sha256": "5d5fecfd409dc7e18584c8983dcf50ad0ef3db6149632cbb8918b511b3bc4b66"
+      },
+      "out/native-cpu-simd-packet-policy/adapter-compile-result.json": {
+        "bytes": 16371,
+        "sha256": "d2c0d6bce1b3dc7ad39c1f004dda5f350efef64a062a041f9e87c969eaab5a0a"
+      },
+      "out/native-cpu-simd-packet-policy/object-code-inspection-uniform.json": {
+        "bytes": 9128,
+        "sha256": "78b369ea21f8df9897c9d1ead7b6807f113797138163ca331f6f748b9a40f08a"
+      },
+      "out/native-cpu-simd-packet-policy/ispc-uniform-compile-result.json": {
+        "bytes": 16351,
+        "sha256": "1e2c1f53d5f05e27af09c04363fc05064bb02494bf7a0a714b50adfefa53ed8f"
+      },
+      "out/native-cpu-simd-packet-policy/ispc-uniform-derivation.json": {
+        "bytes": 5828,
+        "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+      },
+      "out/native-cpu-simd-packet-policy/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-packet-policy/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-medium-tails/prepared-adapter.json": {
+        "bytes": 182996,
+        "sha256": "d9c760daf8ffe63113eac09cea4d72de153364c6236095cf7fcc29922b37372f"
+      },
+      "out/native-cpu-simd-endpoint-regions/prepared-ispc-uniform-inputs.json": {
+        "bytes": 23029,
+        "sha256": "2d4a9625630cb25fdcdab598350d96bfe30fa0be0786889ad8260cd684753b26"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/source-contract.json": {
+        "bytes": 23688,
+        "sha256": "82096b36ca48a057744f1c4ca792c1be020d2ed6a91bb36b35b88f35ee7e1237"
+      },
+      "out/native-cpu-simd-structural-uniform/prepared-ispc-uniform-inputs.json": {
+        "bytes": 19974,
+        "sha256": "d9f05dfa82a753264974f71c01af4098a1a2c27f71700deccfc24fd68004c996"
+      },
+      "out/native-cpu-host-cohort/benefit/runtime/actions.json": {
+        "bytes": 452118,
+        "sha256": "a81b1d4762494eb94b2782e1a4de5db958cf68f41161a26e03dd10699e981e1e"
+      },
+      "out/native-original-input-ownership/provider-history/candidate-default/float-controls-properties.json": {
+        "bytes": 1895,
+        "sha256": "e11626b85bbb8d4bbe9257fdd9781618cf0f177dcfdc15dddc4ec6b585a867f3"
+      },
+      "out/native-original-input-ownership/provider-history/candidate-default/device-features.json": {
+        "bytes": 91095,
+        "sha256": "46d10984d1895772c559ce981436745edf175f7e2a1b955433d9c76a33f08ff6"
+      },
+      "out/native-original-input-ownership/provider-history/baseline-poison-v21/float-controls-properties.json": {
+        "bytes": 1895,
+        "sha256": "371bcb71f96ad605792b3151fc66364cde905263dfe983b8fde6827ebcd85f6f"
+      },
+      "out/native-original-input-ownership/provider-history/baseline-poison-v21/device-features.json": {
+        "bytes": 91119,
+        "sha256": "00bcdd92fb1252848e359b83e7b1a3ab2b62570c64e2de8f58ba3874170cce10"
+      },
+      "out/native-cpu-slang-bridge/ordinary/transport/float-controls-properties.json": {
+        "bytes": 1895,
+        "sha256": "e11626b85bbb8d4bbe9257fdd9781618cf0f177dcfdc15dddc4ec6b585a867f3"
+      },
+      "out/native-cpu-slang-bridge/ordinary/transport/device-features.json": {
+        "bytes": 91245,
+        "sha256": "b81c93a32f71fb857b5b1f54a3f970700571faed600f918124bec676a582c149"
+      },
+      "out/native-cpu-row-ownership/previous-control-8-acceptance.json": {
+        "bytes": 52759,
+        "sha256": "31a1a586d9fe5834988be288947c401e81bcb7eae6597ab99e854074969c07bc"
+      },
+      "out/native-cpu-row-ownership/matched-result.json": {
+        "bytes": 4264,
+        "sha256": "e37879e2e52f60eb42267edac1aac5e28d1b47674a969ed4feb73a77085fccda"
+      },
+      "out/native-cpu-nir-dead-progress/provider/review-admission.json": {
+        "bytes": 1026,
+        "sha256": "b72d0120042cd39bc3ea88d7830dc5bcd929088ab9eb02b5b01278b438ffa728"
+      },
+      "out/native-cpu-nir-dead-progress/provider/provider-build-result.json": {
+        "bytes": 2519,
+        "sha256": "99b8b364a229b0a2f0f13c49ad9f7fbf35cbe939e42d850364d3cc24bb2881ce"
+      },
+      "out/native-cpu-nir-dead-progress/provider/linked-native-proof.json": {
+        "bytes": 7407764,
+        "sha256": "35ab03e42d44a4a11c0abd5f7e6e49520b6936cd94175e39c8dfdbd6e77cf5c5"
+      },
+      "out/native-cpu-nir-dead-progress/provider/incremental-plan.json": {
+        "bytes": 232086,
+        "sha256": "d0893b37b70687d99dd91d15644483c5338157b7b91547ac1026e9b7dc3ecf75"
+      },
+      "out/native-cpu-nir-dead-progress/provider/configure-result.json": {
+        "bytes": 582,
+        "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd"
+      },
+      "out/native-cpu-nir-dead-progress/provider/actions.json": {
+        "bytes": 2453653,
+        "sha256": "2e47fc960fd5039af9afb11298257d5aef757d1c473fd1cb2773cdc0a8b5c323"
+      },
+      "out/native-cpu-nir-dead-progress/reused-native-objects.json": {
+        "bytes": 1970,
+        "sha256": "fc542faaa1582c4440af4752788fc6c43b8a13fd431e579c912a885b71a99c6d"
+      },
+      "out/native-cpu-nir-dead-progress/benefit/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/vulkan/vram-report-limit-layer/VkLayer_MESA_vram_report_limit.json": {
+        "bytes": 1141,
+        "sha256": "10983e25b32eeac4fe67256f9920eeca10d2e5b9ee44949c231e10bbf771d4cc"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/vulkan/screenshot-layer/VkLayer_MESA_screenshot.json": {
+        "bytes": 310,
+        "sha256": "9a1ab458beffb27f528da763086a9a35a1dd3128d1bb27d34c418744aa10ae8b"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/intel/dev/mesa_defs.json": {
+        "bytes": 113793,
+        "sha256": "5812d494fcbd267eba7467b3a8592aa6f6c6080616255df3d67672b05f0a2489"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gfxstream/guest/vulkan/gfxstream_icd.json": {
+        "bytes": 151,
+        "sha256": "ac93d96f5b0119f48bdc9a911f58e5c50f257b7419c3569cd1dcdada46a8f582"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/zink/VP_ZINK_requirements.json": {
+        "bytes": 36301,
+        "sha256": "0e148dcf5f2ea07b4ee0c15b27d4404c017bf7c9f2e007ab56efd9318cc34d5e"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/egl/main/50_mesa.json": {
+        "bytes": 103,
+        "sha256": "cb5b838a61fdee244afce68ac5c0a8d45cebfc0ac5846b70556c64a149f6806a"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/spirv/spirv.core.grammar.json": {
+        "bytes": 560763,
+        "sha256": "ca4ec267bd00418e37c4b8df3c14c67863e68fa12f15988d56aa6694bf945dd8"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/registers-manually-defined.json": {
+        "bytes": 5922,
+        "sha256": "0e1f10a943eeb840fb55d1f1fb89e1a998893659f14195b6c0ca9869cdc9e83a"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/pkt3.json": {
+        "bytes": 18514,
+        "sha256": "36f5c2eba891df4ba1f85807241d536e8e4cc6787e34328971f071f4cddf0242"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx940.json": {
+        "bytes": 97171,
+        "sha256": "c97ebc6b44f20cddce9d3900f53755596aa0928c0ccc843e06203d56eecc705f"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx9.json": {
+        "bytes": 361872,
+        "sha256": "081fbfd1251fb5c6f4b7b6a218ba217e21346e824a04ec8146ab0d1d389ddb06"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx81.json": {
+        "bytes": 327988,
+        "sha256": "851c3eb49a3933730520efcfb680ae756d7cf2c746c00e65e1b12c1dd35e8161"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx8.json": {
+        "bytes": 320092,
+        "sha256": "225dcbb9c4d16cc4c79d48e1b91d19ab71afa24f6a14e3613ddc49379c08d1bb"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx7.json": {
+        "bytes": 309435,
+        "sha256": "22fdc2fa9ceb139b6c9ecdff4ed5e90d2b42f7c700ab4d18f3d742996b506af8"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx6.json": {
+        "bytes": 285433,
+        "sha256": "38b492cf4211615934372777c55381ba21e448d3f199ddf1394def62446ce1a1"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx12.json": {
+        "bytes": 372733,
+        "sha256": "e75a0a16f6c10fb27a02a29644307e949ab78042c76ea62509d9236d7e7e8bc1"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx12-rsrc.json": {
+        "bytes": 12969,
+        "sha256": "3cfef958a39875c6a1b341afb55082a4ffc571ff34dbd651456dc4f846fdddd0"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx115.json": {
+        "bytes": 370883,
+        "sha256": "3d8ba0bb99dc326271b5bc213d1891e0983f1dfdf1f4eaef636c4fe035f365f2"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx11.json": {
+        "bytes": 372700,
+        "sha256": "304b57f399534febbd2b055067b81c2652c700eaea88526a7d10c6bb889bf2fb"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx11-rsrc.json": {
+        "bytes": 15007,
+        "sha256": "838e540d6adcb58f3fce9e561d38dc727563102bd02d47938fc6e170db46c164"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx103.json": {
+        "bytes": 400899,
+        "sha256": "781f3d4aa1e4d00c15fc67db21732521a4619a66480a704fbdbee9f97b0cdfff"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx10.json": {
+        "bytes": 402500,
+        "sha256": "f3435695c47c3c3b1d8329a96b098452d5909944ca2c99995520c22614617d48"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx10-rsrc.json": {
+        "bytes": 19795,
+        "sha256": "ab6deb6cea2daf6ef546b8ae5eff105d5939c9d8cd76a710f9f8064e6a2cf820"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/.pick_status.json": {
+        "bytes": 2113285,
+        "sha256": "2601def631fcc69fab9fc18ae565dbf8101b79858e3485af8897cc85f2b6de6f"
+      },
+      "out/native-cpu-host-representation/probe/result.json": {
+        "bytes": 2447,
+        "sha256": "1c15781d4b3c57e1c68c89efd9c93cf776a2547c386c36d2640e51559129a0c1"
+      },
+      "out/native-cpu-host-representation/probe/preparation.json": {
+        "bytes": 6464,
+        "sha256": "723d67d2d628b1835436d5a185ee1d51d833c81e6c395a62af67486fc1391996"
+      },
+      "out/native-cpu-host-representation/probe/generation.json": {
+        "bytes": 975,
+        "sha256": "beef6d0c83b0b1104582f1d7a63f48b32abc99b2b6e79d2a42548162ed6bf115"
+      },
+      "out/native-cpu-host-representation/probe/compile-result.json": {
+        "bytes": 58471,
+        "sha256": "8fc16d37c9145f5ac2cccafad28a9877ff6b96f3c4c80cd62cea5ae2020c293a"
+      },
+      "out/native-cpu-host-preparation/reuse-authority.json": {
+        "bytes": 39677,
+        "sha256": "b25dce9c1834f109fa3b14984d4463be776cf930bac05c3176a9d9988f30d169"
+      },
+      "out/native-cpu-dispatch-admission/cold-frame/link-recipe.json": {
+        "bytes": 8432,
+        "sha256": "8cba87eb7c419379069e22623dace65d80601abaf1497598c3bf8b232c790e31"
+      },
+      "out/native-cpu-host-preparation/host-source-proof.json": {
+        "bytes": 3078,
+        "sha256": "07d278a7547b743bfd6a5ffa9ed95160f3080d9070b918bff064d97f1bdd64cd"
+      },
+      "out/native-cpu-host-copy-prepare/proof.json": {
+        "bytes": 5978,
+        "sha256": "4776fb469fcc15a549243726dcdc1c948e4c6d548db410797f126454553f79f3"
+      },
+      "out/native-cpu-host-cohort/benefit/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/native-cpu-host-cohort/benefit/providers.json": {
+        "bytes": 1925,
+        "sha256": "bf033cd2eb41dd650cd070eb92932d9cc9b33cd0edceafff572dcd75a71c0a7d"
+      },
+      "out/native-cpu-arithmetic-sharing/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/native-cpu-host-preparation/host-build-result.json": {
+        "bytes": 148955,
+        "sha256": "719f108bc99485e92a6436a13778ca648fe76a1ac2ac58117d73af8acd74f398"
+      },
+      "out/native-cpu-host-cohort/control-8/native-observation.json": {
+        "bytes": 25336,
+        "sha256": "fdf8ba96da61a170a03a0091c1005b84b304550fb6c43e926fab3b756a7ae0d8"
+      },
+      "out/native-cpu-host-cohort/control-8-acceptance.json": {
+        "bytes": 53830,
+        "sha256": "2b2c4bfb88d056c02447a7044414b7a30904ce02b589891d4cf0dd41003281ad"
+      },
+      "out/native-cpu-host-cohort/actions.json": {
+        "bytes": 205540,
+        "sha256": "ddeec3cfc3d135cef5686484c13bf628cad2eb0f6a6e4f9641ddc2bf7bfd4b7e"
+      },
+      "out/native-cpu-host-preparation/build/actions.json": {
+        "bytes": 38934,
+        "sha256": "2b05a5b81f7db1d9e4fb8779dcbdc7ecffd31457ad7f88ac2b20f8d544f5bb93"
+      },
+      "out/native-cpu-host-preparation/prepared-build.json": {
+        "bytes": 181595,
+        "sha256": "2167b51f0eb63880fff7ce2329b00a0b0a04ab613394070fe8b032a46c542cab"
+      }
+    },
+    "future_closure": "Genuine L compile source_inputs + M provider source-contract source_inputs + newhost build-result source_inputs, recursively referenced operational metadata, every prepared host build/cohort action including benefit, all tracked paths.",
+    "immediately_before_retirement_documents": {
+      "out/native-cpu-simd-medium-tails/provider/source-contract.json": {
+        "bytes": 187123,
+        "sha256": "fd7eec72077c7a2007d288f3ff007c4fb59f5ca516af17ad5e1ac4d27920403b"
+      },
+      "out/native-cpu-simd-medium-tails/adapter-compile-result.json": {
+        "bytes": 183373,
+        "sha256": "b2f2707da2580185b8878165729a26e7b362b408a19776e1f49b413bb110813e"
+      },
+      "out/native-cpu-simd-medium-tails/benefit/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/native-cpu-simd-medium-tails/partition-proof.json": {
+        "bytes": 8484,
+        "sha256": "8560a1a0984130e1742bd7b27d2a430cfe307492c23ccfb60bcb725b1d6aebb0"
+      },
+      "out/native-cpu-simd-endpoint-regions/ispc-derivation.json": {
+        "bytes": 17795,
+        "sha256": "22ced710b9ce6ac8f1e6340df81b21e4ef577e96ae4fe66c02b12a51a4548956"
+      },
+      "out/native-cpu-nir-dead-progress/provider/source-contract.json": {
+        "bytes": 31761,
+        "sha256": "8b37fc2e7be7af4b60dcdb2b00d4be77fea2e815c699a9bb83859e4e0435d1b6"
+      },
+      "out/native-cpu-simd-endpoint-regions/ispc-uniform-compile-result.json": {
+        "bytes": 23446,
+        "sha256": "d733dd9383907f8c428eb2531bd5b8d29f5814a232d5061cafa2c284dca7113d"
+      },
+      "out/native-cpu-simd-endpoint-regions/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-endpoint-regions/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-uniform-compile-result.json": {
+        "bytes": 20302,
+        "sha256": "bd7aa0cdc8f29a441d51934c0c93552dceb75f8c36636a855475a8791187e3f8"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-derivation.json": {
+        "bytes": 13757,
+        "sha256": "8f7c959c680ef1d982acf1837c148e1ed8332aa13c845a4c38f6fda76c3c0a72"
+      },
+      "out/native-cpu-simd-structural-uniform/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-structural-uniform/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-output-columns/ispc-uniform-compile-result.json": {
+        "bytes": 16984,
+        "sha256": "c9095ae9489afac4106d76ccbb48ca38d1e477fcc7010e374dc305577fb842f7"
+      },
+      "out/native-cpu-simd-output-columns/ispc-derivation.json": {
+        "bytes": 10391,
+        "sha256": "def37af73efb273b346b4378c1a39b2d089d5213be279144f2f308aa5b3a21dc"
+      },
+      "out/native-cpu-simd-output-columns/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-output-columns/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-rows/adapter-compile-result.json": {
+        "bytes": 12756,
+        "sha256": "c302241b9f90f4843e4171beffbb68ba7d2db126a327cc9a7f8078238df04fc0"
+      },
+      "out/native-cpu-simd-rows/object-code-inspection-uniform.json": {
+        "bytes": 2277,
+        "sha256": "5216cbe7d6d3b710af83437d9783713a55da142ac511f59c834e63bca4bf9bd6"
+      },
+      "out/native-cpu-simd-rows/ispc-uniform-compile-result.json": {
+        "bytes": 12664,
+        "sha256": "19b555751ae288263c2667cc724a47562502800a29265550f5e6108d82196451"
+      },
+      "out/native-cpu-static-program/batch-compile-result.json": {
+        "bytes": 9212,
+        "sha256": "f8434acad86353ab1a345cd35a9f4e6ef338805a2d87974ebacb49d2d9082be2"
+      },
+      "out/native-cpu-static-program/header-preparation.json": {
+        "bytes": 7943,
+        "sha256": "72c76214e8b0267566801b0e7efec605c2e408f2c9ac084a892c95d7a563ef6d"
+      },
+      "out/native-cpu-slang-bridge/batch-generation.json": {
+        "bytes": 8521,
+        "sha256": "de6d68848c352c3b9262e01822730d25459b725d42f57e4b1769ba93d2cc2428"
+      },
+      "out/native-cpu-simd-rows/ispc-uniform-derivation.json": {
+        "bytes": 5828,
+        "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+      },
+      "out/native-cpu-simd-rows/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-rows/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-nir-dead-progress/source-proof.json": {
+        "bytes": 5314,
+        "sha256": "2682493874da45e2c78713d4a30f446c838bd63d048d5b430dffe67d8d34157e"
+      },
+      "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/user-pc-observation.json": {
+        "bytes": 52859,
+        "sha256": "c0637326ef151fdc90da2ed85592204e313dc1f906268c779e56ed3f407c6403"
+      },
+      "out/native-cpu-simd-endpoint-regions/provider/source-contract.json": {
+        "bytes": 30403,
+        "sha256": "80c3a0672e447cfa5c159ef4fb33e9d9d6c5d246f740edb393a31b1423dee3d1"
+      },
+      "out/native-cpu-row-ownership/compiler-result.json": {
+        "bytes": 16890,
+        "sha256": "05b5a01dcaddeba1deacca9ed73af0ee64c1d20cc512d2ad90948aa987a50449"
+      },
+      "out/native-cpu-zero-active-prepare/source-proof.json": {
+        "bytes": 8203,
+        "sha256": "5d5fecfd409dc7e18584c8983dcf50ad0ef3db6149632cbb8918b511b3bc4b66"
+      },
+      "out/native-cpu-simd-packet-policy/adapter-compile-result.json": {
+        "bytes": 16371,
+        "sha256": "d2c0d6bce1b3dc7ad39c1f004dda5f350efef64a062a041f9e87c969eaab5a0a"
+      },
+      "out/native-cpu-simd-packet-policy/object-code-inspection-uniform.json": {
+        "bytes": 9128,
+        "sha256": "78b369ea21f8df9897c9d1ead7b6807f113797138163ca331f6f748b9a40f08a"
+      },
+      "out/native-cpu-simd-packet-policy/ispc-uniform-compile-result.json": {
+        "bytes": 16351,
+        "sha256": "1e2c1f53d5f05e27af09c04363fc05064bb02494bf7a0a714b50adfefa53ed8f"
+      },
+      "out/native-cpu-simd-packet-policy/ispc-uniform-derivation.json": {
+        "bytes": 5828,
+        "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+      },
+      "out/native-cpu-simd-packet-policy/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-packet-policy/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-medium-tails/prepared-adapter.json": {
+        "bytes": 182996,
+        "sha256": "d9c760daf8ffe63113eac09cea4d72de153364c6236095cf7fcc29922b37372f"
+      },
+      "out/native-cpu-simd-endpoint-regions/prepared-ispc-uniform-inputs.json": {
+        "bytes": 23029,
+        "sha256": "2d4a9625630cb25fdcdab598350d96bfe30fa0be0786889ad8260cd684753b26"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/source-contract.json": {
+        "bytes": 23688,
+        "sha256": "82096b36ca48a057744f1c4ca792c1be020d2ed6a91bb36b35b88f35ee7e1237"
+      },
+      "out/native-cpu-simd-structural-uniform/prepared-ispc-uniform-inputs.json": {
+        "bytes": 19974,
+        "sha256": "d9f05dfa82a753264974f71c01af4098a1a2c27f71700deccfc24fd68004c996"
+      },
+      "out/native-cpu-host-cohort/benefit/runtime/actions.json": {
+        "bytes": 452118,
+        "sha256": "a81b1d4762494eb94b2782e1a4de5db958cf68f41161a26e03dd10699e981e1e"
+      },
+      "out/native-original-input-ownership/provider-history/candidate-default/float-controls-properties.json": {
+        "bytes": 1895,
+        "sha256": "e11626b85bbb8d4bbe9257fdd9781618cf0f177dcfdc15dddc4ec6b585a867f3"
+      },
+      "out/native-original-input-ownership/provider-history/candidate-default/device-features.json": {
+        "bytes": 91095,
+        "sha256": "46d10984d1895772c559ce981436745edf175f7e2a1b955433d9c76a33f08ff6"
+      },
+      "out/native-original-input-ownership/provider-history/baseline-poison-v21/float-controls-properties.json": {
+        "bytes": 1895,
+        "sha256": "371bcb71f96ad605792b3151fc66364cde905263dfe983b8fde6827ebcd85f6f"
+      },
+      "out/native-original-input-ownership/provider-history/baseline-poison-v21/device-features.json": {
+        "bytes": 91119,
+        "sha256": "00bcdd92fb1252848e359b83e7b1a3ab2b62570c64e2de8f58ba3874170cce10"
+      },
+      "out/native-cpu-slang-bridge/ordinary/transport/float-controls-properties.json": {
+        "bytes": 1895,
+        "sha256": "e11626b85bbb8d4bbe9257fdd9781618cf0f177dcfdc15dddc4ec6b585a867f3"
+      },
+      "out/native-cpu-slang-bridge/ordinary/transport/device-features.json": {
+        "bytes": 91245,
+        "sha256": "b81c93a32f71fb857b5b1f54a3f970700571faed600f918124bec676a582c149"
+      },
+      "out/native-cpu-row-ownership/previous-control-8-acceptance.json": {
+        "bytes": 52759,
+        "sha256": "31a1a586d9fe5834988be288947c401e81bcb7eae6597ab99e854074969c07bc"
+      },
+      "out/native-cpu-row-ownership/matched-result.json": {
+        "bytes": 4264,
+        "sha256": "e37879e2e52f60eb42267edac1aac5e28d1b47674a969ed4feb73a77085fccda"
+      },
+      "out/native-cpu-nir-dead-progress/provider/review-admission.json": {
+        "bytes": 1026,
+        "sha256": "b72d0120042cd39bc3ea88d7830dc5bcd929088ab9eb02b5b01278b438ffa728"
+      },
+      "out/native-cpu-nir-dead-progress/provider/provider-build-result.json": {
+        "bytes": 2519,
+        "sha256": "99b8b364a229b0a2f0f13c49ad9f7fbf35cbe939e42d850364d3cc24bb2881ce"
+      },
+      "out/native-cpu-nir-dead-progress/provider/linked-native-proof.json": {
+        "bytes": 7407764,
+        "sha256": "35ab03e42d44a4a11c0abd5f7e6e49520b6936cd94175e39c8dfdbd6e77cf5c5"
+      },
+      "out/native-cpu-nir-dead-progress/provider/incremental-plan.json": {
+        "bytes": 232086,
+        "sha256": "d0893b37b70687d99dd91d15644483c5338157b7b91547ac1026e9b7dc3ecf75"
+      },
+      "out/native-cpu-nir-dead-progress/provider/configure-result.json": {
+        "bytes": 582,
+        "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd"
+      },
+      "out/native-cpu-nir-dead-progress/provider/actions.json": {
+        "bytes": 2453653,
+        "sha256": "2e47fc960fd5039af9afb11298257d5aef757d1c473fd1cb2773cdc0a8b5c323"
+      },
+      "out/native-cpu-nir-dead-progress/reused-native-objects.json": {
+        "bytes": 1970,
+        "sha256": "fc542faaa1582c4440af4752788fc6c43b8a13fd431e579c912a885b71a99c6d"
+      },
+      "out/native-cpu-nir-dead-progress/benefit/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/vulkan/vram-report-limit-layer/VkLayer_MESA_vram_report_limit.json": {
+        "bytes": 1141,
+        "sha256": "10983e25b32eeac4fe67256f9920eeca10d2e5b9ee44949c231e10bbf771d4cc"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/vulkan/screenshot-layer/VkLayer_MESA_screenshot.json": {
+        "bytes": 310,
+        "sha256": "9a1ab458beffb27f528da763086a9a35a1dd3128d1bb27d34c418744aa10ae8b"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/intel/dev/mesa_defs.json": {
+        "bytes": 113793,
+        "sha256": "5812d494fcbd267eba7467b3a8592aa6f6c6080616255df3d67672b05f0a2489"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gfxstream/guest/vulkan/gfxstream_icd.json": {
+        "bytes": 151,
+        "sha256": "ac93d96f5b0119f48bdc9a911f58e5c50f257b7419c3569cd1dcdada46a8f582"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/zink/VP_ZINK_requirements.json": {
+        "bytes": 36301,
+        "sha256": "0e148dcf5f2ea07b4ee0c15b27d4404c017bf7c9f2e007ab56efd9318cc34d5e"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/egl/main/50_mesa.json": {
+        "bytes": 103,
+        "sha256": "cb5b838a61fdee244afce68ac5c0a8d45cebfc0ac5846b70556c64a149f6806a"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/spirv/spirv.core.grammar.json": {
+        "bytes": 560763,
+        "sha256": "ca4ec267bd00418e37c4b8df3c14c67863e68fa12f15988d56aa6694bf945dd8"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/registers-manually-defined.json": {
+        "bytes": 5922,
+        "sha256": "0e1f10a943eeb840fb55d1f1fb89e1a998893659f14195b6c0ca9869cdc9e83a"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/pkt3.json": {
+        "bytes": 18514,
+        "sha256": "36f5c2eba891df4ba1f85807241d536e8e4cc6787e34328971f071f4cddf0242"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx940.json": {
+        "bytes": 97171,
+        "sha256": "c97ebc6b44f20cddce9d3900f53755596aa0928c0ccc843e06203d56eecc705f"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx9.json": {
+        "bytes": 361872,
+        "sha256": "081fbfd1251fb5c6f4b7b6a218ba217e21346e824a04ec8146ab0d1d389ddb06"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx81.json": {
+        "bytes": 327988,
+        "sha256": "851c3eb49a3933730520efcfb680ae756d7cf2c746c00e65e1b12c1dd35e8161"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx8.json": {
+        "bytes": 320092,
+        "sha256": "225dcbb9c4d16cc4c79d48e1b91d19ab71afa24f6a14e3613ddc49379c08d1bb"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx7.json": {
+        "bytes": 309435,
+        "sha256": "22fdc2fa9ceb139b6c9ecdff4ed5e90d2b42f7c700ab4d18f3d742996b506af8"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx6.json": {
+        "bytes": 285433,
+        "sha256": "38b492cf4211615934372777c55381ba21e448d3f199ddf1394def62446ce1a1"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx12.json": {
+        "bytes": 372733,
+        "sha256": "e75a0a16f6c10fb27a02a29644307e949ab78042c76ea62509d9236d7e7e8bc1"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx12-rsrc.json": {
+        "bytes": 12969,
+        "sha256": "3cfef958a39875c6a1b341afb55082a4ffc571ff34dbd651456dc4f846fdddd0"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx115.json": {
+        "bytes": 370883,
+        "sha256": "3d8ba0bb99dc326271b5bc213d1891e0983f1dfdf1f4eaef636c4fe035f365f2"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx11.json": {
+        "bytes": 372700,
+        "sha256": "304b57f399534febbd2b055067b81c2652c700eaea88526a7d10c6bb889bf2fb"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx11-rsrc.json": {
+        "bytes": 15007,
+        "sha256": "838e540d6adcb58f3fce9e561d38dc727563102bd02d47938fc6e170db46c164"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx103.json": {
+        "bytes": 400899,
+        "sha256": "781f3d4aa1e4d00c15fc67db21732521a4619a66480a704fbdbee9f97b0cdfff"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx10.json": {
+        "bytes": 402500,
+        "sha256": "f3435695c47c3c3b1d8329a96b098452d5909944ca2c99995520c22614617d48"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/amd/registers/gfx10-rsrc.json": {
+        "bytes": 19795,
+        "sha256": "ab6deb6cea2daf6ef546b8ae5eff105d5939c9d8cd76a710f9f8064e6a2cf820"
+      },
+      "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/.pick_status.json": {
+        "bytes": 2113285,
+        "sha256": "2601def631fcc69fab9fc18ae565dbf8101b79858e3485af8897cc85f2b6de6f"
+      },
+      "out/native-cpu-host-representation/probe/result.json": {
+        "bytes": 2447,
+        "sha256": "1c15781d4b3c57e1c68c89efd9c93cf776a2547c386c36d2640e51559129a0c1"
+      },
+      "out/native-cpu-host-representation/probe/preparation.json": {
+        "bytes": 6464,
+        "sha256": "723d67d2d628b1835436d5a185ee1d51d833c81e6c395a62af67486fc1391996"
+      },
+      "out/native-cpu-host-representation/probe/generation.json": {
+        "bytes": 975,
+        "sha256": "beef6d0c83b0b1104582f1d7a63f48b32abc99b2b6e79d2a42548162ed6bf115"
+      },
+      "out/native-cpu-host-representation/probe/compile-result.json": {
+        "bytes": 58471,
+        "sha256": "8fc16d37c9145f5ac2cccafad28a9877ff6b96f3c4c80cd62cea5ae2020c293a"
+      },
+      "out/native-cpu-host-preparation/reuse-authority.json": {
+        "bytes": 39677,
+        "sha256": "b25dce9c1834f109fa3b14984d4463be776cf930bac05c3176a9d9988f30d169"
+      },
+      "out/native-cpu-dispatch-admission/cold-frame/link-recipe.json": {
+        "bytes": 8432,
+        "sha256": "8cba87eb7c419379069e22623dace65d80601abaf1497598c3bf8b232c790e31"
+      },
+      "out/native-cpu-host-preparation/host-source-proof.json": {
+        "bytes": 3078,
+        "sha256": "07d278a7547b743bfd6a5ffa9ed95160f3080d9070b918bff064d97f1bdd64cd"
+      },
+      "out/native-cpu-host-copy-prepare/proof.json": {
+        "bytes": 5978,
+        "sha256": "4776fb469fcc15a549243726dcdc1c948e4c6d548db410797f126454553f79f3"
+      },
+      "out/native-cpu-host-cohort/benefit/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/native-cpu-host-cohort/benefit/providers.json": {
+        "bytes": 1925,
+        "sha256": "bf033cd2eb41dd650cd070eb92932d9cc9b33cd0edceafff572dcd75a71c0a7d"
+      },
+      "out/native-cpu-arithmetic-sharing/readers/expected-readback-layout.json": {
+        "bytes": 3455,
+        "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+      },
+      "out/native-cpu-host-preparation/host-build-result.json": {
+        "bytes": 148955,
+        "sha256": "719f108bc99485e92a6436a13778ca648fe76a1ac2ac58117d73af8acd74f398"
+      },
+      "out/native-cpu-host-cohort/control-8/native-observation.json": {
+        "bytes": 25336,
+        "sha256": "fdf8ba96da61a170a03a0091c1005b84b304550fb6c43e926fab3b756a7ae0d8"
+      },
+      "out/native-cpu-host-cohort/control-8-acceptance.json": {
+        "bytes": 53830,
+        "sha256": "2b2c4bfb88d056c02447a7044414b7a30904ce02b589891d4cf0dd41003281ad"
+      },
+      "out/native-cpu-host-cohort/actions.json": {
+        "bytes": 205540,
+        "sha256": "ddeec3cfc3d135cef5686484c13bf628cad2eb0f6a6e4f9641ddc2bf7bfd4b7e"
+      },
+      "out/native-cpu-host-preparation/build/actions.json": {
+        "bytes": 38934,
+        "sha256": "2b05a5b81f7db1d9e4fb8779dcbdc7ecffd31457ad7f88ac2b20f8d544f5bb93"
+      },
+      "out/native-cpu-host-preparation/prepared-build.json": {
+        "bytes": 181595,
+        "sha256": "2167b51f0eb63880fff7ce2329b00a0b0a04ab613394070fe8b032a46c542cab"
+      }
+    },
+    "immediately_before_retirement_protected_paths": 15716
+  },
+  "verified_candidates": [
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/inputs-after.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822692172824661,
+      "ctime_ns": 1792822692180381783,
+      "device": 2096,
+      "inode": 2174086,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/owner.json",
+        "bytes": 3765,
+        "sha256": "9f61ea5c88b5305e28f0b9854a1212ef656875482f3b972c1ddf2ff8ddd584b0"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/inputs-before.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822638071656558,
+      "ctime_ns": 1792822638083031480,
+      "device": 2096,
+      "inode": 2174079,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/owner.json",
+        "bytes": 3765,
+        "sha256": "9f61ea5c88b5305e28f0b9854a1212ef656875482f3b972c1ddf2ff8ddd584b0"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/samples.jsonl",
+      "bytes": 710595,
+      "sha256": "be7575442993ee3c9043d0f8851aa957987821651777535c2a9bbb020f25ef84",
+      "CRC32": 3311341224,
+      "mode": 420,
+      "mtime_ns": 1792822691194177372,
+      "ctime_ns": 1792822691194177372,
+      "device": 2096,
+      "inode": 2174085,
+      "allocated_bytes": 712704,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/owner.json",
+        "bytes": 3765,
+        "sha256": "9f61ea5c88b5305e28f0b9854a1212ef656875482f3b972c1ddf2ff8ddd584b0"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/inputs-after.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822795438118695,
+      "ctime_ns": 1792822795445684330,
+      "device": 2096,
+      "inode": 2174124,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/owner.json",
+        "bytes": 3765,
+        "sha256": "c0899b3118eec071fd2e716327a81bbf81fd611ad8d65df68bb5f7eb6776c2c4"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/inputs-before.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822723047902932,
+      "ctime_ns": 1792822723055465087,
+      "device": 2096,
+      "inode": 2174120,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/owner.json",
+        "bytes": 3765,
+        "sha256": "c0899b3118eec071fd2e716327a81bbf81fd611ad8d65df68bb5f7eb6776c2c4"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/samples.jsonl",
+      "bytes": 823236,
+      "sha256": "f6dd879789fb4c3a5fa68335ab0921deaa1618f66092fb5e6fa6283eab33d856",
+      "CRC32": 2102433285,
+      "mode": 420,
+      "mtime_ns": 1792822793396675625,
+      "ctime_ns": 1792822793396675625,
+      "device": 2096,
+      "inode": 2174123,
+      "allocated_bytes": 823296,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/owner.json",
+        "bytes": 3765,
+        "sha256": "c0899b3118eec071fd2e716327a81bbf81fd611ad8d65df68bb5f7eb6776c2c4"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/inputs-after.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822708021178946,
+      "ctime_ns": 1792822708028742949,
+      "device": 2096,
+      "inode": 2174097,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/owner.json",
+        "bytes": 3759,
+        "sha256": "cfe51ccc4e60b3871a56c5c179ef3838bd8ed41791f065385555335154a8cad0"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/inputs-before.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822693219486049,
+      "ctime_ns": 1792822693230821730,
+      "device": 2096,
+      "inode": 2174093,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/owner.json",
+        "bytes": 3759,
+        "sha256": "cfe51ccc4e60b3871a56c5c179ef3838bd8ed41791f065385555335154a8cad0"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/samples.jsonl",
+      "bytes": 165468,
+      "sha256": "d2d991b32dea9b564264c9d2d936c67f613918b13ff835151f2bbc6d9fcc6371",
+      "CRC32": 3246230640,
+      "mode": 420,
+      "mtime_ns": 1792822707052986773,
+      "ctime_ns": 1792822707052986773,
+      "device": 2096,
+      "inode": 2174096,
+      "allocated_bytes": 167936,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/owner.json",
+        "bytes": 3759,
+        "sha256": "cfe51ccc4e60b3871a56c5c179ef3838bd8ed41791f065385555335154a8cad0"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/inputs-after.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822722000544572,
+      "ctime_ns": 1792822722011887802,
+      "device": 2096,
+      "inode": 2174116,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/owner.json",
+        "bytes": 3759,
+        "sha256": "52a134ca6319e483c9023c56305ff27cc45847ba09bd3bff79e72380a5317caf"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/inputs-before.json",
+      "bytes": 520017,
+      "sha256": "daa92c1ee8ea1601a1c6db50bc5c8e47bf20656ab338b132b79628f13c33a7e4",
+      "CRC32": 1634893648,
+      "mode": 420,
+      "mtime_ns": 1792822709061229135,
+      "ctime_ns": 1792822709065011133,
+      "device": 2096,
+      "inode": 2174108,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/owner.json",
+        "bytes": 3759,
+        "sha256": "52a134ca6319e483c9023c56305ff27cc45847ba09bd3bff79e72380a5317caf"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/samples.jsonl",
+      "bytes": 164235,
+      "sha256": "4469222e9704afea583bcfc99894d3af6939b68bcb751696d2a319eb1d2917ca",
+      "CRC32": 350966067,
+      "mode": 420,
+      "mtime_ns": 1792822721028807753,
+      "ctime_ns": 1792822721028807753,
+      "device": 2096,
+      "inode": 2174115,
+      "allocated_bytes": 167936,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/owner.json",
+        "bytes": 3759,
+        "sha256": "52a134ca6319e483c9023c56305ff27cc45847ba09bd3bff79e72380a5317caf"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/inputs-after.json",
+      "bytes": 478381,
+      "sha256": "e261918a06a3216cab5cca5ba987bd6b679f2822887a3864df1823d238588de9",
+      "CRC32": 778776843,
+      "mode": 420,
+      "mtime_ns": 1792822320599014991,
+      "ctime_ns": 1792822320606582651,
+      "device": 2096,
+      "inode": 2167968,
+      "allocated_bytes": 479232,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/owner.json",
+        "bytes": 2485,
+        "sha256": "f59e0195e0e733a9c96e8079db8cd76119fe287216e4877b26a7a3d2ad4be61e"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/inputs-before.json",
+      "bytes": 478381,
+      "sha256": "e261918a06a3216cab5cca5ba987bd6b679f2822887a3864df1823d238588de9",
+      "CRC32": 778776843,
+      "mode": 420,
+      "mtime_ns": 1792822301833588986,
+      "ctime_ns": 1792822301841156002,
+      "device": 2096,
+      "inode": 2167952,
+      "allocated_bytes": 479232,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/owner.json",
+        "bytes": 2485,
+        "sha256": "f59e0195e0e733a9c96e8079db8cd76119fe287216e4877b26a7a3d2ad4be61e"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/samples.jsonl",
+      "bytes": 21737,
+      "sha256": "ce3c9790f282a07836277f8798882cf2747282d8e856a4617e517ee9c68e0455",
+      "CRC32": 1625989899,
+      "mode": 420,
+      "mtime_ns": 1792822319619002812,
+      "ctime_ns": 1792822319619002812,
+      "device": 2096,
+      "inode": 2167962,
+      "allocated_bytes": 24576,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/owner.json",
+        "bytes": 2485,
+        "sha256": "f59e0195e0e733a9c96e8079db8cd76119fe287216e4877b26a7a3d2ad4be61e"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/control-8/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/control-8/inputs-after.json",
+      "bytes": 517896,
+      "sha256": "fe10cbd8965c1a655754619466cdc4762c07d86d4318ac7115a3443a77962a03",
+      "CRC32": 1596267521,
+      "mode": 420,
+      "mtime_ns": 1792822599060023933,
+      "ctime_ns": 1792822599063804087,
+      "device": 2096,
+      "inode": 2174069,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/control-8/owner.json",
+        "bytes": 3786,
+        "sha256": "cac49612535b8aec224ceac3509e37e251ab8bda85748694fb6e44dff2ec2ec9"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/control-8/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/control-8/inputs-before.json",
+      "bytes": 517896,
+      "sha256": "fe10cbd8965c1a655754619466cdc4762c07d86d4318ac7115a3443a77962a03",
+      "CRC32": 1596267521,
+      "mode": 420,
+      "mtime_ns": 1792822580438959804,
+      "ctime_ns": 1792822580461641274,
+      "device": 2096,
+      "inode": 2174054,
+      "allocated_bytes": 520192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/control-8/owner.json",
+        "bytes": 3786,
+        "sha256": "cac49612535b8aec224ceac3509e37e251ab8bda85748694fb6e44dff2ec2ec9"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/control-8/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/control-8/samples.jsonl",
+      "bytes": 272685,
+      "sha256": "428a932eb6825d2900cfbfa083358003434d6eef137af8ba16195246cda1843b",
+      "CRC32": 3857404160,
+      "mode": 420,
+      "mtime_ns": 1792822598054503122,
+      "ctime_ns": 1792822598054503122,
+      "device": 2096,
+      "inode": 2174064,
+      "allocated_bytes": 274432,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/control-8/owner.json",
+        "bytes": 3786,
+        "sha256": "cac49612535b8aec224ceac3509e37e251ab8bda85748694fb6e44dff2ec2ec9"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/inputs-after.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792822891206020918,
+      "ctime_ns": 1792822891217366350,
+      "device": 2096,
+      "inode": 2174189,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/owner.json",
+        "bytes": 3536,
+        "sha256": "e4ea9eeba9c4a2bdbf23d49d7c15f6feff48b9b485c38a4865f02c37de9d83b7"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/inputs-before.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792822828556893554,
+      "ctime_ns": 1792822828564465130,
+      "device": 2096,
+      "inode": 2174182,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/owner.json",
+        "bytes": 3536,
+        "sha256": "e4ea9eeba9c4a2bdbf23d49d7c15f6feff48b9b485c38a4865f02c37de9d83b7"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/samples.jsonl",
+      "bytes": 802678,
+      "sha256": "ae7871e8ce267bfa19356b3cf83426d3a355365a01d54057e96d6fb615bddb05",
+      "CRC32": 1987628149,
+      "mode": 420,
+      "mtime_ns": 1792822890200449080,
+      "ctime_ns": 1792822890200449080,
+      "device": 2096,
+      "inode": 2174188,
+      "allocated_bytes": 802816,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/owner.json",
+        "bytes": 3536,
+        "sha256": "e4ea9eeba9c4a2bdbf23d49d7c15f6feff48b9b485c38a4865f02c37de9d83b7"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/inputs-after.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792822941309325709,
+      "ctime_ns": 1792822941316891226,
+      "device": 2096,
+      "inode": 2174200,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/owner.json",
+        "bytes": 3536,
+        "sha256": "3221a3d2731f9a772204b04ceae55b73efc5d195e3509ea8097c445421ec562e"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/inputs-before.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792822892227109854,
+      "ctime_ns": 1792822892238455285,
+      "device": 2096,
+      "inode": 2174196,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/owner.json",
+        "bytes": 3536,
+        "sha256": "3221a3d2731f9a772204b04ceae55b73efc5d195e3509ea8097c445421ec562e"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/samples.jsonl",
+      "bytes": 627015,
+      "sha256": "20cd9adeb33b6768a29716db34fd8ec359e154fff4979557662e837772176800",
+      "CRC32": 2678886712,
+      "mode": 420,
+      "mtime_ns": 1792822940322025889,
+      "ctime_ns": 1792822940322025889,
+      "device": 2096,
+      "inode": 2174199,
+      "allocated_bytes": 630784,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/owner.json",
+        "bytes": 3536,
+        "sha256": "3221a3d2731f9a772204b04ceae55b73efc5d195e3509ea8097c445421ec562e"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/inputs-after.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792822999993106559,
+      "ctime_ns": 1792823000000664011,
+      "device": 2096,
+      "inode": 2174297,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/owner.json",
+        "bytes": 3536,
+        "sha256": "2138f8e623b9d784ac8655a3b087d10d077cb3fc705f956e305411130ff7134d"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/inputs-before.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792822942421035304,
+      "ctime_ns": 1792822942428595726,
+      "device": 2096,
+      "inode": 2174290,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/owner.json",
+        "bytes": 3536,
+        "sha256": "2138f8e623b9d784ac8655a3b087d10d077cb3fc705f956e305411130ff7134d"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/samples.jsonl",
+      "bytes": 745532,
+      "sha256": "0c465e0affc95bd283b1bd43e866eee106f141770d68000ad0b50a2bd79a01ff",
+      "CRC32": 985592150,
+      "mode": 420,
+      "mtime_ns": 1792822998999301409,
+      "ctime_ns": 1792822998999301409,
+      "device": 2096,
+      "inode": 2174296,
+      "allocated_bytes": 749568,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/owner.json",
+        "bytes": 3536,
+        "sha256": "2138f8e623b9d784ac8655a3b087d10d077cb3fc705f956e305411130ff7134d"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/inputs-after.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792823319682203294,
+      "ctime_ns": 1792823319685988795,
+      "device": 2096,
+      "inode": 2178442,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/owner.json",
+        "bytes": 3270,
+        "sha256": "54e3d0f1a1bf850bc5fb092f7e0e5b4321b838dd7c5ea30bd38d236a5ba2cbbb"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/inputs-before.json",
+      "bytes": 523355,
+      "sha256": "f726753f165076309f3c860e2393dbdb66ce8d53e165e54eb03cc6d66887abe3",
+      "CRC32": 203060916,
+      "mode": 420,
+      "mtime_ns": 1792823001016392024,
+      "ctime_ns": 1792823001020164899,
+      "device": 2096,
+      "inode": 2175522,
+      "allocated_bytes": 524288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/owner.json",
+        "bytes": 3270,
+        "sha256": "54e3d0f1a1bf850bc5fb092f7e0e5b4321b838dd7c5ea30bd38d236a5ba2cbbb"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/samples.jsonl",
+      "bytes": 3652379,
+      "sha256": "d18287cf107b85a844514645f2f3f85ae3ed8fed9247ca08a3cd9db708147709",
+      "CRC32": 2105849321,
+      "mode": 420,
+      "mtime_ns": 1792823318557909492,
+      "ctime_ns": 1792823318557909492,
+      "device": 2096,
+      "inode": 2175530,
+      "allocated_bytes": 3657728,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/owner.json",
+        "bytes": 3270,
+        "sha256": "54e3d0f1a1bf850bc5fb092f7e0e5b4321b838dd7c5ea30bd38d236a5ba2cbbb"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/provider/build/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/provider/build/inputs-after.json",
+      "bytes": 4702814,
+      "sha256": "432ba94801c37073426b51700f866e3153ea383ef6084b6a5b2f65e654430b37",
+      "CRC32": 1348510385,
+      "mode": 420,
+      "mtime_ns": 1792822481340665554,
+      "ctime_ns": 1792822481352016812,
+      "device": 2096,
+      "inode": 2173790,
+      "allocated_bytes": 4706304,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/provider/build/owner.json",
+        "bytes": 3122,
+        "sha256": "f0d89c7dfcfe4bfc0bd8f5e1c9c2300b05ae0c1d6d7e7268b48925f78b36c159"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/provider/build/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/provider/build/inputs-before.json",
+      "bytes": 4702814,
+      "sha256": "432ba94801c37073426b51700f866e3153ea383ef6084b6a5b2f65e654430b37",
+      "CRC32": 1348510385,
+      "mode": 420,
+      "mtime_ns": 1792822474788018049,
+      "ctime_ns": 1792822474799369304,
+      "device": 2096,
+      "inode": 2173781,
+      "allocated_bytes": 4706304,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/provider/build/owner.json",
+        "bytes": 3122,
+        "sha256": "f0d89c7dfcfe4bfc0bd8f5e1c9c2300b05ae0c1d6d7e7268b48925f78b36c159"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/provider/build/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/provider/build/samples.jsonl",
+      "bytes": 6287,
+      "sha256": "97c0840a24fec264441487a3799ed72c0d35f35454411b2e0a8167726e1ddbd8",
+      "CRC32": 3138508486,
+      "mode": 420,
+      "mtime_ns": 1792822478570958617,
+      "ctime_ns": 1792822478570958617,
+      "device": 2096,
+      "inode": 2173789,
+      "allocated_bytes": 8192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/provider/build/owner.json",
+        "bytes": 3122,
+        "sha256": "f0d89c7dfcfe4bfc0bd8f5e1c9c2300b05ae0c1d6d7e7268b48925f78b36c159"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/provider/configure/inputs-after.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/provider/configure/inputs-after.json",
+      "bytes": 4676136,
+      "sha256": "f3aa4f3cd5a84432de2ae0ea99870c9b7189fd57d6e537a296f769c914d83339",
+      "CRC32": 1329670373,
+      "mode": 420,
+      "mtime_ns": 1792822456546287606,
+      "ctime_ns": 1792822456557638609,
+      "device": 2096,
+      "inode": 2173762,
+      "allocated_bytes": 4677632,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/provider/configure/owner.json",
+        "bytes": 2084,
+        "sha256": "bbb1fff2129a251e99899333fda51e008ff94fa89a32298a4062ddcfa02a9e86"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/provider/configure/inputs-before.json",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/provider/configure/inputs-before.json",
+      "bytes": 4676136,
+      "sha256": "f3aa4f3cd5a84432de2ae0ea99870c9b7189fd57d6e537a296f769c914d83339",
+      "CRC32": 1329670373,
+      "mode": 420,
+      "mtime_ns": 1792822451294557106,
+      "ctime_ns": 1792822451305908109,
+      "device": 2096,
+      "inode": 2173758,
+      "allocated_bytes": 4677632,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/provider/configure/owner.json",
+        "bytes": 2084,
+        "sha256": "bbb1fff2129a251e99899333fda51e008ff94fa89a32298a4062ddcfa02a9e86"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-structural-uniform/provider/configure/samples.jsonl",
+      "archive_key": "K",
+      "archive_member": "out/native-cpu-simd-structural-uniform/provider/configure/samples.jsonl",
+      "bytes": 2952,
+      "sha256": "844644a6020eb055470fb7da376c36310b7fc7a8f157a4a6736928130e09146c",
+      "CRC32": 1013615025,
+      "mode": 420,
+      "mtime_ns": 1792822453610161620,
+      "ctime_ns": 1792822453610161620,
+      "device": 2096,
+      "inode": 2173761,
+      "allocated_bytes": 4096,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-structural-uniform/provider/configure/owner.json",
+        "bytes": 2084,
+        "sha256": "bbb1fff2129a251e99899333fda51e008ff94fa89a32298a4062ddcfa02a9e86"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/inputs-after.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/inputs-after.json",
+      "bytes": 538244,
+      "sha256": "73e03924599c7f377c4873bed577ecae05e6da39a7271f635dedc8517e047924",
+      "CRC32": 2489701287,
+      "mode": 420,
+      "mtime_ns": 1792824469896227049,
+      "ctime_ns": 1792824469949122770,
+      "device": 2096,
+      "inode": 2194206,
+      "allocated_bytes": 540672,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/owner.json",
+        "bytes": 3760,
+        "sha256": "9b2e260ae13765e0201287310547f2282d63af694035cc5e3742e8ee815e5762"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/inputs-before.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/inputs-before.json",
+      "bytes": 538244,
+      "sha256": "73e03924599c7f377c4873bed577ecae05e6da39a7271f635dedc8517e047924",
+      "CRC32": 2489701287,
+      "mode": 420,
+      "mtime_ns": 1792824407017541588,
+      "ctime_ns": 1792824407043883187,
+      "device": 2096,
+      "inode": 2194202,
+      "allocated_bytes": 540672,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/owner.json",
+        "bytes": 3760,
+        "sha256": "9b2e260ae13765e0201287310547f2282d63af694035cc5e3742e8ee815e5762"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/samples.jsonl",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/samples.jsonl",
+      "bytes": 790852,
+      "sha256": "9157916e52d32e20c1247a673638390ecb48ddedc97406e953adc1cf1999e772",
+      "CRC32": 961124319,
+      "mode": 420,
+      "mtime_ns": 1792824468842090966,
+      "ctime_ns": 1792824468842090966,
+      "device": 2096,
+      "inode": 2194205,
+      "allocated_bytes": 794624,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/owner.json",
+        "bytes": 3760,
+        "sha256": "9b2e260ae13765e0201287310547f2282d63af694035cc5e3742e8ee815e5762"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/inputs-after.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/inputs-after.json",
+      "bytes": 538244,
+      "sha256": "73e03924599c7f377c4873bed577ecae05e6da39a7271f635dedc8517e047924",
+      "CRC32": 2489701287,
+      "mode": 420,
+      "mtime_ns": 1792824790096974618,
+      "ctime_ns": 1792824790108312488,
+      "device": 2096,
+      "inode": 2135051,
+      "allocated_bytes": 540672,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/owner.json",
+        "bytes": 3349,
+        "sha256": "8e65f36a53b6242305354cc86230d0846b4b80cdce9e824d7ec1f6241c8fd4f1"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/inputs-before.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/inputs-before.json",
+      "bytes": 538244,
+      "sha256": "73e03924599c7f377c4873bed577ecae05e6da39a7271f635dedc8517e047924",
+      "CRC32": 2489701287,
+      "mode": 420,
+      "mtime_ns": 1792824471052376312,
+      "ctime_ns": 1792824471082602435,
+      "device": 2096,
+      "inode": 2194210,
+      "allocated_bytes": 540672,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/owner.json",
+        "bytes": 3349,
+        "sha256": "8e65f36a53b6242305354cc86230d0846b4b80cdce9e824d7ec1f6241c8fd4f1"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/samples.jsonl",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/samples.jsonl",
+      "bytes": 3478644,
+      "sha256": "8e013ca4bb3b50a904ee955e2e354f9f1cd1a51c89b70819851f76e50bc62059",
+      "CRC32": 645639798,
+      "mode": 420,
+      "mtime_ns": 1792824788813745855,
+      "ctime_ns": 1792824788813745855,
+      "device": 2096,
+      "inode": 2194213,
+      "allocated_bytes": 3485696,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/owner.json",
+        "bytes": 3349,
+        "sha256": "8e65f36a53b6242305354cc86230d0846b4b80cdce9e824d7ec1f6241c8fd4f1"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/inputs-after.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/inputs-after.json",
+      "bytes": 497879,
+      "sha256": "74f4e93e43234ec7720f50dc15080b0b0cc7b66e7c11fdff5354a19f8a05b7b4",
+      "CRC32": 1135249784,
+      "mode": 420,
+      "mtime_ns": 1792823852489439647,
+      "ctime_ns": 1792823852500764215,
+      "device": 2096,
+      "inode": 2186789,
+      "allocated_bytes": 499712,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/owner.json",
+        "bytes": 2406,
+        "sha256": "eec50de943fe028dd95026157c2f81b6e079695b8b765ff56f238dff120fb4b2"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/inputs-before.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/inputs-before.json",
+      "bytes": 497879,
+      "sha256": "74f4e93e43234ec7720f50dc15080b0b0cc7b66e7c11fdff5354a19f8a05b7b4",
+      "CRC32": 1135249784,
+      "mode": 420,
+      "mtime_ns": 1792823836400638275,
+      "ctime_ns": 1792823836404415625,
+      "device": 2096,
+      "inode": 2192726,
+      "allocated_bytes": 499712,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/owner.json",
+        "bytes": 2406,
+        "sha256": "eec50de943fe028dd95026157c2f81b6e079695b8b765ff56f238dff120fb4b2"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/samples.jsonl",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/samples.jsonl",
+      "bytes": 17935,
+      "sha256": "348b4436b66a9891d840b8fa40932f4e19c057e98bdd9d0cb97adeb278e1d4b5",
+      "CRC32": 4013978903,
+      "mode": 420,
+      "mtime_ns": 1792823851451354088,
+      "ctime_ns": 1792823851451354088,
+      "device": 2096,
+      "inode": 2192732,
+      "allocated_bytes": 20480,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/owner.json",
+        "bytes": 2406,
+        "sha256": "eec50de943fe028dd95026157c2f81b6e079695b8b765ff56f238dff120fb4b2"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/control-8/inputs-after.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/control-8/inputs-after.json",
+      "bytes": 536143,
+      "sha256": "25af34647ef2d48f81a360e26d9f1e32f1599c7745f7b60c7df0e0656b09d6c9",
+      "CRC32": 542751685,
+      "mode": 420,
+      "mtime_ns": 1792824241590691293,
+      "ctime_ns": 1792824241598230521,
+      "device": 2096,
+      "inode": 2192832,
+      "allocated_bytes": 536576,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/control-8/owner.json",
+        "bytes": 3771,
+        "sha256": "45653af2e6214fe995eeebfc91563ce77789c7f7912a780af197d256a03f2ba8"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/control-8/inputs-before.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/control-8/inputs-before.json",
+      "bytes": 536143,
+      "sha256": "25af34647ef2d48f81a360e26d9f1e32f1599c7745f7b60c7df0e0656b09d6c9",
+      "CRC32": 542751685,
+      "mode": 420,
+      "mtime_ns": 1792824218022679626,
+      "ctime_ns": 1792824218034012935,
+      "device": 2096,
+      "inode": 2090703,
+      "allocated_bytes": 536576,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/control-8/owner.json",
+        "bytes": 3771,
+        "sha256": "45653af2e6214fe995eeebfc91563ce77789c7f7912a780af197d256a03f2ba8"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/control-8/samples.jsonl",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/control-8/samples.jsonl",
+      "bytes": 334727,
+      "sha256": "427b472aa1cef5c7bfee153f4ed108a3496aea103012dc11156fce66ea31c731",
+      "CRC32": 379121634,
+      "mode": 420,
+      "mtime_ns": 1792824240380644942,
+      "ctime_ns": 1792824240380644942,
+      "device": 2096,
+      "inode": 2192831,
+      "allocated_bytes": 335872,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/control-8/owner.json",
+        "bytes": 3771,
+        "sha256": "45653af2e6214fe995eeebfc91563ce77789c7f7912a780af197d256a03f2ba8"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/provider/build/inputs-after.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/provider/build/inputs-after.json",
+      "bytes": 4721835,
+      "sha256": "240bb3a13e51be45c40a703439732bbe1e71f7cd91d6e473a27808424b1463d7",
+      "CRC32": 1990968090,
+      "mode": 420,
+      "mtime_ns": 1792824105194316948,
+      "ctime_ns": 1792824105209415996,
+      "device": 2096,
+      "inode": 2186764,
+      "allocated_bytes": 4722688,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/provider/build/owner.json",
+        "bytes": 3504,
+        "sha256": "d0b748b7eea68679a9f039dada58c0258ea9e954143fab93280256e4c98eaf32"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/provider/build/inputs-before.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/provider/build/inputs-before.json",
+      "bytes": 4721835,
+      "sha256": "240bb3a13e51be45c40a703439732bbe1e71f7cd91d6e473a27808424b1463d7",
+      "CRC32": 1990968090,
+      "mode": 420,
+      "mtime_ns": 1792824100207416001,
+      "ctime_ns": 1792824100222534512,
+      "device": 2096,
+      "inode": 2186755,
+      "allocated_bytes": 4722688,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/provider/build/owner.json",
+        "bytes": 3504,
+        "sha256": "d0b748b7eea68679a9f039dada58c0258ea9e954143fab93280256e4c98eaf32"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/provider/build/samples.jsonl",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/provider/build/samples.jsonl",
+      "bytes": 7264,
+      "sha256": "0df576057ab814d3bcd4e41e13a659d2b3b52c46fe64783ae5aef0f04a4aadd7",
+      "CRC32": 3825069572,
+      "mode": 420,
+      "mtime_ns": 1792824102271092626,
+      "ctime_ns": 1792824102271092626,
+      "device": 2096,
+      "inode": 2186763,
+      "allocated_bytes": 8192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/provider/build/owner.json",
+        "bytes": 3504,
+        "sha256": "d0b748b7eea68679a9f039dada58c0258ea9e954143fab93280256e4c98eaf32"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/provider/configure/inputs-after.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/provider/configure/inputs-after.json",
+      "bytes": 4695558,
+      "sha256": "9c5ef7b4549cff54e886f1bb474644f04f12a67fc3cba3da0c3801f4d16f6cae",
+      "CRC32": 1991155540,
+      "mode": 420,
+      "mtime_ns": 1792824070535747496,
+      "ctime_ns": 1792824070547086153,
+      "device": 2096,
+      "inode": 2186888,
+      "allocated_bytes": 4698112,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/provider/configure/owner.json",
+        "bytes": 1953,
+        "sha256": "eadde3d41757412aceaad052bb607860aeeb6300d18f1fc2972b7b08a8107f46"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/provider/configure/inputs-before.json",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/provider/configure/inputs-before.json",
+      "bytes": 4695558,
+      "sha256": "9c5ef7b4549cff54e886f1bb474644f04f12a67fc3cba3da0c3801f4d16f6cae",
+      "CRC32": 1991155540,
+      "mode": 420,
+      "mtime_ns": 1792824065213906930,
+      "ctime_ns": 1792824065229025919,
+      "device": 2096,
+      "inode": 2186867,
+      "allocated_bytes": 4698112,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/provider/configure/owner.json",
+        "bytes": 1953,
+        "sha256": "eadde3d41757412aceaad052bb607860aeeb6300d18f1fc2972b7b08a8107f46"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-endpoint-regions/provider/configure/samples.jsonl",
+      "archive_key": "L",
+      "archive_member": "out/native-cpu-simd-endpoint-regions/provider/configure/samples.jsonl",
+      "bytes": 2951,
+      "sha256": "62d62a36614727be08f54f23d8b12f904fca4ba00ecbe839d3c9141cf83fb99b",
+      "CRC32": 4009093126,
+      "mode": 420,
+      "mtime_ns": 1792824067542231168,
+      "ctime_ns": 1792824067542231168,
+      "device": 2096,
+      "inode": 2186884,
+      "allocated_bytes": 4096,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-endpoint-regions/provider/configure/owner.json",
+        "bytes": 1953,
+        "sha256": "eadde3d41757412aceaad052bb607860aeeb6300d18f1fc2972b7b08a8107f46"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/inputs-after.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826136093313924,
+      "ctime_ns": 1792826136112222890,
+      "device": 2096,
+      "inode": 2231323,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/owner.json",
+        "bytes": 3737,
+        "sha256": "b2581a04d43ae157393a79adec2745f6e315db475ac73f2bf66cf7c67e05615c"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/inputs-before.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826064935581330,
+      "ctime_ns": 1792826064988442037,
+      "device": 2096,
+      "inode": 2214992,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/owner.json",
+        "bytes": 3737,
+        "sha256": "b2581a04d43ae157393a79adec2745f6e315db475ac73f2bf66cf7c67e05615c"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/samples.jsonl",
+      "bytes": 838573,
+      "sha256": "e7700b784edcd87395ab2ab5d4a316a60a7e63614f4b71fcd9d69aa365def8ba",
+      "CRC32": 1493489311,
+      "mode": 420,
+      "mtime_ns": 1792826134886921959,
+      "ctime_ns": 1792826134886921959,
+      "device": 2096,
+      "inode": 2214995,
+      "allocated_bytes": 839680,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a1/owner.json",
+        "bytes": 3737,
+        "sha256": "b2581a04d43ae157393a79adec2745f6e315db475ac73f2bf66cf7c67e05615c"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/inputs-after.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826245398424875,
+      "ctime_ns": 1792826245409723809,
+      "device": 2096,
+      "inode": 2231555,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/owner.json",
+        "bytes": 3738,
+        "sha256": "81a05e675effe97cb846b1f874580c84f4bc995fc81368b315def48c8b8f108f"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/inputs-before.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826176090551787,
+      "ctime_ns": 1792826176098104006,
+      "device": 2096,
+      "inode": 2231482,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/owner.json",
+        "bytes": 3738,
+        "sha256": "81a05e675effe97cb846b1f874580c84f4bc995fc81368b315def48c8b8f108f"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/samples.jsonl",
+      "bytes": 853890,
+      "sha256": "2eefdebdbfcafcbd8134259b899da960a7eff3ca5362cfa8f5dd5834f39b36f7",
+      "CRC32": 2356828320,
+      "mode": 420,
+      "mtime_ns": 1792826244272297600,
+      "ctime_ns": 1792826244272297600,
+      "device": 2096,
+      "inode": 2231554,
+      "allocated_bytes": 856064,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/a2/owner.json",
+        "bytes": 3738,
+        "sha256": "81a05e675effe97cb846b1f874580c84f4bc995fc81368b315def48c8b8f108f"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/inputs-after.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826154635314303,
+      "ctime_ns": 1792826154646592007,
+      "device": 2096,
+      "inode": 2174149,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/owner.json",
+        "bytes": 3695,
+        "sha256": "765677c4c912c5359fd020348a03a59cc7666a6b1f3fdca71d838488128a4c98"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/inputs-before.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826137379123533,
+      "ctime_ns": 1792826137409377876,
+      "device": 2096,
+      "inode": 2231356,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/owner.json",
+        "bytes": 3695,
+        "sha256": "765677c4c912c5359fd020348a03a59cc7666a6b1f3fdca71d838488128a4c98"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/samples.jsonl",
+      "bytes": 206595,
+      "sha256": "18b82efbd980f945a1409aae76c338c325cfb153a9007fecbf923ef6aeea5a71",
+      "CRC32": 1267566335,
+      "mode": 420,
+      "mtime_ns": 1792826153496266140,
+      "ctime_ns": 1792826153496266140,
+      "device": 2096,
+      "inode": 2231360,
+      "allocated_bytes": 208896,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b1/owner.json",
+        "bytes": 3695,
+        "sha256": "765677c4c912c5359fd020348a03a59cc7666a6b1f3fdca71d838488128a4c98"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/inputs-after.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826174859540125,
+      "ctime_ns": 1792826174870868451,
+      "device": 2096,
+      "inode": 2231403,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/owner.json",
+        "bytes": 3696,
+        "sha256": "868462256255580de3c043ea66b76138293c925fe6530a779dfdb2df84aa5216"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/inputs-before.json",
+      "bytes": 554498,
+      "sha256": "c8b91397a6e929077791fc13b0701fd1a3c6fe24d6ba5df2dc8fc1d672c54f64",
+      "CRC32": 3013067043,
+      "mode": 420,
+      "mtime_ns": 1792826155826991752,
+      "ctime_ns": 1792826155838269457,
+      "device": 2096,
+      "inode": 2231476,
+      "allocated_bytes": 557056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/owner.json",
+        "bytes": 3696,
+        "sha256": "868462256255580de3c043ea66b76138293c925fe6530a779dfdb2df84aa5216"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/samples.jsonl",
+      "bytes": 206248,
+      "sha256": "06e173ea00ada2feff80829ba74c988b8db3f43d49b6068100dfc60789855a11",
+      "CRC32": 3477970297,
+      "mode": 420,
+      "mtime_ns": 1792826173684853379,
+      "ctime_ns": 1792826173684853379,
+      "device": 2096,
+      "inode": 2231479,
+      "allocated_bytes": 208896,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/benefit/runtime/b2/owner.json",
+        "bytes": 3696,
+        "sha256": "868462256255580de3c043ea66b76138293c925fe6530a779dfdb2df84aa5216"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/cold-frame/frame/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/cold-frame/frame/inputs-after.json",
+      "bytes": 592028,
+      "sha256": "4d85c055414ee3ca771c6d1c0551555a7663b33a0c1526377e035439d258ffb1",
+      "CRC32": 458056419,
+      "mode": 420,
+      "mtime_ns": 1792827191566862305,
+      "ctime_ns": 1792827191578192303,
+      "device": 2096,
+      "inode": 2263474,
+      "allocated_bytes": 593920,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/cold-frame/frame/owner.json",
+        "bytes": 3701,
+        "sha256": "73e454872e57769b2bf14c676f746a37e83542066ad6bd087f439fd1218f3860"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/cold-frame/frame/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/cold-frame/frame/inputs-before.json",
+      "bytes": 592028,
+      "sha256": "4d85c055414ee3ca771c6d1c0551555a7663b33a0c1526377e035439d258ffb1",
+      "CRC32": 458056419,
+      "mode": 420,
+      "mtime_ns": 1792826871909272041,
+      "ctime_ns": 1792826871916819177,
+      "device": 2096,
+      "inode": 2262967,
+      "allocated_bytes": 593920,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/cold-frame/frame/owner.json",
+        "bytes": 3701,
+        "sha256": "73e454872e57769b2bf14c676f746a37e83542066ad6bd087f439fd1218f3860"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/cold-frame/frame/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/cold-frame/frame/samples.jsonl",
+      "bytes": 5164327,
+      "sha256": "db4ea12407ae7e0d71d5ef3643045205903c2559c5e3e3ff888bb68f2d60a82e",
+      "CRC32": 1646889614,
+      "mode": 420,
+      "mtime_ns": 1792827190097739233,
+      "ctime_ns": 1792827190097739233,
+      "device": 2096,
+      "inode": 2262970,
+      "allocated_bytes": 5165056,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/cold-frame/frame/owner.json",
+        "bytes": 3701,
+        "sha256": "73e454872e57769b2bf14c676f746a37e83542066ad6bd087f439fd1218f3860"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/control-8/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/control-8/inputs-after.json",
+      "bytes": 552437,
+      "sha256": "1b54ca5d1ff71a1d041435fd93ee035e9481e0b655a8278d1e8eaa55590b5afe",
+      "CRC32": 1766279918,
+      "mode": 420,
+      "mtime_ns": 1792825977090832591,
+      "ctime_ns": 1792825977105936412,
+      "device": 2096,
+      "inode": 2214740,
+      "allocated_bytes": 552960,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/control-8/owner.json",
+        "bytes": 3799,
+        "sha256": "94a486e4e729c07519da79be8a4bd289a0536b730f1138f55f3b5866ddf25092"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/control-8/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/control-8/inputs-before.json",
+      "bytes": 552437,
+      "sha256": "1b54ca5d1ff71a1d041435fd93ee035e9481e0b655a8278d1e8eaa55590b5afe",
+      "CRC32": 1766279918,
+      "mode": 420,
+      "mtime_ns": 1792825962359794029,
+      "ctime_ns": 1792825962367337976,
+      "device": 2096,
+      "inode": 2214732,
+      "allocated_bytes": 552960,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/control-8/owner.json",
+        "bytes": 3799,
+        "sha256": "94a486e4e729c07519da79be8a4bd289a0536b730f1138f55f3b5866ddf25092"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/control-8/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/control-8/samples.jsonl",
+      "bytes": 210528,
+      "sha256": "3735e0c2057cb38f9ef6690ce4faecff171f8de65397ae9843d865dee866602f",
+      "CRC32": 965637361,
+      "mode": 420,
+      "mtime_ns": 1792825975954269962,
+      "ctime_ns": 1792825975954269962,
+      "device": 2096,
+      "inode": 2214736,
+      "allocated_bytes": 212992,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/control-8/owner.json",
+        "bytes": 3799,
+        "sha256": "94a486e4e729c07519da79be8a4bd289a0536b730f1138f55f3b5866ddf25092"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826377286035495,
+      "ctime_ns": 1792826377293582705,
+      "device": 2096,
+      "inode": 2234731,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/owner.json",
+        "bytes": 3292,
+        "sha256": "72e47ac88367551c37f3e8c8bac7e13234d13a43369b0a128726d81fdd78a9c8"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826306985384634,
+      "ctime_ns": 1792826306992933047,
+      "device": 2096,
+      "inode": 2234727,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/owner.json",
+        "bytes": 3292,
+        "sha256": "72e47ac88367551c37f3e8c8bac7e13234d13a43369b0a128726d81fdd78a9c8"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/samples.jsonl",
+      "bytes": 883038,
+      "sha256": "2e918087476c2d6a84a1bac55626f00e669938f6cffbc6f596243b07702cbc33",
+      "CRC32": 2059117819,
+      "mode": 420,
+      "mtime_ns": 1792826376242525829,
+      "ctime_ns": 1792826376242525829,
+      "device": 2096,
+      "inode": 2234730,
+      "allocated_bytes": 884736,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-1/owner.json",
+        "bytes": 3292,
+        "sha256": "72e47ac88367551c37f3e8c8bac7e13234d13a43369b0a128726d81fdd78a9c8"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826434172266220,
+      "ctime_ns": 1792826434179813125,
+      "device": 2096,
+      "inode": 2235683,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/owner.json",
+        "bytes": 3473,
+        "sha256": "108811fe0df1e6b3ba2ac9aa44d92b537d8df5179a24cdc26a38da657b36f3a3"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826378433211424,
+      "ctime_ns": 1792826378440758637,
+      "device": 2096,
+      "inode": 2234736,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/owner.json",
+        "bytes": 3473,
+        "sha256": "108811fe0df1e6b3ba2ac9aa44d92b537d8df5179a24cdc26a38da657b36f3a3"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/samples.jsonl",
+      "bytes": 682298,
+      "sha256": "925bae54d4a56d1927ea30e8be8d1120f688124df135ae7a1bb5e0af451de537",
+      "CRC32": 1011284350,
+      "mode": 420,
+      "mtime_ns": 1792826433066644729,
+      "ctime_ns": 1792826433066644729,
+      "device": 2096,
+      "inode": 2235185,
+      "allocated_bytes": 684032,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-2/owner.json",
+        "bytes": 3473,
+        "sha256": "108811fe0df1e6b3ba2ac9aa44d92b537d8df5179a24cdc26a38da657b36f3a3"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826507203053471,
+      "ctime_ns": 1792826507233244119,
+      "device": 2096,
+      "inode": 2235692,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/owner.json",
+        "bytes": 3473,
+        "sha256": "b87356e2dea33062f761a4f935ce236a7166498912e534f9e47ac5aa62731de4"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826435311848783,
+      "ctime_ns": 1792826435319395689,
+      "device": 2096,
+      "inode": 2235685,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/owner.json",
+        "bytes": 3473,
+        "sha256": "b87356e2dea33062f761a4f935ce236a7166498912e534f9e47ac5aa62731de4"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/samples.jsonl",
+      "bytes": 868136,
+      "sha256": "0e77774164ecfea4ab6599458cd78633b7f3e5d0685c24e244cfa16a0a82acc9",
+      "CRC32": 2369818006,
+      "mode": 420,
+      "mtime_ns": 1792826506074677956,
+      "ctime_ns": 1792826506074677956,
+      "device": 2096,
+      "inode": 2235690,
+      "allocated_bytes": 868352,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-3/owner.json",
+        "bytes": 3473,
+        "sha256": "b87356e2dea33062f761a4f935ce236a7166498912e534f9e47ac5aa62731de4"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826590857067173,
+      "ctime_ns": 1792826590864619737,
+      "device": 2096,
+      "inode": 2254224,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/owner.json",
+        "bytes": 4557,
+        "sha256": "4c5f7a19ab7b5d8e10dd5c1cbe14c579f288704676284cea15b4dafc5a31613a"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826508474834561,
+      "ctime_ns": 1792826508516346707,
+      "device": 2096,
+      "inode": 2254216,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/owner.json",
+        "bytes": 4557,
+        "sha256": "4c5f7a19ab7b5d8e10dd5c1cbe14c579f288704676284cea15b4dafc5a31613a"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/samples.jsonl",
+      "bytes": 1362560,
+      "sha256": "4dd27230ae473aa9a824d4836f4a34bc58ec862ef3bb412260f9c1cab5cbed85",
+      "CRC32": 2583856158,
+      "mode": 420,
+      "mtime_ns": 1792826589735511452,
+      "ctime_ns": 1792826589735511452,
+      "device": 2096,
+      "inode": 2254223,
+      "allocated_bytes": 1363968,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-4/owner.json",
+        "bytes": 4557,
+        "sha256": "4c5f7a19ab7b5d8e10dd5c1cbe14c579f288704676284cea15b4dafc5a31613a"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826693889389886,
+      "ctime_ns": 1792826693896922026,
+      "device": 2096,
+      "inode": 2254251,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/owner.json",
+        "bytes": 3473,
+        "sha256": "00cda8826da34d2177775e5fdc8a16c85e353df681edf5ba5ecc6e799e4a14a7"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826591993728013,
+      "ctime_ns": 1792826592001280576,
+      "device": 2096,
+      "inode": 2254244,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/owner.json",
+        "bytes": 3473,
+        "sha256": "00cda8826da34d2177775e5fdc8a16c85e353df681edf5ba5ecc6e799e4a14a7"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/samples.jsonl",
+      "bytes": 1269916,
+      "sha256": "bcaeacebf221ac10dc2955d636de69622b7ee0320d6c447e5ca569c38ee7fad3",
+      "CRC32": 2321794518,
+      "mode": 420,
+      "mtime_ns": 1792826692748270945,
+      "ctime_ns": 1792826692748270945,
+      "device": 2096,
+      "inode": 2254250,
+      "allocated_bytes": 1273856,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-5/owner.json",
+        "bytes": 3473,
+        "sha256": "00cda8826da34d2177775e5fdc8a16c85e353df681edf5ba5ecc6e799e4a14a7"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826792469526397,
+      "ctime_ns": 1792826792480823707,
+      "device": 2096,
+      "inode": 2254852,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/owner.json",
+        "bytes": 3473,
+        "sha256": "ee6a417e95fe0f0e6815228f93f4344a5594493de824c1b08c85f3d401328ea6"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826695075701665,
+      "ctime_ns": 1792826695090765940,
+      "device": 2096,
+      "inode": 2254845,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/owner.json",
+        "bytes": 3473,
+        "sha256": "ee6a417e95fe0f0e6815228f93f4344a5594493de824c1b08c85f3d401328ea6"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/samples.jsonl",
+      "bytes": 1219630,
+      "sha256": "c669f3b2f186259fd3a8ca07f542310ba7321ab2d02f20b658dc87065640c55f",
+      "CRC32": 1523335086,
+      "mode": 420,
+      "mtime_ns": 1792826791388750529,
+      "ctime_ns": 1792826791388750529,
+      "device": 2096,
+      "inode": 2254851,
+      "allocated_bytes": 1220608,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-6/owner.json",
+        "bytes": 3473,
+        "sha256": "ee6a417e95fe0f0e6815228f93f4344a5594493de824c1b08c85f3d401328ea6"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/inputs-after.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826812727953508,
+      "ctime_ns": 1792826812735483998,
+      "device": 2096,
+      "inode": 2262886,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/owner.json",
+        "bytes": 3292,
+        "sha256": "400085532903235b86c3862c78fdb39e5e458fb9984a3b29aadd6b9b1676a6de"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/inputs-before.json",
+      "bytes": 557704,
+      "sha256": "caea9e997afe5cdb396af82652d43fe8232ae83d95c39a7b1996202822b6a48e",
+      "CRC32": 1202242534,
+      "mode": 420,
+      "mtime_ns": 1792826793706103655,
+      "ctime_ns": 1792826793713654926,
+      "device": 2096,
+      "inode": 2262882,
+      "allocated_bytes": 561152,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/owner.json",
+        "bytes": 3292,
+        "sha256": "400085532903235b86c3862c78fdb39e5e458fb9984a3b29aadd6b9b1676a6de"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/samples.jsonl",
+      "bytes": 211894,
+      "sha256": "4028145e220c19bcf4fbce08476ecc5c0a80982f3f352a76ae127dccda5d173e",
+      "CRC32": 3939829768,
+      "mode": 420,
+      "mtime_ns": 1792826811666154296,
+      "ctime_ns": 1792826811666154296,
+      "device": 2096,
+      "inode": 2262885,
+      "allocated_bytes": 212992,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/controls/runtime/control-7/owner.json",
+        "bytes": 3292,
+        "sha256": "400085532903235b86c3862c78fdb39e5e458fb9984a3b29aadd6b9b1676a6de"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/provider/build/inputs-after.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/provider/build/inputs-after.json",
+      "bytes": 4737539,
+      "sha256": "1891d4bb3b53f48307a618bf04642c6284ba372453f6103b54b0ae550c7e85c7",
+      "CRC32": 1419011232,
+      "mode": 420,
+      "mtime_ns": 1792825898953324284,
+      "ctime_ns": 1792825898964589320,
+      "device": 2096,
+      "inode": 2214699,
+      "allocated_bytes": 4739072,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/provider/build/owner.json",
+        "bytes": 3481,
+        "sha256": "dee11b8d731139fc4c33bd3eb6b6c3ca1f032c303817030019f80bf6318f0f53"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/provider/build/inputs-before.json",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/provider/build/inputs-before.json",
+      "bytes": 4737539,
+      "sha256": "1891d4bb3b53f48307a618bf04642c6284ba372453f6103b54b0ae550c7e85c7",
+      "CRC32": 1419011232,
+      "mode": 420,
+      "mtime_ns": 1792825893880302894,
+      "ctime_ns": 1792825893895322942,
+      "device": 2096,
+      "inode": 2214695,
+      "allocated_bytes": 4739072,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/provider/build/owner.json",
+        "bytes": 3481,
+        "sha256": "dee11b8d731139fc4c33bd3eb6b6c3ca1f032c303817030019f80bf6318f0f53"
+      }
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/provider/build/samples.jsonl",
+      "archive_key": "M",
+      "archive_member": "out/native-cpu-nir-dead-progress/provider/build/samples.jsonl",
+      "bytes": 7058,
+      "sha256": "f271180cb2d35187276db39b70e9411ca5d00a55b5b7e6bd8a987207584e9080",
+      "CRC32": 1973942428,
+      "mode": 420,
+      "mtime_ns": 1792825895953069590,
+      "ctime_ns": 1792825895953069590,
+      "device": 2096,
+      "inode": 2214698,
+      "allocated_bytes": 8192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-nir-dead-progress/provider/build/owner.json",
+        "bytes": 3481,
+        "sha256": "dee11b8d731139fc4c33bd3eb6b6c3ca1f032c303817030019f80bf6318f0f53"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/inputs-after.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828309653764111,
+      "ctime_ns": 1792828309661301837,
+      "device": 2096,
+      "inode": 2321693,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/owner.json",
+        "bytes": 3747,
+        "sha256": "8fdd9705ec4bd9754686f50b161d3f7ae9231f61492e012a079531f87de028c7"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/inputs-before.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828248645451975,
+      "ctime_ns": 1792828248656723395,
+      "device": 2096,
+      "inode": 2321686,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/owner.json",
+        "bytes": 3747,
+        "sha256": "8fdd9705ec4bd9754686f50b161d3f7ae9231f61492e012a079531f87de028c7"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/samples.jsonl",
+      "bytes": 771344,
+      "sha256": "3d01a93336c391995944a0d2ea4ef1956fc283a1d1c6629b12b9ef1ebe01f153",
+      "CRC32": 3273875171,
+      "mode": 420,
+      "mtime_ns": 1792828308440189928,
+      "ctime_ns": 1792828308440189928,
+      "device": 2096,
+      "inode": 2321691,
+      "allocated_bytes": 774144,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a1/owner.json",
+        "bytes": 3747,
+        "sha256": "8fdd9705ec4bd9754686f50b161d3f7ae9231f61492e012a079531f87de028c7"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/inputs-after.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828407496111901,
+      "ctime_ns": 1792828407507375399,
+      "device": 2096,
+      "inode": 2321755,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/owner.json",
+        "bytes": 3747,
+        "sha256": "8fceea17011dbd3dfef635afa54965cd41b9dd22959151a3712bd25b92bb4d3d"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/inputs-before.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828344104924918,
+      "ctime_ns": 1792828344150155849,
+      "device": 2096,
+      "inode": 2321751,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/owner.json",
+        "bytes": 3747,
+        "sha256": "8fceea17011dbd3dfef635afa54965cd41b9dd22959151a3712bd25b92bb4d3d"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/samples.jsonl",
+      "bytes": 803365,
+      "sha256": "458a2f328af010c406554a501e7edd865fe25f3649f600b5a14779555af8a925",
+      "CRC32": 733943632,
+      "mode": 420,
+      "mtime_ns": 1792828406253372554,
+      "ctime_ns": 1792828406253372554,
+      "device": 2096,
+      "inode": 2321754,
+      "allocated_bytes": 806912,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/a2/owner.json",
+        "bytes": 3747,
+        "sha256": "8fceea17011dbd3dfef635afa54965cd41b9dd22959151a3712bd25b92bb4d3d"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/inputs-after.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828325358628001,
+      "ctime_ns": 1792828325369944695,
+      "device": 2096,
+      "inode": 2321718,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/owner.json",
+        "bytes": 3705,
+        "sha256": "494f3a90328ff42f54904e00cb200d575b94304c0c94ccbf911397bae9bc5dd9"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/inputs-before.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828310897489204,
+      "ctime_ns": 1792828310912564660,
+      "device": 2096,
+      "inode": 2321703,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/owner.json",
+        "bytes": 3705,
+        "sha256": "494f3a90328ff42f54904e00cb200d575b94304c0c94ccbf911397bae9bc5dd9"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/samples.jsonl",
+      "bytes": 181385,
+      "sha256": "a0bf642bb9e6f66f0664a9962842831937d33d3c1aab4c9857f0b6ba559e5cf0",
+      "CRC32": 4086685406,
+      "mode": 420,
+      "mtime_ns": 1792828324185463896,
+      "ctime_ns": 1792828324185463896,
+      "device": 2096,
+      "inode": 2321717,
+      "allocated_bytes": 184320,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b1/owner.json",
+        "bytes": 3705,
+        "sha256": "494f3a90328ff42f54904e00cb200d575b94304c0c94ccbf911397bae9bc5dd9"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/inputs-after.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828342683919846,
+      "ctime_ns": 1792828342747996997,
+      "device": 2096,
+      "inode": 2321741,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/owner.json",
+        "bytes": 3704,
+        "sha256": "0d263f76633aa27fe20c9a7356ff580c93c98be2c73c04c344751ba92f15ec23"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/inputs-before.json",
+      "bytes": 769966,
+      "sha256": "8f8efc6d9ea9d1efc9d77e6736b4db9fdf2a99287004c136f7db7bb050264974",
+      "CRC32": 2426342199,
+      "mode": 420,
+      "mtime_ns": 1792828328427362482,
+      "ctime_ns": 1792828328434906945,
+      "device": 2096,
+      "inode": 2321725,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/owner.json",
+        "bytes": 3704,
+        "sha256": "0d263f76633aa27fe20c9a7356ff580c93c98be2c73c04c344751ba92f15ec23"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/samples.jsonl",
+      "bytes": 178734,
+      "sha256": "701034374c0d539c2f48d07ca4ec3d74203813f461b4b6cd74413135faf822c1",
+      "CRC32": 1147646002,
+      "mode": 420,
+      "mtime_ns": 1792828341504146409,
+      "ctime_ns": 1792828341504146409,
+      "device": 2096,
+      "inode": 2321740,
+      "allocated_bytes": 180224,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/benefit/runtime/b2/owner.json",
+        "bytes": 3704,
+        "sha256": "0d263f76633aa27fe20c9a7356ff580c93c98be2c73c04c344751ba92f15ec23"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/compile/adapter/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/compile/adapter/inputs-after.json",
+      "bytes": 737337,
+      "sha256": "3ab34987c8d356e43e532cd88284992343dc924ff64172ebbfb47b1f332d5523",
+      "CRC32": 1557851967,
+      "mode": 420,
+      "mtime_ns": 1792828127007858325,
+      "ctime_ns": 1792828127015370308,
+      "device": 2096,
+      "inode": 2311441,
+      "allocated_bytes": 741376,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/compile/adapter/owner.json",
+        "bytes": 1815,
+        "sha256": "de3217822ee98993c98dae3f4cb55cdb84bdf57e31cfe211daaf40cf1bfceca3"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/compile/adapter/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/compile/adapter/inputs-before.json",
+      "bytes": 737337,
+      "sha256": "3ab34987c8d356e43e532cd88284992343dc924ff64172ebbfb47b1f332d5523",
+      "CRC32": 1557851967,
+      "mode": 420,
+      "mtime_ns": 1792828125223762675,
+      "ctime_ns": 1792828125231274657,
+      "device": 2096,
+      "inode": 2311437,
+      "allocated_bytes": 741376,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/compile/adapter/owner.json",
+        "bytes": 1815,
+        "sha256": "de3217822ee98993c98dae3f4cb55cdb84bdf57e31cfe211daaf40cf1bfceca3"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/compile/adapter/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/compile/adapter/samples.jsonl",
+      "bytes": 663,
+      "sha256": "a349460cdac36bd1f3e7e90819fb40a85bc03abc31a103fd99cfd3342ea82364",
+      "CRC32": 820905925,
+      "mode": 420,
+      "mtime_ns": 1792828125753357384,
+      "ctime_ns": 1792828125753357384,
+      "device": 2096,
+      "inode": 2311440,
+      "allocated_bytes": 4096,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/compile/adapter/owner.json",
+        "bytes": 1815,
+        "sha256": "de3217822ee98993c98dae3f4cb55cdb84bdf57e31cfe211daaf40cf1bfceca3"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/control-8/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/control-8/inputs-after.json",
+      "bytes": 767906,
+      "sha256": "015d3ca872e26a5eac69af51386d092f04691cc725a07d06432ed8c274c653c3",
+      "CRC32": 4194130134,
+      "mode": 420,
+      "mtime_ns": 1792828238359095954,
+      "ctime_ns": 1792828238362867466,
+      "device": 2096,
+      "inode": 2321670,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/control-8/owner.json",
+        "bytes": 4583,
+        "sha256": "1829f9db8b9d4cc7c9b7cb59dd070475ea6d90cec6fc11e1f45fa00f8bd6d234"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/control-8/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/control-8/inputs-before.json",
+      "bytes": 767906,
+      "sha256": "015d3ca872e26a5eac69af51386d092f04691cc725a07d06432ed8c274c653c3",
+      "CRC32": 4194130134,
+      "mode": 420,
+      "mtime_ns": 1792828222214347984,
+      "ctime_ns": 1792828222229419136,
+      "device": 2096,
+      "inode": 2321665,
+      "allocated_bytes": 770048,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/control-8/owner.json",
+        "bytes": 4583,
+        "sha256": "1829f9db8b9d4cc7c9b7cb59dd070475ea6d90cec6fc11e1f45fa00f8bd6d234"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/control-8/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/control-8/samples.jsonl",
+      "bytes": 236636,
+      "sha256": "4856607ca180cbe185c82f8c97c64542f3f5e99c3daeedcb3bab124e7faf0974",
+      "CRC32": 1476799745,
+      "mode": 420,
+      "mtime_ns": 1792828237118268393,
+      "ctime_ns": 1792828237118268393,
+      "device": 2096,
+      "inode": 2321669,
+      "allocated_bytes": 237568,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/control-8/owner.json",
+        "bytes": 4583,
+        "sha256": "1829f9db8b9d4cc7c9b7cb59dd070475ea6d90cec6fc11e1f45fa00f8bd6d234"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/provider/build/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/provider/build/inputs-after.json",
+      "bytes": 4957412,
+      "sha256": "4db139a1150cb0d82cf00a60568c84dcb37da1a8ce89cfd5573e81132d8830e8",
+      "CRC32": 4009593889,
+      "mode": 420,
+      "mtime_ns": 1792828215067121728,
+      "ctime_ns": 1792828215078424589,
+      "device": 2096,
+      "inode": 2321653,
+      "allocated_bytes": 4960256,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/provider/build/owner.json",
+        "bytes": 3500,
+        "sha256": "dc75888647dd09e8c82370cec790be68849ec856560137bf540ac8b89bd6ec5a"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/provider/build/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/provider/build/inputs-before.json",
+      "bytes": 4957412,
+      "sha256": "4db139a1150cb0d82cf00a60568c84dcb37da1a8ce89cfd5573e81132d8830e8",
+      "CRC32": 4009593889,
+      "mode": 420,
+      "mtime_ns": 1792828209698891377,
+      "ctime_ns": 1792828209710204867,
+      "device": 2096,
+      "inode": 2321632,
+      "allocated_bytes": 4960256,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/provider/build/owner.json",
+        "bytes": 3500,
+        "sha256": "dc75888647dd09e8c82370cec790be68849ec856560137bf540ac8b89bd6ec5a"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/provider/build/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/provider/build/samples.jsonl",
+      "bytes": 8217,
+      "sha256": "a6284e644d771572cae2d5782dcb6f271ed0b9e1e6548e6936f3de8d26c1da41",
+      "CRC32": 3918573823,
+      "mode": 420,
+      "mtime_ns": 1792828212025698749,
+      "ctime_ns": 1792828212025698749,
+      "device": 2096,
+      "inode": 2321652,
+      "allocated_bytes": 12288,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/provider/build/owner.json",
+        "bytes": 3500,
+        "sha256": "dc75888647dd09e8c82370cec790be68849ec856560137bf540ac8b89bd6ec5a"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/provider/configure/inputs-after.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/provider/configure/inputs-after.json",
+      "bytes": 4931206,
+      "sha256": "b59cb41f11b6da07baa96418f2b249285b08915500f6c9481a48bb95732ddbf9",
+      "CRC32": 1929389593,
+      "mode": 420,
+      "mtime_ns": 1792828205897559404,
+      "ctime_ns": 1792828205912644054,
+      "device": 2096,
+      "inode": 2311349,
+      "allocated_bytes": 4931584,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/provider/configure/owner.json",
+        "bytes": 2592,
+        "sha256": "1ccaa733b6319a3959afc21b07fb4c49803037ed2ec9baaa4911364ff84751c2"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/provider/configure/inputs-before.json",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/provider/configure/inputs-before.json",
+      "bytes": 4931206,
+      "sha256": "b59cb41f11b6da07baa96418f2b249285b08915500f6c9481a48bb95732ddbf9",
+      "CRC32": 1929389593,
+      "mode": 420,
+      "mtime_ns": 1792828198114420796,
+      "ctime_ns": 1792828198129508318,
+      "device": 2096,
+      "inode": 2321605,
+      "allocated_bytes": 4931584,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/provider/configure/owner.json",
+        "bytes": 2592,
+        "sha256": "1ccaa733b6319a3959afc21b07fb4c49803037ed2ec9baaa4911364ff84751c2"
+      }
+    },
+    {
+      "path": "out/native-cpu-simd-medium-tails/provider/configure/samples.jsonl",
+      "archive_key": "N",
+      "archive_member": "out/native-cpu-simd-medium-tails/provider/configure/samples.jsonl",
+      "bytes": 4252,
+      "sha256": "858cdb36b37420081e444a8d3d8c292815d7c1e891befa1725853a64e7a7d057",
+      "CRC32": 1583675083,
+      "mode": 420,
+      "mtime_ns": 1792828202797237947,
+      "ctime_ns": 1792828202797237947,
+      "device": 2096,
+      "inode": 2321613,
+      "allocated_bytes": 8192,
+      "nlink": 1,
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-medium-tails/provider/configure/owner.json",
+        "bytes": 2592,
+        "sha256": "1ccaa733b6319a3959afc21b07fb4c49803037ed2ec9baaa4911364ff84751c2"
+      }
+    }
+  ],
+  "retained": [
+    {
+      "path": "out/native-cpu-nir-dead-progress/provider/configure/inputs-after.json",
+      "reasons": [
+        "source/frozen/pinned operational input"
+      ]
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/provider/configure/inputs-before.json",
+      "reasons": [
+        "source/frozen/pinned operational input"
+      ]
+    },
+    {
+      "path": "out/native-cpu-nir-dead-progress/provider/configure/samples.jsonl",
+      "reasons": [
+        "source/frozen/pinned operational input"
+      ]
+    }
+  ],
+  "terminal_owners_verified": 40,
+  "proc_visibility": {
+    "inaccessible_fd_PIDs": [
+      1,
+      2,
+      6,
+      40,
+      90,
+      179,
+      180,
+      186,
+      187,
+      194,
+      199,
+      206,
+      208,
+      224,
+      247,
+      366,
+      368,
+      370,
+      464,
+      511,
+      522,
+      553,
+      674,
+      675,
+      4626,
+      63252,
+      63253,
+      63258,
+      63259,
+      63260,
+      63265,
+      64691,
+      64692,
+      64722,
+      64723,
+      64747,
+      64748
+    ],
+    "inaccessible_maps_PIDs": [
+      1,
+      2,
+      6,
+      40,
+      90,
+      179,
+      180,
+      186,
+      187,
+      194,
+      199,
+      206,
+      208,
+      224,
+      243,
+      247,
+      366,
+      368,
+      370,
+      464,
+      511,
+      522,
+      553,
+      674,
+      675,
+      4626,
+      63252,
+      63253,
+      63258,
+      63259,
+      63260,
+      63265,
+      64691,
+      64692,
+      64722,
+      64723,
+      64747,
+      64748
+    ]
+  },
+  "scheduled_consumer_check": {
+    "accessible_Linux_definition_files_examined": 345,
+    "matched_definitions": [],
+    "unreadable": [
+      "/var/spool/cron/crontabs/astra"
+    ]
+  },
+  "restore": "For each retired path, select its archive_key, verify the pinned source-build-and-trial.zip SHA256, extract archive_member into the checkout root, then restore mode and exact mtime_ns from this receipt. Original archive MANIFEST also retains all member identities. Restore paths explicitly before historical path-bound re-audit.",
+  "limits": [
+    "Only these three named ignored raw sidecars are eligible; no sources, owners, XML, logs, observations, archives, resources, objects, ELFs, caches or tracked/frozen files are removed.",
+    "Only accessible Linux proc descriptors/maps/cwd/cmdline and scheduled definitions are checked; inaccessible non-dumpable processes and Windows/other external schedulers are not universally audited. No evidence identifies them as consumers of these immutable retired copies.",
+    "Deleted-file logical/allocated bytes are counted gross; other writers are active, so no whole-drive net free-space or performance attribution is claimed.",
+    "No Git writes/commit/push, workload or scientific/benefit trial is performed. Existing immutable recovery ZIPs remain untouched."
+  ],
+  "removed": [
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/a1/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/a2/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/b1/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/benefit/runtime/b2/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/compile/ispc-uniform/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/control-8/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/control-8/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/control-8/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-1/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-2/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-3/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/controls/runtime/control-4/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/provider/build/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/provider/build/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/provider/build/samples.jsonl",
+    "out/native-cpu-simd-structural-uniform/provider/configure/inputs-after.json",
+    "out/native-cpu-simd-structural-uniform/provider/configure/inputs-before.json",
+    "out/native-cpu-simd-structural-uniform/provider/configure/samples.jsonl",
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/inputs-after.json",
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/inputs-before.json",
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/a1/samples.jsonl",
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/inputs-after.json",
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/inputs-before.json",
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/samples.jsonl",
+    "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/inputs-after.json",
+    "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/inputs-before.json",
+    "out/native-cpu-simd-endpoint-regions/compile/ispc-uniform/samples.jsonl",
+    "out/native-cpu-simd-endpoint-regions/control-8/inputs-after.json",
+    "out/native-cpu-simd-endpoint-regions/control-8/inputs-before.json",
+    "out/native-cpu-simd-endpoint-regions/control-8/samples.jsonl",
+    "out/native-cpu-simd-endpoint-regions/provider/build/inputs-after.json",
+    "out/native-cpu-simd-endpoint-regions/provider/build/inputs-before.json",
+    "out/native-cpu-simd-endpoint-regions/provider/build/samples.jsonl",
+    "out/native-cpu-simd-endpoint-regions/provider/configure/inputs-after.json",
+    "out/native-cpu-simd-endpoint-regions/provider/configure/inputs-before.json",
+    "out/native-cpu-simd-endpoint-regions/provider/configure/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/a1/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/a1/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/a1/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/a2/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/a2/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/a2/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/b1/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/b1/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/b1/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/b2/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/b2/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/benefit/runtime/b2/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/cold-frame/frame/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/cold-frame/frame/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/cold-frame/frame/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/control-8/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/control-8/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/control-8/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-1/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-1/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-1/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-2/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-2/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-2/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-3/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-3/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-3/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-4/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-4/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-4/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-5/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-5/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-5/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-6/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-6/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-6/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-7/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-7/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/controls/runtime/control-7/samples.jsonl",
+    "out/native-cpu-nir-dead-progress/provider/build/inputs-after.json",
+    "out/native-cpu-nir-dead-progress/provider/build/inputs-before.json",
+    "out/native-cpu-nir-dead-progress/provider/build/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/a1/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/a1/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/a1/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/a2/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/a2/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/a2/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/b1/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/b1/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/b1/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/b2/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/b2/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/benefit/runtime/b2/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/compile/adapter/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/compile/adapter/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/compile/adapter/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/control-8/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/control-8/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/control-8/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/provider/build/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/provider/build/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/provider/build/samples.jsonl",
+    "out/native-cpu-simd-medium-tails/provider/configure/inputs-after.json",
+    "out/native-cpu-simd-medium-tails/provider/configure/inputs-before.json",
+    "out/native-cpu-simd-medium-tails/provider/configure/samples.jsonl"
+  ],
+  "logical_bytes_retired": 133904993,
+  "allocated_bytes_retired_gross": 134139904,
+  "proc_visibility_immediately_before_retirement": {
+    "inaccessible_fd_PIDs": [
+      1,
+      2,
+      6,
+      40,
+      90,
+      179,
+      180,
+      186,
+      187,
+      194,
+      199,
+      206,
+      208,
+      224,
+      247,
+      366,
+      368,
+      370,
+      464,
+      511,
+      522,
+      553,
+      674,
+      675,
+      4626,
+      63252,
+      63253,
+      63258,
+      63259,
+      63260,
+      63265,
+      64691,
+      64692,
+      64722,
+      64723,
+      64747,
+      64748
+    ],
+    "inaccessible_maps_PIDs": [
+      1,
+      2,
+      6,
+      40,
+      90,
+      179,
+      180,
+      186,
+      187,
+      194,
+      199,
+      206,
+      208,
+      224,
+      243,
+      247,
+      366,
+      368,
+      370,
+      464,
+      511,
+      522,
+      553,
+      674,
+      675,
+      4626,
+      63252,
+      63253,
+      63258,
+      63259,
+      63260,
+      63265,
+      64691,
+      64692,
+      64722,
+      64723,
+      64747,
+      64748
+    ]
+  },
+  "verification_guard_note": "First attempt stopped on unreadable user crontab before any receipt/deletion. Permission visibility is now recorded explicitly; final candidate metadata/source/proc guards were refreshed.",
+  "removed_file_count": 120,
+  "completed_utc": "2026-10-24T08:20:22.296175+00:00",
+  "whole_drive_free_change_measured": false
+}
