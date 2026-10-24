@@ -8,6 +8,10 @@
     "windows-c251-preflight-retirement.zip": {
       "bytes": 3916412,
       "sha256": "a81033e18ae60aa86bc527f47713d49ac11416d85736315a9ad4de1664a90efb"
+    },
+    "e78-payload-recovery.zip": {
+      "bytes": 51223,
+      "sha256": "7d52f947af23bd8e8fa2de04f0a47b70758235feb0baae53cc6a30a19caeded6"
     }
   },
   "members": {
@@ -35,12 +39,18 @@
       "archive": "exact-retirement-receipts.zip",
       "bytes": 2025963,
       "sha256": "5d13505fcc2dc5314462b4c46a7772bd55c4f1de44aa278dad0c355f25925218"
+    },
+    "e78-payload-archived-2026-10-24.json": {
+      "archive": "e78-payload-recovery.zip",
+      "bytes": 555773,
+      "sha256": "7537ea14e13fe38240a508b672fa329f991c28e4b36f2be1c6dcf1046102d307"
     }
   },
   "space_accounting": {
-    "linux_allocated_bytes_removed_or_sparsified": 1461116928,
+    "linux_allocated_bytes_removed_or_sparsified": 1976430592,
     "Windows_staging_allocated_bytes_removed": 326066176,
     "Windows_context_archive_bytes": 3916412,
-    "limits": "Counted allocations and filesystem free-space observations are separate. Concurrent writers and VM storage prevent assigning all drive-free changes to this cleanup."
+    "limits": "Counted Linux net allocation includes removed extracts, sparsification and net saving after lossless payload archive allocation; Windows staging is separate. Concurrent writers and VM storage mean observed drive-free deltas differ and are not wholly attributed to cleanup.",
+    "latest_lossless_payload_archive_net_saving_bytes": 515313664
   }
 }
