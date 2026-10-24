@@ -1,0 +1,109 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp",
+      "basis": {
+        "bytes": 634190,
+        "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-simd-rows/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 639065,
+        "sha256": "e71c81cba91fa40c9fd0af12ea20b73737e6102835fac079b1e99667eea1f99f"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 201,
+        "constant_arrays": 18,
+        "constant_matrices": 2,
+        "private_arrays": 2,
+        "dimension_reads": 2,
+        "word_loads": 24,
+        "word_indices": 16,
+        "admitted_output_stride": 1,
+        "compile_assertions": 3
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "private_output_layout": {
+        "row_words": 4699,
+        "index_mapping": "(absolute_original_index - original_row_base) * programCount + programIndex",
+        "active_rows_copied_in_and_out": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim."
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp",
+      "basis": {
+        "bytes": 812736,
+        "sha256": "90f41000d38684143089e198ad56a6507546b1e9ad38cae95d9ba8fc8b7e5fc8"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-simd-rows/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 817183,
+        "sha256": "87e7ab8ae98a6add714e508805d280c15f467b76a0a86b965d30cb1920ce8107"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 243,
+        "constant_arrays": 0,
+        "constant_matrices": 0,
+        "private_arrays": 2,
+        "dimension_reads": 2,
+        "word_loads": 24,
+        "word_indices": 15,
+        "admitted_output_stride": 1,
+        "compile_assertions": 3
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "private_output_layout": {
+        "row_words": 3829,
+        "index_mapping": "(absolute_original_index - original_row_base) * programCount + programIndex",
+        "active_rows_copied_in_and_out": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim."
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp",
+      "basis": {
+        "bytes": 409325,
+        "sha256": "5173a3682f0afe1811228c44f46d35fb843683ecf058832ddc8f49465541c7e6"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-simd-rows/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 411343,
+        "sha256": "45858d79bd6cdae97929067773bab63e5c7de2e2300a4eee0b4c565e2cc159cb"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 83,
+        "constant_arrays": 0,
+        "constant_matrices": 0,
+        "private_arrays": 1,
+        "dimension_reads": 2,
+        "word_loads": 21,
+        "word_indices": 7,
+        "admitted_output_stride": 1,
+        "compile_assertions": 2
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "private_output_layout": {
+        "row_words": 4149,
+        "index_mapping": "(absolute_original_index - original_row_base) * programCount + programIndex",
+        "active_rows_copied_in_and_out": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim."
+    }
+  },
+  "compiler_user_guide": "https://ispc.github.io/ispc.html",
+  "scope": "Complete T/E/DP plus all5canonicalprograms. Original arithmetic/control expressions copied with enumerated C-like syntax/type/storage adaptations; original literal call order retained. No field/trial/RHS/quartic/reference/precision/workload/count/budget change. Not compiled or executed."
+}

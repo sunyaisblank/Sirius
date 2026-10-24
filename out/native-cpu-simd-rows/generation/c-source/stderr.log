@@ -1,0 +1,54 @@
+error[E36107]: unavailable features in entry point
+   --> /home/astra/.project/Sirius/out/native-cpu-slang-bridge/shaders/retained_transport.slang:667:6
+    |
+667 | void ComputeMain(uint3 id : SV_GroupID, uint lane : SV_GroupIndex) {
+    |      ^^^^^^^^^^^ entrypoint 'ComputeMain' uses features that are not available in 'compute' stage for 'c' compilation target.
+----'
+note: see using of 'GetDimensions'
+   --> /home/astra/.project/Sirius/out/native-cpu-slang-bridge/shaders/retained_transport.slang:487:12
+    |
+487 | inputs.GetDimensions(ni, si);
+    |        ^^^^^^^^^^^^^
+----'
+note: see definition of 'GetDimensions'
+--> hlsl.meta.slang:5964:10
+-'
+note: see declaration of 'require'
+--> hlsl.meta.slang:5963:6
+-'
+error[E36107]: unavailable features in entry point
+   --> /home/astra/.project/Sirius/out/native-cpu-slang-bridge/shaders/retained_endpoint.slang:857:6
+    |
+857 | void ComputeMain(uint3 id : SV_GroupID, uint lane : SV_GroupIndex) {
+    |      ^^^^^^^^^^^ entrypoint 'ComputeMain' uses features that are not available in 'compute' stage for 'c' compilation target.
+----'
+note: see using of 'GetDimensions'
+   --> /home/astra/.project/Sirius/out/native-cpu-slang-bridge/shaders/retained_endpoint.slang:718:12
+    |
+718 | inputs.GetDimensions(ni, si);
+    |        ^^^^^^^^^^^^^
+----'
+note: see definition of 'GetDimensions'
+--> hlsl.meta.slang:5964:10
+-'
+note: see declaration of 'require'
+--> hlsl.meta.slang:5963:6
+-'
+error[E36107]: unavailable features in entry point
+   --> /home/astra/.project/Sirius/out/native-cpu-slang-bridge/shaders/retained_dopri_phase.slang:237:6
+    |
+237 | void ComputeMain(uint3 id : SV_GroupID, uint lane : SV_GroupIndex) {
+    |      ^^^^^^^^^^^ entrypoint 'ComputeMain' uses features that are not available in 'compute' stage for 'c' compilation target.
+----'
+note: see using of 'GetDimensions'
+   --> /home/astra/.project/Sirius/out/native-cpu-slang-bridge/shaders/retained_dopri_phase.slang:187:12
+    |
+187 | inputs.GetDimensions(ni, si);
+    |        ^^^^^^^^^^^^^
+----'
+note: see definition of 'GetDimensions'
+--> hlsl.meta.slang:5964:10
+-'
+note: see declaration of 'require'
+--> hlsl.meta.slang:5963:6
+-'
