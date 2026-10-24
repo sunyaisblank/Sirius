@@ -31,7 +31,7 @@ changes = [
     ("derived = read(work / 'ispc-uniform-derivation.json')", "derived = read(work / 'ispc-derivation.json')"),
     ("'ispc-uniform-derivation.json', 'prepare_ispc_compile.py'", "'ispc-derivation.json', 'prepare_ispc_compile.py'"),
     ("destination = root / 'bin/linux-gcc/native-cpu-simd-rows/objects-uniform'",
-     "destination = root / 'bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform'"),
+     "destination = root / 'bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform'"),
     ("'--addressing=64'", "'--addressing=32'"),
     ("'--target=sse2-i32x8'", "'--target=avx2-i32x8'"),
     ("'--cpu=x86-64'", "'--cpu=core-avx2'"),
