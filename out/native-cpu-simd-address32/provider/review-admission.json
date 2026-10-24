@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "scope": "Build/source admission only: sameG shader source/packet scheduler/IEEE32 scope, corrected documented offset model. Static fault mechanism fixed in both mask paths. No numerical qualification.",
+  "source_contract": {
+    "bytes": 18373,
+    "sha256": "b76715b8cdf6e6811116aaec46a608f2d0db193ed9eb4fa7adc4e3cfe490617d"
+  },
+  "patch": {
+    "bytes": 1463,
+    "sha256": "aa540e6c48f9c1e2c4709704c3dfac946ba2073ed4964a887500dcf5639b1261"
+  },
+  "addressing_correction": {
+    "bytes": 733,
+    "sha256": "2394519824681e848e5bf6eed414f13c0fda44264aadb97d114c47c70eac5ca4"
+  },
+  "checks": {
+    "all9380calls_all5programs_unchanged": true,
+    "full_admitted_domain_offsets_below_2GiB": true,
+    "all_original_guards_counts_governors_and_FPflags_unchanged": true,
+    "pointer_bases_64bit": true
+  }
+}

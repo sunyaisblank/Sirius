@@ -1,0 +1,14 @@
+{
+  "object": {
+    "path": "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o",
+    "bytes": 3073048,
+    "sha256": "5130e04b06f237319ea5fcc66eb4b5753aebb8585c657c02319d061e1b83b5cd"
+  },
+  "scope": "Independent read-only static inspection, no numerical/benefit/frame claim.",
+  "full_mask_path": "32-bit lane*4; correction constant0xffffffb8 sign-extended by movslq at0x152cf to-72. Load en_base+80-72 for lane20.",
+  "partial_mask_path": "Same32-bit correction/sign-extension at0x15945, same valid table2..6 range.",
+  "valid_lane20_expected_and_actual_offset": 8,
+  "previous_invalid_offset": 17179869192,
+  "views_below_signed32_maximum": true,
+  "all_other_compiler_flags_and_shader_source_unchanged": true
+}

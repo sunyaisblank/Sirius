@@ -1,0 +1,72 @@
+{
+  "revision": "b5ef25d2592c3b555abf4254cf1acb97a7da8c5a",
+  "objects": {
+    "transport": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o",
+        "bytes": 3073048,
+        "sha256": "5130e04b06f237319ea5fcc66eb4b5753aebb8585c657c02319d061e1b83b5cd"
+      },
+      "export": "sirius_simd_transport_packet",
+      "undefined_symbols": [
+        "                 U memset",
+        "                 U sirius_simd_fmaxf"
+      ],
+      "packed_float_instructions": {
+        "addps": 52,
+        "subps": 116,
+        "mulps": 48,
+        "divps": 4,
+        "sqrtps": 4
+      },
+      "forbidden_fma_fp_control_x87_found": [],
+      "total_instructions": 582965,
+      "uniform_private_readers": []
+    },
+    "endpoint": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/endpoint.o",
+        "bytes": 3937032,
+        "sha256": "e8104d7f4b617a77068ca563e82bde95df28ebd4831bfe1466aeaf799006f726"
+      },
+      "export": "sirius_simd_endpoint_packet",
+      "undefined_symbols": [
+        "                 U memset",
+        "                 U sirius_simd_fmaxf"
+      ],
+      "packed_float_instructions": {
+        "addps": 52,
+        "subps": 116,
+        "mulps": 48,
+        "divps": 4,
+        "sqrtps": 4
+      },
+      "forbidden_fma_fp_control_x87_found": [],
+      "total_instructions": 750351,
+      "uniform_private_readers": []
+    },
+    "dopri_phase": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/dopri_phase.o",
+        "bytes": 1838280,
+        "sha256": "1e29ecbf1c40164bc690e81c2a5f7010c90f23934302628fb2f1fdaa1b3c72e8"
+      },
+      "export": "sirius_simd_dopri_phase_packet",
+      "undefined_symbols": [
+        "                 U memset",
+        "                 U sirius_simd_fmaxf"
+      ],
+      "packed_float_instructions": {
+        "addps": 52,
+        "subps": 116,
+        "sqrtps": 4,
+        "mulps": 48,
+        "divps": 4
+      },
+      "forbidden_fma_fp_control_x87_found": [],
+      "total_instructions": 380850,
+      "uniform_private_readers": []
+    }
+  },
+  "scope": "Actual object code inspection only. No numerical equality, runtime gain, frame or scientific/release qualification claim."
+}

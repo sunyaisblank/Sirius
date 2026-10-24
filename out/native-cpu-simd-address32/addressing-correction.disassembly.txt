@@ -1,0 +1,164 @@
+
+/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000000151b0 <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x1170>:
+   151b0:	xchg   %eax,%esp
+   151b1:	and    $0xe0,%al
+   151b3:	add    %al,(%rax)
+   151b5:	add    %ah,0xf(%rsi)
+   151b8:	jg     1515e <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x111e>
+   151ba:	and    $0x10,%al
+   151bc:	add    %eax,(%rax)
+   151be:	add    %ah,0x44(%rsi)
+   151c1:	movq   %mm5,0x80(%rsp)
+   151c9:	movdqa %xmm11,0x270(%rsp)
+   151d3:	movdqa 0x2a0(%rsp),%xmm6
+   151dc:	pslld  $0x2,%xmm6
+   151e1:	movdqa 0x140(%rsp),%xmm5
+   151ea:	pslld  $0x2,%xmm5
+   151ef:	movdqa %xmm12,%xmm3
+   151f4:	pslld  $0x1f,%xmm3
+   151f9:	psrad  $0x1f,%xmm3
+   151fe:	pand   %xmm3,%xmm5
+   15202:	movdqa %xmm7,%xmm2
+   15206:	pslld  $0x1f,%xmm2
+   1520b:	psrad  $0x1f,%xmm2
+   15210:	pand   %xmm2,%xmm6
+   15214:	movdqa 0x0(%rip),%xmm4        # 1521c <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x11dc>
+			15218: R_X86_64_PC32	.LCPI22_9-0x4
+   1521c:	pand   %xmm4,%xmm3
+   15220:	movd   %xmm6,%eax
+   15224:	movslq %eax,%rsi
+   15227:	lea    0x0(%rip),%r13        # 1522e <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x11ee>
+			1522a: R_X86_64_PC32	.rodata+0x1bc
+   1522e:	lea    0x0(%r13,%rsi,1),%rax
+   15233:	mov    %rax,0x130(%rsp)
+   1523b:	movaps %xmm7,0x40(%rsp)
+   15240:	pshufd $0x55,%xmm6,%xmm7
+   15245:	movd   %xmm7,%eax
+   15249:	mov    %ecx,0xd0(%rsp)
+   15250:	movslq %eax,%rdi
+   15253:	lea    0x0(%r13,%rdi,1),%rax
+   15258:	mov    %rax,0x70(%rsp)
+   1525d:	pshufd $0xee,%xmm6,%xmm7
+   15262:	movd   %xmm7,%eax
+   15266:	movslq %eax,%r10
+   15269:	lea    0x0(%r13,%r10,1),%rax
+   1526e:	mov    %rax,0x60(%rsp)
+   15273:	pshufd $0xff,%xmm6,%xmm6
+   15278:	movd   %xmm6,%eax
+   1527c:	movslq %eax,%rbx
+   1527f:	lea    0x0(%r13,%rbx,1),%rax
+   15284:	mov    %rax,0x1a0(%rsp)
+   1528c:	movd   %xmm5,%eax
+   15290:	movslq %eax,%r15
+   15293:	pshufd $0x55,%xmm5,%xmm6
+   15298:	movd   %xmm6,%eax
+   1529c:	movslq %eax,%r12
+   1529f:	pshufd $0xee,%xmm5,%xmm6
+   152a4:	movd   %xmm6,%eax
+   152a8:	cltq
+   152aa:	pshufd $0xff,%xmm5,%xmm5
+   152af:	movd   %xmm5,%ecx
+   152b3:	movslq %ecx,%r9
+   152b6:	lea    (%r15,%r13,1),%rdx
+   152ba:	lea    (%r12,%r13,1),%rcx
+   152be:	lea    (%rax,%r13,1),%r8
+   152c2:	add    %r9,%r13
+   152c5:	pshufd $0xff,%xmm3,%xmm5
+   152ca:	movd   %xmm5,%r11d
+   152cf:	movslq %r11d,%r11
+   152d2:	movss  (%r11,%r13,1),%xmm0
+   152d8:	movaps %xmm0,0x150(%rsp)
+   152e0:	lea    0x0(%rip),%r13        # 152e7 <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x12a7>
+			152e3: R_X86_64_PC32	.rodata+0x19c
+   152e7:	add    %r13,%rsi
+   152ea:	add    %r13,%rdi
+   152ed:	add    %r13,%r10
+   152f0:	add    %r13,%rbx
+   152f3:	add    %r13,%r15
+   152f6:	add    %r13,%r12
+   152f9:	add    %r13,%rax
+   152fc:	add    %r9,%r13
+   152ff:	movss  (%r11,%r13,1),%xmm10
+   15305:	pshufd $0xee,%xmm3,%xmm6
+   1530a:	movd   %xmm6,%r9d
+   1530f:	rex.WRB
+
+/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000015880 <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x1840>:
+   15880:	outsl  %ds:(%rsi),(%dx)
+   15881:	rex.R and $0x70,%al
+   15884:	pand   %xmm2,%xmm0
+   15888:	movdqa 0x0(%rip),%xmm4        # 15890 <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x1850>
+			1588c: R_X86_64_PC32	.LCPI22_9-0x4
+   15890:	pand   %xmm4,%xmm3
+   15894:	movd   %xmm0,%eax
+   15898:	movslq %eax,%rsi
+   1589b:	lea    0x0(%rip),%r13        # 158a2 <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x1862>
+			1589e: R_X86_64_PC32	.rodata+0x1bc
+   158a2:	lea    0x0(%r13,%rsi,1),%rax
+   158a7:	mov    %rax,0xb0(%rsp)
+   158af:	pshufd $0x55,%xmm0,%xmm5
+   158b4:	movd   %xmm5,%eax
+   158b8:	mov    %ecx,0x150(%rsp)
+   158bf:	movslq %eax,%rdi
+   158c2:	lea    0x0(%r13,%rdi,1),%rax
+   158c7:	mov    %rax,0x70(%rsp)
+   158cc:	pshufd $0xee,%xmm0,%xmm5
+   158d1:	movd   %xmm5,%eax
+   158d5:	movslq %eax,%r10
+   158d8:	lea    0x0(%r13,%r10,1),%rax
+   158dd:	mov    %rax,0x270(%rsp)
+   158e5:	pshufd $0xff,%xmm0,%xmm5
+   158ea:	movd   %xmm5,%eax
+   158ee:	movslq %eax,%rbx
+   158f1:	lea    0x0(%r13,%rbx,1),%rax
+   158f6:	mov    %rax,0xa0(%rsp)
+   158fe:	movd   %xmm13,%eax
+   15903:	movslq %eax,%r15
+   15906:	pshufd $0x55,%xmm13,%xmm5
+   1590c:	movd   %xmm5,%eax
+   15910:	movslq %eax,%r12
+   15913:	pshufd $0xee,%xmm13,%xmm5
+   15919:	movd   %xmm5,%eax
+   1591d:	cltq
+   1591f:	pshufd $0xff,%xmm13,%xmm5
+   15925:	movd   %xmm5,%ecx
+   15929:	movslq %ecx,%r9
+   1592c:	lea    (%r15,%r13,1),%rdx
+   15930:	lea    (%r12,%r13,1),%rcx
+   15934:	lea    (%rax,%r13,1),%r8
+   15938:	add    %r9,%r13
+   1593b:	pshufd $0xff,%xmm3,%xmm5
+   15940:	movd   %xmm5,%r11d
+   15945:	movslq %r11d,%r11
+   15948:	movss  (%r11,%r13,1),%xmm0
+   1594e:	movaps %xmm0,0x90(%rsp)
+   15956:	lea    0x0(%rip),%r13        # 1595d <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x191d>
+			15959: R_X86_64_PC32	.rodata+0x19c
+   1595d:	add    %r13,%rsi
+   15960:	add    %r13,%rdi
+   15963:	add    %r13,%r10
+   15966:	add    %r13,%rbx
+   15969:	add    %r13,%r15
+   1596c:	add    %r13,%r12
+   1596f:	add    %r13,%rax
+   15972:	add    %r9,%r13
+   15975:	movss  (%r11,%r13,1),%xmm0
+   1597b:	movaps %xmm0,0xc0(%rsp)
+   15983:	pshufd $0xee,%xmm3,%xmm6
+   15988:	movd   %xmm6,%r9d
+   1598d:	movslq %r9d,%r9
+
+/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o:     file format elf64-x86-64
+
+Contents of section .rodata.cst16:
+ 0800 b8ffffff b8ffffff b8ffffff b8ffffff  ................
