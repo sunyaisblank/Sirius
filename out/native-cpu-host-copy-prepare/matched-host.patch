@@ -1,0 +1,86 @@
+--- a/out/native-cpu-row-ownership/retained_compute.cpp
++++ b/out/native-cpu-row-ownership/retained_compute.cpp
+@@ -551,7 +551,8 @@
+     if (inputs.empty() || inputs.size() > capacity_)
+         return Fail(ErrorDomain::kDevice, "dispatch retained camera", "invalid batch size");
+     static_assert(sizeof(RetainedCameraInput) == 160 * sizeof(std::uint32_t));
+-    std::fill_n(camera_.input.begin() + 1, capacity_ * 160, 0U);
++    std::fill_n(camera_.input.begin() + 1 + inputs.size() * 160,
++                (capacity_ - inputs.size()) * 160, 0U);
+     std::memcpy(camera_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     auto status = Dispatch(camera_, inputs.size(), timing);
+     if (!status) return std::unexpected(status.error());
+@@ -582,7 +583,8 @@
+     if (inputs.empty() || inputs.size() > capacity_)
+         return Fail(ErrorDomain::kDevice, "dispatch retained transport", "invalid batch size");
+     static_assert(sizeof(RetainedStepInput) == 230 * sizeof(std::uint32_t));
+-    std::fill_n(transport_.input.begin() + 1, capacity_ * 230, 0U);
++    std::fill_n(transport_.input.begin() + 1 + inputs.size() * 230,
++                (capacity_ - inputs.size()) * 230, 0U);
+     std::memcpy(transport_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     if (stage_seven_) {
+         auto& owner = *stage_seven_;
+@@ -642,7 +644,8 @@
+     auto owned = AuthorizeStageSevenEndpoint(inputs, owners);
+     if (!owned) return std::unexpected(owned.error());
+     static_assert(sizeof(RetainedEndpointInput) == 225 * sizeof(std::uint32_t));
+-    std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
++    std::fill_n(endpoint_.input.begin() + 1 + inputs.size() * 225,
++                (capacity_ - inputs.size()) * 225, 0U);
+     std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     auto status = Dispatch(endpoint_, inputs.size(), timing, *owned);
+     if (!status) return std::unexpected(status.error());
+@@ -661,7 +664,8 @@
+     if (inputs.empty() || inputs.size() > capacity_)
+         return Fail(ErrorDomain::kDevice, "dispatch retained dense segment", "invalid batch size");
+     static_assert(sizeof(RetainedDenseInput) == 560 * sizeof(std::uint32_t));
+-    std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
++    std::fill_n(dense_.input.begin() + 1 + inputs.size() * 560,
++                (capacity_ - inputs.size()) * 560, 0U);
+     std::memcpy(dense_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     auto status = Dispatch(dense_, inputs.size(), timing);
+     if (!status) return std::unexpected(status.error());
+@@ -680,7 +684,8 @@
+     if (inputs.empty() || inputs.size() > capacity_)
+         return Fail(ErrorDomain::kDevice, "dispatch retained DP phase", "invalid batch size");
+     static_assert(sizeof(RetainedDopriPhaseInput) == 1810 * sizeof(std::uint32_t));
+-    std::fill_n(dopri_phase_.input.begin() + 1, capacity_ * 1810, 0U);
++    std::fill_n(dopri_phase_.input.begin() + 1 + inputs.size() * 1810,
++                (capacity_ - inputs.size()) * 1810, 0U);
+     std::memcpy(dopri_phase_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     auto status = Dispatch(dopri_phase_, inputs.size(), timing);
+     if (!status) return std::unexpected(status.error());
+@@ -721,9 +726,11 @@
+     const auto milliseconds = [](auto started, auto finished) {
+         return std::chrono::duration<double, std::milli>(finished - started).count();
+     };
+-    std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
++    std::fill_n(endpoint_.input.begin() + 1 + endpoints.size() * 225,
++                (capacity_ - endpoints.size()) * 225, 0U);
+     std::memcpy(endpoint_.input.data() + 1, endpoints.data(), endpoints.size_bytes());
+-    std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
++    std::fill_n(dense_.input.begin() + 1 + dense.size() * 560,
++                (capacity_ - dense.size()) * 560, 0U);
+     std::memcpy(dense_.input.data() + 1, dense.data(), dense.size_bytes());
+     const auto write = [&](Stage& stage, std::size_t active) -> base::Expected<void> {
+         auto input = std::span(stage.input);
+@@ -817,7 +824,8 @@
+     if (inputs.empty() || inputs.size() > capacity_)
+         return Fail(ErrorDomain::kDevice, "dispatch retained initialization", "invalid batch size");
+     static_assert(sizeof(RetainedInitializeInput) == 225 * sizeof(std::uint32_t));
+-    std::fill_n(initialize_.input.begin() + 1, capacity_ * 225, 0U);
++    std::fill_n(initialize_.input.begin() + 1 + inputs.size() * 225,
++                (capacity_ - inputs.size()) * 225, 0U);
+     std::memcpy(initialize_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     auto status = Dispatch(initialize_, inputs.size(), timing);
+     if (!status) return std::unexpected(status.error());
+@@ -845,7 +853,8 @@
+     if (inputs.empty() || inputs.size() > capacity_)
+         return Fail(ErrorDomain::kDevice, "dispatch retained ray camera", "invalid batch size");
+     static_assert(sizeof(RetainedRayCameraInput) == 225 * sizeof(std::uint32_t));
+-    std::fill_n(ray_camera_.input.begin() + 1, capacity_ * 225, 0U);
++    std::fill_n(ray_camera_.input.begin() + 1 + inputs.size() * 225,
++                (capacity_ - inputs.size()) * 225, 0U);
+     std::memcpy(ray_camera_.input.data() + 1, inputs.data(), inputs.size_bytes());
+     auto status = Dispatch(ray_camera_, inputs.size(), timing);
+     if (!status) return std::unexpected(status.error());

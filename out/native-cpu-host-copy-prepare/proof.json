@@ -1,0 +1,167 @@
+{
+  "scope": "Unapplied source-only redundant active input zero-store removal. Public and matched-owner patches are alternatives for their respective source copies, not two changes to one linked object.",
+  "sources": {
+    "src/sirius/backend/retained_compute.cpp": {
+      "basis": {
+        "bytes": 45570,
+        "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+      },
+      "candidate": {
+        "bytes": 46079,
+        "sha256": "6bbed9b9f8d03714b442a38df50b40fa4d7742b68117b35dccb69124959cee17"
+      },
+      "patch": {
+        "bytes": 5434,
+        "sha256": "789f8a81d22c15db2a1af7e0593c19f5d7d123705a0430bf79047167cc6f2cd6"
+      },
+      "sites": [
+        {
+          "line": 548,
+          "stage": "camera_",
+          "input": "inputs",
+          "words_per_row": 160
+        },
+        {
+          "line": 579,
+          "stage": "transport_",
+          "input": "inputs",
+          "words_per_row": 230
+        },
+        {
+          "line": 639,
+          "stage": "endpoint_",
+          "input": "inputs",
+          "words_per_row": 225
+        },
+        {
+          "line": 658,
+          "stage": "dense_",
+          "input": "inputs",
+          "words_per_row": 560
+        },
+        {
+          "line": 677,
+          "stage": "dopri_phase_",
+          "input": "inputs",
+          "words_per_row": 1810
+        },
+        {
+          "line": 718,
+          "stage": "endpoint_",
+          "input": "endpoints",
+          "words_per_row": 225
+        },
+        {
+          "line": 720,
+          "stage": "dense_",
+          "input": "dense",
+          "words_per_row": 560
+        },
+        {
+          "line": 814,
+          "stage": "initialize_",
+          "input": "inputs",
+          "words_per_row": 225
+        },
+        {
+          "line": 842,
+          "stage": "ray_camera_",
+          "input": "inputs",
+          "words_per_row": 225
+        }
+      ],
+      "full_source_inverse_exact": true
+    },
+    "out/native-cpu-row-ownership/retained_compute.cpp": {
+      "basis": {
+        "bytes": 46035,
+        "sha256": "0bc5bd4e9f4aa4c9be6f292e09b76c92dc53ae5f75ce91dd62ac482098a160b3"
+      },
+      "candidate": {
+        "bytes": 46544,
+        "sha256": "1a5dee735b7e38d078a428c9f1bc1e59eb17d3afdfa5a6df914586dac41cfc3d"
+      },
+      "patch": {
+        "bytes": 5454,
+        "sha256": "fe62f3e80eadc7efc45956c0029f67ea044b88220ef7837254319934e76125a4"
+      },
+      "sites": [
+        {
+          "line": 554,
+          "stage": "camera_",
+          "input": "inputs",
+          "words_per_row": 160
+        },
+        {
+          "line": 585,
+          "stage": "transport_",
+          "input": "inputs",
+          "words_per_row": 230
+        },
+        {
+          "line": 645,
+          "stage": "endpoint_",
+          "input": "inputs",
+          "words_per_row": 225
+        },
+        {
+          "line": 664,
+          "stage": "dense_",
+          "input": "inputs",
+          "words_per_row": 560
+        },
+        {
+          "line": 683,
+          "stage": "dopri_phase_",
+          "input": "inputs",
+          "words_per_row": 1810
+        },
+        {
+          "line": 724,
+          "stage": "endpoint_",
+          "input": "endpoints",
+          "words_per_row": 225
+        },
+        {
+          "line": 726,
+          "stage": "dense_",
+          "input": "dense",
+          "words_per_row": 560
+        },
+        {
+          "line": 820,
+          "stage": "initialize_",
+          "input": "inputs",
+          "words_per_row": 225
+        },
+        {
+          "line": 848,
+          "stage": "ray_camera_",
+          "input": "inputs",
+          "words_per_row": 225
+        }
+      ],
+      "full_source_inverse_exact": true
+    }
+  },
+  "ownership_header": {
+    "path": "src/sirius/backend/retained_compute.h",
+    "bytes": 15862,
+    "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+  },
+  "value_equality": [
+    "For capacity C, active count R and row stride S, the validated domain is0<R<=C. Each unchanged memcpy copies exactly4*R*S bytes from the complete input span.",
+    "Original final staging words are: word0unchanged; rows[0,R)exact input bytes;rows[R,C)zero; program suffixunchanged. New staging words have exactly those same values.",
+    "The new fill begins at word1+R*S and writes(C-R)*S zero words. Its end is word1+C*S, immediately before the existing canonical program. AtR=C the valid fill range is empty.",
+    "No active field or limb is removed: the complete original memcpy remains byte-for-byte; only its immediately overwritten preceding zero stores are omitted.",
+    "All7 ordinary stage entrypoints validate size<=capacity before the range. EndpointAndDense validates max(endpoints.size,dense.size)<=capacity, establishing both independent subtractions.",
+    "Stage::input is private storage. The existing serialized owning dispatcher and synchronous staging/write call expose no observer between fill and memcpy. No caller input aliases that owned private vector in the supported API.",
+    "First full program uploads, later active-prefix uploads, inactive-input zeroing, fixed capacity header/program suffix, all validators/readback checks, all40fields/4columns/7RHS/3trials/4quartics and recovery/rollback/rounding/FP/counts/governors are unchanged."
+  ],
+  "avoided_active_zero_bytes_per_call": "4*active_rows*input_words_per_row",
+  "Dopri128_example_bytes": 926720,
+  "representation_spacing_patch": "Unchanged, independent and nonoverlapping; no nextafter/IsRepresented rewrite included.",
+  "limits": "No bottleneck/global-GPU attribution or speedup claim follows from the one-dispatcher samples. N was rejected at its performance gate and no N frame ran; all-thread evidence must accompany a later changed candidate's required frame if its preceding gates pass. No actual source modification, host build/link/test or runtime was performed.",
+  "applied": false,
+  "compiled_or_executed": false
+}
