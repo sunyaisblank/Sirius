@@ -124,7 +124,13 @@ def relative_output_columns(text, slug, row_words):
         assert count <= 1
         parameter_count += count
         text = text[:match.start()] + changed + text[match.end():]
-    assert parameter_count == {'transport': 173, 'endpoint': 212, 'dopri_phase': 58}[slug]
+    known, = re.finditer(r'^static bool EvaluateKnownLayer_0\([^{}]*\)\n\{', text, flags=re.M)
+    header = known[0]
+    changed, count = re.subn(r'\buint32_t rowBase\b', 'uniform uint32_t rowBase', header)
+    assert count == 1
+    text = text[:known.start()] + changed + text[known.end():]
+    parameter_count += count
+    assert parameter_count == {'transport': 174, 'endpoint': 213, 'dopri_phase': 59}[slug]
 
     main_start = text.index('static void ComputeOwnedRow_0(')
     main_open = text.index('{', main_start)
@@ -151,7 +157,7 @@ def relative_output_columns(text, slug, row_words):
                  '    }')
     text = text[:loop_start] + new_clear + text[loop_end:]
     restored = text.replace(new_clear, original_clear, 1)
-    restored = re.sub(r'\buniform uint32_t (rowBase_\d+)\b', r'uint32_t \1', restored)
+    restored = re.sub(r'\buniform uint32_t (rowBase(?:_\d+)?)\b', r'uint32_t \1', restored)
     restored = restored.replace(new_base.replace('uniform ', ''), original_base, 1)
     restored = restored.replace('struct KernelContext_0\n{\n', 'struct KernelContext_0\n{\n' + field, 1)
     assert restored == before, 'Only approved output-address/clear changes are permitted'
