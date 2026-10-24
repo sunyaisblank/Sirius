@@ -1,0 +1,262 @@
+{
+  "scope": "Unapplied three-line ISPC source qualifier proposal only; no shader/native compiler, workload, provider, object, host, flags or Git mutation.",
+  "source_inputs": {
+    "out/native-cpu-simd-endpoint-regions/ispc-derivation.json": {
+      "bytes": 17795,
+      "sha256": "22ced710b9ce6ac8f1e6340df81b21e4ef577e96ae4fe66c02b12a51a4548956"
+    },
+    "out/native-cpu-simd-endpoint-regions/ispc-uniform-compile-result.json": {
+      "bytes": 23446,
+      "sha256": "d733dd9383907f8c428eb2531bd5b8d29f5814a232d5061cafa2c284dca7113d"
+    },
+    "out/native-cpu-simd-endpoint-regions/compiler-acquisition.json": {
+      "bytes": 1516,
+      "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+    },
+    "out/native-cpu-simd-endpoint-regions/derive_ispc.py": {
+      "bytes": 11160,
+      "sha256": "aba2c065aaf1626e65b913a327bd14933873580a508d1fc4485277504913be55"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html": {
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "out/native-cpu-transport-worker-occupancy/provider/linked-native-proof.json": {
+      "bytes": 7407773,
+      "sha256": "c5b3f244ff1dac78fab7f7ca4cec8a92774e4a851fd88540c7e0b7e7028e5949"
+    },
+    "out/native-cpu-transport-worker-cohort/cold-frame/frame/all-threads-observation.json": {
+      "bytes": 324319,
+      "sha256": "0dbfa7e482c15a480bc222be3f0c1d4d6dd38d2d4a21d221cf5a27d6ffe7cf46"
+    },
+    "out/native-cpu-transport-worker-cohort/cold-frame/frame/all-threads-symbols.json": {
+      "bytes": 1109757,
+      "sha256": "4f19c4f2b3809eaa4746080aac7cf77d6712ace237f37e82a1cae557a125530c"
+    },
+    "bin/linux-gcc/native-cpu-transport-worker-occupancy/provider/libvulkan_lvp.so": {
+      "bytes": 21713656,
+      "sha256": "c46a4f16921e019df5b1c95c09292b01fa48a87130fa76fa97f8aa370944985b"
+    },
+    "/usr/bin/objdump": {
+      "bytes": 390848,
+      "sha256": "d0041e7511460b9ebfd95ce4f9d93c7ffea398ffc1cb2c316a220dd8e533db3d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc": {
+      "bytes": 648575,
+      "sha256": "7e4f143e9023726c7439252f8077f2d9f4a66498c08ff254598ec46f5d0b355d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc": {
+      "bytes": 825120,
+      "sha256": "53c27e03e5023df65fd78f7408987c443195ce8e14f7e1a124f2f63b39ce987d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc": {
+      "bytes": 414255,
+      "sha256": "45746ec987974e9dff408f3d4ba293ef02e24f200f2b557aa0cd502e772491d8"
+    }
+  },
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 648575,
+        "sha256": "7e4f143e9023726c7439252f8077f2d9f4a66498c08ff254598ec46f5d0b355d"
+      },
+      "candidate": {
+        "bytes": 648582,
+        "sha256": "8af22da0961d7915c89ed6caf4b3f20d4ba07890027f9a292f13f17f4afaa7e4"
+      },
+      "one_inline_qualifier_only": true,
+      "exact_inverse": true,
+      "all_body_and_call_bytes_unchanged": true,
+      "source_call_sites": 6,
+      "literal_instruction_calls_preserved": 3144
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 825120,
+        "sha256": "53c27e03e5023df65fd78f7408987c443195ce8e14f7e1a124f2f63b39ce987d"
+      },
+      "candidate": {
+        "bytes": 825127,
+        "sha256": "857b2f05ae30f3a4b474ae454dc53658daae3161413d3ef143fb001a3e85baea"
+      },
+      "one_inline_qualifier_only": true,
+      "exact_inverse": true,
+      "all_body_and_call_bytes_unchanged": true,
+      "source_call_sites": 6,
+      "literal_instruction_calls_preserved": 4148
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 414255,
+        "sha256": "45746ec987974e9dff408f3d4ba293ef02e24f200f2b557aa0cd502e772491d8"
+      },
+      "candidate": {
+        "bytes": 414262,
+        "sha256": "ed3d5694b27834cd4243bb80f820a63ead5e25621dffcf79607b292d413c7033"
+      },
+      "one_inline_qualifier_only": true,
+      "exact_inverse": true,
+      "all_body_and_call_bytes_unchanged": true,
+      "source_call_sites": 6,
+      "literal_instruction_calls_preserved": 2088
+    }
+  },
+  "instructions": 9380,
+  "patch_applied": false,
+  "new_native_compilations": 0,
+  "unchanged_compile_flags": [
+    "-O2",
+    "--target=avx2-i32x8",
+    "--cpu=core-avx2",
+    "--arch=x86-64",
+    "--addressing=32",
+    "--PIC",
+    "--opt=disable-fma",
+    "--math-lib=system"
+  ],
+  "official_semantics": {
+    "url": "https://ispc.github.io/ispc.html#functions-and-function-calls",
+    "installed_release": "v1.32.0",
+    "pinned_installed_guide": {
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "meaning": "ISPC inline forces inlining; static visibility and all function types/masks remain unchanged. No unmasked qualifier or compiler option is proposed."
+  },
+  "mechanism": "Term is a leaf with no own stack references. Its private varying aggregate is five32-byte vectors: input through RSI, hidden return pointer RDI, x in YMM0 and execution mask in YMM1. Its common epilogue stores five vectors then vzeroupper/ret. Product, RoundedProduct and Add callers materialize/copy these aggregates on stack between the original2/1/3 ordered term calls. Inlining exposes those private temporaries to scalar replacement and removes that function ABI boundary; optimization magnitude is unproven.",
+  "source_semantics": "All three RetainedSum32 calls, upward error update, input/output bound checks, invalid returns, masks, return fields and caller order remain byte-identical. All9380 literal instruction-call lines and every other source byte remain identical. Scalar D, F admission, I adapter, Q scheduler/ISA policy, P host, guards, fields/RHS/trials/quartics/limits and original gates are unchanged.",
+  "existing_Q_machine_code": {
+    "transport": [
+      {
+        "symbol": "RTAccumulateTerm_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyf",
+        "linked_address": 706512,
+        "bytes": 2554,
+        "instruction_count": 494,
+        "term_call_sites": 0,
+        "outgoing_calls": 0,
+        "stack_reference_instructions": 0
+      },
+      {
+        "symbol": "RTAccumulateProduct_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyfvyf",
+        "linked_address": 709072,
+        "bytes": 2593,
+        "instruction_count": 486,
+        "term_call_sites": 4,
+        "outgoing_calls": 4,
+        "stack_reference_instructions": 89
+      },
+      {
+        "symbol": "RTAccumulateRoundedProduct_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyfvyf",
+        "linked_address": 712336,
+        "bytes": 4300,
+        "instruction_count": 866,
+        "term_call_sites": 2,
+        "outgoing_calls": 2,
+        "stack_reference_instructions": 74
+      },
+      {
+        "symbol": "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_",
+        "linked_address": 750048,
+        "bytes": 6950,
+        "instruction_count": 1435,
+        "term_call_sites": 6,
+        "outgoing_calls": 8,
+        "stack_reference_instructions": 159
+      }
+    ],
+    "endpoint": [
+      {
+        "symbol": "RTAccumulateTerm_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyf",
+        "linked_address": 2878960,
+        "bytes": 2554,
+        "instruction_count": 494,
+        "term_call_sites": 0,
+        "outgoing_calls": 0,
+        "stack_reference_instructions": 0
+      },
+      {
+        "symbol": "RTAccumulateProduct_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyfvyf",
+        "linked_address": 2881520,
+        "bytes": 2593,
+        "instruction_count": 486,
+        "term_call_sites": 4,
+        "outgoing_calls": 4,
+        "stack_reference_instructions": 89
+      },
+      {
+        "symbol": "RTAccumulateRoundedProduct_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyfvyf",
+        "linked_address": 2884784,
+        "bytes": 4300,
+        "instruction_count": 866,
+        "term_call_sites": 2,
+        "outgoing_calls": 2,
+        "stack_reference_instructions": 74
+      },
+      {
+        "symbol": "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_",
+        "linked_address": 2922496,
+        "bytes": 6950,
+        "instruction_count": 1435,
+        "term_call_sites": 6,
+        "outgoing_calls": 8,
+        "stack_reference_instructions": 159
+      }
+    ],
+    "dopri_phase": [
+      {
+        "symbol": "RTAccumulateTerm_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyf",
+        "linked_address": 5475952,
+        "bytes": 2554,
+        "instruction_count": 494,
+        "term_call_sites": 0,
+        "outgoing_calls": 0,
+        "stack_reference_instructions": 0
+      },
+      {
+        "symbol": "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_",
+        "linked_address": 5478512,
+        "bytes": 6950,
+        "instruction_count": 1435,
+        "term_call_sites": 6,
+        "outgoing_calls": 8,
+        "stack_reference_instructions": 159
+      },
+      {
+        "symbol": "RTAccumulateProduct_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyfvyf",
+        "linked_address": 5488976,
+        "bytes": 2593,
+        "instruction_count": 486,
+        "term_call_sites": 4,
+        "outgoing_calls": 4,
+        "stack_reference_instructions": 89
+      },
+      {
+        "symbol": "RTAccumulateRoundedProduct_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_vyfvyf",
+        "linked_address": 5492240,
+        "bytes": 4300,
+        "instruction_count": 866,
+        "term_call_sites": 2,
+        "outgoing_calls": 2,
+        "stack_reference_instructions": 74
+      }
+    ]
+  },
+  "existing_frame_window": {
+    "status": "complete",
+    "samples": 1161,
+    "native_object_hits": {
+      "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o": 350,
+      "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o": 315,
+      "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.o": 115,
+      "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/dopri_phase.o": 162,
+      "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.o": 43,
+      "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.o": 6,
+      "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o": 1
+    },
+    "limits": "Existing single3s USER window only. RET/skid concentration and object samples do not isolate call cost, prove whole-frame causality or predict speedup."
+  },
+  "future_finishline": "Before any original gate, inspect all three actual compiled callers: no remaining RTAccumulateTerm calls/sret boundary, record stack/register/code-size changes, and retain ISA/FP/noFMA/noFPcontrol checks. Original C8/all32/51/54, one ABBA22+Decimal, all8 and original frame stay required. Inlining may grow code or increase register spills; source annotation alone is not machine-code or benefit acceptance."
+}

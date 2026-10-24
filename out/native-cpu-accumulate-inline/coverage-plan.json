@@ -1,0 +1,144 @@
+{
+  "status": "source_plan_only; no test code, compilation, component execution or R qualification",
+  "scope": "Additional changed-Transport implementation component control only. Keep the inline proposal on ALL3 stages. Original C8/all32/51markers/54joins, sole ABBA22+Decimal, all8 controls and original frame remain unchanged and mandatory; this control substitutes for none of them.",
+  "comparison": {
+    "baseline": "Exact unchanged L/M/Q Transport SIMD object; rename defined global symbols in a NEW diagnostic object only. Do not compare newly uncovered cases to scalar F or compile old math again.",
+    "candidate": "Exact new R raw Transport object, one of the three qualifier-only changed ISPC objects. Record its real compile/object SHA and later exact R-provider linked code association; historical M SIMD execution cannot cover this changed object.",
+    "limits": "Finite bitwise compiler-change compatibility, not independent mathematics, exhaustive invalid-input proof, benefit study, render result or all-domain proof. Byte-identical bodies/all9380calls and documented inline semantics remain the primary semantic argument."
+  },
+  "inputs": {
+    "fixture_order": [
+      {
+        "path": "tests/support/retained_transport/reference_cases.h",
+        "case_count": 15,
+        "selection": "Every case.input in unchanged header order; no filtering, mutation, conversion or synthesized rows"
+      },
+      {
+        "path": "tests/support/retained_transport/schwarzschild_reference_cases.h",
+        "case_count": 23,
+        "selection": "Every case.input in unchanged header order; no filtering, mutation, conversion or synthesized rows"
+      }
+    ],
+    "active_rows": 38,
+    "capacity_rows": 40,
+    "input_row_words": 230,
+    "output_row_words": 4699,
+    "program_words": 15967,
+    "input_words": 25168,
+    "input_bytes": 100672,
+    "output_words": 187960,
+    "output_bytes": 751840,
+    "program": {
+      "authority": "sirius::backend::retained_program::kTransportProgram in cached retained_kernels.h",
+      "wire_source": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp",
+      "wire_symbol": "sirius_cpu_bridge::transport_program",
+      "complete_array_equality_checked_at_source_plan": true,
+      "little_endian_bytes": 63868,
+      "sha256": "8717c2b5cec0664aa7a2c8aeed122cb54b2092ffe8e3d3dd0901d19af7d47436"
+    },
+    "layout": "Header=40; rows0..14 are all general fixtures, rows15..37 all Schwarzschild fixtures; inactive input rows38..39 initially zero; canonical program starts at word1+40*230. One immutable input buffer shared read-only between the two implementations; verify every input word afterward."
+  },
+  "standalone_link": {
+    "objects": "All8 genuine R native objects, selected by actual sealed object receipts/contract, plus one renamed OLD Transport object and one new baseline-ISA diagnostic driver CPP object. No provider/host/shader/old-ISPC recompilation and no copied alternate math bodies.",
+    "baseline_object": {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o",
+      "bytes": 3083056,
+      "sha256": "8dd21100b5518bf35f6e6bf704ceb459304ab63fa2988eeec3a1e4741dcba47e"
+    },
+    "rename_only_global_defined_symbols": {
+      "sirius_simd_transport_packet": "baseline_sirius_simd_transport_packet",
+      "sirius_simd_transport_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu": "baseline_sirius_simd_transport_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+    },
+    "rename_method": "Use actual GNU nm -g --defined-only to require exactly these2 definitions, then GNU objcopy --redefine-syms=MAP ORIGINAL NEW_BASELINE_OBJECT with exclusive new output. ORIGINAL is read-only; no objcopy on any original path. Local helpers are object-local and remain unchanged.",
+    "rename_proof": "Compare every allocated/code/data section byte-for-byte, local symbol values/sizes/binding/visibility/sections, and all relocation offsets/types/addends/targets after inverse global-name normalization. Undefined symbols remain exactly memset and sirius_simd_fmaxf; no prefixing undefined externals. Record real objcopy argv/tool and new-object identities, zero new baseline-math compilations.",
+    "dependencies": "Unchanged I adapter among R8 supplies sirius_simd_fmaxf calling original ::fmaxf; libc/libm/C++ runtime resolve remaining symbols. Driver supplies diagnostic-local sirius_native_simd_supported using real OS-aware GCC14 AVX2 && x86-64-v3 checks, never constant true; raw execution requires this guard. This binding is not a replacement R-provider query/policy. No dlsym of hidden provider functions.",
+    "code_join": "Before execution associate baseline/new raw entry code in the standalone ELF with the exact renamed OLD/new R object sections using the existing relocation-masked ELF comparison, with unique baseline_/ordinary exports as section anchors. Later R provider proof must associate the SAME new R object SHA/opcodes; all8 object identities and actual link argv are retained."
+  },
+  "execution": {
+    "limits": {
+      "seconds": 300,
+      "rss_kib": 4194304,
+      "reserve_kib": 2097152
+    },
+    "attempts": "One separately owned component action; no warmup, timing gate, alternative flags, resampling or unchanged retry. Stop and preserve first failure.",
+    "output_initialization": "Separate equal output buffers, every one of187960words initialized to0xa5a5a5a5. Do not clear, mask, decode, normalize or omit any output region before comparison.",
+    "raw_ABI": "extern C void (uint32_t* input,uint32_t input_words,uint32_t* output,uint32_t output_words,uint32_t first_x,uint32_t groups); baseline_sirius_simd_transport_packet versus sirius_simd_transport_packet.",
+    "packets": [
+      {
+        "first_x": 0,
+        "groups": 8
+      },
+      {
+        "first_x": 8,
+        "groups": 8
+      },
+      {
+        "first_x": 16,
+        "groups": 8
+      },
+      {
+        "first_x": 24,
+        "groups": 8
+      },
+      {
+        "first_x": 32,
+        "groups": 6
+      }
+    ],
+    "admission": "For EACH implementation/packet, require unchanged F sirius_native_transport_admit_packet(input,100672,output,751840,first_x,0,0,38,1,1,groups) true before its raw call. This shares pinned B full canonical-program/layout/alias/range proof; raw functions themselves do not perform full admission. Call raw directly, not rows adapter which would route groups6 to scalar.",
+    "FP_scope": "Each raw call runs under the existing exact scoped MXCSR operation (saved|0x1f80)&~0xe040; preserve IEEE32 RTE/subnormals and masked exceptions, then restore saved MXCSR exactly. Assert mode/control bits remain configured before restoration; do not confuse permitted internal sticky exceptions with caller-visible restored state.",
+    "comparison": "After all5 raw calls per implementation, compare ALL187960 uint32 words/751840bytes, bit-for-bit with no tolerances or valid-row masks. This includes every status/count, all40 fields/4 final columns, all7 RHS rows and storage tails; inactive rows38..39 must remain exact sentinel. Save full-buffer hashes/word count and first mismatch row/word/case; retain raw buffers on failure. Input/program bytes must remain unchanged."
+  },
+  "failure_rules": [
+    "Unsupported CPU/OS ISA is explicit not-covered, never a successful substitute scalar run.",
+    "Wrong globals, renamed code/relocation discrepancy, stale/missing new R receipt or failed ELF association stops before execution.",
+    "Any pure guard false stops before that raw call; any signal, timeout, unexpected input/output mutation or full-word mismatch is failure, preserved without filtering/refitting/retry.",
+    "Numerical refusal represented in output is compared in full, never dropped or converted to a harness pass/fail assumption about valid flags."
+  ],
+  "source_inputs": {
+    "tests/support/retained_transport/reference_cases.h": {
+      "bytes": 619673,
+      "sha256": "0380a637d02135bff7c20cbe5fdbd53dd30399cdd252429b50c3be786380ed1a"
+    },
+    "tests/support/retained_transport/schwarzschild_reference_cases.h": {
+      "bytes": 679048,
+      "sha256": "8f9c1c7eed95c02ea7c17c7d130418b2030450e44d12aa74cc572f7ba900f05f"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "out/native-cpu-active-prefix/native_packet.hpp": {
+      "bytes": 2445,
+      "sha256": "9df6d65d1c89016694a7f242a8fdd61979db6826c4f0d2619b2b8954a9ca6eee"
+    },
+    "out/native-cpu-dispatch-admission/admission.cpp": {
+      "bytes": 2187,
+      "sha256": "a3d26fd74ab50ee679d0407f14eb6028af27e989df8230059e8ea1cca0e5faa8"
+    },
+    "out/native-cpu-simd-packet-policy/rows_adapter.cpp": {
+      "bytes": 3498,
+      "sha256": "57747ee37daa040d25b1e6f9411affb07fb399ba0003c921aca313810a10a581"
+    },
+    "out/native-cpu-simd-packet-policy/rows_bridge.h": {
+      "bytes": 1538,
+      "sha256": "d52b7cb2080ee35f0f06ea0df9e5e71f8694a3cc45024b486b5cb7a50b9dc282"
+    },
+    "out/native-cpu-slang-bridge/native_bridge.h": {
+      "bytes": 1055,
+      "sha256": "57d78d5d8a61cdd04f4d9e3301d600c96fc716c3581c7d2cdfb045956798b243"
+    },
+    "out/native-cpu-transport-worker-occupancy/provider/linked-native-proof.json": {
+      "bytes": 7407773,
+      "sha256": "c5b3f244ff1dac78fab7f7ca4cec8a92774e4a851fd88540c7e0b7e7028e5949"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/util/u_math.h": {
+      "bytes": 18704,
+      "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+    }
+  }
+}

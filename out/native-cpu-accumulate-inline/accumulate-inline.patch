@@ -1,0 +1,33 @@
+--- a/bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc
++++ b/bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc
+@@ -836,7 +836,7 @@
+ 
+ 
+ #line 83 "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang"
+-static RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_16, float x_4)
++static inline RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_16, float x_4)
+ {
+ 
+ #line 83
+--- a/bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc
++++ b/bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc
+@@ -906,7 +906,7 @@
+ 
+ 
+ #line 83 "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang"
+-static RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_13, float x_4)
++static inline RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_13, float x_4)
+ {
+ 
+ #line 83
+--- a/bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc
++++ b/bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc
+@@ -708,7 +708,7 @@
+ 
+ 
+ #line 83
+-static RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_11, float x_4)
++static inline RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_11, float x_4)
+ {
+ 
+ #line 83
