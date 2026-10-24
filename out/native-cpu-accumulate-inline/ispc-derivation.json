@@ -1,0 +1,539 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp",
+      "basis": {
+        "bytes": 634190,
+        "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 648582,
+        "sha256": "8af22da0961d7915c89ed6caf4b3f20d4ba07890027f9a292f13f17f4afaa7e4"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 201,
+        "constant_arrays": 18,
+        "constant_matrices": 2,
+        "private_arrays": 2,
+        "dimension_reads": 2,
+        "word_loads": 24,
+        "word_indices": 16,
+        "admitted_output_stride": 1,
+        "compile_assertions": 3,
+        "uniform_register_helper_clones": 5,
+        "uniform_canonical_operand_parameters": 4,
+        "uniform_forwarded_output_bases": 174,
+        "zero_output_base_locals": 1,
+        "removed_context_output_base_fields": 1,
+        "equivalent_uniform_full_output_clear_loops": 1,
+        "removed_export_output_base_assignments": 1,
+        "removed_initial_global_output_copy_loops": 1
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "uniform_register_helper_order": [
+        "ScratchAddressUniform_0",
+        "ScratchWriteUniform_0",
+        "ScratchReadUniform_0",
+        "ReadValueUniform_0",
+        "WriteValueUniform_0"
+      ],
+      "relative_output_columns": {
+        "uniform_forwarded_row_base_parameters": 174,
+        "top_row_base_zeroed": 1,
+        "context_absolute_base_fields_removed": 1,
+        "complete_clear_loops_replaced": 1,
+        "old_clear_counter_first_later_use": "i_5 = 0U;",
+        "real_input_row_unchanged": "row_4",
+        "clear_words_in_original_order": 4699,
+        "all_other_body_bytes_unchanged_after_inverse": true
+      },
+      "structural_uniformity": {
+        "changed": true,
+        "owned_uniform_integers": [
+          "lane_2",
+          "i_5",
+          "stage_3",
+          "j_0",
+          "index_13",
+          "index_14",
+          "rowWords_0",
+          "_S230",
+          "_S242",
+          "_S244",
+          "_S246",
+          "_S248",
+          "_S260",
+          "_S261",
+          "_S263",
+          "_S285",
+          "_S287",
+          "_S291",
+          "_S292",
+          "_S312",
+          "_S313",
+          "_S315",
+          "_S317"
+        ],
+        "closed_loop_bounds_without_per_row_breaks": [
+          "i_5<46U",
+          "i_5<40U",
+          "index_13<459U",
+          "stage_3<7U",
+          "index_13<25U",
+          "i_5<40U",
+          "j_0<stage_3",
+          "i_5<40U",
+          "j_0<7U"
+        ],
+        "uniform_evaluator_parameters": [
+          "stage_2",
+          "lane_1"
+        ],
+        "owned_call_replacements": {
+          "ReadStored_0": 5,
+          "WriteStored_0": 9,
+          "ReadCoefficient_0": 3,
+          "CacheCoefficient_0": 1,
+          "ScratchWrite_0": 1
+        },
+        "clones": [
+          {
+            "function": "ReadStoredStructural_0",
+            "uniform_integer_inputs_and_locals": [
+              "base_3"
+            ]
+          },
+          {
+            "function": "WriteStoredStructural_0",
+            "uniform_integer_inputs_and_locals": [
+              "base_1"
+            ]
+          },
+          {
+            "function": "ReadCoefficientStructural_0",
+            "uniform_integer_inputs_and_locals": [
+              "index_6",
+              "base_4"
+            ]
+          },
+          {
+            "function": "CacheCoefficientStructural_0",
+            "uniform_integer_inputs_and_locals": [
+              "lane_0",
+              "_S125",
+              "_S126",
+              "stage_0",
+              "index_3",
+              "previous_0",
+              "index_4",
+              "_S127",
+              "_S128",
+              "index_5",
+              "stage_1",
+              "base_2"
+            ]
+          }
+        ],
+        "all_original_generic_helpers_retained": true,
+        "full_inverse_restores_J_body_bytes": true,
+        "domain": "Export calls owned body only with uniform invocation0; only fixed structural integers and address aliases lifted. Every floating expression/control branch remains original; no program/layer/physics selection or loop counts changed."
+      },
+      "endpoint_regions": {
+        "changed": false,
+        "reused_exact_K_source": true
+      },
+      "private_output_layout": {
+        "row_words": 4699,
+        "index_mapping": "row_relative_column * programCount + programIndex",
+        "active_rows_copied_in": false,
+        "active_rows_copied_out": true,
+        "complete_original_owned_clear_retained": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "preclear_admission_domain": {
+        "authority": "out/native-cpu-active-prefix/native_packet.hpp",
+        "maximum_capacity": 65536,
+        "minimum_program_header_words": 43,
+        "actual_canonical_program_words": 15967,
+        "minimum_output_prefix_words": 2404,
+        "conditions": "Full B admission and immutable views prove positive capacity<=65536, original input/program extents, output capacity*stride/divisibility, active rows inside capacity and sufficient output prefix. Export supplies y=z=0 and owned invocation0. Thus every active row fully clears before any numerical/input-field rejection; no previous global output word is read or needed. Scalar fallback remains unchanged."
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim.",
+      "inline_basis_path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc",
+      "inline_basis": {
+        "bytes": 648575,
+        "sha256": "7e4f143e9023726c7439252f8077f2d9f4a66498c08ff254598ec46f5d0b355d"
+      },
+      "one_inline_qualifier_only": true,
+      "full_inverse_restores_L_source": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp",
+      "basis": {
+        "bytes": 812736,
+        "sha256": "90f41000d38684143089e198ad56a6507546b1e9ad38cae95d9ba8fc8b7e5fc8"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 825127,
+        "sha256": "857b2f05ae30f3a4b474ae454dc53658daae3161413d3ef143fb001a3e85baea"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 243,
+        "constant_arrays": 0,
+        "constant_matrices": 0,
+        "private_arrays": 2,
+        "dimension_reads": 2,
+        "word_loads": 24,
+        "word_indices": 15,
+        "admitted_output_stride": 1,
+        "compile_assertions": 3,
+        "uniform_register_helper_clones": 5,
+        "uniform_canonical_operand_parameters": 4,
+        "uniform_forwarded_output_bases": 213,
+        "zero_output_base_locals": 1,
+        "removed_context_output_base_fields": 1,
+        "equivalent_uniform_full_output_clear_loops": 1,
+        "removed_export_output_base_assignments": 1,
+        "removed_initial_global_output_copy_loops": 1
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "uniform_register_helper_order": [
+        "ScratchAddressUniform_0",
+        "ScratchReadUniform_0",
+        "ReadValueUniform_0",
+        "ScratchWriteUniform_0",
+        "WriteValueUniform_0"
+      ],
+      "relative_output_columns": {
+        "uniform_forwarded_row_base_parameters": 213,
+        "top_row_base_zeroed": 1,
+        "context_absolute_base_fields_removed": 1,
+        "complete_clear_loops_replaced": 1,
+        "old_clear_counter_first_later_use": "i_11 = 0U;",
+        "real_input_row_unchanged": "row_2",
+        "clear_words_in_original_order": 3829,
+        "all_other_body_bytes_unchanged_after_inverse": true
+      },
+      "structural_uniformity": {
+        "changed": false,
+        "reason": "Shared loop/selected-axis variables remain per-row varying."
+      },
+      "endpoint_regions": {
+        "changed": true,
+        "regions": [
+          {
+            "counter": "axis_0",
+            "initial": "1U",
+            "bound": "4U",
+            "fresh": "endpoint_flat_axis",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          },
+          {
+            "counter": "axis_0",
+            "initial": "0U",
+            "bound": "4U",
+            "fresh": "endpoint_matrix_axis",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          },
+          {
+            "counter": "i_11",
+            "initial": "0U",
+            "bound": "45U",
+            "fresh": "endpoint_input_column",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          },
+          {
+            "counter": "i_11",
+            "initial": "45U",
+            "bound": "53U",
+            "fresh": "endpoint_auxiliary_column",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          },
+          {
+            "counter": "i_11",
+            "initial": "0U",
+            "bound": "40U",
+            "fresh": "endpoint_flat_column",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          },
+          {
+            "counter": "i_11",
+            "initial": "0U",
+            "bound": "4U",
+            "fresh": "endpoint_projection_column",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          },
+          {
+            "counter": "i_11",
+            "initial": "0U",
+            "bound": "4U",
+            "fresh": "endpoint_matrix_column",
+            "original_reset_retained": true,
+            "masked_final_value_copy_back": true
+          }
+        ],
+        "uniform_output_aliases": [
+          "_S331",
+          "_S332",
+          "_S334",
+          "_S349",
+          "_S365",
+          "axis_1",
+          "_S385",
+          "_S387",
+          "_S389",
+          "_S392",
+          "_S395",
+          "_S398"
+        ],
+        "owned_helper_replacements": {
+          "ReadStored_0": 9,
+          "WriteStored_0": 8,
+          "Tangent_0": 2
+        },
+        "helper_clones": [
+          {
+            "function": "ReadStoredEndpointRegion_0",
+            "uniform_parameters": [
+              "base_1"
+            ]
+          },
+          {
+            "function": "WriteStoredEndpointRegion_0",
+            "uniform_parameters": [
+              "base_0"
+            ]
+          },
+          {
+            "function": "TangentEndpointRegion_0",
+            "uniform_parameters": [
+              "i_1"
+            ]
+          }
+        ],
+        "generic_helpers_retained": true,
+        "full_inverse_restores_K_source_bytes": true,
+        "all_loop_breaks_are_original_fixed_bounds": true,
+        "projection_success_component_and_handoff_remain_varying": true,
+        "phase_counter_and_evaluator_unchanged": true,
+        "early_return_domain": "A numerical return retires that row from the owned call. Every continuing row in a lexical region has the same constant initial value, fixed bound and increment. Final counter copy-back occurs under the same surviving mask; old counters are not aliased. Per-row physical values and predicates remain varying."
+      },
+      "private_output_layout": {
+        "row_words": 3829,
+        "index_mapping": "row_relative_column * programCount + programIndex",
+        "active_rows_copied_in": false,
+        "active_rows_copied_out": true,
+        "complete_original_owned_clear_retained": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "preclear_admission_domain": {
+        "authority": "out/native-cpu-active-prefix/native_packet.hpp",
+        "maximum_capacity": 65536,
+        "minimum_program_header_words": 103,
+        "actual_canonical_program_words": 21143,
+        "minimum_output_prefix_words": 769,
+        "conditions": "Full B admission and immutable views prove positive capacity<=65536, original input/program extents, output capacity*stride/divisibility, active rows inside capacity and sufficient output prefix. Export supplies y=z=0 and owned invocation0. Thus every active row fully clears before any numerical/input-field rejection; no previous global output word is read or needed. Scalar fallback remains unchanged."
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim.",
+      "inline_basis_path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc",
+      "inline_basis": {
+        "bytes": 825120,
+        "sha256": "53c27e03e5023df65fd78f7408987c443195ce8e14f7e1a124f2f63b39ce987d"
+      },
+      "one_inline_qualifier_only": true,
+      "full_inverse_restores_L_source": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp",
+      "basis": {
+        "bytes": 409325,
+        "sha256": "5173a3682f0afe1811228c44f46d35fb843683ecf058832ddc8f49465541c7e6"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 414262,
+        "sha256": "ed3d5694b27834cd4243bb80f820a63ead5e25621dffcf79607b292d413c7033"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 83,
+        "constant_arrays": 0,
+        "constant_matrices": 0,
+        "private_arrays": 1,
+        "dimension_reads": 2,
+        "word_loads": 21,
+        "word_indices": 7,
+        "admitted_output_stride": 1,
+        "compile_assertions": 2,
+        "uniform_register_helper_clones": 5,
+        "uniform_canonical_operand_parameters": 4,
+        "uniform_forwarded_output_bases": 59,
+        "zero_output_base_locals": 1,
+        "removed_context_output_base_fields": 1,
+        "equivalent_uniform_full_output_clear_loops": 1,
+        "removed_export_output_base_assignments": 1,
+        "removed_initial_global_output_copy_loops": 1
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "uniform_register_helper_order": [
+        "ScratchAddressUniform_0",
+        "ScratchReadUniform_0",
+        "ReadValueUniform_0",
+        "ScratchWriteUniform_0",
+        "WriteValueUniform_0"
+      ],
+      "relative_output_columns": {
+        "uniform_forwarded_row_base_parameters": 59,
+        "top_row_base_zeroed": 1,
+        "context_absolute_base_fields_removed": 1,
+        "complete_clear_loops_replaced": 1,
+        "old_clear_counter_first_later_use": "i_5 = 0U;",
+        "real_input_row_unchanged": "row_3",
+        "clear_words_in_original_order": 4149,
+        "all_other_body_bytes_unchanged_after_inverse": true
+      },
+      "structural_uniformity": {
+        "changed": true,
+        "owned_uniform_integers": [
+          "lane_1",
+          "i_5"
+        ],
+        "closed_loop_bounds_without_per_row_breaks": [
+          "i_5<362U"
+        ],
+        "uniform_evaluator_parameters": [
+          "lane_0"
+        ],
+        "owned_call_replacements": {},
+        "clones": [],
+        "all_original_generic_helpers_retained": true,
+        "full_inverse_restores_J_body_bytes": true,
+        "domain": "Export calls owned body only with uniform invocation0; only fixed structural integers and address aliases lifted. Every floating expression/control branch remains original; no program/layer/physics selection or loop counts changed."
+      },
+      "endpoint_regions": {
+        "changed": false,
+        "reused_exact_K_source": true
+      },
+      "private_output_layout": {
+        "row_words": 4149,
+        "index_mapping": "row_relative_column * programCount + programIndex",
+        "active_rows_copied_in": false,
+        "active_rows_copied_out": true,
+        "complete_original_owned_clear_retained": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "preclear_admission_domain": {
+        "authority": "out/native-cpu-active-prefix/native_packet.hpp",
+        "maximum_capacity": 65536,
+        "minimum_program_header_words": 203,
+        "actual_canonical_program_words": 10689,
+        "minimum_output_prefix_words": 1004,
+        "conditions": "Full B admission and immutable views prove positive capacity<=65536, original input/program extents, output capacity*stride/divisibility, active rows inside capacity and sufficient output prefix. Export supplies y=z=0 and owned invocation0. Thus every active row fully clears before any numerical/input-field rejection; no previous global output word is read or needed. Scalar fallback remains unchanged."
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim.",
+      "inline_basis_path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc",
+      "inline_basis": {
+        "bytes": 414255,
+        "sha256": "45746ec987974e9dff408f3d4ba293ef02e24f200f2b557aa0cd502e772491d8"
+      },
+      "one_inline_qualifier_only": true,
+      "full_inverse_restores_L_source": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-simd-endpoint-regions/ispc-derivation.json": {
+      "bytes": 17795,
+      "sha256": "22ced710b9ce6ac8f1e6340df81b21e4ef577e96ae4fe66c02b12a51a4548956"
+    },
+    "out/native-cpu-simd-endpoint-regions/ispc-uniform-compile-result.json": {
+      "bytes": 23446,
+      "sha256": "d733dd9383907f8c428eb2531bd5b8d29f5814a232d5061cafa2c284dca7113d"
+    },
+    "out/native-cpu-simd-endpoint-regions/compiler-acquisition.json": {
+      "bytes": 1516,
+      "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+    },
+    "out/native-cpu-simd-endpoint-regions/derive_ispc.py": {
+      "bytes": 11160,
+      "sha256": "aba2c065aaf1626e65b913a327bd14933873580a508d1fc4485277504913be55"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html": {
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "out/native-cpu-transport-worker-occupancy/provider/linked-native-proof.json": {
+      "bytes": 7407773,
+      "sha256": "c5b3f244ff1dac78fab7f7ca4cec8a92774e4a851fd88540c7e0b7e7028e5949"
+    },
+    "out/native-cpu-transport-worker-cohort/cold-frame/frame/all-threads-observation.json": {
+      "bytes": 324319,
+      "sha256": "0dbfa7e482c15a480bc222be3f0c1d4d6dd38d2d4a21d221cf5a27d6ffe7cf46"
+    },
+    "out/native-cpu-transport-worker-cohort/cold-frame/frame/all-threads-symbols.json": {
+      "bytes": 1109757,
+      "sha256": "4f19c4f2b3809eaa4746080aac7cf77d6712ace237f37e82a1cae557a125530c"
+    },
+    "bin/linux-gcc/native-cpu-transport-worker-occupancy/provider/libvulkan_lvp.so": {
+      "bytes": 21713656,
+      "sha256": "c46a4f16921e019df5b1c95c09292b01fa48a87130fa76fa97f8aa370944985b"
+    },
+    "/usr/bin/objdump": {
+      "bytes": 390848,
+      "sha256": "d0041e7511460b9ebfd95ce4f9d93c7ffea398ffc1cb2c316a220dd8e533db3d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc": {
+      "bytes": 648575,
+      "sha256": "7e4f143e9023726c7439252f8077f2d9f4a66498c08ff254598ec46f5d0b355d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc": {
+      "bytes": 825120,
+      "sha256": "53c27e03e5023df65fd78f7408987c443195ce8e14f7e1a124f2f63b39ce987d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc": {
+      "bytes": 414255,
+      "sha256": "45746ec987974e9dff408f3d4ba293ef02e24f200f2b557aa0cd502e772491d8"
+    },
+    "out/native-cpu-accumulate-inline/source-proof.json": {
+      "bytes": 11179,
+      "sha256": "b30cd3f3fa880d682ac68859df726dbda79e09ebf35ee4b88d943cb022854b3b"
+    },
+    "out/native-cpu-accumulate-inline/accumulate-inline.patch": {
+      "bytes": 1368,
+      "sha256": "bb23c5de789a89f4fe13433ef89781d151312644e623a5422bbad77dd9f53ff1"
+    },
+    "out/native-cpu-accumulate-inline/coverage-plan.json": {
+      "bytes": 9833,
+      "sha256": "e0b0b253c42dd1d4257d35bdad812ebf4b4b9efb02b1f5fa182e4bea48384771"
+    }
+  },
+  "derivation_basis": {
+    "generator_path": "out/native-cpu-simd-endpoint-regions/derive_ispc.py",
+    "generator": {
+      "bytes": 11160,
+      "sha256": "aba2c065aaf1626e65b913a327bd14933873580a508d1fc4485277504913be55"
+    },
+    "receipt_path": "out/native-cpu-simd-endpoint-regions/ispc-derivation.json",
+    "receipt": {
+      "bytes": 17795,
+      "sha256": "22ced710b9ce6ac8f1e6340df81b21e4ef577e96ae4fe66c02b12a51a4548956"
+    }
+  },
+  "scope": "All3 complete sealed L sources, one inline qualifier each. All other bytes, all9380 literal instruction calls, masks/math/control/counts/FP/eligibility retained. Source derivation only; no compilation or numerical/benefit/frame acceptance."
+}
