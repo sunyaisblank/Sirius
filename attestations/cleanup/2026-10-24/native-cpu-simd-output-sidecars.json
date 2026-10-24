@@ -1,0 +1,1064 @@
+{
+  "kind": "backed-retired-J-owned-phase-sidecars-only",
+  "status": "complete",
+  "created_utc": "2026-10-24T06:26:50.866834+00:00",
+  "operator_head": "7ed7946755cc9134b934a3b2a301cc480c0b0562",
+  "archive_commit": "7c3f8169df0fc68e4b85eb1ae6f4a80692b157fa",
+  "verified_pushed_reachability": {
+    "remote_ref": "refs/heads/development/native-cpu-slang-bridge-2026-10-23",
+    "remote_tip": "7ed7946755cc9134b934a3b2a301cc480c0b0562",
+    "archive_commit_is_ancestor": true
+  },
+  "archive": {
+    "path": "attestations/qualification/bed28e8a/native-cpu-simd-output-columns-frame-timeout/source-build-and-trial.zip",
+    "bytes": 7152208,
+    "sha256": "1ccb08220f78c4ef77f48822f1b53cfd595ccf4a037e477d8d422107f39dc609"
+  },
+  "manifest": {
+    "path": "attestations/qualification/bed28e8a/native-cpu-simd-output-columns-frame-timeout/MANIFEST.json",
+    "bytes": 67620,
+    "sha256": "d6a1857aeb3029e26bfc50f8883eebe3390a9f7faee94224abddfc6ff3459ed7"
+  },
+  "protection": {
+    "tracked_paths": 1696,
+    "all_prepared_K_frozen_paths": 12531,
+    "K_source_input_paths": 111,
+    "documents": {
+      "out/native-cpu-simd-structural-uniform/actions.json": {
+        "bytes": 42988,
+        "sha256": "4ee437a021c9269d9b114a9e5296870cade906d10562e920d7acd167440ea0a0"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-uniform-compile-result.json": {
+        "bytes": 20302,
+        "sha256": "bd7aa0cdc8f29a441d51934c0c93552dceb75f8c36636a855475a8791187e3f8"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/source-contract.json": {
+        "bytes": 23688,
+        "sha256": "82096b36ca48a057744f1c4ca792c1be020d2ed6a91bb36b35b88f35ee7e1237"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/actions.json": {
+        "bytes": 2447144,
+        "sha256": "2012b2fd29bc875260ab7888ef3c83a27f3d2745921a1c89242f908e73b53bad"
+      },
+      "out/native-cpu-simd-structural-uniform/benefit/runtime/actions.json": {
+        "bytes": 134898,
+        "sha256": "1babafaf510c3b62bf0848d1727294d5161dcde886d564d988979c9ace27c3ec"
+      },
+      "out/native-cpu-simd-structural-uniform/controls/runtime/actions.json": {
+        "bytes": 169071,
+        "sha256": "82143e63610231d186db2735d2d53d20a1c0eabf8869b97a111e5b498c195bbc"
+      }
+    },
+    "scope": "All currently prepared K JSON action/source-input metadata, all tracked paths, terminal ownership of each J phase and actual accessible process cwd/fd/maps. Only K owned jobs are currently live per root; no broad historical-owner sweep.",
+    "immediately_before_delete_documents": {
+      "out/native-cpu-simd-structural-uniform/actions.json": {
+        "bytes": 42988,
+        "sha256": "4ee437a021c9269d9b114a9e5296870cade906d10562e920d7acd167440ea0a0"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-uniform-compile-result.json": {
+        "bytes": 20302,
+        "sha256": "bd7aa0cdc8f29a441d51934c0c93552dceb75f8c36636a855475a8791187e3f8"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/source-contract.json": {
+        "bytes": 23688,
+        "sha256": "82096b36ca48a057744f1c4ca792c1be020d2ed6a91bb36b35b88f35ee7e1237"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/actions.json": {
+        "bytes": 2447144,
+        "sha256": "2012b2fd29bc875260ab7888ef3c83a27f3d2745921a1c89242f908e73b53bad"
+      },
+      "out/native-cpu-simd-structural-uniform/benefit/runtime/actions.json": {
+        "bytes": 134898,
+        "sha256": "1babafaf510c3b62bf0848d1727294d5161dcde886d564d988979c9ace27c3ec"
+      },
+      "out/native-cpu-simd-structural-uniform/controls/runtime/actions.json": {
+        "bytes": 169071,
+        "sha256": "82143e63610231d186db2735d2d53d20a1c0eabf8869b97a111e5b498c195bbc"
+      }
+    },
+    "final_documents": {
+      "out/native-cpu-simd-structural-uniform/actions.json": {
+        "bytes": 42988,
+        "sha256": "4ee437a021c9269d9b114a9e5296870cade906d10562e920d7acd167440ea0a0"
+      },
+      "out/native-cpu-simd-structural-uniform/ispc-uniform-compile-result.json": {
+        "bytes": 20302,
+        "sha256": "bd7aa0cdc8f29a441d51934c0c93552dceb75f8c36636a855475a8791187e3f8"
+      },
+      "out/native-cpu-simd-structural-uniform/compile/actions.json": {
+        "bytes": 7175,
+        "sha256": "32e6a58a9ad5ae18b174d649afa214c295c00570b0bfc707c3ddfb7663aeabe7"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/source-contract.json": {
+        "bytes": 23688,
+        "sha256": "82096b36ca48a057744f1c4ca792c1be020d2ed6a91bb36b35b88f35ee7e1237"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/actions.json": {
+        "bytes": 2447144,
+        "sha256": "2012b2fd29bc875260ab7888ef3c83a27f3d2745921a1c89242f908e73b53bad"
+      },
+      "out/native-cpu-simd-structural-uniform/benefit/runtime/actions.json": {
+        "bytes": 134898,
+        "sha256": "1babafaf510c3b62bf0848d1727294d5161dcde886d564d988979c9ace27c3ec"
+      },
+      "out/native-cpu-simd-structural-uniform/controls/runtime/actions.json": {
+        "bytes": 169071,
+        "sha256": "82143e63610231d186db2735d2d53d20a1c0eabf8869b97a111e5b498c195bbc"
+      }
+    },
+    "all_action_document_fingerprints": {
+      "out/native-cpu-simd-structural-uniform/actions.json": {
+        "bytes": 42988,
+        "sha256": "4ee437a021c9269d9b114a9e5296870cade906d10562e920d7acd167440ea0a0"
+      },
+      "out/native-cpu-simd-structural-uniform/compile/actions.json": {
+        "bytes": 7175,
+        "sha256": "32e6a58a9ad5ae18b174d649afa214c295c00570b0bfc707c3ddfb7663aeabe7"
+      },
+      "out/native-cpu-simd-structural-uniform/provider/actions.json": {
+        "bytes": 2447144,
+        "sha256": "2012b2fd29bc875260ab7888ef3c83a27f3d2745921a1c89242f908e73b53bad"
+      },
+      "out/native-cpu-simd-structural-uniform/benefit/runtime/actions.json": {
+        "bytes": 134898,
+        "sha256": "1babafaf510c3b62bf0848d1727294d5161dcde886d564d988979c9ace27c3ec"
+      },
+      "out/native-cpu-simd-structural-uniform/controls/runtime/actions.json": {
+        "bytes": 169071,
+        "sha256": "82143e63610231d186db2735d2d53d20a1c0eabf8869b97a111e5b498c195bbc"
+      }
+    }
+  },
+  "candidates": [
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/a1/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/a1/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820482618519631,
+      "device": 2096,
+      "inode": 2138292,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/a1/owner.json",
+        "bytes": 3753,
+        "sha256": "b4441f01fac59d9d1e1e501af7d721b2405e611d5a409e4e30a9f675a8469603"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/a1/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/a1/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820422728727511,
+      "device": 2096,
+      "inode": 2138286,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/a1/owner.json",
+        "bytes": 3753,
+        "sha256": "b4441f01fac59d9d1e1e501af7d721b2405e611d5a409e4e30a9f675a8469603"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/a1/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/a1/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820481587229211,
+      "device": 2096,
+      "inode": 2138290,
+      "allocated_bytes": 770048,
+      "bytes": 767703,
+      "CRC32": 4141289343,
+      "sha256": "3643795eaaa6907806fc5457230d84e7e978b2183b4252bb93596edac691f6e8",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/a1/owner.json",
+        "bytes": 3753,
+        "sha256": "b4441f01fac59d9d1e1e501af7d721b2405e611d5a409e4e30a9f675a8469603"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/a2/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/a2/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820576393251301,
+      "device": 2096,
+      "inode": 83794,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/a2/owner.json",
+        "bytes": 3754,
+        "sha256": "5d0f6995a21f75162e84b88bd53d185626d1a9f5ddd1c5d0c87ba32eb2f27fd9"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/a2/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/a2/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820514630547677,
+      "device": 2096,
+      "inode": 83789,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/a2/owner.json",
+        "bytes": 3754,
+        "sha256": "5d0f6995a21f75162e84b88bd53d185626d1a9f5ddd1c5d0c87ba32eb2f27fd9"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/a2/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/a2/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820575373583020,
+      "device": 2096,
+      "inode": 83793,
+      "allocated_bytes": 794624,
+      "bytes": 790712,
+      "CRC32": 3678345118,
+      "sha256": "1ab6648eb10401d26feb95fb10f7456dff8ea59b8f7c78fc3b43c8e76b9f448a",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/a2/owner.json",
+        "bytes": 3754,
+        "sha256": "5d0f6995a21f75162e84b88bd53d185626d1a9f5ddd1c5d0c87ba32eb2f27fd9"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/b1/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/b1/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820496803206315,
+      "device": 2096,
+      "inode": 60242,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/b1/owner.json",
+        "bytes": 3540,
+        "sha256": "b47a8c416a17881713f31dedf6bfeae034706d99bce60961b246480420b237e0"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/b1/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/b1/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820483729431731,
+      "device": 2096,
+      "inode": 2138313,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/b1/owner.json",
+        "bytes": 3540,
+        "sha256": "b47a8c416a17881713f31dedf6bfeae034706d99bce60961b246480420b237e0"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/b1/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/b1/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820495701122771,
+      "device": 2096,
+      "inode": 2138319,
+      "allocated_bytes": 163840,
+      "bytes": 163280,
+      "CRC32": 347917702,
+      "sha256": "37d9a791e726505c7777f2e197a842dd8ea7d9d201cd3eca2c05f4b393250e63",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/b1/owner.json",
+        "bytes": 3540,
+        "sha256": "b47a8c416a17881713f31dedf6bfeae034706d99bce60961b246480420b237e0"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/b2/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/b2/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820513522573376,
+      "device": 2096,
+      "inode": 83786,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/b2/owner.json",
+        "bytes": 3723,
+        "sha256": "6bedbed65a2e72b82cd3063c959936617b9d0294416c5b2a56a2bec1d3d47e9a"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/b2/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/b2/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820498124949120,
+      "device": 2096,
+      "inode": 95587,
+      "allocated_bytes": 499712,
+      "bytes": 499281,
+      "CRC32": 4192822524,
+      "sha256": "2970bbc633d42d91bc4f86205b4b74bd07c89d7ee3e06f635475acddf4eac756",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/b2/owner.json",
+        "bytes": 3723,
+        "sha256": "6bedbed65a2e72b82cd3063c959936617b9d0294416c5b2a56a2bec1d3d47e9a"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/benefit/runtime/b2/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/benefit/runtime/b2/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820512505665462,
+      "device": 2096,
+      "inode": 220324,
+      "allocated_bytes": 176128,
+      "bytes": 172948,
+      "CRC32": 1911440823,
+      "sha256": "de0b172b07422c5df9b1dfe42d1047fcd5c1c76091626528bc6832ffe863c379",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/benefit/runtime/b2/owner.json",
+        "bytes": 3723,
+        "sha256": "6bedbed65a2e72b82cd3063c959936617b9d0294416c5b2a56a2bec1d3d47e9a"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/cold-frame/frame/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/cold-frame/frame/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792821579921949068,
+      "device": 2096,
+      "inode": 2166971,
+      "allocated_bytes": 540672,
+      "bytes": 538114,
+      "CRC32": 2598064691,
+      "sha256": "be5c9435ff8959768596b8e8fcca9b61536fd15f44b9006e6a856436d9c336c9",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/cold-frame/frame/owner.json",
+        "bytes": 3716,
+        "sha256": "369ee0393bbcab6f2b14f71ad0be59d17fa3cddb3899f3a45d4b709fed5a5af7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/cold-frame/frame/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/cold-frame/frame/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792821261533255130,
+      "device": 2096,
+      "inode": 2166958,
+      "allocated_bytes": 540672,
+      "bytes": 538114,
+      "CRC32": 2598064691,
+      "sha256": "be5c9435ff8959768596b8e8fcca9b61536fd15f44b9006e6a856436d9c336c9",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/cold-frame/frame/owner.json",
+        "bytes": 3716,
+        "sha256": "369ee0393bbcab6f2b14f71ad0be59d17fa3cddb3899f3a45d4b709fed5a5af7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/cold-frame/frame/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/cold-frame/frame/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792821578591272803,
+      "device": 2096,
+      "inode": 2166967,
+      "allocated_bytes": 5189632,
+      "bytes": 5188674,
+      "CRC32": 2053488317,
+      "sha256": "c275a52c20cacd274d75121c3586fe40444515676241ea584d9028e33d08ae8f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/cold-frame/frame/owner.json",
+        "bytes": 3716,
+        "sha256": "369ee0393bbcab6f2b14f71ad0be59d17fa3cddb3899f3a45d4b709fed5a5af7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/compile/ispc-uniform/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/compile/ispc-uniform/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792819831088483772,
+      "device": 2096,
+      "inode": 2133789,
+      "allocated_bytes": 462848,
+      "bytes": 459025,
+      "CRC32": 2446176808,
+      "sha256": "af6192993df55f055460534c442c6a7ea9654b31f1f0b7e4dd58e331247509e4",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/compile/ispc-uniform/owner.json",
+        "bytes": 2595,
+        "sha256": "946a6ccbd2121f68005015d39bc427e078f5dd57451f80f04cdffab3dc5e8587"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/compile/ispc-uniform/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/compile/ispc-uniform/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792819778770401228,
+      "device": 2096,
+      "inode": 2133780,
+      "allocated_bytes": 462848,
+      "bytes": 459025,
+      "CRC32": 2446176808,
+      "sha256": "af6192993df55f055460534c442c6a7ea9654b31f1f0b7e4dd58e331247509e4",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/compile/ispc-uniform/owner.json",
+        "bytes": 2595,
+        "sha256": "946a6ccbd2121f68005015d39bc427e078f5dd57451f80f04cdffab3dc5e8587"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/compile/ispc-uniform/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/compile/ispc-uniform/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792819830053503544,
+      "device": 2096,
+      "inode": 2133784,
+      "allocated_bytes": 65536,
+      "bytes": 62720,
+      "CRC32": 3443697046,
+      "sha256": "adeb204c0f5426b61505411c6c3d5e3bd3ed702edf3baff00c06209282af911d",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/compile/ispc-uniform/owner.json",
+        "bytes": 2595,
+        "sha256": "946a6ccbd2121f68005015d39bc427e078f5dd57451f80f04cdffab3dc5e8587"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/control-8/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/control-8/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820350134440002,
+      "device": 2096,
+      "inode": 2137795,
+      "allocated_bytes": 499712,
+      "bytes": 497200,
+      "CRC32": 2162143107,
+      "sha256": "da57ba3b6cfd4b7b55989e5d1219992f2b1eae97a95fa6e2c3afe07efbedd205",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/control-8/owner.json",
+        "bytes": 4423,
+        "sha256": "4554759ea69c14e7c0659cc368e7e4a74f741f8881ca1eb4b614d8ca8894a80f"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/control-8/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/control-8/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820334561405429,
+      "device": 2096,
+      "inode": 2137791,
+      "allocated_bytes": 499712,
+      "bytes": 497200,
+      "CRC32": 2162143107,
+      "sha256": "da57ba3b6cfd4b7b55989e5d1219992f2b1eae97a95fa6e2c3afe07efbedd205",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/control-8/owner.json",
+        "bytes": 4423,
+        "sha256": "4554759ea69c14e7c0659cc368e7e4a74f741f8881ca1eb4b614d8ca8894a80f"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/control-8/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/control-8/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820349159886485,
+      "device": 2096,
+      "inode": 2137794,
+      "allocated_bytes": 266240,
+      "bytes": 263865,
+      "CRC32": 2474548967,
+      "sha256": "c807a9eaf13f4d6497ff406c6e398993bf42f1effd8f304b568d5c6785a5aa94",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/control-8/owner.json",
+        "bytes": 4423,
+        "sha256": "4554759ea69c14e7c0659cc368e7e4a74f741f8881ca1eb4b614d8ca8894a80f"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-1/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-1/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820784802778707,
+      "device": 2096,
+      "inode": 1745498,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-1/owner.json",
+        "bytes": 3500,
+        "sha256": "be10beaf5ded2ac2d9aae4ed2f404e65a62d8e4aedeadb332fd0a0543a75c6e7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-1/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-1/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820714902919797,
+      "device": 2096,
+      "inode": 1745494,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-1/owner.json",
+        "bytes": 3500,
+        "sha256": "be10beaf5ded2ac2d9aae4ed2f404e65a62d8e4aedeadb332fd0a0543a75c6e7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-1/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-1/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820783794453907,
+      "device": 2096,
+      "inode": 1745497,
+      "allocated_bytes": 897024,
+      "bytes": 895317,
+      "CRC32": 3397477776,
+      "sha256": "ad9287e648e8cf20ec0d584baff8c19fb1b360eca0971d35013de172b5c599c3",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-1/owner.json",
+        "bytes": 3500,
+        "sha256": "be10beaf5ded2ac2d9aae4ed2f404e65a62d8e4aedeadb332fd0a0543a75c6e7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-2/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-2/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820841407716743,
+      "device": 2096,
+      "inode": 2166241,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-2/owner.json",
+        "bytes": 3317,
+        "sha256": "ba98902e467eaedd0109aafe93097513846758d336545211a2f8a51bd287bda6"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-2/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-2/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820785894186450,
+      "device": 2096,
+      "inode": 2166237,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-2/owner.json",
+        "bytes": 3317,
+        "sha256": "ba98902e467eaedd0109aafe93097513846758d336545211a2f8a51bd287bda6"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-2/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-2/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820840437660341,
+      "device": 2096,
+      "inode": 2166240,
+      "allocated_bytes": 696320,
+      "bytes": 695465,
+      "CRC32": 3776294044,
+      "sha256": "fba98e38e9deed44ab9cac63cd3bf826b056404414cc96f5b420ae3668bafaa5",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-2/owner.json",
+        "bytes": 3317,
+        "sha256": "ba98902e467eaedd0109aafe93097513846758d336545211a2f8a51bd287bda6"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-3/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-3/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820909719707279,
+      "device": 2096,
+      "inode": 2166262,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-3/owner.json",
+        "bytes": 3501,
+        "sha256": "102d28189f2252e0affba560b6eceeeedde017b69cbcb4c154df55a758824004"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-3/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-3/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820842476202963,
+      "device": 2096,
+      "inode": 2166258,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-3/owner.json",
+        "bytes": 3501,
+        "sha256": "102d28189f2252e0affba560b6eceeeedde017b69cbcb4c154df55a758824004"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-3/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-3/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820908726877701,
+      "device": 2096,
+      "inode": 2166261,
+      "allocated_bytes": 860160,
+      "bytes": 857680,
+      "CRC32": 728132267,
+      "sha256": "a055f0ffcf61defe179295f280cc8f279ba8d1637854f56881f3356505bbe1d3",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-3/owner.json",
+        "bytes": 3501,
+        "sha256": "102d28189f2252e0affba560b6eceeeedde017b69cbcb4c154df55a758824004"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-4/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-4/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820986439104982,
+      "device": 2096,
+      "inode": 2166590,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-4/owner.json",
+        "bytes": 3500,
+        "sha256": "c45d7527ad238ff7e1230c5e7dbc32fab545f262a251627875ab00320c41dc19"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-4/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-4/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820910742736997,
+      "device": 2096,
+      "inode": 2166583,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-4/owner.json",
+        "bytes": 3500,
+        "sha256": "c45d7527ad238ff7e1230c5e7dbc32fab545f262a251627875ab00320c41dc19"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-4/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-4/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820983819405272,
+      "device": 2096,
+      "inode": 2166589,
+      "allocated_bytes": 954368,
+      "bytes": 953899,
+      "CRC32": 1515469581,
+      "sha256": "d8a53c2053b0eb5758166cccb8c911d4e3ebf999ecd68d393efc55d333b625e3",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-4/owner.json",
+        "bytes": 3500,
+        "sha256": "c45d7527ad238ff7e1230c5e7dbc32fab545f262a251627875ab00320c41dc19"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-5/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-5/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792821076413393367,
+      "device": 2096,
+      "inode": 2166627,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-5/owner.json",
+        "bytes": 3498,
+        "sha256": "3e1bbfd715657ae9c38affd21ef45783ad081389eae2a8637ecb8947b8d266f7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-5/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-5/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820987443461311,
+      "device": 2096,
+      "inode": 2166622,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-5/owner.json",
+        "bytes": 3498,
+        "sha256": "3e1bbfd715657ae9c38affd21ef45783ad081389eae2a8637ecb8947b8d266f7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-5/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-5/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792821075442559976,
+      "device": 2096,
+      "inode": 2166625,
+      "allocated_bytes": 1171456,
+      "bytes": 1170430,
+      "CRC32": 1859994547,
+      "sha256": "0a64ec3812031435656e999d922e63870c7531f0f140672b7a6dc4ebbb4366f9",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-5/owner.json",
+        "bytes": 3498,
+        "sha256": "3e1bbfd715657ae9c38affd21ef45783ad081389eae2a8637ecb8947b8d266f7"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-6/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-6/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792821179081816141,
+      "device": 2096,
+      "inode": 2166645,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-6/owner.json",
+        "bytes": 3500,
+        "sha256": "4c6c1d3683a36f404f8de0b9b09024a771c5cab4ad4111b63d6b5a84bfbba89d"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-6/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-6/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792821077420771472,
+      "device": 2096,
+      "inode": 2166638,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-6/owner.json",
+        "bytes": 3500,
+        "sha256": "4c6c1d3683a36f404f8de0b9b09024a771c5cab4ad4111b63d6b5a84bfbba89d"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-6/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-6/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792821177960314696,
+      "device": 2096,
+      "inode": 2166644,
+      "allocated_bytes": 1277952,
+      "bytes": 1277376,
+      "CRC32": 2012667623,
+      "sha256": "670c8dd8ec8a871f1b1d2441b1dffcbde2bfb9418ee334b318aaa8d90963d62d",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-6/owner.json",
+        "bytes": 3500,
+        "sha256": "4c6c1d3683a36f404f8de0b9b09024a771c5cab4ad4111b63d6b5a84bfbba89d"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-7/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-7/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792821198667871742,
+      "device": 2096,
+      "inode": 2166862,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-7/owner.json",
+        "bytes": 3501,
+        "sha256": "4ae0b9e2e04a0046d79c233ddae6406d521ab007ef2e9736ca07a40ee101f65b"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-7/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-7/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792821180332486532,
+      "device": 2096,
+      "inode": 2166858,
+      "allocated_bytes": 503808,
+      "bytes": 502531,
+      "CRC32": 3280667694,
+      "sha256": "45adf1f41fcb59eb7473c794e03f95a77c5c27bacda097e572a3011d1741967f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-7/owner.json",
+        "bytes": 3501,
+        "sha256": "4ae0b9e2e04a0046d79c233ddae6406d521ab007ef2e9736ca07a40ee101f65b"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/controls/runtime/control-7/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/controls/runtime/control-7/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792821197686619086,
+      "device": 2096,
+      "inode": 2166861,
+      "allocated_bytes": 221184,
+      "bytes": 218313,
+      "CRC32": 1434903041,
+      "sha256": "5b9c4b79f943ef804f69ac135eaf63f3d87e1acad739fee7887b7f8da6c330c7",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/controls/runtime/control-7/owner.json",
+        "bytes": 3501,
+        "sha256": "4ae0b9e2e04a0046d79c233ddae6406d521ab007ef2e9736ca07a40ee101f65b"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/provider/build/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/provider/build/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820217167732124,
+      "device": 2096,
+      "inode": 2150207,
+      "allocated_bytes": 4685824,
+      "bytes": 4683233,
+      "CRC32": 2985863422,
+      "sha256": "78f0a610d0b4f944eb992d5578e72824177b96aa3623565decda5734f657ea6c",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/provider/build/owner.json",
+        "bytes": 3119,
+        "sha256": "b35c8e5f1ef530f68e5d8187db38064b60a15dec00d6a2e449b288456f16035d"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/provider/build/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/provider/build/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820211103437238,
+      "device": 2096,
+      "inode": 2150191,
+      "allocated_bytes": 4685824,
+      "bytes": 4683233,
+      "CRC32": 2985863422,
+      "sha256": "78f0a610d0b4f944eb992d5578e72824177b96aa3623565decda5734f657ea6c",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/provider/build/owner.json",
+        "bytes": 3119,
+        "sha256": "b35c8e5f1ef530f68e5d8187db38064b60a15dec00d6a2e449b288456f16035d"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/provider/build/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/provider/build/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820213790892132,
+      "device": 2096,
+      "inode": 2150197,
+      "allocated_bytes": 12288,
+      "bytes": 8195,
+      "CRC32": 2900121361,
+      "sha256": "00d6caf547a6013df187cc574f60ac13694b6b87b642161c0d771abeae9aca2f",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/provider/build/owner.json",
+        "bytes": 3119,
+        "sha256": "b35c8e5f1ef530f68e5d8187db38064b60a15dec00d6a2e449b288456f16035d"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/provider/configure/inputs-after.json",
+      "archive_member": "out/native-cpu-simd-output-columns/provider/configure/inputs-after.json",
+      "mode": 420,
+      "mtime_ns": 1792820184585954183,
+      "device": 2096,
+      "inode": 2144279,
+      "allocated_bytes": 4657152,
+      "bytes": 4656627,
+      "CRC32": 2774137451,
+      "sha256": "91f79c1730d66574a64971b3352f02105ba92dfefc86a5eab35f7bedd9b8a9e4",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/provider/configure/owner.json",
+        "bytes": 2422,
+        "sha256": "777e6b12031fbdf19662261d63491fe71c7da71d27126e08de534529071fd1f3"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/provider/configure/inputs-before.json",
+      "archive_member": "out/native-cpu-simd-output-columns/provider/configure/inputs-before.json",
+      "mode": 420,
+      "mtime_ns": 1792820176113988313,
+      "device": 2096,
+      "inode": 2150187,
+      "allocated_bytes": 4657152,
+      "bytes": 4656627,
+      "CRC32": 2774137451,
+      "sha256": "91f79c1730d66574a64971b3352f02105ba92dfefc86a5eab35f7bedd9b8a9e4",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/provider/configure/owner.json",
+        "bytes": 2422,
+        "sha256": "777e6b12031fbdf19662261d63491fe71c7da71d27126e08de534529071fd1f3"
+      },
+      "reasons_retained": []
+    },
+    {
+      "path": "out/native-cpu-simd-output-columns/provider/configure/samples.jsonl",
+      "archive_member": "out/native-cpu-simd-output-columns/provider/configure/samples.jsonl",
+      "mode": 420,
+      "mtime_ns": 1792820181223640720,
+      "device": 2096,
+      "inode": 2150295,
+      "allocated_bytes": 8192,
+      "bytes": 4696,
+      "CRC32": 2882932746,
+      "sha256": "1896da871d04c2003ece4c0c4b157db4426ef3549c7e7d7b5c478e20b3a215c4",
+      "terminal_owner": {
+        "path": "out/native-cpu-simd-output-columns/provider/configure/owner.json",
+        "bytes": 2422,
+        "sha256": "777e6b12031fbdf19662261d63491fe71c7da71d27126e08de534529071fd1f3"
+      },
+      "reasons_retained": []
+    }
+  ],
+  "removed": [
+    "out/native-cpu-simd-output-columns/benefit/runtime/a1/inputs-after.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/a1/inputs-before.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/a1/samples.jsonl",
+    "out/native-cpu-simd-output-columns/benefit/runtime/a2/inputs-after.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/a2/inputs-before.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/a2/samples.jsonl",
+    "out/native-cpu-simd-output-columns/benefit/runtime/b1/inputs-after.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/b1/inputs-before.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/b1/samples.jsonl",
+    "out/native-cpu-simd-output-columns/benefit/runtime/b2/inputs-after.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/b2/inputs-before.json",
+    "out/native-cpu-simd-output-columns/benefit/runtime/b2/samples.jsonl",
+    "out/native-cpu-simd-output-columns/cold-frame/frame/inputs-after.json",
+    "out/native-cpu-simd-output-columns/cold-frame/frame/inputs-before.json",
+    "out/native-cpu-simd-output-columns/cold-frame/frame/samples.jsonl",
+    "out/native-cpu-simd-output-columns/compile/ispc-uniform/inputs-after.json",
+    "out/native-cpu-simd-output-columns/compile/ispc-uniform/inputs-before.json",
+    "out/native-cpu-simd-output-columns/compile/ispc-uniform/samples.jsonl",
+    "out/native-cpu-simd-output-columns/control-8/inputs-after.json",
+    "out/native-cpu-simd-output-columns/control-8/inputs-before.json",
+    "out/native-cpu-simd-output-columns/control-8/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-1/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-1/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-1/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-2/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-2/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-2/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-3/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-3/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-3/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-4/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-4/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-4/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-5/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-5/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-5/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-6/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-6/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-6/samples.jsonl",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-7/inputs-after.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-7/inputs-before.json",
+    "out/native-cpu-simd-output-columns/controls/runtime/control-7/samples.jsonl",
+    "out/native-cpu-simd-output-columns/provider/build/inputs-after.json",
+    "out/native-cpu-simd-output-columns/provider/build/inputs-before.json",
+    "out/native-cpu-simd-output-columns/provider/build/samples.jsonl",
+    "out/native-cpu-simd-output-columns/provider/configure/inputs-after.json",
+    "out/native-cpu-simd-output-columns/provider/configure/inputs-before.json",
+    "out/native-cpu-simd-output-columns/provider/configure/samples.jsonl"
+  ],
+  "retained": [],
+  "restore": "Extract each listed archive_member from the committed source-build-and-trial.zip into the checkout root, then apply recorded mode and mtime_ns before a historical path-bound reader re-audit. Logs/owners/XML/native observations/sources/products are retained.",
+  "limits": [
+    "Accessible process handles/maps are checked; non-dumpable process descriptors remain inaccessible, with no universal absence claim.",
+    "No tracked, prepared-K frozen/source input, provider/product/cache or other path is changed. No Git staging, commit, push, workload or scientific/benefit trial is performed.",
+    "Logical and allocated deleted-file bytes are measured; no whole-drive free-space or performance attribution is made."
+  ],
+  "proc_visibility": {
+    "inaccessible_fd_directories": 38,
+    "J_path_references": []
+  },
+  "guard_stop_before_any_deletion": "Action-document fingerprint enumeration initially omitted compile/actions.json because its protected paths were already in the union. The conservative guard stopped with zero removals. Fingerprints now include every actions.json regardless of set overlap; original CRC/SHA evidence is reused, with archive/file pins unchanged.",
+  "removed_file_count": 48,
+  "logical_bytes_removed": 46189353,
+  "allocated_bytes_removed": 46268416,
+  "completed_utc": "2026-10-24T06:28:47.925123+00:00"
+}
