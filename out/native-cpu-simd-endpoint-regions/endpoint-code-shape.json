@@ -1,0 +1,28 @@
+{
+  "object": {
+    "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o",
+    "bytes": 3468472,
+    "sha256": "b809c75376a943299f224674c00da3ba347c9c10a73ee1ee9f1ac623517bfd10"
+  },
+  "helper": "ReadStoredEndpointRegion_0___unuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+  "instructions": 26,
+  "gather_scatter_instructions": [],
+  "vector_memory_instructions": [
+    "ab5:\tvmaskmovps (%rcx),%ymm0,%ymm1",
+    "ac2:\tvmaskmovps (%rcx),%ymm0,%ymm2",
+    "ac7:\tvmaskmovps 0x20(%rcx),%ymm0,%ymm3",
+    "acd:\tvmaskmovps 0x40(%rcx),%ymm0,%ymm4",
+    "ad3:\tvmaskmovps 0x60(%rcx),%ymm0,%ymm0",
+    "adb:\tvmovups (%rcx),%ymm1",
+    "adf:\tvmovups 0x20(%rcx),%ymm2",
+    "ae4:\tvmovups 0x40(%rcx),%ymm3",
+    "ae9:\tvmovups 0x60(%rcx),%ymm4",
+    "aee:\tvmovups 0x80(%rcx),%ymm0",
+    "af6:\tvmovaps %ymm0,0x80(%rax)",
+    "afe:\tvmovaps %ymm4,0x60(%rax)",
+    "b03:\tvmovaps %ymm3,0x40(%rax)",
+    "b08:\tvmovaps %ymm2,0x20(%rax)",
+    "b0d:\tvmovaps %ymm1,(%rax)"
+  ],
+  "scope": "Actual Endpoint read helper only. Write/Tangent clones were inlined; no individual inlined-store opcode claim. Source/inverse/uniform-type proofs cover those sites. No numerical/performance acceptance."
+}

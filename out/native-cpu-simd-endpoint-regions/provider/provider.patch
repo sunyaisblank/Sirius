@@ -1,0 +1,97 @@
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -11,3 +11,3 @@
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-structural-uniform/objects-uniform/transport.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-structural-uniform/objects-uniform/endpoint.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-structural-uniform/objects-uniform/dopri_phase.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/dopri_phase.o',
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1559 +1559 @@
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8K";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8L";
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -840 +840 @@
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-structural-uniform-v11";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-endpoint-regions-v12";
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -14,0 +15,5 @@
++struct lp_native_cpu_views {
++   struct lp_jit_buffer input;
++   struct lp_jit_buffer output;
++};
++
+@@ -16,2 +21,3 @@
+-lp_native_cpu_packet_mode(const struct lp_cs_job_info *job,
+-                          uint32_t x, uint32_t y, uint32_t z, bool preflight)
++lp_native_cpu_extract_views(const struct lp_cs_job_info *job,
++                            uint32_t x, uint32_t y, uint32_t z,
++                            struct lp_native_cpu_views *views)
+@@ -48,0 +55,14 @@
++   views->input = *input;
++   views->output = *output;
++   return true;
++}
++
++static bool
++lp_native_cpu_packet_mode(const struct lp_cs_job_info *job,
++                          uint32_t x, uint32_t y, uint32_t z, bool preflight)
++{
++   struct lp_native_cpu_views views;
++   if (!lp_native_cpu_extract_views(job, x, y, z, &views))
++      return false;
++   const struct lp_jit_buffer *input = &views.input;
++   const struct lp_jit_buffer *output = &views.output;
+@@ -104,0 +125,29 @@
++
++/* Separate from positive native admission: each exact owned SPIR-V returns
++ * on header rows==0 before any output/program/FP access. Preserve the same
++ * conservative job, descriptor-table, pointer, extent and nonalias domain.
++ * No worker, FP scope or positive native packet is needed for this no-op.
++ */
++static bool
++lp_native_cpu_zero_active(const struct lp_cs_job_info *job)
++{
++   struct lp_native_cpu_views views;
++   if (!lp_native_cpu_extract_views(job, 0, 0, 0, &views))
++      return false;
++   const struct lp_jit_buffer *input = &views.input;
++   const struct lp_jit_buffer *output = &views.output;
++   const uintptr_t in = (uintptr_t)input->u;
++   const uintptr_t out = (uintptr_t)output->u;
++   if (!input->u || !output->u ||
++       input->num_elements < sizeof(uint32_t) ||
++       output->num_elements < sizeof(uint32_t) ||
++       ((input->num_elements | output->num_elements) & 3u) ||
++       ((in | out) & 3u) ||
++       in > UINTPTR_MAX - input->num_elements ||
++       out > UINTPTR_MAX - output->num_elements ||
++       (in < out + output->num_elements && out < in + input->num_elements))
++      return false;
++   uint32_t rows;
++   memcpy(&rows, input->u, sizeof(rows));
++   return rows == 0;
++}
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -1965,0 +1966 @@
++   bool native_zero_active = false;
+@@ -2005,3 +2006,5 @@
+-      if (lp_native_cpu_preflight(&job_info)) {
+-         job_info.native_preflight_passed = true;
+-         job_info.native_simd_packets = sirius_native_simd_supported();
++      native_zero_active = lp_native_cpu_zero_active(&job_info);
++      if (native_zero_active || lp_native_cpu_preflight(&job_info)) {
++         /* A zero-header no-op is not positive native packet admission. */
++         job_info.native_preflight_passed = !native_zero_active;
++         job_info.native_simd_packets = !native_zero_active && sirius_native_simd_supported();
+@@ -2025 +2028,4 @@
+-   if (job_info.native_simd_packets) {
++   if (native_zero_active) {
++      /* num_tasks remains the original logical workgroup count for queries. */
++      scheduled_tasks = 0;
++   } else if (job_info.native_simd_packets) {
