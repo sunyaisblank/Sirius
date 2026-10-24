@@ -66,13 +66,14 @@ bridge = replace((source_root / bridge_name).read_text(),
     '#include "sirius_native_bridge.h"', '''#include "sirius_native_bridge.h"
 #include "util/u_cpu_detect.h"
 
-/* Existing Mesa detection checks AVX, OSXSAVE and enabled XMM/YMM state.
- * This pure query also guards direct C ABI callers in the baseline adapter.
+/* Mesa checks AVX, OSXSAVE and enabled XMM/YMM state. The compiler's required
+ * core-avx2 device also uses v3 integer extensions; guard those here too.
+ * Every other CPU keeps the original scalar path, including direct callers.
  */
 bool ATTRIBUTE_NOINLINE
 sirius_native_simd_supported(void)
 {
-   return util_get_cpu_caps()->has_avx2;
+   return util_get_cpu_caps()->has_avx2 && __builtin_cpu_supports("x86-64-v3");
 }''')
 bridge = replace(bridge,
     '   uint32_t groups = job->intergroup_row_owner ? MIN2(8, job->grid_size[0] - x) : 1;',
@@ -105,7 +106,7 @@ for name, new in new_text.items():
     modified[name] = {'basis': before[name], 'candidate': after[name]}
 (provider / 'provider.patch').write_text(patch)
 inputs = {**simd['source_inputs'], **adapter['source_inputs']}
-contract = {'scope': 'Optional AVX2 full8 packets with existing Mesa OS/CPU check, exactG/H source/all9380calls/all5programs, original F scalar1 on every otherCPU. Each tail row remains a separate parallel scalar task. Pure admission, FP guard, all original grid/query/counts/fallback, 32-bit bounded offsets and64-bit pointers unchanged. Direct C ABI guarded too. No numerical/benefit/frame/scientific/release claim.',
+contract = {'scope': 'Optional core-avx2 full8 packets guarded by Mesa OS-enabled AVX2 and x86-64-v3 CPU level, exactG/H source/all9380calls/all5programs, original F scalar1 on every otherx86CPU. Each tail row remains a separate parallel scalar task. Pure admission, FP guard, all original grid/query/counts/fallback, 32-bit bounded offsets and64-bit pointers unchanged. Direct C ABI guarded too; no FMA/fast math despite hardware support. No numerical/benefit/frame/scientific/release claim.',
     'basis_source_identity': original['full_candidate_source_identity'],
     'modified_files': modified, 'full_candidate_source_identity': canonical(after),
     'native_objects': objects, 'patch': pin(patch.encode()), 'source_inputs': inputs,

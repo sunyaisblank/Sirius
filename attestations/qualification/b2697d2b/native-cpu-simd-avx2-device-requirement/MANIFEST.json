@@ -1,0 +1,83 @@
+{
+  "revision": "b2697d2b54e65f9854846a69f3cdda10f31ed647",
+  "scope": "Compiler configuration rejection only, no object generation or shader execution.",
+  "wall_seconds": 0.7819930739933625,
+  "peak_rss_kib": 252332,
+  "inputs_unchanged": true,
+  "all_births_absent": true,
+  "result": "Compiler requires core-avx2 device for selected avx2-i32x8 target; explicit x86-64 device incompatible. Declare that required device and guard its ISA using OS-enabled AVX2 plus x86-64-v3. All other CPUs retain F scalar; no eligibility/count/precision/governor relaxation or flag sweep.",
+  "archive": {
+    "bytes": 188822,
+    "sha256": "cc2a802bfb64a7ee778ebec68a0748813fd1fb0d99e2379e90e72cb4b8cd0434",
+    "members": {
+      "out/native-cpu-simd-packet-policy/prepare_ispc_compile.py": {
+        "bytes": 2733,
+        "sha256": "6fdbcf9cc7f1c1d647845523ec77db8d649f341df9c8a35812776ae718ee3c62"
+      },
+      "out/native-cpu-simd-packet-policy/build_ispc.py": {
+        "bytes": 605,
+        "sha256": "a65c90a902a56aac50992cd303d5b0acbc537d01e28b17a6054a61db9a0700d9"
+      },
+      "out/native-cpu-simd-packet-policy/compiler-acquisition.json": {
+        "bytes": 1516,
+        "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+      },
+      "out/native-cpu-simd-packet-policy/compiler-environment.json": {
+        "bytes": 729,
+        "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+      },
+      "out/native-cpu-simd-packet-policy/derive_ispc.py": {
+        "bytes": 451,
+        "sha256": "ce4706c91922304207a62df8f8d8206b21d2c9686f285aeeb7f77ff39894ca17"
+      },
+      "out/native-cpu-simd-packet-policy/ispc-uniform-derivation.json": {
+        "bytes": 5828,
+        "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+      },
+      "out/native-cpu-simd-packet-policy/prepared-ispc-uniform-inputs.json": {
+        "bytes": 16192,
+        "sha256": "6331541f31881209e9c84b5a1d570d62cb3db453146e24de5e088d5c32baa46c"
+      },
+      "out/native-cpu-simd-packet-policy/ispc-uniform-compile-result.json": {
+        "bytes": 14292,
+        "sha256": "9bfb7eae9bcd633347c8f240e69a9caf96f2e7be930d26415b4e32caed887bd7"
+      },
+      "out/native-cpu-simd-packet-policy/compile/actions.json": {
+        "bytes": 5693,
+        "sha256": "f481b9828510ef0f26a8716abef23ba4db64abef39f83716c4eae8bdc285942d"
+      },
+      "out/native-cpu-simd-packet-policy/compile/run_owned.py": {
+        "bytes": 293,
+        "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+      },
+      "out/native-cpu-simd-packet-policy/compile/owned_guard.py": {
+        "bytes": 295,
+        "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+      },
+      "out/native-cpu-simd-packet-policy/compile/ispc-uniform/inputs-after.json": {
+        "bytes": 443293,
+        "sha256": "862e2452f2a5fb0e51e1d005fc184eff2989df924f8ef2af7b15e8c7e9abc89c"
+      },
+      "out/native-cpu-simd-packet-policy/compile/ispc-uniform/inputs-before.json": {
+        "bytes": 443293,
+        "sha256": "862e2452f2a5fb0e51e1d005fc184eff2989df924f8ef2af7b15e8c7e9abc89c"
+      },
+      "out/native-cpu-simd-packet-policy/compile/ispc-uniform/owner.json": {
+        "bytes": 1633,
+        "sha256": "0d86463406ce8438fe60ad75de7e2fa9db914bae52e325e5f84d00a8dab75878"
+      },
+      "out/native-cpu-simd-packet-policy/compile/ispc-uniform/samples.jsonl": {
+        "bytes": 667,
+        "sha256": "d286464f7f1badf4057a6246facccf4ce4aa6fbec1c57c9aade4cb79beaa8a24"
+      },
+      "out/native-cpu-simd-packet-policy/compile/ispc-uniform/stderr.log": {
+        "bytes": 121,
+        "sha256": "e71844b6891ab32a2db98362c815e9223d3b0c4caefa236800e720f13985da0e"
+      },
+      "out/native-cpu-simd-packet-policy/compile/ispc-uniform/stdout.log": {
+        "bytes": 495,
+        "sha256": "46e5c79ceda479bafb4ce785a0074a05da7ef68a9ca5a67d0bf383f0b196a14b"
+      }
+    }
+  }
+}

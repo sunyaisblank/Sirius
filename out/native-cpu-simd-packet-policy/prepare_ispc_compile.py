@@ -32,6 +32,7 @@ changes = [
      "destination = root / 'bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform'"),
     ("'--addressing=64'", "'--addressing=32'"),
     ("'--target=sse2-i32x8'", "'--target=avx2-i32x8'"),
+    ("'--cpu=x86-64'", "'--cpu=core-avx2'"),
     ("inputs = dict(scalar['source_inputs'])\n", preserved),
     ("old = read(work / 'generation/actions.json')['c-source']",
      "old = read(root / 'out/native-cpu-simd-rows/generation/actions.json')['c-source']"),
@@ -39,7 +40,7 @@ changes = [
      "assert not (work / 'compile/actions.json').exists()\nactions = {}"),
     ("prepared = {'revision': revision", "prepared = {'address_model': address_model, 'revision': revision"),
     ('Three complete per-row ISPC objects with uniform canonical operands/private scratch indices;',
-     'Address32 offset correction compiling the exact preserved G per-row ISPC sources; OS-guarded AVX2-i32x8 with baseline x86-64 CPU and unchanged strict FP/math flags;'),
+     'Address32 offset correction compiling the exact preserved G per-row ISPC sources; required core-avx2 device guarded by OS-enabled AVX2 plus x86-64-v3, with original scalar fallback and unchanged strict FP/math flags;'),
 ]
 for before, after in changes:
     assert source.count(before) == 1, before
