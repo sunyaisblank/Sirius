@@ -1,0 +1,39 @@
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -1847,11 +1847,13 @@
+    unsigned grid_z, grid_y, grid_x;
+ 
+    if (job_info->native_simd_packets) {
+-      /* Full packets cover eight rows; each remainder row owns one task. */
++      /* Full packets cover eight rows; medium tails share one masked task.
++       * One-to-three-row tails retain independent original scalar tasks. */
+       unsigned full_packets = job_info->grid_size[0] / 8;
++      unsigned remainder = job_info->grid_size[0] % 8;
+       grid_z = grid_y = 0;
+       grid_x = (unsigned)iter_idx < full_packets ? (unsigned)iter_idx * 8 :
+-         full_packets * 8 + ((unsigned)iter_idx - full_packets);
++         full_packets * 8 + (remainder >= 4 ? 0 : (unsigned)iter_idx - full_packets);
+    } else if (job_info->use_iters) {
+       grid_z = iter_idx / (job_info->iter_size[0] * job_info->iter_size[1]);
+       grid_y = (iter_idx - (grid_z * (job_info->iter_size[0] * job_info->iter_size[1]))) / job_info->iter_size[0];
+@@ -2029,7 +2031,8 @@
+       /* num_tasks remains the original logical workgroup count for queries. */
+       scheduled_tasks = 0;
+    } else if (job_info.native_simd_packets) {
+-      scheduled_tasks = job_info.grid_size[0] / 8 + job_info.grid_size[0] % 8;
++      unsigned remainder = job_info.grid_size[0] % 8;
++      scheduled_tasks = job_info.grid_size[0] / 8 + (remainder >= 4 ? 1 : remainder);
+    } else if (intergroup) {
+       job_info.intergroup_row_owner = true;
+       job_info.use_iters = true;
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -72,7 +72,7 @@
+     */
+    uint32_t groups = job->intergroup_row_owner ? MIN2(8, job->grid_size[0] - x) : 1;
+    if (job->native_simd_packets)
+-      groups = x < (job->grid_size[0] / 8) * 8 ? 8 : 1;
++      groups = job->grid_size[0] - x >= 4 ? MIN2(8, job->grid_size[0] - x) : 1;
+    if (preflight) {
+    switch (job->native_cpu_stage) {
+    case 1:

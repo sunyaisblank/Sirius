@@ -1,0 +1,230 @@
+{
+  "patch": {
+    "bytes": 2018,
+    "sha256": "2d2e8899d24547555aa8077fa1e0dd243683b42c318b3e278fd351817cb2d9db"
+  },
+  "changed_files": {
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "basis": {
+        "bytes": 107957,
+        "sha256": "0f242787a0d7ba08ca35157fccfbc0bde12c6538f8101669a5c59a34e7f166c7"
+      },
+      "candidate": {
+        "bytes": 108170,
+        "sha256": "95ed4c97198e31fe13af6da91cc130384a91f5e0bca9c00a5297a376e5c2ca8a"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "basis": {
+        "bytes": 6421,
+        "sha256": "ffa014c8d06e66c33935477fa11a13b775b9cc479860a3be5d6943adc7c3568f"
+      },
+      "candidate": {
+        "bytes": 6445,
+        "sha256": "821b2460f6148b1eba67c8ab870b84bffbbb5f5818d59cf81decd62771ae7462"
+      }
+    }
+  },
+  "source_inputs": {
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 107957,
+      "sha256": "0f242787a0d7ba08ca35157fccfbc0bde12c6538f8101669a5c59a34e7f166c7"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "bytes": 6421,
+      "sha256": "ffa014c8d06e66c33935477fa11a13b775b9cc479860a3be5d6943adc7c3568f"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/transport.ispc": {
+      "bytes": 648575,
+      "sha256": "7e4f143e9023726c7439252f8077f2d9f4a66498c08ff254598ec46f5d0b355d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/endpoint.ispc": {
+      "bytes": 825120,
+      "sha256": "53c27e03e5023df65fd78f7408987c443195ce8e14f7e1a124f2f63b39ce987d"
+    },
+    "bin/linux-gcc/native-cpu-simd-endpoint-regions/ispc-source/dopri_phase.ispc": {
+      "bytes": 414255,
+      "sha256": "45746ec987974e9dff408f3d4ba293ef02e24f200f2b557aa0cd502e772491d8"
+    },
+    "out/native-cpu-simd-packet-policy/rows_adapter.cpp": {
+      "bytes": 3498,
+      "sha256": "57747ee37daa040d25b1e6f9411affb07fb399ba0003c921aca313810a10a581"
+    },
+    "out/native-cpu-simd-packet-policy/adapter-compile-result.json": {
+      "bytes": 16371,
+      "sha256": "d2c0d6bce1b3dc7ad39c1f004dda5f350efef64a062a041f9e87c969eaab5a0a"
+    },
+    "out/native-cpu-nir-dead-progress/provider/source-contract.json": {
+      "bytes": 31761,
+      "sha256": "8b37fc2e7be7af4b60dcdb2b00d4be77fea2e815c699a9bb83859e4e0435d1b6"
+    },
+    "out/native-cpu-simd-endpoint-regions/ispc-derivation.json": {
+      "bytes": 17795,
+      "sha256": "22ced710b9ce6ac8f1e6340df81b21e4ef577e96ae4fe66c02b12a51a4548956"
+    },
+    "out/native-cpu-active-prefix/native_packet.hpp": {
+      "bytes": 2445,
+      "sha256": "9df6d65d1c89016694a7f242a8fdd61979db6826c4f0d2619b2b8954a9ca6eee"
+    },
+    "out/native-cpu-simd-medium-tails/rows_adapter.cpp": {
+      "bytes": 3540,
+      "sha256": "bfbe9b962665f60ce3615019bc4a67c3f614f9a2125e1be7a929424f7fbe4a32"
+    },
+    "out/native-cpu-simd-medium-tails/rows_bridge.h": {
+      "bytes": 1544,
+      "sha256": "ca911e8dbc86daf94f924611b578e988eb343b06e22e17cede3d42527e588844"
+    }
+  },
+  "adapter_only_three_group_predicates_changed": true,
+  "seven_reused_native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.o",
+      "bytes": 204072,
+      "sha256": "1918356540bc503295a33d742edcbc4cb9d726d9b48519cea92e2c955406ade6"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.o",
+      "bytes": 260080,
+      "sha256": "34ad7237f5a8c7de9028ef941a758f602a20b71d3165df1acf956548f1ee6c17"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.o",
+      "bytes": 136712,
+      "sha256": "072cfa002037cf794493687940f7679fdfc1ab9c68b9ed88a1fe4dddb92a2ef0"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o",
+      "bytes": 3083056,
+      "sha256": "8dd21100b5518bf35f6e6bf704ceb459304ab63fa2988eeec3a1e4741dcba47e"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o",
+      "bytes": 3468472,
+      "sha256": "b809c75376a943299f224674c00da3ba347c9c10a73ee1ee9f1ac623517bfd10"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/dopri_phase.o",
+      "bytes": 1789800,
+      "sha256": "18a8e5a6ae1654e8a946b79d7b61dd8d69a3149718d941e0b361fef77b7695df"
+    }
+  ],
+  "new_native_objects_required": 1,
+  "raw_ISPC_sources_and_all9380calls_unchanged": true,
+  "partition": {
+    "domain": "Every integer N with1<=N<=65536; immutable B admission additionally proves N<=capacity<=65536.",
+    "division": "Unique q=floor(N/8),r=N%8 withN=8q+r and0<=r<8.",
+    "full_tasks": "For0<=i<q, x=8i,groups8, interval[8i,8i+8). Their disjoint union is[0,8q).",
+    "medium_tail": "For4<=r<=7, exactly one taski=q hasx=8q,groupsr, interval[8q,N).",
+    "small_tail": "For0<=r<=3, taski=q+j,0<=j<r, hasx=8q+j,groups1. These adjacent singletons partition[8q,N).",
+    "coverage": "The full and tail intervals are adjacent, pairwise disjoint and have total length8q+r=N. Every original row executes exactly once and no row at or aboveN executes.",
+    "C_integer_safety": "q<=8192 and0<=r<=7; taskcount<=8194 forN<=65536 (largest singleton tail atN=65531). All iterator arithmetic fits unsigned/signed task ABI. Existing coarse bounds remain unchanged.",
+    "residues": [
+      {
+        "r": 0,
+        "tail_tasks": 0,
+        "tail_intervals": [],
+        "total_tasks": "q+0"
+      },
+      {
+        "r": 1,
+        "tail_tasks": 1,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 1
+          }
+        ],
+        "total_tasks": "q+1"
+      },
+      {
+        "r": 2,
+        "tail_tasks": 2,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 1
+          },
+          {
+            "start": "8q+1",
+            "width": 1
+          }
+        ],
+        "total_tasks": "q+2"
+      },
+      {
+        "r": 3,
+        "tail_tasks": 3,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 1
+          },
+          {
+            "start": "8q+1",
+            "width": 1
+          },
+          {
+            "start": "8q+2",
+            "width": 1
+          }
+        ],
+        "total_tasks": "q+3"
+      },
+      {
+        "r": 4,
+        "tail_tasks": 1,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 4
+          }
+        ],
+        "total_tasks": "q+1"
+      },
+      {
+        "r": 5,
+        "tail_tasks": 1,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 5
+          }
+        ],
+        "total_tasks": "q+1"
+      },
+      {
+        "r": 6,
+        "tail_tasks": 1,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 6
+          }
+        ],
+        "total_tasks": "q+1"
+      },
+      {
+        "r": 7,
+        "tail_tasks": 1,
+        "tail_intervals": [
+          {
+            "start": "8q+0",
+            "width": 7
+          }
+        ],
+        "total_tasks": "q+1"
+      }
+    ],
+    "CPU_false": "native_simd_packets=false retains the original N scalar tasksx=i,groups1 for0<=i<N. The adapter independently forwards every call to unchanged D scalar when the existing CPU/v3 guard is false.",
+    "query_count": "Original num_tasks=N andblock64 are untouched; cs_invocations remainsuint64_t(N)*64, independently of scheduled_tasks.",
+    "zero_refusal_fallback": "Existing separate zero-header classification, positive B/F pure admission and ordinary LLVM key/task/fallback branches are unchanged."
+  },
+  "inactive_lane_proof": "Raw L exports already mask ComputeOwnedRow and final output copy withprogramIndex<groups. Private context/staged output remain per-row; no unexecuted lane reads an input row or publishes output. B first_x+groups<=activegrid<=capacity protects all active rows.",
+  "limits": "Source-only medium-tail utilization correction motivated by saved frame cardinality histograms. The existing samples do not establish the full-frame cause or a speedup. No shader/compiler/provider/workload execution or performance/scientific/release claim.",
+  "patch_applied": false
+}

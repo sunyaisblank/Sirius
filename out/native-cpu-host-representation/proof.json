@@ -1,0 +1,55 @@
+{
+  "scope": "Unapplied source-only candidate. No actual source, Git index, build, workload, counts, physics, LLVM/provider, capability or governor changes. No speed, all-thread bottleneck, scientific, release or adoption claim.",
+  "source": {
+    "revision_at_preparation": "2d971dff09d4afd0520bb644e8234cff2f0c2c7d",
+    "path": "src/sirius/backend/retained_compute.cpp",
+    "bytes": 45570,
+    "sha256": "ea1edc4e1c18fe4e6f430d292b9bf20995a75277bbfde06a3f86b64aca678566"
+  },
+  "host_patch": {
+    "path": "out/native-cpu-host-representation/host.patch",
+    "bytes": 1627,
+    "sha256": "b65f6cd39fb18bc028b045fe8812812430f5b18a9d13748305bc2c2c77f15c33",
+    "touches": "Only the local spacing lambda in RetainedValue::IsRepresented; original magnitude evaluation, fallback text and entire validation predicate/short-circuit order retained verbatim."
+  },
+  "type_contract": "The patch rejects unsupported types at compile time: exact-width bit_cast sizes, IEC559 radix2, float24/double53 significand bits, binary32/binary64 exponent ranges and matching integer encoding of1.0. Existing RetainedValue is documented binary32 and has sizeof20; bit_cast already used in this translation unit. Proof assumes the conventional IEEE binary32/binary64 interchange field layout verified for the target at later compilation; it is not a theorem about arbitrary conforming C++ float object encodings.",
+  "closed_numeric_proof": [
+    "Let E=(bits>>23)&255 and M=bits&0x7fffff after the original abs(value). E!=0 and bits<0x7f7fffff selects exactly positive finite normal binary32 values except the largest finite value; E ranges1..254. Zero, all subnormals, largest finite, infinities and NaNs use the original nextafter/conversion/subtraction expression.",
+    "Selected magnitude=(2^23+M)*2^(E-150). Incrementing the binary32 encoding toward +infinity changes the value by exactly2^(E-150). This also holds at mantissa rollover to the next binade. The sole rollover to infinity is excluded by bits<max_finite.",
+    "Both neighboring binary32 values convert exactly to binary64 (24<=53 significand bits and binary32 range is within binary64). Their subtraction is exact: the values satisfy Sterbenz and the difference is representable. Thus the original numeric result equals the same positive power of two, independently of the standard rounding direction.",
+    "E-150 ranges-149..104, entirely within normal binary64 range-1022..1023. Biased binary64 exponent=(E-150)+1023=E+873 lies874..1127. Shifting that uint64 exponent by52 with zero sign/fraction constructs the exact result; no integer overflow or floating arithmetic occurs in the fast return.",
+    "The original magnitude operation remains first. For the fast branch, input and successor are normal binary32, their conversions are normal binary64, and the exact difference is normal binary64. DAZ/FTZ therefore add no subnormal operands/results in this branch. All cases where the original nextafter may underflow, overflow, encounter nonfinite input, or observe ambient subnormal handling remain in its unchanged fallback."
+  ],
+  "rounding_fenv_limits": "Numeric equality above assumes ordinary IEEE semantics and a nextafter implementation returning the adjacent representable binary32 independently of rounding mode. It does not establish equality of every implementation-specific errno write, exception flag, trap, interposed libm side effect or signaling-NaN behavior across platforms. No linked-libm source audit or floating-environment experiment was performed. No fast-math/reassociation contract is introduced; compiler transformations and any strict observable-fenv requirements require review before integration. The preserved fallback retains its original operations for exceptional/subnormal categories.",
+  "validation_predicate": {
+    "verbatim_unchanged": true,
+    "sha256": "6fa53f864cec63d5676799de36f0e3a90f2edb523d420b4adb16800d01b71d89",
+    "notes": "No validation order, operands, comparisons, result layout or data structure changes; spacing(high) and spacing(low) are reached at exactly their original short-circuit positions."
+  },
+  "existing_compile_command_read_only": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/backend/retained -I/home/astra/.project/Sirius/src/sirius/.. -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o -c /home/astra/.project/Sirius/src/sirius/backend/retained_compute.cpp",
+  "profile_context": {
+    "symbols": "out/native-cpu-nir-dead-progress/cold-frame/frame/user-pc-symbols.json",
+    "bytes": 17588,
+    "sha256": "1cd64dd1e0854e5df61ab97deb7f1cc9af8ca8f058152f92247b3b081bf11ca7",
+    "sample_count": 81,
+    "main_process": 10325,
+    "sampled_TID": 10387,
+    "IsRepresented_samples": 15,
+    "nextafterf_samples": 12,
+    "scope": "One3s USER-only sample of one hot dispatcher during rejected M frame, not an all-thread aggregate or a causal/global dominance claim."
+  },
+  "checks_performed": [
+    "Exact unique source substitution and reversal in memory; existing source bytes unchanged.",
+    "Unchanged original fallback and full validation predicate checked in memory.",
+    "Unified patch namespace/hunk application checked read-only with git apply --check."
+  ],
+  "not_performed": [
+    "Patch application",
+    "Compiler/build or relink",
+    "Tests/fuzzing/studies",
+    "Physics/runtime workloads",
+    "Fenv/libm experiment",
+    "Git staging/commit/push"
+  ],
+  "later_integration_requirement": "A separately authorized new matched host ELF and original qualification sequence would be required. Keep independent of the current N policy/provider qualification; do not integrate this patch into that frozen run."
+}

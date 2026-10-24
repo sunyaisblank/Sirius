@@ -1,0 +1,28 @@
+--- a/src/sirius/backend/retained_compute.cpp
++++ b/src/sirius/backend/retained_compute.cpp
+@@ -106,7 +106,25 @@
+ 
+ bool RetainedValue::IsRepresented() const {
+     const auto spacing = [](float value) {
++        static_assert(sizeof(float) == sizeof(std::uint32_t) &&
++                      std::numeric_limits<float>::is_iec559 &&
++                      std::numeric_limits<float>::radix == 2 &&
++                      std::numeric_limits<float>::digits == 24 &&
++                      std::numeric_limits<float>::min_exponent == -125 &&
++                      std::numeric_limits<float>::max_exponent == 128 &&
++                      std::bit_cast<std::uint32_t>(1.0f) == 0x3f800000u);
++        static_assert(sizeof(double) == sizeof(std::uint64_t) &&
++                      std::numeric_limits<double>::is_iec559 &&
++                      std::numeric_limits<double>::radix == 2 &&
++                      std::numeric_limits<double>::digits == 53 &&
++                      std::numeric_limits<double>::min_exponent == -1021 &&
++                      std::numeric_limits<double>::max_exponent == 1024 &&
++                      std::bit_cast<std::uint64_t>(1.0) == 0x3ff0000000000000ull);
+         const float magnitude = std::abs(value);
++        const auto bits = std::bit_cast<std::uint32_t>(magnitude);
++        const auto exponent = (bits >> 23) & 255u;
++        if (exponent != 0 && bits < 0x7f7fffffu)
++            return std::bit_cast<double>(std::uint64_t(exponent + 873u) << 52);
+         return double(std::nextafter(magnitude, std::numeric_limits<float>::infinity())) -
+                double(magnitude);
+     };
