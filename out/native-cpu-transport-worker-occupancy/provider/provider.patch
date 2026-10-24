@@ -1,0 +1,51 @@
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -85,6 +85,15 @@
+ 
+ #if LP_VULKAN_IEEE32_ENABLED
+ #include "lp_native_cpu_bridge.h"
++
++/* Pure policy only: retain serial-pool packets; expose one row per worker
++ * when all Transport rows fit the existing pool. No pool setting changes.
++ */
++static bool ATTRIBUTE_NOINLINE
++sirius_native_transport_simd_policy(unsigned rows, unsigned workers)
++{
++   return workers == 0 || rows > workers;
++}
+ #endif
+ 
+ enum {
+@@ -2007,7 +2016,9 @@
+       if (native_zero_active || lp_native_cpu_preflight(&job_info)) {
+          /* A zero-header no-op is not positive native packet admission. */
+          job_info.native_preflight_passed = !native_zero_active;
+-         job_info.native_simd_packets = !native_zero_active && sirius_native_simd_supported();
++         job_info.native_simd_packets = !native_zero_active && sirius_native_simd_supported() &&
++            (job_info.native_cpu_stage != 1 ||
++             sirius_native_transport_simd_policy(job_info.grid_size[0], screen->cs_tpool->num_threads));
+          job_info.current->variant = NULL;
+          /* No variant is bound. A later refusal must select one even when
+           * resource bindings and the original fallback key are unchanged.
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8M";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8Q";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -837,7 +837,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-nir-dead-progress-v13";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-transport-worker-occupancy-v15";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);

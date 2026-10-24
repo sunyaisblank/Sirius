@@ -1,0 +1,80 @@
+{
+  "changed_files": {
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "basis": {
+        "bytes": 107957,
+        "sha256": "0f242787a0d7ba08ca35157fccfbc0bde12c6538f8101669a5c59a34e7f166c7"
+      },
+      "candidate": {
+        "bytes": 108412,
+        "sha256": "7efc8f17028df80eac701ca3094465781ad7136a9d046a72066e7f4349219fae"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 116201,
+        "sha256": "1ec5ab3b1de39f9c709f0c48ca97cfac68ff185b9a303ea44e772d61a95719a0"
+      },
+      "candidate": {
+        "bytes": 116201,
+        "sha256": "44b26b757b2b0c863c8bf6820532367651bf3b427be00da71422246242b08940"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32370,
+        "sha256": "ae3a71cd160039fee7ca9d1a0f8060b7ec47ec86cb3b6d6acf0916eb1e6558ec"
+      },
+      "candidate": {
+        "bytes": 32379,
+        "sha256": "d42c30bdf5f9666f00cfe0c7e8387cce7922db9e20fa3575a1455639097d92ba"
+      }
+    }
+  },
+  "patch": {
+    "bytes": 2399,
+    "sha256": "171bc28cda679307bdc9f00aed9ca0ee6720f56782256ac785271bba12df2aa5"
+  },
+  "patch_applied": false,
+  "policy_helper": "sirius_native_transport_simd_policy",
+  "policy": "positive && CPU_ISA && (stage != Transport || workers == 0 || grid_x > workers)",
+  "policy_source_inverse_exact": true,
+  "new_native_compilations": 0,
+  "source_inputs": {
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 107957,
+      "sha256": "0f242787a0d7ba08ca35157fccfbc0bde12c6538f8101669a5c59a34e7f166c7"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c": {
+      "bytes": 116201,
+      "sha256": "1ec5ab3b1de39f9c709f0c48ca97cfac68ff185b9a303ea44e772d61a95719a0"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "bytes": 32370,
+      "sha256": "ae3a71cd160039fee7ca9d1a0f8060b7ec47ec86cb3b6d6acf0916eb1e6558ec"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_cs_tpool.c": {
+      "bytes": 5070,
+      "sha256": "64548d7cd306da701d02c9c6140a6e4bd75ff76cd0b854e8eb44018e033ecac9"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_cs_tpool.h": {
+      "bytes": 2897,
+      "sha256": "faf24436178f850eda73ad7d7a69b068ab9e75df71443724e168bed4fd579804"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "bytes": 6421,
+      "sha256": "ffa014c8d06e66c33935477fa11a13b775b9cc479860a3be5d6943adc7c3568f"
+    }
+  },
+  "partition_proof": {
+    "domain": "All admitted original grids 1 <= N <= 65536 and every unsigned pool worker count W.",
+    "Transport_CPU_true_W_positive_N_le_W": "The existing nonpacket native branch queues N tasks, IDs 0..N-1, groups1. Each original row runs once through the unchanged F scalar execution path.",
+    "other_positive_jobs": "E/DP, Transport W0, Transport N>W retain M exactly: q=floor(N/8), r=N%8; q+r tasks map 8*i for i<q (groups8), then 8*q+i-q (groups1). Disjoint intervals partition [0,N).",
+    "CPU_false": "Original F scalar N-task path for all stages, unchanged.",
+    "refusal_zero_active_and_other_modules": "Policy not evaluated. All admission, zero-active no-op, ordinary intergroup key/JIT, resource/dirty ordering and failure paths remain M.",
+    "queries": "num_tasks remains original N; both paths add N*64 logical invocations. Worker FP scope and original guards remain unchanged.",
+    "pool_lifetime": "num_threads assigned once after creation/startup failures, never changed after publication; no environment/worker/governor setting altered."
+  },
+  "cost_scope": "M Transport12 is one8-row SIMD task plus four scalar tasks; Q can expose twelve one-row tasks when the existing pool has at least twelve workers. No proven latency crossover, frame bottleneck attribution or speedup. This is a topology-based implementation policy, not a changed scientific gate or threshold search.",
+  "gate_scope": "All original C8 32 readbacks/51 markers/54 joins and original ABBA22/Decimal thresholds remain unchanged. Only extra passive implementation-route expectations adapt; historical Transport SIMD execution is not fresh Q execution evidence."
+}
