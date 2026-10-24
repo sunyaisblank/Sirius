@@ -1,0 +1,693 @@
+{
+  "revision": "b66133039e3672e4e387f9be8cf91a5d371ce082",
+  "scope": "Private H source/build, soleC8 and original soleABBA evidence. Numerical readbacks exact; benefit rejected12/22, so no remaining7 controls, cold frame, public adoption, full scientific or release claim.",
+  "c8": {
+    "passed": true,
+    "readbacks": 32,
+    "markers": 51,
+    "module_joins": 54,
+    "first_rows_pure_and_actual_SIMD_returns_each": 3
+  },
+  "benefit": {
+    "audit_passed": true,
+    "checks_passed": 12,
+    "checks_total": 22,
+    "independent_Decimal_agrees_on_all22": true,
+    "all22_pass": false,
+    "failed_checks": [
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "improvement_percent": 0.9587957440213266,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "endpoint inclusive Dispatch",
+        "improvement_percent": -18.096280364128532,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "transport inclusive Dispatch",
+        "improvement_percent": -13.799906371558237,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "improvement_percent": -10.95650301032158,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "scope": "transport:rows=12 inclusive Dispatch",
+        "improvement_percent": -47.37001278380422,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "improvement_percent": -11.317051239672779,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "endpoint inclusive Dispatch",
+        "improvement_percent": -10.227632102383478,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "transport inclusive Dispatch",
+        "improvement_percent": -32.89754039168507,
+        "minimum_percent": -5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "improvement_percent": -6.111118481239405,
+        "minimum_percent": 5,
+        "pass": false
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "transport:rows=12 inclusive Dispatch",
+        "improvement_percent": -49.93136782506059,
+        "minimum_percent": -5,
+        "pass": false
+      }
+    ],
+    "original_thresholds_counts_references_governors_unchanged": true,
+    "extra_retries_or_warmups": 0
+  },
+  "owners": {
+    "control-8": {
+      "wall_seconds": 11.160564107005484,
+      "peak_sampled_rss_kib": 1062704,
+      "child_exit": 0
+    },
+    "a1": {
+      "wall_seconds": 50.930945849977434,
+      "peak_sampled_rss_kib": 2342432,
+      "child_exit": 0
+    },
+    "b1": {
+      "wall_seconds": 11.564326541963965,
+      "peak_sampled_rss_kib": 939092,
+      "child_exit": 0
+    },
+    "b2": {
+      "wall_seconds": 11.364884604001418,
+      "peak_sampled_rss_kib": 938752,
+      "child_exit": 0
+    },
+    "a2": {
+      "wall_seconds": 52.148681267979555,
+      "peak_sampled_rss_kib": 2342956,
+      "child_exit": 0
+    }
+  },
+  "source_grounded_followup": "Current packed tail executes1..7 scalar rows serially, unlike original F individual rowtasks. Restore separate scalar task per tail. SSE2 native gang8 emits two128-bit halves and emulated gathers; pursue optional OS-enabled AVX2 with original scalar route on otherCPUs, retaining eligibility and complete source arithmetic. No performance prediction or unchanged retry.",
+  "archives": {
+    "source-build-and-trial.zip": {
+      "bytes": 4878153,
+      "sha256": "7aa88af2b15469427a52d87a082c1401960cddc87692c1d5b4e2af8a54bca098",
+      "members": {
+        "out/native-cpu-simd-address32/actions.json": {
+          "bytes": 34764,
+          "sha256": "fe9b5619c83dfca5779a9915f8d08c07c4aa355bb6c7434882c471761817d0da"
+        },
+        "out/native-cpu-simd-address32/adapter-compile-result.json": {
+          "bytes": 16287,
+          "sha256": "ba6bb3b3b5092870022e3e384e9e878378f6ec92790fa907c1eeb0af7b127573"
+        },
+        "out/native-cpu-simd-address32/addressing-correction.disassembly.txt": {
+          "bytes": 5784,
+          "sha256": "c8e9a16e246ae0dccdbe3589495a69c04a2cc063500e8f0470eddce3d5da250e"
+        },
+        "out/native-cpu-simd-address32/addressing-correction.json": {
+          "bytes": 733,
+          "sha256": "2394519824681e848e5bf6eed414f13c0fda44264aadb97d114c47c70eac5ca4"
+        },
+        "out/native-cpu-simd-address32/benefit/prepare.py": {
+          "bytes": 463,
+          "sha256": "be88230bfa45a2f06b81ac09c937ef826845d231147623f7b3e44400e20a069e"
+        },
+        "out/native-cpu-simd-address32/benefit/providers.json": {
+          "bytes": 1914,
+          "sha256": "38cb0287f6e0ad5a8b5e040d7afc2e4b4ea9d9d3555688d8803936f1a5cae81a"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/benefit.json": {
+          "bytes": 234783,
+          "sha256": "70336ca4ba95db16544896160c8bda21b3f1c8da5bca135670e52e1040180a2b"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/decimal-agreement.json": {
+          "bytes": 8004,
+          "sha256": "2fdb01b197648fb9ed7215401301c8444c839f42e0724f97e0bee76657045a8d"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/decimal_check.py": {
+          "bytes": 532,
+          "sha256": "b8a090379e1ad48cbccb0714963cfffaaab8d28b813de4dc2c58b844c3fd4b12"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/expected-readback-layout.json": {
+          "bytes": 3455,
+          "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/native_evidence.py": {
+          "bytes": 518,
+          "sha256": "bf50b12e63d42c0715007e173e25ea2abbf01f71030b9d62099be034d59e40e8"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/numeric_gates.py": {
+          "bytes": 516,
+          "sha256": "5317872eae1fccf0ba9a04f552f3c303e309fda2f0279e573ef1137d8772ca12"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/read_results.py": {
+          "bytes": 531,
+          "sha256": "210b9bceb7ccc005de14e43a8c350273c68b3b58123e33093f8b59c4a232ac59"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/run_abba.py": {
+          "bytes": 527,
+          "sha256": "d17dab020af00d8977d31c3d3bfba9d3bbc964ae09b3fcb7fdc38b9990e54847"
+        },
+        "out/native-cpu-simd-address32/benefit/readers/sole-ABBA-inputs.json": {
+          "bytes": 2109,
+          "sha256": "4176d3b7fbe505963a9ce269e0e2955eee9fbdbfae76df08954088521044f0f6"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/gtest.xml": {
+          "bytes": 41000,
+          "sha256": "f5fcb516afec888eb060c2d9f8571ea1f11f00f003cd28f840204161feff8e33"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/inputs-after.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/inputs-before.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/owner.json": {
+          "bytes": 3739,
+          "sha256": "91397195811e20545ba399cfd8038dbbcdb8e236076860bc5464be243132317d"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/samples.jsonl": {
+          "bytes": 705442,
+          "sha256": "1da0ed89af20fe015ce480ac3f95740a93f347304d1cb8551cc3c2bc509ec35a"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a1/stdout.log": {
+          "bytes": 708,
+          "sha256": "ab281454bca30b8636d0d51eced6d165590c2f13425b81657883d837311fc842"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/gtest.xml": {
+          "bytes": 41083,
+          "sha256": "2406c0c9c50cc50a7b639e0653699449463e8690653370cb60b61d8560c7b9a6"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/inputs-after.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/inputs-before.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/owner.json": {
+          "bytes": 3739,
+          "sha256": "0e0d8a8be5ca9080fae6fa89070dde9ac19c717bb4f1cd7e74409a5057f42d0c"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/samples.jsonl": {
+          "bytes": 722436,
+          "sha256": "bcf5f35871c97ee3880e49df47ebba5b298e6d4ce264b39388e843ae1e34b947"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/a2/stdout.log": {
+          "bytes": 708,
+          "sha256": "bcbee26049241abeb3ee6ffa7da352568ab76d077587085d84f58c3598b783fd"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/actions.json": {
+          "bytes": 116130,
+          "sha256": "dafe06bb62a0f2f1793b72b1d7c50dc2311bd7807cfee82753086aa44d6540ee"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/gtest.xml": {
+          "bytes": 40788,
+          "sha256": "b4adbf09edf5dbe33cc841ba009573f4c3583d5dd3fd110c32b9b9e1f052f9be"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/inputs-after.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/inputs-before.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/owner.json": {
+          "bytes": 3678,
+          "sha256": "7be3f87f8afc98fa341c3ecf1da633ade8491497fdbf92af82e6f6b528b756b1"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/samples.jsonl": {
+          "bytes": 158545,
+          "sha256": "44853cd1d23fef18850a666f14d598aa4f000cf516facc6276501855c05b17c0"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b1/stdout.log": {
+          "bytes": 708,
+          "sha256": "451ed03e03f2c179fe4e55d103ddfe56353f1d214eea99b8253070893ecaa18e"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/gtest.xml": {
+          "bytes": 40796,
+          "sha256": "91fd24f70bd985695537c4c72bfd0a52bd79b9a66a71503cfa2a387e45af36ee"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/inputs-after.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/inputs-before.json": {
+          "bytes": 468318,
+          "sha256": "f7f4a7e2347787039aa82af20829571d3f80e846dbd263d795b25cfe22bb2adc"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/owner.json": {
+          "bytes": 3678,
+          "sha256": "77ee0f2e8ffcca61acfc6e060135fcb5ee1a2c7897d1d2d1b96f673e019c57ff"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/samples.jsonl": {
+          "bytes": 155922,
+          "sha256": "33ac2ca740640834f800fc473f02ca248264cf99b2e0e1a62b94f7ee48f202d0"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/b2/stdout.log": {
+          "bytes": 708,
+          "sha256": "86680c6f53472f6bf68e940ac35fc6c93bbc579ab760ba14b906dc571efb437d"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/owned_guard.py": {
+          "bytes": 514,
+          "sha256": "5a578e7ed136a69ac15ccb6fc14c2de71d17d2e09ed93fbe2e028ad248ab3042"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/run_case.py": {
+          "bytes": 527,
+          "sha256": "3f71f7fa68d4572db49720cd82f304584b7afd9684263408ccd0760d2e833954"
+        },
+        "out/native-cpu-simd-address32/benefit/runtime/run_owned.py": {
+          "bytes": 512,
+          "sha256": "95127cdfbdae57cb6b08f75b90a66d45c06f4acded269064f2645e791b619347"
+        },
+        "out/native-cpu-simd-address32/build_adapter.py": {
+          "bytes": 362,
+          "sha256": "625e3564889cdd7458dad28bfc344f40714bb57b9bf1fc0c2d3ae6a0d6b2ba26"
+        },
+        "out/native-cpu-simd-address32/build_ispc.py": {
+          "bytes": 601,
+          "sha256": "c035aa41218c673c000bfef534dbb02136215d568ef837d8acfabb8369ba020d"
+        },
+        "out/native-cpu-simd-address32/build_provider.py": {
+          "bytes": 528,
+          "sha256": "87668f06d1e257896271fa56330bb344971cbeb2f88c86383a586a1476c2285e"
+        },
+        "out/native-cpu-simd-address32/compile/actions.json": {
+          "bytes": 11704,
+          "sha256": "17db34181fa53beee5561f63386b9fe99c4b9fbbc1be9f8116764af1ac1f2709"
+        },
+        "out/native-cpu-simd-address32/compile/adapter/inputs-after.json": {
+          "bytes": 430478,
+          "sha256": "b78de7b4df5ea7647d045b57fc9c13d3287717a7a196f96a5da8d74e15ea40a7"
+        },
+        "out/native-cpu-simd-address32/compile/adapter/inputs-before.json": {
+          "bytes": 430478,
+          "sha256": "b78de7b4df5ea7647d045b57fc9c13d3287717a7a196f96a5da8d74e15ea40a7"
+        },
+        "out/native-cpu-simd-address32/compile/adapter/owner.json": {
+          "bytes": 1870,
+          "sha256": "cffec53f9688795bfb0b99c4da71a47a37c43ce26cc57468ce95a388b9fd35ab"
+        },
+        "out/native-cpu-simd-address32/compile/adapter/samples.jsonl": {
+          "bytes": 688,
+          "sha256": "cbd11b560d056faec1e2522b2017c780018e91f7a606a08a1b70c1898bf33ffe"
+        },
+        "out/native-cpu-simd-address32/compile/adapter/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/compile/adapter/stdout.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/compile/ispc-uniform/inputs-after.json": {
+          "bytes": 428715,
+          "sha256": "d339502babc89033c6b4d1f90899378b8dd3b61186e53bc28a7540f51ded9cde"
+        },
+        "out/native-cpu-simd-address32/compile/ispc-uniform/inputs-before.json": {
+          "bytes": 428715,
+          "sha256": "d339502babc89033c6b4d1f90899378b8dd3b61186e53bc28a7540f51ded9cde"
+        },
+        "out/native-cpu-simd-address32/compile/ispc-uniform/owner.json": {
+          "bytes": 2316,
+          "sha256": "8bd3ca9fcde9e9115f51e714763aaa0b3fe8c3a095f10e8301e973f5aa034b6f"
+        },
+        "out/native-cpu-simd-address32/compile/ispc-uniform/samples.jsonl": {
+          "bytes": 68716,
+          "sha256": "e2a7d37ba66fd1962ec8bcc68e0f24b991056a9115ba94539d28e889183f3d7d"
+        },
+        "out/native-cpu-simd-address32/compile/ispc-uniform/stderr.log": {
+          "bytes": 44670,
+          "sha256": "7ee99580370aabef97298e8050a4c3af1d2401cfd3e322d51b509bd9785d33fe"
+        },
+        "out/native-cpu-simd-address32/compile/ispc-uniform/stdout.log": {
+          "bytes": 1476,
+          "sha256": "080c2f5f29d7548e893519c777f87b31db858ce89be905018c6b356570367f8b"
+        },
+        "out/native-cpu-simd-address32/compile/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-simd-address32/compile/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-simd-address32/compiler-acquisition.json": {
+          "bytes": 1516,
+          "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+        },
+        "out/native-cpu-simd-address32/compiler-environment.json": {
+          "bytes": 729,
+          "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+        },
+        "out/native-cpu-simd-address32/configure_provider.py": {
+          "bytes": 362,
+          "sha256": "9dead9ae782220b1af5e63240d63697511bf78a480bdf61b1085e29a93be4bc0"
+        },
+        "out/native-cpu-simd-address32/control-8/gtest.xml": {
+          "bytes": 40851,
+          "sha256": "b9409595dc5189548126ab7a027648b441e5c06aedbfbe6ab629f2392e9f0ca1"
+        },
+        "out/native-cpu-simd-address32/control-8/inputs-after.json": {
+          "bytes": 466287,
+          "sha256": "6abdf9d24410ca3e14abef7f30450d8d9efbefddbbd418a990f67db0bef6027e"
+        },
+        "out/native-cpu-simd-address32/control-8/inputs-before.json": {
+          "bytes": 466287,
+          "sha256": "6abdf9d24410ca3e14abef7f30450d8d9efbefddbbd418a990f67db0bef6027e"
+        },
+        "out/native-cpu-simd-address32/control-8/native-observation.json": {
+          "bytes": 23652,
+          "sha256": "aa3326d4e2b9a1149a8b49290df5bf8b4b8491a4f9869667027a2a4121699472"
+        },
+        "out/native-cpu-simd-address32/control-8/observe.gdb": {
+          "bytes": 225,
+          "sha256": "8c51a0add5c3ba2d414e8794dd2e171c7ba07154010eb435c5236febd6d39589"
+        },
+        "out/native-cpu-simd-address32/control-8/owner.json": {
+          "bytes": 4190,
+          "sha256": "86a1045b3d91ebd36b180dddf9b4c0aa4224fcddde2861bc526bec764dd33d1e"
+        },
+        "out/native-cpu-simd-address32/control-8/samples.jsonl": {
+          "bytes": 204392,
+          "sha256": "12d45f62983c3c1e8b61f519df42e9b45a21c87ac22cc81309133131349a9acf"
+        },
+        "out/native-cpu-simd-address32/control-8/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/control-8/stdout.log": {
+          "bytes": 4015,
+          "sha256": "035fbacc6f162bf7830ca83d5851c05c2f782a8300ee7970df1aa3e89be79aa3"
+        },
+        "out/native-cpu-simd-address32/control-8-acceptance.json": {
+          "bytes": 53844,
+          "sha256": "afea9c6b31f3ba23e90c7d574535a2576e14fffb437821a0c37f7d5e6067dccd"
+        },
+        "out/native-cpu-simd-address32/controls/prepare.py": {
+          "bytes": 3862,
+          "sha256": "d0585f1a90cafbbb6ef0585e76021aa63c6a9acbafa8f1a37f3ce346e871c1fa"
+        },
+        "out/native-cpu-simd-address32/controls/readers/native_evidence.py": {
+          "bytes": 499,
+          "sha256": "b9024736eaffc834151c9b99e4e3a9b82664da274ef1b98ede7d0221e7692857"
+        },
+        "out/native-cpu-simd-address32/controls/readers/read_controls.py": {
+          "bytes": 2751,
+          "sha256": "4c5c47e4df5419e22c9eda0047703e986aeff6c8eb24dff8c2fc528936e9a48d"
+        },
+        "out/native-cpu-simd-address32/controls/run_controls.py": {
+          "bytes": 1121,
+          "sha256": "a347e191ee83311c843f0021ad2b9de41bd1d6f87e41ab0e150211ec6f72883c"
+        },
+        "out/native-cpu-simd-address32/controls/runtime/owned_guard.py": {
+          "bytes": 299,
+          "sha256": "6fc32fd7fbed8e24370e929829a70b82aa53e54668fb38ded68ace2d1e9a6037"
+        },
+        "out/native-cpu-simd-address32/controls/runtime/run_case.py": {
+          "bytes": 1487,
+          "sha256": "3a31aa8dd9e7451c092d2f80797529aa53ef6f29d75e0f725410eb7b6d1c762f"
+        },
+        "out/native-cpu-simd-address32/controls/runtime/run_owned.py": {
+          "bytes": 297,
+          "sha256": "6ae4510d2a1672ffb6b1fee3e37bdbc62c3aee3e993cafb1c210224b55cf2dd2"
+        },
+        "out/native-cpu-simd-address32/derive_ispc.py": {
+          "bytes": 451,
+          "sha256": "5979810be43553bd8c069d7421f0fd6af12a935a23ecec3d47fd16310d67ab66"
+        },
+        "out/native-cpu-simd-address32/inspect_objects.py": {
+          "bytes": 354,
+          "sha256": "1507f581f41c607e0b433c7d852981dd421807efb9a5c3200f07238df9829c23"
+        },
+        "out/native-cpu-simd-address32/ispc-uniform-compile-result.json": {
+          "bytes": 16184,
+          "sha256": "dd450b29d4273d453ca42e8804922a12bdc84eb0e1d4b90739f1bc573235a8ae"
+        },
+        "out/native-cpu-simd-address32/ispc-uniform-derivation.json": {
+          "bytes": 5828,
+          "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+        },
+        "out/native-cpu-simd-address32/native_observer.py": {
+          "bytes": 7628,
+          "sha256": "9431a27f8c9a3c16c81f8b54a08bfd566f33b61ee335a82b7df174550d5203b4"
+        },
+        "out/native-cpu-simd-address32/object-code-inspection-uniform.json": {
+          "bytes": 2292,
+          "sha256": "13104d01eb68a49c2f8820471648906917b685258e887eb0e2a6e30601abc2f1"
+        },
+        "out/native-cpu-simd-address32/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-simd-address32/prepare.py": {
+          "bytes": 991,
+          "sha256": "2833a2ef6b23d68fb89e919cdd72695e91dbe786f67d36f8d4e662013d571dc8"
+        },
+        "out/native-cpu-simd-address32/prepare_adapter.py": {
+          "bytes": 663,
+          "sha256": "3b87d17dfba03ddaab380720bcc92d421f25754de4cb8c55a5433c9ef2492ae4"
+        },
+        "out/native-cpu-simd-address32/prepare_ispc_compile.py": {
+          "bytes": 2620,
+          "sha256": "087ce3f7f39d57c82b9fa3a7dd9d3f260bf0e37af95f2da1cb38e08a89eb0868"
+        },
+        "out/native-cpu-simd-address32/prepare_provider_build.py": {
+          "bytes": 367,
+          "sha256": "6c540ca4a42a766b5e24c2739118a752fc31464cba089d9d237ce21ab1cb9de8"
+        },
+        "out/native-cpu-simd-address32/prepare_provider_config.py": {
+          "bytes": 914,
+          "sha256": "0a84279be7f28efe1b91cfd05757d5bf9aed62263d2224a220763e7adeed5072"
+        },
+        "out/native-cpu-simd-address32/prepare_provider_patch.py": {
+          "bytes": 3769,
+          "sha256": "0f92ab17ee0884c0fefdc33fbc33020db4e06e1b5dd82ca16e19fa2f532fceb4"
+        },
+        "out/native-cpu-simd-address32/prepared-adapter.json": {
+          "bytes": 15910,
+          "sha256": "3fd4724d856d1020eaf82e1acdcfa19187b71f1abcc9d02fcdbb2fb82fae5cd7"
+        },
+        "out/native-cpu-simd-address32/prepared-ispc-uniform-inputs.json": {
+          "bytes": 16086,
+          "sha256": "d70107277bebd78c6d8e1523af78b6fa5bfb2dab9ad3aad71af2b76c50245112"
+        },
+        "out/native-cpu-simd-address32/provider/actions.json": {
+          "bytes": 2444998,
+          "sha256": "0c772e0ee06d9a5f567e5815307f29287bc39cd248fe62303ae66cb68606f085"
+        },
+        "out/native-cpu-simd-address32/provider/build/inputs-after.json": {
+          "bytes": 4655204,
+          "sha256": "07e855dd959942666c952bc1c1d118834e2cae7566a115a989e5194978f2c007"
+        },
+        "out/native-cpu-simd-address32/provider/build/inputs-before.json": {
+          "bytes": 4655204,
+          "sha256": "07e855dd959942666c952bc1c1d118834e2cae7566a115a989e5194978f2c007"
+        },
+        "out/native-cpu-simd-address32/provider/build/owner.json": {
+          "bytes": 3114,
+          "sha256": "bf50c6ee45d552854f47b85b7eacb878831b4738f0a1c7353513d749010d386c"
+        },
+        "out/native-cpu-simd-address32/provider/build/samples.jsonl": {
+          "bytes": 6284,
+          "sha256": "24b0e2f97e4b1fa64483bf812f42f4d92c5684f835b73fcb705fe3a6217e9da1"
+        },
+        "out/native-cpu-simd-address32/provider/build/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/provider/build/stdout.log": {
+          "bytes": 688,
+          "sha256": "eedc3e645ca714a3906c907e85b8b32e0d6abae8bc01690c5bd36705af4bb113"
+        },
+        "out/native-cpu-simd-address32/provider/configure/inputs-after.json": {
+          "bytes": 4628688,
+          "sha256": "5b78e7e33628b17d1005b03d6f391166ccc4fe1471799454606881a3ba2a91d9"
+        },
+        "out/native-cpu-simd-address32/provider/configure/inputs-before.json": {
+          "bytes": 4628688,
+          "sha256": "5b78e7e33628b17d1005b03d6f391166ccc4fe1471799454606881a3ba2a91d9"
+        },
+        "out/native-cpu-simd-address32/provider/configure/owner.json": {
+          "bytes": 2161,
+          "sha256": "9419637601873f19c0a4b286a8d41e96bf7090a769dbb126d4037a4a3af2d067"
+        },
+        "out/native-cpu-simd-address32/provider/configure/samples.jsonl": {
+          "bytes": 2854,
+          "sha256": "6c89d24f400bab9d3478276c4530ad6446f3138b9cd4f5cc4d4e559d457f1228"
+        },
+        "out/native-cpu-simd-address32/provider/configure/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-address32/provider/configure/stdout.log": {
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05"
+        },
+        "out/native-cpu-simd-address32/provider/configure-result.json": {
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd"
+        },
+        "out/native-cpu-simd-address32/provider/incremental-dry-run.txt": {
+          "bytes": 29764,
+          "sha256": "7370ab4c0a94a1d37131dc741b85a6da24f689b198fe6cbc0477e9876ef39d24"
+        },
+        "out/native-cpu-simd-address32/provider/incremental-plan.json": {
+          "bytes": 215754,
+          "sha256": "0dc424c210ddebcc817eac3d1010643e564d3812e42fbeb20cbeae0229182d14"
+        },
+        "out/native-cpu-simd-address32/provider/linked-callback.disassembly.txt": {
+          "bytes": 33029,
+          "sha256": "6c2dd68522d356295f96222b2087a38d66260a986e6aa6d9c55adba347b465f7"
+        },
+        "out/native-cpu-simd-address32/provider/linked-native-proof.json": {
+          "bytes": 3304395,
+          "sha256": "e9f0eb4793156832f6e938106ae434e71252074d1737f50c97ecae9710dea4ee"
+        },
+        "out/native-cpu-simd-address32/provider/linked-runtime-resolution.txt": {
+          "bytes": 1402,
+          "sha256": "cc78f92f369da2d7b113b8553aefe77db6131ef91191f8443e4f9c64ef9f5fdc"
+        },
+        "out/native-cpu-simd-address32/provider/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-simd-address32/provider/provider-build-result.json": {
+          "bytes": 2488,
+          "sha256": "4bc59d70098534be203e4e41bf88435b35549979c533ce86dd2285556a376e03"
+        },
+        "out/native-cpu-simd-address32/provider/provider.patch": {
+          "bytes": 1463,
+          "sha256": "aa540e6c48f9c1e2c4709704c3dfac946ba2073ed4964a887500dcf5639b1261"
+        },
+        "out/native-cpu-simd-address32/provider/review-admission.json": {
+          "bytes": 832,
+          "sha256": "1475ff35e6038dc5d167489a46742569af55e59a489125b0be9e1b7f2a383935"
+        },
+        "out/native-cpu-simd-address32/provider/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-simd-address32/provider/source-contract.json": {
+          "bytes": 18373,
+          "sha256": "b76715b8cdf6e6811116aaec46a608f2d0db193ed9eb4fa7adc4e3cfe490617d"
+        },
+        "out/native-cpu-simd-address32/read_linked_native.py": {
+          "bytes": 3721,
+          "sha256": "02fef1d801467d4d7d0403dcd6e40a745b45d841ddab232ac7ca9915627f6de0"
+        },
+        "out/native-cpu-simd-address32/read_result.py": {
+          "bytes": 6185,
+          "sha256": "1e7d521fecefc0851a66604ca5e4d6d6d75cfd42d8cc800e05c356795ddc28cd"
+        },
+        "out/native-cpu-simd-address32/rows_adapter.cpp": {
+          "bytes": 3393,
+          "sha256": "1cdc082dc954ccef45702369449b2790c9802859f86633d8ea2d58dca6a9cd67"
+        },
+        "out/native-cpu-simd-address32/rows_bridge.h": {
+          "bytes": 1398,
+          "sha256": "9a547455c9c38c92bf76a20c8b948c1d761607d820f40161d9910231004573e6"
+        },
+        "out/native-cpu-simd-address32/run_case.py": {
+          "bytes": 1154,
+          "sha256": "0a82176edfc959c7f379ffa9c89657ba97e013428f4f94028bfb47eee6f70dfd"
+        },
+        "out/native-cpu-simd-address32/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        }
+      }
+    },
+    "actual-native-products.zip": {
+      "bytes": 6874778,
+      "sha256": "cd023d9c07ca29dee32b4fc072b30a64e2064192e2f879ed87ffd12af53550e2",
+      "members": {
+        "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/dopri_phase.o": {
+          "bytes": 1838280,
+          "sha256": "1e29ecbf1c40164bc690e81c2a5f7010c90f23934302628fb2f1fdaa1b3c72e8"
+        },
+        "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/endpoint.o": {
+          "bytes": 3937032,
+          "sha256": "e8104d7f4b617a77068ca563e82bde95df28ebd4831bfe1466aeaf799006f726"
+        },
+        "bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o": {
+          "bytes": 3073048,
+          "sha256": "5130e04b06f237319ea5fcc66eb4b5753aebb8585c657c02319d061e1b83b5cd"
+        },
+        "bin/linux-gcc/native-cpu-simd-address32/objects/rows_adapter.o": {
+          "bytes": 4048,
+          "sha256": "ea50189e2bbb3d795d51408d29e6eac80a14b2516bdd400282554997d402569d"
+        },
+        "bin/linux-gcc/native-cpu-simd-address32/provider/libvulkan_lvp.so": {
+          "bytes": 23663832,
+          "sha256": "e39edf613fc22a32ab54c5907716656550b0996c92c2c5e701cea452ad793410"
+        },
+        "bin/linux-gcc/native-cpu-simd-address32/provider/lvp_icd.json": {
+          "bytes": 199,
+          "sha256": "afe735c4285616e2eac6afc68b2aec6619caec8ee3a1daffc2c059d8faa7f7b4"
+        }
+      }
+    }
+  },
+  "restoration": "Member paths/identities are exact. Restore any retired member before replaying historical reader/recipe. Reusable official compiler, G shared source, D/F objects and Mesa build cache remain required."
+}
