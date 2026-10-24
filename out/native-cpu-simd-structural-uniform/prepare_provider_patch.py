@@ -77,4 +77,4 @@ contract = {'scope': 'Uniform structural indices and contiguous private output/c
     'adapter_recompiled': False, 'guard_shared_byte_authority': 'out/native-cpu-active-prefix/native_packet.hpp'}
 (provider / 'source-contract.json').write_text(json.dumps(contract, indent=2) + '\n')
 print(json.dumps({'patch_written': True, 'shared_source_modified': False,
-                  'changed_provider_files': len(modified), 'objects_reused': 5, 'new_SIMD_objects': 3}))
+                  'changed_provider_files': len(modified), 'objects_reused': 5 + simd['reused_compiled_objects'], 'new_SIMD_objects': simd['new_compilations'], 'linked_SIMD_objects': 3}))

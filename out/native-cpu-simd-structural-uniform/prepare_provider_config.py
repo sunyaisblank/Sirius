@@ -9,7 +9,7 @@ for before, after in [
     ("(W / 'build/actions.json').read_text())['typed-three-stage-batch']", "(W / 'compile/actions.json').read_text())['ispc-uniform']"),
     ("(W / 'batch-compile-result.json').read_text()", "(W / 'ispc-uniform-compile-result.json').read_text()"),
     ("(W / 'build' / name).read_text()", "(W / 'compile' / name).read_text()"),
-    ('consume3 sealed baseline-ISA native objects', 'consume8 sealed baseline-ISA native objects'),
+    ('consume3 sealed baseline-ISA native objects', 'consume8 sealed native objects under the unchanged CPU ISA guard'),
 ]:
     assert before in source
     source = source.replace(before, after)

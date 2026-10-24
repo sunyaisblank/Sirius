@@ -1,0 +1,78 @@
+{
+  "object": {
+    "path": "bin/linux-gcc/native-cpu-simd-structural-uniform/objects-uniform/transport.o",
+    "bytes": 3083056,
+    "sha256": "8dd21100b5518bf35f6e6bf704ceb459304ab63fa2988eeec3a1e4741dcba47e"
+  },
+  "helpers": {
+    "ReadStoredStructural_0": {
+      "symbol": "ReadStoredStructural_0___unuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "instructions": 26,
+      "gather_scatter_instructions": [],
+      "vector_memory_instructions": [
+        "16d45:\tvmaskmovps (%rcx),%ymm0,%ymm1",
+        "16d52:\tvmaskmovps (%rcx),%ymm0,%ymm2",
+        "16d57:\tvmaskmovps 0x20(%rcx),%ymm0,%ymm3",
+        "16d5d:\tvmaskmovps 0x40(%rcx),%ymm0,%ymm4",
+        "16d63:\tvmaskmovps 0x60(%rcx),%ymm0,%ymm0",
+        "16d6b:\tvmovups (%rcx),%ymm1",
+        "16d6f:\tvmovups 0x20(%rcx),%ymm2",
+        "16d74:\tvmovups 0x40(%rcx),%ymm3",
+        "16d79:\tvmovups 0x60(%rcx),%ymm4",
+        "16d7e:\tvmovups 0x80(%rcx),%ymm0",
+        "16d86:\tvmovaps %ymm0,0x80(%rax)",
+        "16d8e:\tvmovaps %ymm4,0x60(%rax)",
+        "16d93:\tvmovaps %ymm3,0x40(%rax)",
+        "16d98:\tvmovaps %ymm2,0x20(%rax)",
+        "16d9d:\tvmovaps %ymm1,(%rax)"
+      ],
+      "vector_memory_instruction_count": 15
+    },
+    "WriteStoredStructural_0": {
+      "symbol": "WriteStoredStructural_0___unuun_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "instructions": 41,
+      "gather_scatter_instructions": [],
+      "vector_memory_instructions": [
+        "e5f6:\tvmovups (%rsi),%ymm1",
+        "e5fc:\tvmaskmovps %ymm1,%ymm0,(%rcx)",
+        "e609:\tvmovups 0x20(%rsi),%ymm1",
+        "e60e:\tvmaskmovps %ymm1,%ymm0,(%rdi,%rcx,1)",
+        "e61c:\tvmovups 0x40(%rsi),%ymm1",
+        "e621:\tvmaskmovps %ymm1,%ymm0,(%rdi,%rcx,1)",
+        "e62f:\tvmovups 0x60(%rsi),%ymm1",
+        "e634:\tvmaskmovps %ymm1,%ymm0,(%rdi,%rcx,1)",
+        "e63e:\tvmovups 0x80(%rsi),%ymm1",
+        "e646:\tvmaskmovps %ymm1,%ymm0,0x80(%rcx,%rax,1)",
+        "e654:\tvmovups %ymm1,(%rcx)",
+        "e65c:\tvmovups 0x20(%rsi),%ymm0",
+        "e661:\tvmovups %ymm0,0x20(%rcx,%rax,1)",
+        "e66b:\tvmovups 0x40(%rsi),%ymm0",
+        "e670:\tvmovups %ymm0,0x40(%rcx,%rax,1)",
+        "e67a:\tvmovups 0x60(%rsi),%ymm0",
+        "e67f:\tvmovups %ymm0,0x60(%rcx,%rax,1)",
+        "e689:\tvmovups 0x80(%rsi),%ymm0",
+        "e691:\tvmovups %ymm0,0x80(%rcx,%rax,1)"
+      ],
+      "vector_memory_instruction_count": 19
+    },
+    "CacheCoefficientStructural_0": {
+      "symbol": "CacheCoefficientStructural_0___unuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "instructions": 1529,
+      "gather_scatter_instructions": [],
+      "vector_memory_instructions": [
+        "14d75:\tvmovups %ymm1,0x11f20(%rbx,%rax,1)",
+        "14d7e:\tvmovups %ymm2,0x11f40(%rbx,%rax,1)",
+        "14d87:\tvmovups %ymm3,0x11f60(%rbx,%rax,1)",
+        "14d90:\tvmovups %ymm4,0x11f80(%rbx,%rax,1)",
+        "14d99:\tvmovups %ymm0,0x11fa0(%rbx,%rax,1)",
+        "14f49:\tvmaskmovps %ymm1,%ymm5,0x11f20(%rbx,%rax,1)",
+        "14f53:\tvmaskmovps %ymm2,%ymm5,0x11f40(%rbx,%rax,1)",
+        "14f5d:\tvmaskmovps %ymm3,%ymm5,0x11f60(%rbx,%rax,1)",
+        "14f67:\tvmaskmovps %ymm4,%ymm5,0x11f80(%rbx,%rax,1)",
+        "14f71:\tvmaskmovps %ymm0,%ymm5,0x11fa0(%rbx,%rax,1)"
+      ],
+      "vector_memory_instruction_count": 800
+    }
+  },
+  "scope": "Actual K Transport helper code only; contiguous YMM loads/stores observed and no gather/scatter instruction in these helper bodies. No speedup, whole-kernel memory or numerical acceptance claim."
+}
