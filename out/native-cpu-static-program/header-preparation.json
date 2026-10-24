@@ -1,0 +1,229 @@
+{
+  "scope": "Complete canonical native lowering only. At most12 opcode template bodies per stage; operands are literal uint32 arguments, no instruction metadata reads in static helpers. Original generated arithmetic tail, generic fallback, outer layer checks, root publication, context lifetime and64logicalGroupcalls retained. All instructions execute in original layer/index order, including after structural false; invalid numerical results still write all5words. No compile/runtime or benefit claim.",
+  "instructions": 9380,
+  "layers": 399,
+  "headers": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-owner-context/typed-batch/transport.native.hpp",
+      "basis": {
+        "bytes": 88060,
+        "sha256": "82c2b3b89c7a2ccdab97491d6dd9d6e7495e950601fb531e3f65822299c458b6"
+      },
+      "table_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp",
+      "table": {
+        "bytes": 64160,
+        "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+      },
+      "adapter_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.cpp",
+      "adapter": {
+        "bytes": 2925,
+        "sha256": "fe8daf2bfc2d4b0e87370b6b559c70f3687166667609c8fadcc54cbe69452083"
+      },
+      "input_row_words_from_original_packet_guard": 230,
+      "derived_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp",
+      "derived": {
+        "bytes": 634190,
+        "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+      },
+      "programs": [
+        {
+          "base": 0,
+          "instructions": 2587,
+          "registers": 459,
+          "roots": 40,
+          "layers": 117,
+          "canonical_tuples": {
+            "bytes": 43912,
+            "sha256": "5696a2a59222be45925f8a1cbb3edc344313547a2816e724bc736480ac5924c0"
+          },
+          "opcodes": {
+            "0": 7,
+            "1": 40,
+            "2": 791,
+            "3": 4,
+            "4": 1235,
+            "5": 191,
+            "6": 2,
+            "7": 254,
+            "8": 1,
+            "9": 7,
+            "10": 20,
+            "11": 35
+          },
+          "all_original_tuples_in_original_layer_order": true
+        },
+        {
+          "base": 13096,
+          "instructions": 557,
+          "registers": 459,
+          "roots": 40,
+          "layers": 42,
+          "canonical_tuples": {
+            "bytes": 8462,
+            "sha256": "91695daf70e826ba69615eb7f24ba45c9d3a33768f63e5a4b078d205be4e03e0"
+          },
+          "opcodes": {
+            "0": 3,
+            "1": 37,
+            "2": 156,
+            "3": 6,
+            "4": 247,
+            "5": 49,
+            "6": 1,
+            "7": 54,
+            "8": 1,
+            "9": 3
+          },
+          "all_original_tuples_in_original_layer_order": true
+        }
+      ],
+      "original_arithmetic_tail": {
+        "bytes": 11685,
+        "sha256": "c6e295a8d74a44a48d42275b3097d59b31828cdeb58e1109aeeb1a1393d56e0f"
+      },
+      "arithmetic_tail_byte_identical": true,
+      "generic_fallback_byte_identical": true,
+      "outer_layer_validation_and_publication_byte_identical": true,
+      "other_generated_header_bytes_changed": false
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-owner-context/typed-batch/endpoint.native.hpp",
+      "basis": {
+        "bytes": 100803,
+        "sha256": "ebb21a92ef879e0dde6895f0ae6a9ed5c794fbce7da97ed1f18eda6dae3bcbeb"
+      },
+      "table_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp",
+      "table": {
+        "bytes": 85168,
+        "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+      },
+      "adapter_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.cpp",
+      "adapter": {
+        "bytes": 2909,
+        "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+      },
+      "input_row_words_from_original_packet_guard": 225,
+      "derived_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp",
+      "derived": {
+        "bytes": 812736,
+        "sha256": "90f41000d38684143089e198ad56a6507546b1e9ad38cae95d9ba8fc8b7e5fc8"
+      },
+      "programs": [
+        {
+          "base": 0,
+          "instructions": 2205,
+          "registers": 612,
+          "roots": 100,
+          "layers": 111,
+          "canonical_tuples": {
+            "bytes": 36849,
+            "sha256": "59077c86ebeed5bf145293c305b4595c5baac14f566b661da8b8276ac3a603e0"
+          },
+          "opcodes": {
+            "0": 7,
+            "1": 53,
+            "2": 855,
+            "3": 103,
+            "4": 1035,
+            "5": 85,
+            "6": 2,
+            "7": 26,
+            "8": 1,
+            "9": 7,
+            "10": 5,
+            "11": 26
+          },
+          "all_original_tuples_in_original_layer_order": true
+        },
+        {
+          "base": 11240,
+          "instructions": 1943,
+          "registers": 612,
+          "roots": 100,
+          "layers": 84,
+          "canonical_tuples": {
+            "bytes": 32528,
+            "sha256": "557bdd0ac490a72aa8a43d1597702f708869db8183614c08ca20e17d2a24db55"
+          },
+          "opcodes": {
+            "0": 4,
+            "1": 50,
+            "2": 752,
+            "3": 94,
+            "4": 928,
+            "5": 69,
+            "6": 1,
+            "7": 14,
+            "8": 1,
+            "9": 4,
+            "11": 26
+          },
+          "all_original_tuples_in_original_layer_order": true
+        }
+      ],
+      "original_arithmetic_tail": {
+        "bytes": 11694,
+        "sha256": "d6d35079d2e86fa909e4f92f78f5a15732ff66f77d56baaf13fd009f9dda13dd"
+      },
+      "arithmetic_tail_byte_identical": true,
+      "generic_fallback_byte_identical": true,
+      "outer_layer_validation_and_publication_byte_identical": true,
+      "other_generated_header_bytes_changed": false
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-owner-context/typed-batch/dopri_phase.native.hpp",
+      "basis": {
+        "bytes": 63849,
+        "sha256": "4f0f5ed02c6509ed63b61a36d102b5d345a673b06ddce287bbd1d83d9764abdf"
+      },
+      "table_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp",
+      "table": {
+        "bytes": 44967,
+        "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+      },
+      "adapter_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.cpp",
+      "adapter": {
+        "bytes": 2866,
+        "sha256": "e481ae98846a7d8d509e2e3e17e8b8d72ea561e30929a165c85e9026c57d93d6"
+      },
+      "input_row_words_from_original_packet_guard": 1810,
+      "derived_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp",
+      "derived": {
+        "bytes": 409325,
+        "sha256": "5173a3682f0afe1811228c44f46d35fb843683ecf058832ddc8f49465541c7e6"
+      },
+      "programs": [
+        {
+          "base": 0,
+          "instructions": 2088,
+          "registers": 629,
+          "roots": 200,
+          "layers": 45,
+          "canonical_tuples": {
+            "bytes": 36646,
+            "sha256": "b68ff9e0dfde637a4a30a21d6caee91064ae305bf5b35f11a07f97af88c9be1e"
+          },
+          "opcodes": {
+            "0": 29,
+            "1": 322,
+            "2": 585,
+            "3": 284,
+            "4": 661,
+            "5": 45,
+            "7": 2,
+            "11": 160
+          },
+          "all_original_tuples_in_original_layer_order": true
+        }
+      ],
+      "original_arithmetic_tail": {
+        "bytes": 11628,
+        "sha256": "d9d6cd66bac77590a411df08157cfb98d31c0cfda60523f8055ff496c061b659"
+      },
+      "arithmetic_tail_byte_identical": true,
+      "generic_fallback_byte_identical": true,
+      "outer_layer_validation_and_publication_byte_identical": true,
+      "other_generated_header_bytes_changed": false
+    }
+  }
+}
