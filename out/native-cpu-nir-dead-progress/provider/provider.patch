@@ -1,0 +1,34 @@
+--- a/src/gallium/auxiliary/gallivm/lp_bld_nir.c
++++ b/src/gallium/auxiliary/gallivm/lp_bld_nir.c
+@@ -93,6 +93,9 @@
+          .lower_inverse_ballot = true,
+       };
+       NIR_PASS(progress, nir, nir_lower_subgroups, &subgroups_options);
++      /* Rewrites can orphan pure SSA trees. Remove them before another
++       * fixed-point iteration optimizes/lower-packs those dead trees. */
++      NIR_PASS(progress, nir, nir_opt_dce);
+    } while (progress);
+ 
+    do {
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8L";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8M";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -837,7 +837,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-endpoint-regions-v12";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-nir-dead-progress-v13";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);

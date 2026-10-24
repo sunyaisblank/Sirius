@@ -1,0 +1,104 @@
+{
+  "changed_file": "src/gallium/auxiliary/gallivm/lp_bld_nir.c",
+  "basis": {
+    "bytes": 3794,
+    "sha256": "90947f4f085415ac463019affe1e2725e5dc83ec56e24e0b301cba57205337f5"
+  },
+  "candidate": {
+    "bytes": 3984,
+    "sha256": "5b39157064ae067f15f0cead34a2033142944639c34b19422ed0ff5686614046"
+  },
+  "patch": {
+    "bytes": 467,
+    "sha256": "6d2fe5b9a3023d747bd087017cb1fbe2931b3d5b7a5de47bf565bdfd946cab91"
+  },
+  "source_inputs": {
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/auxiliary/gallivm/lp_bld_nir.c": {
+      "bytes": 3794,
+      "sha256": "90947f4f085415ac463019affe1e2725e5dc83ec56e24e0b301cba57205337f5"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/nir/nir_search.c": {
+      "bytes": 31924,
+      "sha256": "862e9c41143674400690a5a5b4415dc86989a97ca661c1d4fbe56f15a436b9d3"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/nir/nir_lower_packing.c": {
+      "bytes": 6761,
+      "sha256": "d00cba28403a900de6437c0d5b4d6d83ab54e5e3fa3cae6491d4621f1d5ba9c1"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/nir/nir_opt_constant_folding.c": {
+      "bytes": 14715,
+      "sha256": "1ae1f50f9b1e5946b3893d576fa5a43c1da2a1cfa747076ad7ec971b7944ad17"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/compiler/nir/nir_opt_dce.c": {
+      "bytes": 8314,
+      "sha256": "6724b5f4b2ccee2843446f877232fc18ccb991e639eff5206dfd2f3339f1461e"
+    },
+    "out/native-cpu-simd-endpoint-regions/provider/source-contract.json": {
+      "bytes": 30403,
+      "sha256": "80c3a0672e447cfa5c159ef4fb33e9d9d6c5d246f740edb393a31b1423dee3d1"
+    },
+    "out/native-cpu-simd-endpoint-regions/benefit/runtime/b1/user-pc-observation.json": {
+      "bytes": 52859,
+      "sha256": "c0637326ef151fdc90da2ed85592204e313dc1f906268c779e56ed3f407c6403"
+    }
+  },
+  "native_objects_reused_without_recompilation": [
+    {
+      "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.o",
+      "bytes": 204072,
+      "sha256": "1918356540bc503295a33d742edcbc4cb9d726d9b48519cea92e2c955406ade6"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.o",
+      "bytes": 260080,
+      "sha256": "34ad7237f5a8c7de9028ef941a758f602a20b71d3165df1acf956548f1ee6c17"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.o",
+      "bytes": 136712,
+      "sha256": "072cfa002037cf794493687940f7679fdfc1ab9c68b9ed88a1fe4dddb92a2ef0"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o",
+      "bytes": 3083056,
+      "sha256": "8dd21100b5518bf35f6e6bf704ceb459304ab63fa2988eeec3a1e4741dcba47e"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o",
+      "bytes": 3468472,
+      "sha256": "b809c75376a943299f224674c00da3ba347c9c10a73ee1ee9f1ac623517bfd10"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/dopri_phase.o",
+      "bytes": 1789800,
+      "sha256": "18a8e5a6ae1654e8a946b79d7b61dd8d69a3149718d941e0b361fef77b7695df"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+      "bytes": 4280,
+      "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+    }
+  ],
+  "new_native_objects": 0,
+  "source_facts": [
+    "The sampled constant-folding/algebraic/packing/texture/instruction-lowering pass combination occurs in lp_build_opt_nir main fixed-point loop.",
+    "That loop currently has no dead-code cleanup; nir_lower_tex walks all instructions on every iteration even for texture-free shaders.",
+    "nir_algebraic_impl enqueues every ALU without a liveness gate. Its replacement removes the old root, not its now-unused source cone.",
+    "Constant folding and packing likewise replace ALU roots and report progress even if their replacement has no live consumer.",
+    "One end-of-loop DCE transitively removes dead SSA cones so later iterations cannot continue rewriting those cones.",
+    "nir_opt_dce marks all calls/jumps, non-eliminable intrinsics and branch conditions live, recursively marks their source definitions, then removes only unmarked instructions.",
+    "DCE does not rewrite retained live FP instruction expressions or their float-control metadata. No native shader, field, RHS, trial, output store, whitelist, eligibility, guard, query count, compiler flag or iteration limit is changed."
+  ],
+  "limits": [
+    "The passive IP samples identify active passes, not the precise shader/module or live NIR expression cycle.",
+    "The source proves possible dead-expression progress and a semantics-preserving cleanup; it does not prove this is the complete cause of the terminal timeout or guarantee convergence of any live rewrite cycle.",
+    "Root must integrate the patch with a new private provider/cache identity and perform the original gates. Existing eight native objects remain byte-identical."
+  ],
+  "patch_applied": false,
+  "compiler_build_or_shader_execution_launched": false
+}

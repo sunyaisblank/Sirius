@@ -1,0 +1,12 @@
+--- a/src/gallium/auxiliary/gallivm/lp_bld_nir.c
++++ b/src/gallium/auxiliary/gallivm/lp_bld_nir.c
+@@ -93,6 +93,9 @@
+          .lower_inverse_ballot = true,
+       };
+       NIR_PASS(progress, nir, nir_lower_subgroups, &subgroups_options);
++      /* Rewrites can orphan pure SSA trees. Remove them before another
++       * fixed-point iteration optimizes/lower-packs those dead trees. */
++      NIR_PASS(progress, nir, nir_opt_dce);
+    } while (progress);
+ 
+    do {
