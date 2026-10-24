@@ -30,6 +30,44 @@ assert pin(root / source['derived_path']) == source['derived']
 authority = doc(work / 'reuse-authority.json')
 inputs = dict(source['source_inputs'])
 inputs[source['derived_path']] = source['derived']
+# Reuse the one completed new-code spacing proof; never rerun it here.
+probe = root / 'out/native-cpu-host-representation/probe'
+probe_result = doc(probe / 'result.json')
+probe_generation = doc(probe / 'generation.json')
+probe_compile = doc(probe / 'compile-result.json')
+probe_preparation = doc(probe / 'preparation.json')
+assert probe_result['passed'] and probe_result['exact_expected_counts']
+assert probe_result['all_actual_runtime_bytes_match_compile_pins']
+comparison = probe_result['comparison']
+assert comparison['passed'] and comparison['comparisons'] == 82304 and comparison['mismatches'] == 0
+assert probe_compile['passed'] and probe_compile['exit'] == probe_result['exit'] == 0
+assert probe_preparation['expected_comparisons'] == 82304
+assert probe_generation['patch_identity'] == source['source_inputs'][probe_generation['patch']]
+assert pin(root / probe_generation['patch']) == probe_generation['patch_identity']
+assert probe_result['generation'] == probe_compile['generation'] == pin(probe / 'generation.json')
+assert probe_result['preparation'] == probe_compile['preparation'] == pin(probe / 'preparation.json')
+assert probe_result['generated_source'] == probe_generation['generated_source'] == pin(probe / 'probe.cpp')
+for name in ('compile/owner.json', 'run/owner.json'):
+    owner = doc(probe / name)
+    assert owner['status'] == 'terminal' and owner['passed'] and owner['child_exit'] == 0
+    assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
+    assert owner['stop_reason'] is None and not owner['cleanup_errors'] and not owner['remaining_owned_processes']
+    assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
+for name in ('result.json', 'generation.json', 'preparation.json', 'compile-result.json',
+             'probe.cpp', 'compile/owner.json', 'run/owner.json'):
+    path = probe / name
+    inputs[str(path.relative_to(root))] = pin(path)
+for group in ('headers', 'runtime_libraries', 'link_inputs'):
+    for name, expected in probe_compile[group].items():
+        assert pin(root / name) == expected, name
+        inputs[name] = expected
+probe_executable = root / probe_preparation['executable']
+assert pin(probe_executable) == probe_compile['executable'] == probe_result['executable']
+for name, expected in probe_result['actual_mapped_files'].items():
+    assert pin(root / name) == expected, name
+    assert expected == (probe_compile['executable'] if Path(name) == probe_executable
+                        else probe_compile['runtime_libraries'][name])
+    inputs[name] = expected
 for name, expected in authority['source_inputs'].items():
     assert pin(root / name) == expected, name
     inputs[name] = expected
@@ -46,6 +84,17 @@ frame_path = products / 'frame/sirius_render_tests'
 compile_args = list(commands[0]['argv'])
 compile_args[compile_args.index('-c') + 1] = str(root / source['derived_path'])
 compile_args[compile_args.index('-o') + 1] = str(object_path)
+old_include = '-I' + str(root / 'out/native-cpu-row-ownership/headers')
+new_include = '-I' + str(products / 'reused/headers')
+assert compile_args.count(old_include) == 1
+compile_args[compile_args.index(old_include)] = new_include
+private_headers = []
+for recovery in authority['private_header_recovery']:
+    assert recovery['relative_path'] == 'retained_kernels.h'
+    target = products / 'reused/headers' / recovery['relative_path']
+    assert not target.exists()
+    private_headers.append({**recovery, 'path': str(target.relative_to(root))})
+assert len(private_headers) == 1
 old_archive = str(cache / 'native-cpu-row-ownership/matched/libsirius_backend.a')
 old_observer = str(cache / 'native-cpu-row-ownership/matched/audited-observer.o')
 host_args = list(commands[1]['argv'])
@@ -60,6 +109,7 @@ frame_args[frame_args.index('-o') + 1] = str(frame_path)
 inverse = list(compile_args)
 inverse[inverse.index('-c') + 1] = commands[0]['argv'][commands[0]['argv'].index('-c') + 1]
 inverse[inverse.index('-o') + 1] = commands[0]['argv'][commands[0]['argv'].index('-o') + 1]
+inverse[inverse.index(new_include)] = old_include
 assert inverse == commands[0]['argv']
 inverse = [old_archive if arg == str(archive_path) else
            old_observer if arg == str(observer_path) else arg for arg in host_args]
@@ -74,7 +124,7 @@ planned = [{'argv': compile_args, 'cwd': commands[0]['cwd']},
            {'argv': frame_args, 'cwd': frame['cwd']}]
 for path in (object_path, archive_path, observer_path, host_path, frame_path):
     assert not path.exists(), path
-for name in ('matched', 'reused', 'frame'):
+for name in ('matched', 'reused', 'reused/headers', 'frame'):
     (products / name).mkdir(parents=True, exist_ok=True)
 for path in work.rglob('*'):
     if path.is_file():
@@ -84,7 +134,6 @@ dependencies = subprocess.check_output(['/usr/bin/ninja', '-C', str(cache), '-t'
     'src/sirius/backend/CMakeFiles/sirius_backend.dir/retained_compute.cpp.o'], text=True)
 header_names = [line.strip() for line in dependencies.splitlines()[1:] if line.strip()]
 assert len(header_names) >= 300
-header_names += [str(path) for path in (root / 'out/native-cpu-row-ownership/headers').iterdir() if path.is_file()]
 for name in header_names:
     path = Path(name)
     if not path.is_absolute():
@@ -118,7 +167,10 @@ prepared = {'commands': planned, 'source_inputs': inputs, 'source_proof': source
     'authority': authority, 'backend_archive': str(archive_path.relative_to(root)),
     'object': str(object_path.relative_to(root)), 'observer': str(observer_path.relative_to(root)),
     'executable': str(host_path.relative_to(root)), 'frame_executable': str(frame_path.relative_to(root)),
-    'header_dependency_inputs': header_names}
+    'header_dependency_inputs': header_names, 'private_headers': private_headers,
+    'include_path_relocation': {'original': old_include, 'recovered': new_include,
+        'only_exact_archived_header_bytes': True, 'compiler_argv_inverse_exact': True},
+    'spacing_probe': {'result': pin(probe / 'result.json'), 'comparisons': 82304, 'mismatches': 0}}
 (work / 'prepared-build.json').write_text(json.dumps(prepared, indent=2) + '\n')
 action = {'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
     'kind': 'diagnostic', 'expected_exit': 0,
@@ -126,7 +178,7 @@ action = {'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text
     'argv': ['/usr/bin/python3', '-B', str(work / 'build_host.py')],
     'frozen_inputs': sorted(set(inputs) | {str((work / 'prepared-build.json').relative_to(root))}),
     'software_provider': False,
-    'scope': 'Compile exactly1private retained_compute.cpp using the saved actualmatched7f2g++14flags; restore only1authenticated observer blob, replace only1archive member, relink original audited host and F frame with all other original inputs. M provider unchanged. No shader/ISPC/provider/observer/otherCPP builds, resources copied/restored or Sirius workloads. Source/build only; original runtime/scientific/release gates remain outstanding.'}
+    'scope': 'Compile exactly1private retained_compute.cpp using the saved actualmatched7f2g++14flags with exact archived private header bytes at a truthfully relocated include path; reuse completed82304case spacing proof, restore only1authenticated observer blob+1private header, replace only1archive member, relink original audited host and F frame with all other original inputs. M provider unchanged. No shader/ISPC/provider/observer/otherCPP builds, resources copied/restored or Sirius workloads. Source/build only; original runtime/scientific/release gates remain outstanding.'}
 (work / 'build/actions.json').write_text(json.dumps({'host-build': action}, indent=2) + '\n')
 print(json.dumps({'new_CPP_compilations': 1, 'new_links': 2, 'restored_observer_members': 1,
                   'frozen_inputs': len(inputs), 'compiled_or_executed': False}))

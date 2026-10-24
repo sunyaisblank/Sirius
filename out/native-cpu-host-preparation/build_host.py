@@ -34,7 +34,26 @@ record = {'passed': False, 'commands': [], 'source_inputs': prepared['source_inp
     'new_shader_ISPC_provider_compilations': 0,
     'same_actual_executable_for_both_provider_arms': True,
     'source_proof': prepared['source_proof'], 'all3modules_once_in_both_executables': False,
+    'include_path_relocation': prepared['include_path_relocation'],
+    'spacing_probe': prepared['spacing_probe'],
     'scope': 'One private host compile and original audited-host/frame links. Fulloriginalshaderbytes/counts/limits/precision and Mprovider preserved. No runtime/numerical/performance/frame/scientific/release claim.'}
+write(record)
+record['restored_private_headers'] = []
+for recovery in prepared['private_headers']:
+    target = root / recovery['path']
+    archive = root / recovery['archive']
+    assert pin(archive) == recovery['archive_identity']
+    assert not target.exists()
+    with zipfile.ZipFile(archive) as handle:
+        data = handle.read(recovery['member'])
+    assert {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()} == recovery['header_identity']
+    with target.open('xb') as stream:
+        stream.write(data)
+    os.chmod(target, recovery['mode'])
+    assert pin(target) == recovery['header_identity']
+    record['restored_private_headers'].append({'path': recovery['path'], **pin(target),
+        'archive': recovery['archive'], 'member': recovery['member']})
+    del data
 write(record)
 observer = root / prepared['observer']
 recovery = authority['observer_recovery']
@@ -67,6 +86,8 @@ def run(index):
 
 
 run(0)
+for recovery in prepared['private_headers']:
+    assert pin(root / recovery['path']) == recovery['header_identity']
 object_path = root / prepared['object']
 assert object_path.is_file()
 record['objects'] = [{'argv': prepared['commands'][0]['argv'], 'exit': 0,
@@ -118,6 +139,12 @@ record['frame_resource_payload_bytes_copied'] = 0
 record['source_inputs_unchanged'] = True
 record['original_backend_archive_unchanged'] = pin(old_archive) == authority['backend_archive_identity']
 unchanged()
+record['source_inputs'] = dict(prepared['source_inputs'])
+for recovery in prepared['private_headers']:
+    assert pin(root / recovery['path']) == recovery['header_identity']
+    record['source_inputs'][recovery['path']] = recovery['header_identity']
+assert pin(observer) == authority['observer_recovery']['object_identity']
+record['source_inputs'][str(observer.relative_to(root))] = pin(observer)
 record['passed'] = True
 write(record)
 print(json.dumps({'passed': True, 'new_cpp_compilations': 1, 'observer_compilations': 0,

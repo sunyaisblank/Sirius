@@ -282,6 +282,14 @@
     "bin/linux-gcc/native-cpu-nir-dead-progress/provider/lvp_icd.json": {
       "bytes": 202,
       "sha256": "0009b2168a7cfc2087ec8f31e6c9c882afec7bcb8902ea0221ed2d733cfd5f12"
+    },
+    "attestations/qualification/bfa095ba/native-cpu-row-ownership-finite-outcome/diagnostics-and-trial.zip": {
+      "bytes": 7057296,
+      "sha256": "8ed4b5a7fcf87b508433af4a4c693c197ffe152739b50f447f057f46ea6e035b"
+    },
+    "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
     }
   },
   "unchanged_other_link_inputs": {
@@ -882,5 +890,23 @@
       "sha256": "0009b2168a7cfc2087ec8f31e6c9c882afec7bcb8902ea0221ed2d733cfd5f12"
     }
   },
-  "scope": "Saved genuine original compiler/link/archive/module inputs only. No build/output/qualification result is transferred."
+  "scope": "Saved genuine original compiler/link/archive/module inputs only. No build/output/qualification result is transferred.",
+  "private_header_recovery": [
+    {
+      "original_path": "out/native-cpu-row-ownership/headers/retained_kernels.h",
+      "relative_path": "retained_kernels.h",
+      "archive": "attestations/qualification/bfa095ba/native-cpu-row-ownership-finite-outcome/diagnostics-and-trial.zip",
+      "archive_identity": {
+        "bytes": 7057296,
+        "sha256": "8ed4b5a7fcf87b508433af4a4c693c197ffe152739b50f447f057f46ea6e035b"
+      },
+      "member": "out/native-cpu-row-ownership/headers/retained_kernels.h",
+      "header_identity": {
+        "bytes": 376926,
+        "sha256": "33395c44c592750576c503516fa935bc31bb949a0a402a33b10256933483bedb"
+      },
+      "mode": 420,
+      "includes_existing_header": "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h"
+    }
+  ]
 }
