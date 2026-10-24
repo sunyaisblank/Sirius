@@ -1,0 +1,68 @@
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -76,0 +77 @@
++   bool native_simd_packets;
+@@ -1848 +1849,7 @@
+-   if (job_info->use_iters) {
++   if (job_info->native_simd_packets) {
++      /* Full packets cover eight rows; each remainder row owns one task. */
++      unsigned full_packets = job_info->grid_size[0] / 8;
++      grid_z = grid_y = 0;
++      grid_x = (unsigned)iter_idx < full_packets ? (unsigned)iter_idx * 8 :
++         full_packets * 8 + ((unsigned)iter_idx - full_packets);
++   } else if (job_info->use_iters) {
+@@ -1999,0 +2007 @@
++         job_info.native_simd_packets = sirius_native_simd_supported();
+@@ -2015,3 +2023,5 @@
+-   /* Native SIMD packets reuse the original packed task IDs after pure
+-    * admission. Original grid, query counts and fallback key stay intact. */
+-   if (intergroup || job_info.native_preflight_passed) {
++   /* Native full packets and individual tails retain original workgroup IDs.
++    * Other CPUs use the original scalar row tasks; ordinary JIT is unchanged. */
++   if (job_info.native_simd_packets) {
++      scheduled_tasks = job_info.grid_size[0] / 8 + job_info.grid_size[0] % 8;
++   } else if (intergroup) {
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -2,0 +3,11 @@
++#include "util/u_cpu_detect.h"
++
++/* Mesa checks AVX, OSXSAVE and enabled XMM/YMM state. The compiler's required
++ * core-avx2 device also uses v3 integer extensions; guard those here too.
++ * Every other CPU keeps the original scalar path, including direct callers.
++ */
++bool ATTRIBUTE_NOINLINE
++sirius_native_simd_supported(void)
++{
++   return util_get_cpu_caps()->has_avx2 && __builtin_cpu_supports("x86-64-v3");
++}
+@@ -42,0 +54,2 @@
++   if (job->native_simd_packets)
++      groups = x < (job->grid_size[0] / 8) * 8 ? 8 : 1;
+--- a/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
++++ b/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
+@@ -34,0 +35,3 @@
++// Pure runtime ISA/OS-state query; scalar baseline remains supported.
++bool sirius_native_simd_supported(void) SIRIUS_NATIVE_NOEXCEPT;
++
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -11,4 +11,4 @@
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects-uniform/transport.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects-uniform/endpoint.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects-uniform/dopri_phase.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-address32/objects/rows_adapter.o'
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/transport.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/endpoint.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/dopri_phase.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o'
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1559 +1559 @@
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8H";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8I";
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -840 +840 @@
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-address32-v8";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-packet-policy-v9";

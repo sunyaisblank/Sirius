@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "source_contract": {
+    "bytes": 19557,
+    "sha256": "6d1158da7f373d35f0fb6a543ef9aff366b6fd96fb8512c1a73ea49bc456284c"
+  },
+  "patch": {
+    "bytes": 3662,
+    "sha256": "fa701fafb1d73e95df8fc382cfd67a168a6120cecae157aa1d069acca1b1633c"
+  },
+  "scope": "Source/build admission only. Independent exact/disjoint packet/tail mapping and untouched ordinary fallback/query counts reviewed. CPU gate requires Mesa OS-enabled AVX2 plus GCC x86-64-v3 for required compiler device. Direct C ABI guard retained. All3actualobjects have no FMA, FP-mode mutation, EVEX/AVX512 or unguarded extensions. No C8, benefit, frame, scientific or release acceptance claimed.",
+  "mapping": "N=8q+r. Tasks0..q-1 cover8i..8i+7. Tasksq..q+r-1 cover8q+(i-q) individually. CPUfalse restores original F N scalar tasks. Original grid*N64 query accounting unchanged.",
+  "official_CPU_guard_reference": "https://gcc.gnu.org/onlinedocs/gcc/x86-Built-in-Functions.html"
+}
