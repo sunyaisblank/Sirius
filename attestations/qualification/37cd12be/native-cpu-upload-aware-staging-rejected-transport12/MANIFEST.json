@@ -1,0 +1,1384 @@
+{
+  "scope": "P upload-aware private-host staging candidate rejected by the sole original22 gate at21/22. C8 and one fake wire-contract control PASS. No remaining controls/frame/retry, full scientific, release or adoption acceptance.",
+  "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+  "created_UTC": "2026-10-24T08:58:24.346018+00:00",
+  "phase_revisions": {
+    "P_host_build_and_C8": "b746ff15335548c7d4d477368801f5b87685a5cc",
+    "new_fake_boundary_and_ABBA": "37cd12be724231de8e4aa55ada82089900ddc472"
+  },
+  "source_transition": "The later revision adds the separately compiled fake boundary package; all C8/ABBA frozen ledgers bind the same actual P host ELF and M provider. No new physical observer, shader/native/provider implementation is supplied by the fake control.",
+  "archives": {
+    "source-build-and-trial.zip": {
+      "bytes": 3234352,
+      "sha256": "92b5d13154c7ffabda433562b3588ce8b2a246b02d992843e6512eaa983bb272",
+      "members": {
+        "out/native-cpu-upload-aware-staging/build/actions.json": {
+          "bytes": 39161,
+          "sha256": "a0a66887b0d576b273613fff20c915efc53175d9070d1cb843ef6f06fffdea96",
+          "mode": 420,
+          "mtime_ns": 1792831241413855509
+        },
+        "out/native-cpu-upload-aware-staging/build/host-build/inputs-after.json": {
+          "bytes": 686013,
+          "sha256": "bc20a8ca59ede790b90a1daf785b1fdd421623cf6f2a4c8cde1fcd05c09d327e",
+          "mode": 420,
+          "mtime_ns": 1792831249172906877
+        },
+        "out/native-cpu-upload-aware-staging/build/host-build/inputs-before.json": {
+          "bytes": 686013,
+          "sha256": "bc20a8ca59ede790b90a1daf785b1fdd421623cf6f2a4c8cde1fcd05c09d327e",
+          "mode": 420,
+          "mtime_ns": 1792831242348290782
+        },
+        "out/native-cpu-upload-aware-staging/build/host-build/owner.json": {
+          "bytes": 3666,
+          "sha256": "a095bb7d1dcb987c84564e7ff3ec1f60d7ec38a9dd12871bda0d14793ade50ec",
+          "mode": 420,
+          "mtime_ns": 1792831249199270973
+        },
+        "out/native-cpu-upload-aware-staging/build/host-build/samples.jsonl": {
+          "bytes": 10004,
+          "sha256": "dab2009d56143a1aa329e0d2559bebe5a9a5baf0bd5d72775d804d20c32de97e",
+          "mode": 420,
+          "mtime_ns": 1792831248039250746
+        },
+        "out/native-cpu-upload-aware-staging/build/host-build/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831242393505396
+        },
+        "out/native-cpu-upload-aware-staging/build/host-build/stdout.log": {
+          "bytes": 189,
+          "sha256": "b7c2404860bb1b86e1e7b6c4aff62e5f72698aee07a408c487b58819e2114f81",
+          "mode": 420,
+          "mtime_ns": 1792831248257696115
+        },
+        "out/native-cpu-upload-aware-staging/build/owned_guard.py": {
+          "bytes": 20791,
+          "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+          "mode": 420,
+          "mtime_ns": 1792830931910742811
+        },
+        "out/native-cpu-upload-aware-staging/build/run_owned.py": {
+          "bytes": 12531,
+          "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab",
+          "mode": 420,
+          "mtime_ns": 1792830931906987151
+        },
+        "out/native-cpu-upload-aware-staging/build_host.py": {
+          "bytes": 7002,
+          "sha256": "dae7c951ae31faf30515a8f6260bd192438416c8992db721b8005accb34436cf",
+          "mode": 420,
+          "mtime_ns": 1792831194449167067
+        },
+        "out/native-cpu-upload-aware-staging/derive_host.py": {
+          "bytes": 10808,
+          "sha256": "bd21f3efd87d0eaf3d6866ca4f8f5037218f90e00c87e6a0e5dfd4b3d0b038c6",
+          "mode": 420,
+          "mtime_ns": 1792831194449167067
+        },
+        "out/native-cpu-upload-aware-staging/host-build-result.json": {
+          "bytes": 153300,
+          "sha256": "cddf15f81f65322165134ed83f02a0e920d39a59467ae189cfb39f891d8fffee",
+          "mode": 420,
+          "mtime_ns": 1792831248257696115
+        },
+        "out/native-cpu-upload-aware-staging/host-source-proof.json": {
+          "bytes": 7081,
+          "sha256": "075dcce073bf31776eb1047843db9714f8e878505aca709448cba976d14c7afd",
+          "mode": 420,
+          "mtime_ns": 1792831194588494608
+        },
+        "out/native-cpu-upload-aware-staging/prepare_build.py": {
+          "bytes": 11852,
+          "sha256": "9b5bb7d8716e1144cd84a327958f0fa2e4b138aaa42a575cceed7e7c7e0e9d00",
+          "mode": 420,
+          "mtime_ns": 1792831194449167067
+        },
+        "out/native-cpu-upload-aware-staging/prepared-build.json": {
+          "bytes": 185791,
+          "sha256": "35abe6173aab824278ff1d6a4740c8e68bf10f8511c51a25e78152fe03a1bc66",
+          "mode": 420,
+          "mtime_ns": 1792831241413855509
+        },
+        "out/native-cpu-upload-aware-staging/reuse-authority.json": {
+          "bytes": 39677,
+          "sha256": "b25dce9c1834f109fa3b14984d4463be776cf930bac05c3176a9d9988f30d169",
+          "mode": 420,
+          "mtime_ns": 1792830931906987151
+        },
+        "out/native-cpu-upload-aware-cohort/actions.json": {
+          "bytes": 205721,
+          "sha256": "de027669c8f48bf3931daa5fa653fc757b3e20cf1b511c8201550957ac49a395",
+          "mode": 420,
+          "mtime_ns": 1792831249914867857
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/prepare.py": {
+          "bytes": 1691,
+          "sha256": "795e50c250ca136d9502be2fb7f85258009d3667f5d24f2484fcf4d2983e6bc8",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/providers.json": {
+          "bytes": 1925,
+          "sha256": "bf033cd2eb41dd650cd070eb92932d9cc9b33cd0edceafff572dcd75a71c0a7d",
+          "mode": 420,
+          "mtime_ns": 1792831503727767772
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/benefit.json": {
+          "bytes": 234640,
+          "sha256": "3f3c1b55f3428f53ee900d2887d24cfe7766223db885b6a55dc9cbf3cccf57a6",
+          "mode": 420,
+          "mtime_ns": 1792831668153404140
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/decimal-agreement.json": {
+          "bytes": 7986,
+          "sha256": "74f72796cc19fed60836ec0ab7693c5bd902a6ff7d9df057df4071f4efb85d5f",
+          "mode": 420,
+          "mtime_ns": 1792831668198608991
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/decimal_check.py": {
+          "bytes": 537,
+          "sha256": "ddc37dfa399bf82ad9de67529be1e5408fe527cf4e90132eddce4100a8e054ad",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/expected-readback-layout.json": {
+          "bytes": 3455,
+          "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/native_evidence.py": {
+          "bytes": 518,
+          "sha256": "bf50b12e63d42c0715007e173e25ea2abbf01f71030b9d62099be034d59e40e8",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/numeric_gates.py": {
+          "bytes": 516,
+          "sha256": "5317872eae1fccf0ba9a04f552f3c303e309fda2f0279e573ef1137d8772ca12",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/read_results.py": {
+          "bytes": 536,
+          "sha256": "e9f90edbd24970c4ca731b02869821f0da498517874b13cdeb8df7e563000fab",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/run_abba.py": {
+          "bytes": 532,
+          "sha256": "6c57b60a012524f3dc7a389fd45fd7d16f200e9d68460984a411c1673897138c",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/readers/sole-ABBA-inputs.json": {
+          "bytes": 2164,
+          "sha256": "c83f1bdd239baa962184f134dad7d7171fbbbb8139190cff0937e55f85cf8857",
+          "mode": 420,
+          "mtime_ns": 1792831503821834629
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/gtest.xml": {
+          "bytes": 40953,
+          "sha256": "106c02a0a00567f70a957114bad7b2c4e2edf3c6c1f9505a0a4e8261dded662f",
+          "mode": 420,
+          "mtime_ns": 1792831569085058204
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/inputs-after.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831570554330477
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/inputs-before.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831505217786766
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/owner.json": {
+          "bytes": 3594,
+          "sha256": "2103313d43dee5d77bbf28e45a876ada0a9b8111a31e8849eb22e379dfa3f239",
+          "mode": 420,
+          "mtime_ns": 1792831570576934667
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/samples.jsonl": {
+          "bytes": 817706,
+          "sha256": "336130685f1089b0018d3afdf8610ecea1aa53fea50f9cb2bc987bbb86bf2c30",
+          "mode": 420,
+          "mtime_ns": 1792831569296030635
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831505225312115
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/stdout.log": {
+          "bytes": 708,
+          "sha256": "69ea1bc595d3884850259ac960d2b25d9ecfaf1ccd83ead2faf8cebfa2345683",
+          "mode": 420,
+          "mtime_ns": 1792831569085058204
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/gtest.xml": {
+          "bytes": 40706,
+          "sha256": "349044e9f3776e64ac072b6ee767e66f30d190b85999b38e0056f14d04482697",
+          "mode": 420,
+          "mtime_ns": 1792831661825887834
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/inputs-after.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831663348055717
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/inputs-before.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831603934664547
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/owner.json": {
+          "bytes": 3781,
+          "sha256": "4dc57e556a88616f1c63c11a53ac77208c33a91fe5ffa9a7d7e5c82cc11805d1",
+          "mode": 420,
+          "mtime_ns": 1792831663374299991
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/samples.jsonl": {
+          "bytes": 748695,
+          "sha256": "c666883b4eb86ef0d473b7779134bd5ee42580a0e21b24b8459b4e1262199ac4",
+          "mode": 420,
+          "mtime_ns": 1792831662069584662
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831603942180824
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/stdout.log": {
+          "bytes": 708,
+          "sha256": "0a672b3b4372093b554128808bfadcd3de1a2aafcef48e776f00bb2891b674ea",
+          "mode": 420,
+          "mtime_ns": 1792831661825887834
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/actions.json": {
+          "bytes": 453275,
+          "sha256": "a913ed96be5f19ea6c212eeb3bac2b4b5095d32e0584ad597cf61e2da2e2fcd5",
+          "mode": 420,
+          "mtime_ns": 1792831503784207886
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/gtest.xml": {
+          "bytes": 40769,
+          "sha256": "6e056244bda33309f43538075dea321feec086b6b03ee0787d10e8a5f49fc5f7",
+          "mode": 420,
+          "mtime_ns": 1792831586246420496
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/inputs-after.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831587638642932
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/inputs-before.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831571925651268
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/owner.json": {
+          "bytes": 3739,
+          "sha256": "ec0c8fa307b4aca5736a2bff95e243961d5327bf4c2e5fa0833ae225917f4efd",
+          "mode": 420,
+          "mtime_ns": 1792831587664982274
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/samples.jsonl": {
+          "bytes": 171810,
+          "sha256": "2ee2ea8a34e9a7650a2b266158d18ea03a901f1d6cf98cae5f656d4cf9869345",
+          "mode": 420,
+          "mtime_ns": 1792831586348015106
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831571940720729
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/stdout.log": {
+          "bytes": 708,
+          "sha256": "474f549480a07c17804c9eaf1234543dd0545f761e68670904ddd5fdbf5a84ea",
+          "mode": 420,
+          "mtime_ns": 1792831586246420496
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/gtest.xml": {
+          "bytes": 40807,
+          "sha256": "eee9c292f15094c7911ac81ed130efe99c8f2c2d8c9d68dfecf7c54bd3e29bff",
+          "mode": 420,
+          "mtime_ns": 1792831601070962364
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/inputs-after.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831602480264618
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/inputs-before.json": {
+          "bytes": 742282,
+          "sha256": "4d774a0dec1f10d1e52a003aceabdabbf33785864b27c1ffd54950b764424617",
+          "mode": 420,
+          "mtime_ns": 1792831589023339844
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/owner.json": {
+          "bytes": 3739,
+          "sha256": "61da7b4118d88cb2a4c11870d6fe2f7fbca413d9f456f9810d13901d0be54ac1",
+          "mode": 420,
+          "mtime_ns": 1792831602506571595
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/samples.jsonl": {
+          "bytes": 166851,
+          "sha256": "d429d06b94ad66646ddd46a26c145d3c8d053784ee2cd60bf800199cded106e2",
+          "mode": 420,
+          "mtime_ns": 1792831601194980962
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831589034628136
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/stdout.log": {
+          "bytes": 708,
+          "sha256": "a6ee7c633ee906c13f16a5df54287a5efc02152ef47a9f1628153910f1d5a773",
+          "mode": 420,
+          "mtime_ns": 1792831601070962364
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/owned_guard.py": {
+          "bytes": 514,
+          "sha256": "5a578e7ed136a69ac15ccb6fc14c2de71d17d2e09ed93fbe2e028ad248ab3042",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/run_case.py": {
+          "bytes": 532,
+          "sha256": "7760db5337f30dc0fe5d040c4f4a136cc3057f0b00ebc7e7d8e3a45d68844851",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/benefit/runtime/run_owned.py": {
+          "bytes": 512,
+          "sha256": "95127cdfbdae57cb6b08f75b90a66d45c06f4acded269064f2645e791b619347",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/cold-frame/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/cold-frame/prepare.py": {
+          "bytes": 5640,
+          "sha256": "cbf44c9102ade90fef190e1e06ba0ec6bcb312be6c091b25689de5934f85eff3",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/cold-frame/read_result.py": {
+          "bytes": 2709,
+          "sha256": "d7b0ec1be337ddbed245eb00184a60a13ddccb4c29f3d258215ff22926fb4693",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/cold-frame/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/gtest.xml": {
+          "bytes": 40673,
+          "sha256": "9fc68ca45030eba85d7fd2bb3a788bc66051da2e0d6b4cc256b49f048d53074d",
+          "mode": 420,
+          "mtime_ns": 1792831265664464315
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/inputs-after.json": {
+          "bytes": 738894,
+          "sha256": "729fa39c5ef20305f91a11d195cd71afc6752f3688ce17ede59812454bd8a12a",
+          "mode": 420,
+          "mtime_ns": 1792831267141457621
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/inputs-before.json": {
+          "bytes": 738894,
+          "sha256": "729fa39c5ef20305f91a11d195cd71afc6752f3688ce17ede59812454bd8a12a",
+          "mode": 420,
+          "mtime_ns": 1792831251236664086
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/native-observation.json": {
+          "bytes": 25337,
+          "sha256": "4a6ededdce8b9808246a77de0dbafc908fc43302f966aca35c5b0e12e9ef1f76",
+          "mode": 420,
+          "mtime_ns": 1792831265769963840
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/observe.gdb": {
+          "bytes": 230,
+          "sha256": "c2059b4ffdab3769520cc19e72febf0592b323e9995d31e04cd8bb2b0b8ea789",
+          "mode": 420,
+          "mtime_ns": 1792831251854180188
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/owner.json": {
+          "bytes": 3733,
+          "sha256": "6911a9c5d4b9daac205839d3801fa6614de05c82feff51623c0736523379ff18",
+          "mode": 420,
+          "mtime_ns": 1792831267228117943
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/samples.jsonl": {
+          "bytes": 228254,
+          "sha256": "eae5d8372702e866e6bf60a8f506ec2d84980e8c904784966dc46d890f937075",
+          "mode": 420,
+          "mtime_ns": 1792831265803874400
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831251244194772
+        },
+        "out/native-cpu-upload-aware-cohort/control-8/stdout.log": {
+          "bytes": 4015,
+          "sha256": "cf0c42e8eb61d510124993730d0d990fc7a0b19230356acc9f73e06703b4ce5a",
+          "mode": 420,
+          "mtime_ns": 1792831265800106561
+        },
+        "out/native-cpu-upload-aware-cohort/control-8-acceptance.json": {
+          "bytes": 53923,
+          "sha256": "c70988f87a7192cf18368eed23aef9259d1472ea3b0bbcfa2d0585fe1b530444",
+          "mode": 420,
+          "mtime_ns": 1792831268697096664
+        },
+        "out/native-cpu-upload-aware-cohort/controls/prepare.py": {
+          "bytes": 4355,
+          "sha256": "fb3c0f57354932cb69ae4d444cd1be3ae08393a97ee6406003d56d04644c0c66",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/controls/readers/native_evidence.py": {
+          "bytes": 499,
+          "sha256": "b9024736eaffc834151c9b99e4e3a9b82664da274ef1b98ede7d0221e7692857",
+          "mode": 420,
+          "mtime_ns": 1792830822390333559
+        },
+        "out/native-cpu-upload-aware-cohort/controls/readers/read_controls.py": {
+          "bytes": 2888,
+          "sha256": "ace5f2409f885fe7efcaf6397c329f25fac93930e6f4900aad292999c7398286",
+          "mode": 420,
+          "mtime_ns": 1792830822390333559
+        },
+        "out/native-cpu-upload-aware-cohort/controls/run_controls.py": {
+          "bytes": 1121,
+          "sha256": "a347e191ee83311c843f0021ad2b9de41bd1d6f87e41ab0e150211ec6f72883c",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/controls/runtime/control4_observer.py": {
+          "bytes": 5625,
+          "sha256": "00fdda2b5bdcaf9ad52802fcc0c5dba5d5991fdf97c5a4e0d288999e8091c659",
+          "mode": 420,
+          "mtime_ns": 1792830822390333559
+        },
+        "out/native-cpu-upload-aware-cohort/controls/runtime/owned_guard.py": {
+          "bytes": 299,
+          "sha256": "6fc32fd7fbed8e24370e929829a70b82aa53e54668fb38ded68ace2d1e9a6037",
+          "mode": 420,
+          "mtime_ns": 1792830822390333559
+        },
+        "out/native-cpu-upload-aware-cohort/controls/runtime/run_case.py": {
+          "bytes": 2906,
+          "sha256": "806e03ff5c78f19d0637a9f7b438439c0c6472cebc108b47330a42730ca533da",
+          "mode": 420,
+          "mtime_ns": 1792830822390333559
+        },
+        "out/native-cpu-upload-aware-cohort/controls/runtime/run_owned.py": {
+          "bytes": 297,
+          "sha256": "6ae4510d2a1672ffb6b1fee3e37bdbc62c3aee3e993cafb1c210224b55cf2dd2",
+          "mode": 420,
+          "mtime_ns": 1792830822390333559
+        },
+        "out/native-cpu-upload-aware-cohort/native_observer.py": {
+          "bytes": 9132,
+          "sha256": "dd2b901b804f374be8f0d946efec84ff5f4fd946bb97228f90b796d79a42f93c",
+          "mode": 420,
+          "mtime_ns": 1792830822382792867
+        },
+        "out/native-cpu-upload-aware-cohort/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/prepare.py": {
+          "bytes": 3235,
+          "sha256": "7013dce0b73f1bcff0fc7bcfc7fedc405a6718a3d8e40c7711f98c9fd2ff89a3",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/read_result.py": {
+          "bytes": 7268,
+          "sha256": "8ea7f62e0c3083efd9ac155f09d274ea9df714ce2c1a79aa2e2c2a97f5f1b5c3",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/run_case.py": {
+          "bytes": 1415,
+          "sha256": "13d4ed3bfe16bbd1fc9e172f474626932d133b840c01f27e37276990d3602f26",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-cohort/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792830822386563216
+        },
+        "out/native-cpu-upload-aware-boundary/actions.json": {
+          "bytes": 78908,
+          "sha256": "09e1634016566c6ba2ba09b06cd3992f75cae18f5c670e4eef3085729db99ceb",
+          "mode": 420,
+          "mtime_ns": 1792831501056269074
+        },
+        "out/native-cpu-upload-aware-boundary/boundary.cpp": {
+          "bytes": 8370,
+          "sha256": "9c064424a99537e12ed6ab588278a88108b03d3d55e4c218e7c90a452116039b",
+          "mode": 420,
+          "mtime_ns": 1792831394539863986
+        },
+        "out/native-cpu-upload-aware-boundary/compile/inputs-after.json": {
+          "bytes": 689061,
+          "sha256": "33e274bd3cac89d41f4ed49d959051ef30c01b3c916db9ccfb75d8e97ba9af54",
+          "mode": 420,
+          "mtime_ns": 1792831500962202219
+        },
+        "out/native-cpu-upload-aware-boundary/compile/inputs-before.json": {
+          "bytes": 689061,
+          "sha256": "33e274bd3cac89d41f4ed49d959051ef30c01b3c916db9ccfb75d8e97ba9af54",
+          "mode": 420,
+          "mtime_ns": 1792831497729801877
+        },
+        "out/native-cpu-upload-aware-boundary/compile/owner.json": {
+          "bytes": 2185,
+          "sha256": "bdd3d004a766986b4f494276abac0a5496e3c37c438c87e8e8679ae0b7b0d0e0",
+          "mode": 420,
+          "mtime_ns": 1792831500988540940
+        },
+        "out/native-cpu-upload-aware-boundary/compile/samples.jsonl": {
+          "bytes": 3712,
+          "sha256": "6395e1141af04b3862e24442234e4668692f056d5535c2b9f6d68521be8af252",
+          "mode": 420,
+          "mtime_ns": 1792831499792010539
+        },
+        "out/native-cpu-upload-aware-boundary/compile/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831497733569246
+        },
+        "out/native-cpu-upload-aware-boundary/compile/stdout.log": {
+          "bytes": 36,
+          "sha256": "2795a2a06826c2e5bcb7056c5714a61ac11ae5f56a68374c632201b02fdb469c",
+          "mode": 420,
+          "mtime_ns": 1792831499859738676
+        },
+        "out/native-cpu-upload-aware-boundary/compile-result.json": {
+          "bytes": 2843,
+          "sha256": "daa5e844f9f72f644ca8e168bd51b55db8aaf7d536b06730d15b92f722524666",
+          "mode": 420,
+          "mtime_ns": 1792831499859738676
+        },
+        "out/native-cpu-upload-aware-boundary/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792831221107838064
+        },
+        "out/native-cpu-upload-aware-boundary/prepare.py": {
+          "bytes": 6324,
+          "sha256": "917ceeb5597d10c8f3bf55da1429e29b3e2e5af76746a72cbe15464d42ae0e72",
+          "mode": 420,
+          "mtime_ns": 1792831465933666653
+        },
+        "out/native-cpu-upload-aware-boundary/prepared.json": {
+          "bytes": 121104,
+          "sha256": "86d0afec524e91e7b385b23755692f965f415dc552ae502d3fc85ac2a6a92f58",
+          "mode": 420,
+          "mtime_ns": 1792831496735216537
+        },
+        "out/native-cpu-upload-aware-boundary/result.json": {
+          "bytes": 1364,
+          "sha256": "01cffc496a7d30b1ed74e12184d313cbc8d5f1c910f684603e21dc083dd11f98",
+          "mode": 420,
+          "mtime_ns": 1792831502455983890
+        },
+        "out/native-cpu-upload-aware-boundary/run/inputs-after.json": {
+          "bytes": 690175,
+          "sha256": "aecd07bcdbe073fb1b07d9767847f6f92df0a7aaa7535640787821ca363fa7c3",
+          "mode": 420,
+          "mtime_ns": 1792831503543396735
+        },
+        "out/native-cpu-upload-aware-boundary/run/inputs-before.json": {
+          "bytes": 690175,
+          "sha256": "aecd07bcdbe073fb1b07d9767847f6f92df0a7aaa7535640787821ca363fa7c3",
+          "mode": 420,
+          "mtime_ns": 1792831502057140420
+        },
+        "out/native-cpu-upload-aware-boundary/run/owner.json": {
+          "bytes": 1652,
+          "sha256": "ba293a8141c4e8d816aa975acfc12b95e69b08e670a3089e13de1354ac0ff6b8",
+          "mode": 420,
+          "mtime_ns": 1792831503573498130
+        },
+        "out/native-cpu-upload-aware-boundary/run/samples.jsonl": {
+          "bytes": 444,
+          "sha256": "bfee4acbcd0e8e4cd97d2ca746e605453f3ebf186f7374a11e16a411a7960fa1",
+          "mode": 420,
+          "mtime_ns": 1792831502328052963
+        },
+        "out/native-cpu-upload-aware-boundary/run/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792831502064665769
+        },
+        "out/native-cpu-upload-aware-boundary/run/stdout.log": {
+          "bytes": 32,
+          "sha256": "fb1a049de3589cac1237b601f6ddd6d5a3bd990f0b18adb31430b42713931769",
+          "mode": 420,
+          "mtime_ns": 1792831502455983890
+        },
+        "out/native-cpu-upload-aware-boundary/run/wire-result.json": {
+          "bytes": 246,
+          "sha256": "cfc4075a1ece86e539f75c9557e7f9327443cfdbcf0f812495727d9b1e99a7f0",
+          "mode": 420,
+          "mtime_ns": 1792831502271612850
+        },
+        "out/native-cpu-upload-aware-boundary/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792831221107838064
+        },
+        "out/native-cpu-upload-aware-boundary/task.py": {
+          "bytes": 3823,
+          "sha256": "04e01a666ed193a01398694fc9be3d02f060742787a8a1dd960bbd28610f3e43",
+          "mode": 420,
+          "mtime_ns": 1792831465933666653
+        },
+        "bin/linux-gcc/native-cpu-upload-aware-staging/source/retained_compute.cpp": {
+          "bytes": 48169,
+          "sha256": "f5d082de58f96406fb76c9db310daa6ebd33aad3c59b3aaf23032b5ee4c83b47",
+          "mode": 420,
+          "mtime_ns": 1792831194588494608
+        }
+      }
+    },
+    "actual-products.zip": {
+      "bytes": 16178730,
+      "sha256": "e73e3ad2b8bd35c81bcfbf45c5fee6037316af62131586d73ba4c290f0a3c4a3",
+      "members": {
+        "bin/linux-gcc/native-cpu-upload-aware-staging/matched/retained_compute.cpp.o": {
+          "bytes": 5925440,
+          "sha256": "c1c1f6765aab7a45c1f5e930ad274e51595cbbf6a29459e26e2e2f43ee257f78",
+          "mode": 420,
+          "mtime_ns": 1792831247289757156
+        },
+        "bin/linux-gcc/native-cpu-upload-aware-staging/matched/libsirius_backend.a": {
+          "bytes": 6870596,
+          "sha256": "315d27fc49e49016d08a1338b347267439bc4812d33b2f7cd50abf952103bf20",
+          "mode": 420,
+          "mtime_ns": 1792831247376382044
+        },
+        "bin/linux-gcc/native-cpu-upload-aware-staging/matched/audited_backend_tests": {
+          "bytes": 13781496,
+          "sha256": "6200bc95e5e1679ff8b763807818685b646ac901c7325eb7e78f82dd3339dda1",
+          "mode": 493,
+          "mtime_ns": 1792831247704050096
+        },
+        "bin/linux-gcc/native-cpu-upload-aware-staging/frame/sirius_render_tests": {
+          "bytes": 12465456,
+          "sha256": "777b749acea49efc33e697cd076628d7cb80b28cc7ad0313caf56f1932996d84",
+          "mode": 493,
+          "mtime_ns": 1792831248020419250
+        },
+        "bin/linux-gcc/native-cpu-upload-aware-boundary/boundary.o": {
+          "bytes": 46624,
+          "sha256": "d347a25ad8cc57e6c00830da58690a5c9f1f1d0943a25ff2ca26ed73f165de90",
+          "mode": 420,
+          "mtime_ns": 1792831499494759276
+        },
+        "bin/linux-gcc/native-cpu-upload-aware-boundary/boundary": {
+          "bytes": 5909056,
+          "sha256": "20259b3d492e1a0e0a280472fb6d256238e3af3843e02d691b5952d4f78e2e31",
+          "mode": 493,
+          "mtime_ns": 1792831499686655662
+        }
+      }
+    }
+  },
+  "host_build": {
+    "receipt": {
+      "bytes": 153300,
+      "sha256": "cddf15f81f65322165134ed83f02a0e920d39a59467ae189cfb39f891d8fffee"
+    },
+    "wall_seconds": 5.907012661918998,
+    "P_host_CPP_compilations": 1,
+    "P_host_links": 2,
+    "observer_compilations": 0,
+    "new_shader_ISPC_provider_compilations": 0,
+    "only_changed_backend_member": [
+      "retained_compute.cpp.o"
+    ],
+    "source_proof": {
+      "bytes": 7081,
+      "sha256": "075dcce073bf31776eb1047843db9714f8e878505aca709448cba976d14c7afd"
+    },
+    "private_source": {
+      "path": "bin/linux-gcc/native-cpu-upload-aware-staging/source/retained_compute.cpp",
+      "bytes": 48169,
+      "sha256": "f5d082de58f96406fb76c9db310daa6ebd33aad3c59b3aaf23032b5ee4c83b47"
+    }
+  },
+  "C8": {
+    "passed": true,
+    "wall_seconds": 12.739140694960952,
+    "all32_readbacks_match": true,
+    "actual_raw_SIMD_returns": 3,
+    "acceptance": {
+      "bytes": 53923,
+      "sha256": "c70988f87a7192cf18368eed23aef9259d1472ea3b0bbcfa2d0585fe1b530444"
+    }
+  },
+  "fake_boundary": {
+    "receipt": {
+      "bytes": 1364,
+      "sha256": "01cffc496a7d30b1ed74e12184d313cbc8d5f1c910f684603e21dc083dd11f98"
+    },
+    "wire_result": {
+      "passed": true,
+      "write_attempts": 4,
+      "successful_dispatches": 3,
+      "successful_reads": 3,
+      "first_failed_rows": 3,
+      "retry_rows": 1,
+      "grow_rows": 3,
+      "shrink_rows": 1,
+      "program_bytes": 107364,
+      "first_success_zero_inactive": true,
+      "later_prefix_preserved_inactive": true
+    },
+    "fixture_CPP_compilations": 1,
+    "fixture_links": 1,
+    "fixture_executions": 1,
+    "compile_wall_seconds": 2.3254498889436945,
+    "run_wall_seconds": 0.5296914489008486,
+    "scope": "One public RetainedCompute/fake-device first-write failure and resize wire contract. No physical math oracle, original gate substitution, benchmark observer change or performance claim."
+  },
+  "sole_ABBA": {
+    "order": [
+      "a1",
+      "b1",
+      "b2",
+      "a2"
+    ],
+    "slot_wall_seconds": {
+      "a1": 60.265383837977424,
+      "b1": 12.577591218985617,
+      "b2": 12.191361787961796,
+      "a2": 54.35140388389118
+    },
+    "original_checks_passed": 21,
+    "original_checks_total": 22,
+    "accepted": false,
+    "independent_Decimal_agrees_on_all22_verdicts": true,
+    "all22_Decimal_pass": false,
+    "failed_checks": [
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "transport:rows=12 inclusive Dispatch",
+        "baseline_samples_ms": [
+          14.914911,
+          11.1352,
+          11.654863
+        ],
+        "candidate_samples_ms": [
+          12.165923,
+          14.078876000000001,
+          13.277998
+        ],
+        "baseline_median_ms": 11.654863,
+        "candidate_median_ms": 13.277998,
+        "improvement_percent": -13.926675929180801,
+        "minimum_percent": -5,
+        "pass": false
+      }
+    ],
+    "whole_call_gains": [
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "improvement_percent": 27.75080250476063
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "improvement_percent": 17.47168064691975
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "improvement_percent": 32.06770619525101
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "improvement_percent": 9.715010287845379
+      }
+    ],
+    "reader": {
+      "bytes": 234640,
+      "sha256": "3f3c1b55f3428f53ee900d2887d24cfe7766223db885b6a55dc9cbf3cccf57a6"
+    },
+    "Decimal": {
+      "bytes": 7986,
+      "sha256": "74f72796cc19fed60836ec0ab7693c5bd902a6ff7d9df057df4071f4efb85d5f"
+    },
+    "limits": "Favorable whole-call gains do not rescue reverse modern Transport12 regression below the original inclusive-Dispatch -5% threshold. No threshold/count/governor/input change, retry, warmup or additional slot."
+  },
+  "M_reuse": {
+    "current_items": {
+      "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.o": {
+        "archive": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/actual-native-and-frame-products.zip",
+        "archive_identity": {
+          "bytes": 8628501,
+          "sha256": "7be041992a86522614d16676d5d2da78ffd0a97466b486059b7090b93d88b8f3",
+          "pushed_git_blob": "776dfda434e20d26c07ed8098210fe8e5ac2a661"
+        },
+        "member": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.o",
+        "CRC32": 3087816041,
+        "current": {
+          "bytes": 204072,
+          "sha256": "1918356540bc503295a33d742edcbc4cb9d726d9b48519cea92e2c955406ade6",
+          "mode": 420,
+          "mtime_ns": 1792808343874307790
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 60664,
+          "sha256": "e82c6e78132fbb34533a8d284f949bda60f78e0d23773861ef3b6478eadcbd69"
+        }
+      },
+      "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.o": {
+        "archive": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/actual-native-and-frame-products.zip",
+        "archive_identity": {
+          "bytes": 8628501,
+          "sha256": "7be041992a86522614d16676d5d2da78ffd0a97466b486059b7090b93d88b8f3",
+          "pushed_git_blob": "776dfda434e20d26c07ed8098210fe8e5ac2a661"
+        },
+        "member": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.o",
+        "CRC32": 204510575,
+        "current": {
+          "bytes": 260080,
+          "sha256": "34ad7237f5a8c7de9028ef941a758f602a20b71d3165df1acf956548f1ee6c17",
+          "mode": 420,
+          "mtime_ns": 1792808345742592209
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 60664,
+          "sha256": "e82c6e78132fbb34533a8d284f949bda60f78e0d23773861ef3b6478eadcbd69"
+        }
+      },
+      "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.o": {
+        "archive": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/actual-native-and-frame-products.zip",
+        "archive_identity": {
+          "bytes": 8628501,
+          "sha256": "7be041992a86522614d16676d5d2da78ffd0a97466b486059b7090b93d88b8f3",
+          "pushed_git_blob": "776dfda434e20d26c07ed8098210fe8e5ac2a661"
+        },
+        "member": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.o",
+        "CRC32": 4022206183,
+        "current": {
+          "bytes": 136712,
+          "sha256": "072cfa002037cf794493687940f7679fdfc1ab9c68b9ed88a1fe4dddb92a2ef0",
+          "mode": 420,
+          "mtime_ns": 1792808347043400370
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 60664,
+          "sha256": "e82c6e78132fbb34533a8d284f949bda60f78e0d23773861ef3b6478eadcbd69"
+        }
+      },
+      "bin/linux-gcc/native-cpu-dispatch-admission/admission.o": {
+        "archive": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/actual-native-and-frame-products.zip",
+        "archive_identity": {
+          "bytes": 8628501,
+          "sha256": "7be041992a86522614d16676d5d2da78ffd0a97466b486059b7090b93d88b8f3",
+          "pushed_git_blob": "776dfda434e20d26c07ed8098210fe8e5ac2a661"
+        },
+        "member": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+        "CRC32": 3788008092,
+        "current": {
+          "bytes": 194704,
+          "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616",
+          "mode": 420,
+          "mtime_ns": 1792810505635372151
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 60664,
+          "sha256": "e82c6e78132fbb34533a8d284f949bda60f78e0d23773861ef3b6478eadcbd69"
+        }
+      },
+      "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o": {
+        "archive": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/actual-products.zip",
+        "archive_identity": {
+          "bytes": 6600953,
+          "sha256": "c1047b75a42ea3797386773b53b1962474e0ef9e46e2de27ac962a9ad7ed23b2",
+          "pushed_git_blob": "de36595849f7b19144b0ba1ea7a0e6cae386f1f8"
+        },
+        "member": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/transport.o",
+        "CRC32": 883436280,
+        "current": {
+          "bytes": 3083056,
+          "sha256": "8dd21100b5518bf35f6e6bf704ceb459304ab63fa2988eeec3a1e4741dcba47e",
+          "mode": 420,
+          "mtime_ns": 1792822312022199287
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 38855,
+          "sha256": "7b7345211967ad016225531f82a32d712eccf58e925f0638f61c95f935cc050d"
+        }
+      },
+      "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o": {
+        "archive": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/actual-products.zip",
+        "archive_identity": {
+          "bytes": 6600953,
+          "sha256": "c1047b75a42ea3797386773b53b1962474e0ef9e46e2de27ac962a9ad7ed23b2",
+          "pushed_git_blob": "de36595849f7b19144b0ba1ea7a0e6cae386f1f8"
+        },
+        "member": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/endpoint.o",
+        "CRC32": 3901351304,
+        "current": {
+          "bytes": 3468472,
+          "sha256": "b809c75376a943299f224674c00da3ba347c9c10a73ee1ee9f1ac623517bfd10",
+          "mode": 420,
+          "mtime_ns": 1792823851122941565
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 38855,
+          "sha256": "7b7345211967ad016225531f82a32d712eccf58e925f0638f61c95f935cc050d"
+        }
+      },
+      "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/dopri_phase.o": {
+        "archive": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/actual-products.zip",
+        "archive_identity": {
+          "bytes": 6600953,
+          "sha256": "c1047b75a42ea3797386773b53b1962474e0ef9e46e2de27ac962a9ad7ed23b2",
+          "pushed_git_blob": "de36595849f7b19144b0ba1ea7a0e6cae386f1f8"
+        },
+        "member": "bin/linux-gcc/native-cpu-simd-endpoint-regions/objects-uniform/dopri_phase.o",
+        "CRC32": 1742308342,
+        "current": {
+          "bytes": 1789800,
+          "sha256": "18a8e5a6ae1654e8a946b79d7b61dd8d69a3149718d941e0b361fef77b7695df",
+          "mode": 420,
+          "mtime_ns": 1792822319286025700
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 38855,
+          "sha256": "7b7345211967ad016225531f82a32d712eccf58e925f0638f61c95f935cc050d"
+        }
+      },
+      "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o": {
+        "archive": "attestations/qualification/1c4ca0dc/native-cpu-simd-packet-policy-rejected-benefit/actual-native-products.zip",
+        "archive_identity": {
+          "bytes": 6438489,
+          "sha256": "7d6a7657efbb6146ed160bed9b2c2ae685f4e53683074fc5128e8aee1a3db0c9",
+          "pushed_git_blob": "6e612454467e820b7755ed83daa69f2a091b8ff6"
+        },
+        "member": "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+        "CRC32": 1560827456,
+        "current": {
+          "bytes": 4280,
+          "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e",
+          "mode": 420,
+          "mtime_ns": 1792817683503140192
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/1c4ca0dc/native-cpu-simd-packet-policy-rejected-benefit/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 30464,
+          "sha256": "1d9916d1427223ec163114c4753fbf02b2f9ac649ec587ff1dba6714f7cece13"
+        }
+      },
+      "bin/linux-gcc/native-cpu-nir-dead-progress/provider/libvulkan_lvp.so": {
+        "archive": "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/actual-products.zip",
+        "archive_identity": {
+          "bytes": 5822637,
+          "sha256": "b97d7d78d989f59a20bc673334e56b7d16aba570427259891c20676b332cd1a5",
+          "pushed_git_blob": "d7663b86f5057f464533ca5c9007bd9658be631d"
+        },
+        "member": "bin/linux-gcc/native-cpu-nir-dead-progress/provider/libvulkan_lvp.so",
+        "CRC32": 170064956,
+        "current": {
+          "bytes": 21713592,
+          "sha256": "27b8109cee5f17d14e4e920b5ba825a975e1e68878f54bbd4fb2a52a31f93b75",
+          "mode": 493,
+          "mtime_ns": 1792825895968089641
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 83810,
+          "sha256": "3cdfab3ad1f3a76482492cf4069dc0748b4f9ce1753088bdbe75fab72226ffac"
+        }
+      },
+      "bin/linux-gcc/native-cpu-nir-dead-progress/provider/lvp_icd.json": {
+        "archive": "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/actual-products.zip",
+        "archive_identity": {
+          "bytes": 5822637,
+          "sha256": "b97d7d78d989f59a20bc673334e56b7d16aba570427259891c20676b332cd1a5",
+          "pushed_git_blob": "d7663b86f5057f464533ca5c9007bd9658be631d"
+        },
+        "member": "bin/linux-gcc/native-cpu-nir-dead-progress/provider/lvp_icd.json",
+        "CRC32": 3512962230,
+        "current": {
+          "bytes": 202,
+          "sha256": "0009b2168a7cfc2087ec8f31e6c9c882afec7bcb8902ea0221ed2d733cfd5f12",
+          "mode": 420,
+          "mtime_ns": 1792825896122045137
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 83810,
+          "sha256": "3cdfab3ad1f3a76482492cf4069dc0748b4f9ce1753088bdbe75fab72226ffac"
+        }
+      },
+      "bin/linux-gcc/native-cpu-upload-aware-staging/reused/audited-observer.o": {
+        "archive": "attestations/qualification/08add7e5/native-original-input-ownership-finite-outcome/actual-products-01.zip",
+        "archive_identity": {
+          "bytes": 25316900,
+          "sha256": "24b2dccb3380e9f11c0d32270432adbad07d51519ef34ed216b6fdc613c7a1fc",
+          "pushed_git_blob": "8326cc1fece00601250bb3d2aeda8c1c5cc96e14"
+        },
+        "member": "sha256/4d9f8dd3364c08a58fb8ed56540331fecd1d94a66f221024c6c91f602cd72355",
+        "CRC32": 42339467,
+        "current": {
+          "bytes": 9376200,
+          "sha256": "4d9f8dd3364c08a58fb8ed56540331fecd1d94a66f221024c6c91f602cd72355",
+          "mode": 420,
+          "mtime_ns": 1792831242645909945
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/bfa095ba/native-cpu-row-ownership-finite-outcome/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 87807,
+          "sha256": "c409bf07efb30618c894a9b5c32d4dede9664267f379cee1b4a659083ebbbecf"
+        }
+      },
+      "bin/linux-gcc/native-cpu-upload-aware-staging/reused/headers/retained_kernels.h": {
+        "archive": "attestations/qualification/bfa095ba/native-cpu-row-ownership-finite-outcome/diagnostics-and-trial.zip",
+        "archive_identity": {
+          "bytes": 7057296,
+          "sha256": "8ed4b5a7fcf87b508433af4a4c693c197ffe152739b50f447f057f46ea6e035b",
+          "pushed_git_blob": "6411a29b7b1f26b699a4d31eb97a1b1406b51a40"
+        },
+        "member": "out/native-cpu-row-ownership/headers/retained_kernels.h",
+        "CRC32": 2078245904,
+        "current": {
+          "bytes": 376926,
+          "sha256": "33395c44c592750576c503516fa935bc31bb949a0a402a33b10256933483bedb",
+          "mode": 420,
+          "mtime_ns": 1792831242596948054
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true
+      }
+    },
+    "count": 12,
+    "new_native_provider_compilations": 0,
+    "source_contract": {
+      "path": "out/native-cpu-nir-dead-progress/provider/source-contract.json",
+      "bytes": 31761,
+      "sha256": "8b37fc2e7be7af4b60dcdb2b00d4be77fea2e815c699a9bb83859e4e0435d1b6"
+    },
+    "all153_source_contract_pins_current_equal": true,
+    "all_reused_current_files_retained": true
+  },
+  "old_spacing_probe_reuse": {
+    "prior_manifest": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/MANIFEST.json",
+    "prior_manifest_identity": {
+      "bytes": 80260,
+      "sha256": "f38a5228c1ef76c915889989c33218358852a3535f534bd245aa9b1d7c498fb1"
+    },
+    "existing_recovery_members": {
+      "out/native-cpu-host-representation/probe/probe.cpp": {
+        "archive": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/source-build-probe-and-trial.zip",
+        "archive_identity": {
+          "bytes": 2739092,
+          "sha256": "0893e4e0b19d2a7477feaa31cbef047aec66371b61d1d8aee5ff5fd02d1c382b",
+          "pushed_git_blob": "5a5f350b1cea6cb9974dc80b391404ddeedfcef0"
+        },
+        "member": "out/native-cpu-host-representation/probe/probe.cpp",
+        "CRC32": 707701022,
+        "current": {
+          "bytes": 9685,
+          "sha256": "6d2e023fa6c56f3ff4821cc93c6d960eaf0e3f773286e6feef4c96914ea09f0c",
+          "mode": 420,
+          "mtime_ns": 1792829139442066816
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 80260,
+          "sha256": "f38a5228c1ef76c915889989c33218358852a3535f534bd245aa9b1d7c498fb1"
+        }
+      },
+      "out/native-cpu-host-representation/probe/result.json": {
+        "archive": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/source-build-probe-and-trial.zip",
+        "archive_identity": {
+          "bytes": 2739092,
+          "sha256": "0893e4e0b19d2a7477feaa31cbef047aec66371b61d1d8aee5ff5fd02d1c382b",
+          "pushed_git_blob": "5a5f350b1cea6cb9974dc80b391404ddeedfcef0"
+        },
+        "member": "out/native-cpu-host-representation/probe/result.json",
+        "CRC32": 34368198,
+        "current": {
+          "bytes": 2447,
+          "sha256": "1c15781d4b3c57e1c68c89efd9c93cf776a2547c386c36d2640e51559129a0c1",
+          "mode": 420,
+          "mtime_ns": 1792829143187663799
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 80260,
+          "sha256": "f38a5228c1ef76c915889989c33218358852a3535f534bd245aa9b1d7c498fb1"
+        }
+      },
+      "bin/linux-gcc/native-cpu-host-representation/spacing-probe": {
+        "archive": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/source-build-probe-and-trial.zip",
+        "archive_identity": {
+          "bytes": 2739092,
+          "sha256": "0893e4e0b19d2a7477feaa31cbef047aec66371b61d1d8aee5ff5fd02d1c382b",
+          "pushed_git_blob": "5a5f350b1cea6cb9974dc80b391404ddeedfcef0"
+        },
+        "member": "bin/linux-gcc/native-cpu-host-representation/spacing-probe",
+        "CRC32": 775172686,
+        "current": {
+          "bytes": 31024,
+          "sha256": "02e8e7481ee8d2a4eeaaa2b1c4357faccb2bf0e63cfd0fa0433e8c0f384c2d03",
+          "mode": 493,
+          "mtime_ns": 1792829141499357252
+        },
+        "full_member_CRC_SHA_and_current_SHA_verified": true,
+        "manifest": "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/MANIFEST.json",
+        "manifest_identity": {
+          "bytes": 80260,
+          "sha256": "f38a5228c1ef76c915889989c33218358852a3535f534bd245aa9b1d7c498fb1"
+        }
+      }
+    },
+    "comparisons_previously_completed": 82304,
+    "mismatches": 0,
+    "new_probe_compilations_or_executions_in_P": 0,
+    "scope": "Reused exact compiled source/result/executable from the earlier archived abc9 bundle; no new floating-environment matrix execution or all-platform errno/fenv claim."
+  },
+  "referenced_existing_archives": {
+    "attestations/qualification/629e3794/native-cpu-dispatch-admission-frame-timeout/actual-native-and-frame-products.zip": {
+      "bytes": 8628501,
+      "sha256": "7be041992a86522614d16676d5d2da78ffd0a97466b486059b7090b93d88b8f3",
+      "pushed_git_blob": "776dfda434e20d26c07ed8098210fe8e5ac2a661"
+    },
+    "attestations/qualification/1f2de343/native-cpu-endpoint-regions-rejected-nir-compile/actual-products.zip": {
+      "bytes": 6600953,
+      "sha256": "c1047b75a42ea3797386773b53b1962474e0ef9e46e2de27ac962a9ad7ed23b2",
+      "pushed_git_blob": "de36595849f7b19144b0ba1ea7a0e6cae386f1f8"
+    },
+    "attestations/qualification/1c4ca0dc/native-cpu-simd-packet-policy-rejected-benefit/actual-native-products.zip": {
+      "bytes": 6438489,
+      "sha256": "7d6a7657efbb6146ed160bed9b2c2ae685f4e53683074fc5128e8aee1a3db0c9",
+      "pushed_git_blob": "6e612454467e820b7755ed83daa69f2a091b8ff6"
+    },
+    "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/actual-products.zip": {
+      "bytes": 5822637,
+      "sha256": "b97d7d78d989f59a20bc673334e56b7d16aba570427259891c20676b332cd1a5",
+      "pushed_git_blob": "d7663b86f5057f464533ca5c9007bd9658be631d"
+    },
+    "attestations/qualification/08add7e5/native-original-input-ownership-finite-outcome/actual-products-01.zip": {
+      "bytes": 25316900,
+      "sha256": "24b2dccb3380e9f11c0d32270432adbad07d51519ef34ed216b6fdc613c7a1fc",
+      "pushed_git_blob": "8326cc1fece00601250bb3d2aeda8c1c5cc96e14"
+    },
+    "attestations/qualification/bfa095ba/native-cpu-row-ownership-finite-outcome/diagnostics-and-trial.zip": {
+      "bytes": 7057296,
+      "sha256": "8ed4b5a7fcf87b508433af4a4c693c197ffe152739b50f447f057f46ea6e035b",
+      "pushed_git_blob": "6411a29b7b1f26b699a4d31eb97a1b1406b51a40"
+    },
+    "attestations/qualification/abc9dbc1/native-cpu-host-rejected-unstable-benefit/source-build-probe-and-trial.zip": {
+      "bytes": 2739092,
+      "sha256": "0893e4e0b19d2a7477feaa31cbef047aec66371b61d1d8aee5ff5fd02d1c382b",
+      "pushed_git_blob": "5a5f350b1cea6cb9974dc80b391404ddeedfcef0"
+    }
+  },
+  "owners": {
+    "out/native-cpu-upload-aware-staging/build/host-build/owner.json": {
+      "identity": {
+        "bytes": 3666,
+        "sha256": "a095bb7d1dcb987c84564e7ff3ec1f60d7ec38a9dd12871bda0d14793ade50ec"
+      },
+      "source": {
+        "revision": "b746ff15335548c7d4d477368801f5b87685a5cc",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 5.907012661918998,
+      "peak_sampled_rss_kib": 567288
+    },
+    "out/native-cpu-upload-aware-cohort/benefit/runtime/a1/owner.json": {
+      "identity": {
+        "bytes": 3594,
+        "sha256": "2103313d43dee5d77bbf28e45a876ada0a9b8111a31e8849eb22e379dfa3f239"
+      },
+      "source": {
+        "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 60.265383837977424,
+      "peak_sampled_rss_kib": 2345212
+    },
+    "out/native-cpu-upload-aware-cohort/benefit/runtime/a2/owner.json": {
+      "identity": {
+        "bytes": 3781,
+        "sha256": "4dc57e556a88616f1c63c11a53ac77208c33a91fe5ffa9a7d7e5c82cc11805d1"
+      },
+      "source": {
+        "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 54.35140388389118,
+      "peak_sampled_rss_kib": 2344512
+    },
+    "out/native-cpu-upload-aware-cohort/benefit/runtime/b1/owner.json": {
+      "identity": {
+        "bytes": 3739,
+        "sha256": "ec0c8fa307b4aca5736a2bff95e243961d5327bf4c2e5fa0833ae225917f4efd"
+      },
+      "source": {
+        "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 12.577591218985617,
+      "peak_sampled_rss_kib": 941368
+    },
+    "out/native-cpu-upload-aware-cohort/benefit/runtime/b2/owner.json": {
+      "identity": {
+        "bytes": 3739,
+        "sha256": "61da7b4118d88cb2a4c11870d6fe2f7fbca413d9f456f9810d13901d0be54ac1"
+      },
+      "source": {
+        "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 12.191361787961796,
+      "peak_sampled_rss_kib": 941640
+    },
+    "out/native-cpu-upload-aware-cohort/control-8/owner.json": {
+      "identity": {
+        "bytes": 3733,
+        "sha256": "6911a9c5d4b9daac205839d3801fa6614de05c82feff51623c0736523379ff18"
+      },
+      "source": {
+        "revision": "b746ff15335548c7d4d477368801f5b87685a5cc",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 12.739140694960952,
+      "peak_sampled_rss_kib": 1076920
+    },
+    "out/native-cpu-upload-aware-boundary/compile/owner.json": {
+      "identity": {
+        "bytes": 2185,
+        "sha256": "bdd3d004a766986b4f494276abac0a5496e3c37c438c87e8e8679ae0b7b0d0e0"
+      },
+      "source": {
+        "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 2.3254498889436945,
+      "peak_sampled_rss_kib": 252264
+    },
+    "out/native-cpu-upload-aware-boundary/run/owner.json": {
+      "identity": {
+        "bytes": 1652,
+        "sha256": "ba293a8141c4e8d816aa975acfc12b95e69b08e670a3089e13de1354ac0ff6b8"
+      },
+      "source": {
+        "revision": "37cd12be724231de8e4aa55ada82089900ddc472",
+        "status": ""
+      },
+      "passed": true,
+      "wall_seconds": 0.5296914489008486,
+      "peak_sampled_rss_kib": 39856
+    }
+  },
+  "owner_closure": {
+    "all8_terminal_passed_as_individual_actions": true,
+    "ABBA_gate_still_rejected": true,
+    "all_recorded_before_after_input_maps_equal": true,
+    "all_source_and_whole_input_closure_flags_true": true,
+    "all_saved_births_independently_rechecked_absent": true,
+    "remaining_owned_processes": [],
+    "cleanup_errors": []
+  },
+  "source_ancestry": {
+    "remote_ref": "refs/heads/development/native-cpu-slang-bridge-2026-10-23",
+    "remote_tip": "37cd12be724231de8e4aa55ada82089900ddc472",
+    "P_build_and_runtime_source_commits_pushed_ancestors": true
+  },
+  "integrity": {
+    "source_files": 111,
+    "new_products": 6,
+    "all_new_members_full_CRC_and_SHA256_verified": true,
+    "all_new_members_equal_current_SHA256": true,
+    "mode_and_mtime_ns_preserved": true,
+    "checkout_relative_unique_namespace": true,
+    "no_symlinks": true,
+    "all_referenced_recovery_archive_SHA_and_pushed_blob_verified": true,
+    "all_selected_reused_member_CRC_and_current_SHA_verified": true
+  },
+  "preservation_stage": "complete_verified",
+  "raw_deletions_performed": false,
+  "restoration": "Extract exact checkout-relative archive members and restore recorded modes/mtime_ns. The twelve reused inputs and prior spacing source/result/executable have exact existing archive/member mappings above; restore to each listed current path with its recorded metadata. All current P raw source/products/caches and all recovery archives remain retained.",
+  "not_attempted": [
+    "remaining controls1\u20137",
+    "cold frame",
+    "resource restoration/retirement",
+    "retries"
+  ]
+}
