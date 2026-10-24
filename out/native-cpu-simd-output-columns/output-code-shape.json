@@ -1,0 +1,68 @@
+{
+  "scope": "Independent actual-object code-shape review only; no runtime benefit claim. All9380 literal instruction lines and mathematical expressions preserved.",
+  "objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform/transport.o",
+      "bytes": 3100792,
+      "sha256": "828ba9593e42e02adba6763afcf25783700dfb8dae4815665cd698594a55c7be"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform/endpoint.o",
+      "bytes": 3481888,
+      "sha256": "b9b9645076bfc09d3e3b7134627795a19e14ba9cb6c96bb2abf5a883b805fdb0"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform/dopri_phase.o",
+      "bytes": 1792328,
+      "sha256": "bc689d0b374be34b0db0a7dc3037b139b4f480f40bbd821c493050f2765c28d0"
+    }
+  ],
+  "full_original_clear": {
+    "transport": {
+      "columns": 4699,
+      "unroll": "587*8+3",
+      "full_mask_store_offsets": [
+        "0x209314",
+        "0x209388"
+      ],
+      "partial_mask_store_offsets": [
+        "0x209904",
+        "0x209978"
+      ]
+    },
+    "endpoint": {
+      "columns": 3829,
+      "unroll": "547*7",
+      "full_mask_store_offsets": [
+        "0x273f04",
+        "0x273f5d"
+      ],
+      "partial_mask_store_offsets": [
+        "0x274ae4",
+        "0x274b3d"
+      ]
+    },
+    "dopri_phase": {
+      "columns": 4149,
+      "unroll": "461*9",
+      "full_mask_store_offsets": [
+        "0x13eef7",
+        "0x13ef73"
+      ],
+      "partial_mask_store_offsets": [
+        "0x13f5b7",
+        "0x13f633"
+      ]
+    }
+  },
+  "instruction": "contiguous vmaskmovps stores of a zero YMM vector;32 bytes percolumn",
+  "exports": {
+    "transport_owned_call": "0x213f52",
+    "endpoint_owned_call": "0x27df42",
+    "dopri_phase_owned_call": "0x141aa2",
+    "global_output_read_before_owned_execution": false,
+    "only_global_output_access": "full active-row staged-to-global copy after owned execution"
+  },
+  "input_row_ids_and_varying_projection_columns_preserved": true,
+  "adapter": "Exact I adapter reused; raw ABI remains6 scalar pointer/count/index arguments, no private structs crossABI."
+}

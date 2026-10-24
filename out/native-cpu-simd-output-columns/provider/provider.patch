@@ -1,0 +1,19 @@
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -11,3 +11,3 @@
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/transport.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/endpoint.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/dopri_phase.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform/transport.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform/endpoint.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-output-columns/objects-uniform/dopri_phase.o',
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1559 +1559 @@
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8I";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8J";
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -840 +840 @@
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-packet-policy-v9";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-output-columns-v10";
