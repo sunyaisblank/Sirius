@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "scope": "Source/codegen/build admission only. Root review of exact6-file patch, independent helper/adapter/packing source review, successful owned3-stage and adapter compiles. Does not grant numerical or performance qualification.",
+  "source_contract": {
+    "bytes": 16097,
+    "sha256": "27cdf34edc3cb1336f25498b8fe45939da9bf8127171d8ac3adfcc63b351af12"
+  },
+  "patch": {
+    "bytes": 2759,
+    "sha256": "563226c09edba716c5ca6e912c4615a83e80f31322965229daffa6e0f18a8530"
+  },
+  "checks": {
+    "full_guard_before_raw_SIMD": true,
+    "pure_preflight_unchanged": true,
+    "original_scalar_tails_unchanged": true,
+    "original_grid_query_counts_and_refused_fallback_key": true,
+    "worker_IEEE32_guard_unchanged": true,
+    "original_arithmetic_literal_calls": 9380,
+    "all_original_programs": 5,
+    "compiled_SIMD_stages": 3,
+    "fma_or_FPmode_mutation_in_objects": false,
+    "adapter_fmaxf_is_exact_external_tailcall": true
+  }
+}

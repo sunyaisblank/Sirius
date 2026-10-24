@@ -1,0 +1,45 @@
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -2015 +2015,3 @@
+-   if (intergroup) {
++   /* Native SIMD packets reuse the original packed task IDs after pure
++    * admission. Original grid, query counts and fallback key stay intact. */
++   if (intergroup || job_info.native_preflight_passed) {
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -61 +61 @@
+-      return sirius_native_transport_try_packet(input->u, input->num_elements,
++      return sirius_native_transport_rows_try_packet(input->u, input->num_elements,
+@@ -65 +65 @@
+-      return sirius_native_endpoint_try_packet(input->u, input->num_elements,
++      return sirius_native_endpoint_rows_try_packet(input->u, input->num_elements,
+@@ -69 +69 @@
+-      return sirius_native_dopri_phase_try_packet(input->u, input->num_elements,
++      return sirius_native_dopri_phase_rows_try_packet(input->u, input->num_elements,
+--- a/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
++++ b/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
+@@ -29,0 +30,5 @@
++// Full8 SIMD packets; original scalar execution for every smaller tail.
++bool sirius_native_transport_rows_try_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++bool sirius_native_endpoint_rows_try_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++bool sirius_native_dopri_phase_rows_try_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -10 +10,5 @@
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dispatch-admission/admission.o'
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dispatch-admission/admission.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/objects-uniform/transport.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/objects-uniform/endpoint.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/objects-uniform/dopri_phase.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/objects/rows_adapter.o'
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1559 +1559 @@
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8F";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8G";
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -840 +840 @@
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-dispatch-admission-v6";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd-rows-v7";
