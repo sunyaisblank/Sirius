@@ -57,7 +57,7 @@ for slug in ('transport', 'endpoint', 'dopri_phase'):
         'entrypoint': 'sirius_' + slug + '_ComputeMain',
         'moves': [declaration.strip(), assignment.strip()], 'all_other_header_bytes_equal': True,
         'original_Group_text_equal': derived[end + len(moved) - len(body):] == text[end:]}
-    patch += ''.join(difflib.unified_diff(text.splitlines(True), derived.splitlines(True),
+    patch += ''.join(difflib.unified_diff(text.splitlines(True), derived.splitlines(True), n=0,
         fromfile='a/' + str(source.relative_to(root)), tofile='b/' + str(path.relative_to(root))))
 record = {'scope': 'Source preparation only: move only private KernelContext{} declaration and globalParams assignment inside the preexisting lane-zero branch. All64Group calls, integer lanecheck/groupIDreads, ownerbody/arithmetic/tables/order remain unchanged. No compile/build/runtime or gain claim.', 'headers': records}
 publish(work / 'owner-context.patch', patch.encode())
