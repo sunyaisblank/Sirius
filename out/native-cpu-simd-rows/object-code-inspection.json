@@ -1,0 +1,82 @@
+{
+  "revision": "1664604b818dd5c060c28c07b188cbbd10f06cbf",
+  "compiler_flags": [
+    "-O2",
+    "--target=sse2-i32x8",
+    "--cpu=x86-64",
+    "--arch=x86-64",
+    "--addressing=64",
+    "--PIC",
+    "--opt=disable-fma",
+    "--math-lib=system"
+  ],
+  "objects": {
+    "transport": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-simd-rows/objects/transport.o",
+        "bytes": 4101272,
+        "sha256": "172fd3a1be4ebb5c2503760d8de5529c02edcdbfbe6eb3ad9c9f7bf806d0912c"
+      },
+      "export": "sirius_simd_transport_packet",
+      "required_export_present": true,
+      "undefined_symbols": [
+        "                 U memset"
+      ],
+      "packed_float_instructions": {
+        "addps": 52,
+        "subps": 116,
+        "mulps": 48,
+        "divps": 4,
+        "sqrtps": 4
+      },
+      "forbidden_fma_fp_control_x87_found": [],
+      "total_instructions": 620901,
+      "code_inspection_only": true
+    },
+    "endpoint": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-simd-rows/objects/endpoint.o",
+        "bytes": 5286536,
+        "sha256": "1c01631de58550589a398cf787d617c7186894be75dbe491a1590af2a959c3fd"
+      },
+      "export": "sirius_simd_endpoint_packet",
+      "required_export_present": true,
+      "undefined_symbols": [
+        "                 U memset"
+      ],
+      "packed_float_instructions": {
+        "addps": 52,
+        "subps": 116,
+        "mulps": 48,
+        "divps": 4,
+        "sqrtps": 4
+      },
+      "forbidden_fma_fp_control_x87_found": [],
+      "total_instructions": 798293,
+      "code_inspection_only": true
+    },
+    "dopri_phase": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-simd-rows/objects/dopri_phase.o",
+        "bytes": 2540080,
+        "sha256": "bd6f8755ad24bc44af66e1d10df49a90a460368af21c5aa92f62f1b9275b3d53"
+      },
+      "export": "sirius_simd_dopri_phase_packet",
+      "required_export_present": true,
+      "undefined_symbols": [
+        "                 U memset"
+      ],
+      "packed_float_instructions": {
+        "addps": 52,
+        "subps": 116,
+        "sqrtps": 4,
+        "mulps": 48,
+        "divps": 4
+      },
+      "forbidden_fma_fp_control_x87_found": [],
+      "total_instructions": 406677,
+      "code_inspection_only": true
+    }
+  },
+  "scope": "Actual object read-only inspection. Packed arithmetic present in all3, no contracted FMA/FP mode mutation/x87 arithmetic. Does not prove numerical equality, runtime lane count, benefit, frame or scientific qualification."
+}
