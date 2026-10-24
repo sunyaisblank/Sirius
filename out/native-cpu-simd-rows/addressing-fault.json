@@ -1,0 +1,36 @@
+{
+  "revision": "eb9a7014e4b054a638189970ccc47e337e1a4084",
+  "observed_result": "First original C8 rejected: SIGSEGV at Transport CacheCoefficient_0, linked offset0xbf031. First actual SIMD Transport8 entered and did not return. Original scalar T/E tail3 calls returned true; DP and all32 completion not reached. No numerical acceptance, ABBA, all8 or frame run follows.",
+  "owner": {
+    "bytes": 3792,
+    "sha256": "43bca271bab17a708e5c63584556e38778021aab493c533a1445c9c664d774bb"
+  },
+  "wall_seconds": 13.440223010955378,
+  "peak_rss_kib": 1062992,
+  "inputs_unchanged": true,
+  "all_births_absent": true,
+  "fault_algebra": {
+    "source_valid_domain": "lane20..24; en/ed index=lane-18 gives2..6",
+    "actual_compiled_address": "en_base + 4*lane + 0x00000003ffffffb8",
+    "valid_lane20_actual_offset": "0x400000008",
+    "valid_lane20_required_offset": 8,
+    "excess_bytes": 17179869184,
+    "scope": "Concrete compiled unsigned-offset widening artifact at this instruction; not a global compiler-bug or performance claim."
+  },
+  "next_change": "Documented addressing32 model retains64-bit pointers. B admission proves all input/output byte extents below2^31, so this covers complete admitted domain without reducing eligibility, counts, accuracy or governors.",
+  "maximum_admitted_view_bytes": {
+    "transport": [
+      60356992,
+      1231814656
+    ],
+    "endpoint": [
+      59066976,
+      1003749376
+    ],
+    "dopri_phase": [
+      474523400,
+      1087635456
+    ]
+  },
+  "observer_metadata_limit": "Python breakpoint stop callback captured parent rows with groups<8 despite GDB condition. They are retained as observed; no parent-readback acceptance claim. Follow-up must explicitly filter before recording groups8, without resampling raw entry."
+}

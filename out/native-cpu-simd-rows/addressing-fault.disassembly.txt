@@ -1,0 +1,94 @@
+
+/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/provider/libvulkan_lvp.so:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000000bef00 <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x1200>:
+   bef00:	jg     bef5e <CacheCoefficient_0___vyuun_3C_s_5B_vyKernelContext_0_5D__3E_+0x125e>
+   bef02:	and    $0x30,%al
+   bef04:	movdqa %xmm12,0x1f0(%rsp)
+   bef0e:	movdqa %xmm7,0x40(%rsp)
+   bef14:	pxor   %xmm3,%xmm3
+   bef18:	movdqa 0x120(%rsp),%xmm4
+   bef21:	movdqa %xmm4,%xmm2
+   bef25:	punpckhdq %xmm3,%xmm2
+   bef29:	punpckldq %xmm3,%xmm4
+   bef2d:	movdqa 0x220(%rsp),%xmm10
+   bef37:	movdqa %xmm10,%xmm9
+   bef3c:	punpckhdq %xmm3,%xmm9
+   bef41:	punpckldq %xmm3,%xmm10
+   bef46:	psllq  $0x2,%xmm10
+   bef4c:	psllq  $0x2,%xmm9
+   bef52:	psllq  $0x2,%xmm4
+   bef57:	psllq  $0x2,%xmm2
+   bef5c:	pshufd $0xfa,%xmm5,%xmm6
+   bef61:	pslld  $0x1f,%xmm6
+   bef66:	psrad  $0x1f,%xmm6
+   bef6b:	pand   %xmm6,%xmm2
+   bef6f:	pshufd $0x50,%xmm5,%xmm7
+   bef74:	pslld  $0x1f,%xmm7
+   bef79:	psrad  $0x1f,%xmm7
+   bef7e:	pand   %xmm7,%xmm4
+   bef82:	movaps %xmm5,0x90(%rsp)
+   bef8a:	pshufd $0xfa,%xmm8,%xmm5
+   bef90:	pslld  $0x1f,%xmm5
+   bef95:	psrad  $0x1f,%xmm5
+   bef9a:	pand   %xmm5,%xmm9
+   bef9f:	pshufd $0x50,%xmm8,%xmm3
+   befa5:	pslld  $0x1f,%xmm3
+   befaa:	psrad  $0x1f,%xmm3
+   befaf:	pand   %xmm3,%xmm10
+   befb4:	movaps %xmm8,0xb0(%rsp)
+   befbd:	movdqa 0xd9a61a(%rip),%xmm8        # e595e0 <_ZN17sirius_cpu_bridge17transport_programE+0x100e0>
+   befc6:	pand   %xmm8,%xmm6
+   befcb:	movq   %xmm10,%rsi
+   befd0:	lea    0xdbdad9(%rip),%r15        # e7cab0 <en_0>
+   befd7:	lea    (%r15,%rsi,1),%rax
+   befdb:	mov    %rax,0xc0(%rsp)
+   befe3:	pshufd $0xee,%xmm10,%xmm10
+   befe9:	mov    %ecx,0xf0(%rsp)
+   beff0:	movq   %xmm10,%rdi
+   beff5:	lea    (%r15,%rdi,1),%rax
+   beff9:	mov    %rax,0x70(%rsp)
+   beffe:	movq   %xmm9,%r10
+   bf003:	lea    (%r15,%r10,1),%r14
+   bf007:	pshufd $0xee,%xmm9,%xmm9
+   bf00d:	movq   %xmm9,%r11
+   bf012:	lea    (%r15,%r11,1),%rax
+   bf016:	mov    %rax,0x230(%rsp)
+   bf01e:	movq   %xmm4,%r12
+   bf023:	movq   %xmm2,%r13
+   bf028:	lea    (%r15,%r13,1),%rax
+   bf02c:	movq   %xmm6,%rcx
+   bf031:	movss  (%rcx,%rax,1),%xmm10
+   bf037:	lea    0xdbda52(%rip),%rax        # e7ca90 <ed_0>
+   bf03e:	add    %rax,%r13
+   bf041:	movss  (%rcx,%r13,1),%xmm11
+   bf047:	lea    (%r15,%r12,1),%rcx
+   bf04b:	pshufd $0xee,%xmm4,%xmm4
+   bf050:	movq   %xmm4,%r13
+   bf055:	pshufd $0xee,%xmm2,%xmm2
+   bf05a:	lea    (%r15,%r13,1),%rdx
+   bf05e:	movq   %xmm2,%r8
+   bf063:	add    %r8,%r15
+   bf066:	pshufd $0xee,%xmm6,%xmm2
+   bf06b:	movq   %xmm2,%r9
+   bf070:	movss  (%r9,%r15,1),%xmm4
+   bf076:	add    %rax,%rsi
+   bf079:	add    %rax,%rdi
+   bf07c:	add    %rax,%r10
+   bf07f:	add    %rax,%r11
+   bf082:	add    %rax,%r12
+   bf085:	add    %rax,%r13
+   bf088:	add    %r8,%rax
+   bf08b:	repz
+   bf08c:	rex.RB
+   bf08d:	.byte 0xf
+   bf08e:	.byte 0x10
+   bf08f:	.byte 0x24
+
+/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/provider/libvulkan_lvp.so:     file format elf64-x86-64
+
+Contents of section .rodata:
+ e595e0 b8ffffff 03000000 b8ffffff 03000000  ................
