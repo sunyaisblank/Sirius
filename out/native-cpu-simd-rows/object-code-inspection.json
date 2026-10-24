@@ -78,5 +78,15 @@
       "code_inspection_only": true
     }
   },
-  "scope": "Actual object read-only inspection. Packed arithmetic present in all3, no contracted FMA/FP mode mutation/x87 arithmetic. Does not prove numerical equality, runtime lane count, benefit, frame or scientific qualification."
+  "scope": "Actual object read-only inspection. Packed arithmetic present in all3, no contracted FMA/FP mode mutation/x87 arithmetic. Does not prove numerical equality, runtime lane count, benefit, frame or scientific qualification.",
+  "source_grounded_followup": {
+    "reason": "Canonical operands are literals but helper parameter types became varying, leaving scalar gathers/shuffles in private register access. No runtime acceptance/failure inferred.",
+    "private_read_value_each_stage": {
+      "static_instructions": 239,
+      "scalar_movss": 40,
+      "movd": 38,
+      "pshufd": 28
+    },
+    "followup": "Uniform canonical operands and cloned uniform-index private scratch helpers, original generic varying helpers retained. No output-interface or arithmetic formula change."
+  }
 }

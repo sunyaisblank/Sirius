@@ -12,7 +12,7 @@ import sys
 root = Path.cwd()
 work = Path(__file__).resolve().parent
 basis = root / 'bin/linux-gcc/native-cpu-static-program/typed-batch'
-destination = root / 'bin/linux-gcc/native-cpu-simd-rows/ispc-source'
+destination = root / 'bin/linux-gcc/native-cpu-simd-rows/ispc-source-uniform'
 assert sys.argv[1:] in ([], ['--write'])
 write = sys.argv[1:] == ['--write']
 
@@ -46,6 +46,64 @@ def close_delimiter(text, opening, left, right):
     return end - 1
 
 
+def uniform_register_access(text):
+    """Clone translated private-register helpers; preserve generic bodies."""
+    before = text
+    names = {name + '_0': name + 'Uniform_0' for name in
+             ('ScratchAddress', 'ScratchRead', 'ScratchWrite', 'ReadValue', 'WriteValue')}
+    insertions = []
+    order = []
+    for old, new in names.items():
+        match, = re.finditer(r'^static (?:uint32_t|RetainedTriple_0|void) ' + old +
+                             r'\([^\n]+\)\n\{', text, flags=re.M)
+        opening = match.end() - 1
+        end = end_of_block(text, opening)
+        original = text[match.start():end]
+        header, body = original.split('{', 1)
+        header, qualified = re.subn(r'\buint32_t ((?:index|component|prefix)_\d+)\b',
+                                    r'uniform uint32_t \1', header)
+        assert qualified == (3 if old.startswith('Scratch') else 1)
+        if old == 'ScratchAddress_0':
+            assert not re.search(r'\browBase_\d+\b', body)
+            header = header.replace('static uint32_t ', 'static uniform uint32_t ', 1)
+        header = header.replace(old + '(', new + '(', 1)
+        clone = header + '{' + body
+        for source, target in names.items():
+            clone = re.sub(r'\b' + source + r'(?=\()', target, clone)
+        # Reverse only approved names/qualifiers to prove exact body cloning.
+        restored = clone
+        for source, target in names.items():
+            restored = re.sub(r'\b' + target + r'(?=\()', source, restored)
+        restored_header, restored_body = restored.split('{', 1)
+        restored_header = restored_header.replace('uniform uint32_t ', 'uint32_t ')
+        assert restored_header + '{' + restored_body == original
+        addition = '\n\n// Uniform canonical register access; original generic helper retained.\n' + clone
+        insertions.append((end, addition))
+        order.append((match.start(), new))
+    for end, addition in sorted(insertions, reverse=True):
+        text = text[:end] + addition + text[end:]
+
+    match, = re.finditer(r'^static bool EvaluateOneStatic_0\(([^\n]+)\)\n\{', text, flags=re.M)
+    opening = match.end() - 1
+    end = end_of_block(text, opening)
+    original_static = text[match.start():end]
+    header, body = original_static.split('{', 1)
+    header, qualified = re.subn(r'\buint32_t ((?:destination|a|b|c)_\d+)\b',
+                                r'uniform uint32_t \1', header)
+    assert qualified == 4
+    for name, expected in (('ReadValue_0', 3), ('WriteValue_0', 1)):
+        body, changed = re.subn(r'\b' + name + r'(?=\()', names[name], body)
+        assert changed == expected
+    revised_static = header + '{' + body
+    text = text[:match.start()] + revised_static + text[end:]
+    restored = text.replace(revised_static, original_static, 1)
+    for _, addition in insertions:
+        assert restored.count(addition) == 1
+        restored = restored.replace(addition, '', 1)
+    assert restored == before
+    return text, [name for _, name in sorted(order)]
+
+
 PRELUDE = r'''
 typedef uint32 uint32_t;
 typedef int32 int32_t;
@@ -63,8 +121,9 @@ struct GlobalParams_0 {
     uniform WordBuffer outputs_0;
 };
 // Original Slang/GCC prelude uses libm fmaxf. Preserve NaN and zero-sign
-// behavior through that same function for exceptional/tied zero operands.
-extern "C" uniform float fmaxf(uniform float a, uniform float b);
+// behavior through the strict C++ libm adapter for exceptional/tied zeros.
+// A unique symbol prevents ISPC from replacing this call as a math builtin.
+extern "C" uniform float sirius_simd_fmaxf(uniform float a, uniform float b);
 static float F32_max(float a, float b) {
     float r = a > b ? a : b;
     bool edge = isnan(a) || isnan(b) ||
@@ -72,7 +131,7 @@ static float F32_max(float a, float b) {
          ((intbits(a) ^ intbits(b)) == 0x80000000U));
     if (edge) {
         foreach_active (i) {
-            r = fmaxf(extract(a, i), extract(b, i));
+            r = sirius_simd_fmaxf(extract(a, i), extract(b, i));
         }
     }
     return r;
@@ -183,6 +242,9 @@ for slug in ('transport', 'endpoint', 'dopri_phase'):
     # scalar conversion uses C cast spelling instead of C++ constructor syntax.
     for kind in ('int32_t', 'uint32_t', 'float', 'int'):
         text = re.sub(r'\b' + kind + r'\(', '(' + kind + ')(', text)
+    text, uniform_helper_order = uniform_register_access(text)
+    counts['uniform_register_helper_clones'] = len(uniform_helper_order)
+    counts['uniform_canonical_operand_parameters'] = 4
     calls = re.findall(r'EvaluateOneStatic_0<(\d+)U>\(([^\n]+)\)', text)
     original_calls = re.findall(r'EvaluateOneStatic_0<(\d+)U>\(([^\n]+)\)', raw)
     assert calls == original_calls
@@ -229,6 +291,7 @@ export void sirius_simd_{slug}_packet(
     records[slug] = {'basis_path': str(source.relative_to(root)), 'basis': pin(source.read_bytes()),
         'derived_path': str(output.relative_to(root)), 'derived': pin(derived.encode()),
         'approved_syntax_replacement_counts': counts, 'literal_instruction_calls_preserved': len(calls),
+        'uniform_register_helper_order': uniform_helper_order,
         'private_output_layout': {'row_words': row_words,
             'index_mapping': '(absolute_original_index - original_row_base) * programCount + programIndex',
             'active_rows_copied_in_and_out': True, 'inactive_rows_accessed': False,
@@ -236,7 +299,7 @@ export void sirius_simd_{slug}_packet(
         'logical_invocations_per_active_row': 64, 'physical_math_rederived': False,
         'limits': 'Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim.'}
 assert total == 9380
-publish(work / 'ispc-derivation.json', (json.dumps({'instructions': total, 'stages': records,
+publish(work / 'ispc-uniform-derivation.json', (json.dumps({'instructions': total, 'stages': records,
     'compiler_user_guide': 'https://ispc.github.io/ispc.html',
     'scope': 'Complete T/E/DP plus all5canonicalprograms. Original arithmetic/control expressions copied with enumerated C-like syntax/type/storage adaptations; original literal call order retained. No field/trial/RHS/quartic/reference/precision/workload/count/budget change. Not compiled or executed.'}, indent=2) + '\n').encode())
 print(json.dumps({'derived_stages': 3, 'instructions': total, 'compiled_or_executed': False}))

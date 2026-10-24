@@ -29,10 +29,10 @@ original = json.loads((root / 'out/native-cpu-dispatch-admission/provider/source
 before = {str(p.relative_to(source_root)): pin(p.read_bytes())
           for p in source_root.rglob('*') if p.is_file()}
 assert canonical(before) == original['full_candidate_source_identity']
-simd = json.loads((work / 'ispc-compile-result.json').read_text())
+simd = json.loads((work / 'ispc-uniform-compile-result.json').read_text())
 adapter = json.loads((work / 'adapter-compile-result.json').read_text())
 assert simd['all_objects_compiled'] and adapter['all_prepared_source_bytes_unchanged']
-for name in ('ispc', 'adapter'):
+for name in ('ispc-uniform', 'adapter'):
     owner = json.loads((work / 'compile' / name / 'owner.json').read_text())
     assert owner['passed'] and owner['whole_inputs_unchanged'] and not owner['remaining_owned_processes']
 assert adapter['objects'][0]['exit'] == 0
@@ -77,7 +77,7 @@ for name, new in new_text.items():
     modified[name] = {'basis': before[name], 'candidate': after[name]}
 (provider / 'provider.patch').write_text(patch)
 inputs = {**simd['source_inputs'], **adapter['source_inputs']}
-for name in ('ispc-compile-result.json', 'adapter-compile-result.json', 'object-code-inspection.json'):
+for name in ('ispc-uniform-compile-result.json', 'adapter-compile-result.json', 'object-code-inspection-uniform.json'):
     p = work / name
     inputs[str(p.relative_to(root))] = pin(p.read_bytes())
 contract = {'scope': 'Private eight-row SIMD native packets with all5canonicalprograms/all9380originalcalls. Same full F/B admission, original scalar1..7 tails, original group/query counts, fallback intergroup key/JIT, pending variant, FP guard and complete T/E/DP contracts. No public source adoption or scientific/frame/benefit claim.',

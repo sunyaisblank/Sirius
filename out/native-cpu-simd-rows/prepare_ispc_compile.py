@@ -9,7 +9,7 @@ import sys
 
 root = Path.cwd()
 work = Path(__file__).resolve().parent
-destination = root / 'bin/linux-gcc/native-cpu-simd-rows/objects'
+destination = root / 'bin/linux-gcc/native-cpu-simd-rows/objects-uniform'
 basis = root / 'out/native-cpu-static-program'
 
 
@@ -25,8 +25,8 @@ def read(path):
 assert not os.environ.get('ISPC_ARGS', '')
 assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
 revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
-assert not any(p.exists() for p in (destination, work / 'prepared-ispc-inputs.json',
-    work / 'ispc-compile-result.json', work / 'compile/actions.json'))
+assert not any(p.exists() for p in (destination, work / 'prepared-ispc-uniform-inputs.json',
+    work / 'ispc-uniform-compile-result.json'))
 assert pin(basis / 'batch-compile-result.json')['sha256'] == 'f8434acad86353ab1a345cd35a9f4e6ef338805a2d87974ebacb49d2d9082be2'
 scalar = read(basis / 'batch-compile-result.json')
 assert scalar['all_prepared_source_bytes_unchanged'] and len(scalar['objects']) == 3
@@ -59,7 +59,7 @@ for name in runtime_paths:
 
 # Default derivation mode only compares existing bytes; it cannot overwrite.
 subprocess.run([sys.executable, '-B', str(work / 'derive_ispc.py')], check=True)
-derived = read(work / 'ispc-derivation.json')
+derived = read(work / 'ispc-uniform-derivation.json')
 assert derived['instructions'] == 9380 and set(derived['stages']) == {'transport', 'endpoint', 'dopri_phase'}
 flags = ['-O2', '--target=sse2-i32x8', '--cpu=x86-64', '--arch=x86-64',
          '--addressing=64', '--PIC', '--opt=disable-fma', '--math-lib=system']
@@ -82,7 +82,7 @@ for slug in ('transport', 'endpoint', 'dopri_phase'):
                     'argv': [str(root / compiler_name), str(root / row['derived_path']),
                              *flags, '--emit-obj', '-o', str(output)]})
 for name in ('compiler-acquisition.json', 'compiler-environment.json', 'derive_ispc.py',
-             'ispc-derivation.json', 'prepare_ispc_compile.py', 'build_ispc.py',
+             'ispc-uniform-derivation.json', 'prepare_ispc_compile.py', 'build_ispc.py',
              'compile/run_owned.py', 'compile/owned_guard.py'):
     path = work / name
     inputs[str(path.relative_to(root))] = pin(path)
@@ -94,14 +94,17 @@ admission = root / 'bin/linux-gcc/native-cpu-dispatch-admission/admission.o'
 assert pin(admission) == {'bytes': 194704, 'sha256': 'b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616'}
 inputs[str(admission.relative_to(root))] = pin(admission)
 prepared = {'revision': revision, 'inputs': inputs, 'objects': objects, 'fixed_flags': flags,
-            'scope': 'Three complete per-row ISPC objects only; preserved 9380 literal calls/all5canonicalprograms. Original three D scalar objects and F admission object remain unchanged. No provider, host, shader execution or qualification.'}
-(work / 'prepared-ispc-inputs.json').write_text(json.dumps(prepared, indent=2) + '\n')
+            'scope': 'Three complete per-row ISPC objects with uniform canonical operands/private scratch indices; preserved 9380 literal calls/all5canonicalprograms, original generic helpers and all arithmetic. Original three D scalar objects and F admission object remain unchanged. No provider, host, shader execution or qualification.'}
+(work / 'prepared-ispc-uniform-inputs.json').write_text(json.dumps(prepared, indent=2) + '\n')
 old = read(work / 'generation/actions.json')['c-source']
 action = {**old, 'revision': revision, 'kind': 'compile',
           'argv': ['/usr/bin/python3', '-B', str(work / 'build_ispc.py')],
           'limits': {'seconds': 300, 'rss_kib': 4194304, 'reserve_kib': 2097152},
-          'frozen_inputs': sorted(set(inputs) | {str((work / 'prepared-ispc-inputs.json').relative_to(root))}),
+          'frozen_inputs': sorted(set(inputs) | {str((work / 'prepared-ispc-uniform-inputs.json').relative_to(root))}),
           'scope': prepared['scope']}
-(work / 'compile/actions.json').write_text(json.dumps({'ispc': action}, indent=2) + '\n')
+actions = read(work / 'compile/actions.json')
+assert 'ispc-uniform' not in actions
+actions['ispc-uniform'] = action
+(work / 'compile/actions.json').write_text(json.dumps(actions, indent=2) + '\n')
 print(json.dumps({'prepared_objects': 3, 'preserved_scalar_objects': 3, 'preserved_admission_objects': 1,
                   'compiled': False, 'revision': revision}))

@@ -16,8 +16,8 @@ def pin(path):
 assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
 assert not (work / 'prepared-adapter.json').exists()
 assert not (work / 'adapter-compile-result.json').exists()
-record = json.loads((work / 'ispc-compile-result.json').read_text())
-owner = json.loads((work / 'compile/ispc/owner.json').read_text())
+record = json.loads((work / 'ispc-uniform-compile-result.json').read_text())
+owner = json.loads((work / 'compile/ispc-uniform/owner.json').read_text())
 assert record['all_objects_compiled'] and owner['passed'] and owner['whole_inputs_unchanged']
 inputs = dict(record['source_inputs'])
 for item in record['objects']:
@@ -34,14 +34,14 @@ assert not output.exists()
 argv[argv.index('-c') + 1] = str(work / 'rows_adapter.cpp')
 argv[argv.index('-o') + 1] = str(output)
 for name in ('rows_adapter.cpp', 'rows_bridge.h', 'prepare_adapter.py', 'build_adapter.py',
-             'ispc-compile-result.json', 'compile/ispc/owner.json', 'object-code-inspection.json'):
+             'ispc-uniform-compile-result.json', 'compile/ispc-uniform/owner.json', 'object-code-inspection-uniform.json'):
     path = work / name
     inputs[str(path.relative_to(root))] = pin(path)
 prepared = {'inputs': inputs, 'argv': argv, 'output': str(output.relative_to(root))}
 (work / 'prepared-adapter.json').write_text(json.dumps(prepared, indent=2) + '\n')
 actions = json.loads((work / 'compile/actions.json').read_text())
 assert 'adapter' not in actions
-actions['adapter'] = {**actions['ispc'],
+actions['adapter'] = {**actions['ispc-uniform'],
     'revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
     'argv': ['/usr/bin/python3', '-B', str(work / 'build_adapter.py')],
     'frozen_inputs': sorted(set(inputs) | {str((work / 'prepared-adapter.json').relative_to(root))}),

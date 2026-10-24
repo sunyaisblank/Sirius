@@ -7,9 +7,9 @@ import subprocess
 
 root = Path.cwd()
 work = Path(__file__).resolve().parent
-prepared = json.loads((work / 'prepared-ispc-inputs.json').read_text())
-receipt = work / 'ispc-compile-result.json'
-destination = root / 'bin/linux-gcc/native-cpu-simd-rows/objects'
+prepared = json.loads((work / 'prepared-ispc-uniform-inputs.json').read_text())
+receipt = work / 'ispc-uniform-compile-result.json'
+destination = root / 'bin/linux-gcc/native-cpu-simd-rows/objects-uniform'
 
 
 def pin(path):

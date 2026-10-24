@@ -1,5 +1,12 @@
 #include "rows_bridge.h"
+#include <cmath>
 #include <type_traits>
+
+// A unique external name keeps ISPC from replacing libm fmaxf with its own
+// intrinsic. The original Slang/GCC prelude calls this same scalar function.
+extern "C" float sirius_simd_fmaxf(float a, float b) noexcept {
+    return ::fmaxf(a, b);
+}
 
 // ISPC exports take word counts, while the original packet ABI takes bytes.
 extern "C" void sirius_simd_transport_packet(uint32_t *input, uint32_t input_words,
