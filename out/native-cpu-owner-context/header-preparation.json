@@ -1,0 +1,62 @@
+{
+  "scope": "Source preparation only: move only private KernelContext{} declaration and globalParams assignment inside the preexisting lane-zero branch. All64Group calls, integer lanecheck/groupIDreads, ownerbody/arithmetic/tables/order remain unchanged. No compile/build/runtime or gain claim.",
+  "headers": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.native.hpp",
+      "basis": {
+        "bytes": 88052,
+        "sha256": "74d60b6f50864101d797f434b45ef3a8ef107b0b954fb1c0fd721b040c0761cf"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-owner-context/typed-batch/transport.native.hpp",
+      "derived": {
+        "bytes": 88060,
+        "sha256": "82c2b3b89c7a2ccdab97491d6dd9d6e7495e950601fb531e3f65822299c458b6"
+      },
+      "entrypoint": "sirius_transport_ComputeMain",
+      "moves": [
+        "KernelContext_0 kernelContext_14{};",
+        "(&kernelContext_14)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));"
+      ],
+      "all_other_header_bytes_equal": true,
+      "original_Group_text_equal": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.native.hpp",
+      "basis": {
+        "bytes": 100795,
+        "sha256": "25b18fe2dc56f2e98b564cdd19e7909d3babeeb197df6469b857ea0f3ed78393"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-owner-context/typed-batch/endpoint.native.hpp",
+      "derived": {
+        "bytes": 100803,
+        "sha256": "ebb21a92ef879e0dde6895f0ae6a9ed5c794fbce7da97ed1f18eda6dae3bcbeb"
+      },
+      "entrypoint": "sirius_endpoint_ComputeMain",
+      "moves": [
+        "KernelContext_0 kernelContext_14{};",
+        "(&kernelContext_14)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));"
+      ],
+      "all_other_header_bytes_equal": true,
+      "original_Group_text_equal": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.native.hpp",
+      "basis": {
+        "bytes": 63841,
+        "sha256": "24b18109cac98a3a796981e53263506e7a8b43bf9ff526f5fd7c69da12517705"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-owner-context/typed-batch/dopri_phase.native.hpp",
+      "derived": {
+        "bytes": 63849,
+        "sha256": "4f0f5ed02c6509ed63b61a36d102b5d345a673b06ddce287bbd1d83d9764abdf"
+      },
+      "entrypoint": "sirius_dopri_phase_ComputeMain",
+      "moves": [
+        "KernelContext_0 kernelContext_10{};",
+        "(&kernelContext_10)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));"
+      ],
+      "all_other_header_bytes_equal": true,
+      "original_Group_text_equal": true
+    }
+  }
+}

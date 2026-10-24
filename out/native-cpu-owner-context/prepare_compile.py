@@ -1,0 +1,11 @@
+"""Reuse sealed prior authority; task-local paths/source-input binding only."""
+from pathlib import Path
+import hashlib
+basis = Path.cwd() / 'out/native-cpu-active-prefix/prepare_compile.py'
+assert hashlib.sha256(basis.read_bytes()).hexdigest() == 'c78ac1b5cc95c32483e66a9cdde592ec23bfe91ac26c0d0c0ec025aed725f915'
+source = basis.read_text()
+changes = [('bin/linux-gcc/native-cpu-active-prefix/typed-batch', 'bin/linux-gcc/native-cpu-owner-context/typed-batch'), ('destination.mkdir(parents=True, exist_ok=False)', "assert destination.is_dir()\nassert {p.name for p in destination.iterdir()} == {slug + '.native.hpp' for slug in ('transport', 'endpoint', 'dopri_phase')}"), ("inputs[str((work / 'native_packet.hpp').relative_to(root))] = pin(work / 'native_packet.hpp')", "shared_guard = root / 'out/native-cpu-active-prefix/native_packet.hpp'\ninputs[str(shared_guard.relative_to(root))] = pin(shared_guard)\nfor slug in ('transport', 'endpoint', 'dopri_phase'):\n    header = destination / (slug + '.native.hpp')\n    inputs[str(header.relative_to(root))] = pin(header)\ninputs[str((work / 'header-preparation.json').relative_to(root))] = pin(work / 'header-preparation.json')"), ("    argv = list(item['argv'])", "    argv = list(item['argv'])\n    header_index = argv.index(str(root / 'bin/linux-gcc/native-cpu-slang-bridge/typed-batch'))\n    assert argv[header_index - 1] == '-isystem'\n    argv[header_index - 1:header_index - 1] = ['-isystem', str(destination)]"), ("argv[include:include + 2] = ['-I', str(work), '-I', str(basis)]", "argv[include:include + 2] = ['-I', str(root / 'out/native-cpu-active-prefix'), '-I', str(basis)]"), ('Only native_packet.hpp differs: immutablecapacity defines extents/tail; activeprefix defines dispatchedgroups.', 'Only3nativeHPPentrypoints differ by privateownercontextlifetime. Activeprefix guard is the exact shared pinned B authority; all64Groupcalls and ownerbody/arithmetic/table/order are unchanged.'), ('only activeprefix admission changes.', 'only privatecontext initialization/assignment move inside existinglanezero branch; sharedBactiveprefix admission unchanged.')]
+for before, after in changes:
+    assert before in source, before
+    source = source.replace(before, after)
+exec(compile(source, str(basis), 'exec'))

@@ -1,0 +1,66 @@
+--- a/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.native.hpp
++++ b/bin/linux-gcc/native-cpu-owner-context/typed-batch/transport.native.hpp
+@@ -5185,10 +5185,8 @@
+     ComputeThreadVaryingInput * _S320 = (slang_bit_cast<ComputeThreadVaryingInput *>(_S319));
+ 
+ #line 667
+-    KernelContext_0 kernelContext_14{};
+ 
+ #line 667
+-    (&kernelContext_14)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));
+ 
+ #line 667
+     Vector<uint32_t, 3>  _S321 = _S320->groupID;
+@@ -5196,6 +5194,8 @@
+     {
+ 
+ #line 668
++        KernelContext_0 kernelContext_14{};
++        (&kernelContext_14)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));
+         ComputeOwnedRow_0(_S321, 0U, &kernelContext_14);
+ 
+ #line 668
+--- a/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.native.hpp
++++ b/bin/linux-gcc/native-cpu-owner-context/typed-batch/endpoint.native.hpp
+@@ -5931,10 +5931,8 @@
+     ComputeThreadVaryingInput * _S408 = (slang_bit_cast<ComputeThreadVaryingInput *>(_S407));
+ 
+ #line 857
+-    KernelContext_0 kernelContext_14{};
+ 
+ #line 857
+-    (&kernelContext_14)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));
+ 
+ #line 857
+     Vector<uint32_t, 3>  _S409 = _S408->groupID;
+@@ -5942,6 +5940,8 @@
+     {
+ 
+ #line 858
++        KernelContext_0 kernelContext_14{};
++        (&kernelContext_14)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));
+         ComputeOwnedRow_0(_S409, 0U, &kernelContext_14);
+ 
+ #line 858
+--- a/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.native.hpp
++++ b/bin/linux-gcc/native-cpu-owner-context/typed-batch/dopri_phase.native.hpp
+@@ -3852,10 +3852,8 @@
+     ComputeThreadVaryingInput * _S202 = (slang_bit_cast<ComputeThreadVaryingInput *>(_S201));
+ 
+ #line 237
+-    KernelContext_0 kernelContext_10{};
+ 
+ #line 237
+-    (&kernelContext_10)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));
+ 
+ #line 237
+     Vector<uint32_t, 3>  _S203 = _S202->groupID;
+@@ -3863,6 +3861,8 @@
+     {
+ 
+ #line 238
++        KernelContext_0 kernelContext_10{};
++        (&kernelContext_10)->globalParams_0 = (slang_bit_cast<GlobalParams_0*>(globalParams_1));
+         ComputeOwnedRow_0(_S203, 0U, &kernelContext_10);
+ 
+ #line 238
