@@ -1,0 +1,46 @@
+{
+  "scope": "Authorized exact-tip preservation and retired duplicate/storage cleanup only; no project/runtime/scientific qualification. Restore exactmembers/paths/modes/mtimes from these receipts before a path-bound historical re-audit. Sparseconversion preservesoriginalbytes/hashes/paths.",
+  "archives": {
+    "exact-retirement-receipts.zip": {
+      "bytes": 197369,
+      "sha256": "2973690ffd691e9ca6dc991e292258f270a098163298a18601f004652592f09d"
+    },
+    "windows-c251-preflight-retirement.zip": {
+      "bytes": 3916412,
+      "sha256": "a81033e18ae60aa86bc527f47713d49ac11416d85736315a9ad4de1664a90efb"
+    }
+  },
+  "members": {
+    "retired-branches-2026-10-24.json": {
+      "archive": "exact-retirement-receipts.zip",
+      "bytes": 18290,
+      "sha256": "2ff3445c5b9dd6a36eeb195c6a3fce03757e007f005a8a445a5d1aa6cc1ef2cc"
+    },
+    "ci-extracts-retired-2026-10-24.json": {
+      "archive": "exact-retirement-receipts.zip",
+      "bytes": 355316,
+      "sha256": "9f408e7e8f10790ea5809f0524f589f2faadba17d039c3ca222b07c6824f7393"
+    },
+    "macos-extracts-retired-2026-10-24.json": {
+      "archive": "exact-retirement-receipts.zip",
+      "bytes": 397531,
+      "sha256": "1f925405da38431afee299151ae062705b7aaac580d165b0ab67191f30fdeba0"
+    },
+    "sparse-retired-buffers-2026-10-24.json": {
+      "archive": "exact-retirement-receipts.zip",
+      "bytes": 320729,
+      "sha256": "fc6de851d925fd049a443506f96648ebf5f92f129e61a8e07f0bf85807c11f67"
+    },
+    "windows-c251-preflight-retired-2026-10-24.json": {
+      "archive": "exact-retirement-receipts.zip",
+      "bytes": 2025963,
+      "sha256": "5d13505fcc2dc5314462b4c46a7772bd55c4f1de44aa278dad0c355f25925218"
+    }
+  },
+  "space_accounting": {
+    "linux_allocated_bytes_removed_or_sparsified": 1461116928,
+    "Windows_staging_allocated_bytes_removed": 326066176,
+    "Windows_context_archive_bytes": 3916412,
+    "limits": "Counted allocations and filesystem free-space observations are separate. Concurrent writers and VM storage prevent assigning all drive-free changes to this cleanup."
+  }
+}
