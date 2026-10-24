@@ -1,0 +1,111 @@
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -12,9 +12,15 @@
+    return util_get_cpu_caps()->has_avx2 && __builtin_cpu_supports("x86-64-v3");
+ }
+ 
++struct lp_native_cpu_views {
++   struct lp_jit_buffer input;
++   struct lp_jit_buffer output;
++};
++
+ static bool
+-lp_native_cpu_packet_mode(const struct lp_cs_job_info *job,
+-                          uint32_t x, uint32_t y, uint32_t z, bool preflight)
++lp_native_cpu_extract_views(const struct lp_cs_job_info *job,
++                            uint32_t x, uint32_t y, uint32_t z,
++                            struct lp_native_cpu_views *views)
+ {
+    if (!job->native_cpu_stage || job->native_cpu_stage > 3 ||
+        job->block_size[0] != 64 || job->block_size[1] != 1 || job->block_size[2] != 1 ||
+@@ -46,6 +52,20 @@
+        (output_address < table_address + table_bytes &&
+         table_address < output_address + output->num_elements))
+       return false;
++   views->input = *input;
++   views->output = *output;
++   return true;
++}
++
++static bool
++lp_native_cpu_packet_mode(const struct lp_cs_job_info *job,
++                          uint32_t x, uint32_t y, uint32_t z, bool preflight)
++{
++   struct lp_native_cpu_views views;
++   if (!lp_native_cpu_extract_views(job, x, y, z, &views))
++      return false;
++   const struct lp_jit_buffer *input = &views.input;
++   const struct lp_jit_buffer *output = &views.output;
+    /* SSBO descriptor extents are bytes. Full numerical/program/range checks
+     * occur together in try_packet before any output write. A refusal never
+     * means that an earlier row was executed; the ordinary JIT remains safe.
+@@ -102,3 +122,32 @@
+ {
+    return lp_native_cpu_packet_mode(job, 0, 0, 0, true);
+ }
++
++/* Separate from positive native admission: each exact owned SPIR-V returns
++ * on header rows==0 before any output/program/FP access. Preserve the same
++ * conservative job, descriptor-table, pointer, extent and nonalias domain.
++ * No worker, FP scope or positive native packet is needed for this no-op.
++ */
++static bool
++lp_native_cpu_zero_active(const struct lp_cs_job_info *job)
++{
++   struct lp_native_cpu_views views;
++   if (!lp_native_cpu_extract_views(job, 0, 0, 0, &views))
++      return false;
++   const struct lp_jit_buffer *input = &views.input;
++   const struct lp_jit_buffer *output = &views.output;
++   const uintptr_t in = (uintptr_t)input->u;
++   const uintptr_t out = (uintptr_t)output->u;
++   if (!input->u || !output->u ||
++       input->num_elements < sizeof(uint32_t) ||
++       output->num_elements < sizeof(uint32_t) ||
++       ((input->num_elements | output->num_elements) & 3u) ||
++       ((in | out) & 3u) ||
++       in > UINTPTR_MAX - input->num_elements ||
++       out > UINTPTR_MAX - output->num_elements ||
++       (in < out + output->num_elements && out < in + input->num_elements))
++      return false;
++   uint32_t rows;
++   memcpy(&rows, input->u, sizeof(rows));
++   return rows == 0;
++}
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -1963,6 +1963,7 @@
+       llvmpipe->cs_dirty |= LP_CSNEW_CS;
+    }
+    bool native_direct = false;
++   bool native_zero_active = false;
+ #if LP_VULKAN_IEEE32_ENABLED
+    const nir_shader *native_nir = llvmpipe->cs->base.ir.nir;
+    native_direct = (native_nir->info.stage == MESA_SHADER_COMPUTE &&
+@@ -2002,9 +2003,11 @@
+ #if LP_VULKAN_IEEE32_ENABLED
+    if (native_direct) {
+       job_info.native_cpu_stage = native_nir->info.cs.llvmpipe_native_cpu_stage;
+-      if (lp_native_cpu_preflight(&job_info)) {
+-         job_info.native_preflight_passed = true;
+-         job_info.native_simd_packets = sirius_native_simd_supported();
++      native_zero_active = lp_native_cpu_zero_active(&job_info);
++      if (native_zero_active || lp_native_cpu_preflight(&job_info)) {
++         /* A zero-header no-op is not positive native packet admission. */
++         job_info.native_preflight_passed = !native_zero_active;
++         job_info.native_simd_packets = !native_zero_active && sirius_native_simd_supported();
+          job_info.current->variant = NULL;
+          /* No variant is bound. A later refusal must select one even when
+           * resource bindings and the original fallback key are unchanged.
+@@ -2022,7 +2025,10 @@
+    int scheduled_tasks = num_tasks;
+    /* Native full packets and individual tails retain original workgroup IDs.
+     * Other CPUs use the original scalar row tasks; ordinary JIT is unchanged. */
+-   if (job_info.native_simd_packets) {
++   if (native_zero_active) {
++      /* num_tasks remains the original logical workgroup count for queries. */
++      scheduled_tasks = 0;
++   } else if (job_info.native_simd_packets) {
+       scheduled_tasks = job_info.grid_size[0] / 8 + job_info.grid_size[0] % 8;
+    } else if (intergroup) {
+       job_info.intergroup_row_owner = true;
