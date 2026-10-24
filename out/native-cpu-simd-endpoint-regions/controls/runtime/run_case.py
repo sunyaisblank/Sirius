@@ -2,8 +2,10 @@
 from pathlib import Path
 import hashlib
 import json
+import signal
 import subprocess
 import sys
+import time
 
 root = Path.cwd()
 work = Path(__file__).resolve().parent
@@ -33,8 +35,19 @@ if label == 'control-4':
         'set auto-load off\nset startup-with-shell off\nset disable-randomization off\n'
         'set print thread-events off\nsource ' + str(work / 'control4_observer.py') +
         '\nrun\npython resume_after_sample()\n')
-    subprocess.run(['/usr/bin/gdb', '-nx', '-nh', '-q', '-batch', '-x', str(commands),
-                    '--args', *original_argv], cwd=root, check=True)
+    debugger = subprocess.Popen(['/usr/bin/gdb', '-nx', '-nh', '-q', '-batch', '-x', str(commands),
+                                 '--args', *original_argv], cwd=root)
+    started, requested = time.monotonic(), False
+    while debugger.poll() is None:
+        if not requested and time.monotonic() - started >= 45:
+            # This is our unreaped child, so its PID cannot have been reused.
+            (work / label / 'sample-request.json').write_text(json.dumps({
+                'debugger_pid': debugger.pid, 'elapsed_seconds': time.monotonic() - started,
+                'signal_target': 'own debugger child only', 'signals_sent': 1}) + '\n')
+            debugger.send_signal(signal.SIGINT)
+            requested = True
+        time.sleep(.05)
+    assert debugger.returncode == 0, debugger.returncode
     observation = json.loads((work / label / 'route-observation.json').read_text())
     assert not observation['failures'] and observation['inferior_exit'] == 0, observation
 else:

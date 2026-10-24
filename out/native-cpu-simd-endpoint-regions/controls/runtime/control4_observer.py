@@ -3,14 +3,15 @@
 No inferior calls, register/data writes, altered test inputs or retry. The
 debugger remains inside the original 300s owner. Interrupt/resume overhead is
 included; this numerical control supplies no performance-benefit evidence.
-GDB's documented thread-safe interrupt is used from a signal-blocked thread:
-https://sourceware.org/gdb/current/onlinedocs/gdb.html/Threading-in-GDB.html
+The owning Python process sends one SIGINT to its own debugger child. A small
+independent sleep-process check rejected an internal GDB Python timer because
+its interrupt was deferred, and verified external interrupt/capture/resume.
+No extra Sirius test is used to check the observation harness.
 """
 from pathlib import Path
 import gdb
 import json
 import struct
-import threading
 import time
 
 work = Path.cwd() / 'out/native-cpu-simd-endpoint-regions/controls/runtime'
@@ -18,10 +19,8 @@ folder = work / 'control-4'
 action = json.loads((work / 'actions.json').read_text())['control-4']
 provider = Path(action['runtime_provider']).resolve(strict=True)
 started = time.monotonic()
-done = threading.Event()
-sample_requested = threading.Event()
 record = {'calls': [], 'failures': [], 'sample_after_seconds': 45,
-          'sample': None, 'inferior_exit': None,
+          'sample': None, 'inferior_exit': None, 'last_stop_signal': None,
           'scope': 'One original C4 under bounded observation; all overhead included. No performance evidence.'}
 armed = False
 breakpoints = []
@@ -98,12 +97,6 @@ class Entered(gdb.Breakpoint):
             return True
 
 
-def sample_timer():
-    if not done.wait(45):
-        sample_requested.set()
-        gdb.interrupt()
-
-
 def loaded(event):
     global armed
     if armed or not event.new_objfile.filename:
@@ -117,14 +110,11 @@ def loaded(event):
         breakpoints.append(Entered('sirius_simd_' + slug + '_packet', 'raw_SIMD'))
     for name in ('lvp_shader_compile', 'llvmpipe_update_cs_variant', 'gallivm_compile_module'):
         breakpoints.append(Entered(name, 'ordinary_compilation', maximum=6))
-    with gdb.blocked_signals():
-        threading.Thread(target=sample_timer, daemon=True).start()
     save()
 
 
 def exited(event):
-    done.set()
-    record['inferior_exit'] = event.exit_code
+    record['inferior_exit'] = getattr(event, 'exit_code', None)
     record['exit_seconds'] = time.monotonic() - started
     save()
 
@@ -132,7 +122,7 @@ def exited(event):
 def resume_after_sample():
     if record['inferior_exit'] is not None:
         return
-    if not sample_requested.is_set():
+    if not (folder / 'sample-request.json').is_file() or record['last_stop_signal'] != 'SIGINT':
         record['failures'].append('Unexpected inferior stop before fixed-time sample')
         save()
         return
@@ -142,6 +132,13 @@ def resume_after_sample():
     gdb.execute('continue')
 
 
+def stopped(event):
+    if isinstance(event, gdb.SignalEvent):
+        record['last_stop_signal'] = event.stop_signal
+        save()
+
+
 gdb.events.new_objfile.connect(loaded)
 gdb.events.exited.connect(exited)
+gdb.events.stop.connect(stopped)
 save()
