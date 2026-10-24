@@ -49,7 +49,6 @@ def close_delimiter(text, opening, left, right):
 PRELUDE = r'''
 typedef uint32 uint32_t;
 typedef int32 int32_t;
-typedef uint32 uint;
 struct RowID { uint32_t x; uint32_t y; uint32_t z; };
 struct WordDimensions { uint32_t x; uint32_t y; };
 static WordDimensions uint2(uint32_t x, uint32_t y) {

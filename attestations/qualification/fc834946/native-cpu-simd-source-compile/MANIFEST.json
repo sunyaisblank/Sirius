@@ -1,0 +1,88 @@
+{
+  "revision": "fc8349461a9c5bb77c88222f1930408d187dae6e",
+  "scope": "Compiler syntax rejection, no object or shader execution. All original numerical/control/workload contracts unchanged.",
+  "result": "ISPC predefined uint alias conflicts with redundant generated typedef. Remove alias; no compiler flag tuning or unchanged retry.",
+  "wall_seconds": 1.0395242939703166,
+  "peak_rss_kib": 206348,
+  "all_births_absent": true,
+  "source_inputs_unchanged": true,
+  "archive": {
+    "path": "source-and-diagnostics.zip",
+    "bytes": 291925,
+    "sha256": "4d99ed36a2ae07834effdb185bfdbc3bdf6a84905fd1e75a69e38350e63fd4c5",
+    "members": {
+      "out/native-cpu-simd-rows/derive_ispc.py": {
+        "bytes": 12303,
+        "sha256": "df1444c34fe261b1262752487bb9fda2a58fed63024780574596144ef9bf31b6"
+      },
+      "out/native-cpu-simd-rows/ispc-derivation.json": {
+        "bytes": 4886,
+        "sha256": "e909a76ff7f7a347764fba76c5c250ebd2dd1cc835304d8437e81266e0036601"
+      },
+      "out/native-cpu-simd-rows/prepare_ispc_compile.py": {
+        "bytes": 6088,
+        "sha256": "a5f9c08853948c9b5a8cae8c436ff6694b279152f7e29d6bcbd6f4aac271934b"
+      },
+      "out/native-cpu-simd-rows/build_ispc.py": {
+        "bytes": 2205,
+        "sha256": "878e5935748fd0e79b01e51aa6f7031f60d0b89eb91b2e6218dd2e75545964f6"
+      },
+      "out/native-cpu-simd-rows/prepared-ispc-inputs.json": {
+        "bytes": 12017,
+        "sha256": "3297a336d1fba4531d6748d2f6ba68ed3e703fa2ae05383ca2c1839aa043e6cc"
+      },
+      "out/native-cpu-simd-rows/ispc-compile-result.json": {
+        "bytes": 10567,
+        "sha256": "a18ab9c82e08469e5094b4bb7e6777efc0167acf4b1cebbde75c14b9fbb9d258"
+      },
+      "out/native-cpu-simd-rows/compile/actions.json": {
+        "bytes": 4185,
+        "sha256": "5b5903b1bafdc3a5e05db9c0fb80a17695e9b759c9d8fe21ccd8a6aecfd019c9"
+      },
+      "out/native-cpu-simd-rows/compile/run_owned.py": {
+        "bytes": 293,
+        "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+      },
+      "out/native-cpu-simd-rows/compile/owned_guard.py": {
+        "bytes": 295,
+        "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+      },
+      "out/native-cpu-simd-rows/compile/ispc/inputs-after.json": {
+        "bytes": 402405,
+        "sha256": "5972d6141b20eefbbef8fbb9b6ef4515aadba1feb76df8879b831a9a9d131bbe"
+      },
+      "out/native-cpu-simd-rows/compile/ispc/inputs-before.json": {
+        "bytes": 402405,
+        "sha256": "5972d6141b20eefbbef8fbb9b6ef4515aadba1feb76df8879b831a9a9d131bbe"
+      },
+      "out/native-cpu-simd-rows/compile/ispc/owner.json": {
+        "bytes": 1576,
+        "sha256": "f8a3ae3c82d41366411aa5022aa9a0bc6e439edd2fb320c4b153c9c3249ced41"
+      },
+      "out/native-cpu-simd-rows/compile/ispc/samples.jsonl": {
+        "bytes": 1016,
+        "sha256": "573eb8b95697d08e1fb284449c8887019ecfd7092d97f65dddf89fdba843895f"
+      },
+      "out/native-cpu-simd-rows/compile/ispc/stderr.log": {
+        "bytes": 2096,
+        "sha256": "501f17860d716ce0e2ab68cb0671fe4aef2ee71393a7df8ab28e12b9f8bfc50a"
+      },
+      "out/native-cpu-simd-rows/compile/ispc/stdout.log": {
+        "bytes": 470,
+        "sha256": "d98d6a7ca4215f2870f1bbcb83c2720440220dbb2530ec92b55b17368a2f1b83"
+      },
+      "bin/linux-gcc/native-cpu-simd-rows/ispc-source/dopri_phase.ispc": {
+        "bytes": 411343,
+        "sha256": "45858d79bd6cdae97929067773bab63e5c7de2e2300a4eee0b4c565e2cc159cb"
+      },
+      "bin/linux-gcc/native-cpu-simd-rows/ispc-source/endpoint.ispc": {
+        "bytes": 817183,
+        "sha256": "87e7ab8ae98a6add714e508805d280c15f467b76a0a86b965d30cb1920ce8107"
+      },
+      "bin/linux-gcc/native-cpu-simd-rows/ispc-source/transport.ispc": {
+        "bytes": 639065,
+        "sha256": "e71c81cba91fa40c9fd0af12ea20b73737e6102835fac079b1e99667eea1f99f"
+      }
+    }
+  }
+}
