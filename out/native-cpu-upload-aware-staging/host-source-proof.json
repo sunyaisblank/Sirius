@@ -1,0 +1,133 @@
+{
+  "basis_path": "out/native-cpu-row-ownership/retained_compute.cpp",
+  "basis": {
+    "bytes": 46035,
+    "sha256": "0bc5bd4e9f4aa4c9be6f292e09b76c92dc53ae5f75ce91dd62ac482098a160b3"
+  },
+  "derived_path": "bin/linux-gcc/native-cpu-upload-aware-staging/source/retained_compute.cpp",
+  "derived": {
+    "bytes": 48169,
+    "sha256": "f5d082de58f96406fb76c9db310daa6ebd33aad3c59b3aaf23032b5ee4c83b47"
+  },
+  "source_inputs": {
+    "out/native-cpu-row-ownership/retained_compute.cpp": {
+      "bytes": 46035,
+      "sha256": "0bc5bd4e9f4aa4c9be6f292e09b76c92dc53ae5f75ce91dd62ac482098a160b3"
+    },
+    "src/sirius/backend/retained_compute.h": {
+      "bytes": 15862,
+      "sha256": "be59f256c881e47eed888e40fdc32dfd164bdb3eca83f09ffdab44d401b37ee1"
+    },
+    "out/native-cpu-host-representation/host.patch": {
+      "bytes": 1627,
+      "sha256": "b65f6cd39fb18bc028b045fe8812812430f5b18a9d13748305bc2c2c77f15c33"
+    },
+    "out/native-cpu-host-copy-prepare/proof.json": {
+      "bytes": 5978,
+      "sha256": "4776fb469fcc15a549243726dcdc1c948e4c6d548db410797f126454553f79f3"
+    },
+    "out/native-cpu-host-copy-prepare/matched-host.patch": {
+      "bytes": 5454,
+      "sha256": "fe62f3e80eadc7efc45956c0029f67ea044b88220ef7837254319934e76125a4"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    }
+  },
+  "full_inverse_restores_matched_source": true,
+  "normal_spacing_patch_applied_once_in_private_copy": true,
+  "original_spacing_fallback_verbatim": true,
+  "inactive_only_input_zero_ranges": [
+    {
+      "stage": "camera_",
+      "words_per_row": 160,
+      "input": "inputs"
+    },
+    {
+      "stage": "transport_",
+      "words_per_row": 230,
+      "input": "inputs"
+    },
+    {
+      "stage": "endpoint_",
+      "words_per_row": 225,
+      "input": "inputs"
+    },
+    {
+      "stage": "dense_",
+      "words_per_row": 560,
+      "input": "inputs"
+    },
+    {
+      "stage": "dopri_phase_",
+      "words_per_row": 1810,
+      "input": "inputs"
+    },
+    {
+      "stage": "endpoint_",
+      "words_per_row": 225,
+      "input": "endpoints"
+    },
+    {
+      "stage": "dense_",
+      "words_per_row": 560,
+      "input": "dense"
+    },
+    {
+      "stage": "initialize_",
+      "words_per_row": 225,
+      "input": "inputs"
+    },
+    {
+      "stage": "ray_camera_",
+      "words_per_row": 225,
+      "input": "inputs"
+    }
+  ],
+  "inactive_clear_guards": 9,
+  "inactive_clear_only_before_first_successful_upload": true,
+  "all_other_source_bytes_unchanged": true,
+  "source_selectors_and_all_shader_arrays_unchanged": true,
+  "normal_spacing_scope": "Original abs remains first. Only finite positive normal magnitudes below maxfinite use the exact exponent-derived normal binary64 ULP. All zero/subnormal/maxfinite/nonfinite cases retain the original nextafter expression and its exception/errno behavior. Root independently reviews/tests linked-libm FEnv/errno equivalence before runtime admission.",
+  "copy_scope": "Complete active memcpy retained at all nine sites. Inactive host rows are cleared only while that Stage.program_uploaded is false. Header/program host suffix, every consumed upload byte, device state, authorized host reads and refusal/rollback behavior are unchanged. Inactive unconsumed host bytes may differ after a successful full upload.",
+  "upload_wire_invariant": {
+    "flag_default_false": true,
+    "flag_assignment_count": 2,
+    "assignments_only_true_after_successful_write": true,
+    "stage_input_reference_lines": [
+      "stage.input.resize(bytes[0] / 4);",
+      "stage.input[0] = static_cast<std::uint32_t>(capacity);",
+      "stage.input.begin() + 1 + layout.input_words * capacity);",
+      "const auto* original = transport_.input.data() + 1 + row * 230;",
+      "auto input = std::span(stage.input);",
+      "std::fill_n(camera_.input.begin() + 1, capacity_ * 160, 0U);",
+      "std::memcpy(camera_.input.data() + 1, inputs.data(), inputs.size_bytes());",
+      "std::fill_n(transport_.input.begin() + 1, capacity_ * 230, 0U);",
+      "std::memcpy(transport_.input.data() + 1, inputs.data(), inputs.size_bytes());",
+      "std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);",
+      "std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());",
+      "std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);",
+      "std::memcpy(dense_.input.data() + 1, inputs.data(), inputs.size_bytes());",
+      "std::fill_n(dopri_phase_.input.begin() + 1, capacity_ * 1810, 0U);",
+      "std::memcpy(dopri_phase_.input.data() + 1, inputs.data(), inputs.size_bytes());",
+      "std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);",
+      "std::memcpy(endpoint_.input.data() + 1, endpoints.data(), endpoints.size_bytes());",
+      "std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);",
+      "std::memcpy(dense_.input.data() + 1, dense.data(), dense.size_bytes());",
+      "auto input = std::span(stage.input);",
+      "std::fill_n(initialize_.input.begin() + 1, capacity_ * 225, 0U);",
+      "std::memcpy(initialize_.input.data() + 1, inputs.data(), inputs.size_bytes());",
+      "std::fill_n(ray_camera_.input.begin() + 1, capacity_ * 225, 0U);",
+      "std::memcpy(ray_camera_.input.data() + 1, inputs.data(), inputs.size_bytes());"
+    ],
+    "false": "Full serialization follows unchanged inactive clear plus full active memcpy. Failed writes leave the flag false, so a smaller retry clears newly inactive rows before its next full write; any partial-write behavior receives the same wire bytes and call sequence.",
+    "true": "Successful full upload already installed the immutable program tail. Every later serialization is exactly header plus active rows; each active row is fully copied before upload, including newly active rows after growth. Skipped inactive host bytes never enter those uploads. A later dispatch/read/decode/timing failure does not invalidate the completed upload.",
+    "paired_endpoint_dense": "The two Stage flags remain independent. Endpoint write success followed by Dense write failure leaves Endpoint true and Dense false, exactly as before; write order, early returns and each subsequent serialized range are unchanged.",
+    "preparation_and_reset": "Preparation writes only device header zero/restored capacity and never changes the host input or uploaded-program flag. ResetStatistics changes neither. Cancellation and errors retain original ordering and flag lifetime.",
+    "stage_seven_host_reader": "Step invalidates every issued bit before validation/staging. Only successfully decoded active result rows may be issued; authorization checks matching issuer/generation/row and issued before reading that transport input row. No inactive stale host tail is consumed.",
+    "all_nine_active_copies_and_all_other_source_bytes_retained": true,
+    "no_new_fields_allocations_upload_ranges_or_dispatches": true
+  },
+  "limits": "Derived source only; no compiler/build/runtime, bottleneck, speedup, scientific or release claim."
+}
