@@ -1,0 +1,214 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp",
+      "basis": {
+        "bytes": 634190,
+        "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-simd-output-columns/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 642893,
+        "sha256": "97086a3e7cb1217d9c19eed83ab81102f3a7d39da20178a5d6e5dc79b59c2f33"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 201,
+        "constant_arrays": 18,
+        "constant_matrices": 2,
+        "private_arrays": 2,
+        "dimension_reads": 2,
+        "word_loads": 24,
+        "word_indices": 16,
+        "admitted_output_stride": 1,
+        "compile_assertions": 3,
+        "uniform_register_helper_clones": 5,
+        "uniform_canonical_operand_parameters": 4,
+        "uniform_forwarded_output_bases": 173,
+        "zero_output_base_locals": 1,
+        "removed_context_output_base_fields": 1,
+        "equivalent_uniform_full_output_clear_loops": 1,
+        "removed_export_output_base_assignments": 1,
+        "removed_initial_global_output_copy_loops": 1
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "uniform_register_helper_order": [
+        "ScratchAddressUniform_0",
+        "ScratchWriteUniform_0",
+        "ScratchReadUniform_0",
+        "ReadValueUniform_0",
+        "WriteValueUniform_0"
+      ],
+      "relative_output_columns": {
+        "uniform_forwarded_row_base_parameters": 173,
+        "top_row_base_zeroed": 1,
+        "context_absolute_base_fields_removed": 1,
+        "complete_clear_loops_replaced": 1,
+        "old_clear_counter_first_later_use": "i_5 = 0U;",
+        "real_input_row_unchanged": "row_4",
+        "clear_words_in_original_order": 4699,
+        "all_other_body_bytes_unchanged_after_inverse": true
+      },
+      "private_output_layout": {
+        "row_words": 4699,
+        "index_mapping": "row_relative_column * programCount + programIndex",
+        "active_rows_copied_in": false,
+        "active_rows_copied_out": true,
+        "complete_original_owned_clear_retained": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "preclear_admission_domain": {
+        "authority": "out/native-cpu-active-prefix/native_packet.hpp",
+        "maximum_capacity": 65536,
+        "minimum_program_header_words": 43,
+        "actual_canonical_program_words": 15967,
+        "minimum_output_prefix_words": 2404,
+        "conditions": "Full B admission and immutable views prove positive capacity<=65536, original input/program extents, output capacity*stride/divisibility, active rows inside capacity and sufficient output prefix. Export supplies y=z=0 and owned invocation0. Thus every active row fully clears before any numerical/input-field rejection; no previous global output word is read or needed. Scalar fallback remains unchanged."
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim."
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp",
+      "basis": {
+        "bytes": 812736,
+        "sha256": "90f41000d38684143089e198ad56a6507546b1e9ad38cae95d9ba8fc8b7e5fc8"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-simd-output-columns/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 821297,
+        "sha256": "4192e7c09d202a95e0daa373d57f46def581ca8a21950715f237b0b6bac92fb4"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 243,
+        "constant_arrays": 0,
+        "constant_matrices": 0,
+        "private_arrays": 2,
+        "dimension_reads": 2,
+        "word_loads": 24,
+        "word_indices": 15,
+        "admitted_output_stride": 1,
+        "compile_assertions": 3,
+        "uniform_register_helper_clones": 5,
+        "uniform_canonical_operand_parameters": 4,
+        "uniform_forwarded_output_bases": 212,
+        "zero_output_base_locals": 1,
+        "removed_context_output_base_fields": 1,
+        "equivalent_uniform_full_output_clear_loops": 1,
+        "removed_export_output_base_assignments": 1,
+        "removed_initial_global_output_copy_loops": 1
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "uniform_register_helper_order": [
+        "ScratchAddressUniform_0",
+        "ScratchReadUniform_0",
+        "ReadValueUniform_0",
+        "ScratchWriteUniform_0",
+        "WriteValueUniform_0"
+      ],
+      "relative_output_columns": {
+        "uniform_forwarded_row_base_parameters": 212,
+        "top_row_base_zeroed": 1,
+        "context_absolute_base_fields_removed": 1,
+        "complete_clear_loops_replaced": 1,
+        "old_clear_counter_first_later_use": "i_11 = 0U;",
+        "real_input_row_unchanged": "row_2",
+        "clear_words_in_original_order": 3829,
+        "all_other_body_bytes_unchanged_after_inverse": true
+      },
+      "private_output_layout": {
+        "row_words": 3829,
+        "index_mapping": "row_relative_column * programCount + programIndex",
+        "active_rows_copied_in": false,
+        "active_rows_copied_out": true,
+        "complete_original_owned_clear_retained": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "preclear_admission_domain": {
+        "authority": "out/native-cpu-active-prefix/native_packet.hpp",
+        "maximum_capacity": 65536,
+        "minimum_program_header_words": 103,
+        "actual_canonical_program_words": 21143,
+        "minimum_output_prefix_words": 769,
+        "conditions": "Full B admission and immutable views prove positive capacity<=65536, original input/program extents, output capacity*stride/divisibility, active rows inside capacity and sufficient output prefix. Export supplies y=z=0 and owned invocation0. Thus every active row fully clears before any numerical/input-field rejection; no previous global output word is read or needed. Scalar fallback remains unchanged."
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim."
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp",
+      "basis": {
+        "bytes": 409325,
+        "sha256": "5173a3682f0afe1811228c44f46d35fb843683ecf058832ddc8f49465541c7e6"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-simd-output-columns/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 414223,
+        "sha256": "74292eadc02a58d687ca227b5a14336f652477ae3a0df4b7cbe84dddbbca5cc7"
+      },
+      "approved_syntax_replacement_counts": {
+        "private_pointers": 83,
+        "constant_arrays": 0,
+        "constant_matrices": 0,
+        "private_arrays": 1,
+        "dimension_reads": 2,
+        "word_loads": 21,
+        "word_indices": 7,
+        "admitted_output_stride": 1,
+        "compile_assertions": 2,
+        "uniform_register_helper_clones": 5,
+        "uniform_canonical_operand_parameters": 4,
+        "uniform_forwarded_output_bases": 58,
+        "zero_output_base_locals": 1,
+        "removed_context_output_base_fields": 1,
+        "equivalent_uniform_full_output_clear_loops": 1,
+        "removed_export_output_base_assignments": 1,
+        "removed_initial_global_output_copy_loops": 1
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "uniform_register_helper_order": [
+        "ScratchAddressUniform_0",
+        "ScratchReadUniform_0",
+        "ReadValueUniform_0",
+        "ScratchWriteUniform_0",
+        "WriteValueUniform_0"
+      ],
+      "relative_output_columns": {
+        "uniform_forwarded_row_base_parameters": 58,
+        "top_row_base_zeroed": 1,
+        "context_absolute_base_fields_removed": 1,
+        "complete_clear_loops_replaced": 1,
+        "old_clear_counter_first_later_use": "i_5 = 0U;",
+        "real_input_row_unchanged": "row_3",
+        "clear_words_in_original_order": 4149,
+        "all_other_body_bytes_unchanged_after_inverse": true
+      },
+      "private_output_layout": {
+        "row_words": 4149,
+        "index_mapping": "row_relative_column * programCount + programIndex",
+        "active_rows_copied_in": false,
+        "active_rows_copied_out": true,
+        "complete_original_owned_clear_retained": true,
+        "inactive_rows_accessed": false,
+        "all_original_output_values_preserved": true
+      },
+      "preclear_admission_domain": {
+        "authority": "out/native-cpu-active-prefix/native_packet.hpp",
+        "maximum_capacity": 65536,
+        "minimum_program_header_words": 203,
+        "actual_canonical_program_words": 10689,
+        "minimum_output_prefix_words": 1004,
+        "conditions": "Full B admission and immutable views prove positive capacity<=65536, original input/program extents, output capacity*stride/divisibility, active rows inside capacity and sufficient output prefix. Export supplies y=z=0 and owned invocation0. Thus every active row fully clears before any numerical/input-field rejection; no previous global output word is read or needed. Scalar fallback remains unchanged."
+      },
+      "logical_invocations_per_active_row": 64,
+      "physical_math_rederived": false,
+      "limits": "Source derivation only. Uniform/global versus varying/private storage adaptation and prelude intrinsics need independent review and actual compiled/numerical proof. No object/execution/benefit/frame claim."
+    }
+  },
+  "compiler_user_guide": "https://ispc.github.io/ispc.html",
+  "scope": "Complete T/E/DP plus all5canonicalprograms. Original arithmetic/control expressions copied with enumerated C-like syntax/type/storage adaptations; original literal call order retained. No field/trial/RHS/quartic/reference/precision/workload/count/budget change. Not compiled or executed."
+}

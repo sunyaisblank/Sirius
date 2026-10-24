@@ -1,0 +1,653 @@
+{
+  "revision": "1c4ca0dcb988b44566f58ccb9c204e98a64391d7",
+  "scope": "Private I source/build/soleC8/original soleABBA only. All reference buffers exact;21/22 performance checks passed with independentDecimal agreement, therefore rejected. No remaining7/frame, adoption, scientific or release acceptance.",
+  "c8": {
+    "all32_exact": true,
+    "markers": 51,
+    "module_joins": 54,
+    "observed_CPU_support": true,
+    "first_actual_rawSIMD_returns": 3,
+    "independent_scalar_tail_task_observed": true
+  },
+  "benefit": {
+    "audit_passed": true,
+    "checks_passed": 21,
+    "checks_total": 22,
+    "Decimal_agrees_on_all22": true,
+    "all22_pass": false,
+    "failed_check": {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_samples_ms": [
+        2.535585,
+        2.51111,
+        2.372946
+      ],
+      "candidate_samples_ms": [
+        3.605905,
+        2.880707,
+        1.987678
+      ],
+      "baseline_median_ms": 2.51111,
+      "candidate_median_ms": 2.880707,
+      "improvement_percent": -14.718471114367757,
+      "minimum_percent": -5,
+      "pass": false
+    },
+    "whole_checks": [
+      {
+        "direction": "forward",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "improvement_percent": 29.253510951184065,
+        "pass": true
+      },
+      {
+        "direction": "forward",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "improvement_percent": 20.09942482986163,
+        "pass": true
+      },
+      {
+        "direction": "reverse",
+        "family": "legacy",
+        "scope": "complete_call_ms",
+        "improvement_percent": 20.19925681585931,
+        "pass": true
+      },
+      {
+        "direction": "reverse",
+        "family": "modern",
+        "scope": "complete_call_ms",
+        "improvement_percent": 10.770120934310976,
+        "pass": true
+      }
+    ],
+    "extra_retries_or_warmups": 0
+  },
+  "owners": {
+    "control-8": {
+      "wall_seconds": 23.591723621007986,
+      "peak_sampled_rss_kib": 1062648,
+      "child_exit": 0
+    },
+    "a1": {
+      "wall_seconds": 86.75809713301715,
+      "peak_sampled_rss_kib": 2340720,
+      "child_exit": 0
+    },
+    "b1": {
+      "wall_seconds": 15.00749036599882,
+      "peak_sampled_rss_kib": 939436,
+      "child_exit": 0
+    },
+    "b2": {
+      "wall_seconds": 14.328957413090393,
+      "peak_sampled_rss_kib": 938836,
+      "child_exit": 0
+    },
+    "a2": {
+      "wall_seconds": 63.38338504603598,
+      "peak_sampled_rss_kib": 2342188,
+      "child_exit": 0
+    }
+  },
+  "archives": {
+    "source-build-and-trial.zip": {
+      "bytes": 5080545,
+      "sha256": "1837189ba4ee17b50c7dff7db4ba0c92198739730efb04c99e903392545f380c",
+      "members": {
+        "out/native-cpu-simd-packet-policy/actions.json": {
+          "bytes": 34917,
+          "sha256": "60070b02321225a589c807c679b180fb149377bec22cf2b460c4788d5678cd60"
+        },
+        "out/native-cpu-simd-packet-policy/adapter-compile-result.json": {
+          "bytes": 16371,
+          "sha256": "d2c0d6bce1b3dc7ad39c1f004dda5f350efef64a062a041f9e87c969eaab5a0a"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/prepare.py": {
+          "bytes": 463,
+          "sha256": "e1c566fc71f6ca3015338e79b395e7dcb1d1ea64ba3282fd1b35e641add802ba"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/providers.json": {
+          "bytes": 1922,
+          "sha256": "a3676bd6c45ec9b5b290a108402bcc7db3cb57bf08c9fdd75fd9a6c8f387f356"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/benefit.json": {
+          "bytes": 234657,
+          "sha256": "a5ad4f1ee00c60a4eafaf5979f80ecd63cf7706ed02f96a42f8cb3c6d2cf40cc"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/decimal-agreement.json": {
+          "bytes": 7977,
+          "sha256": "792c9c3fa037497f9346908859f1b5df95955ec4f9de1584644a6fce07ba0eda"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/decimal_check.py": {
+          "bytes": 536,
+          "sha256": "1fc939799941bae216b7e372022fb0374437ef4adb81fb813cf30a6728ad4fbd"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/expected-readback-layout.json": {
+          "bytes": 3455,
+          "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/native_evidence.py": {
+          "bytes": 518,
+          "sha256": "bf50b12e63d42c0715007e173e25ea2abbf01f71030b9d62099be034d59e40e8"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/numeric_gates.py": {
+          "bytes": 516,
+          "sha256": "5317872eae1fccf0ba9a04f552f3c303e309fda2f0279e573ef1137d8772ca12"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/read_results.py": {
+          "bytes": 535,
+          "sha256": "5b909287d802d49aec2f646d1bc94d3d1a636b362c3925ca418c9b433f24774c"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/run_abba.py": {
+          "bytes": 531,
+          "sha256": "67d7740ced53801d60ebd8ccb2a99c7c9ed3b4543f01385474ce0a7b99562743"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/readers/sole-ABBA-inputs.json": {
+          "bytes": 2153,
+          "sha256": "9b4af10e3f046bc471b037f219541b3502e86a2a7ce0567ff32396c77a208de6"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/gtest.xml": {
+          "bytes": 40976,
+          "sha256": "41ff4207755b463e5bf29fe29e83b803fd141fda47f16183ede6e132695141ff"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/inputs-after.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/inputs-before.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/owner.json": {
+          "bytes": 3750,
+          "sha256": "44237a7bddb55890460acab0265175b8fa7ed6ded0684be83791b888e7213b27"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/samples.jsonl": {
+          "bytes": 963867,
+          "sha256": "e17e3fd2868ad2c7aef75c1724be37cc1493d1d9decd7c1e9dfc8057fad56e07"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a1/stdout.log": {
+          "bytes": 708,
+          "sha256": "6165e04d7e1b9983eb7e6c24bdb71b7ca128b00a104dcdda705c843a03bd7fb9"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/gtest.xml": {
+          "bytes": 40826,
+          "sha256": "250630a56a2c0bb7d9c0abf8cbc0957d71cf693af27386767af49d2b94304b31"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/inputs-after.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/inputs-before.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/owner.json": {
+          "bytes": 3750,
+          "sha256": "6145d23991a5c12f26bedcd54ff68db2357f087615a23dc0e5b70ad8f4570b05"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/samples.jsonl": {
+          "bytes": 863681,
+          "sha256": "bc224361ecbc37d0df479515780682d1d9265ca92d8771dc034d2cb84a808ed6"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/a2/stdout.log": {
+          "bytes": 708,
+          "sha256": "54fa692c33cac9ac71e1669711e9e223f8768bd36a616f08278e4072dd92a692"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/actions.json": {
+          "bytes": 116815,
+          "sha256": "3b6ed9f607e9b06a165debf026bb21ae69c03a671614d2e6485d6ee24026eea5"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/gtest.xml": {
+          "bytes": 40698,
+          "sha256": "2db63ce9f4a644848de3a91eb2177d80049dc1b78c7d7bf9b5b85bcc8ea30079"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/inputs-after.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/inputs-before.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/owner.json": {
+          "bytes": 3713,
+          "sha256": "d12ea76582bee2b23b22d78d3d8dec4d2a1696474bd545fabea72b359a6332a6"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/samples.jsonl": {
+          "bytes": 201775,
+          "sha256": "98daacfc8d4073d4a7deedb972d880c67378c4683974c317fb3929a13767ce36"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b1/stdout.log": {
+          "bytes": 708,
+          "sha256": "26b1a29fe6696654b0f484b583930ef51100736c48b5900a0eee5662888f3cb0"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/gtest.xml": {
+          "bytes": 40705,
+          "sha256": "81a3b9ed03d14977382079f721bfe35e85a3044ffcd387abef30bd47f9ef6bf7"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/inputs-after.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/inputs-before.json": {
+          "bytes": 483577,
+          "sha256": "287e92fda9bb452bbe62b35c2d60f5fe3803d60c394c4c6a578eb65ae35d2d98"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/owner.json": {
+          "bytes": 3714,
+          "sha256": "8558362459dc671cc9fc4c8c7a2eee21d8efb581832ee40c112a74cf1ca836bd"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/samples.jsonl": {
+          "bytes": 193929,
+          "sha256": "467d7c96c60b1bb8fd28615cb4fbbd2cafc47fd6cefa3d099fb9807c946022ae"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/b2/stdout.log": {
+          "bytes": 708,
+          "sha256": "68f322b4b35d06ed748c07723447005dda2bdcbb67cacd50db0b77844a5eba94"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/owned_guard.py": {
+          "bytes": 514,
+          "sha256": "5a578e7ed136a69ac15ccb6fc14c2de71d17d2e09ed93fbe2e028ad248ab3042"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/run_case.py": {
+          "bytes": 531,
+          "sha256": "5bcad1e6d3cb01b62b87aaa72de679a2daf6f243a5a49a79e8f41d7f1bc80fe1"
+        },
+        "out/native-cpu-simd-packet-policy/benefit/runtime/run_owned.py": {
+          "bytes": 512,
+          "sha256": "95127cdfbdae57cb6b08f75b90a66d45c06f4acded269064f2645e791b619347"
+        },
+        "out/native-cpu-simd-packet-policy/build_adapter.py": {
+          "bytes": 362,
+          "sha256": "840d79531601e2f66915f392616732ea425fe0712bbbb43a09fc7d1067a965a0"
+        },
+        "out/native-cpu-simd-packet-policy/build_ispc.py": {
+          "bytes": 605,
+          "sha256": "a65c90a902a56aac50992cd303d5b0acbc537d01e28b17a6054a61db9a0700d9"
+        },
+        "out/native-cpu-simd-packet-policy/build_provider.py": {
+          "bytes": 532,
+          "sha256": "03fa7c7dba797a5a97b33ae38a92226f4e483a54591cf18ca2397c7a969d67e0"
+        },
+        "out/native-cpu-simd-packet-policy/compile/actions.json": {
+          "bytes": 11926,
+          "sha256": "6d40e71c896f0aa4e9e10b67c32a2e7ac851c649a72ddace2cdc636a8f5e6328"
+        },
+        "out/native-cpu-simd-packet-policy/compile/adapter/inputs-after.json": {
+          "bytes": 446130,
+          "sha256": "bbe13b998b89ba706f265816f4c338854e2ed496abf88d36401daabf3e978424"
+        },
+        "out/native-cpu-simd-packet-policy/compile/adapter/inputs-before.json": {
+          "bytes": 446130,
+          "sha256": "bbe13b998b89ba706f265816f4c338854e2ed496abf88d36401daabf3e978424"
+        },
+        "out/native-cpu-simd-packet-policy/compile/adapter/owner.json": {
+          "bytes": 1874,
+          "sha256": "1787b4639fff828483b73a9d889223cd7813ff1f164d0ed6ba34a7711af4d2a4"
+        },
+        "out/native-cpu-simd-packet-policy/compile/adapter/samples.jsonl": {
+          "bytes": 688,
+          "sha256": "035d84fd444f1fcf2382aa2199d43661a0d35d2ce9188fdb94a2fb7778c52bf0"
+        },
+        "out/native-cpu-simd-packet-policy/compile/adapter/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/compile/adapter/stdout.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/compile/ispc-uniform/inputs-after.json": {
+          "bytes": 444009,
+          "sha256": "305b587f560e29e0726318ab981fa1d8f3ec805ffdc23a032b499cde4634fb05"
+        },
+        "out/native-cpu-simd-packet-policy/compile/ispc-uniform/inputs-before.json": {
+          "bytes": 444009,
+          "sha256": "305b587f560e29e0726318ab981fa1d8f3ec805ffdc23a032b499cde4634fb05"
+        },
+        "out/native-cpu-simd-packet-policy/compile/ispc-uniform/owner.json": {
+          "bytes": 2524,
+          "sha256": "6247e5c541eaee28c7abd78a402b79309884150c2b80c5585bf0e144bc732629"
+        },
+        "out/native-cpu-simd-packet-policy/compile/ispc-uniform/samples.jsonl": {
+          "bytes": 56844,
+          "sha256": "22fa615b1996043eeb4b4c50643b7c31d876c0cc1c83d428f53b11df6242f35d"
+        },
+        "out/native-cpu-simd-packet-policy/compile/ispc-uniform/stderr.log": {
+          "bytes": 44670,
+          "sha256": "7e8fed6c53ed081992d0e9f4e249c2a094bc304ca91c727acddac740bf469151"
+        },
+        "out/native-cpu-simd-packet-policy/compile/ispc-uniform/stdout.log": {
+          "bytes": 1497,
+          "sha256": "9fdb8d3b280ad3fc16a3eeeb97c678b960203cb6301744aaf2d68a6c80fa9711"
+        },
+        "out/native-cpu-simd-packet-policy/compile/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-simd-packet-policy/compile/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-simd-packet-policy/compiler-acquisition.json": {
+          "bytes": 1516,
+          "sha256": "1af00eea3a09ff7772324105fdbdcc001d62491a22c2a68ce741f3710a49e20b"
+        },
+        "out/native-cpu-simd-packet-policy/compiler-environment.json": {
+          "bytes": 729,
+          "sha256": "f225ac34c573c886ee0163f25c511ed97029de5e6f0629f49d1001524bd861eb"
+        },
+        "out/native-cpu-simd-packet-policy/configure_provider.py": {
+          "bytes": 362,
+          "sha256": "9dead9ae782220b1af5e63240d63697511bf78a480bdf61b1085e29a93be4bc0"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/gtest.xml": {
+          "bytes": 40883,
+          "sha256": "32947526237c8f20de6bbff707723b2e17ad45801b5d5cbc9f2a5b036133bb1b"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/inputs-after.json": {
+          "bytes": 481506,
+          "sha256": "5cc418d9d150f879e41b87a94bdf5b1e47740d145052d33d78693b70a34884f3"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/inputs-before.json": {
+          "bytes": 481506,
+          "sha256": "5cc418d9d150f879e41b87a94bdf5b1e47740d145052d33d78693b70a34884f3"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/native-observation.json": {
+          "bytes": 25426,
+          "sha256": "66a9118ba75e446b651665f5c77b70aeda8263929f9051dd10b3a92bf73fee4c"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/observe.gdb": {
+          "bytes": 229,
+          "sha256": "661b073ea2cf4e01ebf73bf1040bdd2313dd0533d1f233646ccd8f4b74668d5b"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/owner.json": {
+          "bytes": 4412,
+          "sha256": "c477d9cc6d151fd10164dcb8881f4d65b61e71b47216786ae3bff88146b3f3c4"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/samples.jsonl": {
+          "bytes": 320395,
+          "sha256": "17481059385b55761466a668f0909a1284351734b36573b9ff4f0bfba38a511e"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/control-8/stdout.log": {
+          "bytes": 4015,
+          "sha256": "cee4a4cd6bcd3f4452a9e3e47f91b9a54f44e56ddea7b8316c5779956ef73b92"
+        },
+        "out/native-cpu-simd-packet-policy/control-8-acceptance.json": {
+          "bytes": 53846,
+          "sha256": "edd229038fe52b272a774177949dfa8785637e9e887e1ce2e8d0e5c0691608c8"
+        },
+        "out/native-cpu-simd-packet-policy/controls/prepare.py": {
+          "bytes": 3862,
+          "sha256": "441355daa5075c2c872eb15ed554fe1893d5ab61fe9a5fce7aee1169103dc3fc"
+        },
+        "out/native-cpu-simd-packet-policy/controls/readers/native_evidence.py": {
+          "bytes": 499,
+          "sha256": "b9024736eaffc834151c9b99e4e3a9b82664da274ef1b98ede7d0221e7692857"
+        },
+        "out/native-cpu-simd-packet-policy/controls/readers/read_controls.py": {
+          "bytes": 2767,
+          "sha256": "3a85fc5014ce84a296d8ce93b8506f6ed2165ca225d90ea7b93d9d6016514d50"
+        },
+        "out/native-cpu-simd-packet-policy/controls/run_controls.py": {
+          "bytes": 1121,
+          "sha256": "a347e191ee83311c843f0021ad2b9de41bd1d6f87e41ab0e150211ec6f72883c"
+        },
+        "out/native-cpu-simd-packet-policy/controls/runtime/owned_guard.py": {
+          "bytes": 299,
+          "sha256": "6fc32fd7fbed8e24370e929829a70b82aa53e54668fb38ded68ace2d1e9a6037"
+        },
+        "out/native-cpu-simd-packet-policy/controls/runtime/run_case.py": {
+          "bytes": 1487,
+          "sha256": "3a31aa8dd9e7451c092d2f80797529aa53ef6f29d75e0f725410eb7b6d1c762f"
+        },
+        "out/native-cpu-simd-packet-policy/controls/runtime/run_owned.py": {
+          "bytes": 297,
+          "sha256": "6ae4510d2a1672ffb6b1fee3e37bdbc62c3aee3e993cafb1c210224b55cf2dd2"
+        },
+        "out/native-cpu-simd-packet-policy/derive_ispc.py": {
+          "bytes": 451,
+          "sha256": "ce4706c91922304207a62df8f8d8206b21d2c9686f285aeeb7f77ff39894ca17"
+        },
+        "out/native-cpu-simd-packet-policy/inspect_objects.py": {
+          "bytes": 2911,
+          "sha256": "8d7218591b0fec447eaced65eabc39c2aaa08d4a884e27529e159ecfed67f298"
+        },
+        "out/native-cpu-simd-packet-policy/ispc-uniform-compile-result.json": {
+          "bytes": 16351,
+          "sha256": "1e2c1f53d5f05e27af09c04363fc05064bb02494bf7a0a714b50adfefa53ed8f"
+        },
+        "out/native-cpu-simd-packet-policy/ispc-uniform-derivation.json": {
+          "bytes": 5828,
+          "sha256": "9253cc92ae2b480cd3b660a9da8213adeaf5ab59c0a9b7f25abd2bb744a8dc38"
+        },
+        "out/native-cpu-simd-packet-policy/native_observer.py": {
+          "bytes": 9131,
+          "sha256": "eefbcdce3415009e636e7c37123e40becd96d75ef094a9fb7ff5ed5057908952"
+        },
+        "out/native-cpu-simd-packet-policy/object-code-inspection-uniform.json": {
+          "bytes": 9128,
+          "sha256": "78b369ea21f8df9897c9d1ead7b6807f113797138163ca331f6f748b9a40f08a"
+        },
+        "out/native-cpu-simd-packet-policy/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-simd-packet-policy/prepare.py": {
+          "bytes": 995,
+          "sha256": "79d7437b2a87e2f3307d3942ca54a4df15dcbb907373f9e80331fb3485f028e1"
+        },
+        "out/native-cpu-simd-packet-policy/prepare_adapter.py": {
+          "bytes": 667,
+          "sha256": "2f800d9933623f5510417724c4b82760c7d662dadbbf48d9f903b8717a471436"
+        },
+        "out/native-cpu-simd-packet-policy/prepare_ispc_compile.py": {
+          "bytes": 2830,
+          "sha256": "c1d286589a0ff0811cbdd6fd492c9f55978e611a89693e635982bddf1aaeb71c"
+        },
+        "out/native-cpu-simd-packet-policy/prepare_provider_build.py": {
+          "bytes": 367,
+          "sha256": "6c540ca4a42a766b5e24c2739118a752fc31464cba089d9d237ce21ab1cb9de8"
+        },
+        "out/native-cpu-simd-packet-policy/prepare_provider_config.py": {
+          "bytes": 914,
+          "sha256": "0a84279be7f28efe1b91cfd05757d5bf9aed62263d2224a220763e7adeed5072"
+        },
+        "out/native-cpu-simd-packet-policy/prepare_provider_patch.py": {
+          "bytes": 6644,
+          "sha256": "e69d5845a5f023750f8a31403889500bcaa0fa468f878f791fb8e0ffc09285cc"
+        },
+        "out/native-cpu-simd-packet-policy/prepared-adapter.json": {
+          "bytes": 15994,
+          "sha256": "55dfa4241eeaf37c0c1539b2ba594d11afd0f953b8c09a1ee64fb2a938a4946e"
+        },
+        "out/native-cpu-simd-packet-policy/prepared-ispc-uniform-inputs.json": {
+          "bytes": 16256,
+          "sha256": "a4da45dc24d85416b45b2d38b38e0656797824f997da1f46607ad9f6fa9421d6"
+        },
+        "out/native-cpu-simd-packet-policy/provider/actions.json": {
+          "bytes": 2445199,
+          "sha256": "9ddf1364307c1bf0e94bc276e021e20a37dc3477173f26951fadb39019eb06d5"
+        },
+        "out/native-cpu-simd-packet-policy/provider/build/inputs-after.json": {
+          "bytes": 4670146,
+          "sha256": "0f7899f0d7102654c8e5c09de1cc5f78afddfc87c72fdba31c876fad109105f8"
+        },
+        "out/native-cpu-simd-packet-policy/provider/build/inputs-before.json": {
+          "bytes": 4670146,
+          "sha256": "0f7899f0d7102654c8e5c09de1cc5f78afddfc87c72fdba31c876fad109105f8"
+        },
+        "out/native-cpu-simd-packet-policy/provider/build/owner.json": {
+          "bytes": 3501,
+          "sha256": "fb4a7cbe525e509c91fc6320b4ad3a4f9080b4603cc9a99d8ba2bf6ce03a81fc"
+        },
+        "out/native-cpu-simd-packet-policy/provider/build/samples.jsonl": {
+          "bytes": 8220,
+          "sha256": "c15646e96a4af24e061e002e3617de69ce48fde50238604788266810941cd0ae"
+        },
+        "out/native-cpu-simd-packet-policy/provider/build/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/provider/build/stdout.log": {
+          "bytes": 775,
+          "sha256": "54bb797222a292442637006ea474f6ece98c5e9415281d99a3244a7b9747284c"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure/inputs-after.json": {
+          "bytes": 4643923,
+          "sha256": "f6e61e8a116f8ff4662da50e0149aa135c98089977ff1df41ad61a075c54a2a8"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure/inputs-before.json": {
+          "bytes": 4643923,
+          "sha256": "f6e61e8a116f8ff4662da50e0149aa135c98089977ff1df41ad61a075c54a2a8"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure/owner.json": {
+          "bytes": 2292,
+          "sha256": "8f2a84b97f17f5a9fcf97da812b93bc8eb99ecb713ec0a66c8084bcb5b71ace5"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure/samples.jsonl": {
+          "bytes": 3539,
+          "sha256": "84a60d67a656b62466c27704f9bc071da6d48f874d5db28c06adfe9a843821ec"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure/stdout.log": {
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05"
+        },
+        "out/native-cpu-simd-packet-policy/provider/configure-result.json": {
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd"
+        },
+        "out/native-cpu-simd-packet-policy/provider/incremental-dry-run.txt": {
+          "bytes": 33940,
+          "sha256": "51601daaaa9a4e0e68f80925e602b728618699056c78c82ad273c72e9ca9f236"
+        },
+        "out/native-cpu-simd-packet-policy/provider/incremental-plan.json": {
+          "bytes": 219812,
+          "sha256": "0d8f34806114c41aad8aaedba32700782cbef8bd0cfbb72526209c9aa26b84b0"
+        },
+        "out/native-cpu-simd-packet-policy/provider/linked-callback.disassembly.txt": {
+          "bytes": 36834,
+          "sha256": "8e19721608c9cb00aa7d4a8cd09a2674a41e3de5e82f3aad55b5f50795bcf84e"
+        },
+        "out/native-cpu-simd-packet-policy/provider/linked-native-proof.json": {
+          "bytes": 7156170,
+          "sha256": "a81625045dbdb89a24ce652102a62fffddc575a2629cd7f7a5ddeb6b18782df6"
+        },
+        "out/native-cpu-simd-packet-policy/provider/linked-runtime-resolution.txt": {
+          "bytes": 1402,
+          "sha256": "12b42d8c6f7e13217ed5ad37f417be8f5719948a3c2232dbd25f5345118091a4"
+        },
+        "out/native-cpu-simd-packet-policy/provider/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-simd-packet-policy/provider/provider-build-result.json": {
+          "bytes": 2512,
+          "sha256": "d9ac4d76a47bf443383c9ca6c28d998248a6507beb8c9b540b5f4cd8f2775e67"
+        },
+        "out/native-cpu-simd-packet-policy/provider/provider.patch": {
+          "bytes": 3662,
+          "sha256": "fa701fafb1d73e95df8fc382cfd67a168a6120cecae157aa1d069acca1b1633c"
+        },
+        "out/native-cpu-simd-packet-policy/provider/review-admission.json": {
+          "bytes": 965,
+          "sha256": "be2c463044cfcdccc8e737c47e8e00c1bd9096696383e6434881e33f03bfb0ea"
+        },
+        "out/native-cpu-simd-packet-policy/provider/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-simd-packet-policy/provider/source-contract.json": {
+          "bytes": 19557,
+          "sha256": "6d1158da7f373d35f0fb6a543ef9aff366b6fd96fb8512c1a73ea49bc456284c"
+        },
+        "out/native-cpu-simd-packet-policy/read_linked_native.py": {
+          "bytes": 3753,
+          "sha256": "6c370ba65c321680d4ed1e8b92790cf014bc7fc666ea9109edfd893adad003d9"
+        },
+        "out/native-cpu-simd-packet-policy/read_result.py": {
+          "bytes": 7239,
+          "sha256": "ab5d556e2cc6cfb0a3652de273a7d8cb44c43a28b58efb6127acd54b957f8486"
+        },
+        "out/native-cpu-simd-packet-policy/rows_adapter.cpp": {
+          "bytes": 3498,
+          "sha256": "57747ee37daa040d25b1e6f9411affb07fb399ba0003c921aca313810a10a581"
+        },
+        "out/native-cpu-simd-packet-policy/rows_bridge.h": {
+          "bytes": 1538,
+          "sha256": "d52b7cb2080ee35f0f06ea0df9e5e71f8694a3cc45024b486b5cb7a50b9dc282"
+        },
+        "out/native-cpu-simd-packet-policy/run_case.py": {
+          "bytes": 1415,
+          "sha256": "13d4ed3bfe16bbd1fc9e172f474626932d133b840c01f27e37276990d3602f26"
+        },
+        "out/native-cpu-simd-packet-policy/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        }
+      }
+    },
+    "actual-native-products.zip": {
+      "bytes": 6438489,
+      "sha256": "7d6a7657efbb6146ed160bed9b2c2ae685f4e53683074fc5128e8aee1a3db0c9",
+      "members": {
+        "bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/dopri_phase.o": {
+          "bytes": 1796752,
+          "sha256": "0c7d7ae8d2c63bf36dde94305f08daf9483fd056d8e7051fb5a0eff8b2524cf1"
+        },
+        "bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/endpoint.o": {
+          "bytes": 3527296,
+          "sha256": "9d8db67bb9a1cfcd61cf148925a3bb52d42307e0f1bddc493c84c37301077732"
+        },
+        "bin/linux-gcc/native-cpu-simd-packet-policy/objects-uniform/transport.o": {
+          "bytes": 3073768,
+          "sha256": "ef17b297d296dc687e75edad0fd3c217c9df0aadbb95fbe10d890fe9fa579b0c"
+        },
+        "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o": {
+          "bytes": 4280,
+          "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+        },
+        "bin/linux-gcc/native-cpu-simd-packet-policy/provider/libvulkan_lvp.so": {
+          "bytes": 21811736,
+          "sha256": "f7cde632135dce6e0a765c8dfd73c6b45a32f88aa9b0c813f5ede4025ce2aefc"
+        },
+        "bin/linux-gcc/native-cpu-simd-packet-policy/provider/lvp_icd.json": {
+          "bytes": 203,
+          "sha256": "fe2e460b7bb4c60296bdefb4dc9d870947361cc32f0626c254a5759623fe5edf"
+        }
+      }
+    }
+  },
+  "next_source_grounded_change": "Keep I ISA/CPU fallback/tail policy and all arithmetic. Full B admission proves each active output row clears before numerical rejection; remove redundant copy-in. Use zero private output-row base and row-relative SoA column addresses, keep real input-row IDs and generic varying projection columns. Preserve all9380calls, full clear/full activecopyout, original fields/counts/references/governors.",
+  "cleanup": "Historical G/H retired members have exact restoration map in committed cleanup receipt; shared G uniform source/compiler/objects and active I products remain usable."
+}
