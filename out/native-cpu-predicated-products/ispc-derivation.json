@@ -1,0 +1,178 @@
+{
+  "status": "contingent source only; no compilation or workload",
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-registers/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 629676,
+        "sha256": "e08f3e58809ccb06cf9438dc10ba4164bddb0070667becd67dc329ff8b643b98"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-predicated-products/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 630342,
+        "sha256": "616af22dd2cca9888661b1124850917568e19b65096203e2a2e56923496184e7"
+      },
+      "helpers": {
+        "RTAccumulateProduct_0": {
+          "basis": {
+            "bytes": 1377,
+            "sha256": "52a0d20fd35af0683f2b6fcbb8a127ecfd8fe9bac7aa522fdeada606ff92233b"
+          },
+          "derived": {
+            "bytes": 1710,
+            "sha256": "f2af3fc69d7cd94c88a1d6c89a897e695b48f40814a92f5cc31950c2b63b9e58"
+          },
+          "ordered_nonzero_core_copied_exactly": {
+            "bytes": 483,
+            "sha256": "41e80d86780bad667b051959067face78f6266116266c0f9050d4be4ad39ee64"
+          },
+          "invalid_precedes_zero": true,
+          "all_five_zero_product_sum_words_preserved": true
+        },
+        "RTAccumulateRoundedProduct_0": {
+          "basis": {
+            "bytes": 1322,
+            "sha256": "71dee86bbd64a8fc3fe638973476d77d36dec2ec54df914e46672b9527fbf423"
+          },
+          "derived": {
+            "bytes": 1655,
+            "sha256": "0d5c75f26dc6d2903ba5450934836003c8ee36c885d224ab7e9be49e40a8bb08"
+          },
+          "ordered_nonzero_core_copied_exactly": {
+            "bytes": 421,
+            "sha256": "2e368085562b635ad175e8ff93602804ed8fd50dc7d0529114c6a5f15b6da1c5"
+          },
+          "invalid_precedes_zero": true,
+          "all_five_zero_product_sum_words_preserved": true
+        }
+      },
+      "instructions": 3144,
+      "inverse_restores_exact_AA_source": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-registers/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 798016,
+        "sha256": "1fc7e8af3d560544a81ec4f2da1c012d19095cca9690168a8004384e9a97196d"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-predicated-products/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 798682,
+        "sha256": "518ecc8423a39f4c190a4f575eda1041a088cd0fe512ee10c0a61102cf9b0077"
+      },
+      "helpers": {
+        "RTAccumulateProduct_0": {
+          "basis": {
+            "bytes": 1373,
+            "sha256": "dd5f71ae1559df039b48043e0f6bed83e8d3c27dec3c04d48736e807a095328d"
+          },
+          "derived": {
+            "bytes": 1706,
+            "sha256": "ddd81dbf27786fccdc90d89885860d99783759bc7806d9196fe2086cbbb91265"
+          },
+          "ordered_nonzero_core_copied_exactly": {
+            "bytes": 482,
+            "sha256": "cb26f8e211f8edbf3443fed0e1bb2d3ddbb4c89d3132ceed1afdb2b602e41cf4"
+          },
+          "invalid_precedes_zero": true,
+          "all_five_zero_product_sum_words_preserved": true
+        },
+        "RTAccumulateRoundedProduct_0": {
+          "basis": {
+            "bytes": 1322,
+            "sha256": "58ae756f2bd3839c7131067bf248f80bad47bbf99ba77c1efc37841158bce618"
+          },
+          "derived": {
+            "bytes": 1655,
+            "sha256": "a4e8b1d365875ed2b23ca724d111fbfd798d4e72e3733cba66d0d0ceff6a2a57"
+          },
+          "ordered_nonzero_core_copied_exactly": {
+            "bytes": 421,
+            "sha256": "76864f5823f4fcd9b42d506c1fddda0dc9fd04ee7f0b366b83b4d6d8da289cf1"
+          },
+          "invalid_precedes_zero": true,
+          "all_five_zero_product_sum_words_preserved": true
+        }
+      },
+      "instructions": 4148,
+      "inverse_restores_exact_AA_source": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-static-registers/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 406511,
+        "sha256": "a1b2479118298fd652d2d98ce081cf07561a14a4cd04176fdc88c5bda64e498d"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-predicated-products/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 407177,
+        "sha256": "ead4d78222224f740d5738a79247633bd61fa9d0523421afcebddaaecb30313f"
+      },
+      "helpers": {
+        "RTAccumulateProduct_0": {
+          "basis": {
+            "bytes": 1377,
+            "sha256": "aefef25f3c9d20b93dc88922794a012439e17877dae3d65c628583f8ec484be6"
+          },
+          "derived": {
+            "bytes": 1710,
+            "sha256": "cb7179ead1c8a405e83d2f0ca4f8c61880a6decd967efc2d6bb8a76617baab9f"
+          },
+          "ordered_nonzero_core_copied_exactly": {
+            "bytes": 483,
+            "sha256": "bdbf03e987f7b8340dbcc59ca0127970994eae3a4166a1f784305cf4568583f0"
+          },
+          "invalid_precedes_zero": true,
+          "all_five_zero_product_sum_words_preserved": true
+        },
+        "RTAccumulateRoundedProduct_0": {
+          "basis": {
+            "bytes": 1322,
+            "sha256": "f715064d7693a37486cf749e3df61c7a08944de65540968a8ad6de0552c3d2b4"
+          },
+          "derived": {
+            "bytes": 1655,
+            "sha256": "01edf2b1b7e93856a3722d608f97e96a66d00472e35af7d0e7e6f7aca3a89daa"
+          },
+          "ordered_nonzero_core_copied_exactly": {
+            "bytes": 421,
+            "sha256": "00b1324138fe6e94e7830100753a10aff97e97384cbe5717b7ca7a425695c52f"
+          },
+          "invalid_precedes_zero": true,
+          "all_five_zero_product_sum_words_preserved": true
+        }
+      },
+      "instructions": 2088,
+      "inverse_restores_exact_AA_source": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-static-registers/ispc-derivation.json": {
+      "bytes": 11562,
+      "sha256": "e2b5a66d7f0efc1d7a704f07937b26cb650a40268b07fd04256b4426ef6b6bcc"
+    },
+    "out/native-cpu-predicated-products/derive_ispc.py": {
+      "bytes": 6838,
+      "sha256": "d7945b7ded99bf8f0073fad5776da2c6b354e0e49c2bdb4579b39cd78878df08"
+    },
+    "bin/linux-gcc/native-cpu-static-registers/ispc-source/transport.ispc": {
+      "bytes": 629676,
+      "sha256": "e08f3e58809ccb06cf9438dc10ba4164bddb0070667becd67dc329ff8b643b98"
+    },
+    "bin/linux-gcc/native-cpu-static-registers/ispc-source/endpoint.ispc": {
+      "bytes": 798016,
+      "sha256": "1fc7e8af3d560544a81ec4f2da1c012d19095cca9690168a8004384e9a97196d"
+    },
+    "bin/linux-gcc/native-cpu-static-registers/ispc-source/dopri_phase.ispc": {
+      "bytes": 406511,
+      "sha256": "a1b2479118298fd652d2d98ce081cf07561a14a4cd04176fdc88c5bda64e498d"
+    }
+  },
+  "scope": "Replace only the two product-accumulator input/zero early-return masks with explicit result selection. Original complete nonzero calculation core, including conditional error update, is copied byte-for-byte. Invalid input selects original canonical invalid before zero selection; zero products preserve all five original sum words, including signed zeros and the original nonzero valid word. Full AA static metadata, ordered tuples, arithmetic helpers, row/refusal/rollback/publication remain.",
+  "reasoning": [
+    "For each executing lane, bad input returns the original canonical invalid. Good zero product returns the exact original sum. Good nonzero product executes and returns the original core. These three cases are disjoint and exhaustive; the uniform all-good-zero return preserves the original cheap common case.",
+    "The original nonzero core reads sum and writes only local temporaries; RetainedProduct32, ordered FP/bit helpers and RTAccumulateTerm have no external or indexing effects. Extra calculations on unselected lanes can raise FP status, so this is suitable only inside the existing saved/masked IEEE32 worker scope with full restoration and no intervening status observation. Actual FP ownership/code inspection and runtime comparisons remain required; this source argument is not machine-checked proof.",
+    "Do not compile or execute unless AA fails the decisive original frame and its terminal result has been preserved. Discard unused contingent output if AA succeeds."
+  ]
+}
