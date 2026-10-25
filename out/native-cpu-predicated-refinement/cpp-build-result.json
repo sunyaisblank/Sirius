@@ -1,0 +1,1385 @@
+{
+  "passed": true,
+  "compilations": [
+    {
+      "name": "retained8",
+      "argv": [
+        "/usr/bin/x86_64-linux-gnu-g++-14",
+        "-std=c++2c",
+        "-O2",
+        "-fPIC",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-isystem",
+        "/opt/slang/include",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-static-program/typed-batch",
+        "-isystem",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+        "-I",
+        "/home/astra/.project/Sirius/out/native-cpu-active-prefix",
+        "-I",
+        "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+        "-march=x86-64-v3",
+        "-mtune=znver4",
+        "-mfpmath=sse",
+        "-fexcess-precision=standard",
+        "-fno-fast-math",
+        "-fno-associative-math",
+        "-fno-unsafe-math-optimizations",
+        "-frounding-math",
+        "-ffp-contract=off",
+        "-c",
+        "/home/astra/.project/Sirius/out/native-cpu-predicated-refinement/retained8.cpp",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o"
+      ],
+      "started": true,
+      "exit": 0,
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o",
+        "bytes": 232296,
+        "sha256": "4ba2041a0b651015c4066f7c1a50c9e423a01d549f8532cd8bce66e2e36d8061"
+      }
+    }
+  ],
+  "new_CPP_compilations": 1,
+  "new_links": 1,
+  "link_argv": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/probe/driver.o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/probe/abi-check"
+  ],
+  "link_exit": 0,
+  "executable": {
+    "path": "bin/linux-gcc/native-cpu-predicated-refinement/probe/abi-check",
+    "bytes": 376592,
+    "sha256": "71a9c540a50d31e5bce2979def261da5d18c228c1b506c78f5482eb2fe7d654d"
+  },
+  "runtime_libraries": {
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    }
+  },
+  "new_relocatable_links": 1,
+  "adapter_link_argv": [
+    "/usr/bin/ld",
+    "-r",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/objects/rows_adapter.o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o"
+  ],
+  "merged_adapter": {
+    "path": "bin/linux-gcc/native-cpu-predicated-refinement/objects/rows_adapter.o",
+    "bytes": 235760,
+    "sha256": "30241226fdf18a91cd827662f7ba917edfa2ed6c2ef64a5769167a2a7a886af2"
+  },
+  "adapter_input_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+      "bytes": 4280,
+      "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o",
+      "bytes": 232296,
+      "sha256": "4ba2041a0b651015c4066f7c1a50c9e423a01d549f8532cd8bce66e2e36d8061"
+    }
+  ],
+  "adapter_input_code_association": {
+    "passed": true,
+    "executable": {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/objects/rows_adapter.o",
+      "bytes": 235760,
+      "sha256": "30241226fdf18a91cd827662f7ba917edfa2ed6c2ef64a5769167a2a7a886af2"
+    },
+    "objects": [
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+          "bytes": 4280,
+          "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "sirius_simd_fmaxf",
+            "bytes": 9,
+            "linked_address": 0,
+            "masked_relocations": [
+              {
+                "offset": 5,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_transport_rows_try_packet",
+            "bytes": 266,
+            "linked_address": 16,
+            "masked_relocations": [
+              {
+                "offset": 150,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 203,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 244,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 113,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_endpoint_rows_try_packet",
+            "bytes": 266,
+            "linked_address": 288,
+            "masked_relocations": [
+              {
+                "offset": 150,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 203,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 244,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 113,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dopri_phase_rows_try_packet",
+            "bytes": 266,
+            "linked_address": 560,
+            "masked_relocations": [
+              {
+                "offset": 150,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 203,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 244,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 113,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o",
+          "bytes": 232296,
+          "sha256": "4ba2041a0b651015c4066f7c1a50c9e423a01d549f8532cd8bce66e2e36d8061"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "_ZN12_GLOBAL__N_115slow_add_tripleENS_6TripleES0_Dv8_j",
+            "bytes": 4300,
+            "linked_address": 832,
+            "masked_relocations": [
+              {
+                "offset": 3318,
+                "ELF_type": 2,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "_ZN12_GLOBAL__N_120slow_multiply_tripleENS_6TripleES0_Dv8_j",
+            "bytes": 17576,
+            "linked_address": 5136,
+            "masked_relocations": [
+              {
+                "offset": 1422,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2429,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3456,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4130,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5137,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6164,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13442,
+                "ELF_type": 2,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_add8",
+            "bytes": 4146,
+            "linked_address": 22720,
+            "masked_relocations": [
+              {
+                "offset": 181,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4142,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_multiply8",
+            "bytes": 11690,
+            "linked_address": 26880,
+            "masked_relocations": [
+              {
+                "offset": 69,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 314,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 453,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 718,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 795,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1156,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1227,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2355,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2706,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2912,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3275,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7637,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 8587,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 11686,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_divide8",
+            "bytes": 38375,
+            "linked_address": 38576,
+            "masked_relocations": [
+              {
+                "offset": 69,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1490,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1693,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2035,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2587,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2781,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3302,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4030,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4043,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4345,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4456,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5023,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5110,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5329,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5362,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5611,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5973,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6183,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6545,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10275,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10876,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10995,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 12955,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13073,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13251,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13472,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13593,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13767,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14106,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15203,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15373,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 19907,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 20397,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 20843,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 20884,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21106,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21483,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21689,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22066,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 27554,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 27741,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 31785,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 33180,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 33594,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 38371,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_sqrt8",
+            "bytes": 33205,
+            "linked_address": 76960,
+            "masked_relocations": [
+              {
+                "offset": 67,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1944,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2048,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2380,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2455,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2668,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2719,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2961,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3344,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6371,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7028,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7044,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7272,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7360,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9300,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9414,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9659,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9969,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10113,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10283,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10574,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 11843,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 12007,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14415,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 16773,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17180,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17234,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17427,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17865,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22830,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 23021,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 24083,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 27947,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 28312,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 33201,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_subtract8",
+            "bytes": 4221,
+            "linked_address": 110176,
+            "masked_relocations": [
+              {
+                "offset": 156,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4217,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_tagged_add8",
+            "bytes": 7592,
+            "linked_address": 114400,
+            "masked_relocations": [
+              {
+                "offset": 54,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7588,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_tagged_multiply8",
+            "bytes": 22460,
+            "linked_address": 122000,
+            "masked_relocations": [
+              {
+                "offset": 269,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 730,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 817,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1531,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1627,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1898,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1973,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3055,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3121,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3241,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3647,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3939,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4291,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4497,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4849,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9237,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13067,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13324,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14063,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14269,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15008,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22456,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_tagged_subtract8",
+            "bytes": 7516,
+            "linked_address": 144464,
+            "masked_relocations": [
+              {
+                "offset": 54,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7512,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_tagged_divide8",
+            "bytes": 38759,
+            "linked_address": 151984,
+            "masked_relocations": [
+              {
+                "offset": 90,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1498,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1693,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2035,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2955,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3165,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3724,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4419,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4432,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4751,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4857,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5462,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5511,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5734,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5771,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6012,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6374,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6584,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6946,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10675,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 11260,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 11379,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13339,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13457,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13635,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13856,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13977,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14151,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14491,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15587,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15757,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 20291,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 20781,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21211,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21252,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21474,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21851,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22057,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22434,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 27922,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 28125,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 32169,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 33564,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 33978,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 38755,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_tagged_sqrt8",
+            "bytes": 33467,
+            "linked_address": 190752,
+            "masked_relocations": [
+              {
+                "offset": 90,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2277,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2437,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2772,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2834,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3088,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3122,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3323,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3719,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6723,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7356,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7424,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7597,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7680,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9621,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9736,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9983,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10252,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10429,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10603,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10895,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 12163,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 12329,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14736,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14752,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17109,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17549,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17576,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17778,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 18192,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 23113,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 23277,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 24340,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 28347,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 28706,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 33463,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Every retained function opcode in exact renamed OLD/new R Transport objects, masking only declared4B PC32/PLT32/REX_GOTPCRELX operands. Linker relaxation disabled. This alone is not relocation-target semantics or numerical acceptance."
+  }
+}
