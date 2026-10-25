@@ -1,0 +1,46 @@
+"""Reuse sealed original acceptance; current artifact-path binding only."""
+from pathlib import Path
+import hashlib
+basis = Path.cwd() / 'out/native-original-input-ownership/readers/read_controls.py'
+assert hashlib.sha256(basis.read_bytes()).hexdigest() == '2c645bf4033da6a31cb0bee68cdf1e1d44fba07d371766168b1646f707e15f65'
+source = basis.read_text()
+changes = [("doc(W.parent / 'providers.json')",
+  "doc(R / 'out/native-cpu-predicated-arithmetic-cohort/benefit/providers.json')"),
+ ("W / 'control-8-acceptance.json'", "R / 'out/native-cpu-predicated-arithmetic-cohort/control-8-acceptance.json'"),
+ ("W / 'benefit.json'", "R / 'out/native-cpu-predicated-arithmetic-cohort/benefit/readers/benefit.json'"),
+ ("W / 'decimal-agreement.json'",
+  "R / 'out/native-cpu-predicated-arithmetic-cohort/benefit/readers/decimal-agreement.json'"),
+ ("doc(W.parent / 'compiler-result.json')",
+  "doc(R / 'out/native-cpu-row-ownership/compiler-result.json')"),
+ ("doc(W.parent / 'provider-history/candidate-default/device-features.json')",
+  "doc(R / 'out/native-cpu-slang-bridge/ordinary/transport/device-features.json')"),
+ ("doc(W.parent / 'provider-history/candidate-default/float-controls-properties.json')",
+  "doc(R / 'out/native-cpu-slang-bridge/ordinary/transport/float-controls-properties.json')"),
+ ("        assert row['complete_native_routes']['complete_readbacks'] == 28\n",
+  "        assert row['complete_native_routes']['complete_readbacks'] == 28\n"
+  '        tail_checks = 0\n'
+  '        for wide in range(2):\n'
+  '            nonzero = 0\n'
+  '            for call, active in enumerate(old.FACTORED_ROWS):\n'
+  "                tail = old.fields(props[f'inactive_tail_check_0_{wide}_{call}'])\n"
+  "                assert set(tail) == {'active_rows', 'capacity', 'bytes', 'nonzero_before', "
+  "'sha256'}\n"
+  "                assert tail['active_rows'] == str(active) and tail['capacity'] == '32'\n"
+  "                assert tail['bytes'] == str((32 - active) * 3829 * 4)\n"
+  "                assert tail['nonzero_before'] in ('0', '1')\n"
+  "                assert re.fullmatch('[0-9a-f]{64}', tail['sha256'])\n"
+  "                nonzero += int(tail['nonzero_before'])\n"
+  '                tail_checks += 1\n'
+  "            assert nonzero > 0 and props[f'inactive_tail_nonzero_witnesses_0_{wide}'] == "
+  'str(nonzero)\n'
+  "        row['complete_inactive_Endpoint_tail_checks'] = tail_checks\n"
+  '        assert tail_checks == 28\n'),
+ ('Original eight finite controls and sole benefit gate only.',
+  'Original eight finite controls, two precision routes/28complete readbacks, '
+  'all28completeinactiveEndpointtails and sole benefit gate only. Historical A property/feature '
+  'expectations are composed with unchanged M property implementation, not newly queried.')]
+for old, new in changes:
+    assert old in source, old
+    source = source.replace(old, new)
+source = source.replace('current host/M', 'current P host/X').replace('Same genuinely rebuilt host/Mprovider', 'Same P host/Xprovider').replace('unchanged M property implementation', 'unchanged R property implementation').replace('exact M provider reused.', 'exact R provider used.')
+exec(compile(source, str(basis), 'exec'))
