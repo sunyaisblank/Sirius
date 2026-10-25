@@ -118,7 +118,7 @@ for name in (
 ):
     references[name] = identity(R / name)
 manifest = {'schema': 'sirius-native-cpu-direct-scratch-terminal-v1',
-            'qualifying_source_revision': revision, 'owners': owners, 'archives': bundles,
+            'qualifying_source_revision': revision, 'accepted': bool(frame['accepted']), 'owners': owners, 'archives': bundles,
             'additional_qualification_claimed': False,
             'scope': 'All3 complete Z ISPC stages route original Add/Multiply bodies and return expressions to the original five-word private scratch writer after capturing both full operands; exact source inverse restores X, including all9380literal calls. Same X arithmetic and Y worker notification/direct-single scheduling/FP scope retained. Fresh old/new Transport compatibility all38/all187960words PASS; original C8/all32+51markers+54joins and sole ABBA22+Decimal/all8 PASS. Original frame outcome below remains decisive. No full scientific/release/main/780M/large-scene/original-July provenance completion claim.',
             'original_frame': frame, 'runtime_transition': doc(C / 'runtime-transition.json'),
