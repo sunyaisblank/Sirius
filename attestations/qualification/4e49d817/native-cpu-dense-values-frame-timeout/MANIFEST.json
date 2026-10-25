@@ -1,0 +1,1409 @@
+{
+  "schema": "sirius-native-cpu-dense-values-terminal-v1",
+  "qualifying_source_revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+  "accepted": false,
+  "owners": {
+    "out/native-cpu-dense-values/bridge/build/owner.json": {
+      "source": {
+        "revision": "37e4007c4743d7d9f6aedbcefa3c50ac8ee9de90",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.6176466440083459,
+      "peak_sampled_rss_kib": 53004,
+      "stop_reason": null
+    },
+    "out/native-cpu-dense-values/compile/ispc-values/owner.json": {
+      "source": {
+        "revision": "3dbeceb63b70bfadc0db2bc1b18f9ef30540cade",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 22.19402572698891,
+      "peak_sampled_rss_kib": 256464,
+      "stop_reason": null
+    },
+    "out/native-cpu-dense-values/provider/build/owner.json": {
+      "source": {
+        "revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.3124974370002747,
+      "peak_sampled_rss_kib": 247016,
+      "stop_reason": null
+    },
+    "out/native-cpu-dense-values/provider/configure/owner.json": {
+      "source": {
+        "revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.8259458109969273,
+      "peak_sampled_rss_kib": 136160,
+      "stop_reason": null
+    },
+    "out/native-cpu-dense-values-cohort/cold-frame/frame/owner.json": {
+      "source": {
+        "revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": false,
+      "child_exit": -15,
+      "wall_seconds": 300.23619759001303,
+      "peak_sampled_rss_kib": 1163952,
+      "stop_reason": "diagnostic_timeout"
+    },
+    "out/native-cpu-dense-values-cohort/control-8/owner.json": {
+      "source": {
+        "revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 12.833117299014702,
+      "peak_sampled_rss_kib": 1078680,
+      "stop_reason": null
+    },
+    "out/native-cpu-dense-values-compatibility/link/owner.json": {
+      "source": {
+        "revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.307323584915139,
+      "peak_sampled_rss_kib": 70396,
+      "stop_reason": null
+    },
+    "out/native-cpu-dense-values-compatibility/run/owner.json": {
+      "source": {
+        "revision": "4e49d817fc394b69307ba5ac4a0c37b67864fff9",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 1.0438349799951538,
+      "peak_sampled_rss_kib": 50880,
+      "stop_reason": null
+    }
+  },
+  "archives": [
+    {
+      "file": "source-build-and-trial.zip",
+      "identity": {
+        "bytes": 7126937,
+        "sha256": "40d6251d08312a66602d6b47ff0d2122ef21d9cbd27ae30e069f5e998f2c7bf3",
+        "mode": 420,
+        "mtime_ns": 1792936899498383625
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-dense-values/ispc-source/dopri_phase.ispc": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/ispc-source/dopri_phase.ispc",
+          "bytes": 400409,
+          "sha256": "21f51dd78a044761759a4ef4b1afa18958643eefa823e1a5e3457bd480f4a58c",
+          "mode": 420,
+          "mtime_ns": 1792934840059731153
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/ispc-source/endpoint.ispc": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/ispc-source/endpoint.ispc",
+          "bytes": 791904,
+          "sha256": "d0590a9bc5001dd1181cf2a4add4806a372929679ed14c6e8b96e858214129ad",
+          "mode": 420,
+          "mtime_ns": 1792934840051896054
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/ispc-source/transport.ispc": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/ispc-source/transport.ispc",
+          "bytes": 623564,
+          "sha256": "6448e05b89ecb423a5a8debfc43c29527246d57ea886c5373ebf9d7f2aa3c5b7",
+          "mode": 420,
+          "mtime_ns": 1792934840036225848
+        },
+        "files/out/native-cpu-dense-values-cohort/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/actions.json",
+          "bytes": 247298,
+          "sha256": "3a200055ad8f2b1310a87c4d6d28c71db9b309168325d61d43da018092ab67e6",
+          "mode": 420,
+          "mtime_ns": 1792935796825396682
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/actions.json",
+          "bytes": 86247,
+          "sha256": "9f8592b95747428eea18c89345feccd69feff221bf84c8cde00ae2e82330e022",
+          "mode": 420,
+          "mtime_ns": 1792935886277757480
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame-inputs.json",
+          "bytes": 1904,
+          "sha256": "9b4048728289b89918328d3ddd75d0bfe932a3ab1181c29da093642cffe232ef",
+          "mode": 420,
+          "mtime_ns": 1792935885816036372
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame/inputs-after.json",
+          "bytes": 1045065,
+          "sha256": "f0bf6480e6cc479abc107b29bcc6284dd8765d35842826b6218cdee7866539e5",
+          "mode": 420,
+          "mtime_ns": 1792936196801059536
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame/inputs-before.json",
+          "bytes": 1045065,
+          "sha256": "f0bf6480e6cc479abc107b29bcc6284dd8765d35842826b6218cdee7866539e5",
+          "mode": 420,
+          "mtime_ns": 1792935888414015693
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame/owner.json",
+          "bytes": 3956,
+          "sha256": "b375f619a3601f0e42a9d2c8a5615a575644f1f7e39bddfdd9bf74a784fb90ff",
+          "mode": 420,
+          "mtime_ns": 1792936196871455787
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame/samples.jsonl",
+          "bytes": 5254633,
+          "sha256": "57a8b02c519243a479c55e246ed869941a1218ff58947a0e404f182e74b52232",
+          "mode": 420,
+          "mtime_ns": 1792936194423230594
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame/stderr.log",
+          "bytes": 67510,
+          "sha256": "6461c624ffa1bf738cae71dc3c9bad5080e62f338b970f6499e13e269bb90322",
+          "mode": 420,
+          "mtime_ns": 1792936180148660319
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/frame/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/frame/stdout.log",
+          "bytes": 681137,
+          "sha256": "41e39aff7ef1ae06b2241b044f311b97f514c598dcc5ddc79947718923f34173",
+          "mode": 420,
+          "mtime_ns": 1792936194345012538
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/prepare.py",
+          "bytes": 14941,
+          "sha256": "d8331f550ed3b45ee680d4dc037c90c2de12ac159fc9facc7a3c33e7fbac77ff",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/read_result.py",
+          "bytes": 4452,
+          "sha256": "e5d549a0720615af71ad5d5939b41223206428c14c7749cc29b9f2426addb98c",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/resource-restore.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/resource-restore.json",
+          "bytes": 5376,
+          "sha256": "1261b9b350194a4cee65416b961c8cfe40cecae754c7d855769e9c93383980c5",
+          "mode": 420,
+          "mtime_ns": 1792935885796291950
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/result.json",
+          "bytes": 2448,
+          "sha256": "690b561827f47c84b42d1f79101377b2d6b9baf336de478e8f2aaaabc9f857f4",
+          "mode": 420,
+          "mtime_ns": 1792936898837991833
+        },
+        "files/out/native-cpu-dense-values-cohort/cold-frame/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/cold-frame/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/compatibility.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/compatibility.py",
+          "bytes": 4897,
+          "sha256": "7086636d88806c2ee8a70363aa7bc91ebf8e99f1adf09ed3578d66b57e2905c6",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8-acceptance.json",
+          "bytes": 58086,
+          "sha256": "f09a6085f76685f737e6888279ce9c85d1d201be3930b51ed99709f048115632",
+          "mode": 420,
+          "mtime_ns": 1792935885172368206
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/gtest.xml",
+          "bytes": 40789,
+          "sha256": "de094a81967a4c79dd0947c2192cdd4fcb78cc9313528e0c0430a7297dfb134e",
+          "mode": 420,
+          "mtime_ns": 1792935811539637358
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/inputs-after.json",
+          "bytes": 993455,
+          "sha256": "461f0a8730c54f0d454b78f060d87cadf7ac670133d45b0a15b93c68688f055e",
+          "mode": 420,
+          "mtime_ns": 1792935813436156871
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/inputs-before.json",
+          "bytes": 993455,
+          "sha256": "461f0a8730c54f0d454b78f060d87cadf7ac670133d45b0a15b93c68688f055e",
+          "mode": 420,
+          "mtime_ns": 1792935798618072424
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/native-observation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/native-observation.json",
+          "bytes": 55158,
+          "sha256": "b383d295152f357affdc425662b51b141597707405c521a2648893e5576dcdf3",
+          "mode": 420,
+          "mtime_ns": 1792935811662962478
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/observe.gdb": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/observe.gdb",
+          "bytes": 230,
+          "sha256": "d4f74a2d4171a40bb619fee60d3f2898104ff5b7e86d6620c25685fe37705aa2",
+          "mode": 420,
+          "mtime_ns": 1792935799284480144
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/owner.json",
+          "bytes": 4412,
+          "sha256": "16e3e6cbecf3a767e22c0cdc74045f7d59a445b1d9f4eb1b207b28413ac5e75b",
+          "mode": 420,
+          "mtime_ns": 1792935813460546006
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/samples.jsonl",
+          "bytes": 233025,
+          "sha256": "a020eac5bd2654111161648f79c05a641571c457141e13fccba58de913ce5c64",
+          "mode": 420,
+          "mtime_ns": 1792935811704070853
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935798621969547
+        },
+        "files/out/native-cpu-dense-values-cohort/control-8/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/control-8/stdout.log",
+          "bytes": 4015,
+          "sha256": "4ad2971fc8d4c6b1e18405027093b5253a4db9eba07da4bb4303945726a81073",
+          "mode": 420,
+          "mtime_ns": 1792935811699960015
+        },
+        "files/out/native-cpu-dense-values-cohort/native_observer.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/native_observer.py",
+          "bytes": 12611,
+          "sha256": "efc621e843b1462f812fb2e2918e856e02411315a8af492c60338c99f3cc8a32",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-cohort/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-cohort/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/prepare.py",
+          "bytes": 4680,
+          "sha256": "33ce16931062d1a1df632faeffb495e1ff0c9938d31dd2ae6a4c9be03a006365",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/read_result.py",
+          "bytes": 10563,
+          "sha256": "b341f5154ce24b56cdb345f863ed3dcff7cb88645239cc2c68da8ce8f12dcebf",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/run_case.py",
+          "bytes": 1803,
+          "sha256": "70a89563785e82d28a43574a8914740df2b6045c90d19e360b0fd9b1714642cf",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values-cohort/runtime-transition.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/runtime-transition.json",
+          "bytes": 5966,
+          "sha256": "cde81fde672baab2d992be92dfa7ea55f386bf635aca8bc397cb8c307f1a4278",
+          "mode": 420,
+          "mtime_ns": 1792935795835527903
+        },
+        "files/out/native-cpu-dense-values-cohort/runtime_transition.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-cohort/runtime_transition.py",
+          "bytes": 3723,
+          "sha256": "8ec291014cdd8537442af8c665300d44b379f71b3f4aca3d67adeafe3f6999f2",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-compatibility/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/actions.json",
+          "bytes": 58147,
+          "sha256": "c80b1eef91508177910326dae6a3c05ab5a32d2c3195296f482ad5e08df81075",
+          "mode": 420,
+          "mtime_ns": 1792935756263773698
+        },
+        "files/out/native-cpu-dense-values-compatibility/link-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link-proof.json",
+          "bytes": 3746252,
+          "sha256": "f7cbe66a76f9f1ace7f3a55a6745d345c034ade84508b01b1df1caa6c69ae6d1",
+          "mode": 420,
+          "mtime_ns": 1792935747414531255
+        },
+        "files/out/native-cpu-dense-values-compatibility/link-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link-result.json",
+          "bytes": 6807,
+          "sha256": "00b5b9db9ddc8e7099129603c0f54bfcfbe764bcab1ea9cd463a5f188501a77c",
+          "mode": 420,
+          "mtime_ns": 1792935747629802553
+        },
+        "files/out/native-cpu-dense-values-compatibility/link.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link.py",
+          "bytes": 3270,
+          "sha256": "f5d43a16506d29ba88ebac641702c1cf580c6e434feb38ee2d9a7e0c3c8ec548",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/inputs-after.json",
+          "bytes": 866996,
+          "sha256": "c23ee0266dee360a1819556e054fda876d7f77dfadc3eeeb6462f59f72419a0a",
+          "mode": 420,
+          "mtime_ns": 1792935749624545587
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/inputs-before.json",
+          "bytes": 866996,
+          "sha256": "c23ee0266dee360a1819556e054fda876d7f77dfadc3eeeb6462f59f72419a0a",
+          "mode": 420,
+          "mtime_ns": 1792935745555370039
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/owner.json",
+          "bytes": 2401,
+          "sha256": "4c8c3c55e31fd22aa4c770834c08b98601ec495d2c0295fb48fb96ef458b6c9d",
+          "mode": 420,
+          "mtime_ns": 1792935749659771799
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/runtime-resolution.txt",
+          "bytes": 374,
+          "sha256": "9ea650a65544bc82f0f5697e132c95e2437d447a0a9a0da62c4d35d096cc2f1e",
+          "mode": 420,
+          "mtime_ns": 1792935747426273327
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/samples.jsonl",
+          "bytes": 2234,
+          "sha256": "2210ccd4601fef3f9b4ede800ccd006498524ac6a88e22ae3a7213e433086732",
+          "mode": 420,
+          "mtime_ns": 1792935747602404388
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935745559284063
+        },
+        "files/out/native-cpu-dense-values-compatibility/link/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/link/stdout.log",
+          "bytes": 60,
+          "sha256": "fd87b3fdf1fe916d9b554544e8d197a6dcaf3e970ae009a45787f33d93a473c8",
+          "mode": 420,
+          "mtime_ns": 1792935747629802553
+        },
+        "files/out/native-cpu-dense-values-compatibility/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-compatibility/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/prepare.py",
+          "bytes": 7322,
+          "sha256": "43b1b213f94e552ae8e43c3f3e3f8652bb114be03a693d0adfcc2f66accc8d27",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-compatibility/prepared.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/prepared.json",
+          "bytes": 90711,
+          "sha256": "42397cf031bc0c2fc727ebc3300baa19466d72be23d4b58f7659597add61ce2a",
+          "mode": 420,
+          "mtime_ns": 1792935744334194675
+        },
+        "files/out/native-cpu-dense-values-compatibility/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/result.json",
+          "bytes": 11763,
+          "sha256": "91821e63013955f5532628be57af5a9d2d4da3f12e0f205b0443001ce1c0c0fa",
+          "mode": 420,
+          "mtime_ns": 1792935758405162034
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/baseline.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/baseline.bin",
+          "bytes": 751840,
+          "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc",
+          "mode": 420,
+          "mtime_ns": 1792935758131126962
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/calls.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/calls.jsonl",
+          "bytes": 1472,
+          "sha256": "aedd0c24d2b06019b4f7e3314f93e0be17dbfe4c1099276081c4386c6bd8cec3",
+          "mode": 420,
+          "mtime_ns": 1792935758217252271
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/candidate.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/candidate.bin",
+          "bytes": 751840,
+          "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc",
+          "mode": 420,
+          "mtime_ns": 1792935758217252271
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/cases.tsv": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/cases.tsv",
+          "bytes": 1187,
+          "sha256": "c585c14dd3503398447ff38a5cd1a277411eae803ca6eaf733017f8c9b863347",
+          "mode": 420,
+          "mtime_ns": 1792935757720074358
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/comparison.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/comparison.json",
+          "bytes": 268,
+          "sha256": "89ed34eb1e00841f56d41d033a2670114effa68cb5d434a19686def1b07c612a",
+          "mode": 420,
+          "mtime_ns": 1792935758217252271
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/input-after.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/input-after.bin",
+          "bytes": 100672,
+          "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad",
+          "mode": 420,
+          "mtime_ns": 1792935758068490375
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/input-before.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/input-before.bin",
+          "bytes": 100672,
+          "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad",
+          "mode": 420,
+          "mtime_ns": 1792935757720074358
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/inputs-after.json",
+          "bytes": 868140,
+          "sha256": "d1035f5b3c8714f6928445020988a9ecaed5857549760cbd2ca3cf7bd6e6aefd",
+          "mode": 420,
+          "mtime_ns": 1792935759629920959
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/inputs-before.json",
+          "bytes": 868140,
+          "sha256": "d1035f5b3c8714f6928445020988a9ecaed5857549760cbd2ca3cf7bd6e6aefd",
+          "mode": 420,
+          "mtime_ns": 1792935757489101942
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/owner.json",
+          "bytes": 1781,
+          "sha256": "7bb6d7826ff17ce075786779aaa71d689d321b44ea6a9aa5547bd73f9697507c",
+          "mode": 420,
+          "mtime_ns": 1792935759657302604
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/samples.jsonl",
+          "bytes": 1131,
+          "sha256": "0e3e52747c73bd46d7a13d7296f694d236ee3ee36d158bbd9c2a546144a19f05",
+          "mode": 420,
+          "mtime_ns": 1792935758279888858
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935757496931514
+        },
+        "files/out/native-cpu-dense-values-compatibility/run/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run/stdout.log",
+          "bytes": 32,
+          "sha256": "fb1a049de3589cac1237b601f6ddd6d5a3bd990f0b18adb31430b42713931769",
+          "mode": 420,
+          "mtime_ns": 1792935758405162034
+        },
+        "files/out/native-cpu-dense-values-compatibility/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values-compatibility/run_task.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values-compatibility/run_task.py",
+          "bytes": 518,
+          "sha256": "e63294a00c9d79a7403a96d52415feeff39739b41d7e772facc74575f2028585",
+          "mode": 420,
+          "mtime_ns": 1792935433872243718
+        },
+        "files/out/native-cpu-dense-values/apply_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/apply_provider.py",
+          "bytes": 2288,
+          "sha256": "57b01de76c00a273a197b98e767fc28791d43259ddea1dca7dafa415794ae6c4",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/bridge-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge-build-result.json",
+          "bytes": 1694,
+          "sha256": "b495778b70469a3adc9842c1affc7e7010000a589e3a1e4cc09f4c46fdf35df9",
+          "mode": 420,
+          "mtime_ns": 1792935144795502439
+        },
+        "files/out/native-cpu-dense-values/bridge-code-inspection.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge-code-inspection.json",
+          "bytes": 891,
+          "sha256": "2c5d03fb8448aea6b03dbd91c4a4ab342bd7733cc257423c51fd0f4333feaadb",
+          "mode": 420,
+          "mtime_ns": 1792935364321945025
+        },
+        "files/out/native-cpu-dense-values/bridge/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/actions.json",
+          "bytes": 24374,
+          "sha256": "83834a2b519297ffdf42c335e1aab865fc5cccfc6c9d5a0f00d97e05279154f0",
+          "mode": 420,
+          "mtime_ns": 1792935142417850392
+        },
+        "files/out/native-cpu-dense-values/bridge/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/build/inputs-after.json",
+          "bytes": 844488,
+          "sha256": "04e4e9f761b906d409464b81412755d5bcdc456b8a2468d902eb047f9ab4f41a",
+          "mode": 420,
+          "mtime_ns": 1792935146402457180
+        },
+        "files/out/native-cpu-dense-values/bridge/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/build/inputs-before.json",
+          "bytes": 844488,
+          "sha256": "04e4e9f761b906d409464b81412755d5bcdc456b8a2468d902eb047f9ab4f41a",
+          "mode": 420,
+          "mtime_ns": 1792935144283672472
+        },
+        "files/out/native-cpu-dense-values/bridge/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/build/owner.json",
+          "bytes": 2281,
+          "sha256": "a414f01a87659053deb94b172afe4da2fcc2b715e202f4d226bf469a7763db35",
+          "mode": 420,
+          "mtime_ns": 1792935146462122146
+        },
+        "files/out/native-cpu-dense-values/bridge/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/build/samples.jsonl",
+          "bytes": 688,
+          "sha256": "fce2e47fd6dbf7c8ca6eee958433869cf56602331cd62fc8c6a44cba1301db35",
+          "mode": 420,
+          "mtime_ns": 1792935144623559561
+        },
+        "files/out/native-cpu-dense-values/bridge/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935144311663174
+        },
+        "files/out/native-cpu-dense-values/bridge/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/build/stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935144311663174
+        },
+        "files/out/native-cpu-dense-values/bridge/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/owned_guard.py",
+          "bytes": 150,
+          "sha256": "00d67e8f715e82bbdff70cfed86ae122a7aeef14b1879dc90f5a2e043ea40397",
+          "mode": 420,
+          "mtime_ns": 1792934983855222218
+        },
+        "files/out/native-cpu-dense-values/bridge/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/bridge/run_owned.py",
+          "bytes": 148,
+          "sha256": "fc24db2d9c1a86dc9c1fb56c2e3d5904276204b0f3844f47396820a46ed4f3cc",
+          "mode": 420,
+          "mtime_ns": 1792934983855222218
+        },
+        "files/out/native-cpu-dense-values/build_bridge.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/build_bridge.py",
+          "bytes": 1204,
+          "sha256": "c5b5c4476bc4d8461f0621727e01a4a52eed73b683777c440816caf08247f0b3",
+          "mode": 420,
+          "mtime_ns": 1792934983851303061
+        },
+        "files/out/native-cpu-dense-values/build_ispc.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/build_ispc.py",
+          "bytes": 3473,
+          "sha256": "6a7dbe4ab62634a42f61ba705860191a18835546e5ec54acec7b343ac7670314",
+          "mode": 420,
+          "mtime_ns": 1792935539777684398
+        },
+        "files/out/native-cpu-dense-values/build_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/build_provider.py",
+          "bytes": 393,
+          "sha256": "ece97961f31c4c1b1d47e75a39e69c027ffff26c026051b63d467ade3588af38",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/compile/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/actions.json",
+          "bytes": 26663,
+          "sha256": "8a65d67552a7617031121c8f6d82dd46172521735d7f0eb64b56abd66cb0d2e1",
+          "mode": 420,
+          "mtime_ns": 1792935542809060528
+        },
+        "files/out/native-cpu-dense-values/compile/ispc-values/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/ispc-values/inputs-after.json",
+          "bytes": 858909,
+          "sha256": "b560649db53076e8bd1be5fdb8844e4aaf443b4555ad0b3c10fe038910fda0eb",
+          "mode": 420,
+          "mtime_ns": 1792935568058080802
+        },
+        "files/out/native-cpu-dense-values/compile/ispc-values/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/ispc-values/inputs-before.json",
+          "bytes": 858909,
+          "sha256": "b560649db53076e8bd1be5fdb8844e4aaf443b4555ad0b3c10fe038910fda0eb",
+          "mode": 420,
+          "mtime_ns": 1792935544081925178
+        },
+        "files/out/native-cpu-dense-values/compile/ispc-values/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/ispc-values/owner.json",
+          "bytes": 3025,
+          "sha256": "674d5147e93a9ff6dadbbd1658205ccec9599b5185046be2e2d4aa74f4712725",
+          "mode": 420,
+          "mtime_ns": 1792935568077656875
+        },
+        "files/out/native-cpu-dense-values/compile/ispc-values/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/ispc-values/samples.jsonl",
+          "bytes": 29555,
+          "sha256": "f55002703db89d72b962605d839163c47c45094871e31013f2dc7b65393ca4b9",
+          "mode": 420,
+          "mtime_ns": 1792935566703416421
+        },
+        "files/out/native-cpu-dense-values/compile/ispc-values/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/ispc-values/stderr.log",
+          "bytes": 30431,
+          "sha256": "94a6b163f53c8100ef643eda00f9e9ae2afa318b27278077fa24e123713f1cb1",
+          "mode": 420,
+          "mtime_ns": 1792935562233217076
+        },
+        "files/out/native-cpu-dense-values/compile/ispc-values/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/ispc-values/stdout.log",
+          "bytes": 1440,
+          "sha256": "c065c841d12935c87ff4f57c3beaaaff1e0ebb07c4800bfeff47b5f7c7352e23",
+          "mode": 420,
+          "mtime_ns": 1792935560260847176
+        },
+        "files/out/native-cpu-dense-values/compile/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792935364163903200
+        },
+        "files/out/native-cpu-dense-values/compile/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/compile/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792935364163903200
+        },
+        "files/out/native-cpu-dense-values/configure_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/configure_provider.py",
+          "bytes": 231,
+          "sha256": "7d238db4c256eeb1e1ef6e803858c49f42ec94ec16cc6c1c6daf34902be5f9dd",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/derive_ispc.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/derive_ispc.py",
+          "bytes": 6411,
+          "sha256": "12fa1f8c2c8da48e5125c141f8bff152796840881a4571317543858da82daec1",
+          "mode": 420,
+          "mtime_ns": 1792934839969627487
+        },
+        "files/out/native-cpu-dense-values/inspect_bridge.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/inspect_bridge.py",
+          "bytes": 1735,
+          "sha256": "f05e27375c1b2c232a9e7e7935f35de5d8bc894444fe196bf6334ff065171195",
+          "mode": 420,
+          "mtime_ns": 1792935364199462612
+        },
+        "files/out/native-cpu-dense-values/inspect_objects.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/inspect_objects.py",
+          "bytes": 3168,
+          "sha256": "df3f041cc48f07482f2b0eaaaa773338aa3e034ae7a35d4178a35c98f783c16b",
+          "mode": 420,
+          "mtime_ns": 1792935364163903200
+        },
+        "files/out/native-cpu-dense-values/inspect_values.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/inspect_values.py",
+          "bytes": 1683,
+          "sha256": "1633c8a16f94f456b8c29e7f95f5338af5b32c78f6cb3bc9a6f7ee02a8388c36",
+          "mode": 420,
+          "mtime_ns": 1792935364199462612
+        },
+        "files/out/native-cpu-dense-values/ispc-derivation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/ispc-derivation.json",
+          "bytes": 4262,
+          "sha256": "1a15e007fec83f6d9990cfd0ec3eca1c9efcc07897ecb078963c1f7ba77c1e9e",
+          "mode": 420,
+          "mtime_ns": 1792934840059731153
+        },
+        "files/out/native-cpu-dense-values/ispc-values-compile-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/ispc-values-compile-result.json",
+          "bytes": 89642,
+          "sha256": "5039fa45159590461e717d3789e5a9c1786a7a074b5940627460925c42f923f3",
+          "mode": 420,
+          "mtime_ns": 1792935566758229431
+        },
+        "files/out/native-cpu-dense-values/object-code-inspection-values.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/object-code-inspection-values.json",
+          "bytes": 10096,
+          "sha256": "fae1a791bc7ae3dc359c1b689b81056193f0fadf647968e8889e87b055139c7a",
+          "mode": 420,
+          "mtime_ns": 1792935624806255813
+        },
+        "files/out/native-cpu-dense-values/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/prepare_bridge.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepare_bridge.py",
+          "bytes": 3802,
+          "sha256": "bb72263d184a4bc208c9cc875205ee3273a2f45584fb5ef04ad771417d98ac99",
+          "mode": 420,
+          "mtime_ns": 1792934983851303061
+        },
+        "files/out/native-cpu-dense-values/prepare_ispc_compile.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepare_ispc_compile.py",
+          "bytes": 7961,
+          "sha256": "9b12fe1a5eab2cffedf5791635f0921409ee28e091c5b9fe1772cdec355d2ea6",
+          "mode": 420,
+          "mtime_ns": 1792935539777684398
+        },
+        "files/out/native-cpu-dense-values/prepare_provider_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepare_provider_build.py",
+          "bytes": 230,
+          "sha256": "4b9877e3fab9ae6096707c4d2d0f476c4976c1b23aada5bd65e142412f6b826f",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/prepare_provider_config.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepare_provider_config.py",
+          "bytes": 3599,
+          "sha256": "4ab14a417c9a517696637de9793f52895111fde99d9aadce9f844fab1e032b32",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/prepare_provider_patch.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepare_provider_patch.py",
+          "bytes": 4371,
+          "sha256": "af64ecd834c4d693afa6db6b326ffb473f5b4f9683d996506389bf99e1f1ef78",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/prepared-bridge.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepared-bridge.json",
+          "bytes": 72470,
+          "sha256": "0b742e7c5f3461044cb26d0fb5e8606731afb54f35f28a0932b1f3958b9088ce",
+          "mode": 420,
+          "mtime_ns": 1792935142417850392
+        },
+        "files/out/native-cpu-dense-values/prepared-ispc-values-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/prepared-ispc-values-inputs.json",
+          "bytes": 82600,
+          "sha256": "375b855478182a3c36a2c8e333101b13f44b4ecb72871a32f4e93534129a473f",
+          "mode": 420,
+          "mtime_ns": 1792935542809060528
+        },
+        "files/out/native-cpu-dense-values/provider/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/actions.json",
+          "bytes": 2546514,
+          "sha256": "4db252408b3f18f7ab1cf1975a44b6ed81523c86c1a37db6b4518961b5e29e91",
+          "mode": 420,
+          "mtime_ns": 1792935725391935386
+        },
+        "files/out/native-cpu-dense-values/provider/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/build/inputs-after.json",
+          "bytes": 5159798,
+          "sha256": "dfbeaa1c695882954fd6758156e57c7ecf4ae99836309763397d8fc4e31020ce",
+          "mode": 420,
+          "mtime_ns": 1792935734441874684
+        },
+        "files/out/native-cpu-dense-values/provider/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/build/inputs-before.json",
+          "bytes": 5159798,
+          "sha256": "dfbeaa1c695882954fd6758156e57c7ecf4ae99836309763397d8fc4e31020ce",
+          "mode": 420,
+          "mtime_ns": 1792935728926898385
+        },
+        "files/out/native-cpu-dense-values/provider/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/build/owner.json",
+          "bytes": 3112,
+          "sha256": "7a7d6335f818459517f2602f9f9e9e2406fb88c45d78c37b69d4ca21236685af",
+          "mode": 420,
+          "mtime_ns": 1792935734473161812
+        },
+        "files/out/native-cpu-dense-values/provider/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/build/samples.jsonl",
+          "bytes": 6897,
+          "sha256": "384db53f7afe71f5289029a3b3311c329eac0ed72f4b4ea837904b7b6b14ec80",
+          "mode": 420,
+          "mtime_ns": 1792935730997528795
+        },
+        "files/out/native-cpu-dense-values/provider/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935728942555325
+        },
+        "files/out/native-cpu-dense-values/provider/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/build/stdout.log",
+          "bytes": 688,
+          "sha256": "c3a378587465ac796d25d73ff4c0d7478c0020267b0ed4ab3ef85f29fa58ddff",
+          "mode": 420,
+          "mtime_ns": 1792935731212811731
+        },
+        "files/out/native-cpu-dense-values/provider/configure-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure-result.json",
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd",
+          "mode": 420,
+          "mtime_ns": 1792935652030312248
+        },
+        "files/out/native-cpu-dense-values/provider/configure/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure/inputs-after.json",
+          "bytes": 5133315,
+          "sha256": "3cc9ec48d094e01fe7506646e34f944be2f4c968573da1169e83b16c61a55bc4",
+          "mode": 420,
+          "mtime_ns": 1792935655185866596
+        },
+        "files/out/native-cpu-dense-values/provider/configure/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure/inputs-before.json",
+          "bytes": 5133315,
+          "sha256": "3cc9ec48d094e01fe7506646e34f944be2f4c968573da1169e83b16c61a55bc4",
+          "mode": 420,
+          "mtime_ns": 1792935649247588149
+        },
+        "files/out/native-cpu-dense-values/provider/configure/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure/owner.json",
+          "bytes": 2223,
+          "sha256": "f3a627261e3d8d3b1d04106d0509c506c6f03441b681bbf63b2fe6038ef60d02",
+          "mode": 420,
+          "mtime_ns": 1792935655217187701
+        },
+        "files/out/native-cpu-dense-values/provider/configure/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure/samples.jsonl",
+          "bytes": 3420,
+          "sha256": "0b73fbdd63eb9f6c37590eee4d59182004c8e9854e5a91a46b7aa9ac096f9a4f",
+          "mode": 420,
+          "mtime_ns": 1792935651858104287
+        },
+        "files/out/native-cpu-dense-values/provider/configure/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792935649290640138
+        },
+        "files/out/native-cpu-dense-values/provider/configure/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/configure/stdout.log",
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05",
+          "mode": 420,
+          "mtime_ns": 1792935651889414827
+        },
+        "files/out/native-cpu-dense-values/provider/incremental-dry-run.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/incremental-dry-run.txt",
+          "bytes": 29711,
+          "sha256": "eeed3c39940459ea0b8c5176f94fac7922ce8bcb4012bd11255f0bdacc4ce32c",
+          "mode": 420,
+          "mtime_ns": 1792935724996402872
+        },
+        "files/out/native-cpu-dense-values/provider/incremental-plan.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/incremental-plan.json",
+          "bytes": 215704,
+          "sha256": "384de82cb39d1646209d69672221edfae066e1f6fe6f8abf3f5233920f4f8fcc",
+          "mode": 420,
+          "mtime_ns": 1792935724996402872
+        },
+        "files/out/native-cpu-dense-values/provider/linked-callback.disassembly.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/linked-callback.disassembly.txt",
+          "bytes": 36585,
+          "sha256": "fb78e62b9049660eaef4626feb3794337be8eefd95967accb1fde27f9b58b428",
+          "mode": 420,
+          "mtime_ns": 1792935740449003099
+        },
+        "files/out/native-cpu-dense-values/provider/linked-native-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/linked-native-proof.json",
+          "bytes": 2636103,
+          "sha256": "6f9d031aa4038b9f3a40fa4ae0121f5d25a97fd65c2d387ef875b234f92c087a",
+          "mode": 420,
+          "mtime_ns": 1792935743958448409
+        },
+        "files/out/native-cpu-dense-values/provider/linked-runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/linked-runtime-resolution.txt",
+          "bytes": 1402,
+          "sha256": "9edce568490ff15f01fe0cb2abe46cef0905688ddf80987b8c4cfdaf08c9dbb7",
+          "mode": 420,
+          "mtime_ns": 1792935741422814928
+        },
+        "files/out/native-cpu-dense-values/provider/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792935645079372724
+        },
+        "files/out/native-cpu-dense-values/provider/provider-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/provider-build-result.json",
+          "bytes": 2430,
+          "sha256": "855d19c95e75045b339a627d305f9c97ba7a00ee5d8fc9f6408db1b4d5dc4b17",
+          "mode": 420,
+          "mtime_ns": 1792935731204983261
+        },
+        "files/out/native-cpu-dense-values/provider/provider.patch": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/provider.patch",
+          "bytes": 2433,
+          "sha256": "cb10594ddb4416427af4beeedbc33836011e018bf2141ffcfa9db92dc61b9f95",
+          "mode": 420,
+          "mtime_ns": 1792935629950854256
+        },
+        "files/out/native-cpu-dense-values/provider/review-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/review-admission.json",
+          "bytes": 842,
+          "sha256": "cd97efcbf492c64fc1c428314618f4dd396fe549088ceaf1992d1832f228e194",
+          "mode": 420,
+          "mtime_ns": 1792935632608835762
+        },
+        "files/out/native-cpu-dense-values/provider/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792935645079372724
+        },
+        "files/out/native-cpu-dense-values/provider/source-contract.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/provider/source-contract.json",
+          "bytes": 117031,
+          "sha256": "b90b97d90bcc45b1f2b10910760133d20c3c8b5b0e47a67f8d425e8aeb27cb0d",
+          "mode": 420,
+          "mtime_ns": 1792935629950854256
+        },
+        "files/out/native-cpu-dense-values/read_linked_native.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/read_linked_native.py",
+          "bytes": 6358,
+          "sha256": "b4957ba57390b102c784478061877dec56088d5a64fb061015de67fe045e4a31",
+          "mode": 420,
+          "mtime_ns": 1792935433876153495
+        },
+        "files/out/native-cpu-dense-values/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792935433868333944
+        },
+        "files/out/native-cpu-dense-values/values-code-inspection.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/values-code-inspection.json",
+          "bytes": 9055,
+          "sha256": "8167ab71c90a7dee3df4494999e190aed6856c6d243bb204a52c5cc4d4cfb354",
+          "mode": 420,
+          "mtime_ns": 1792935624892363842
+        },
+        "files/out/native-cpu-dense-values/values_bridge.cpp": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-dense-values/values_bridge.cpp",
+          "bytes": 1432,
+          "sha256": "1720549c9a4a997919e0736e2a024d5e103b11c58f71fb1d2007e83d5c834df3",
+          "mode": 420,
+          "mtime_ns": 1792934839969627487
+        },
+        "files/out/preserve-native-cpu-dense-values.py": {
+          "source": "/home/astra/.project/Sirius/out/preserve-native-cpu-dense-values.py",
+          "bytes": 10286,
+          "sha256": "5f0ec80c9177872764053dcd0eadc73f025e990b190b24c7429903908141c241",
+          "mode": 420,
+          "mtime_ns": 1792935511639486847
+        }
+      }
+    },
+    {
+      "file": "actual-products.zip",
+      "identity": {
+        "bytes": 6612417,
+        "sha256": "550a6d959174d837ca8e56485f9cf9b94f3048671c7c81a7527ef0273fe13f27",
+        "mode": 420,
+        "mtime_ns": 1792936900358859703
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-dense-values-compatibility/compatibility": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values-compatibility/compatibility",
+          "bytes": 5506136,
+          "sha256": "f9064d03aec579583c480206c85969eae38f2fcdd170e03e9bc63eb3958d6be2",
+          "mode": 493,
+          "mtime_ns": 1792935745935030329
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/objects/dopri_phase.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/objects/dopri_phase.o",
+          "bytes": 1050848,
+          "sha256": "25ca1259b62fd1ea120eb963987cfdbe2279bbda2ebd16160c83341f3771a93e",
+          "mode": 420,
+          "mtime_ns": 1792935566280573204
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/objects/endpoint.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/objects/endpoint.o",
+          "bytes": 987168,
+          "sha256": "e0e6945a91ad55b11be2ad89d869922b6b700527f3007e52bde34af085ad4e05",
+          "mode": 420,
+          "mtime_ns": 1792935560151513754
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/objects/rows_adapter.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/objects/rows_adapter.o",
+          "bytes": 15672,
+          "sha256": "88ed76a98a050c916c6f828139f626331866217af227442d26036c1fb0ef6cb0",
+          "mode": 420,
+          "mtime_ns": 1792935566382368796
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/objects/transport.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/objects/transport.o",
+          "bytes": 973048,
+          "sha256": "24eb1a383d3ba10ba58e56448dd6e3879ef05edf961d27db6e9166f48ca92879",
+          "mode": 420,
+          "mtime_ns": 1792935550865423625
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/objects/values_bridge.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/objects/values_bridge.o",
+          "bytes": 2304,
+          "sha256": "e979c1a91425596386efd46ec76ef2c185094fc8ceb2e7a36435445daea1d681",
+          "mode": 420,
+          "mtime_ns": 1792935144703532993
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+          "bytes": 17908072,
+          "sha256": "284fc1e2e08d271e41bbc60257cd49155c37f7e4fac12237a067ef64c37d03fb",
+          "mode": 493,
+          "mtime_ns": 1792935731021014205
+        },
+        "files/bin/linux-gcc/native-cpu-dense-values/provider/lvp_icd.json": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/lvp_icd.json",
+          "bytes": 197,
+          "sha256": "4f1feddbc38eae65343097d0ebdfbae988a1d605c562273cb9cf8558b2230614",
+          "mode": 420,
+          "mtime_ns": 1792935731181497848
+        }
+      }
+    }
+  ],
+  "additional_qualification_claimed": false,
+  "scope": "AD routes remaining compound Add/Multiply through initialized explicit word buffers and packing-only C++ adapters into exact checked AC arithmetic. Original AC math/adapter object and all its function opcodes are unchanged; no arithmetic compilation/source change. AC Store calls remain, with all9380tuples and other original row/control/refusal/rollback/publication. Masks and operand/output snapshots preserve aliases and inactive words. New baseline packing-only object and actual raw-to-value-to-original-math target graph joined. Fresh full38/all187960words and original C8/all32+51markers+54joins passed; actual original frame result is decisive. Broader Z ABBA22+Decimal/all8 remain predecessor evidence. No independent math/science/release/main/780M/large-scene/original-July completion claim.",
+  "original_frame": {
+    "attempted": true,
+    "accepted": false,
+    "owner": {
+      "bytes": 3956,
+      "sha256": "b375f619a3601f0e42a9d2c8a5615a575644f1f7e39bddfdd9bf74a784fb90ff"
+    },
+    "XML": null,
+    "stop_reason": "diagnostic_timeout",
+    "child_exit": -15,
+    "wall_seconds": 300.23619759001303,
+    "peak_sampled_rss_kib": 1163952,
+    "build": {
+      "bytes": 153300,
+      "sha256": "cddf15f81f65322165134ed83f02a0e920d39a59467ae189cfb39f891d8fffee"
+    },
+    "frame_inputs": {
+      "bytes": 1904,
+      "sha256": "9b4048728289b89918328d3ddd75d0bfe932a3ab1181c29da093642cffe232ef"
+    },
+    "module_joins": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+        "bytes": 86008,
+        "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      }
+    },
+    "predecessor_Z_controls": {
+      "bytes": 61733,
+      "sha256": "7a949ec66b7d5a14b0426ccec308725b56da627357398dc5607b851873615aac"
+    },
+    "predecessor_Z_benefit": {
+      "bytes": 234821,
+      "sha256": "daf7acb99643527f478e5297707208da1f1b02e188a598030146005b42801f7b"
+    },
+    "predecessor_Z_decimal": {
+      "bytes": 7994,
+      "sha256": "947d8da3fb77f3eee2dfe1d4c03064e1597a6503ef227f4949191ed99bce906d"
+    },
+    "scope": "One original cold128x128/1SPP Kerr runtime profile, unchanged defaults/governors, cache disabled. Original test validates and removes its PPM. Fresh AD full38/C8 and this actual original frame only; broader all22+Decimal/all8 results belong to predecessor Z, with exact source inverse and guarded metadata substitution. No newly executed AD broad-suite or full scientific, Mandatory or release qualification claim."
+  },
+  "runtime_transition": {
+    "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+    "historical_build_dependency": {
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "current_runtime": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "incoming_merged_dependency": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "current_CPP_build_preparation": {
+      "bytes": 72470,
+      "sha256": "0b742e7c5f3461044cb26d0fb5e8606731afb54f35f28a0932b1f3958b9088ce"
+    },
+    "package": "zlib1g:amd64",
+    "version": "1:1.3.dfsg-3.1ubuntu2.3",
+    "package_integrity_output": "",
+    "upgrade_log": [
+      "2026-10-25 06:06:09 upgrade zlib1g:amd64 1:1.3.dfsg-3.1ubuntu2.2 1:1.3.dfsg-3.1ubuntu2.3"
+    ],
+    "existing_product_resolution": [
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-upload-aware-staging/matched/audited_backend_tests",
+        "identity": {
+          "bytes": 13781496,
+          "sha256": "6200bc95e5e1679ff8b763807818685b646ac901c7325eb7e78f82dd3339dda1"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-upload-aware-staging/frame/sirius_render_tests",
+        "identity": {
+          "bytes": 12465456,
+          "sha256": "777b749acea49efc33e697cd076628d7cb80b28cc7ad0313caf56f1932996d84"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 17908072,
+          "sha256": "284fc1e2e08d271e41bbc60257cd49155c37f7e4fac12237a067ef64c37d03fb"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-retained-ownership/providers/baseline/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 14768776,
+          "sha256": "cde2d0f8f243448a3f3b28408121412fb03a8bd9c01f5731f9e87a107150e952"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      }
+    ],
+    "scope": "Historical P host receipts pin the old library; the new dense C++ build explicitly pins the current installed library. Preserve both provenances and verify the incoming merged pin against those exact two identities. This cohort uses the current package after product/library-resolution checks; no package change is performed. All other identities, original C8/full38/frame assertions/counts/governors remain. Z broader gates are predecessor supporting evidence only. No historical qualification, numerical equivalence or release claim is transferred across the package update."
+  },
+  "last_reported_tiles": [
+    3776,
+    16384
+  ],
+  "additional_passive_profile_executed": false,
+  "profile_scope": "No profiling study for AD. Historical R profile supports the arithmetic premise only; it is not current Z execution or performance evidence.",
+  "dense_CPP_ABI_scope": {
+    "focused_owner": {
+      "bytes": 1940,
+      "sha256": "1d96b17364a96434488f8f8726c8ce2acf4b7afa4233f3a950b13c2468cbc85a",
+      "mode": 420,
+      "mtime_ns": 1792933667803529644
+    },
+    "focused_output": {
+      "passed": true,
+      "calls": 11880,
+      "compared_words": 1425600,
+      "active_lane_results": 35640,
+      "case_tuples": 33,
+      "input_alias_and_inactive_words_checked": true,
+      "FP_controls_unchanged": true
+    },
+    "CXX_build": {
+      "bytes": 4353,
+      "sha256": "cc7dc02217659fd7a9a9abee137fd4268a6cac00934b9f72cf6da73f61c52166",
+      "mode": 420,
+      "mtime_ns": 1792933484381226660
+    },
+    "CXX_code": {
+      "bytes": 5449,
+      "sha256": "6c57a63d635bb2be86809fa2c28f485fe27afcfe095383229113ee4b6210c7c3",
+      "mode": 420,
+      "mtime_ns": 1792933640778951397
+    }
+  },
+  "diagnostic_build_scope": "Zero new CPP compilations or baseline objcopy operations. Reused exact verified R driver and renamed Q baseline; one new link and one fresh full38/all187960word comparison passed. Historical R accounting failures remain historical.",
+  "predecessor_Z_broader_evidence": {
+    "benefit/readers/benefit.json": {
+      "bytes": 234821,
+      "sha256": "daf7acb99643527f478e5297707208da1f1b02e188a598030146005b42801f7b",
+      "mode": 420,
+      "mtime_ns": 1792930676511445536
+    },
+    "benefit/readers/decimal-agreement.json": {
+      "bytes": 7994,
+      "sha256": "947d8da3fb77f3eee2dfe1d4c03064e1597a6503ef227f4949191ed99bce906d",
+      "mode": 420,
+      "mtime_ns": 1792930683157782609
+    },
+    "controls/readers/controls-1-8-acceptance.json": {
+      "bytes": 61733,
+      "sha256": "7a949ec66b7d5a14b0426ccec308725b56da627357398dc5607b851873615aac",
+      "mode": 420,
+      "mtime_ns": 1792931410443288846
+    }
+  },
+  "legacy_human_scope_labels": "Inherited comments may retain old stage labels; frozen paths/object hashes/native PCs/module joins identify actual Z. Original ABBA/frame scopes identify Z. No new AD broad-suite execution; actual current paths/hashes and fresh C8 identify AD. Z broader results are preserved separately.",
+  "new_product_members": 8,
+  "current_system_zlib_recovery_member": false,
+  "reused_driver_baseline_runtime_recovery": "R603a155e actual-products.zip preserves the exact driver object, renamed baseline and current f61677c7 system zlib; no duplicate copies here.",
+  "reused_native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    }
+  ],
+  "recovery_manifests": {
+    "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/MANIFEST.json": {
+      "bytes": 83810,
+      "sha256": "3cdfab3ad1f3a76482492cf4069dc0748b4f9ce1753088bdbe75fab72226ffac",
+      "mode": 420,
+      "mtime_ns": 1792827582922129520
+    },
+    "attestations/qualification/37cd12be/native-cpu-upload-aware-staging-rejected-transport12/MANIFEST.json": {
+      "bytes": 60549,
+      "sha256": "8966f6084acc0d9b86c2d4a1f9243181a689f0af78d8f5a5be3bb2845c329dd8",
+      "mode": 420,
+      "mtime_ns": 1792832352304978375
+    },
+    "attestations/qualification/1fdaa56a/native-cpu-worker-occupancy-frame-timeout/MANIFEST.json": {
+      "bytes": 101861,
+      "sha256": "cd8993a3af7feffc81e69a97b26da7ed6b2979d998c74d4e8c83d3f17dd60b84",
+      "mode": 420,
+      "mtime_ns": 1792834568204177115
+    },
+    "attestations/qualification/603a155e/native-cpu-accumulate-inline-frame-timeout/MANIFEST.json": {
+      "bytes": 127988,
+      "sha256": "823a9dd6476a7c6471025c55cb56865deab2f9371934ef1a8a0b132e66f635ff",
+      "mode": 420,
+      "mtime_ns": 1792912003593378577
+    },
+    "attestations/qualification/4595f5a6/native-cpu-product-inline-frame-timeout/MANIFEST.json": {
+      "bytes": 118003,
+      "sha256": "34d1ef679f97a68fee66c45f2646394f48508c529f03e2fbf80d2249e25b8d83",
+      "mode": 420,
+      "mtime_ns": 1792925468433635290
+    },
+    "attestations/qualification/bee63496/native-cpu-task-cardinality-frame-timeout/MANIFEST.json": {
+      "bytes": 85793,
+      "sha256": "fcb519f077bda3709543706118545264698ad4749f48aa5706fd9d5907132abe",
+      "mode": 420,
+      "mtime_ns": 1792929608096052704
+    },
+    "attestations/qualification/7a8e6d48/native-cpu-direct-scratch-frame-timeout/MANIFEST.json": {
+      "bytes": 109652,
+      "sha256": "32f74d5125aa9bc07dd287644d5a19fdca9eebe3a9e8165cd1a20dc95b9815f9",
+      "mode": 420,
+      "mtime_ns": 1792931746746988018
+    },
+    "attestations/qualification/6c79517c/native-cpu-static-registers-frame-timeout/MANIFEST.json": {
+      "bytes": 66115,
+      "sha256": "d637fb454ff2c2220c492dc1866a9abc3e45acc3f4b83179acddd2191cd585e1",
+      "mode": 420,
+      "mtime_ns": 1792932355068057909
+    },
+    "attestations/qualification/fddb9175/native-cpu-predicated-products-frame-timeout/MANIFEST.json": {
+      "bytes": 67332,
+      "sha256": "85e701631e4165849c97bce402e16549dd195afb0ad08b9aad18731ec652086c",
+      "mode": 420,
+      "mtime_ns": 1792933103647085404
+    },
+    "attestations/qualification/2e8224da/native-cpu-dense-arithmetic-frame-timeout/MANIFEST.json": {
+      "bytes": 78309,
+      "sha256": "f8ff2c521a559d6fbf77cd3125e72f58ec894f634a94e69f4392154786c2b655",
+      "mode": 420,
+      "mtime_ns": 1792935013042436438
+    }
+  },
+  "resource_payloads": "Original32 cache assets and their existing recovery bundle reused; frame aliases can be retired only after this archive is independently verified and committed/pushed."
+}
