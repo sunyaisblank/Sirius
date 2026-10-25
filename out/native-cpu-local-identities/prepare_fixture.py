@@ -18,7 +18,6 @@ if not sys.argv[1:]:
  mapping={'sirius_native_tagged_'+n+'8':'local_tagged_'+n+'8' for n in ('add','subtract','multiply')}
  objcopy=Path('/usr/bin/objcopy').resolve();ispc=Path(J(A/'ispc-dense-compile-result.json')['objects'][0]['argv'][0]);linker=Path('/usr/bin/x86_64-linux-gnu-g++-14').resolve()
  tools={objcopy,ispc,linker,Path('/usr/bin/ld').resolve(),Path('/usr/bin/ldd').resolve()}
- toolpaths=J(A/'prepared-cpp.json')['inputs'];tools|={Path(n) for n in toolpaths if Path(n).is_absolute() and Path(n).is_file()}
  for tool in list(tools):
   if tool.read_bytes()[:4]!=b'\x7fELF':continue
   output=subprocess.check_output(['ldd','-r',str(tool)],text=True,stderr=subprocess.STDOUT);assert 'not found' not in output and 'undefined symbol' not in output
