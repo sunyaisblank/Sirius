@@ -1,0 +1,1644 @@
+{
+  "schema": "sirius-native-cpu-lazy-nir-terminal-v1",
+  "qualifying_source_revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+  "accepted": false,
+  "owners": {
+    "out/native-cpu-lazy-nir/provider/build/owner.json": {
+      "source": {
+        "revision": "cd4b0745dd215f70afd7b9956ecc482b6a61066f",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 4.887378277024254,
+      "peak_sampled_rss_kib": 325532,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir/provider/configure/owner.json": {
+      "source": {
+        "revision": "cd4b0745dd215f70afd7b9956ecc482b6a61066f",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 3.08238021901343,
+      "peak_sampled_rss_kib": 127800,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/owner.json": {
+      "source": {
+        "revision": "7fb94d73fd4815ccdf86466d2f624181bd00073a",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 63.49933911894914,
+      "peak_sampled_rss_kib": 2345580,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/owner.json": {
+      "source": {
+        "revision": "7fb94d73fd4815ccdf86466d2f624181bd00073a",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 64.13993196294177,
+      "peak_sampled_rss_kib": 2345088,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/owner.json": {
+      "source": {
+        "revision": "7fb94d73fd4815ccdf86466d2f624181bd00073a",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 13.576095754979178,
+      "peak_sampled_rss_kib": 941668,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/owner.json": {
+      "source": {
+        "revision": "7fb94d73fd4815ccdf86466d2f624181bd00073a",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 14.714644177001901,
+      "peak_sampled_rss_kib": 941924,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/cold-frame/frame/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": false,
+      "child_exit": -15,
+      "wall_seconds": 300.2554566479521,
+      "peak_sampled_rss_kib": 1108204,
+      "stop_reason": "diagnostic_timeout"
+    },
+    "out/native-cpu-lazy-nir-cohort/control-8/owner.json": {
+      "source": {
+        "revision": "9c40d81fde73bd6b8735dc277ae43b65dbd08e44",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 17.76686965499539,
+      "peak_sampled_rss_kib": 1089244,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 64.54525213001762,
+      "peak_sampled_rss_kib": 3414064,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 49.52493256400339,
+      "peak_sampled_rss_kib": 1475028,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 60.519945253035985,
+      "peak_sampled_rss_kib": 3502644,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 69.3535498919664,
+      "peak_sampled_rss_kib": 3533664,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 95.59585249505471,
+      "peak_sampled_rss_kib": 3500696,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 96.07742963195778,
+      "peak_sampled_rss_kib": 3619780,
+      "stop_reason": null
+    },
+    "out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/owner.json": {
+      "source": {
+        "revision": "f69d74df1afc418aa59d66aa21f896b94567802b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 13.471488342969678,
+      "peak_sampled_rss_kib": 1038360,
+      "stop_reason": null
+    }
+  },
+  "archives": [
+    {
+      "file": "source-build-and-trial.zip",
+      "identity": {
+        "bytes": 9022091,
+        "sha256": "4a2e5b121f89b5cd741f13bf62c397dd964c9397a45a2bc9342b110d7d34dfc6",
+        "mode": 420,
+        "mtime_ns": 1792923773936900678
+      },
+      "members": {
+        "files/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_screen.c": {
+          "source": "/home/astra/.project/Sirius/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_screen.c",
+          "bytes": 32807,
+          "sha256": "dfddb77414f8e3f4309b842628fc2182ca5952b3f598666f557e7aff90cbb15b",
+          "mode": 420,
+          "mtime_ns": 1792921350240788249
+        },
+        "files/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+          "source": "/home/astra/.project/Sirius/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c",
+          "bytes": 109116,
+          "sha256": "eb77574af753680c2bb935ccd7a8b1331ba4890b77d552f35d796d26c652032d",
+          "mode": 420,
+          "mtime_ns": 1792921350240788249
+        },
+        "files/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.h": {
+          "source": "/home/astra/.project/Sirius/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.h",
+          "bytes": 5190,
+          "sha256": "3e52b7d8b2f36305ce6d22f83e2ae874c8107325c3008a5b782b84be6fcf0feb",
+          "mode": 420,
+          "mtime_ns": 1792921350240788249
+        },
+        "files/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c": {
+          "source": "/home/astra/.project/Sirius/out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/frontends/lavapipe/lvp_device.c",
+          "bytes": 116201,
+          "sha256": "e30d2e630575219839233eb5aa4cd75c79c1054883f6ae5bf05298c73f87fe2b",
+          "mode": 420,
+          "mtime_ns": 1792921350244746549
+        },
+        "files/out/native-cpu-lazy-nir-cohort/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/actions.json",
+          "bytes": 192984,
+          "sha256": "a00c6d67177b835c939777fc23eaa394951a6db77348498d9de5577b25d7d1e9",
+          "mode": 420,
+          "mtime_ns": 1792921778334729033
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/prepare.py",
+          "bytes": 2093,
+          "sha256": "a78f68709016c5f88c35e65d049ada83145553ec26c7c0ac52a424fa764ef5ad",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/providers.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/providers.json",
+          "bytes": 1909,
+          "sha256": "d081b8a17c23f4f69939572cc911fc36435a92ab80bffd556117719c88ae6a96",
+          "mode": 420,
+          "mtime_ns": 1792922003098223101
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/benefit.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/benefit.json",
+          "bytes": 234597,
+          "sha256": "3a19f7f2ef76d175f17c9c28ad4ecd7807698f31fe50c6f12674dbb067edcb26",
+          "mode": 420,
+          "mtime_ns": 1792922174921844036
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/decimal-agreement.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/decimal-agreement.json",
+          "bytes": 7935,
+          "sha256": "033a683b0fc0135bbec5e50755cb7b3a2c61527b26a0137883e17902b0d50f35",
+          "mode": 420,
+          "mtime_ns": 1792922521558066210
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/decimal_check.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/decimal_check.py",
+          "bytes": 533,
+          "sha256": "087a34123af4af1062bd6bed1e0271552e0205744d2de7684a7e45a197006404",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/expected-readback-layout.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/expected-readback-layout.json",
+          "bytes": 3455,
+          "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/native_evidence.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/native_evidence.py",
+          "bytes": 518,
+          "sha256": "bf50b12e63d42c0715007e173e25ea2abbf01f71030b9d62099be034d59e40e8",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/numeric_gates.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/numeric_gates.py",
+          "bytes": 516,
+          "sha256": "5317872eae1fccf0ba9a04f552f3c303e309fda2f0279e573ef1137d8772ca12",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/read_results.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/read_results.py",
+          "bytes": 532,
+          "sha256": "2a9898c65a42ceeee552da50e54eb9c4e2835e453fc8af09a4cd92eee069300d",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/run_abba.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/run_abba.py",
+          "bytes": 528,
+          "sha256": "a708b6bfef1281a41407e8e6734616ff58de364ebe4aa449af807ff80e6dcf35",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/readers/sole-ABBA-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/readers/sole-ABBA-inputs.json",
+          "bytes": 2120,
+          "sha256": "9634a1d0faebeeba0c1670538934b051d73ef4f09193ed44161d5524ed3bb9c0",
+          "mode": 420,
+          "mtime_ns": 1792922003229147489
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/gtest.xml",
+          "bytes": 40859,
+          "sha256": "9f89f04621a5a00c8763f3ebb5a9cfe906e6513f8966217badb3505618df89b6",
+          "mode": 420,
+          "mtime_ns": 1792922067963553111
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/inputs-after.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922069706317801
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/inputs-before.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922004601620371
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/owner.json",
+          "bytes": 3749,
+          "sha256": "15fd21e03da371efc6ce3590ab2ef2ccf26cb71cd503558033c50c06977fa6d9",
+          "mode": 420,
+          "mtime_ns": 1792922069730079143
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/samples.jsonl",
+          "bytes": 851837,
+          "sha256": "1a5e199da705c851d9cd829f0f30347848911267dbad38dbef88f016304e5cb8",
+          "mode": 420,
+          "mtime_ns": 1792922068272538197
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922004609551866
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a1/stdout.log",
+          "bytes": 708,
+          "sha256": "2445e245773c4e9d59afec8b18cf51b0a8e67614a04c8736e0d9b1b94324fa1b",
+          "mode": 420,
+          "mtime_ns": 1792922067963553111
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/gtest.xml",
+          "bytes": 40807,
+          "sha256": "7e7fbc311afb71539eae816f40f815aa0f58eac1353c33d8b55ceca54c34de0e",
+          "mode": 420,
+          "mtime_ns": 1792922168778390303
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/inputs-after.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922170423411884
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/inputs-before.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922104682735046
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/owner.json",
+          "bytes": 3749,
+          "sha256": "b9696ae519b2954722d9b430ff0d9dcdd21869631bfa2d6e80a99ab5f64f3d51",
+          "mode": 420,
+          "mtime_ns": 1792922170463818402
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/samples.jsonl",
+          "bytes": 870348,
+          "sha256": "4fedf0306a7b3b797f8f56a345f5389e586ee215a85bd085003c1623b0dac8ea",
+          "mode": 420,
+          "mtime_ns": 1792922169095307619
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922104690650492
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/a2/stdout.log",
+          "bytes": 708,
+          "sha256": "38bbb09e9bd6cf68cf75de878dcebcb183597a74fc31bad31a4aeae3bfe3668a",
+          "mode": 420,
+          "mtime_ns": 1792922168778390303
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/actions.json",
+          "bytes": 425538,
+          "sha256": "fd5550e60d9c3ef6b4f031a90a41c7ca73443c18f3365ac5046b2554b98236cb",
+          "mode": 420,
+          "mtime_ns": 1792922003157734188
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/gtest.xml",
+          "bytes": 40845,
+          "sha256": "ddc1d58a92161ff48b1191325fb8bcba93f3fb6a287ce7f614c56d543afa6d35",
+          "mode": 420,
+          "mtime_ns": 1792922084625177995
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/inputs-after.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922085989188218
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/inputs-before.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922071080270263
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/owner.json",
+          "bytes": 3653,
+          "sha256": "d888fa03c7209aa5215bb477b0cdc5b3be76a02815a29717b830702cd1f7c4a3",
+          "mode": 420,
+          "mtime_ns": 1792922086017156393
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/samples.jsonl",
+          "bytes": 181850,
+          "sha256": "7430c6d8b5eea610d4310ecf5ffefa87a0ce5cb75a871fefc8fc9f93eea976e5",
+          "mode": 420,
+          "mtime_ns": 1792922084729297128
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922071092146155
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b1/stdout.log",
+          "bytes": 708,
+          "sha256": "8567a57f2e86e928fbcfd06d23b5bff8921d2750d141b3e5c22601b59a352aa1",
+          "mode": 420,
+          "mtime_ns": 1792922084625177995
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/gtest.xml",
+          "bytes": 40624,
+          "sha256": "68cbd86e48531221e0c8603813ee5cd12774815c4215d83dc0d382fdc4733cc7",
+          "mode": 420,
+          "mtime_ns": 1792922101908408817
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/inputs-after.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922103337212218
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/inputs-before.json",
+          "bytes": 833902,
+          "sha256": "9c6f38d030975b2a5f790f81914b33d103c27df698d157e0481af264561e313e",
+          "mode": 420,
+          "mtime_ns": 1792922087342355602
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/owner.json",
+          "bytes": 3653,
+          "sha256": "b76349ecacf7a7d4bf7689711698dea4b9b8167e6cf3efef656dd5db971f8451",
+          "mode": 420,
+          "mtime_ns": 1792922103360956763
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/samples.jsonl",
+          "bytes": 199146,
+          "sha256": "b10ac7e980891efbe1a5feae1102ba0475758954fad17a2bd0e28631cbaa7f72",
+          "mode": 420,
+          "mtime_ns": 1792922102031122735
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922087350331538
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/b2/stdout.log",
+          "bytes": 708,
+          "sha256": "b257085c89e733720e458633506abea37aa98b5aec154b0eca7552738dd8e928",
+          "mode": 420,
+          "mtime_ns": 1792922101908408817
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/owned_guard.py",
+          "bytes": 514,
+          "sha256": "5a578e7ed136a69ac15ccb6fc14c2de71d17d2e09ed93fbe2e028ad248ab3042",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/run_case.py",
+          "bytes": 528,
+          "sha256": "8573c3da92066b70818752deff08e025cbf0f3c9e47e90c5cd258cd93f328589",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/benefit/runtime/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/benefit/runtime/run_owned.py",
+          "bytes": 512,
+          "sha256": "95127cdfbdae57cb6b08f75b90a66d45c06f4acded269064f2645e791b619347",
+          "mode": 420,
+          "mtime_ns": 1792921789327036305
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/actions.json",
+          "bytes": 67866,
+          "sha256": "143672d209160cced4d44a7443176c5cd01b9444f7966c99ff019f4763537e63",
+          "mode": 420,
+          "mtime_ns": 1792923104523915268
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame-inputs.json",
+          "bytes": 1904,
+          "sha256": "031777e83c80117b64383ec9fe4324ab51deff173246c6936a695d91de15891f",
+          "mode": 420,
+          "mtime_ns": 1792923103478948527
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame/inputs-after.json",
+          "bytes": 874476,
+          "sha256": "7435023a7f24f507139eac869cc7133073dfc4b4a3fa03cb5927d25d8b5b95a2",
+          "mode": 420,
+          "mtime_ns": 1792923410606271590
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame/inputs-before.json",
+          "bytes": 874476,
+          "sha256": "7435023a7f24f507139eac869cc7133073dfc4b4a3fa03cb5927d25d8b5b95a2",
+          "mode": 420,
+          "mtime_ns": 1792923107789664845
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame/owner.json",
+          "bytes": 3724,
+          "sha256": "51255d268b48d81796d48158f005729b0380909bb7933168cc814fd157a6fa35",
+          "mode": 420,
+          "mtime_ns": 1792923410650234838
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame/samples.jsonl",
+          "bytes": 5163395,
+          "sha256": "87da6f615b57f9ce70ca7ef8e84c45d445cb4f6fd26f18500f722552a36aa207",
+          "mode": 420,
+          "mtime_ns": 1792923408821534646
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame/stderr.log",
+          "bytes": 67519,
+          "sha256": "89f5972fcd2d0a25dedd9c78813940a2665ede3485a623024589e1516fda712e",
+          "mode": 420,
+          "mtime_ns": 1792923396974820555
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/frame/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/frame/stdout.log",
+          "bytes": 570871,
+          "sha256": "5f23c1783330ac8c924f2c9299bb6db6689a019f07c828729fc4894e952b83b1",
+          "mode": 420,
+          "mtime_ns": 1792923408825545052
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792922152025534775
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/prepare.py",
+          "bytes": 14074,
+          "sha256": "316af5775af11c491e1a3bfab80c2de33e84d74722e9b628ba14595f78bbd1ac",
+          "mode": 420,
+          "mtime_ns": 1792922152025534775
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/read_result.py",
+          "bytes": 2705,
+          "sha256": "8a4bdb40d8297a091f1ae77249dba1c3be110cbefe205ff9f4558e272e54fa48",
+          "mode": 420,
+          "mtime_ns": 1792922152025534775
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/resource-restore.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/resource-restore.json",
+          "bytes": 5376,
+          "sha256": "51ecfd673c01c6fc8eab1f0c633e7e44f86e19a4327026c4df38d712bba38a2b",
+          "mode": 420,
+          "mtime_ns": 1792923103426212309
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/result.json",
+          "bytes": 2195,
+          "sha256": "26927a875a0ae07143f9cb2e9eb7d88e73e66abdc0566557dbdb126393167727",
+          "mode": 420,
+          "mtime_ns": 1792923743306066079
+        },
+        "files/out/native-cpu-lazy-nir-cohort/cold-frame/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/cold-frame/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792922152025534775
+        },
+        "files/out/native-cpu-lazy-nir-cohort/compatibility.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/compatibility.py",
+          "bytes": 3711,
+          "sha256": "54080b416c45c3c7d29fb274accf711c1ab4c0f7d372efd8cc0060165c9b71a3",
+          "mode": 420,
+          "mtime_ns": 1792921501826339871
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8-acceptance.json",
+          "bytes": 58104,
+          "sha256": "8bcc2e8fe8b9c2aad76cdec01a597b2602525a5c81395dab88d5c88a47f8977e",
+          "mode": 420,
+          "mtime_ns": 1792921839726838255
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/gtest.xml",
+          "bytes": 40790,
+          "sha256": "c3ac1034d002af0aeb1ddd174d730a7118529376e3e17cd042dd8ee6c558a5e3",
+          "mode": 420,
+          "mtime_ns": 1792921806114101537
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/inputs-after.json",
+          "bytes": 828982,
+          "sha256": "90886083147211563df83e8d45e36ff10dfc2beb2cb157bac71d92d545ecd93f",
+          "mode": 420,
+          "mtime_ns": 1792921807545383598
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/inputs-before.json",
+          "bytes": 828982,
+          "sha256": "90886083147211563df83e8d45e36ff10dfc2beb2cb157bac71d92d545ecd93f",
+          "mode": 420,
+          "mtime_ns": 1792921788400081366
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/native-observation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/native-observation.json",
+          "bytes": 54392,
+          "sha256": "8539b0b0ea0224cf1e8cdd7ff0d3de66a53513df86f4af109326a626c05851f5",
+          "mode": 420,
+          "mtime_ns": 1792921806212944223
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/observe.gdb": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/observe.gdb",
+          "bytes": 226,
+          "sha256": "0aa54e50411c6ea3fad2831dd698738807afe679ec9ea674bf380e1a74287689",
+          "mode": 420,
+          "mtime_ns": 1792921788778129815
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/owner.json",
+          "bytes": 4810,
+          "sha256": "c22691f4593e9895a81919c6ab8a82d88c3bb0dc6c4b9fcf458cb749a61cbb4c",
+          "mode": 420,
+          "mtime_ns": 1792921807588876538
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/samples.jsonl",
+          "bytes": 306518,
+          "sha256": "9b04b412a34270b469827e130846cdbe7cbf7307b3dae42f440618dcfede12f2",
+          "mode": 420,
+          "mtime_ns": 1792921806252481297
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792921788419978653
+        },
+        "files/out/native-cpu-lazy-nir-cohort/control-8/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/control-8/stdout.log",
+          "bytes": 4015,
+          "sha256": "6fc7cb27e9753691c720d75254e326837d5a24b2ffd7f4e90ab576ea47c2ef79",
+          "mode": 420,
+          "mtime_ns": 1792921806244573881
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/prepare.py",
+          "bytes": 4442,
+          "sha256": "d764529e427114f8c4dcb3b145f31664134f2abf2b7b855c654e27ea2953f82b",
+          "mode": 420,
+          "mtime_ns": 1792922586335948210
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/readers/controls-1-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/readers/controls-1-8-acceptance.json",
+          "bytes": 61774,
+          "sha256": "0c05b654f65ef1ce28849bd64c000b65cd700b3db7e87ea3ea76b075c79881ba",
+          "mode": 420,
+          "mtime_ns": 1792923062880510619
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/readers/native_evidence.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/readers/native_evidence.py",
+          "bytes": 499,
+          "sha256": "b9024736eaffc834151c9b99e4e3a9b82664da274ef1b98ede7d0221e7692857",
+          "mode": 420,
+          "mtime_ns": 1792922152021563613
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/readers/read_controls.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/readers/read_controls.py",
+          "bytes": 3226,
+          "sha256": "fdc21f4f4110d442a3052c9b395fd7833102931fd5f75a6351cf1548f219ab56",
+          "mode": 420,
+          "mtime_ns": 1792922152021563613
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/run_controls.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/run_controls.py",
+          "bytes": 1121,
+          "sha256": "a347e191ee83311c843f0021ad2b9de41bd1d6f87e41ab0e150211ec6f72883c",
+          "mode": 420,
+          "mtime_ns": 1792922152017592455
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/actions.json",
+          "bytes": 415406,
+          "sha256": "d7c9bb5b192d98683a0c0a36534323123918943b0ab9056dc5d76d0eaeb9ad60",
+          "mode": 420,
+          "mtime_ns": 1792922586601029400
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/gtest.xml",
+          "bytes": 10965,
+          "sha256": "2224b27b4ebfda21ae1a126d7f2279c435b398c21ac57d3c3fc8d45fed687fa8",
+          "mode": 420,
+          "mtime_ns": 1792922652515213209
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922654192445692
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922588086440572
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/owner.json",
+          "bytes": 3426,
+          "sha256": "e0bc4339b693fdc7779c11837d5a8cfd79f2fa33d2ab2ebf5de0f4f23cc74923",
+          "mode": 420,
+          "mtime_ns": 1792922654220586191
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/samples.jsonl",
+          "bytes": 879050,
+          "sha256": "f94dcaa27ba73a7c7c84e33fbf95eb7c46a4f2971294a7104144b90813985c0e",
+          "mode": 420,
+          "mtime_ns": 1792922652814222582
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/stderr.log",
+          "bytes": 6868,
+          "sha256": "897a34bf2704bf703105fd492e0df66bed4f0f04327da379a945fa34ec3122d6",
+          "mode": 420,
+          "mtime_ns": 1792922652373789859
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-1/stdout.log",
+          "bytes": 750,
+          "sha256": "9d43c03f5a2963d93137386cfe9cf65048e816b306208c272721fb5e9585e273",
+          "mode": 420,
+          "mtime_ns": 1792922652515213209
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/gtest.xml",
+          "bytes": 635,
+          "sha256": "65ad89d35ccec3c8c36cfe7a83acac596cdf56ecbc406fc1b1c89a3df1ced244",
+          "mode": 420,
+          "mtime_ns": 1792922705127137997
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922706452431667
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922655594211913
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/owner.json",
+          "bytes": 3426,
+          "sha256": "06b45141f37e814d009abfd72d114065e50222ba44323036c1e298ebcc422be5",
+          "mode": 420,
+          "mtime_ns": 1792922706480122194
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/samples.jsonl",
+          "bytes": 673275,
+          "sha256": "5e5c35173c68de0b330a033bd3dd59341a4ef02980d8bf7f244d795536236313",
+          "mode": 420,
+          "mtime_ns": 1792922705206263188
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922655610258560
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-2/stdout.log",
+          "bytes": 729,
+          "sha256": "71219e42bd8c59d4bd5892526e21487c5d10266a3991d001df7f033edf5f235c",
+          "mode": 420,
+          "mtime_ns": 1792922705127137997
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/gtest.xml",
+          "bytes": 976,
+          "sha256": "02013677df581ca935498a82502824fa5004ccc5846ea19dee068b4c262087ac",
+          "mode": 420,
+          "mtime_ns": 1792922768152945393
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922769916010160
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922707757814802
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/observe.gdb": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/observe.gdb",
+          "bytes": 273,
+          "sha256": "8db1694fbc14ac5d7401d3b2a2457cbde24a37e23234a24b8d20e6953433c829",
+          "mode": 420,
+          "mtime_ns": 1792922707836929006
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/owner.json",
+          "bytes": 4686,
+          "sha256": "c18ca19d7547b4480ce2a93d950f47b2c6f054588842b139cec573406149da1c",
+          "mode": 420,
+          "mtime_ns": 1792922769940474623
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/route-observation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/route-observation.json",
+          "bytes": 41225,
+          "sha256": "2f405e1339624da06c3b2d22b025d48b7bb207532958d6e9977e733d0971e682",
+          "mode": 420,
+          "mtime_ns": 1792922768560104559
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/samples.jsonl",
+          "bytes": 1116634,
+          "sha256": "8e7d9eb5843f216482aa73a6bade03cae54bd83be18a777dfd67d8b7b3e0ddf2",
+          "mode": 420,
+          "mtime_ns": 1792922768583819472
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922707769681934
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-3/stdout.log",
+          "bytes": 1211,
+          "sha256": "a2758e91b047f6fe8ccee53511115cbc5c08986607a1103833b3654e37e2aad7",
+          "mode": 420,
+          "mtime_ns": 1792922768560104559
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/gtest.xml",
+          "bytes": 606,
+          "sha256": "b2d94d444bdc098f7f50f3ebb52676b88052591bcdb77ed0606e79d02510c812",
+          "mode": 420,
+          "mtime_ns": 1792922840663981395
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922842212407864
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922771308503492
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/owner.json",
+          "bytes": 3253,
+          "sha256": "41498c27f0abe62f1ad1daed4c005e90292887e7a2dc01c24be78890b38a3d72",
+          "mode": 420,
+          "mtime_ns": 1792922842240182854
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/samples.jsonl",
+          "bytes": 946213,
+          "sha256": "a4cc81b2aa05be03463302fbd4680ebb52f9ad265672f03c43145e64c4bb7ead",
+          "mode": 420,
+          "mtime_ns": 1792922840850693484
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922771320647888
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-4/stdout.log",
+          "bytes": 686,
+          "sha256": "b983862ffdd0a7d1345e09dc6c2e6e8cd2546b2d5707a54a40dcf4c7147e7023",
+          "mode": 420,
+          "mtime_ns": 1792922840663981395
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/gtest.xml",
+          "bytes": 616,
+          "sha256": "2dda22a9caead36b329ef147ac6da436cd805c2f3ed82a567abb0f3d9600d6b0",
+          "mode": 420,
+          "mtime_ns": 1792922939705733225
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922941413303858
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922843628628151
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/owner.json",
+          "bytes": 3254,
+          "sha256": "c71fb5bac504f33cfc584ff71cff5551742d513da2bf2fd28fb47a5eb65db23c",
+          "mode": 420,
+          "mtime_ns": 1792922941444925336
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/samples.jsonl",
+          "bytes": 1299633,
+          "sha256": "2e754befe7059b76d842b992c155bdf929ae986807e8d0d26594cd781ab34b40",
+          "mode": 420,
+          "mtime_ns": 1792922940021951066
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922843636559988
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-5/stdout.log",
+          "bytes": 716,
+          "sha256": "243fb3a77c61fec0bf1709499fff23d6a9d7258a1eabfcc3e660492db4e6e75b",
+          "mode": 420,
+          "mtime_ns": 1792922939705733225
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/gtest.xml",
+          "bytes": 622,
+          "sha256": "08449cb1551f74df810deefe23a5203d6287bcfbb080b31e3ec539924df6df61",
+          "mode": 420,
+          "mtime_ns": 1792923038669468038
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792923040392308885
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792922942828364962
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/owner.json",
+          "bytes": 3254,
+          "sha256": "14db9e9770aded268efbbe89809f3e5e1a8c52141fa3f9618eb01fc2f5375608",
+          "mode": 420,
+          "mtime_ns": 1792923040416028472
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/samples.jsonl",
+          "bytes": 1310513,
+          "sha256": "21b37c3d9a88a47d640f4a734f0ddf9217368af876ec9ff91d95ce16e7b3aa30",
+          "mode": 420,
+          "mtime_ns": 1792923039001802294
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792922942840223015
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-6/stdout.log",
+          "bytes": 731,
+          "sha256": "9f2a26116ceeb004706d3a17fd2e0854ee02c14dd45303da5c87e55f608fcf76",
+          "mode": 420,
+          "mtime_ns": 1792923038669468038
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/gtest.xml",
+          "bytes": 44723,
+          "sha256": "72a930d7f628d7ae3c173e5a05e883389fb43adc28ff4704a7c3ae8ab2e1b12f",
+          "mode": 420,
+          "mtime_ns": 1792923055115288529
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/inputs-after.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792923056584865377
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/inputs-before.json",
+          "bytes": 840748,
+          "sha256": "79c20697478b2318730889ca1830b0a8164a2b1976dcd4beba897d7192f305e5",
+          "mode": 420,
+          "mtime_ns": 1792923041776854892
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/owner.json",
+          "bytes": 3427,
+          "sha256": "a8b08fd49d28fecc140a560fe5870939558b6bc27173bfd7bafe647fe11199f4",
+          "mode": 420,
+          "mtime_ns": 1792923056612657560
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/samples.jsonl",
+          "bytes": 181538,
+          "sha256": "6fef03fc8d72e74f16a7d8011626562b636d874652c90ed160e02e34b8e961a6",
+          "mode": 420,
+          "mtime_ns": 1792923055222554689
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792923041785021742
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control-7/stdout.log",
+          "bytes": 744,
+          "sha256": "e9e62e8b158fe8cad1c7bb4d2eadad605b7a400dd83133437fd1bd7a344f9dbe",
+          "mode": 420,
+          "mtime_ns": 1792923055115288529
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/control3_observer.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/control3_observer.py",
+          "bytes": 3727,
+          "sha256": "36814d7503ab88b0150f07a3afecd29ee0d0a396ca6aedba121421fb519b190f",
+          "mode": 420,
+          "mtime_ns": 1792922521712170723
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/nir-layout.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/nir-layout.json",
+          "bytes": 1385,
+          "sha256": "4988f96e1dfe725f7877a2c2f0dd096f3f33102fd4a7eb84cb6318445e9b35ad",
+          "mode": 420,
+          "mtime_ns": 1792922521672656745
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/owned_guard.py",
+          "bytes": 299,
+          "sha256": "6fc32fd7fbed8e24370e929829a70b82aa53e54668fb38ded68ace2d1e9a6037",
+          "mode": 420,
+          "mtime_ns": 1792922152021563613
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/run_case.py",
+          "bytes": 2159,
+          "sha256": "b475e088da69ae1d2b893bb249661d5e9b84df83bc3950cf7da027ec474314c4",
+          "mode": 420,
+          "mtime_ns": 1792922521712170723
+        },
+        "files/out/native-cpu-lazy-nir-cohort/controls/runtime/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/controls/runtime/run_owned.py",
+          "bytes": 297,
+          "sha256": "6ae4510d2a1672ffb6b1fee3e37bdbc62c3aee3e993cafb1c210224b55cf2dd2",
+          "mode": 420,
+          "mtime_ns": 1792922152021563613
+        },
+        "files/out/native-cpu-lazy-nir-cohort/native_observer.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/native_observer.py",
+          "bytes": 12607,
+          "sha256": "beba614635380a4d59e0e422e3df2542200252a2a4857b3bc3b722960a72bbf6",
+          "mode": 420,
+          "mtime_ns": 1792921501826339871
+        },
+        "files/out/native-cpu-lazy-nir-cohort/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792921501826339871
+        },
+        "files/out/native-cpu-lazy-nir-cohort/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/prepare.py",
+          "bytes": 4556,
+          "sha256": "6f7d44023e9053a4b835968aa53020b1dc822c815bb1abb6fb53b289a8fcd4b8",
+          "mode": 420,
+          "mtime_ns": 1792921764034979778
+        },
+        "files/out/native-cpu-lazy-nir-cohort/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/read_result.py",
+          "bytes": 10505,
+          "sha256": "9d9e4db73fdbe9367a5369766cb5092d852189c33904348a903879fda0fea006",
+          "mode": 420,
+          "mtime_ns": 1792921764034979778
+        },
+        "files/out/native-cpu-lazy-nir-cohort/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/run_case.py",
+          "bytes": 1803,
+          "sha256": "70a89563785e82d28a43574a8914740df2b6045c90d19e360b0fd9b1714642cf",
+          "mode": 420,
+          "mtime_ns": 1792921501826339871
+        },
+        "files/out/native-cpu-lazy-nir-cohort/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792921501826339871
+        },
+        "files/out/native-cpu-lazy-nir-cohort/runtime-transition.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/runtime-transition.json",
+          "bytes": 5669,
+          "sha256": "834af2bbfa675d7ccaedc9a74d006e76982564818a8a4fad8c14330ea4d6654e",
+          "mode": 420,
+          "mtime_ns": 1792921777864335542
+        },
+        "files/out/native-cpu-lazy-nir-cohort/runtime_transition.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir-cohort/runtime_transition.py",
+          "bytes": 3394,
+          "sha256": "c69ae4846a0d0faf0495c73b7c8b1d0987d5543954136a9af6053fc8684a493b",
+          "mode": 420,
+          "mtime_ns": 1792921501822382292
+        },
+        "files/out/native-cpu-lazy-nir/apply_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/apply_provider.py",
+          "bytes": 2372,
+          "sha256": "203e4ac749bb579aea39dca75459060e43f0f01ac327a5779cacd900bcc72c36",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/build_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/build_provider.py",
+          "bytes": 389,
+          "sha256": "40ece5d522c8d28f6fc0059b677b3703d99ccbae1f24aab42a5bd9a5abde1689",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/configure_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/configure_provider.py",
+          "bytes": 231,
+          "sha256": "7d238db4c256eeb1e1ef6e803858c49f42ec94ec16cc6c1c6daf34902be5f9dd",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/prepare_provider_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/prepare_provider_build.py",
+          "bytes": 230,
+          "sha256": "4b9877e3fab9ae6096707c4d2d0f476c4976c1b23aada5bd65e142412f6b826f",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/prepare_provider_config.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/prepare_provider_config.py",
+          "bytes": 3542,
+          "sha256": "d9363d23ac003b04860662b01e7fb1a36e422417afce0648808e3f9b0d13a55e",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/prepare_provider_patch.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/prepare_provider_patch.py",
+          "bytes": 7158,
+          "sha256": "b4574c943a15a997d68fd41e4da97203ac662f3637eb9d8c25c7905f553ab35d",
+          "mode": 420,
+          "mtime_ns": 1792921193604333478
+        },
+        "files/out/native-cpu-lazy-nir/provider/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/actions.json",
+          "bytes": 2439020,
+          "sha256": "d85f3865c95503a72bfc232036b4c18b53b7a0e26edd48e1a4453ae0e675d16e",
+          "mode": 420,
+          "mtime_ns": 1792921586324969849
+        },
+        "files/out/native-cpu-lazy-nir/provider/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/build/inputs-after.json",
+          "bytes": 4854655,
+          "sha256": "41859c369492334194c3956b9557f0669faad7ca469b67fa0001306965dad0d8",
+          "mode": 420,
+          "mtime_ns": 1792921609373194999
+        },
+        "files/out/native-cpu-lazy-nir/provider/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/build/inputs-before.json",
+          "bytes": 4854655,
+          "sha256": "41859c369492334194c3956b9557f0669faad7ca469b67fa0001306965dad0d8",
+          "mode": 420,
+          "mtime_ns": 1792921601827387435
+        },
+        "files/out/native-cpu-lazy-nir/provider/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/build/owner.json",
+          "bytes": 13091,
+          "sha256": "2706caf0155941d4fe55de7e2621ce3a1843f42ad024059fe11a65502d097d8a",
+          "mode": 420,
+          "mtime_ns": 1792921609404982817
+        },
+        "files/out/native-cpu-lazy-nir/provider/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/build/samples.jsonl",
+          "bytes": 23056,
+          "sha256": "903d6dbc4de0a39760a08d536cbe3f81178f72ee6aa78ea85ed28d872127ba12",
+          "mode": 420,
+          "mtime_ns": 1792921606465106856
+        },
+        "files/out/native-cpu-lazy-nir/provider/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792921601839419783
+        },
+        "files/out/native-cpu-lazy-nir/provider/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/build/stdout.log",
+          "bytes": 3543,
+          "sha256": "5419a45896339eeaa650ab62c54a58cc957758058219dcae9de66b22edbab615",
+          "mode": 420,
+          "mtime_ns": 1792921606469089868
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure-result.json",
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd",
+          "mode": 420,
+          "mtime_ns": 1792921515292440693
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure/inputs-after.json",
+          "bytes": 4839620,
+          "sha256": "6ac528de98c2cd1b04237ebe5e5b61f52e974e9bd09baab2f79302fb8d5bb850",
+          "mode": 420,
+          "mtime_ns": 1792921518041937914
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure/inputs-before.json",
+          "bytes": 4839620,
+          "sha256": "6ac528de98c2cd1b04237ebe5e5b61f52e974e9bd09baab2f79302fb8d5bb850",
+          "mode": 420,
+          "mtime_ns": 1792921512263515758
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure/owner.json",
+          "bytes": 2369,
+          "sha256": "440c3c4dde11ce1c2c49ffaa40e52b048758abb883278a287a2ed80c14abbcca",
+          "mode": 420,
+          "mtime_ns": 1792921518081670771
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure/samples.jsonl",
+          "bytes": 3885,
+          "sha256": "a2d974976d497dd377312365c790382b08f304d931e407674d5c66eb62cf7964",
+          "mode": 420,
+          "mtime_ns": 1792921515089309854
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792921512271510018
+        },
+        "files/out/native-cpu-lazy-nir/provider/configure/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/configure/stdout.log",
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05",
+          "mode": 420,
+          "mtime_ns": 1792921515101258727
+        },
+        "files/out/native-cpu-lazy-nir/provider/incremental-dry-run.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/incremental-dry-run.txt",
+          "bytes": 158546,
+          "sha256": "7023917e2fca72c7bfdb182ff44817800d01169cc67d0e1cefb729a1cecc7a5e",
+          "mode": 420,
+          "mtime_ns": 1792921585916960857
+        },
+        "files/out/native-cpu-lazy-nir/provider/incremental-plan.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/incremental-plan.json",
+          "bytes": 341163,
+          "sha256": "7d366a79abb5321f28d22ccbe256edb4921f285c313fae8efe7203db575dd46f",
+          "mode": 420,
+          "mtime_ns": 1792921585916960857
+        },
+        "files/out/native-cpu-lazy-nir/provider/linked-callback.disassembly.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/linked-callback.disassembly.txt",
+          "bytes": 36557,
+          "sha256": "567b15bf3d7d2430bf35e7bd5d1960b64ce493dc797ff555882c2799ba8c45f6",
+          "mode": 420,
+          "mtime_ns": 1792921766198798197
+        },
+        "files/out/native-cpu-lazy-nir/provider/linked-native-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/linked-native-proof.json",
+          "bytes": 7536641,
+          "sha256": "e5996a441013a6a0895b9576386378aafaed30b59617641037b778e83378f913",
+          "mode": 420,
+          "mtime_ns": 1792921768971149982
+        },
+        "files/out/native-cpu-lazy-nir/provider/linked-runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/linked-runtime-resolution.txt",
+          "bytes": 1402,
+          "sha256": "ff2325f44db05cab2f240715d1532ac4ce565832edb9374986b7751887100930",
+          "mode": 420,
+          "mtime_ns": 1792921768781085172
+        },
+        "files/out/native-cpu-lazy-nir/provider/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792921501770933783
+        },
+        "files/out/native-cpu-lazy-nir/provider/provider-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/provider-build-result.json",
+          "bytes": 2420,
+          "sha256": "c2d8b33f42848f8c695c3648f079e91d660d9e05f8c1d1b1189310f2d5c85a65",
+          "mode": 420,
+          "mtime_ns": 1792921606457140832
+        },
+        "files/out/native-cpu-lazy-nir/provider/provider.patch": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/provider.patch",
+          "bytes": 3114,
+          "sha256": "a9729d07f958d1585bc7b89d1543f4cf08190576d2c40f6acf6231e662e7ab24",
+          "mode": 420,
+          "mtime_ns": 1792921198407700808
+        },
+        "files/out/native-cpu-lazy-nir/provider/review-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/review-admission.json",
+          "bytes": 878,
+          "sha256": "7e62d1bbf8ba1ac2c3fbcbcdab3fa6b17de533fd9ba718960a17473cc117035c",
+          "mode": 420,
+          "mtime_ns": 1792921351190756288
+        },
+        "files/out/native-cpu-lazy-nir/provider/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792921501770933783
+        },
+        "files/out/native-cpu-lazy-nir/provider/source-contract.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/provider/source-contract.json",
+          "bytes": 18790,
+          "sha256": "90ae997c9bbc3852368b3816b692bc7ad9995c4276a1481f22474c3e26f628e5",
+          "mode": 420,
+          "mtime_ns": 1792921198407700808
+        },
+        "files/out/native-cpu-lazy-nir/read_linked_native.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/read_linked_native.py",
+          "bytes": 3753,
+          "sha256": "6c370ba65c321680d4ed1e8b92790cf014bc7fc666ea9109edfd893adad003d9",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/native-cpu-lazy-nir/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-lazy-nir/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792921280033679049
+        },
+        "files/out/preserve-native-cpu-lazy-nir.py": {
+          "source": "/home/astra/.project/Sirius/out/preserve-native-cpu-lazy-nir.py",
+          "bytes": 5980,
+          "sha256": "2c87369ecb7dd69006bb2b6a77662fe2951aba1aab943d2388186207bb9870c4",
+          "mode": 420,
+          "mtime_ns": 1792923773151370342
+        },
+        "files/out/preserve-native-cpu-zero-term.py": {
+          "source": "/home/astra/.project/Sirius/out/preserve-native-cpu-zero-term.py",
+          "bytes": 8609,
+          "sha256": "ccd75a78db3da7b950541549b1c1f28dd26aa9b3aa6d233df65d904d36473020",
+          "mode": 420,
+          "mtime_ns": 1792914159776996619
+        }
+      }
+    },
+    {
+      "file": "actual-products.zip",
+      "identity": {
+        "bytes": 5153983,
+        "sha256": "9d561617294f673d86ec970586f7ae01688afeb8710e20c2653d9a7e799d2d58",
+        "mode": 420,
+        "mtime_ns": 1792923774745510416
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so",
+          "bytes": 21791336,
+          "sha256": "200a889fe0786706c003f4be6ee4eed300563b98a69dda47e594a8940f676dc8",
+          "mode": 493,
+          "mtime_ns": 1792921606261973216
+        },
+        "files/bin/linux-gcc/native-cpu-lazy-nir/provider/lvp_icd.json": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-lazy-nir/provider/lvp_icd.json",
+          "bytes": 193,
+          "sha256": "dfa2ff2f39e15f2554174e609597100138c98edabb9974d17f9140c43682123b",
+          "mode": 420,
+          "mtime_ns": 1792921606429259742
+        }
+      }
+    }
+  ],
+  "original_frame": {
+    "attempted": true,
+    "accepted": false,
+    "owner": {
+      "bytes": 3724,
+      "sha256": "51255d268b48d81796d48158f005729b0380909bb7933168cc814fd157a6fa35"
+    },
+    "XML": null,
+    "stop_reason": "diagnostic_timeout",
+    "child_exit": -15,
+    "wall_seconds": 300.2554566479521,
+    "peak_sampled_rss_kib": 1108204,
+    "build": {
+      "bytes": 153300,
+      "sha256": "cddf15f81f65322165134ed83f02a0e920d39a59467ae189cfb39f891d8fffee"
+    },
+    "frame_inputs": {
+      "bytes": 1904,
+      "sha256": "031777e83c80117b64383ec9fe4324ab51deff173246c6936a695d91de15891f"
+    },
+    "module_joins": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+        "bytes": 86008,
+        "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      }
+    },
+    "controls": {
+      "bytes": 61774,
+      "sha256": "0c05b654f65ef1ce28849bd64c000b65cd700b3db7e87ea3ea76b075c79881ba"
+    },
+    "benefit": {
+      "bytes": 234597,
+      "sha256": "3a19f7f2ef76d175f17c9c28ad4ecd7807698f31fe50c6f12674dbb067edcb26"
+    },
+    "decimal": {
+      "bytes": 7935,
+      "sha256": "033a683b0fc0135bbec5e50755cb7b3a2c61527b26a0137883e17902b0d50f35"
+    },
+    "scope": "One original cold128x128/1SPP Kerr runtime profile, unchanged defaults/governors, cache disabled. Original test validates and removes its PPM. No full scientific, Mandatory or release qualification claim."
+  },
+  "last_reported_tiles": [
+    3160,
+    16384
+  ],
+  "new_product_members": 2,
+  "scope": "V defers native marked compute NIR optimization to first real variant generation, before IR cache serialization; other shaders retain eager finalization. Actual U scalar/S row arithmetic, Q scheduler, host, fixture and original scene unchanged. Incremental provider build and full898function/module joins passed, reused exact U full38 checker joined, original C8/all32/51markers/54joins, sole ABBA22 plus independent Decimal, and all8 original controls passed. The sole original128x128 one-SPP software Vulkan frame timed out under unchanged300s/4GiB/2GiB governors. No unchanged retry, full science/release/main or adoption claim.",
+  "control3_observer_limit": "The first64 finalizer entries were all graphics shader_stage4/native_stage0 and exhausted the capture cap. The observer recorded the first EndpointRows return true, but does not demonstrate compute tag classification, lazy skip, fallback, or the full timeout cause. Original C3 assertions passed; no repeated capture.",
+  "additional_frame_profile_executed": false,
+  "native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/objects/transport.o",
+      "bytes": 3115824,
+      "sha256": "a0bc1a77106abf466fa621f6c5b93d2e8fbc90ebcf8bf0e9e2a2997397a243bf"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/objects/endpoint.o",
+      "bytes": 3501304,
+      "sha256": "02bd72733f2eb8e24fadfaac0ddef93e1d9da13687ee88421edb324f837e408a"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/objects/dopri_phase.o",
+      "bytes": 1822672,
+      "sha256": "a11815e10d4a28bf6b33b217ae59d2db1962a66114c95507d5fa3622d26c8429"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+      "bytes": 4280,
+      "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+    }
+  ],
+  "reused_U_products_recovery": "attestations/qualification/fb50bb2a/native-cpu-scalar-zero-control3-timeout/MANIFEST.json",
+  "reused_S_row_products_recovery": "attestations/qualification/115b86f3/native-cpu-zero-term-frame-timeout/MANIFEST.json",
+  "reused_driver_baseline_runtime_recovery": "attestations/qualification/603a155e/native-cpu-accumulate-inline-frame-timeout/MANIFEST.json",
+  "runtime_transition": {
+    "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+    "historical_build_dependency": {
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "current_runtime": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "package": "zlib1g:amd64",
+    "version": "1:1.3.dfsg-3.1ubuntu2.3",
+    "package_integrity_output": "",
+    "upgrade_log": [
+      "2026-10-25 06:06:09 upgrade zlib1g:amd64 1:1.3.dfsg-3.1ubuntu2.2 1:1.3.dfsg-3.1ubuntu2.3"
+    ],
+    "existing_product_resolution": [
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-upload-aware-staging/matched/audited_backend_tests",
+        "identity": {
+          "bytes": 13781496,
+          "sha256": "6200bc95e5e1679ff8b763807818685b646ac901c7325eb7e78f82dd3339dda1"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-upload-aware-staging/frame/sirius_render_tests",
+        "identity": {
+          "bytes": 12465456,
+          "sha256": "777b749acea49efc33e697cd076628d7cb80b28cc7ad0313caf56f1932996d84"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 21791336,
+          "sha256": "200a889fe0786706c003f4be6ee4eed300563b98a69dda47e594a8940f676dc8"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-retained-ownership/providers/baseline/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 14768776,
+          "sha256": "cde2d0f8f243448a3f3b28408121412fb03a8bd9c01f5731f9e87a107150e952"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      }
+    ],
+    "scope": "Preserved P/R builds predate the system package upgrade; the V provider was built against the current runtime. Only the historical P host dependency pin is superseded for this fresh cohort. Historical build receipts/products stay unchanged. Only this current runtime dependency pin is superseded; all other original expected identities and original C8/ABBA22+Decimal/all8/frame assertions/counts/governors remain. Both ABBA arms use the same current system library. No historical qualification, numerical equivalence or release claim is transferred across the update."
+  },
+  "resource_payloads": "Original32 cache assets/recovery preserved. Retire only restored hardlink aliases after independent bundle verification and commit/push."
+}
