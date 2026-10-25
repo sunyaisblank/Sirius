@@ -1,0 +1,46 @@
+{
+  "schema": "sirius-current-retained-operator-abi-observation-v1",
+  "basis_compile_revision": "2b132be2068ab9af0a5e69eed562e8106517a4bb",
+  "compile_result": {
+    "path": "out/native-cpu-product-inline/ispc-product-compile-result.json",
+    "bytes": 8163,
+    "sha256": "79cb42b4d42b89f222530d6f70adb6d143504b804a1064a21bf09f1d341114ba"
+  },
+  "observation": "Existing post-W nm/objdump inspection; no new workload, debugger sample, compiler action or program study executed for this note. Counts are static direct call sites, not runtime frequencies or whole-frame causal shares.",
+  "stages": {
+    "transport": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-product-inline/objects/transport.o",
+        "bytes": 3161760,
+        "sha256": "38cfe4a1f29b3399baf06d3581066d82a388edcd6a2b1a6311b4b17c6757856e"
+      },
+      "RTAdd_code_bytes": 20263,
+      "RTAdd_direct_call_sites": 948,
+      "RTMultiply_code_bytes": 88148,
+      "RTMultiply_direct_call_sites": 1493
+    },
+    "endpoint": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-product-inline/objects/endpoint.o",
+        "bytes": 3547248,
+        "sha256": "9454d08de30881011eef98564dd95a6c73bf7f2e57d73dabe9031c6c2cc810cc"
+      },
+      "RTAdd_code_bytes": 20263,
+      "RTAdd_direct_call_sites": 1773,
+      "RTMultiply_code_bytes": 88148,
+      "RTMultiply_direct_call_sites": 1966
+    },
+    "dopri_phase": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-product-inline/objects/dopri_phase.o",
+        "bytes": 1868696,
+        "sha256": "bffd432e9b7b23fc13ea9b801e2a4ff32c333018d680905838a38b3ebdb9508f"
+      },
+      "RTAdd_code_bytes": 20263,
+      "RTAdd_direct_call_sites": 888,
+      "RTMultiply_code_bytes": 88148,
+      "RTMultiply_direct_call_sites": 673
+    }
+  },
+  "decision": "Do not blindly force-inline whole RTAdd/RTMultiply into thousands of call sites, sweep flags/thresholds, or repeat unchanged rejected frames. Product-helper inlining did not satisfy the original frame. The next implementation needs an operator/control/dispatch-level structural premise with exact arithmetic and all fields retained; no selected future optimization or speed claim is inferred."
+}
