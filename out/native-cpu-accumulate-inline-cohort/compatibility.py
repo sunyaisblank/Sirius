@@ -15,12 +15,19 @@ def check(root):
         assert pin(path) == {key: row[key] for key in ('bytes', 'sha256')}
         return path
     work = root / 'out/native-cpu-accumulate-compatibility'
-    for phase in ('compile', 'run'):
+    for phase in ('link', 'run'):
         owner = doc(work / phase / 'owner.json')
         assert owner['status'] == 'terminal' and owner['passed'] and owner['child_exit'] == 0
         assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
         assert not owner['cleanup_errors'] and not owner['remaining_owned_processes']
         assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
+    build = doc(work / 'compile-completion.json')
+    assert build['passed'] and build['diagnostic_CPP_compilations'] == 1 and build['diagnostic_links'] == 1
+    assert build['additional_CPP_compilations_in_link_continuation'] == 0
+    original = doc(work / 'compile/owner.json')
+    assert original['status'] == 'terminal' and not original['passed'] and original['child_exit'] == 1
+    assert original['source_unchanged'] and original['whole_inputs_unchanged']
+    assert not original['cleanup_errors'] and not original['remaining_owned_processes']
     result_path = work / 'result.json'
     result = doc(result_path)
     assert result['passed'] and result['runtime_exit'] == 0
