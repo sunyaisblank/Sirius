@@ -1,0 +1,149 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 622708,
+        "sha256": "d9eaaf6f227d10fae25a586a647198e424d73667dc570c3ca3fecad6b04ce72b"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 622708,
+        "sha256": "06e56c09af6c23779eb4c1c2563afaa36f00721c5bbc3e46c5418615bc8ffa9e"
+      },
+      "writers": {
+        "ScratchWrite_0": {
+          "old_body_sha256": "4e84462801a7cc2416bdce38ca8b87fbf0e12d186f3cb4389fa3686a3549706b",
+          "new_body_sha256": "2cd00e46221289ecc586276faa848116120d05063b9a18cd27a94efe273fc8c3",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "ScratchWriteUniform_0": {
+          "old_body_sha256": "814a8c0c89ad19a79ae66f52d573dedd2fc219b364f2b6f2a7953446e3c2b0d3",
+          "new_body_sha256": "815c0191e66803ea01dc74c66df3948c8148bada260a086180cbfbf9c3b89007",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "WriteValue_0": {
+          "old_body_sha256": "bd3b8af84cc312ecaf8d35d4ba413d664145c3dbba657a89f4323579b2306556",
+          "new_body_sha256": "c10e05ca69a9c9351fcc354c5353e6e4db496fb2c0c08a57a35922fd5f9cf542",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "WriteValueUniform_0": {
+          "old_body_sha256": "9f3661844f395a62647c2005f16aa08013cba62b2d5db59b7e5ebe59d516ed7b",
+          "new_body_sha256": "b32a790a3516bf35020780a61a2ba1033300188e0f05caee95701c03af75e719",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        }
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "whole_source_inverse_restores_AJ": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 791036,
+        "sha256": "e4ee809ad521096b2c85ad95a2b8431b22110f0e17a25101f3264c2767403079"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 791036,
+        "sha256": "55492333bed6f0cc6b02e110e2141988d32ef682ed564a22b0a5bc208961a3ee"
+      },
+      "writers": {
+        "ScratchWrite_0": {
+          "old_body_sha256": "d874fe61a64eb76a9e17299d9085018ad4b893a8b719a95c881e3ab925aca4dd",
+          "new_body_sha256": "aa81837c834bd81f5b1ef2379be309eff20f6930f39d80856504c8d50788db67",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "ScratchWriteUniform_0": {
+          "old_body_sha256": "84b04152cf04ea2258d7f1d8dc8f1358247387640bee7fcde692503f0403b6d0",
+          "new_body_sha256": "eb144448d695adb8e5290eb7b9dd6642ecaf19e3e04d9b2688d092244f853087",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "WriteValue_0": {
+          "old_body_sha256": "51b5cebd55f76cb3146a0290cf14d33791cc75bfcd7b3d65cf927c5308df9636",
+          "new_body_sha256": "c9f3c511221d0eccc6ec7cd5af7b80f31304f2dbaa816fba159937f7ad86727a",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "WriteValueUniform_0": {
+          "old_body_sha256": "1eef0cb5b75a2a6df36a4750ac5816b460d4e34b41d26be0fe1504671b285a95",
+          "new_body_sha256": "b06cbd45dae3bc457fbaf33b9c1ca94f31653f327f444e4f3dc6ff082c1e49e4",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        }
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "whole_source_inverse_restores_AJ": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 399580,
+        "sha256": "b2001fc9cbf3de57bbad20e1c081c30a81458051fba47029677f5bf538613978"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 399580,
+        "sha256": "b45ae5e43d8112bd73a02cbc7f28c25c0f1e4520d7a15df7c5a76654cfdfad54"
+      },
+      "writers": {
+        "ScratchWrite_0": {
+          "old_body_sha256": "49fcf56391364f607fa25a22faa56b383057ae05502609a77ed71c811f1c983d",
+          "new_body_sha256": "2b31c2433d01f21fdc611290457147fec7c31542a7640a7d99bf7c296f66c622",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "ScratchWriteUniform_0": {
+          "old_body_sha256": "114e0969de9b70001f5cfabed1d8d51f4122a070a9e21bb7b7f3537fc514ccff",
+          "new_body_sha256": "45dfc36a8a04458c4b7179c4db4db974e26eacc7b7538cd45939cb4c91ff43f5",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "WriteValue_0": {
+          "old_body_sha256": "609fbfef1e4351166f896b669554f530549df14bf73b23ecfb279b61fe2f2bf4",
+          "new_body_sha256": "ca6de6e7f179bc7c30fed55589817f75d1a712f786722ff6c43760ffbbdbfc4f",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        },
+        "WriteValueUniform_0": {
+          "old_body_sha256": "09fabe40434124f87f6fe034ee70e6196d2cac97d06408b6f4ec4a2497285a59",
+          "new_body_sha256": "c6eb16411e426d3f3e53f5da2a6a001eab47c9d382daf65790ccb24dc4e14637",
+          "old_update_unreachable": true,
+          "new_update_before_only_return": true
+        }
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "whole_source_inverse_restores_AJ": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-normalization-tags/ispc-derivation.json": {
+      "bytes": 8982,
+      "sha256": "985ecde92f57ac1cd974aea222e293a9fbe5900adcf54e8d24b4c334e1ebfff9"
+    },
+    "out/native-cpu-reachable-tag-writers/derive_ispc.py": {
+      "bytes": 3637,
+      "sha256": "e73da86d6b5729fa6667c074d07b9fc8b5f7293ce8d18580fb258d83a2369b62"
+    },
+    "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/transport.ispc": {
+      "bytes": 622708,
+      "sha256": "d9eaaf6f227d10fae25a586a647198e424d73667dc570c3ca3fecad6b04ce72b"
+    },
+    "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/endpoint.ispc": {
+      "bytes": 791036,
+      "sha256": "e4ee809ad521096b2c85ad95a2b8431b22110f0e17a25101f3264c2767403079"
+    },
+    "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/dopri_phase.ispc": {
+      "bytes": 399580,
+      "sha256": "b2001fc9cbf3de57bbad20e1c081c30a81458051fba47029677f5bf538613978"
+    }
+  },
+  "defect": "AJ appended each of four tag writes after the generated unconditional return, in all three stages. Partial invalidation and complete refresh were unreachable. Earlier standalone predicate and arithmetic fixtures did not call these writers and did not establish coherence. AK reused the same raw3 and inherits this defect.",
+  "scope": "Only move twelve private metadata writes before their original terminal returns. All five payload stores, masks/indices, canonical9380tuples, generic/runtime guards, original arithmetic, tags/predicate, complete initialization, public layouts and nonempty refinement behavior remain. Reuse exact AK C++ helper/adapter and old scalar3/pure admission. Focused actual-writer old/new regression and current whole-program controls required; no full scientific/performance/release claim."
+}
