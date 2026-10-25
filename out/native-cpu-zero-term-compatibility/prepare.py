@@ -57,7 +57,14 @@ for path in (compiled_path, contract_path, OLD / 'prepared.json', OLD / 'compile
              OLD / 'elf_proof.py', OLD / 'elf_proof_complete.py', OLD / 'task.py', OLD / 'rename-proof.json',
              R / 'out/native-cpu-accumulate-inline/coverage-plan.json', *W.glob('*.py')):
     inputs[str(path.relative_to(R))] = pin(path)
-for name in ('/usr/bin/x86_64-linux-gnu-g++-14', '/usr/lib/gcc/x86_64-linux-gnu/14/collect2', '/usr/bin/ld', '/usr/bin/ldd'):
+tool_receipt = R / 'out/native-cpu-host-representation/probe/preparation.json'
+tools = doc(tool_receipt)['tool_dependencies']
+assert any(Path(name).name == 'collect2' for name in tools)
+for name, expected in tools.items():
+    assert pin(Path(name)) == expected, name
+    inputs[name] = expected
+inputs[str(tool_receipt.relative_to(R))] = pin(tool_receipt)
+for name in ('/usr/bin/x86_64-linux-gnu-g++-14', '/usr/bin/ld', '/usr/bin/ldd'):
     path = Path(name).resolve(strict=True); inputs[str(path)] = pin(path)
 if mode == 'link':
     assert not B.exists() and not (W / 'prepared.json').exists() and not (W / 'actions.json').exists()
