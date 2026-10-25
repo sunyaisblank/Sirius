@@ -1,0 +1,108 @@
+--- a/bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp
++++ b/bin/linux-gcc/native-cpu-scalar-zero/typed-batch/transport.native.hpp
+@@ -805,7 +805,7 @@
+ 
+ 
+ #line 83 "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang"
+-static RetainedTriple_0 RTAccumulateTerm_0(RetainedTriple_0 * a_16, float x_4)
++static inline __attribute__((always_inline)) RetainedTriple_0 RTAccumulateTerm_0(RetainedTriple_0 * a_16, float x_4)
+ {
+ 
+ #line 83
+@@ -835,6 +835,24 @@
+ 
+ #line 102
+         return RTInvalid_0();
++    }
++
++    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.
++    if ((RPBits_0(x_4) & 2147483647U) == 0U)
++    {
++        if (!RPBounded_0(a_16->hi_0, 2105540608U) ||
++            !RPBounded_0(a_16->lo_0, 2105540608U) ||
++            !RPBounded_0(a_16->tail_0, 2105540608U) ||
++            !RPBounded_0(a_16->error_0, 2105540608U))
++            return RTInvalid_0();
++        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;
++        RetainedTriple_0 SiriusZeroTermResult;
++        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->hi_0;
++        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->lo_0;
++        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->tail_0;
++        SiriusZeroTermResult.error_0 = ((RPBits_0(a_16->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_16->error_0;
++        SiriusZeroTermResult.valid_0 = 1U;
++        return SiriusZeroTermResult;
+     }
+ 
+ #line 103
+--- a/bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp
++++ b/bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.native.hpp
+@@ -837,7 +837,7 @@
+ 
+ 
+ #line 83 "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang"
+-static RetainedTriple_0 RTAccumulateTerm_0(RetainedTriple_0 * a_13, float x_4)
++static inline __attribute__((always_inline)) RetainedTriple_0 RTAccumulateTerm_0(RetainedTriple_0 * a_13, float x_4)
+ {
+ 
+ #line 83
+@@ -867,6 +867,24 @@
+ 
+ #line 102
+         return RTInvalid_0();
++    }
++
++    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.
++    if ((RPBits_0(x_4) & 2147483647U) == 0U)
++    {
++        if (!RPBounded_0(a_13->hi_0, 2105540608U) ||
++            !RPBounded_0(a_13->lo_0, 2105540608U) ||
++            !RPBounded_0(a_13->tail_0, 2105540608U) ||
++            !RPBounded_0(a_13->error_0, 2105540608U))
++            return RTInvalid_0();
++        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;
++        RetainedTriple_0 SiriusZeroTermResult;
++        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->hi_0;
++        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->lo_0;
++        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->tail_0;
++        SiriusZeroTermResult.error_0 = ((RPBits_0(a_13->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_13->error_0;
++        SiriusZeroTermResult.valid_0 = 1U;
++        return SiriusZeroTermResult;
+     }
+ 
+ #line 103
+--- a/bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp
++++ b/bin/linux-gcc/native-cpu-scalar-zero/typed-batch/dopri_phase.native.hpp
+@@ -677,7 +677,7 @@
+ 
+ 
+ #line 83
+-static RetainedTriple_0 RTAccumulateTerm_0(RetainedTriple_0 * a_11, float x_4)
++static inline __attribute__((always_inline)) RetainedTriple_0 RTAccumulateTerm_0(RetainedTriple_0 * a_11, float x_4)
+ {
+ 
+ #line 83
+@@ -707,6 +707,24 @@
+ 
+ #line 102
+         return RTInvalid_0();
++    }
++
++    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.
++    if ((RPBits_0(x_4) & 2147483647U) == 0U)
++    {
++        if (!RPBounded_0(a_11->hi_0, 2105540608U) ||
++            !RPBounded_0(a_11->lo_0, 2105540608U) ||
++            !RPBounded_0(a_11->tail_0, 2105540608U) ||
++            !RPBounded_0(a_11->error_0, 2105540608U))
++            return RTInvalid_0();
++        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;
++        RetainedTriple_0 SiriusZeroTermResult;
++        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->hi_0;
++        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->lo_0;
++        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->tail_0;
++        SiriusZeroTermResult.error_0 = ((RPBits_0(a_11->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_11->error_0;
++        SiriusZeroTermResult.valid_0 = 1U;
++        return SiriusZeroTermResult;
+     }
+ 
+ #line 103
