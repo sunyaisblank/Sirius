@@ -57,13 +57,18 @@ for name, recovery in (
 assert len(members) == 6
 paths = {str(R / row['path']) for row in members}
 mapped = []
+privileged_maps = []
 for process in Path('/proc').iterdir():
     if not process.name.isdecimal():
         continue
     try:
         if process.stat().st_uid != os.getuid():
             continue
-        content = (process / 'maps').read_text()
+        try:
+            content = (process / 'maps').read_text()
+        except PermissionError:
+            content = subprocess.check_output(['sudo', '-n', '/usr/bin/cat', str(process / 'maps')], text=True)
+            privileged_maps.append(int(process.name))
     except FileNotFoundError:
         continue
     for path in paths:
@@ -78,6 +83,7 @@ report = {'schema': 'sirius-superseded-provider-retirement-v1', 'source': revisi
     'gross_allocated_bytes_retired': sum(v['allocated_bytes'] for v in members),
     'gross_logical_bytes_retired': sum(v['bytes'] for v in members),
     'checked_same_user_maps': len(mapped),
+    'privileged_read_only_maps_checks': privileged_maps,
     'scope': 'Six exact archived untracked S/U/V provider files only. W provider/current frozen inputs/native objects/source generators/active build cache/original resources unchanged. Product archives were independently CRC/SHA/mode verified and checked against pushed Git bytes before unlink. Gross retired allocation is not net project or filesystem space gain.'}
 def save():
     record.write_text(json.dumps(report, indent=2) + '\n')
