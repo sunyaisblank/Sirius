@@ -1,0 +1,435 @@
+{
+  "status": "static schedule compiler preparation only; no native object or math workload",
+  "source_inputs": {
+    "out/native-cpu-static-program/header-preparation.json": {
+      "bytes": 7943,
+      "sha256": "72c76214e8b0267566801b0e7efec605c2e408f2c9ac084a892c95d7a563ef6d"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/ispc-source/transport.ispc": {
+      "bytes": 649694,
+      "sha256": "e7ebd38fe8e6d0e62481826d0ea8cf22b415a0507a5d81ef02433bf1d9f29e69"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/ispc-source/endpoint.ispc": {
+      "bytes": 826239,
+      "sha256": "419cc7925cb65b04a2c47f5ffbe8f58fd7e21b2324cc678a63c940c5b97a8656"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/ispc-source/dopri_phase.ispc": {
+      "bytes": 415374,
+      "sha256": "cb571ec2f9071c44828891976254cd83feb6d4eb8302df86370231eae4525162"
+    }
+  },
+  "families": {
+    "transport": {
+      "programs": [
+        {
+          "base": 0,
+          "instructions": 2587,
+          "registers": 459,
+          "roots": 40,
+          "layers": 117,
+          "source_arity_check": {
+            "source": {
+              "bytes": 11761,
+              "sha256": "c169da84574ce5c91fb784873e86cb24cc909c2848cfac22f591649b7c621ed1"
+            },
+            "input_limit": 45,
+            "scratch_read_roles_in_source_order": [
+              "a_31",
+              "b_22",
+              "c_2"
+            ],
+            "destination_role": "destination_0",
+            "source_branch_shape_checked_for_arity": true
+          },
+          "tiles": {
+            "1": {
+              "packs": 2587,
+              "active_nodes": 2587,
+              "field_lane_utilization": 1.0,
+              "pack_size_histogram": {
+                "1": 2587
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "2": {
+              "packs": 1321,
+              "active_nodes": 2587,
+              "field_lane_utilization": 0.9791824375473126,
+              "pack_size_histogram": {
+                "1": 55,
+                "2": 1266
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "4": {
+              "packs": 685,
+              "active_nodes": 2587,
+              "field_lane_utilization": 0.9441605839416058,
+              "pack_size_histogram": {
+                "1": 25,
+                "2": 24,
+                "3": 30,
+                "4": 606
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "8": {
+              "packs": 370,
+              "active_nodes": 2587,
+              "field_lane_utilization": 0.8739864864864865,
+              "pack_size_histogram": {
+                "1": 16,
+                "2": 10,
+                "3": 17,
+                "4": 12,
+                "5": 9,
+                "6": 14,
+                "7": 13,
+                "8": 279
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            }
+          }
+        },
+        {
+          "base": 13096,
+          "instructions": 557,
+          "registers": 459,
+          "roots": 40,
+          "layers": 42,
+          "source_arity_check": {
+            "source": {
+              "bytes": 11761,
+              "sha256": "c169da84574ce5c91fb784873e86cb24cc909c2848cfac22f591649b7c621ed1"
+            },
+            "input_limit": 45,
+            "scratch_read_roles_in_source_order": [
+              "a_31",
+              "b_22",
+              "c_2"
+            ],
+            "destination_role": "destination_0",
+            "source_branch_shape_checked_for_arity": true
+          },
+          "tiles": {
+            "1": {
+              "packs": 557,
+              "active_nodes": 557,
+              "field_lane_utilization": 1.0,
+              "pack_size_histogram": {
+                "1": 557
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "2": {
+              "packs": 289,
+              "active_nodes": 557,
+              "field_lane_utilization": 0.9636678200692042,
+              "pack_size_histogram": {
+                "1": 21,
+                "2": 268
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "4": {
+              "packs": 155,
+              "active_nodes": 557,
+              "field_lane_utilization": 0.8983870967741936,
+              "pack_size_histogram": {
+                "1": 15,
+                "2": 6,
+                "3": 6,
+                "4": 128
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "8": {
+              "packs": 88,
+              "active_nodes": 557,
+              "field_lane_utilization": 0.7911931818181818,
+              "pack_size_histogram": {
+                "1": 6,
+                "2": 5,
+                "3": 3,
+                "4": 7,
+                "5": 9,
+                "6": 1,
+                "7": 3,
+                "8": 54
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            }
+          }
+        }
+      ],
+      "generated_path": "bin/linux-gcc/native-cpu-field-simd/generated/transport.ispc.inc",
+      "generated": {
+        "bytes": 152914,
+        "sha256": "6ece5b5f8edcbb889642d4ceae4562c378fee4cdc83b281f0fafe08a854f79c2"
+      }
+    },
+    "endpoint": {
+      "programs": [
+        {
+          "base": 0,
+          "instructions": 2205,
+          "registers": 612,
+          "roots": 100,
+          "layers": 111,
+          "source_arity_check": {
+            "source": {
+              "bytes": 11770,
+              "sha256": "54973b70908f7e76b2cfd667451544d9dfd9fa90cd52826984e6f8d5757fb649"
+            },
+            "input_limit": 53,
+            "scratch_read_roles_in_source_order": [
+              "a_31",
+              "b_23",
+              "c_4"
+            ],
+            "destination_role": "destination_0",
+            "source_branch_shape_checked_for_arity": true
+          },
+          "tiles": {
+            "1": {
+              "packs": 2205,
+              "active_nodes": 2205,
+              "field_lane_utilization": 1.0,
+              "pack_size_histogram": {
+                "1": 2205
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "2": {
+              "packs": 1125,
+              "active_nodes": 2205,
+              "field_lane_utilization": 0.98,
+              "pack_size_histogram": {
+                "1": 45,
+                "2": 1080
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "4": {
+              "packs": 595,
+              "active_nodes": 2205,
+              "field_lane_utilization": 0.9264705882352942,
+              "pack_size_histogram": {
+                "1": 35,
+                "2": 30,
+                "3": 10,
+                "4": 520
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "8": {
+              "packs": 347,
+              "active_nodes": 2205,
+              "field_lane_utilization": 0.7943083573487032,
+              "pack_size_histogram": {
+                "1": 29,
+                "2": 19,
+                "3": 5,
+                "4": 46,
+                "5": 6,
+                "6": 11,
+                "7": 5,
+                "8": 226
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            }
+          }
+        },
+        {
+          "base": 11240,
+          "instructions": 1943,
+          "registers": 612,
+          "roots": 100,
+          "layers": 84,
+          "source_arity_check": {
+            "source": {
+              "bytes": 11770,
+              "sha256": "54973b70908f7e76b2cfd667451544d9dfd9fa90cd52826984e6f8d5757fb649"
+            },
+            "input_limit": 53,
+            "scratch_read_roles_in_source_order": [
+              "a_31",
+              "b_23",
+              "c_4"
+            ],
+            "destination_role": "destination_0",
+            "source_branch_shape_checked_for_arity": true
+          },
+          "tiles": {
+            "1": {
+              "packs": 1943,
+              "active_nodes": 1943,
+              "field_lane_utilization": 1.0,
+              "pack_size_histogram": {
+                "1": 1943
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "2": {
+              "packs": 983,
+              "active_nodes": 1943,
+              "field_lane_utilization": 0.9883011190233978,
+              "pack_size_histogram": {
+                "1": 23,
+                "2": 960
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "4": {
+              "packs": 509,
+              "active_nodes": 1943,
+              "field_lane_utilization": 0.9543222003929273,
+              "pack_size_histogram": {
+                "1": 17,
+                "2": 18,
+                "3": 6,
+                "4": 468
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "8": {
+              "packs": 281,
+              "active_nodes": 1943,
+              "field_lane_utilization": 0.8643238434163701,
+              "pack_size_histogram": {
+                "1": 15,
+                "2": 12,
+                "3": 5,
+                "4": 21,
+                "5": 2,
+                "6": 6,
+                "7": 1,
+                "8": 219
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            }
+          }
+        }
+      ],
+      "generated_path": "bin/linux-gcc/native-cpu-field-simd/generated/endpoint.ispc.inc",
+      "generated": {
+        "bytes": 202817,
+        "sha256": "804f73a1c867d1672274045a8bc4478564097583c133b06aae340cc6c492580a"
+      }
+    },
+    "dopri_phase": {
+      "programs": [
+        {
+          "base": 0,
+          "instructions": 2088,
+          "registers": 629,
+          "roots": 200,
+          "layers": 45,
+          "source_arity_check": {
+            "source": {
+              "bytes": 11704,
+              "sha256": "868f11bdc9a7a913f679731149e06a7076b0763f4e8c2db16758265a373669db"
+            },
+            "input_limit": 362,
+            "scratch_read_roles_in_source_order": [
+              "a_31",
+              "b_22",
+              "c_2"
+            ],
+            "destination_role": "destination_0",
+            "source_branch_shape_checked_for_arity": true
+          },
+          "tiles": {
+            "1": {
+              "packs": 2088,
+              "active_nodes": 2088,
+              "field_lane_utilization": 1.0,
+              "pack_size_histogram": {
+                "1": 2088
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "2": {
+              "packs": 1050,
+              "active_nodes": 2088,
+              "field_lane_utilization": 0.9942857142857143,
+              "pack_size_histogram": {
+                "1": 12,
+                "2": 1038
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "4": {
+              "packs": 534,
+              "active_nodes": 2088,
+              "field_lane_utilization": 0.9775280898876404,
+              "pack_size_histogram": {
+                "1": 10,
+                "2": 8,
+                "3": 2,
+                "4": 514
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            },
+            "8": {
+              "packs": 274,
+              "active_nodes": 2088,
+              "field_lane_utilization": 0.9525547445255474,
+              "pack_size_histogram": {
+                "1": 5,
+                "2": 6,
+                "3": 1,
+                "4": 2,
+                "5": 5,
+                "6": 2,
+                "7": 1,
+                "8": 252
+              },
+              "all_original_instructions_once": true,
+              "ordered_value_flow_and_final_scratch_equal": true
+            }
+          }
+        }
+      ],
+      "generated_path": "bin/linux-gcc/native-cpu-field-simd/generated/dopri_phase.ispc.inc",
+      "generated": {
+        "bytes": 94641,
+        "sha256": "8d1b031d295f23b37053f9a3fb48da8041d0f8b0a3136289d333638b794b18aa"
+      }
+    }
+  },
+  "instructions": 9380,
+  "original_layers": 399,
+  "scope": "Preserve all canonical tuples, original layer boundaries, ordered operand values and every final scratch cell. Packing changes only independent instruction order within a layer, with explicit RAW/WAR/WAW dependencies and an independent symbolic replay. Same arithmetic bodies, original roots/publication/refusal and runtime address/FP ownership still require implementation and full original acceptance; this is not runtime or scientific qualification."
+}
