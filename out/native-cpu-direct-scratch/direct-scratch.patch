@@ -1,0 +1,1080 @@
+--- a/transport.ispc
++++ b/transport.ispc
+@@ -2982,6 +2982,340 @@
+ #line 59
+     return;
+ }
++// Direct private-scratch result ABI; original arithmetic helpers retained.
++static noinline void RTAddStore_0(uniform uint32_t SiriusDestination,
++    uniform uint32_t SiriusA, uniform uint32_t SiriusB, uniform uint32_t SiriusRowBase,
++    varying KernelContext_0 * uniform SiriusContext)
++{
++    // Load both full operands before any destination write, including aliases.
++    RetainedTriple_0 SiriusReadA = ReadValueUniform_0(SiriusA, SiriusRowBase, SiriusContext);
++    RetainedTriple_0 SiriusReadB = ReadValueUniform_0(SiriusB, SiriusRowBase, SiriusContext);
++    varying RetainedTriple_0 * uniform a_21 = &SiriusReadA;
++    varying RetainedTriple_0 * uniform b_14 = &SiriusReadB;
++
++
++#line 116
++    bool _S79;
++    if((a_21->valid_0) == 0U)
++    {
++
++#line 117
++        _S79 = true;
++
++#line 117
++    }
++    else
++    {
++
++#line 117
++        _S79 = (b_14->valid_0) == 0U;
++
++#line 117
++    }
++
++#line 117
++    if(_S79)
++    {
++
++#line 117
++        { RetainedTriple_0 SiriusStoredResult_0 = RTInvalid_0();
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_0, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 118
++    float _S80 = RPZero_0();
++
++#line 118
++    bool _S81 = RTExact_0(a_21, _S80);
++
++#line 118
++    if(_S81)
++    {
++
++#line 118
++        { RetainedTriple_0 SiriusStoredResult_1 = *b_14;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_1, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 118
++    bool _S82 = RTExact_0(b_14, _S80);
++    if(_S82)
++    {
++
++#line 119
++        { RetainedTriple_0 SiriusStoredResult_2 = *a_21;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_2, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 119
++    RetainedTriple_0 _S83 = RTAccumulateTerm_0(a_21, b_14->hi_0);
++
++#line 119
++    RetainedTriple_0 _S84 = _S83;
++
++#line 119
++    RetainedTriple_0 _S85 = RTAccumulateTerm_0(&_S84, b_14->lo_0);
++
++#line 119
++    RetainedTriple_0 _S86 = _S85;
++
++#line 119
++    RetainedTriple_0 _S87 = RTAccumulateTerm_0(&_S86, b_14->tail_0);
++
++#line 119
++    RetainedTriple_0 _S88;
++
++#line 128
++    if((_S87.valid_0) == 0U)
++    {
++
++#line 128
++        _S88 = _S87;
++
++#line 128
++    }
++    else
++    {
++
++#line 128
++        _S88 = RTFinishAccumulation_0(_S87.hi_0, _S87.lo_0, _S87.tail_0, RPUpAdd_0(_S87.error_0, b_14->error_0));
++
++#line 128
++    }
++
++#line 128
++    { RetainedTriple_0 SiriusStoredResult_3 = _S88;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_3, SiriusRowBase, SiriusContext);
++        return; }
++
++}
++
++static noinline void RTMultiplyStore_0(uniform uint32_t SiriusDestination,
++    uniform uint32_t SiriusA, uniform uint32_t SiriusB, uniform uint32_t SiriusRowBase,
++    varying KernelContext_0 * uniform SiriusContext)
++{
++    // Load both full operands before any destination write, including aliases.
++    RetainedTriple_0 SiriusReadA = ReadValueUniform_0(SiriusA, SiriusRowBase, SiriusContext);
++    RetainedTriple_0 SiriusReadB = ReadValueUniform_0(SiriusB, SiriusRowBase, SiriusContext);
++    varying RetainedTriple_0 * uniform a_20 = &SiriusReadA;
++    varying RetainedTriple_0 * uniform b_13 = &SiriusReadB;
++
++
++#line 169
++    bool _S44;
++    if((a_20->valid_0) == 0U)
++    {
++
++#line 170
++        _S44 = true;
++
++#line 170
++    }
++    else
++    {
++
++#line 170
++        _S44 = (b_13->valid_0) == 0U;
++
++#line 170
++    }
++
++#line 170
++    if(_S44)
++    {
++
++#line 170
++        { RetainedTriple_0 SiriusStoredResult_0 = RTInvalid_0();
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_0, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 171
++    float _S45 = RPZero_0();
++
++#line 171
++    bool _S46 = RTExact_0(a_20, _S45);
++
++#line 171
++    if(_S46)
++    {
++
++#line 171
++        _S44 = true;
++
++#line 171
++    }
++    else
++    {
++
++#line 171
++        bool _S47 = RTExact_0(b_13, _S45);
++
++#line 171
++        _S44 = _S47;
++
++#line 171
++    }
++
++#line 171
++    if(_S44)
++    {
++
++#line 171
++        { RetainedTriple_0 SiriusStoredResult_1 = RTConstant_0(_S45);
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_1, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 172
++    float _S48 = RPOne_0();
++
++#line 172
++    bool _S49 = RTExact_0(a_20, _S48);
++
++#line 172
++    if(_S49)
++    {
++
++#line 172
++        { RetainedTriple_0 SiriusStoredResult_2 = *b_13;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_2, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 172
++    bool _S50 = RTExact_0(b_13, _S48);
++    if(_S50)
++    {
++
++#line 173
++        { RetainedTriple_0 SiriusStoredResult_3 = *a_20;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_3, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 174
++    float _S51 = RPFromSigned_0((int)(-1));
++
++#line 174
++    bool _S52 = RTExact_0(a_20, _S51);
++
++#line 174
++    if(_S52)
++    {
++
++#line 174
++        RetainedTriple_0 _S53 = RTNegate_0(b_13);
++
++#line 174
++        { RetainedTriple_0 SiriusStoredResult_4 = _S53;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_4, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 174
++    bool _S54 = RTExact_0(b_13, _S51);
++    if(_S54)
++    {
++
++#line 175
++        RetainedTriple_0 _S55 = RTNegate_0(a_20);
++
++#line 175
++        { RetainedTriple_0 SiriusStoredResult_5 = _S55;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_5, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 175
++    RetainedTriple_0 _S56 = RTConstant_0(_S45);
++
++#line 175
++    RetainedTriple_0 _S57 = RTAccumulateProduct_0(&_S56, a_20->hi_0, b_13->hi_0);
++
++#line 175
++    float _S58 = b_13->lo_0;
++
++#line 175
++    RetainedTriple_0 _S59 = _S57;
++
++#line 175
++    RetainedTriple_0 _S60 = RTAccumulateProduct_0(&_S59, a_20->hi_0, b_13->lo_0);
++
++#line 175
++    float _S61 = a_20->lo_0;
++
++#line 175
++    RetainedTriple_0 _S62 = _S60;
++
++#line 175
++    RetainedTriple_0 _S63 = RTAccumulateProduct_0(&_S62, a_20->lo_0, b_13->hi_0);
++
++#line 175
++    RetainedTriple_0 _S64 = _S63;
++
++#line 175
++    RetainedTriple_0 _S65 = RTAccumulateRoundedProduct_0(&_S64, a_20->lo_0, b_13->lo_0);
++
++#line 175
++    float _S66 = b_13->tail_0;
++
++#line 175
++    RetainedTriple_0 _S67 = _S65;
++
++#line 175
++    RetainedTriple_0 _S68 = RTAccumulateRoundedProduct_0(&_S67, a_20->hi_0, b_13->tail_0);
++
++#line 175
++    float _S69 = a_20->tail_0;
++
++#line 175
++    RetainedTriple_0 _S70 = _S68;
++
++#line 175
++    RetainedTriple_0 _S71 = RTAccumulateRoundedProduct_0(&_S70, a_20->tail_0, b_13->hi_0);
++
++#line 193
++    if((_S71.valid_0) == 0U)
++    {
++
++#line 193
++        { RetainedTriple_0 SiriusStoredResult_6 = _S71;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_6, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 194
++    float _S72 = RPAbs_0(_S66);
++    float _S73 = RPAbs_0(_S69);
++
++#line 194
++    float omitted_0 = RPUpAdd_0(RPUpAdd_0(RPUpMultiply_0(RPAbs_0(_S61), _S72), RPUpMultiply_0(_S73, RPAbs_0(_S58))), RPUpMultiply_0(_S73, _S72));
++
++#line 194
++    float _S74 = a_20->error_0;
++
++#line 194
++    float _S75 = RTCenterUpper_0(b_13);
++
++    float _S76 = RPUpMultiply_0(_S74, _S75);
++
++#line 196
++    float _S77 = b_13->error_0;
++
++#line 196
++    float _S78 = RTCenterUpper_0(a_20);
++
++    { RetainedTriple_0 SiriusStoredResult_7 = RTFinishAccumulation_0(_S71.hi_0, _S71.lo_0, _S71.tail_0, RPUpAdd_0(RPUpAdd_0(_S71.error_0, omitted_0), RPUpAdd_0(RPUpAdd_0(_S76, RPUpMultiply_0(_S77, _S78)), RPUpMultiply_0(_S74, _S77))));
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_7, SiriusRowBase, SiriusContext);
++        return; }
++
++}
++
++
+ 
+ 
+ #line 61
+@@ -3537,6 +3871,16 @@
+     }
+ 
+ #line 70
++    if (StaticOp == 2U || StaticOp == 4U) {
++        if (a_31 >= registers_0 || b_22 >= registers_0)
++            return false;
++        if (StaticOp == 2U)
++            RTAddStore_0(destination_0, a_31, b_22, rowBase_6, kernelContext_11);
++        else
++            RTMultiplyStore_0(destination_0, a_31, b_22, rowBase_6, kernelContext_11);
++        return true;
++    }
++
+     RetainedTriple_0 _S165 = RTInvalid_0();
+ 
+ #line 70
+--- a/endpoint.ispc
++++ b/endpoint.ispc
+@@ -3636,6 +3636,340 @@
+ #line 60
+     return;
+ }
++// Direct private-scratch result ABI; original arithmetic helpers retained.
++static noinline void RTAddStore_0(uniform uint32_t SiriusDestination,
++    uniform uint32_t SiriusA, uniform uint32_t SiriusB, uniform uint32_t SiriusRowBase,
++    varying KernelContext_0 * uniform SiriusContext)
++{
++    // Load both full operands before any destination write, including aliases.
++    RetainedTriple_0 SiriusReadA = ReadValueUniform_0(SiriusA, SiriusRowBase, SiriusContext);
++    RetainedTriple_0 SiriusReadB = ReadValueUniform_0(SiriusB, SiriusRowBase, SiriusContext);
++    varying RetainedTriple_0 * uniform a_18 = &SiriusReadA;
++    varying RetainedTriple_0 * uniform b_12 = &SiriusReadB;
++
++
++#line 116
++    bool _S76;
++    if((a_18->valid_0) == 0U)
++    {
++
++#line 117
++        _S76 = true;
++
++#line 117
++    }
++    else
++    {
++
++#line 117
++        _S76 = (b_12->valid_0) == 0U;
++
++#line 117
++    }
++
++#line 117
++    if(_S76)
++    {
++
++#line 117
++        { RetainedTriple_0 SiriusStoredResult_0 = RTInvalid_0();
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_0, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 118
++    float _S77 = RPZero_0();
++
++#line 118
++    bool _S78 = RTExact_0(a_18, _S77);
++
++#line 118
++    if(_S78)
++    {
++
++#line 118
++        { RetainedTriple_0 SiriusStoredResult_1 = *b_12;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_1, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 118
++    bool _S79 = RTExact_0(b_12, _S77);
++    if(_S79)
++    {
++
++#line 119
++        { RetainedTriple_0 SiriusStoredResult_2 = *a_18;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_2, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 119
++    RetainedTriple_0 _S80 = RTAccumulateTerm_0(a_18, b_12->hi_0);
++
++#line 119
++    RetainedTriple_0 _S81 = _S80;
++
++#line 119
++    RetainedTriple_0 _S82 = RTAccumulateTerm_0(&_S81, b_12->lo_0);
++
++#line 119
++    RetainedTriple_0 _S83 = _S82;
++
++#line 119
++    RetainedTriple_0 _S84 = RTAccumulateTerm_0(&_S83, b_12->tail_0);
++
++#line 119
++    RetainedTriple_0 _S85;
++
++#line 128
++    if((_S84.valid_0) == 0U)
++    {
++
++#line 128
++        _S85 = _S84;
++
++#line 128
++    }
++    else
++    {
++
++#line 128
++        _S85 = RTFinishAccumulation_0(_S84.hi_0, _S84.lo_0, _S84.tail_0, RPUpAdd_0(_S84.error_0, b_12->error_0));
++
++#line 128
++    }
++
++#line 128
++    { RetainedTriple_0 SiriusStoredResult_3 = _S85;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_3, SiriusRowBase, SiriusContext);
++        return; }
++
++}
++
++static noinline void RTMultiplyStore_0(uniform uint32_t SiriusDestination,
++    uniform uint32_t SiriusA, uniform uint32_t SiriusB, uniform uint32_t SiriusRowBase,
++    varying KernelContext_0 * uniform SiriusContext)
++{
++    // Load both full operands before any destination write, including aliases.
++    RetainedTriple_0 SiriusReadA = ReadValueUniform_0(SiriusA, SiriusRowBase, SiriusContext);
++    RetainedTriple_0 SiriusReadB = ReadValueUniform_0(SiriusB, SiriusRowBase, SiriusContext);
++    varying RetainedTriple_0 * uniform a_17 = &SiriusReadA;
++    varying RetainedTriple_0 * uniform b_11 = &SiriusReadB;
++
++
++#line 169
++    bool _S41;
++    if((a_17->valid_0) == 0U)
++    {
++
++#line 170
++        _S41 = true;
++
++#line 170
++    }
++    else
++    {
++
++#line 170
++        _S41 = (b_11->valid_0) == 0U;
++
++#line 170
++    }
++
++#line 170
++    if(_S41)
++    {
++
++#line 170
++        { RetainedTriple_0 SiriusStoredResult_0 = RTInvalid_0();
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_0, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 171
++    float _S42 = RPZero_0();
++
++#line 171
++    bool _S43 = RTExact_0(a_17, _S42);
++
++#line 171
++    if(_S43)
++    {
++
++#line 171
++        _S41 = true;
++
++#line 171
++    }
++    else
++    {
++
++#line 171
++        bool _S44 = RTExact_0(b_11, _S42);
++
++#line 171
++        _S41 = _S44;
++
++#line 171
++    }
++
++#line 171
++    if(_S41)
++    {
++
++#line 171
++        { RetainedTriple_0 SiriusStoredResult_1 = RTConstant_0(_S42);
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_1, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 172
++    float _S45 = RPOne_0();
++
++#line 172
++    bool _S46 = RTExact_0(a_17, _S45);
++
++#line 172
++    if(_S46)
++    {
++
++#line 172
++        { RetainedTriple_0 SiriusStoredResult_2 = *b_11;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_2, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 172
++    bool _S47 = RTExact_0(b_11, _S45);
++    if(_S47)
++    {
++
++#line 173
++        { RetainedTriple_0 SiriusStoredResult_3 = *a_17;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_3, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 174
++    float _S48 = RPFromSigned_0((int)(-1));
++
++#line 174
++    bool _S49 = RTExact_0(a_17, _S48);
++
++#line 174
++    if(_S49)
++    {
++
++#line 174
++        RetainedTriple_0 _S50 = RTNegate_0(b_11);
++
++#line 174
++        { RetainedTriple_0 SiriusStoredResult_4 = _S50;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_4, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 174
++    bool _S51 = RTExact_0(b_11, _S48);
++    if(_S51)
++    {
++
++#line 175
++        RetainedTriple_0 _S52 = RTNegate_0(a_17);
++
++#line 175
++        { RetainedTriple_0 SiriusStoredResult_5 = _S52;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_5, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 175
++    RetainedTriple_0 _S53 = RTConstant_0(_S42);
++
++#line 175
++    RetainedTriple_0 _S54 = RTAccumulateProduct_0(&_S53, a_17->hi_0, b_11->hi_0);
++
++#line 175
++    float _S55 = b_11->lo_0;
++
++#line 175
++    RetainedTriple_0 _S56 = _S54;
++
++#line 175
++    RetainedTriple_0 _S57 = RTAccumulateProduct_0(&_S56, a_17->hi_0, b_11->lo_0);
++
++#line 175
++    float _S58 = a_17->lo_0;
++
++#line 175
++    RetainedTriple_0 _S59 = _S57;
++
++#line 175
++    RetainedTriple_0 _S60 = RTAccumulateProduct_0(&_S59, a_17->lo_0, b_11->hi_0);
++
++#line 175
++    RetainedTriple_0 _S61 = _S60;
++
++#line 175
++    RetainedTriple_0 _S62 = RTAccumulateRoundedProduct_0(&_S61, a_17->lo_0, b_11->lo_0);
++
++#line 175
++    float _S63 = b_11->tail_0;
++
++#line 175
++    RetainedTriple_0 _S64 = _S62;
++
++#line 175
++    RetainedTriple_0 _S65 = RTAccumulateRoundedProduct_0(&_S64, a_17->hi_0, b_11->tail_0);
++
++#line 175
++    float _S66 = a_17->tail_0;
++
++#line 175
++    RetainedTriple_0 _S67 = _S65;
++
++#line 175
++    RetainedTriple_0 _S68 = RTAccumulateRoundedProduct_0(&_S67, a_17->tail_0, b_11->hi_0);
++
++#line 193
++    if((_S68.valid_0) == 0U)
++    {
++
++#line 193
++        { RetainedTriple_0 SiriusStoredResult_6 = _S68;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_6, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 194
++    float _S69 = RPAbs_0(_S63);
++    float _S70 = RPAbs_0(_S66);
++
++#line 194
++    float omitted_0 = RPUpAdd_0(RPUpAdd_0(RPUpMultiply_0(RPAbs_0(_S58), _S69), RPUpMultiply_0(_S70, RPAbs_0(_S55))), RPUpMultiply_0(_S70, _S69));
++
++#line 194
++    float _S71 = a_17->error_0;
++
++#line 194
++    float _S72 = RTCenterUpper_0(b_11);
++
++    float _S73 = RPUpMultiply_0(_S71, _S72);
++
++#line 196
++    float _S74 = b_11->error_0;
++
++#line 196
++    float _S75 = RTCenterUpper_0(a_17);
++
++    { RetainedTriple_0 SiriusStoredResult_7 = RTFinishAccumulation_0(_S68.hi_0, _S68.lo_0, _S68.tail_0, RPUpAdd_0(RPUpAdd_0(_S68.error_0, omitted_0), RPUpAdd_0(RPUpAdd_0(_S73, RPUpMultiply_0(_S74, _S75)), RPUpMultiply_0(_S71, _S74))));
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_7, SiriusRowBase, SiriusContext);
++        return; }
++
++}
++
++
+ 
+ 
+ #line 61
+@@ -4190,6 +4524,16 @@
+     }
+ 
+ #line 66
++    if (StaticOp == 2U || StaticOp == 4U) {
++        if (a_31 >= registers_1 || b_23 >= registers_1)
++            return false;
++        if (StaticOp == 2U)
++            RTAddStore_0(destination_0, a_31, b_23, rowBase_9, kernelContext_11);
++        else
++            RTMultiplyStore_0(destination_0, a_31, b_23, rowBase_9, kernelContext_11);
++        return true;
++    }
++
+     RetainedTriple_0 _S284 = RTInvalid_0();
+ 
+ #line 66
+--- a/dopri_phase.ispc
++++ b/dopri_phase.ispc
+@@ -2445,6 +2445,340 @@
+ #line 45
+     return;
+ }
++// Direct private-scratch result ABI; original arithmetic helpers retained.
++static noinline void RTAddStore_0(uniform uint32_t SiriusDestination,
++    uniform uint32_t SiriusA, uniform uint32_t SiriusB, uniform uint32_t SiriusRowBase,
++    varying KernelContext_0 * uniform SiriusContext)
++{
++    // Load both full operands before any destination write, including aliases.
++    RetainedTriple_0 SiriusReadA = ReadValueUniform_0(SiriusA, SiriusRowBase, SiriusContext);
++    RetainedTriple_0 SiriusReadB = ReadValueUniform_0(SiriusB, SiriusRowBase, SiriusContext);
++    varying RetainedTriple_0 * uniform a_12 = &SiriusReadA;
++    varying RetainedTriple_0 * uniform b_8 = &SiriusReadB;
++
++
++#line 116
++    bool _S17;
++    if((a_12->valid_0) == 0U)
++    {
++
++#line 117
++        _S17 = true;
++
++#line 117
++    }
++    else
++    {
++
++#line 117
++        _S17 = (b_8->valid_0) == 0U;
++
++#line 117
++    }
++
++#line 117
++    if(_S17)
++    {
++
++#line 117
++        { RetainedTriple_0 SiriusStoredResult_0 = RTInvalid_0();
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_0, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 118
++    float _S18 = RPZero_0();
++
++#line 118
++    bool _S19 = RTExact_0(a_12, _S18);
++
++#line 118
++    if(_S19)
++    {
++
++#line 118
++        { RetainedTriple_0 SiriusStoredResult_1 = *b_8;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_1, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 118
++    bool _S20 = RTExact_0(b_8, _S18);
++    if(_S20)
++    {
++
++#line 119
++        { RetainedTriple_0 SiriusStoredResult_2 = *a_12;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_2, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 119
++    RetainedTriple_0 _S21 = RTAccumulateTerm_0(a_12, b_8->hi_0);
++
++#line 119
++    RetainedTriple_0 _S22 = _S21;
++
++#line 119
++    RetainedTriple_0 _S23 = RTAccumulateTerm_0(&_S22, b_8->lo_0);
++
++#line 119
++    RetainedTriple_0 _S24 = _S23;
++
++#line 119
++    RetainedTriple_0 _S25 = RTAccumulateTerm_0(&_S24, b_8->tail_0);
++
++#line 119
++    RetainedTriple_0 _S26;
++
++#line 128
++    if((_S25.valid_0) == 0U)
++    {
++
++#line 128
++        _S26 = _S25;
++
++#line 128
++    }
++    else
++    {
++
++#line 128
++        _S26 = RTFinishAccumulation_0(_S25.hi_0, _S25.lo_0, _S25.tail_0, RPUpAdd_0(_S25.error_0, b_8->error_0));
++
++#line 128
++    }
++
++#line 128
++    { RetainedTriple_0 SiriusStoredResult_3 = _S26;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_3, SiriusRowBase, SiriusContext);
++        return; }
++
++}
++
++static noinline void RTMultiplyStore_0(uniform uint32_t SiriusDestination,
++    uniform uint32_t SiriusA, uniform uint32_t SiriusB, uniform uint32_t SiriusRowBase,
++    varying KernelContext_0 * uniform SiriusContext)
++{
++    // Load both full operands before any destination write, including aliases.
++    RetainedTriple_0 SiriusReadA = ReadValueUniform_0(SiriusA, SiriusRowBase, SiriusContext);
++    RetainedTriple_0 SiriusReadB = ReadValueUniform_0(SiriusB, SiriusRowBase, SiriusContext);
++    varying RetainedTriple_0 * uniform a_21 = &SiriusReadA;
++    varying RetainedTriple_0 * uniform b_15 = &SiriusReadB;
++
++
++#line 169
++    bool _S49;
++    if((a_21->valid_0) == 0U)
++    {
++
++#line 170
++        _S49 = true;
++
++#line 170
++    }
++    else
++    {
++
++#line 170
++        _S49 = (b_15->valid_0) == 0U;
++
++#line 170
++    }
++
++#line 170
++    if(_S49)
++    {
++
++#line 170
++        { RetainedTriple_0 SiriusStoredResult_0 = RTInvalid_0();
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_0, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 171
++    float _S50 = RPZero_0();
++
++#line 171
++    bool _S51 = RTExact_0(a_21, _S50);
++
++#line 171
++    if(_S51)
++    {
++
++#line 171
++        _S49 = true;
++
++#line 171
++    }
++    else
++    {
++
++#line 171
++        bool _S52 = RTExact_0(b_15, _S50);
++
++#line 171
++        _S49 = _S52;
++
++#line 171
++    }
++
++#line 171
++    if(_S49)
++    {
++
++#line 171
++        { RetainedTriple_0 SiriusStoredResult_1 = RTConstant_0(_S50);
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_1, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 172
++    float _S53 = RPOne_0();
++
++#line 172
++    bool _S54 = RTExact_0(a_21, _S53);
++
++#line 172
++    if(_S54)
++    {
++
++#line 172
++        { RetainedTriple_0 SiriusStoredResult_2 = *b_15;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_2, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 172
++    bool _S55 = RTExact_0(b_15, _S53);
++    if(_S55)
++    {
++
++#line 173
++        { RetainedTriple_0 SiriusStoredResult_3 = *a_21;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_3, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 174
++    float _S56 = RPFromSigned_0((int)(-1));
++
++#line 174
++    bool _S57 = RTExact_0(a_21, _S56);
++
++#line 174
++    if(_S57)
++    {
++
++#line 174
++        RetainedTriple_0 _S58 = RTNegate_0(b_15);
++
++#line 174
++        { RetainedTriple_0 SiriusStoredResult_4 = _S58;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_4, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 174
++    bool _S59 = RTExact_0(b_15, _S56);
++    if(_S59)
++    {
++
++#line 175
++        RetainedTriple_0 _S60 = RTNegate_0(a_21);
++
++#line 175
++        { RetainedTriple_0 SiriusStoredResult_5 = _S60;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_5, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 175
++    RetainedTriple_0 _S61 = RTConstant_0(_S50);
++
++#line 175
++    RetainedTriple_0 _S62 = RTAccumulateProduct_0(&_S61, a_21->hi_0, b_15->hi_0);
++
++#line 175
++    float _S63 = b_15->lo_0;
++
++#line 175
++    RetainedTriple_0 _S64 = _S62;
++
++#line 175
++    RetainedTriple_0 _S65 = RTAccumulateProduct_0(&_S64, a_21->hi_0, b_15->lo_0);
++
++#line 175
++    float _S66 = a_21->lo_0;
++
++#line 175
++    RetainedTriple_0 _S67 = _S65;
++
++#line 175
++    RetainedTriple_0 _S68 = RTAccumulateProduct_0(&_S67, a_21->lo_0, b_15->hi_0);
++
++#line 175
++    RetainedTriple_0 _S69 = _S68;
++
++#line 175
++    RetainedTriple_0 _S70 = RTAccumulateRoundedProduct_0(&_S69, a_21->lo_0, b_15->lo_0);
++
++#line 175
++    float _S71 = b_15->tail_0;
++
++#line 175
++    RetainedTriple_0 _S72 = _S70;
++
++#line 175
++    RetainedTriple_0 _S73 = RTAccumulateRoundedProduct_0(&_S72, a_21->hi_0, b_15->tail_0);
++
++#line 175
++    float _S74 = a_21->tail_0;
++
++#line 175
++    RetainedTriple_0 _S75 = _S73;
++
++#line 175
++    RetainedTriple_0 _S76 = RTAccumulateRoundedProduct_0(&_S75, a_21->tail_0, b_15->hi_0);
++
++#line 193
++    if((_S76.valid_0) == 0U)
++    {
++
++#line 193
++        { RetainedTriple_0 SiriusStoredResult_6 = _S76;
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_6, SiriusRowBase, SiriusContext);
++        return; }
++    }
++
++#line 194
++    float _S77 = RPAbs_0(_S71);
++    float _S78 = RPAbs_0(_S74);
++
++#line 194
++    float omitted_0 = RPUpAdd_0(RPUpAdd_0(RPUpMultiply_0(RPAbs_0(_S66), _S77), RPUpMultiply_0(_S78, RPAbs_0(_S63))), RPUpMultiply_0(_S78, _S77));
++
++#line 194
++    float _S79 = a_21->error_0;
++
++#line 194
++    float _S80 = RTCenterUpper_0(b_15);
++
++    float _S81 = RPUpMultiply_0(_S79, _S80);
++
++#line 196
++    float _S82 = b_15->error_0;
++
++#line 196
++    float _S83 = RTCenterUpper_0(a_21);
++
++    { RetainedTriple_0 SiriusStoredResult_7 = RTFinishAccumulation_0(_S76.hi_0, _S76.lo_0, _S76.tail_0, RPUpAdd_0(RPUpAdd_0(_S76.error_0, omitted_0), RPUpAdd_0(RPUpAdd_0(_S81, RPUpMultiply_0(_S82, _S83)), RPUpMultiply_0(_S79, _S82))));
++        WriteValueUniform_0(SiriusDestination, &SiriusStoredResult_7, SiriusRowBase, SiriusContext);
++        return; }
++
++}
++
++
+ 
+ 
+ #line 53
+@@ -3013,6 +3347,16 @@
+     }
+ 
+ #line 58
++    if (StaticOp == 2U || StaticOp == 4U) {
++        if (a_31 >= registers_0 || b_22 >= registers_0)
++            return false;
++        if (StaticOp == 2U)
++            RTAddStore_0(destination_0, a_31, b_22, rowBase_5, kernelContext_6);
++        else
++            RTMultiplyStore_0(destination_0, a_31, b_22, rowBase_5, kernelContext_6);
++        return true;
++    }
++
+     RetainedTriple_0 _S138 = RTInvalid_0();
+ 
+ #line 58
