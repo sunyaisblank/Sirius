@@ -1,0 +1,155 @@
+{
+  "passed": true,
+  "helper_object": {
+    "path": "bin/linux-gcc/native-cpu-masked-arithmetic/probe/retained8.o",
+    "bytes": 24656,
+    "sha256": "767222b7d5459e61b8f1515d91ee75b18e6bdabc5c5f17894fb1f6247ea4117c"
+  },
+  "executable": {
+    "path": "bin/linux-gcc/native-cpu-masked-arithmetic/probe/abi-check",
+    "bytes": 174896,
+    "sha256": "b5c27f661e755548e2e61496f07d796b6e400a9a58de5263ab291fb1b2e18b7d"
+  },
+  "EVEX": 0,
+  "forbidden_FMA_FP_control_x87_extensions": [],
+  "mnemonics": [
+    "add",
+    "and",
+    "call",
+    "cmp",
+    "cs",
+    "data16",
+    "endbr64",
+    "je",
+    "jmp",
+    "jne",
+    "lea",
+    "leave",
+    "mov",
+    "nopl",
+    "nopw",
+    "push",
+    "ret",
+    "shl",
+    "sub",
+    "test",
+    "vaddps",
+    "vbroadcastss",
+    "vmovaps",
+    "vmovd",
+    "vmovdqa",
+    "vmovdqu",
+    "vmovmskps",
+    "vmulps",
+    "vpaddd",
+    "vpand",
+    "vpandn",
+    "vpblendvb",
+    "vpbroadcastd",
+    "vpcmpeqd",
+    "vpcmpgtd",
+    "vpminud",
+    "vpor",
+    "vpsubd",
+    "vpxor",
+    "vsubps",
+    "vzeroupper",
+    "xchg"
+  ],
+  "linked_code": {
+    "passed": true,
+    "executable": {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-masked-arithmetic/probe/abi-check",
+      "bytes": 174896,
+      "sha256": "b5c27f661e755548e2e61496f07d796b6e400a9a58de5263ab291fb1b2e18b7d"
+    },
+    "objects": [
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-masked-arithmetic/probe/retained8.o",
+          "bytes": 24656,
+          "sha256": "767222b7d5459e61b8f1515d91ee75b18e6bdabc5c5f17894fb1f6247ea4117c"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "sirius_native_dense_add8",
+            "bytes": 4637,
+            "linked_address": 112592,
+            "masked_relocations": [
+              {
+                "offset": 40,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3510,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4633,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_multiply8",
+            "bytes": 17952,
+            "linked_address": 117232,
+            "masked_relocations": [
+              {
+                "offset": 40,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1561,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2529,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3514,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4211,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5175,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6150,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13685,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17948,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Every retained function opcode in exact renamed OLD/new R Transport objects, masking only declared4B PC32/PLT32/REX_GOTPCRELX operands. Linker relaxation disabled. This alone is not relocation-target semantics or numerical acceptance."
+  },
+  "scope": "Actual guarded-v3 helper code/ISA and every retained function opcode join to the focused test ELF. No execution, numerical agreement, runtime gain, whole-renderer or scientific/release claim."
+}

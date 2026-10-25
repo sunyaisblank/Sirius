@@ -1,0 +1,91 @@
+{
+  "status": "source derived; not renderer-qualified",
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 624299,
+        "sha256": "9ac822c9e422ba1e60645c8ab186584e4d10e1c4bc82e0e01343c464576baea7"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 622776,
+        "sha256": "2b88bd86794520f8bf657fadaff3c82016258ae6c9070b2b9f212105826f7a28"
+      },
+      "instructions": 3144,
+      "inverse_restores_exact_AC_source": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 792639,
+        "sha256": "798757c45bf78b02dc00290358532f54b7984a5b273f2d7eeaf8423434d7f40a"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 791116,
+        "sha256": "c30ef52a95c4fb980a0d843a13d0a0c492caac16fe3ea30abce9bb38e90c141a"
+      },
+      "instructions": 4148,
+      "inverse_restores_exact_AC_source": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 401142,
+        "sha256": "b72fcac38a74e69f00462346dbb292aa39cbed38ce49584156af8748cf08af82"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 399621,
+        "sha256": "7ac670d20184f454da15a9828b76c07865545e649602c938c593d9677c8a509f"
+      },
+      "instructions": 2088,
+      "inverse_restores_exact_AC_source": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-dense-arithmetic/ispc-derivation.json": {
+      "bytes": 4954,
+      "sha256": "5c75da4ee17e3df4b880fb87695b19b5cb8d0de873b55fda459a3dfec9da212c"
+    },
+    "out/native-cpu-masked-arithmetic/derive_ispc.py": {
+      "bytes": 5284,
+      "sha256": "9acaeab4fc85cd08be1e2e92a5a515168ccc218051d8893d5f38456d9d6105a2"
+    },
+    "out/native-cpu-masked-arithmetic/retained8.cpp": {
+      "bytes": 11931,
+      "sha256": "59554baa861f87885d6422f565beba910c4b2d60f86d7f0739f41a2a1f5d6a04"
+    },
+    "out/native-cpu-masked-arithmetic/cpp-code-inspection.json": {
+      "bytes": 4043,
+      "sha256": "ae6e5abbcc35dbb9fa280e3e7e9fdd07fa490b8b2dea8ebcde17dcaee4d79e5c"
+    },
+    "out/native-cpu-masked-arithmetic/cpp-build-result.json": {
+      "bytes": 2942,
+      "sha256": "ebb4e4ec6a3ba99094f84645318549389e63ed9d7fb598f4956d0fd77895ead3"
+    },
+    "out/native-cpu-masked-arithmetic/cpp/run/owner.json": {
+      "bytes": 1943,
+      "sha256": "7c78ac5354e5abefc2bb4cfe0220cbaed54ef497c2359c14f617bce3fefcd361"
+    },
+    "out/native-cpu-masked-arithmetic/cpp/run/stdout.log": {
+      "bytes": 175,
+      "sha256": "a4705279a6e222cac203c9b5be9f7244b968e3cf5091eb71124d782b072d2c68"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/transport.ispc": {
+      "bytes": 624299,
+      "sha256": "9ac822c9e422ba1e60645c8ab186584e4d10e1c4bc82e0e01343c464576baea7"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/endpoint.ispc": {
+      "bytes": 792639,
+      "sha256": "798757c45bf78b02dc00290358532f54b7984a5b273f2d7eeaf8423434d7f40a"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/dopri_phase.ispc": {
+      "bytes": 401142,
+      "sha256": "b72fcac38a74e69f00462346dbb292aa39cbed38ce49584156af8748cf08af82"
+    }
+  },
+  "scope": "AE replaces only the two pure compound Add/Multiply bodies of AC source with one initialized 15-column scratch bank and direct calls to the same explicit mask/index C ABI as Store calls. Both operands are packed before external writes; output occupies distinct initialized register2. New checked AE math eliminates discarded-lane FP work and private aggregate helper calls under unchanged strict FP flags. Full inverse restores exact AC source; all9380tuples and other row/control/refusal/publication contracts remain. No packing-only C++ wrapper or copies are needed. Source reasoning and finite scalar agreement are not independent mathematical/scientific acceptance; linked targets/full38/C8/original frame remain required."
+}
