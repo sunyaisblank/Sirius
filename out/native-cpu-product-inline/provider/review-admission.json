@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "source_contract": {
+    "bytes": 23061,
+    "sha256": "07077237d201141cc92778459d57e4983e543bc9c5c09f989318d804ff46f57b"
+  },
+  "patch": {
+    "bytes": 2182,
+    "sha256": "24041ac8c09299a490a638c076fc8dd0c4257562b60118e4f571fa73363cc169"
+  },
+  "full_source_identity_verified_before_and_after": true,
+  "scope": "Coordinator source review and exact patch application only, not independent or machine-checked correctness. Replaces only three raw SIMD objects after two inline qualifiers per complete source; exact inverse restores S. U scalar, Q scheduling and V deferred NIR remain. Same original query64, pureF/B, D fallback, IEEE32 save/restore, zero-active no-op and JIT recovery; no host/SPV/count/precision/cache/governor changes. Requires original C8/full32 and later unchanged acceptance."
+}
