@@ -1,0 +1,16 @@
+{
+  "sampler": "out/native-cpu-runtime-observe/all_threads.py",
+  "sampler_identity": {
+    "bytes": 15441,
+    "sha256": "c11b84990fe85213be1c5ec1298d58e7d9909aba86ad85ff6046ac01f4e511ba"
+  },
+  "target_executable": "bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+  "wait_for_first_tile_seconds": 120,
+  "captures": 1,
+  "requested_capture_seconds": 3,
+  "CPU_clock_period_ns": 10000000,
+  "thread_cap": 256,
+  "ring_pages_per_thread": 9,
+  "trigger": "first original stdout tile marker, one live matching renderer in the exact owned child session; sampler separately validates source/births/maps/ICD/stable thread boundaries",
+  "scope": "One fixed existing USER-PC capture of the current original frame, no added render or retries, original output/count/cache/governor/limits retained. Instrumented wall time includes observation overhead; original frame verdict and bounded samples have separate scopes."
+}

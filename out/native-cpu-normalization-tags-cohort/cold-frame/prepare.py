@@ -165,6 +165,7 @@ elif mode == 'frame-actions':
         R / 'out/native-cpu-row-ownership/cold-frame/run_owned.py', R / 'out/native-cpu-row-ownership/cold-frame/owned_guard.py',
         R / 'out/native-cpu-dispatch-admission/cold-frame/read_result.py', R / 'out/native-cpu-arithmetic-sharing/readers/native_evidence.py'}
     inputs |= {path for path in W.iterdir() if path.is_file()}
+    inputs.add(R / 'out/native-cpu-runtime-observe/decode_all_threads.py')
     inputs |= {path for path in (P / 'affected-control').rglob('*') if path.is_file()}
     inputs |= {R / 'out/native-cpu-owned-lower-increments/host-build-result.json',
                R / 'out/native-cpu-normalization-tags/provider/linked-native-proof.json',
@@ -191,7 +192,7 @@ elif mode == 'frame-actions':
     action['argv'][1] = '-DSIRIUS_RENDER_TESTS=' + str(EXE)
     action.update(revision=revision, frozen_inputs=sorted(str(path.relative_to(R)) if path.is_relative_to(R) else str(path) for path in inputs),
                   runtime_provider=provider['library'], runtime_icd=provider['ICD'], build_environment={'TMPDIR': str(temp)},
-                  scope=action['scope'] + ' Reuse exact H host/frame ELF with its owned lower increments and prior audited links; AJ private normalization tags retain unchanged AH arithmetic and the complete fallback; explicit masks/alias-safe snapshots and Y FP/scheduler retained. Fresh AJ full38/C8; Z all22+Decimal/all8 are predecessor evidence only, not newly executed AJ gates. Only the32 byte-verified historical resource names restored as hardlinks.')
+                  scope=action['scope'] + ' Reuse exact H host/frame ELF with its owned lower increments and prior audited links; AJ private normalization tags retain unchanged AH arithmetic and the complete fallback; explicit masks/alias-safe snapshots and Y FP/scheduler retained. Fresh AJ full38/C8; Z all22+Decimal/all8 are predecessor evidence only, not newly executed AJ gates. Only the32 byte-verified historical resource names restored as hardlinks. One predeclared existing3s USER-PC capture is planned after the first tile marker; original frame command/limits/assertions remain and wall time includes observer interference. No capture/render retry or uninstrumented speed claim.')
     write(W / 'actions.json', {'frame': action})
     print(json.dumps({'prepared_original_frame': True, 'host_links_already_completed': 2, 'executed': False}))
 elif mode == 'retire-resources':
