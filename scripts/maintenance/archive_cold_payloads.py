@@ -15,7 +15,7 @@ R=Path(__file__).resolve().parents[2]
 BASE=R/'scripts/maintenance/compact_attestation_snapshots.py'
 namespace={'__file__':str(BASE)}
 exec(compile(BASE.read_text().split('parser=argparse.ArgumentParser',1)[0],str(BASE),'exec'),namespace)
-metadata=namespace['metadata'];identity=namespace['stat_identity'];meta=namespace['content_metadata'];digest=namespace['digest'];busy=namespace['busy'];protected=namespace['protected'];target=namespace['target']
+metadata=namespace['metadata'];identity=namespace['stat_identity'];meta=namespace['content_metadata'];digest=namespace['digest'];busy=namespace['busy'];protected=namespace['protected']
 SCRIPT=Path(__file__).resolve()
 SOURCE_SUFFIXES={'.json','.jsonl','.xml','.txt','.md','.py','.cpp','.c','.cc','.h','.hpp','.cs','.ispc','.isph','.slang','.spvasm','.sh','.ps1','.cmake','.yml','.yaml'}
 ARCHIVES=namespace['ARCHIVES']
@@ -28,20 +28,37 @@ def write(path,value):
 
 def load(path):return json.loads(path.read_text())
 
-def check_plan(path):
- p=load(path);assert p['root']==str(R) and p['script_sha256']==digest(SCRIPT) and p['helper_sha256']==digest(BASE)
+def checked_path(name,exists=True):
+ relative=Path(name);assert not relative.is_absolute() and '..' not in relative.parts and relative.parts[0] in {'attestations','out'}
+ p=R/relative;assert p.resolve(strict=exists)==p
+ if exists:assert p.is_file() and not p.is_symlink()
  return p
 
-def make_plan(path):
+def target(name):return checked_path(name)
+
+def check_plan(path,restoring=False):
+ p=load(path);assert p['root']==str(R) and p['schema']==1
+ # Recovery stays usable across compatible maintenance-tool updates. Mutating
+ # archival stages still require the exact executor recorded by their plan.
+ if not restoring:assert p['script_sha256']==digest(SCRIPT) and p['helper_sha256']==digest(BASE)
+ return p
+
+def make_plan(path,scope):
  assert not path.exists();tracked=set(subprocess.check_output(['git','ls-files','-z'],cwd=R).split(b'\0'))
  opened,processes=busy();excluded=protected()|opened;candidates=[]
- for base,dirs,files in os.walk(R/'attestations',followlinks=False):
-  root=Path(base);parts=root.relative_to(R/'attestations').parts
+ scan=R/('out' if scope=='diagnostics' else 'attestations')
+ for base,dirs,files in os.walk(scan,followlinks=False):
+  root=Path(base);parts=root.relative_to(scan).parts
   dirs[:]=[d for d in dirs if d!='.git' and not (root/d).is_symlink()]
-  if parts and parts[0] in EXCLUDED:dirs[:]=[];continue
+  if scope!='diagnostics' and parts and parts[0] in EXCLUDED:dirs[:]=[];continue
   for name in files:
    p=root/name
-   if p.is_symlink() or str(p) in excluded or os.fsencode(str(p.relative_to(R))) in tracked or p.suffix.lower() in SOURCE_SUFFIXES or name.lower().endswith(ARCHIVES):continue
+   ledger=name in {'inputs-before.json','inputs-after.json','samples.jsonl','source-freeze.json'}
+   generated=p.suffix.lower() in {'.h','.hpp','.spvasm'}
+   diagnostic=p.suffix.lower() in {'.tar','.data'}
+   selected=(ledger or generated) if scope=='generated' else (ledger or diagnostic) if scope=='diagnostics' else p.suffix.lower() not in SOURCE_SUFFIXES
+   archive=name.lower().endswith(ARCHIVES) and not(scope=='diagnostics' and p.suffix.lower()=='.tar')
+   if p.is_symlink() or str(p) in excluded or os.fsencode(str(p.relative_to(R))) in tracked or not selected or archive:continue
    s=p.lstat()
    if not stat.S_ISREG(s.st_mode) or s.st_size<1048576 or s.st_uid!=os.getuid():continue
    m=metadata(p)
@@ -61,15 +78,24 @@ def make_plan(path):
  for row in records:
   objects.setdefault(row['sha256'],dict(source_path=row['path'],bytes=row['before']['bytes']))
   inodes[(row['before']['device'],row['before']['inode'])]=row['before']
- p=dict(schema=1,root=str(R),source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),script_sha256=digest(SCRIPT),helper_sha256=digest(BASE),created_unix=time.time(),same_user_processes_checked=processes,protected_paths=len(excluded),records=records,objects=objects,expanded_unique_allocated_bytes=sum(v['allocated_bytes'] for v in inodes.values()),
+ p=dict(schema=1,root=str(R),scope_name=scope,source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),script_sha256=digest(SCRIPT),helper_sha256=digest(BASE),created_unix=time.time(),same_user_processes_checked=processes,protected_paths=len(excluded),records=records,objects=objects,expanded_unique_allocated_bytes=sum(v['allocated_bytes'] for v in inodes.values()),
   scope='Cold untracked historical binary/input/resource snapshots only, at least1MiB. Current frozen inputs and open/mapped files, Git-tracked files, source/metadata, current qualification, forensic originals and existing archives excluded. Preserve every unique byte and original file mode/mtime/owner/group in a local compressed content-addressed archive; remove only verified expanded copies. All old paths are recoverable with this script; no overwrite of newer state, Git history rewrite or system capability change.',restore_command='python3 -B scripts/maintenance/archive_cold_payloads.py restore '+str(path.relative_to(R))+' --path <original-relative-path>')
  write(path,p);print(json.dumps(dict(planned_paths=len(records),unique_payloads=len(objects),expanded_unique_allocated_bytes=p['expanded_unique_allocated_bytes'])))
 
 def pack(path):
  p=check_plan(path);out=path.parent/'objects.json';assert not out.exists();objects={}
+ existing={};registry=R/'attestations/archive-index.json'
+ if registry.exists():
+  entries=load(registry);indices=[entries['verified_objects']]+[s['verified_objects'] for s in entries.get('stores',[])]
+  for index in set(indices):
+   f=R/index
+   if f.exists():existing.update(load(f)['objects'])
  def one(item):
   sha,entry=item;source=target(entry['source_path']);m=metadata(source)
   expected=next(r['before'] for r in p['records'] if r['path']==entry['source_path']);assert identity(m)==identity(expected)
+  if sha in existing:
+   row=existing[sha];assert row['uncompressed_bytes']==entry['bytes'] and digest(R/row['path'])==row['sha256']
+   return sha,dict(row,reused_existing_archive=True)
   dest=path.parent/'payloads'/sha[:2]/(sha+'.gz');dest.parent.mkdir(parents=True,exist_ok=True)
   if not dest.exists():
    temp=dest.with_suffix('.partial');assert not temp.exists();observed=hashlib.sha256();size=0
@@ -89,8 +115,9 @@ def pack(path):
   for f in as_completed(futures):
    sha,row=f.result();objects[sha]=row
    if len(objects)%100==0:print(json.dumps(dict(verified_objects=len(objects),total=len(p['objects']))),flush=True)
- write(out,dict(plan_sha256=digest(path),objects=objects,all_payloads_roundtrip_verified=True,compressed_allocated_bytes=sum(o['allocated_bytes'] for o in objects.values())))
- print(json.dumps(dict(verified_objects=len(objects),compressed_allocated_bytes=sum(o['allocated_bytes'] for o in objects.values()),expanded_unique_allocated_bytes=p['expanded_unique_allocated_bytes'])))
+ new_bytes=sum(o['allocated_bytes'] for o in objects.values() if not o.get('reused_existing_archive'))
+ write(out,dict(plan_sha256=digest(path),objects=objects,all_payloads_roundtrip_verified=True,compressed_allocated_bytes=sum(o['allocated_bytes'] for o in objects.values()),new_compressed_allocated_bytes=new_bytes))
+ print(json.dumps(dict(verified_objects=len(objects),new_compressed_allocated_bytes=new_bytes,expanded_unique_allocated_bytes=p['expanded_unique_allocated_bytes'])))
 
 def retire(path):
  p=check_plan(path);objects=load(path.parent/'objects.json');assert objects['plan_sha256']==digest(path) and objects['all_payloads_roundtrip_verified']
@@ -114,8 +141,8 @@ def retire(path):
  write(path.parent/('retirement-'+str(time.time_ns())+'.json'),summary);print(json.dumps(summary))
 
 def restore(path,name):
- p=check_plan(path);rows=[r for r in p['records'] if r['path']==name];assert len(rows)==1;r=rows[0];file=R/name
- assert file.is_relative_to(R/'attestations') and not file.exists() and not file.is_symlink()
+ p=check_plan(path,restoring=True);rows=[r for r in p['records'] if r['path']==name];assert len(rows)==1;r=rows[0];file=checked_path(name,exists=False)
+ assert not file.exists() and not file.is_symlink()
  objects=load(path.parent/'objects.json');blob=R/objects['objects'][r['sha256']]['path'];assert digest(blob)==objects['objects'][r['sha256']]['sha256']
  file.parent.mkdir(parents=True,exist_ok=True);assert file.parent.resolve()==file.parent
  temp=file.with_name('.sirius-restore-'+str(os.getpid()));assert not temp.exists()
@@ -132,9 +159,9 @@ def restore(path,name):
   if temp.exists():temp.unlink()
  assert digest(file)==r['sha256'] and meta(metadata(file))==meta(r['before']);print(json.dumps(dict(restored=name,sha256=r['sha256'])))
 
-parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('mode',choices=['plan','pack','retire','restore']);parser.add_argument('plan',type=Path);parser.add_argument('--path')
+parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('mode',choices=['plan','pack','retire','restore']);parser.add_argument('plan',type=Path);parser.add_argument('--path');parser.add_argument('--scope',choices=['attestations','generated','diagnostics'],default='attestations')
 a=parser.parse_args();path=a.plan.resolve();assert path.is_relative_to(R/'attestations/cleanup')
-if a.mode=='plan':make_plan(path)
+if a.mode=='plan':make_plan(path,a.scope)
 elif a.mode=='pack':pack(path)
 elif a.mode=='retire':retire(path)
 else:assert a.path;restore(path,a.path)
