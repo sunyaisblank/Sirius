@@ -1,0 +1,85 @@
+{
+  "status": "complete",
+  "source": "3fd5ade3ff7a2f1c1ae27f4b038a561f495c16b8",
+  "members": [
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/provider/libvulkan_lvp.so",
+      "archive": "attestations/qualification/893125b9/native-cpu-reachable-tag-writers-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-reachable-tag-writers/provider/libvulkan_lvp.so",
+      "sha256": "3d1094d4fe90030272171015b634a5ca5687deca39d1cb1bbb5710be52317ed0",
+      "bytes": 18514544,
+      "allocated_bytes": 18518016,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/provider/lvp_icd.json",
+      "archive": "attestations/qualification/893125b9/native-cpu-reachable-tag-writers-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-reachable-tag-writers/provider/lvp_icd.json",
+      "sha256": "4157315234858d1a9a6f98c4a3c9e54711f66828a8a32472ca05620f37e8bb98",
+      "bytes": 206,
+      "allocated_bytes": 4096,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-value-facts/probe/retained8.o",
+      "archive": "attestations/qualification/d4f1d31e/native-cpu-value-fact-stores-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-value-facts/probe/retained8.o",
+      "sha256": "3a11db187ad5da5014139a84ea34fa2d72fc90ddd1aa092df18209a4a2ed6747",
+      "bytes": 235000,
+      "allocated_bytes": 237568,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-value-facts/probe/driver.o",
+      "archive": "attestations/qualification/d4f1d31e/native-cpu-value-fact-stores-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-value-facts/probe/driver.o",
+      "sha256": "b2267f6c2ff960b5973de6fb7bebb0af4aada75d3b18f74411021c12800e2efd",
+      "bytes": 151792,
+      "allocated_bytes": 155648,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-value-facts/probe/abi-check",
+      "archive": "attestations/qualification/d4f1d31e/native-cpu-value-fact-stores-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-value-facts/probe/abi-check",
+      "sha256": "5a30341ba9764e3f23a39075a45fff886605d5dc61e657e459eba4ded4179ff8",
+      "bytes": 380688,
+      "allocated_bytes": 380928,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-value-facts/objects/rows_adapter.o",
+      "archive": "attestations/qualification/d4f1d31e/native-cpu-value-fact-stores-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-value-facts/objects/rows_adapter.o",
+      "sha256": "e0182c5439e6a885c997f6e1dd3bde2cf4db1d8363d72fa879dbe6d2e8b9450c",
+      "bytes": 238464,
+      "allocated_bytes": 241664,
+      "removed": true
+    }
+  ],
+  "recovery_archives": [
+    {
+      "path": "attestations/qualification/893125b9/native-cpu-reachable-tag-writers-frame-timeout/actual-products.zip",
+      "sha256": "261c8918cb03571b7230539b82fcf7d238133f5e0672c3a784643d01caa0c129",
+      "verified_members": 9
+    },
+    {
+      "path": "attestations/qualification/d4f1d31e/native-cpu-value-fact-stores-frame-timeout/actual-products.zip",
+      "sha256": "3b5faae733954405580412f4c05eee2682dedb6f0dad1166b0b96005dff2a9c6",
+      "verified_members": 17
+    }
+  ],
+  "same_user_map_and_fd_tables_checked": 29,
+  "privileged_read_only_metadata_checks": [
+    {
+      "pid": 243,
+      "descriptors_checked": 39
+    },
+    {
+      "pid": 247,
+      "descriptors_checked": 7
+    }
+  ],
+  "gross_allocated_bytes_retired": 19537920,
+  "scope": "Six untracked recovered products only: superseded correct AL provider pair and four supporting basic-facts products. AL remains historical valid finite evidence; it is not marked disproved. Full pushed archives independently SHA/CRC/member/mode/time verified. No current AM/H frozen-input, Ninja, same-user mapped or open-FD consumer. Basic source remains used for AM derivation. Current AM products, unique source, concise evidence, original resources and reusable caches retained. Gross retired allocation, not net drive gain or scientific/release qualification."
+}
