@@ -1,0 +1,12 @@
+{
+  "library": "bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so",
+  "library_identity": {
+    "bytes": 21791336,
+    "sha256": "200a889fe0786706c003f4be6ee4eed300563b98a69dda47e594a8940f676dc8"
+  },
+  "shader_stage_offset": 97,
+  "native_stage_offset": 393,
+  "compute_stage_value": 5,
+  "actual_finalizer_disassembly": "\n/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so:     file format elf64-x86-64\n\n\nDisassembly of section .init:\n\nDisassembly of section .plt:\n\nDisassembly of section .plt.got:\n\nDisassembly of section .text:\n\n0000000000b69a10 <llvmpipe_finalize_nir>:\n  b69a10:\tendbr64\n  b69a14:\tcmpb   $0x5,0x61(%rsi)\n  b69a18:\tmov    %rsi,%rdi\n  b69a1b:\tjne    b69a2b <llvmpipe_finalize_nir+0x1b>\n  b69a1d:\tmovzbl 0x189(%rsi),%eax\n  b69a24:\tsub    $0x1,%eax\n  b69a27:\tcmp    $0x2,%al\n  b69a29:\tjbe    b69a40 <llvmpipe_finalize_nir+0x30>\n  b69a2b:\tsub    $0x8,%rsp\n  b69a2f:\tcall   9da170 <lp_build_opt_nir>\n  b69a34:\txor    %eax,%eax\n  b69a36:\tadd    $0x8,%rsp\n  b69a3a:\tret\n  b69a3b:\tnopl   0x0(%rax,%rax,1)\n  b69a40:\txor    %eax,%eax\n  b69a42:\tret\n\nDisassembly of section .fini:\n",
+  "scope": "Offsets decoded from this exact compiled finalizer guard, not guessed from another header/ABI. Used only for passive original-C3 compiler route observation; no numerical expectation."
+}
