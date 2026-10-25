@@ -32,7 +32,10 @@ assert not doc(manifest)['accepted']
 assert not os.environ.get('ISPC_ARGS')
 assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
 assert not (W / 'prepared-ispc-values-inputs.json').exists()
-assert not (R / 'bin/linux-gcc/native-cpu-dense-values/objects').exists()
+object_directory = R / 'bin/linux-gcc/native-cpu-dense-values/objects'
+assert {p.name for p in object_directory.iterdir()} == {'values_bridge.o'}
+bridge_identity = doc(W / 'bridge-build-result.json')['object']
+assert pin(R / bridge_identity['path']) == {k: bridge_identity[k] for k in ('bytes', 'sha256')}
 subprocess.run(['/usr/bin/python3', '-B', str(W / 'derive_ispc.py')], check=True)
 derived = doc(W / 'ispc-derivation.json')
 old = doc(B / 'ispc-dense-compile-result.json')

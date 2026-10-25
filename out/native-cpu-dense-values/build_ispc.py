@@ -30,8 +30,9 @@ def save():
 
 
 verify()
-assert not receipt.exists() and not destination.exists()
-destination.mkdir(parents=True)
+assert not receipt.exists()
+assert {p.name for p in destination.iterdir()} == {'values_bridge.o'}
+destination.mkdir(parents=True, exist_ok=True)
 result = {'revision': prepared['revision'], 'objects': [], 'all_objects_compiled': False,
           'source_inputs': prepared['inputs'], 'scope': prepared['scope']}
 with receipt.open('x') as stream:
