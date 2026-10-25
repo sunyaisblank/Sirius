@@ -1,0 +1,41 @@
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AE";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AF";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
+@@ -1777,11 +1777,18 @@
+    if (result != VK_SUCCESS)
+       return result;
+ 
++#if !LP_VULKAN_IEEE32_ENABLED
+    result = vk_queue_enable_submit_thread(&queue->vk);
+    if (result != VK_SUCCESS) {
+       vk_queue_finish(&queue->vk);
+       return result;
+    }
++#endif
++   /* IEEE32 keeps Mesa's on-demand submit mode. Ready submissions execute
++    * through the same driver callback; unresolved dependencies start the
++    * existing submit thread in vk_queue_submit(). Queue order, sync payloads,
++    * driver FP save/restore, execution and completion remain unchanged.
++    */
+ 
+    queue->device = device;
+ 
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -847,7 +847,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-masked-arithmetic-v29";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-demand-submit-v30";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);

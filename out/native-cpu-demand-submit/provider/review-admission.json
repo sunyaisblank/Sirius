@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "source_contract": {
+    "bytes": 124739,
+    "sha256": "fb93168947ebc3301dc63905f573e6870829ac7c1c6f4c78f00f7246aacbc237"
+  },
+  "patch": {
+    "bytes": 1710,
+    "sha256": "91e85bd6f1a7b6bcc4737fece29886b4566b45b883a355995df11455f29b7327"
+  },
+  "full_source_identity_verified_before_and_after": true,
+  "scope": "Exact two-file provider patch only: private IEEE32 build retains Mesa on-demand submit mode, with existing runtime dependency-driven submit-thread fallback; other builds retain original forced-thread initialization. Native8, FP wrappers, pipeline execution and all synchronization/error paths are unchanged. Fresh original C8/frame required. No performance/scientific/release claim."
+}
