@@ -16,7 +16,7 @@ for root in (W,C,D):
    try:t=(Path('/proc')/str(row['pid'])/'stat').read_text().rsplit(')',1)[1].split()[19]
    except (FileNotFoundError,ProcessLookupError):t=None
    assert t!=str(row['saved_start_ticks'])
-frozen={(R/name).resolve() for root in (W,C,D,R/'out/native-cpu-owned-lower-increments') for p in root.rglob('actions.json') for a in J(p).values() for name in a['frozen_inputs']}
+frozen={(R/name).resolve() for root in (W,C,D,R/'out/native-cpu-owned-lower-increments') for p in root.rglob('actions.json') if p!=W/'fixture/actions.json' for a in J(p).values() for name in a['frozen_inputs']}
 tracked=set(subprocess.check_output(['git','ls-files'],text=True).splitlines());members=[];archives=[]
 products=[R/x['product']['path'] for x in J(W/'fixture/build-result.json')['commands']]
 groups=[(manifest_path,products)]
@@ -70,7 +70,7 @@ for p in Path('/proc').iterdir():
 build=(R/'bin/linux-gcc/lavapipe-acqrel-ordering/build.ninja').read_text();assert not any(target in build for target in targets)
 report=dict(status='started',source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),members=members,recovery_archives=archives,
  same_user_map_and_fd_tables_checked=checked,privileged_read_only_metadata_checks=privileged,gross_allocated_bytes_retired=sum(x['allocated_bytes'] for x in members),
- scope='Three untracked recovered diagnostic products only: renamed original scalar-reference driver, integer-only ISPC fixture object and linked ABI check. Full pushed archive SHA/CRC/member/mode/time verified. No current AN/H frozen-input, Ninja, same-user mapped or open-FD consumer. All current raw/provider/full38 products, unchanged AM math/provider and unique source/concise evidence/resources/reusable caches retained. Gross retired allocation, not net drive gain or scientific/release qualification.')
+ scope='Three untracked recovered diagnostic products only: renamed original scalar-reference driver, integer-only ISPC fixture object and linked ABI check. Full pushed archive SHA/CRC/member/mode/time verified. No current AN/H non-fixture frozen-input, Ninja, same-user mapped or open-FD consumer. The sole historical fixture action is terminal, all births absent, and preserved in pushed recovery. All current raw/provider/full38 products, unchanged AM math/provider and unique source/concise evidence/resources/reusable caches retained. Gross retired allocation, not net drive gain or scientific/release qualification.')
 record=manifest_path.parent/'RETIRED-DIAGNOSTIC-PRODUCTS.json';assert not record.exists()
 def save():record.write_text(json.dumps(report,indent=2)+'\n')
 save()
