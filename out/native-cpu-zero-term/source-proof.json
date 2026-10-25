@@ -1,0 +1,113 @@
+{
+  "status": "unapplied source proposal; no new source copies, compilation, link, workload or qualification",
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 648582,
+        "sha256": "8af22da0961d7915c89ed6caf4b3f20d4ba07890027f9a292f13f17f4afaa7e4"
+      },
+      "future_candidate_path": "bin/linux-gcc/native-cpu-zero-term/ispc-source/transport.ispc",
+      "candidate": {
+        "bytes": 649694,
+        "sha256": "e7ebd38fe8e6d0e62481826d0ea8cf22b415a0507a5d81ef02433bf1d9f29e69"
+      },
+      "inverse_removes_one_zero_arm_only": true,
+      "literal_instruction_calls_preserved": 3144,
+      "zero_arm": "\n\n    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.\n    if ((RPBits_0(x_4) & 2147483647U) == 0U)\n    {\n        if (!RPBounded_0(a_16->hi_0, 2105540608U) ||\n            !RPBounded_0(a_16->lo_0, 2105540608U) ||\n            !RPBounded_0(a_16->tail_0, 2105540608U) ||\n            !RPBounded_0(a_16->error_0, 2105540608U))\n            return RTInvalid_0();\n        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;\n        RetainedTriple_0 SiriusZeroTermResult;\n        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->hi_0;\n        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->lo_0;\n        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->tail_0;\n        SiriusZeroTermResult.error_0 = ((RPBits_0(a_16->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_16->error_0;\n        SiriusZeroTermResult.valid_0 = 1U;\n        return SiriusZeroTermResult;\n    }"
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 825127,
+        "sha256": "857b2f05ae30f3a4b474ae454dc53658daae3161413d3ef143fb001a3e85baea"
+      },
+      "future_candidate_path": "bin/linux-gcc/native-cpu-zero-term/ispc-source/endpoint.ispc",
+      "candidate": {
+        "bytes": 826239,
+        "sha256": "419cc7925cb65b04a2c47f5ffbe8f58fd7e21b2324cc678a63c940c5b97a8656"
+      },
+      "inverse_removes_one_zero_arm_only": true,
+      "literal_instruction_calls_preserved": 4148,
+      "zero_arm": "\n\n    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.\n    if ((RPBits_0(x_4) & 2147483647U) == 0U)\n    {\n        if (!RPBounded_0(a_13->hi_0, 2105540608U) ||\n            !RPBounded_0(a_13->lo_0, 2105540608U) ||\n            !RPBounded_0(a_13->tail_0, 2105540608U) ||\n            !RPBounded_0(a_13->error_0, 2105540608U))\n            return RTInvalid_0();\n        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;\n        RetainedTriple_0 SiriusZeroTermResult;\n        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->hi_0;\n        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->lo_0;\n        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->tail_0;\n        SiriusZeroTermResult.error_0 = ((RPBits_0(a_13->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_13->error_0;\n        SiriusZeroTermResult.valid_0 = 1U;\n        return SiriusZeroTermResult;\n    }"
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 414262,
+        "sha256": "ed3d5694b27834cd4243bb80f820a63ead5e25621dffcf79607b292d413c7033"
+      },
+      "future_candidate_path": "bin/linux-gcc/native-cpu-zero-term/ispc-source/dopri_phase.ispc",
+      "candidate": {
+        "bytes": 415374,
+        "sha256": "cb571ec2f9071c44828891976254cd83feb6d4eb8302df86370231eae4525162"
+      },
+      "inverse_removes_one_zero_arm_only": true,
+      "literal_instruction_calls_preserved": 2088,
+      "zero_arm": "\n\n    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.\n    if ((RPBits_0(x_4) & 2147483647U) == 0U)\n    {\n        if (!RPBounded_0(a_11->hi_0, 2105540608U) ||\n            !RPBounded_0(a_11->lo_0, 2105540608U) ||\n            !RPBounded_0(a_11->tail_0, 2105540608U) ||\n            !RPBounded_0(a_11->error_0, 2105540608U))\n            return RTInvalid_0();\n        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;\n        RetainedTriple_0 SiriusZeroTermResult;\n        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->hi_0;\n        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->lo_0;\n        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->tail_0;\n        SiriusZeroTermResult.error_0 = ((RPBits_0(a_11->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_11->error_0;\n        SiriusZeroTermResult.valid_0 = 1U;\n        return SiriusZeroTermResult;\n    }"
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-accumulate-inline/ispc-derivation.json": {
+      "bytes": 21661,
+      "sha256": "2ee32fa7afb3342344ddf4d5bb18c547dfac09def14f0cd78301f89a96108a95"
+    },
+    "out/native-cpu-accumulate-inline/ispc-inline-compile-result.json": {
+      "bytes": 28629,
+      "sha256": "39820f7ef942e5a4702438e1f441142fc48e5f7f2502791fa210fb6b8325da2b"
+    },
+    "out/native-cpu-accumulate-inline/inline-code-inspection.json": {
+      "bytes": 43132,
+      "sha256": "21099f2172a9856030246dfb484ab0c4691bab22f9ab15e8c1a2e4f3ea24135e"
+    },
+    "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/transport.ispc": {
+      "bytes": 648582,
+      "sha256": "8af22da0961d7915c89ed6caf4b3f20d4ba07890027f9a292f13f17f4afaa7e4"
+    },
+    "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/endpoint.ispc": {
+      "bytes": 825127,
+      "sha256": "857b2f05ae30f3a4b474ae454dc53658daae3161413d3ef143fb001a3e85baea"
+    },
+    "bin/linux-gcc/native-cpu-accumulate-inline/ispc-source/dopri_phase.ispc": {
+      "bytes": 414262,
+      "sha256": "ed3d5694b27834cd4243bb80f820a63ead5e25621dffcf79607b292d413c7033"
+    }
+  },
+  "premise": "R removed Term ABI boundaries but retained all three sorted sums and radius/bounds work for a zero term. RTAdd of a nonzero RTConstant still passes its exactly-zero low/tail components through two such accumulations. Source-supported opportunity; dynamic frequency, compiler code shape and benefit remain unmeasured. No parameter/flag sweep.",
+  "scope": "All3 full stage programs retain every literal instruction call and all fields/columns/RHS/RK/quartic/guard/layout/counts/FP/eligibility. Original prefix rejects invalid a.valid and out-of-bound x exactly as before. For nonzero x, every original body byte remains and executes. No unmasked qualifier, precision/budget/cache/count/reference/governor change.",
+  "semantic_argument": [
+    "Existing scope is binary32 RTE, FTZ/DAZ off, no contraction. For x=+0 or -0 and any finite a, sorted RetainedSum32 selects a first because absbits(a)<absbits(x) is false. s=a+x; s-a is exactly +0 in every sign-zero case and for every nonzero finite a, including subnormals. Its residual x-(s-a) is therefore exactly x, with its sign.",
+    "Induct through all3 sums: the same signed zero is carried through hi/lo/tail. For x=+0 each center component keeps its bits except -0 becomes +0. For x=-0 all3 center component bits remain unchanged. No component can cross an original magnitude bound by adding zero.",
+    "The final residual absolute value is +0. RPUpAdd(error,+0) first applies the unchanged magnitude bound; if error is either zero it returns the second operand +0, otherwise returns error unchanged. Thus the error field only canonicalizes -0 to +0.",
+    "If any hi/lo/tail/error magnitude exceeds the original 2105540608 bound, the original result is canonical RTInvalid; the zero arm returns exactly that same value. This also covers nonfinite and signaling NaN inputs as output-bit semantics. If a.valid is nonzero, the original successful result always writes valid=1, and the zero arm does too.",
+    "No external FP-environment equivalence is claimed outside the existing native scoped IEEE32 call, which restores the complete caller MXCSR. Internal sticky exception flags may differ for rejected nonfinite inputs; they are not exposed by that scope. Exact output bits, radius/enclosures, refusal and active/inactive ownership remain required."
+  ],
+  "signed_zero_table": [
+    {
+      "term": "+0",
+      "input_component": "+0",
+      "sum": "+0",
+      "residual": "+0"
+    },
+    {
+      "term": "+0",
+      "input_component": "-0",
+      "sum": "+0",
+      "residual": "+0"
+    },
+    {
+      "term": "-0",
+      "input_component": "+0",
+      "sum": "+0",
+      "residual": "-0"
+    },
+    {
+      "term": "-0",
+      "input_component": "-0",
+      "sum": "-0",
+      "residual": "-0"
+    }
+  ],
+  "required_before_adoption": "Review the all-binary32 bit/rounding argument; actual all3 same-tool/flags compilation and ISA/code checks; fresh changed-Transport all38/all187960-word compatibility, original C8/all32/51markers/54joins, sole ABBA22+Decimal, all8 controls and original300s frame. Reuse the exact existing driver/baseline diagnostic objects if their source/ABI/input/tool provenance still matches; no reason to compile their unchanged C++ again. Full science/release/main qualification remains separate."
+}
