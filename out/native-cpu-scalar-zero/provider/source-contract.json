@@ -1,0 +1,403 @@
+{
+  "basis_source_identity": {
+    "bytes": 1483006,
+    "sha256": "5027d007ca44f5753feda8c32fa29b0480f6a4ec904c43822722a22187975543"
+  },
+  "full_candidate_source_identity": {
+    "bytes": 1483006,
+    "sha256": "be4cb164c9d1de0b1d694585894c4023f9f7ceac611aba3bc64b0a3707c5c754"
+  },
+  "modified_files": {
+    "src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "basis": {
+        "bytes": 6332,
+        "sha256": "d7a4ddd750bca9e38de37f6ed00131662f577c05f831f7bf9261b34f33c22435"
+      },
+      "candidate": {
+        "bytes": 6421,
+        "sha256": "ffa014c8d06e66c33935477fa11a13b775b9cc479860a3be5d6943adc7c3568f"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32363,
+        "sha256": "c0265d05a71bb3420e97d83bdf2033e0839b8c110ce956ccf0e37444f153ed3b"
+      },
+      "candidate": {
+        "bytes": 32364,
+        "sha256": "22175ac27977c27366aba4f8f6a0d899105ca2d481bc1e260ecded5168add121"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "basis": {
+        "bytes": 107347,
+        "sha256": "ab5bea266c98ec632f1fc7e89aa2caf4c9a7b5d1775243d53651eec28f03a45f"
+      },
+      "candidate": {
+        "bytes": 108412,
+        "sha256": "7efc8f17028df80eac701ca3094465781ad7136a9d046a72066e7f4349219fae"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 116201,
+        "sha256": "6cae856f1ed09a51ec186cd687c64b4e07d705322a63bc58bbfb78907a8313c0"
+      },
+      "candidate": {
+        "bytes": 116201,
+        "sha256": "476ba53cc3fd62d604b3c7caa3bbc1a8e373f45bc9f60751b9be7a72ed850c57"
+      }
+    },
+    "src/gallium/targets/lavapipe/meson.build": {
+      "basis": {
+        "bytes": 3583,
+        "sha256": "e72fff1554a4e848c0a75cb9f082dcbf8c59a294635a85b537fdcf69147807a5"
+      },
+      "candidate": {
+        "bytes": 3250,
+        "sha256": "9d3887812b35f98d5be3084c3b3a033a845c776f9432228dcc2ebc9fdd980d8f"
+      }
+    }
+  },
+  "native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/objects/transport.o",
+      "bytes": 3115824,
+      "sha256": "a0bc1a77106abf466fa621f6c5b93d2e8fbc90ebcf8bf0e9e2a2997397a243bf"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/objects/endpoint.o",
+      "bytes": 3501304,
+      "sha256": "02bd72733f2eb8e24fadfaac0ddef93e1d9da13687ee88421edb324f837e408a"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/objects/dopri_phase.o",
+      "bytes": 1822672,
+      "sha256": "a11815e10d4a28bf6b33b217ae59d2db1962a66114c95507d5fa3622d26c8429"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+      "bytes": 4280,
+      "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+    }
+  ],
+  "patch": {
+    "bytes": 6705,
+    "sha256": "b6fd0b70a4e76881f071c31c79651e18795b9e4f97dcf8c9ab2e15f86c5f9110"
+  },
+  "source_inputs": {
+    "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "out/native-cpu-slang-bridge/batch-generation.json": {
+      "bytes": 8521,
+      "sha256": "de6d68848c352c3b9262e01822730d25459b725d42f57e4b1769ba93d2cc2428"
+    },
+    "out/native-cpu-slang-bridge/prepare_batch.py": {
+      "bytes": 8809,
+      "sha256": "5aa607cefd69d77bb033146ceeb539dffc7152fa5189f7744cc694753dbd7d68"
+    },
+    "out/native-cpu-slang-bridge/native_packet.hpp": {
+      "bytes": 2271,
+      "sha256": "02a17ea28db707c1572de4137ece237930c220f261f6613ad3bf3de821bd4ce5"
+    },
+    "out/native-cpu-slang-bridge/native_bridge.h": {
+      "bytes": 1055,
+      "sha256": "57d78d5d8a61cdd04f4d9e3301d600c96fc716c3581c7d2cdfb045956798b243"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/transport.cpp": {
+      "bytes": 87927,
+      "sha256": "1b2e56701b29b5c150c861113edc36389772eaca48e92e8c16f6e406e11d6092"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/transport.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.native.hpp": {
+      "bytes": 88052,
+      "sha256": "74d60b6f50864101d797f434b45ef3a8ef107b0b954fb1c0fd721b040c0761cf"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.cpp": {
+      "bytes": 2925,
+      "sha256": "fe8daf2bfc2d4b0e87370b6b559c70f3687166667609c8fadcc54cbe69452083"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/endpoint.cpp": {
+      "bytes": 100678,
+      "sha256": "1cf56b2406c6a034b5bc75361df1fa62cc09b30407a04b1153dc325df4c229f8"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/endpoint.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.native.hpp": {
+      "bytes": 100795,
+      "sha256": "25b18fe2dc56f2e98b564cdd19e7909d3babeeb197df6469b857ea0f3ed78393"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.cpp": {
+      "bytes": 2909,
+      "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.cpp": {
+      "bytes": 63700,
+      "sha256": "a2d57dc0d8063b42dcca97f38797b68f5dfeb9bd05ca10073819f5607ac572f9"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 63841,
+      "sha256": "24b18109cac98a3a796981e53263506e7a8b43bf9ff526f5fd7c69da12517705"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.cpp": {
+      "bytes": 2866,
+      "sha256": "e481ae98846a7d8d509e2e3e17e8b8d72ea561e30929a165c85e9026c57d93d6"
+    },
+    "out/native-cpu-active-prefix/native_packet.hpp": {
+      "bytes": 2445,
+      "sha256": "9df6d65d1c89016694a7f242a8fdd61979db6826c4f0d2619b2b8954a9ca6eee"
+    },
+    "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp": {
+      "bytes": 634190,
+      "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+    },
+    "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp": {
+      "bytes": 812736,
+      "sha256": "90f41000d38684143089e198ad56a6507546b1e9ad38cae95d9ba8fc8b7e5fc8"
+    },
+    "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 409325,
+      "sha256": "5173a3682f0afe1811228c44f46d35fb843683ecf058832ddc8f49465541c7e6"
+    },
+    "out/native-cpu-static-program/header-preparation.json": {
+      "bytes": 7943,
+      "sha256": "72c76214e8b0267566801b0e7efec605c2e408f2c9ac084a892c95d7a563ef6d"
+    },
+    "out/native-cpu-scalar-zero/derive.py": {
+      "bytes": 4399,
+      "sha256": "e4f27391fa082b2b5c99ed61795833b98b11611f7d86f5b39a91bdf317f39d4f"
+    },
+    "out/native-cpu-zero-term/source-proof.json": {
+      "bytes": 9828,
+      "sha256": "e9cd6c81af9eb87bb6bf9378a65670dbe6d6d7b61465cc425256b8f518a93bd4"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/transport.native.hpp": {
+      "bytes": 635340,
+      "sha256": "e9d605e77065dd22c7018526c4d8d7bec27960d5c8d2be27306d22f0545d4ea4"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/transport.cpp": {
+      "bytes": 2925,
+      "sha256": "fe8daf2bfc2d4b0e87370b6b559c70f3687166667609c8fadcc54cbe69452083"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.native.hpp": {
+      "bytes": 813886,
+      "sha256": "b95b630d7fdb7a50db8f3551d3e48a3c932b9d5944dabc4b45afe301cc45c698"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.cpp": {
+      "bytes": 2909,
+      "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 410475,
+      "sha256": "0808c37704c7f98423bb1b5b0f57c74feef5d27f015b74caf4dc62c6255ca626"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/dopri_phase.cpp": {
+      "bytes": 2866,
+      "sha256": "e481ae98846a7d8d509e2e3e17e8b8d72ea561e30929a165c85e9026c57d93d6"
+    },
+    "/usr/bin/x86_64-linux-gnu-g++-14": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus": {
+      "bytes": 36622952,
+      "sha256": "52fda0dfd1df95d8d9370c39de67e08b6e37dcfe25a2ef977f8451521159e834"
+    },
+    "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2": {
+      "bytes": 434560,
+      "sha256": "a03c6db64a7b078b47079de2e234fb9f07e71108742f5087da4ccd4c92d770ec"
+    },
+    "/usr/bin/x86_64-linux-gnu-as": {
+      "bytes": 745768,
+      "sha256": "7a2ef948033b05ad0c5dcb0d5be059bc68562b5d45713d91aee21df2b4bf4e92"
+    },
+    "/usr/bin/x86_64-linux-gnu-ld.bfd": {
+      "bytes": 1359128,
+      "sha256": "e46a122cc3a29feba3b1d0fc2a274b6e46538be016ebe381370c0801bb98b0b8"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/bin/ldd": {
+      "bytes": 5382,
+      "sha256": "752803b8baa217b821bd4566c4fbdaec50c01cb32d2796ec056d22d190d4290f"
+    },
+    "out/native-cpu-scalar-zero/prepare_compile.py": {
+      "bytes": 3426,
+      "sha256": "268d6fac3b23d40733f4baa96bffd840793f560bc215d870dc90540748555da9"
+    },
+    "out/native-cpu-scalar-zero/build.py": {
+      "bytes": 2367,
+      "sha256": "ab6cddd6a7a53af757ac84783fd7486145ac5586eae660c51385b576cd528413"
+    },
+    "out/native-cpu-scalar-zero/derivation.json": {
+      "bytes": 7132,
+      "sha256": "84af5c154cb39e12441dc6a239a5f76aa88bb6518a8c164321e2efa7b07f7b08"
+    },
+    "out/native-cpu-scalar-zero/scalar-zero.patch": {
+      "bytes": 4995,
+      "sha256": "ed187af6d536263ccbaa352cf31e1a8058c39c5e982f76da13341f16635f8c81"
+    },
+    "out/native-cpu-scalar-zero/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-scalar-zero/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-host-representation/probe/preparation.json": {
+      "bytes": 6464,
+      "sha256": "723d67d2d628b1835436d5a185ee1d51d833c81e6c395a62af67486fc1391996"
+    },
+    "out/native-cpu-static-program/batch-compile-result.json": {
+      "bytes": 9212,
+      "sha256": "f8434acad86353ab1a345cd35a9f4e6ef338805a2d87974ebacb49d2d9082be2"
+    },
+    "out/native-cpu-row-ownership/cold-frame/run_owned.py": {
+      "bytes": 12531,
+      "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab"
+    },
+    "out/native-cpu-row-ownership/cold-frame/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o": {
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o": {
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o": {
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    "bin/linux-gcc/native-cpu-dispatch-admission/admission.o": {
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/objects/transport.o": {
+      "bytes": 3115824,
+      "sha256": "a0bc1a77106abf466fa621f6c5b93d2e8fbc90ebcf8bf0e9e2a2997397a243bf"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/objects/endpoint.o": {
+      "bytes": 3501304,
+      "sha256": "02bd72733f2eb8e24fadfaac0ddef93e1d9da13687ee88421edb324f837e408a"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/objects/dopri_phase.o": {
+      "bytes": 1822672,
+      "sha256": "a11815e10d4a28bf6b33b217ae59d2db1962a66114c95507d5fa3622d26c8429"
+    },
+    "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o": {
+      "bytes": 4280,
+      "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+    },
+    "out/native-cpu-scalar-zero/cpp-compile-result.json": {
+      "bytes": 14560,
+      "sha256": "0fd97b1d7d8680b3e63358f827e52f28528f88b65f11a3d265adc905ef01f1db"
+    },
+    "out/native-cpu-scalar-zero/compile/cpp/owner.json": {
+      "bytes": 2441,
+      "sha256": "afe5b8c5e86f2ec035c9872237567665a651fce2f8901cf3ec94e4be1c08b814"
+    },
+    "out/native-cpu-scalar-zero/object-code-inspection.json": {
+      "bytes": 5889,
+      "sha256": "ced7ec78243e80c4423bdeb279f79f8bdc9c66473f871e8565f9d6e0d21e06d8"
+    },
+    "out/native-cpu-scalar-zero/prepare_provider_patch.py": {
+      "bytes": 5217,
+      "sha256": "bd1d1baed9c2f0b567326649d563b0fd2dce8c84f84cea16a32387a232b9524b"
+    },
+    "out/native-cpu-scalar-zero-compatibility/result.json": {
+      "bytes": 10607,
+      "sha256": "e64fb215fa9ea55e428cf53b25099bcf18322e9757e58b473c056e67a91f9e59"
+    },
+    "out/native-cpu-scalar-zero-compatibility/run/owner.json": {
+      "bytes": 2117,
+      "sha256": "809caf358b1489ea0670e939324cf64725109908ad45a78195399dd55a4587ad"
+    },
+    "out/native-cpu-zero-term/provider/source-contract.json": {
+      "bytes": 44876,
+      "sha256": "8f593add281e33548b9cc3c40dac1ff8dc92e66919cd8ac2af1df84cd2f8e9e4"
+    },
+    "out/native-cpu-field-simd/provider/source-contract.json": {
+      "bytes": 21271,
+      "sha256": "2c979ad3b7aca059cbce510696b6f6acbbb1383b8079211f44e5c085461de6f9"
+    },
+    "out/native-cpu-field-simd/provider/provider.patch": {
+      "bytes": 6258,
+      "sha256": "c6ceb393a2f9e9156ebca244194edf31a69b5ad3239e39fc5bb1c571902e8111"
+    }
+  },
+  "new_CPP_compilations": 3,
+  "new_ISPC_compilations": 0,
+  "reused_native_objects": 5,
+  "guard_shared_byte_authority": "out/native-cpu-active-prefix/native_packet.hpp",
+  "scope": "U changes only the actual D scalar Term inline/exact-zero arithmetic from S; all9380instructions, S raw3/pureF/Iadapter/Q scheduling and every count/FP/guard/cache/governor contract retained. Reverses rejected field-SIMD scheduling. Actual fresh scalarTransport38fixtures/all187960words PASS. No runtime benefit/frame/science/release/adoption claim."
+}
