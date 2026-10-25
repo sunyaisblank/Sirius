@@ -1,0 +1,15 @@
+{
+  "source": "src/sirius/backend/retained_integrator.cpp",
+  "basis": {
+    "bytes": 36518,
+    "sha256": "1e650958d952afab60cebe9a871d8a85b819f15bd87632cde73731313dfdb4da"
+  },
+  "derived_path": "out/native-cpu-owned-lower-increments/retained_integrator.cpp",
+  "derived": {
+    "bytes": 37247,
+    "sha256": "382aacb6f1dab31164541ad74b3f1ed1f776459dc7026e086cc968a40febca49"
+  },
+  "full_inverse_restores_original_source": true,
+  "all_other_source_bytes_unchanged": true,
+  "scope": "One local reuse in part0 of a valid curved DP attempt. The same step already produced all40 lower PhaseIncrements inside PhasePacket[trial1]; original Increments(lower) repeats the same six-input CenterDifference, ordered3Extract, Radius and upward float conversion at indices8*group+axis. Copy exactly those20 five-word values from packet[1][40+index]. The curve belongs to this row/attempt, is built before Endpoint and is not modified before this copy. Other trials, four quartics, all40fields, original shader calls/inputs/counts and every error/refusal/rollback/publication remain. Flat/legacy paths retain original calculation. Source reasoning is not machine-checked proof; fresh original host controls/C8/frame remain necessary."
+}
