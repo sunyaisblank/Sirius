@@ -1,0 +1,23 @@
+{
+  "basis": {
+    "path": "out/native-cpu-normalization-tags/retained8.cpp",
+    "bytes": 30889,
+    "sha256": "f3d02bfe7d82162eeac4425f12eaafbe46bd3079c0e8e0516155cefa39a60338"
+  },
+  "candidate": {
+    "path": "out/native-cpu-predicated-refinement/retained8.cpp",
+    "bytes": 31345,
+    "sha256": "12233bd0e95161c5d4293fea4423bf830a0a9494d86243c19b57cb977fe0cc29"
+  },
+  "new_uniform_terminal_returns": 6,
+  "exact_inverse_restores_AJ": true,
+  "unchanged_refinement_count": 3,
+  "argument": [
+    "Divide identity is the original eligible&exact-denominator-one mask. Original final selection returns a for those lanes and canonical invalid for every other lane when work is empty. Both masks only lose active lanes. The three inserted exits return precisely that same five-word selection before seed, final residual or final pack.",
+    "Sqrt original final selection returns original a verbatim for invalid input, canonical valid zero for exact-zero input and canonical invalid for remaining lanes when work is empty. All three exits retain that original precedence, arbitrary invalid words and signed-zero behavior.",
+    "No active refinement lane skips arithmetic: any nonempty work mask enters the identical original seed, three ordered correction steps, final residual, radius and normalization/refusal code. Mixed lanes retain the original vector computation and selection. Destination alias snapshots, masks, complete bank writes and normalization-tag refresh are unchanged.",
+    "The provider already masks IEEE32 exceptions and restores the complete saved worker state. Fewer unused calculations may change intermediate exception status; no preservation of unobserved intermediate status is claimed. FP controls/ISA/rounding and the original scalar mathematical contract remain.",
+    "This is source reasoning plus an exact byte inverse, not machine-checked equivalence, runtime benefit, full science or release acceptance. Existing 49-case complete-bank/tag/mask/alias fixture is reused, with broadcast identity/refusal/zero cases. Actual code joins and original whole-path checks remain required."
+  ],
+  "scope": "Six empty-work terminal returns in existing C++ Divide/Sqrt only. Same five public words/private normalized tags, raw3 objects, canonical9380tuples/programs/SPVs, eligibility, refinement formulas/order, all fields/RHS/trials/quartics, scheduler, queue, counts, cache/governors and complete fallback."
+}
