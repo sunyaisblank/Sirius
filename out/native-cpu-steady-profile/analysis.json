@@ -1,0 +1,286 @@
+{
+  "source": "db09db3f7664cd2c259de422ab147c4ba5b751f6",
+  "diagnostic_complete": true,
+  "frame_accepted": false,
+  "scientific_qualification": false,
+  "trigger_progress": [
+    128,
+    16384
+  ],
+  "capture_samples": 1072,
+  "stable_observed_threads": 100,
+  "native_joined_samples": 896,
+  "samples_by_file": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so": 908,
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests": 75,
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": 67,
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": 15,
+    "unresolved": 7
+  },
+  "samples_by_native_object": {
+    "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o": 505,
+    "bin/linux-gcc/native-cpu-normalization-tags/objects/endpoint.o": 106,
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o": 127,
+    "bin/linux-gcc/native-cpu-normalization-tags/objects/dopri_phase.o": 72,
+    "bin/linux-gcc/native-cpu-normalization-tags/objects/transport.o": 46,
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o": 33,
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o": 7
+  },
+  "top_functions": [
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_tagged_multiply8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_tagged_multiply8"
+      ],
+      "unresolved_reason": null,
+      "samples": 184
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_tagged_divide8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_tagged_divide8"
+      ],
+      "unresolved_reason": null,
+      "samples": 146
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_dense_multiply8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_dense_multiply8"
+      ],
+      "unresolved_reason": null,
+      "samples": 57
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_tagged_add8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_tagged_add8"
+      ],
+      "unresolved_reason": null,
+      "samples": 52
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_simd_endpoint_packet",
+      "location": "??:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/endpoint.o"
+      ],
+      "native_symbols": [
+        "sirius_simd_endpoint_packet"
+      ],
+      "unresolved_reason": null,
+      "samples": 41
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "ComputeOwnedRow_0___s_5B_vyRowID_5D_vyuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "location": "endpoint.ispc:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/endpoint.o"
+      ],
+      "native_symbols": [
+        "ComputeOwnedRow_0___s_5B_vyRowID_5D_vyuun_3C_s_5B_vyKernelContext_0_5D__3E_"
+      ],
+      "unresolved_reason": null,
+      "samples": 33
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_generated_transport::RTMultiply_0(sirius_generated_transport::RetainedTriple_0*, sirius_generated_transport::RetainedTriple_0*)",
+      "location": "transport.cpp:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o"
+      ],
+      "native_symbols": [
+        "_ZN26sirius_generated_transportL12RTMultiply_0EPNS_16RetainedTriple_0ES1_"
+      ],
+      "unresolved_reason": null,
+      "samples": 29
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_generated_transport::RTAccumulateProduct_0(sirius_generated_transport::RetainedTriple_0*, float, float)",
+      "location": "transport.cpp:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o"
+      ],
+      "native_symbols": [
+        "_ZN26sirius_generated_transportL21RTAccumulateProduct_0EPNS_16RetainedTriple_0Eff"
+      ],
+      "unresolved_reason": null,
+      "samples": 29
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_generated_transport::RTAccumulateRoundedProduct_0(sirius_generated_transport::RetainedTriple_0*, float, float)",
+      "location": "transport.cpp:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o"
+      ],
+      "native_symbols": [
+        "_ZN26sirius_generated_transportL28RTAccumulateRoundedProduct_0EPNS_16RetainedTriple_0Eff"
+      ],
+      "unresolved_reason": null,
+      "samples": 28
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_dense_add8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_dense_add8"
+      ],
+      "unresolved_reason": null,
+      "samples": 25
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+      "function": "sirius::backend::RetainedValue::IsRepresented() const",
+      "location": "??:?",
+      "native_objects": [],
+      "native_symbols": [],
+      "unresolved_reason": null,
+      "samples": 25
+    },
+    {
+      "file": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "function": "__memset_avx512_unaligned_erms",
+      "location": "./string/../sysdeps/x86_64/multiarch/memset-vec-unaligned-erms.S:228",
+      "native_objects": [],
+      "native_symbols": [],
+      "unresolved_reason": null,
+      "samples": 18
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_generated_transport::RTAdd_0(sirius_generated_transport::RetainedTriple_0*, sirius_generated_transport::RetainedTriple_0*) [clone .part.0]",
+      "location": "transport.cpp:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o"
+      ],
+      "native_symbols": [
+        "_ZN26sirius_generated_transportL7RTAdd_0EPNS_16RetainedTriple_0ES1_.part.0"
+      ],
+      "unresolved_reason": null,
+      "samples": 17
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_tagged_subtract8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_tagged_subtract8"
+      ],
+      "unresolved_reason": null,
+      "samples": 16
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_simd_dopri_phase_packet",
+      "location": "??:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/dopri_phase.o"
+      ],
+      "native_symbols": [
+        "sirius_simd_dopri_phase_packet"
+      ],
+      "unresolved_reason": null,
+      "samples": 16
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_native_dense_divide8",
+      "location": ":?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/rows_adapter.o"
+      ],
+      "native_symbols": [
+        "sirius_native_dense_divide8"
+      ],
+      "unresolved_reason": null,
+      "samples": 14
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "ComputeOwnedRow_0___s_5B_vyRowID_5D_unuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "location": "transport.ispc:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/transport.o"
+      ],
+      "native_symbols": [
+        "ComputeOwnedRow_0___s_5B_vyRowID_5D_unuun_3C_s_5B_vyKernelContext_0_5D__3E_"
+      ],
+      "unresolved_reason": null,
+      "samples": 14
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "ComputeOwnedRow_0___s_5B_vyRowID_5D_unuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "location": "dopri_phase.ispc:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-normalization-tags/objects/dopri_phase.o"
+      ],
+      "native_symbols": [
+        "ComputeOwnedRow_0___s_5B_vyRowID_5D_unuun_3C_s_5B_vyKernelContext_0_5D__3E_"
+      ],
+      "unresolved_reason": null,
+      "samples": 12
+    },
+    {
+      "file": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "function": "__nextafterf",
+      "location": "./math/../sysdeps/ieee754/flt-32/s_nextafterf.c:73",
+      "native_objects": [],
+      "native_symbols": [],
+      "unresolved_reason": null,
+      "samples": 12
+    },
+    {
+      "file": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "function": "sirius_generated_endpoint::RTAdd_0(sirius_generated_endpoint::RetainedTriple_0*, sirius_generated_endpoint::RetainedTriple_0*) [clone .part.0]",
+      "location": "endpoint.cpp:?",
+      "native_objects": [
+        "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o"
+      ],
+      "native_symbols": [
+        "_ZN25sirius_generated_endpointL7RTAdd_0EPNS_16RetainedTriple_0ES1_.part.0"
+      ],
+      "unresolved_reason": null,
+      "samples": 11
+    }
+  ],
+  "observer_wall_seconds": 3.4116482759127393,
+  "observer_peak_rss_kib": 19072,
+  "owned_wall_seconds": 24.55879962304607,
+  "owned_peak_sampled_rss_kib": 940860,
+  "minimum_sampled_available_kib": 19805860,
+  "conclusion": "This steady body sample places the majority of observed USER CPU PCs in verified native retained arithmetic/execution. Tagged multiply/divide are prominent. It does not support treating inclusive API wait/dispatch windows as dominant isolated CPU cost. Further work should reduce faithfully executed retained arithmetic work or its recurring cost with an explicit equivalence argument; another scheduling/ABI-only or arithmetic-layout variation is not justified by this capture.",
+  "limits": "One3s100Hz USER-only PC window after128 completed tiles,100 stable observed threads. No callchains, kernel/off-CPU attribution, whole-frame causal shares, timing comparison, parameter sweep or completed image. Deliberately stopped at192/16384. Seven samples have unresolved maps; source/whole frozen inputs unchanged, terminal cleanup complete. Prior initialization capture is separate and not pooled."
+}

@@ -1,0 +1,43 @@
+{
+  "source": "db09db3f7664cd2c259de422ab147c4ba5b751f6",
+  "original_argv": [
+    "/usr/bin/cmake",
+    "-DSIRIUS_RENDER_TESTS=/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+    "-P",
+    "/home/astra/.project/Sirius/tests/operational/vulkan_runtime_profile.cmake"
+  ],
+  "executable": "bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+  "executable_identity": {
+    "bytes": 12469552,
+    "sha256": "c96e7640e3231d47cdea77af7acc0baaf87d9ca25a900215039786d79070688b"
+  },
+  "original_action": {
+    "bytes": 85981,
+    "sha256": "02fe1749a430521e60e8a4fc00640894c6ecece8587998f7d25ad062d0fdfd0d"
+  },
+  "original_terminal_owner": {
+    "bytes": 4198,
+    "sha256": "2aa598065bf9750c72c9045358496d3188a860aadc5e830e53e11a63db84a085"
+  },
+  "trigger_completed_tiles": 128,
+  "trigger_total_tiles": 16384,
+  "wait_seconds": 30,
+  "captures": 1,
+  "capture_seconds": 3,
+  "sampler": "out/native-cpu-runtime-observe/all_threads.py",
+  "sampler_identity": {
+    "bytes": 15441,
+    "sha256": "c11b84990fe85213be1c5ec1298d58e7d9909aba86ad85ff6046ac01f4e511ba"
+  },
+  "previous_initialization_capture_reused": false,
+  "removed_unused_historical_input": "out/native-cpu-normalization-tags-cohort/cold-frame/decode_profile.py",
+  "historical_observer_only_input_change": {
+    "path": "out/native-cpu-normalization-tags-cohort/cold-frame/profile_existing_frame.py",
+    "identity": {
+      "bytes": 3993,
+      "sha256": "d297e2077c9833e3e9c60cc1092bbc70d7d11db89cb737a208dc779edef9c27e"
+    },
+    "reason": "Previously pushed completed-tile trigger repair; no render input change. This diagnostic uses its separate controller."
+  },
+  "scope": "One purpose-specific steady-render USER-PC diagnostic. Original128x128 one-SPP scene and executable/provider/resource/count/cache bytes retained; no acceptance retry or completed frame. Stop deliberately immediately after a single3s100Hz capture after at least128 completed tiles. No speed comparison, full science or release claim."
+}
