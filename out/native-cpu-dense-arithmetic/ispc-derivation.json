@@ -1,0 +1,99 @@
+{
+  "status": "source bridge prepared; not compiled or renderer-qualified",
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-predicated-products/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 630342,
+        "sha256": "616af22dd2cca9888661b1124850917568e19b65096203e2a2e56923496184e7"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 624299,
+        "sha256": "9ac822c9e422ba1e60645c8ab186584e4d10e1c4bc82e0e01343c464576baea7"
+      },
+      "scratch_columns": 2295,
+      "instructions": 3144,
+      "inverse_restores_exact_AB_source": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-predicated-products/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 798682,
+        "sha256": "518ecc8423a39f4c190a4f575eda1041a088cd0fe512ee10c0a61102cf9b0077"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 792639,
+        "sha256": "798757c45bf78b02dc00290358532f54b7984a5b273f2d7eeaf8423434d7f40a"
+      },
+      "scratch_columns": 3060,
+      "instructions": 4148,
+      "inverse_restores_exact_AB_source": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-predicated-products/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 407177,
+        "sha256": "ead4d78222224f740d5738a79247633bd61fa9d0523421afcebddaaecb30313f"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 401142,
+        "sha256": "b72fcac38a74e69f00462346dbb292aa39cbed38ce49584156af8748cf08af82"
+      },
+      "scratch_columns": 3145,
+      "instructions": 2088,
+      "inverse_restores_exact_AB_source": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-predicated-products/ispc-derivation.json": {
+      "bytes": 8139,
+      "sha256": "f9a8d2654dd3067584d33a00758a474e164c522c71597fc069ddef73d28353e7"
+    },
+    "out/native-cpu-dense-arithmetic/derive_ispc.py": {
+      "bytes": 6584,
+      "sha256": "560f52d68735b07b689ca57d26aef7addbc0f905113092f20b820fcabdc794ee"
+    },
+    "out/native-cpu-dense-arithmetic/retained8.cpp": {
+      "bytes": 10015,
+      "sha256": "e57d49b66e833705febf35f40fb3aed0a27a0ebcb505a58f145a22f5f7a0f711"
+    },
+    "out/native-cpu-dense-arithmetic/cpp-code-inspection.json": {
+      "bytes": 5449,
+      "sha256": "6c57a63d635bb2be86809fa2c28f485fe27afcfe095383229113ee4b6210c7c3"
+    },
+    "out/native-cpu-dense-arithmetic/cpp-build-result.json": {
+      "bytes": 4353,
+      "sha256": "cc7dc02217659fd7a9a9abee137fd4268a6cac00934b9f72cf6da73f61c52166"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/build/owner.json": {
+      "bytes": 3253,
+      "sha256": "dcb609dbba5a7f867a2e3e7677ecac04249926c273bdbe89ff344398bbcfaec0"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/run/owner.json": {
+      "bytes": 1940,
+      "sha256": "1d96b17364a96434488f8f8726c8ce2acf4b7afa4233f3a950b13c2468cbc85a"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/run/stdout.log": {
+      "bytes": 175,
+      "sha256": "a4705279a6e222cac203c9b5be9f7244b968e3cf5091eb71124d782b072d2c68"
+    },
+    "bin/linux-gcc/native-cpu-predicated-products/ispc-source/transport.ispc": {
+      "bytes": 630342,
+      "sha256": "616af22dd2cca9888661b1124850917568e19b65096203e2a2e56923496184e7"
+    },
+    "bin/linux-gcc/native-cpu-predicated-products/ispc-source/endpoint.ispc": {
+      "bytes": 798682,
+      "sha256": "518ecc8423a39f4c190a4f575eda1041a088cd0fe512ee10c0a61102cf9b0077"
+    },
+    "bin/linux-gcc/native-cpu-predicated-products/ispc-source/dopri_phase.ispc": {
+      "bytes": 407177,
+      "sha256": "ead4d78222224f740d5738a79247633bd61fa9d0523421afcebddaaecb30313f"
+    }
+  },
+  "scope": "Only two shared private arithmetic-store bodies call the checked C++26 dense AVX2 implementation via scalar C ABI. Every ordered canonical tuple, all original ISPC arithmetic helpers/generic fallback, row/control/refusal/rollback/publication remain. C++ operands are loaded in full before writes; each destination field merges the explicit active lane mask. Actual shared scratch layout is five varying32 columns per register, eight physical words per column, with complete context initialization before use. Existing original index guards dominate calls. No eligibility/count/precision/physical operation changes.",
+  "proof_limits": "The bridge inverse restores exact AB source. Dense arithmetic equivalence is coordinator source reasoning plus one focused finite scalar-reference comparison, not machine-checked proof or independent scientific validation. ISPC uniform pointer reinterpretation/lanemask ABI, linked call targets and complete row integration still require actual code association and fresh full38/C8 before the sole original frame."
+}
