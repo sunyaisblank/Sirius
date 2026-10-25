@@ -1,0 +1,39 @@
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -8,10 +8,10 @@
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dispatch-admission/admission.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-arithmetic-closure/objects/transport.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-arithmetic-closure/objects/endpoint.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-arithmetic-closure/objects/dopri_phase.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/objects/rows_adapter.o'
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-direct-compound/objects/transport.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-direct-compound/objects/endpoint.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-direct-compound/objects/dopri_phase.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-direct-compound/objects/rows_adapter.o'
+   ),
+   vs_module_defs : vulkan_api_def,
+   include_directories : [ inc_src, inc_util, inc_include, inc_gallium, inc_gallium_aux, inc_gallium_winsys, inc_gallium_drivers ],
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -847,7 +847,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-normalized-arithmetic-v32";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-direct-compound-v33";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AH";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AI";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
