@@ -1,0 +1,26 @@
+{
+  "profile_controller": {
+    "bytes": 1453,
+    "sha256": "758c5e435e9aa665d2eb3a4a3281476f23db7833e6407a3b298ac6a05e139e87"
+  },
+  "trigger_condition": "b'Tile' in stdout; does not require a completed Tile n/total record",
+  "configuration_header_matches_trigger": true,
+  "first_matching_header": "Tile size:   64 px",
+  "steady_state_established": false,
+  "capture_scope": "One valid3s USER-PC window with272samples and34observed stable threads. The trigger is also eligible on the configuration header, so this may include initialization. No steady-state, whole-frame, kernel/off-CPU or uninstrumented-speed attribution. No capture/render retry.",
+  "observer_peak_rss_kib": 18748,
+  "observer_wall_seconds": 3.369342273916118,
+  "decoded_sample_count": 272,
+  "sampled_native_object_instructions": 0,
+  "per_file_samples": {
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so": 109,
+    "/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1": 143,
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": 19,
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": 1
+  },
+  "decoded_record": {
+    "bytes": 245286,
+    "sha256": "332bfda488a5ca300d154badb12454db53a1b099cde3d22469e1ac622c860e73"
+  },
+  "interpretation": "This early-window capture contains LLVM/NIR compilation and zero joined native-object instruction samples. It provides no evidence about the dominant steady-state native/host cost. It cannot justify another arithmetic-only trial or an unchanged frame/capture retry."
+}
