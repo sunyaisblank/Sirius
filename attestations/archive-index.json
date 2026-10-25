@@ -4,5 +4,12 @@
   "verified_objects": "attestations/cleanup/2026-10-26-cold-payloads/objects.json",
   "payload_directory": "attestations/cleanup/2026-10-26-cold-payloads/payloads",
   "disposition": "Retain: one local compressed copy of each unique historical payload. Git stores the recovery index and source; payload blobs remain with project data.",
-  "restore_command": "python3 -B scripts/maintenance/archive_cold_payloads.py restore attestations/cleanup/2026-10-26-cold-payloads/plan.json --path <original-relative-path>"
+  "restore_command": "python3 -B scripts/maintenance/archive_cold_payloads.py restore attestations/cleanup/2026-10-26-cold-payloads/plan.json --path <original-relative-path>",
+  "stores": [
+    {
+      "archive_index": "attestations/cleanup/2026-10-26-generated-snapshots/plan.json",
+      "verified_objects": "attestations/cleanup/2026-10-26-generated-snapshots/objects.json",
+      "payload_directory": "attestations/cleanup/2026-10-26-generated-snapshots/payloads"
+    }
+  ]
 }
