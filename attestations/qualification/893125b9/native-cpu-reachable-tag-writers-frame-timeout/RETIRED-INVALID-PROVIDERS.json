@@ -1,0 +1,62 @@
+{
+  "status": "complete",
+  "source": "28c437bd08dca038189146abf0c05dcdc99f6bef",
+  "members": [
+    {
+      "path": "bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "archive": "attestations/qualification/0ce77927/native-cpu-normalization-tags-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-normalization-tags/provider/libvulkan_lvp.so",
+      "sha256": "c1d1740d669efa5e50d95be448c5528e569b9074c969ffa0ae134280fc41e5b1",
+      "bytes": 17592712,
+      "allocated_bytes": 17596416,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-normalization-tags/provider/lvp_icd.json",
+      "archive": "attestations/qualification/0ce77927/native-cpu-normalization-tags-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-normalization-tags/provider/lvp_icd.json",
+      "sha256": "683c8a4e8969781ba1cdbe8871064d224ae495f0b56b659bb563768c34ed17ba",
+      "bytes": 203,
+      "allocated_bytes": 4096,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-refinement/provider/libvulkan_lvp.so",
+      "archive": "attestations/qualification/5bc67064/native-cpu-predicated-refinement-finite-compatibility/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-predicated-refinement/provider/libvulkan_lvp.so",
+      "sha256": "107edb829f7c45a714a36a09c9edb400fe35a22c041c76c44defc4f99cd7f96c",
+      "bytes": 17596808,
+      "allocated_bytes": 17600512,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-refinement/provider/lvp_icd.json",
+      "archive": "attestations/qualification/5bc67064/native-cpu-predicated-refinement-finite-compatibility/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-predicated-refinement/provider/lvp_icd.json",
+      "sha256": "1e9cc50e2a3990e5f2db217ab16161d9e49d047e48257d5a10a37d0f06c3a2ca",
+      "bytes": 206,
+      "allocated_bytes": 4096,
+      "removed": true
+    }
+  ],
+  "recovery_archives": [
+    {
+      "path": "attestations/qualification/0ce77927/native-cpu-normalization-tags-frame-timeout/actual-products.zip",
+      "sha256": "c2b106330f5c537273865d8a5e03aad23609c50585728f61321fc32d857278a2",
+      "verified_members": 12
+    },
+    {
+      "path": "attestations/qualification/5bc67064/native-cpu-predicated-refinement-finite-compatibility/actual-products.zip",
+      "sha256": "6bed0db70fe21d1c73c4166c23c1dcf091d82903edc0197fbd3c0e1a21c2e522",
+      "verified_members": 6
+    }
+  ],
+  "same_user_map_tables_checked": 32,
+  "privileged_read_only_map_checks": [
+    243,
+    247,
+    44340
+  ],
+  "gross_allocated_bytes_retired": 35205120,
+  "scope": "Four untracked superseded AJ/AK provider names whose coherent-tag claims are disproved. All old archive payloads independently verified against pushed recovery; no current corrected AL/owned-host frozen-input, Ninja or same-user mapping consumer. Old source, raw/CPP objects, finite records and authentic recovery retained. Corrected AL products and all scientific/public resources/caches retained. Gross retired allocation, not net drive gain or release qualification."
+}
