@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "executable": {
+    "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writer-check",
+    "bytes": 439848,
+    "sha256": "25beb42f69fcb48b09f9c4102bee0e76002d8dd4c36c0d05a18e9564038f0a1e"
+  },
+  "objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writers.o",
+      "bytes": 75144,
+      "sha256": "166663d85935e4c464b206512b8266b02e6598b07661d47e96bcb5345ec73bac"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/driver.o",
+      "bytes": 149200,
+      "sha256": "0437d5db6318ca7a5af063cc9f02ed1a8e9b25bd7de3e4e8ae9c36e8cb6abe03"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-refinement/probe/retained8.o",
+      "bytes": 232296,
+      "sha256": "4ba2041a0b651015c4066f7c1a50c9e423a01d549f8532cd8bce66e2e36d8061"
+    }
+  ],
+  "linked_code": {
+    "bytes": 117484,
+    "sha256": "4622734139196a7383a3d6000c0977465994136b9ea0aa6aa90bad3a91843a0d"
+  },
+  "runtime_libraries": {
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    }
+  },
+  "original_owner": {
+    "bytes": 2063,
+    "sha256": "bd1104b36d4138835928000e4290f239855369dc9c23d6e4f8685654029a5557"
+  },
+  "original_owner_passed": false,
+  "ELF_type_authority": {
+    "path": "/usr/include/elf.h",
+    "bytes": 194903,
+    "sha256": "9f2df1ad48c311b675db6ee074ceda3efc8603ec08ce948d1d7fa8cae7faeff3"
+  },
+  "new_compilations": 0,
+  "new_links": 0,
+  "GOTPCREL9_checked": 4,
+  "writer_pointer_targets_checked": 6,
+  "correction": "Both compiler commands and linker exited0. Original reader did not support driver GOTPCREL9 function-pointer operands; original failed owner/build result/source are unchanged. Existing bytes now have full opcode and explicit GOT target joins. No compiler/link/workload repeated."
+}

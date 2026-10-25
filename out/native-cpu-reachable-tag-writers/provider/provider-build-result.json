@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "library": "bin/linux-gcc/native-cpu-reachable-tag-writers/provider/libvulkan_lvp.so",
+  "library_identity": {
+    "bytes": 18514544,
+    "sha256": "3d1094d4fe90030272171015b634a5ca5687deca39d1cb1bbb5710be52317ed0"
+  },
+  "ICD": "bin/linux-gcc/native-cpu-reachable-tag-writers/provider/lvp_icd.json",
+  "ICD_identity": {
+    "bytes": 206,
+    "sha256": "4157315234858d1a9a6f98c4a3c9e54711f66828a8a32472ca05620f37e8bb98"
+  },
+  "actual_build_target": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+  "target_identity": {
+    "bytes": 18514544,
+    "sha256": "3d1094d4fe90030272171015b634a5ca5687deca39d1cb1bbb5710be52317ed0"
+  },
+  "reused_build_inputs_unchanged": 862,
+  "native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/objects/transport.o",
+      "bytes": 1416640,
+      "sha256": "3c582032fd4025d69f7a6ec2f36ee651a41b00f92b2d3b0b3edb4ce0ac33c856"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/objects/endpoint.o",
+      "bytes": 984056,
+      "sha256": "fd9424a144a2356a4057d639c517d2266648aa883de8fea6f4cf8c30bcd86805"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/objects/dopri_phase.o",
+      "bytes": 1253440,
+      "sha256": "418b4c837ef8883c0cee5e57791b8d9f56c569744e9f60025a561ca367c627a7"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-refinement/objects/rows_adapter.o",
+      "bytes": 235760,
+      "sha256": "30241226fdf18a91cd827662f7ba917edfa2ed6c2ef64a5769167a2a7a886af2"
+    }
+  ],
+  "scope": "One private provider build only. No loading/execution/FP equivalence/benefit/scientific/release qualification or adoption."
+}

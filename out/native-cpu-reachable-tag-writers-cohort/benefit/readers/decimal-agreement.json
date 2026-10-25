@@ -1,0 +1,227 @@
+{
+  "agrees_on_all22": true,
+  "all22_pass": true,
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_ms": "32.171880000000002",
+      "candidate_ms": "20.382107999999999",
+      "improvement_percent": "36.6462015897112704233509767093952592542943272575143725331359",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_ms": "4.6603949999999999",
+      "candidate_ms": "3.464564",
+      "improvement_percent": "25.6594344470801278788479184077771922518996438666077071128015",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_ms": "7.3020399999999999",
+      "candidate_ms": "2.8533379999999999",
+      "improvement_percent": "60.9240979233200593385423514979383752833776793599922115378398",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_ms": "19.5455389999999998",
+      "candidate_ms": "12.8949749999999997",
+      "improvement_percent": "34.0259943714010658291489876170830165302577495262015187225868",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_ms": "40.974862999999999",
+      "candidate_ms": "27.468844000000001",
+      "improvement_percent": "32.9617185053187324375366064144920371676802534883896297024899",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_ms": "2.7230919999999998",
+      "candidate_ms": "1.7614479999999999",
+      "improvement_percent": "35.3144146433539509729685697988867781895411391819871080037795",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_ms": "6.3340700000000001",
+      "candidate_ms": "3.5915819999999998",
+      "improvement_percent": "43.2974059333098664318928282556102721963472418901232194095228",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_ms": "5.6893199999999999",
+      "candidate_ms": "3.9819819999999999",
+      "improvement_percent": "30.0095266218106914360508219226672332730593800782384058738018",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_ms": "9.9367670000000001",
+      "candidate_ms": "5.3190510000000000",
+      "improvement_percent": "46.4710101384081970879360446067800816106884200185021787198148",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_ms": "12.5146119999999997",
+      "candidate_ms": "8.9003079999999998",
+      "improvement_percent": "28.8806716500679364781106673559181014507841079512037956298791",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "instance",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": "8889.4849410000005045",
+      "candidate_ms": "623.9139399999999879",
+      "improvement_percent": "92.9814388106740598111851978910885727161127392865240992730226",
+      "minimum_percent": "0",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_ms": "34.416656000000003",
+      "candidate_ms": "22.231712000000002",
+      "improvement_percent": "35.4042066143788052443962062108411772140611617664559961263092",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_ms": "5.363979",
+      "candidate_ms": "3.9430579999999998",
+      "improvement_percent": "26.4900552369798651337001878642701621315072262587157779700480",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_ms": "7.467625",
+      "candidate_ms": "3.0205199999999999",
+      "improvement_percent": "59.5517985972782524564369528464538591587017291307477276912003",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_ms": "20.3816170000000003",
+      "candidate_ms": "13.9116859999999995",
+      "improvement_percent": "31.7439533870153712768135120925581428085880709186399272159603",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_ms": "38.309957999999995",
+      "candidate_ms": "24.644933000000002",
+      "improvement_percent": "35.6696423420772081856161708761476827534202564445101654014155",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_ms": "2.6120779999999999",
+      "candidate_ms": "1.674358",
+      "improvement_percent": "35.8993873842970974028871796438351918620799089397480420599963",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_ms": "5.7668710000000001",
+      "candidate_ms": "3.5682320000000001",
+      "improvement_percent": "38.1253369461532946007403851039273359723082915513918037648442",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_ms": "5.238925",
+      "candidate_ms": "3.403902",
+      "improvement_percent": "35.0267087236408232604971439751475732139704233215783772434230",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_ms": "10.0883109999999996",
+      "candidate_ms": "4.8459450000000000",
+      "improvement_percent": "51.9647540604170490764907648234495973207314811547581084973087",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_ms": "12.3236610000000000",
+      "candidate_ms": "8.7548750000000002",
+      "improvement_percent": "28.9588134564882935355005302401615883461903082209093547769612",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "instance",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": "9595.8918429999995955",
+      "candidate_ms": "494.4542339999999968",
+      "improvement_percent": "94.8472300220776882130292414062200557224775869971226956587722",
+      "minimum_percent": "0",
+      "passed": true
+    }
+  ],
+  "scope": "Independent Decimal/raw-XML numerical witness only. No additional execution, provenance or scientific acceptance."
+}

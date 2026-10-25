@@ -1,0 +1,2170 @@
+{
+  "source": "893125b9830643f9a066278dd4726e72a81af5df",
+  "accepted": false,
+  "original_frame_passed": false,
+  "all22_original_gates_pass": true,
+  "all8_original_controls_pass": true,
+  "original_frame_attempted": true,
+  "full_scientific_and_release_qualification": false,
+  "owners": {
+    "out/native-cpu-reachable-tag-writers/compile/ispc-dense/owner.json": {
+      "source": {
+        "revision": "c7679df82eb4ad0f08537be3cd97614008601568",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 32.00756951898802,
+      "peak_sampled_rss_kib": 247008,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers/fixture/build/owner.json": {
+      "source": {
+        "revision": "45be7b7604e05b904ad68e1085838ca395de280a",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": false,
+      "child_exit": 1,
+      "wall_seconds": 4.359739361912943,
+      "peak_sampled_rss_kib": 392092,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers/fixture/run/owner.json": {
+      "source": {
+        "revision": "46a1c51f1dfddbe8ee356f790486c1ed4f19beb6",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.2698540830751881,
+      "peak_sampled_rss_kib": 32664,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers/provider/build/owner.json": {
+      "source": {
+        "revision": "a8f4defde68360b1ff5aa538fd95fd2040a64209",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.82936543202959,
+      "peak_sampled_rss_kib": 243144,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers/provider/configure/owner.json": {
+      "source": {
+        "revision": "a8f4defde68360b1ff5aa538fd95fd2040a64209",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 3.3432296820683405,
+      "peak_sampled_rss_kib": 132176,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 58.58477264107205,
+      "peak_sampled_rss_kib": 2346140,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 59.77736821305007,
+      "peak_sampled_rss_kib": 2345652,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 14.18324047292117,
+      "peak_sampled_rss_kib": 690952,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 13.543136787018739,
+      "peak_sampled_rss_kib": 690384,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": false,
+      "child_exit": -15,
+      "wall_seconds": 300.22928448498715,
+      "peak_sampled_rss_kib": 925460,
+      "stop_reason": "diagnostic_timeout"
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/control-8/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 15.348477174062282,
+      "peak_sampled_rss_kib": 839996,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 78.14147078304086,
+      "peak_sampled_rss_kib": 2573388,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 79.83856535097584,
+      "peak_sampled_rss_kib": 984968,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 74.66469000198413,
+      "peak_sampled_rss_kib": 2631368,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 111.94312451896258,
+      "peak_sampled_rss_kib": 2774668,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 128.53357289999258,
+      "peak_sampled_rss_kib": 2558376,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 123.25880056805909,
+      "peak_sampled_rss_kib": 2649488,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 16.110931532923132,
+      "peak_sampled_rss_kib": 805756,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-compatibility/link/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.5592999369837344,
+      "peak_sampled_rss_kib": 70956,
+      "stop_reason": null
+    },
+    "out/native-cpu-reachable-tag-writers-compatibility/run/owner.json": {
+      "source": {
+        "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.7817322970367968,
+      "peak_sampled_rss_kib": 42668,
+      "stop_reason": null
+    }
+  },
+  "archives": [
+    {
+      "file": "source-build-and-trial.zip",
+      "identity": {
+        "bytes": 13047836,
+        "sha256": "2ec09aff979b58f6e2225c005298268b0ceced27dc8dac7eb085d3f0eec7a9dc",
+        "mode": 420,
+        "mtime_ns": 1792957676197928555
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/dopri_phase.ispc": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/dopri_phase.ispc",
+          "bytes": 399580,
+          "sha256": "b45ae5e43d8112bd73a02cbc7f28c25c0f1e4520d7a15df7c5a76654cfdfad54",
+          "mode": 420,
+          "mtime_ns": 1792955478619549365
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/endpoint.ispc": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/endpoint.ispc",
+          "bytes": 791036,
+          "sha256": "55492333bed6f0cc6b02e110e2141988d32ef682ed564a22b0a5bc208961a3ee",
+          "mode": 420,
+          "mtime_ns": 1792955478611834663
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/transport.ispc": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/transport.ispc",
+          "bytes": 622708,
+          "sha256": "06e56c09af6c23779eb4c1c2563afaa36f00721c5bbc3e46c5418615bc8ffa9e",
+          "mode": 420,
+          "mtime_ns": 1792955478592547902
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/actions.json",
+          "bytes": 195972,
+          "sha256": "2852ce201e87303f92dedb9dc7633a4b167bdc9148c7a69865945d589286453a",
+          "mode": 420,
+          "mtime_ns": 1792956351993855550
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/affected-control/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/affected-control/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/affected-control/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/affected-control/prepare.py",
+          "bytes": 2874,
+          "sha256": "e8e67ee63e804ab60410ec824d6463e2f349ceb353cadbee205870afb2ba2ad8",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/affected-control/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/affected-control/read_result.py",
+          "bytes": 2558,
+          "sha256": "67870cfa88418452cb3d6133b1510adfb7a2e822a7cdef18e6d59a9e2378f8d4",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/affected-control/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/affected-control/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/prepare.py",
+          "bytes": 2133,
+          "sha256": "ca222114a5c096034c133eede149f0de5729819a8c1c0fc0ca70db01e5355a0e",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/providers.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/providers.json",
+          "bytes": 1936,
+          "sha256": "51d62fa51ab25f82d039743a546febd360b6ee098069412d17b31c3fe5306536",
+          "mode": 420,
+          "mtime_ns": 1792956429761238498
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/benefit.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/benefit.json",
+          "bytes": 234779,
+          "sha256": "8262e883e0afdc58ff5e8bc00b51a60be470cd49d81ce2389df5f6247edbf180",
+          "mode": 420,
+          "mtime_ns": 1792956601212431666
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/decimal-agreement.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/decimal-agreement.json",
+          "bytes": 7949,
+          "sha256": "94e23ca98b61abca696d3bdf27777baad0ad22481f7d8cf15f3889b2c230c8a4",
+          "mode": 420,
+          "mtime_ns": 1792956629620075450
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/decimal_check.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/decimal_check.py",
+          "bytes": 546,
+          "sha256": "aaf9b371f593602d62325669d7e3ba7137b8ae961353ebc0b750a22fdebeb0de",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/expected-readback-layout.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/expected-readback-layout.json",
+          "bytes": 3455,
+          "sha256": "a40ce35b744ff05c987833de8337ec6f5445daea9553348cdb9209ad78314392",
+          "mode": 420,
+          "mtime_ns": 1792956253304069821
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/native_evidence.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/native_evidence.py",
+          "bytes": 518,
+          "sha256": "bf50b12e63d42c0715007e173e25ea2abbf01f71030b9d62099be034d59e40e8",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/numeric_gates.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/numeric_gates.py",
+          "bytes": 516,
+          "sha256": "5317872eae1fccf0ba9a04f552f3c303e309fda2f0279e573ef1137d8772ca12",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/read_results.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/read_results.py",
+          "bytes": 545,
+          "sha256": "2d003d557112ec89179f70ce0d6a58f41589c4edb4d9c888a7d33a3041049f17",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/run_abba.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/run_abba.py",
+          "bytes": 541,
+          "sha256": "07bb5aab4c0bbca60010a0ff1c548edff7e8360b7313ff175b48ce7d84361c22",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/sole-ABBA-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/readers/sole-ABBA-inputs.json",
+          "bytes": 2263,
+          "sha256": "7e172cbf6842d9cfb9f920c1db6213c75c0eda655929512757b0e2fb42d3ae3f",
+          "mode": 420,
+          "mtime_ns": 1792956429857613015
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/gtest.xml",
+          "bytes": 40942,
+          "sha256": "39a041656554fde1fc53000380f159f6f0d1ee5d7d2d5b5d729174f12333431b",
+          "mode": 420,
+          "mtime_ns": 1792956492233053973
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/inputs-after.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956494254063341
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/inputs-before.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956431673308924
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/owner.json",
+          "bytes": 3800,
+          "sha256": "ec4b966cb866475e44e69997f2adbb7c15e0035b08d2e4cd1e24fc44c2898e55",
+          "mode": 420,
+          "mtime_ns": 1792956494277194680
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/samples.jsonl",
+          "bytes": 816753,
+          "sha256": "15bcd145bb7c8f68397e56e4de11c0cf478ac3dd2662042ddb6d96e6506c8e39",
+          "mode": 420,
+          "mtime_ns": 1792956492541667352
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956431681018885
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a1/stdout.log",
+          "bytes": 708,
+          "sha256": "c63a93128e308e4b6a2fdbefce618ab4f71426e4f955f4c933fc2195962b42cf",
+          "mode": 420,
+          "mtime_ns": 1792956492233053973
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/gtest.xml",
+          "bytes": 40844,
+          "sha256": "4ba518f1e21fc9e56eee0d465077e2a7a36d4e90c579c0a1f1c29b782f2cb719",
+          "mode": 420,
+          "mtime_ns": 1792956593429711137
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/inputs-after.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956595323427128
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/inputs-before.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956531673152234
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/owner.json",
+          "bytes": 3800,
+          "sha256": "45d2e573c6360041281b7dfcdacf815c17e7846096c47a04d3d36f1354f153fb",
+          "mode": 420,
+          "mtime_ns": 1792956595346521226
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/samples.jsonl",
+          "bytes": 832041,
+          "sha256": "3a641641cf0959ce941965e9fe0fdac20451c1605dddaeab2e23d2715c38d3c2",
+          "mode": 420,
+          "mtime_ns": 1792956593726085387
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956531677004187
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/a2/stdout.log",
+          "bytes": 708,
+          "sha256": "cb4f91033fa11fc00fea9545f2d29b50a4d0cdeef1aa1d8b4998c9d615877400",
+          "mode": 420,
+          "mtime_ns": 1792956593429711137
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/actions.json",
+          "bytes": 437142,
+          "sha256": "0b4a51f7c43e674ddf261c6e6cbbdc20f418df982eb4bcb97a016bcb2e53cfec",
+          "mode": 420,
+          "mtime_ns": 1792956429822918188
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/gtest.xml",
+          "bytes": 40752,
+          "sha256": "aec1c48ea12ec61ff398d1308280486bcd0cec1ba0fed2af750c59ad46ead909",
+          "mode": 420,
+          "mtime_ns": 1792956510068898527
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/inputs-after.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956511803073014
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/inputs-before.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956496004334732
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/owner.json",
+          "bytes": 3781,
+          "sha256": "4ef909eb1aa2112bb65513f786f9f015e8c0f75743e4fb45afa5d4817285da91",
+          "mode": 420,
+          "mtime_ns": 1792956511826195341
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/samples.jsonl",
+          "bytes": 193483,
+          "sha256": "7393b1651bbc2821d510fbe0794d2adbd30384f5d6649d94898c4f0a9a6b59ae",
+          "mode": 420,
+          "mtime_ns": 1792956510153680389
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956496008189955
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b1/stdout.log",
+          "bytes": 708,
+          "sha256": "476ad339a39acf4a910d2008e804d6413f57cfb486853e64f06bf4233f611094",
+          "mode": 420,
+          "mtime_ns": 1792956510068898527
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/gtest.xml",
+          "bytes": 40703,
+          "sha256": "3c399f4ae3e185a7c35067a680149f4765b3774c309afb9dff0c090ccef0b199",
+          "mode": 420,
+          "mtime_ns": 1792956528206396893
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/inputs-after.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956529905107012
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/inputs-before.json",
+          "bytes": 1098063,
+          "sha256": "6b9100e263ff85ee3ca9775f1ef6f87eb327c6d650f6a32de0b62a95655e823e",
+          "mode": 420,
+          "mtime_ns": 1792956513672127730
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/owner.json",
+          "bytes": 3597,
+          "sha256": "091020e724b55a43011befea4e7ad8ae6cfdceb84258806bf5a0556d8e8686c3",
+          "mode": 420,
+          "mtime_ns": 1792956529935922615
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/samples.jsonl",
+          "bytes": 186543,
+          "sha256": "b482cc5f7b51699e95df4405b1047ce896b41264f2eb632fb2f53a2b2fd98f49",
+          "mode": 420,
+          "mtime_ns": 1792956528314251501
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956513683688893
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/b2/stdout.log",
+          "bytes": 708,
+          "sha256": "013b0f20c08fae779fd6ec942938fc53a080e3676b17c42d41574591d64db772",
+          "mode": 420,
+          "mtime_ns": 1792956528206396893
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/owned_guard.py",
+          "bytes": 514,
+          "sha256": "5a578e7ed136a69ac15ccb6fc14c2de71d17d2e09ed93fbe2e028ad248ab3042",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/run_case.py",
+          "bytes": 541,
+          "sha256": "4ab034a97461cb7f2e995bffba33dc7b2d988641db6b86383add274704864085",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/benefit/runtime/run_owned.py",
+          "bytes": 512,
+          "sha256": "95127cdfbdae57cb6b08f75b90a66d45c06f4acded269064f2645e791b619347",
+          "mode": 420,
+          "mtime_ns": 1792956253292504896
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/actions.json",
+          "bytes": 69978,
+          "sha256": "177cc3361052c74c2c0c2d77df19a28002df7dd151fe5cdf318d8f8f98c0181e",
+          "mode": 420,
+          "mtime_ns": 1792957350627899630
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame-inputs.json",
+          "bytes": 1906,
+          "sha256": "793d8c963d572615412ecef6dfb345dc049056bb3e075fd821730e4081b57c7e",
+          "mode": 420,
+          "mtime_ns": 1792957350181302296
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/inputs-after.json",
+          "bytes": 1136502,
+          "sha256": "dae968fa819eb4205bc672d1dbb655880007fb90175ed36dfabcac3b2c92c73c",
+          "mode": 420,
+          "mtime_ns": 1792957666542476973
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/inputs-before.json",
+          "bytes": 1136502,
+          "sha256": "dae968fa819eb4205bc672d1dbb655880007fb90175ed36dfabcac3b2c92c73c",
+          "mode": 420,
+          "mtime_ns": 1792957352664537475
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/owner.json",
+          "bytes": 3903,
+          "sha256": "b90f914b8d8dd809c7336e57bfb3e035dbc2e9e7da6c2eedb23886b2c55b97dc",
+          "mode": 420,
+          "mtime_ns": 1792957666584824869
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/samples.jsonl",
+          "bytes": 5307794,
+          "sha256": "b869e29a2c1afaf1757912e8084c9ceb4ff42a263b5a29a040d5acaccd343b86",
+          "mode": 420,
+          "mtime_ns": 1792957664532838786
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/stderr.log",
+          "bytes": 68109,
+          "sha256": "e20695c02dbc06ff3a1203de7906afa955ece3446d07329b48b2e52491524a50",
+          "mode": 420,
+          "mtime_ns": 1792957655551179903
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/frame/stdout.log",
+          "bytes": 769037,
+          "sha256": "9825f613b605316855a1267a0026a2941874a9b2032b32c76c92bc85f16093b0",
+          "mode": 420,
+          "mtime_ns": 1792957664467564949
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792956298283372768
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/prepare.py",
+          "bytes": 14225,
+          "sha256": "f7bfe97b69635d28ff2651f19ca3f7213b106dad8fa2db39650880e814404bf9",
+          "mode": 420,
+          "mtime_ns": 1792956298283372768
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/read_result.py",
+          "bytes": 2724,
+          "sha256": "b67374d07da9b27d6db77322b61ba98734d9a97b232b9e9680bb55bd8cec1d0d",
+          "mode": 420,
+          "mtime_ns": 1792956298283372768
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/resource-restore.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/resource-restore.json",
+          "bytes": 5378,
+          "sha256": "5d8f9b6789dd759161e0788870d73003d83d41b3cfaed37817e962077296e5c8",
+          "mode": 420,
+          "mtime_ns": 1792957350162052412
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/result.json",
+          "bytes": 2195,
+          "sha256": "b93d04d90fe602c2c34fb2a2ab7aced3c89a6c5c343150511e259b64c3e4dd5d",
+          "mode": 420,
+          "mtime_ns": 1792957675042306780
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/cold-frame/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/cold-frame/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792956298283372768
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/compatibility.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/compatibility.py",
+          "bytes": 4929,
+          "sha256": "7f60f14faad0f242f7bd75a497b842d0f6df905b720c67f0b9cd3f6e16485c90",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8-acceptance.json",
+          "bytes": 58238,
+          "sha256": "a6a401a0da0ec2daa5fb7508b7b41e76dca5f72a61633c6da7f6996f31c7dbd2",
+          "mode": 420,
+          "mtime_ns": 1792956391933905952
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/gtest.xml",
+          "bytes": 40761,
+          "sha256": "582933855c1a74349c26e356baad1fcd8bf8a3df5630ff9296138c3b82cd94ad",
+          "mode": 420,
+          "mtime_ns": 1792956370152768986
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/inputs-after.json",
+          "bytes": 1095893,
+          "sha256": "c9871af0ba1766517aa398413b14d2475b4b4cbe70b5ea7bc617caaade974874",
+          "mode": 420,
+          "mtime_ns": 1792956371922847661
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/inputs-before.json",
+          "bytes": 1095893,
+          "sha256": "c9871af0ba1766517aa398413b14d2475b4b4cbe70b5ea7bc617caaade974874",
+          "mode": 420,
+          "mtime_ns": 1792956353784867321
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/native-observation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/native-observation.json",
+          "bytes": 56887,
+          "sha256": "f45eddc8f98ebb5cf824bfb39ba553950a5ef8905de4b657e901cc69d54f5ce4",
+          "mode": 420,
+          "mtime_ns": 1792956370237609359
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/observe.gdb": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/observe.gdb",
+          "bytes": 239,
+          "sha256": "4e440b6e0c8b7cb5d146c4e95e4a3b2d104b33d440ecc795c10bdd83730c65c4",
+          "mode": 420,
+          "mtime_ns": 1792956354330626273
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/owner.json",
+          "bytes": 5195,
+          "sha256": "94cc05884da23274a5b55f8740ddb74514863ca0be2a12c1974b4e9141601929",
+          "mode": 420,
+          "mtime_ns": 1792956371938273183
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/samples.jsonl",
+          "bytes": 278476,
+          "sha256": "cfd010a70021ffc13e6dcbb133639126a746cbe115f0c52aeaae138326d123ae",
+          "mode": 420,
+          "mtime_ns": 1792956370272316784
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956353792554068
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/control-8/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/control-8/stdout.log",
+          "bytes": 3932,
+          "sha256": "7ea457787acef5349e3cb0a147271b5d6b189cf22af8118f8914b54fd9c64346",
+          "mode": 420,
+          "mtime_ns": 1792956370272316784
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/prepare.py",
+          "bytes": 3973,
+          "sha256": "c018087abae5e031574e772bb4b1b56d972f68ed3a56c63b62976d355a0687d6",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/readers/controls-1-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/readers/controls-1-8-acceptance.json",
+          "bytes": 61843,
+          "sha256": "0987d75938ff257e4d61c836a8cc25f077fe1faa8df683ebedb5ff733fcc2772",
+          "mode": 420,
+          "mtime_ns": 1792957303825323667
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/readers/native_evidence.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/readers/native_evidence.py",
+          "bytes": 499,
+          "sha256": "b9024736eaffc834151c9b99e4e3a9b82664da274ef1b98ede7d0221e7692857",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/readers/read_controls.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/readers/read_controls.py",
+          "bytes": 3210,
+          "sha256": "3062c964b288c044e6a8b8c648a7279cddf24eb2d019083f9818c53ec1112cab",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/run_controls.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/run_controls.py",
+          "bytes": 1121,
+          "sha256": "a347e191ee83311c843f0021ad2b9de41bd1d6f87e41ab0e150211ec6f72883c",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/actions.json",
+          "bytes": 430871,
+          "sha256": "8fcfea36691ae2a4541955d2ec2d9fde466fb2e11b7b26325ff4951868e67598",
+          "mode": 420,
+          "mtime_ns": 1792956629735677853
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/gtest.xml",
+          "bytes": 10965,
+          "sha256": "b08eac66cf6c6ea4b0f1ff64f322ef8d62546dc71e94dccece8fcba5218f5775",
+          "mode": 420,
+          "mtime_ns": 1792956712844098228
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956714855629608
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956631569902657
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/owner.json",
+          "bytes": 3543,
+          "sha256": "e87a469622c1037492ea2d039900da74b80704189be6f30aa48ea663208916d5",
+          "mode": 420,
+          "mtime_ns": 1792956714882604168
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/samples.jsonl",
+          "bytes": 1047856,
+          "sha256": "bf2cb20c94c473e7de004253fef24618e21b5f91bc4585c48671217b17b276a8",
+          "mode": 420,
+          "mtime_ns": 1792956713140818376
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/stderr.log",
+          "bytes": 6880,
+          "sha256": "230e44f511cdfa40dad159d2aaeb70a2c597488bfaafc75b5a15b2f090e6277c",
+          "mode": 420,
+          "mtime_ns": 1792956712778588588
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-1/stdout.log",
+          "bytes": 750,
+          "sha256": "593b89a74b6f15c53b7451ab50dc39dd6d5591e6945e1a03071491d7eba3adac",
+          "mode": 420,
+          "mtime_ns": 1792956712844098228
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/gtest.xml",
+          "bytes": 635,
+          "sha256": "30aea75e8b6bc08348bedd68d884965481bfb8e01e700dae62ba8c31df0f37a8",
+          "mode": 420,
+          "mtime_ns": 1792956799722900650
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956801537985992
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956716574294356
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/owner.json",
+          "bytes": 3542,
+          "sha256": "37af5da9095dca71a02e8b5ac626d2654d8b77a81037698d45fa3ee6ebfae58d",
+          "mode": 420,
+          "mtime_ns": 1792956801568825227
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/samples.jsonl",
+          "bytes": 878135,
+          "sha256": "fd2e1edd3250fbdbb009f9e19085b60438dbbdd2733fc95c4e9e2fed3ca55c1c",
+          "mode": 420,
+          "mtime_ns": 1792956799850070692
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956716582001372
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-2/stdout.log",
+          "bytes": 729,
+          "sha256": "f8e5fc8b7c50b87cc021cc8a036b8f23ff83e9c3c840c1756cd96dca6716f7c9",
+          "mode": 420,
+          "mtime_ns": 1792956799722900650
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/gtest.xml",
+          "bytes": 976,
+          "sha256": "abe38cd0db3d1171aaa848b07be9519802789128ee83397ff78bdbec67429530",
+          "mode": 420,
+          "mtime_ns": 1792956879785615502
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956881946192048
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956803245708706
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/owner.json",
+          "bytes": 3543,
+          "sha256": "647f0ca9250eaee5a96db47592fc93b41d8b1af16ed3535082fc73dad8c47cba",
+          "mode": 420,
+          "mtime_ns": 1792956881977002409
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/samples.jsonl",
+          "bytes": 1017385,
+          "sha256": "60cb3f72fb6b5220dfdc22e691c88f8d6bab5c9d08442abb7b670417dc43b03f",
+          "mode": 420,
+          "mtime_ns": 1792956880174596306
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956803249563611
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-3/stdout.log",
+          "bytes": 747,
+          "sha256": "ede4e8cf64c211fff7b4f5e09de29472855ed7f8d48def56b55aeed9674e1bd9",
+          "mode": 420,
+          "mtime_ns": 1792956879785615502
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/gtest.xml",
+          "bytes": 609,
+          "sha256": "13fa87fb1558e1d4402e76033d1f6da5a1681a98df61ee9cb0272193f993447d",
+          "mode": 420,
+          "mtime_ns": 1792957000268133180
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957004958604378
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792956884041336194
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/owner.json",
+          "bytes": 3544,
+          "sha256": "117428edb947240ec96d8dd0dab64d0c41709a83574eecadb6ab1870cfb5541f",
+          "mode": 420,
+          "mtime_ns": 1792957004981709440
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/samples.jsonl",
+          "bytes": 1401434,
+          "sha256": "67d09bb857d5c4f2f52aeeb5eb53202cb037623f502c29b1840b5fc54081273a",
+          "mode": 420,
+          "mtime_ns": 1792957000576340181
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956884049040418
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-4/stdout.log",
+          "bytes": 689,
+          "sha256": "3f3bdbf56632dc8b7de786363acef512b21c2f247491a8156cdcebe47856671b",
+          "mode": 420,
+          "mtime_ns": 1792957000268133180
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/gtest.xml",
+          "bytes": 616,
+          "sha256": "efe60988bda5e8855dfd8c842bcee32552bc085f2f34ca1bd20f20e00221055d",
+          "mode": 420,
+          "mtime_ns": 1792957139528804631
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957142904169757
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957006737693922
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/owner.json",
+          "bytes": 3544,
+          "sha256": "41cab332c631d197ced06caf579d3952d65594d5cf6fe9dbc301354e53488292",
+          "mode": 420,
+          "mtime_ns": 1792957142927435110
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/samples.jsonl",
+          "bytes": 1663456,
+          "sha256": "3c9780bba4495bf1b55b75033d98e5a16b4d53d8c143db7f029b699b7661dadf",
+          "mode": 420,
+          "mtime_ns": 1792957139883111418
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792957006741544763
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-5/stdout.log",
+          "bytes": 719,
+          "sha256": "9c780e3db584fbaaa6ec41d65efe9a06eafb6ce273e8334da552141f4d1be748",
+          "mode": 420,
+          "mtime_ns": 1792957139528804631
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/gtest.xml",
+          "bytes": 621,
+          "sha256": "03fdba4e1edd86316298025168b69c7fda8aa2bf2f7ba11490564f3006deef26",
+          "mode": 420,
+          "mtime_ns": 1792957272275902317
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957274292121670
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957144695601980
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/owner.json",
+          "bytes": 3544,
+          "sha256": "e9caf13cb12227da9b909a892c8aa1679713663b7a9451fe3ff442199d180ec6",
+          "mode": 420,
+          "mtime_ns": 1792957274330746562
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/samples.jsonl",
+          "bytes": 1638292,
+          "sha256": "614eb76ed51474414ad3dff6e54fcf5fece706578f08c2054aa6cedff1c95462",
+          "mode": 420,
+          "mtime_ns": 1792957272619663853
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792957144699479540
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-6/stdout.log",
+          "bytes": 734,
+          "sha256": "eb13de1937996c97c501ff18015a865aa3fbfdfbde3b85e0c38600c23e6f58e5",
+          "mode": 420,
+          "mtime_ns": 1792957272275902317
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/gtest.xml",
+          "bytes": 44779,
+          "sha256": "2691910790cf634473cdf753298ccf926ba6008364ea5778c21e688c823e8fda",
+          "mode": 420,
+          "mtime_ns": 1792957292091482839
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/inputs-after.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957293879546515
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/inputs-before.json",
+          "bytes": 1101511,
+          "sha256": "e3a326f15e31d7b70e3c22ccf859863415235c1f91c7600e72a4c42bb31b753b",
+          "mode": 420,
+          "mtime_ns": 1792957276114083534
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/owner.json",
+          "bytes": 3358,
+          "sha256": "fe442326c9723e5c01497615fd345e9796351d490e3074af0d051f5f3538d1cc",
+          "mode": 420,
+          "mtime_ns": 1792957293910375199
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/samples.jsonl",
+          "bytes": 217922,
+          "sha256": "aa2653d009feec0fdcc5a44b7c22c11bb6c2990823736eee26e086ef81819e54",
+          "mode": 420,
+          "mtime_ns": 1792957292210943990
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792957276133260270
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/control-7/stdout.log",
+          "bytes": 744,
+          "sha256": "b7b0a5f5c446aa8adfa31e1b233ef6d46ab9b3f58da70f050a543143c35d3705",
+          "mode": 420,
+          "mtime_ns": 1792957292091482839
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/owned_guard.py",
+          "bytes": 299,
+          "sha256": "6fc32fd7fbed8e24370e929829a70b82aa53e54668fb38ded68ace2d1e9a6037",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/run_case.py",
+          "bytes": 1616,
+          "sha256": "af700fb2c5394bb079756ae9bfa7371f26010ce2349e9d1a1161e598d8c4a354",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/controls/runtime/run_owned.py",
+          "bytes": 297,
+          "sha256": "6ae4510d2a1672ffb6b1fee3e37bdbc62c3aee3e993cafb1c210224b55cf2dd2",
+          "mode": 420,
+          "mtime_ns": 1792956253296359871
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/native_observer.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/native_observer.py",
+          "bytes": 12620,
+          "sha256": "ecc3bad08c1c5b8772c29a535840c0cfb3cc101617a5d269dfcc555ad8e726f1",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/prepare.py",
+          "bytes": 4752,
+          "sha256": "0b6a82512170c4df7d1b25fda0a106458bfc33e527faf08289d850e74c38c583",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/read_result.py",
+          "bytes": 10563,
+          "sha256": "097aa9ecc117bf337035e0d8d652b11e02a37b6adb18a501fe4c1507c73461c5",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/run_case.py",
+          "bytes": 1803,
+          "sha256": "70a89563785e82d28a43574a8914740df2b6045c90d19e360b0fd9b1714642cf",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/runtime-transition.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/runtime-transition.json",
+          "bytes": 5979,
+          "sha256": "5fb644b14f6b25793132aea137d22e08acb922f2e3403c4305ca8a2e3dab17b8",
+          "mode": 420,
+          "mtime_ns": 1792956351240005452
+        },
+        "files/out/native-cpu-reachable-tag-writers-cohort/runtime_transition.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-cohort/runtime_transition.py",
+          "bytes": 3740,
+          "sha256": "d2e36329c32b2a6ff5a9730ad9399b6e2b3a280ff5471ab858b76681f8351f25",
+          "mode": 420,
+          "mtime_ns": 1792956068320706476
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/actions.json",
+          "bytes": 66460,
+          "sha256": "fd459d89197a7e9842bc561e78bcb1f9b6861f7c90e009578ad8d2cda841000b",
+          "mode": 420,
+          "mtime_ns": 1792956323575537261
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link-proof.json",
+          "bytes": 4488447,
+          "sha256": "23903e3cc6dda2b137f4f0cb0e816d1489e80a2d3a0d91c7a8b8c50a15842f05",
+          "mode": 420,
+          "mtime_ns": 1792956303331086273
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link-result.json",
+          "bytes": 6998,
+          "sha256": "14dc5a6873ad4a51321eb25799b18e69aaeb1e648899f172cb840f780e213223",
+          "mode": 420,
+          "mtime_ns": 1792956303585513754
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link.py",
+          "bytes": 3270,
+          "sha256": "f5d43a16506d29ba88ebac641702c1cf580c6e434feb38ee2d9a7e0c3c8ec548",
+          "mode": 420,
+          "mtime_ns": 1792956068316854432
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/inputs-after.json",
+          "bytes": 1015769,
+          "sha256": "2be6e5fe3b101734af78ad3594eb0c36fed4fe25d501ef5200d97f8f50d3f743",
+          "mode": 420,
+          "mtime_ns": 1792956305131353447
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/inputs-before.json",
+          "bytes": 1015769,
+          "sha256": "2be6e5fe3b101734af78ad3594eb0c36fed4fe25d501ef5200d97f8f50d3f743",
+          "mode": 420,
+          "mtime_ns": 1792956301241807061
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/owner.json",
+          "bytes": 2578,
+          "sha256": "51489e363d4ea39a088bb10a00e39c7d5a4d17e801e90040b185859e860e8acf",
+          "mode": 420,
+          "mtime_ns": 1792956305162193142
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/runtime-resolution.txt",
+          "bytes": 374,
+          "sha256": "b3e1a804d19e06475e6680c54fe7cf39dba4e0655dc097117ea24cc00e7b2507",
+          "mode": 420,
+          "mtime_ns": 1792956303346506120
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/samples.jsonl",
+          "bytes": 2454,
+          "sha256": "d04ffdbe7e0bbd6635b8d1803959d4d219f42f25aff6f932f488d9392cd77428",
+          "mode": 420,
+          "mtime_ns": 1792956303546964135
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956301245661699
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/link/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/link/stdout.log",
+          "bytes": 60,
+          "sha256": "fd87b3fdf1fe916d9b554544e8d197a6dcaf3e970ae009a45787f33d93a473c8",
+          "mode": 420,
+          "mtime_ns": 1792956303585513754
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792956068316854432
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/prepare.py",
+          "bytes": 7508,
+          "sha256": "602f3e0fd0991aba9c3ca68b02e90de8db0182c5d408485ffb77f69497294d7c",
+          "mode": 420,
+          "mtime_ns": 1792956068316854432
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/prepared.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/prepared.json",
+          "bytes": 101019,
+          "sha256": "335c2ac67aeb4252d75902099fb6a99fe64977f8363922a8103c32083dd3e718",
+          "mode": 420,
+          "mtime_ns": 1792956298680400212
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/result.json",
+          "bytes": 11838,
+          "sha256": "52d64ed3931a40fce5ed5d684730c4f2b6c646c2980ac68fcaa9e5ab86384e8e",
+          "mode": 420,
+          "mtime_ns": 1792956325535781457
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/baseline.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/baseline.bin",
+          "bytes": 751840,
+          "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc",
+          "mode": 420,
+          "mtime_ns": 1792956325300860248
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/calls.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/calls.jsonl",
+          "bytes": 1472,
+          "sha256": "aedd0c24d2b06019b4f7e3314f93e0be17dbfe4c1099276081c4386c6bd8cec3",
+          "mode": 420,
+          "mtime_ns": 1792956325300860248
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/candidate.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/candidate.bin",
+          "bytes": 751840,
+          "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc",
+          "mode": 420,
+          "mtime_ns": 1792956325300860248
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/cases.tsv": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/cases.tsv",
+          "bytes": 1187,
+          "sha256": "c585c14dd3503398447ff38a5cd1a277411eae803ca6eaf733017f8c9b863347",
+          "mode": 420,
+          "mtime_ns": 1792956325243092737
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/comparison.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/comparison.json",
+          "bytes": 268,
+          "sha256": "89ed34eb1e00841f56d41d033a2670114effa68cb5d434a19686def1b07c612a",
+          "mode": 420,
+          "mtime_ns": 1792956325304711415
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/input-after.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/input-after.bin",
+          "bytes": 100672,
+          "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad",
+          "mode": 420,
+          "mtime_ns": 1792956325300860248
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/input-before.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/input-before.bin",
+          "bytes": 100672,
+          "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad",
+          "mode": 420,
+          "mtime_ns": 1792956325239241569
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/inputs-after.json",
+          "bytes": 1016985,
+          "sha256": "b410269e15676fc77898c1b3be7a40f14229f8358cd05d4eb081d2fc650921f5",
+          "mode": 420,
+          "mtime_ns": 1792956327122946790
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/inputs-before.json",
+          "bytes": 1016985,
+          "sha256": "b410269e15676fc77898c1b3be7a40f14229f8358cd05d4eb081d2fc650921f5",
+          "mode": 420,
+          "mtime_ns": 1792956324965808685
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/owner.json",
+          "bytes": 1671,
+          "sha256": "b0f9c7c11bc0da29b5ebbf648c74c21afbf710df0a91bfd79a7b587a75615fa5",
+          "mode": 420,
+          "mtime_ns": 1792956327149928459
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/samples.jsonl",
+          "bytes": 664,
+          "sha256": "5b45d0e20284b85f79fb2b7f77bf067ad887a97d698ad92de9a6f151c4fc8068",
+          "mode": 420,
+          "mtime_ns": 1792956325493418617
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956324973511019
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run/stdout.log",
+          "bytes": 32,
+          "sha256": "fb1a049de3589cac1237b601f6ddd6d5a3bd990f0b18adb31430b42713931769",
+          "mode": 420,
+          "mtime_ns": 1792956325535781457
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792956068316854432
+        },
+        "files/out/native-cpu-reachable-tag-writers-compatibility/run_task.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers-compatibility/run_task.py",
+          "bytes": 518,
+          "sha256": "e63294a00c9d79a7403a96d52415feeff39739b41d7e772facc74575f2028585",
+          "mode": 420,
+          "mtime_ns": 1792956068316854432
+        },
+        "files/out/native-cpu-reachable-tag-writers/admit_fixture_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/admit_fixture_build.py",
+          "bytes": 6795,
+          "sha256": "1a43b9e7ccc0cd8291e7bb5c488dca099b27ea6aee04772203ab513668f1b602",
+          "mode": 420,
+          "mtime_ns": 1792955859507494836
+        },
+        "files/out/native-cpu-reachable-tag-writers/apply_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/apply_provider.py",
+          "bytes": 565,
+          "sha256": "436404b07d7a0662c4067bb8a4e0738d19b12233d8be8c07a84ea047eaca3241",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/build_ispc.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/build_ispc.py",
+          "bytes": 1793,
+          "sha256": "fd649d4b7d8309bd46240fd8d9bd0614710803cce27093ea3c53a76272b05d9d",
+          "mode": 420,
+          "mtime_ns": 1792955912310204984
+        },
+        "files/out/native-cpu-reachable-tag-writers/build_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/build_provider.py",
+          "bytes": 285,
+          "sha256": "fd3ff86cd234bec4d7993727207afb3809666693664a74253a52b8e466baff3c",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/cases.inc": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/cases.inc",
+          "bytes": 1790,
+          "sha256": "4c93a3946f8478e1ca37b847534b8ec14ef3fbdf4fe686a238bbc49769cd3945",
+          "mode": 420,
+          "mtime_ns": 1792955547657362715
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/actions.json",
+          "bytes": 16212,
+          "sha256": "c43f0238a53e824f5b50337a35175a6c2a6dfae4b5373fd8a2f724355e187003",
+          "mode": 420,
+          "mtime_ns": 1792955915066055718
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/ispc-dense/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/ispc-dense/inputs-after.json",
+          "bytes": 941896,
+          "sha256": "7a336c2afa3ee13782a0fa42a9e52fe1ba624b2a80c38b93b5935049ef08110f",
+          "mode": 420,
+          "mtime_ns": 1792955951003207297
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/ispc-dense/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/ispc-dense/inputs-before.json",
+          "bytes": 941896,
+          "sha256": "7a336c2afa3ee13782a0fa42a9e52fe1ba624b2a80c38b93b5935049ef08110f",
+          "mode": 420,
+          "mtime_ns": 1792955916592373049
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/ispc-dense/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/ispc-dense/owner.json",
+          "bytes": 2659,
+          "sha256": "b4373a58fb37cdb35f58d04f3c6fb4d70918e015e31dcc74eae78e8763ec5f0c",
+          "mode": 420,
+          "mtime_ns": 1792955951026313664
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/ispc-dense/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/ispc-dense/samples.jsonl",
+          "bytes": 42463,
+          "sha256": "98db6a04ebf181aa82c3f856fce9a2e13434254979dca14cd1e208564e3b02ec",
+          "mode": 420,
+          "mtime_ns": 1792955949466633944
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/ispc-dense/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/ispc-dense/stderr.log",
+          "bytes": 31686,
+          "sha256": "87ea0ba0103d86c3a90591a70eb588584c7422aa861d8346e38ed38eecf3af76",
+          "mode": 420,
+          "mtime_ns": 1792955943994027121
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/ispc-dense/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/ispc-dense/stdout.log",
+          "bytes": 85,
+          "sha256": "aeee57b48e289225c4ff2caa48ab023ed2073ee3a74b989f2b1911ce334c5f51",
+          "mode": 420,
+          "mtime_ns": 1792955949562910468
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792955478499971458
+        },
+        "files/out/native-cpu-reachable-tag-writers/compile/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/compile/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792955478496114105
+        },
+        "files/out/native-cpu-reachable-tag-writers/configure_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/configure_provider.py",
+          "bytes": 142,
+          "sha256": "c3d64ba490ea8747cf7574f66e5b433ab3bc8c0462fd8e11ac5fc9905ea8ec68",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/dense-code-inspection.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/dense-code-inspection.json",
+          "bytes": 33571,
+          "sha256": "2183d5fd2c830b82a2ffab7b74f7bc832f617d9b4e0bdbf4705546a7f0cd9109",
+          "mode": 420,
+          "mtime_ns": 1792956012786493877
+        },
+        "files/out/native-cpu-reachable-tag-writers/derive_fixture.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/derive_fixture.py",
+          "bytes": 4438,
+          "sha256": "172992f6d775d70406a95550a70718042ea7ceec4e9365b4479ab1f704d69360",
+          "mode": 420,
+          "mtime_ns": 1792955478530830274
+        },
+        "files/out/native-cpu-reachable-tag-writers/derive_ispc.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/derive_ispc.py",
+          "bytes": 3637,
+          "sha256": "e73da86d6b5729fa6667c074d07b9fc8b5f7293ce8d18580fb258d83a2369b62",
+          "mode": 420,
+          "mtime_ns": 1792955478530830274
+        },
+        "files/out/native-cpu-reachable-tag-writers/driver.cpp": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/driver.cpp",
+          "bytes": 6703,
+          "sha256": "55218a0a58a1f9ff2251d7be8c0890bea0838e9369b02caee4f8059edd53ed68",
+          "mode": 420,
+          "mtime_ns": 1792955547695931861
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/actions.json",
+          "bytes": 52649,
+          "sha256": "e86b1c7106a685bddc55e57dc274923020c4e513b62b9b1881308a7ae464d62c",
+          "mode": 420,
+          "mtime_ns": 1792955859877409885
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build-admission.json",
+          "bytes": 2555,
+          "sha256": "f3c7f4b01cb9aa67aeb7f3883b9067d2d828396cadf661d65803e6e5491625aa",
+          "mode": 420,
+          "mtime_ns": 1792955859804197532
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build-result.json",
+          "bytes": 3127,
+          "sha256": "f3b6767ba9cff517cdf77d8ebb8fe86af486cb2ace0db4457650978da2a10444",
+          "mode": 420,
+          "mtime_ns": 1792955626047194321
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build/inputs-after.json",
+          "bytes": 981533,
+          "sha256": "44ad2e0650709cc007d286f48e6b90dc183d3f5eadeabc000f288e27014f4af6",
+          "mode": 420,
+          "mtime_ns": 1792955627647875886
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build/inputs-before.json",
+          "bytes": 981533,
+          "sha256": "44ad2e0650709cc007d286f48e6b90dc183d3f5eadeabc000f288e27014f4af6",
+          "mode": 420,
+          "mtime_ns": 1792955621977991796
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build/owner.json",
+          "bytes": 2063,
+          "sha256": "bd1104b36d4138835928000e4290f239855369dc9c23d6e4f8685654029a5557",
+          "mode": 420,
+          "mtime_ns": 1792955627667161205
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build/samples.jsonl",
+          "bytes": 7076,
+          "sha256": "8f47cbf54708cdd5bb7b4cf89a86c2552d304af24e4c9455b8cfbed11b3e6365",
+          "mode": 420,
+          "mtime_ns": 1792955626081907900
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build/stderr.log",
+          "bytes": 2451,
+          "sha256": "633040ddfe9cb3fa5a407bf24085286c3e89fadd575a61f755caf690947c31c8",
+          "mode": 420,
+          "mtime_ns": 1792955626135906795
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/build/stdout.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792955621989562991
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/linked-code-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/linked-code-admission.json",
+          "bytes": 117484,
+          "sha256": "4622734139196a7383a3d6000c0977465994136b9ea0aa6aa90bad3a91843a0d",
+          "mode": 420,
+          "mtime_ns": 1792955859781077845
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792955478488399403
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/prepared.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/prepared.json",
+          "bytes": 77650,
+          "sha256": "fa5ea0614e424d0592878c826dc375961367b3263df10b345aa43f451a798420",
+          "mode": 420,
+          "mtime_ns": 1792955620485307641
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/result.json",
+          "bytes": 1104,
+          "sha256": "249e038a3e4e00059ea586b93044130e5f1ca925b3e95a146090aaee01b3fa8e",
+          "mode": 420,
+          "mtime_ns": 1792955861449928479
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run/inputs-after.json",
+          "bytes": 983855,
+          "sha256": "46692260f02e8112159c538f76e0a445cff2c1aee20dcba86b1f2500fdbc2f35",
+          "mode": 420,
+          "mtime_ns": 1792955862715199920
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run/inputs-before.json",
+          "bytes": 983855,
+          "sha256": "46692260f02e8112159c538f76e0a445cff2c1aee20dcba86b1f2500fdbc2f35",
+          "mode": 420,
+          "mtime_ns": 1792955861210761315
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run/owner.json",
+          "bytes": 2489,
+          "sha256": "ad2f565ffe24f019d6b0be31c5bd1615eaa4aaf17b4be18d577a062483ad506e",
+          "mode": 420,
+          "mtime_ns": 1792955862742202664
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run/samples.jsonl",
+          "bytes": 221,
+          "sha256": "a999424353ef826795460b3cd21a6b7ef01f9ce3f8dcef489654cdc1c714db2c",
+          "mode": 420,
+          "mtime_ns": 1792955861222333920
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792955861214618850
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run/stdout.log",
+          "bytes": 231,
+          "sha256": "ab0d04e7907c9cdc7f151cb45d43860a945cb6e152fc3ae43a358b5f348c63ed",
+          "mode": 420,
+          "mtime_ns": 1792955861449928479
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792955478484542048
+        },
+        "files/out/native-cpu-reachable-tag-writers/fixture_task.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/fixture_task.py",
+          "bytes": 2839,
+          "sha256": "ea7984236ac68649883a1337fbfc477967db49095e19b881f0ff559f0b03e7ea",
+          "mode": 420,
+          "mtime_ns": 1792955620007031356
+        },
+        "files/out/native-cpu-reachable-tag-writers/inspect_dense.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/inspect_dense.py",
+          "bytes": 2817,
+          "sha256": "732520e1e8d1149537c09ea6f487e50b45e373049417bb6e82161888a3e75696",
+          "mode": 420,
+          "mtime_ns": 1792955961842576059
+        },
+        "files/out/native-cpu-reachable-tag-writers/inspect_objects.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/inspect_objects.py",
+          "bytes": 4759,
+          "sha256": "a201565fd00d0efe6ab84c4dc69782c7d610a860820da1de415d11e580ec00e5",
+          "mode": 420,
+          "mtime_ns": 1792955961842576059
+        },
+        "files/out/native-cpu-reachable-tag-writers/ispc-dense-compile-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/ispc-dense-compile-result.json",
+          "bytes": 79522,
+          "sha256": "abdbf379cdc3920b425bf467ea5e8eebfcb3c8c29474fe7456b82070532d84d2",
+          "mode": 420,
+          "mtime_ns": 1792955949562910468
+        },
+        "files/out/native-cpu-reachable-tag-writers/ispc-derivation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/ispc-derivation.json",
+          "bytes": 7593,
+          "sha256": "0ccfa060b1634ddba22618edde798d0c453406dda6f00cf90e4ed9e06f4360bd",
+          "mode": 420,
+          "mtime_ns": 1792955478623406718
+        },
+        "files/out/native-cpu-reachable-tag-writers/object-code-inspection-dense.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/object-code-inspection-dense.json",
+          "bytes": 10789,
+          "sha256": "41daaeada269768d18923e30fe019cffb073cf0069cdf221cc4a438a0bd9cb68",
+          "mode": 420,
+          "mtime_ns": 1792956012589839968
+        },
+        "files/out/native-cpu-reachable-tag-writers/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792955478484542048
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepare_fixture.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepare_fixture.py",
+          "bytes": 4581,
+          "sha256": "a4e093eb73453bce0801c2f71518c80cb6ae9c825a0a8d35a0849decb7cadbac",
+          "mode": 420,
+          "mtime_ns": 1792955620007031356
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepare_fixture_run.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepare_fixture_run.py",
+          "bytes": 1718,
+          "sha256": "1f7f00f7c3ba718653d00f65db2a8c67a165cf1ebf2522da74486e0cf1b1b6aa",
+          "mode": 420,
+          "mtime_ns": 1792955759702846886
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepare_ispc_compile.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepare_ispc_compile.py",
+          "bytes": 4532,
+          "sha256": "15e5dc2fdbc7f1f87f2502eb363f2ae79c9bc1687c3a8d833b87c8c4d1a8d983",
+          "mode": 420,
+          "mtime_ns": 1792955912310204984
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepare_provider_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepare_provider_build.py",
+          "bytes": 146,
+          "sha256": "285be38948c768e5054df5e5c044c5c013c01e9e8c3fbea87e747fa38a9e9409",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepare_provider_config.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepare_provider_config.py",
+          "bytes": 156,
+          "sha256": "2b994fd26d3ab4939e0310125ee2f054baac9b968580f5ba3671a22b991c0a09",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepare_provider_patch.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepare_provider_patch.py",
+          "bytes": 4832,
+          "sha256": "e9a840b0c975f5acc9964972b28a1e91c4b47414f5a2d4717afca2f445d6d058",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/prepared-ispc-dense-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/prepared-ispc-dense-inputs.json",
+          "bytes": 80915,
+          "sha256": "3cdc8fbe8ac999f371ef44ebced844394fe11b1b68614bfe8440228016b53d2a",
+          "mode": 420,
+          "mtime_ns": 1792955915066055718
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/actions.json",
+          "bytes": 2621605,
+          "sha256": "2d0e01a62147edaf0835ace15c42d6c9df1c98c4e20dcfeff85f317d50ad9704",
+          "mode": 420,
+          "mtime_ns": 1792956181198078249
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/build/inputs-after.json",
+          "bytes": 5372969,
+          "sha256": "1f85127ef0484fa9504369f8a91ac88c11a08f6fd90398ff9e90f0a8bf3d5f30",
+          "mode": 420,
+          "mtime_ns": 1792956191412437371
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/build/inputs-before.json",
+          "bytes": 5372969,
+          "sha256": "1f85127ef0484fa9504369f8a91ac88c11a08f6fd90398ff9e90f0a8bf3d5f30",
+          "mode": 420,
+          "mtime_ns": 1792956184814483372
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/build/owner.json",
+          "bytes": 3247,
+          "sha256": "4ffc29396a2de2f29c00e11989b9b71558eef653be9b6bc03676434a91dd93e4",
+          "mode": 420,
+          "mtime_ns": 1792956191470202173
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/build/samples.jsonl",
+          "bytes": 8560,
+          "sha256": "a3658b78e61aaee12b2aac0ed6a795defcefe406f63f91fd143e37d2dfe3d211",
+          "mode": 420,
+          "mtime_ns": 1792956187750148966
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956185180750416
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/build/stdout.log",
+          "bytes": 688,
+          "sha256": "03ee7f813d68cbc0d6b52903a202bb70074143a480916f74c54e6d46d9331332",
+          "mode": 420,
+          "mtime_ns": 1792956187923443371
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure-result.json",
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd",
+          "mode": 420,
+          "mtime_ns": 1792956086071858863
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure/inputs-after.json",
+          "bytes": 5346324,
+          "sha256": "5a882b656e4a4cd727d32d099ac3c2d20afa38bd7efa7ae8d5fba023b276510e",
+          "mode": 420,
+          "mtime_ns": 1792956089844762967
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure/inputs-before.json",
+          "bytes": 5346324,
+          "sha256": "5a882b656e4a4cd727d32d099ac3c2d20afa38bd7efa7ae8d5fba023b276510e",
+          "mode": 420,
+          "mtime_ns": 1792956082156076449
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure/owner.json",
+          "bytes": 2360,
+          "sha256": "d30f1b72629a353c3d620847e5a0ba24831d240ae2ce7fd383e0138771ae8a94",
+          "mode": 420,
+          "mtime_ns": 1792956089875626614
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure/samples.jsonl",
+          "bytes": 4108,
+          "sha256": "51cd19b9acf74ea93d669a7ada9efa5d4a37a3a037ed01dc080ca444ae4056ac",
+          "mode": 420,
+          "mtime_ns": 1792956085875219681
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792956082159932119
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/configure/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/configure/stdout.log",
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05",
+          "mode": 420,
+          "mtime_ns": 1792956085859796999
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/incremental-dry-run.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/incremental-dry-run.txt",
+          "bytes": 29747,
+          "sha256": "566582eef36f67caf175325482b6ba7f7af8245ba568924ec4685bee1a2b5211",
+          "mode": 420,
+          "mtime_ns": 1792956180770124128
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/incremental-plan.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/incremental-plan.json",
+          "bytes": 215740,
+          "sha256": "e2551dc9d2e0b0546847b0b90e6ebc36f0f0a8c1879a9d1e9abe272dfbc5aaae",
+          "mode": 420,
+          "mtime_ns": 1792956180770124128
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/linked-callback.disassembly.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/linked-callback.disassembly.txt",
+          "bytes": 36648,
+          "sha256": "6ba192516cc6e8a6ef50ebc60871d5e1dc2f3de87e50b93ba427d65cb86ae648",
+          "mode": 420,
+          "mtime_ns": 1792956202728096345
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/linked-native-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/linked-native-proof.json",
+          "bytes": 3850387,
+          "sha256": "9cbca8a92e82fa54636a3c0f07ccea471cb82195b97bd57e712453aca6168a05",
+          "mode": 420,
+          "mtime_ns": 1792956208379700227
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/linked-runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/linked-runtime-resolution.txt",
+          "bytes": 1402,
+          "sha256": "2f08978216d49fdaa77acd0debbd6fabd85fdd437fe6939efeaa3f358d09c1e4",
+          "mode": 420,
+          "mtime_ns": 1792956203988708637
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792956034034592143
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/provider-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/provider-build-result.json",
+          "bytes": 2486,
+          "sha256": "4bae05a0a37731f4203df72ebdb5ba0f2c3642b16c673c002f8d8e14224cdf04",
+          "mode": 420,
+          "mtime_ns": 1792956187904188436
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/provider.patch": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/provider.patch",
+          "bytes": 2255,
+          "sha256": "790ebc3139d92317834f221cadcaba85b6841457297dc959569d0aad6c78c7ea",
+          "mode": 420,
+          "mtime_ns": 1792956030329211487
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/review-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/review-admission.json",
+          "bytes": 789,
+          "sha256": "df44ebd1e719826219af85d59978862b13ab7d8c4caa20329f8234cc29b3e1f2",
+          "mode": 420,
+          "mtime_ns": 1792956032731346921
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792956034034592143
+        },
+        "files/out/native-cpu-reachable-tag-writers/provider/source-contract.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/provider/source-contract.json",
+          "bytes": 92450,
+          "sha256": "3204fe77933b8de3fb028e7446655472e7a77f400087a3941b22b04e10a8d888",
+          "mode": 420,
+          "mtime_ns": 1792956030329211487
+        },
+        "files/out/native-cpu-reachable-tag-writers/read_linked_native.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/read_linked_native.py",
+          "bytes": 148,
+          "sha256": "bdd1a57fdccc3f766ac87c8a631098501c015f16611a6238d87696965a8b1239",
+          "mode": 420,
+          "mtime_ns": 1792956010754401392
+        },
+        "files/out/native-cpu-reachable-tag-writers/run_fixture.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/run_fixture.py",
+          "bytes": 1418,
+          "sha256": "31acb6cf810e25a59e1a5756ed102abf8079b425bfe9304c29247f7b5d22445e",
+          "mode": 420,
+          "mtime_ns": 1792955759706703529
+        },
+        "files/out/native-cpu-reachable-tag-writers/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792955478480684699
+        },
+        "files/out/native-cpu-reachable-tag-writers/writer-fixture-source.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/writer-fixture-source.json",
+          "bytes": 7867,
+          "sha256": "5f1b00f3fe0884fc032efc23666ae433945badabe40ca6f11a24c5daecfdbd76",
+          "mode": 420,
+          "mtime_ns": 1792955478727555216
+        },
+        "files/out/native-cpu-reachable-tag-writers/writers.ispc": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-reachable-tag-writers/writers.ispc",
+          "bytes": 34732,
+          "sha256": "1f2ee6588d098c99d56bf355fed420e7b0e4ffbb331602255e7a503f330b3c4b",
+          "mode": 420,
+          "mtime_ns": 1792955478727555216
+        },
+        "files/out/preserve-native-cpu-reachable-tag-writers.py": {
+          "source": "/home/astra/.project/Sirius/out/preserve-native-cpu-reachable-tag-writers.py",
+          "bytes": 7813,
+          "sha256": "d071be3057f5a80c4ba0f07deac270b8729c63aa9e0e6c5c620969705c9eecee",
+          "mode": 420,
+          "mtime_ns": 1792957084909462492
+        }
+      }
+    },
+    {
+      "file": "actual-products.zip",
+      "identity": {
+        "bytes": 7001236,
+        "sha256": "261c8918cb03571b7230539b82fcf7d238133f5e0672c3a784643d01caa0c129",
+        "mode": 420,
+        "mtime_ns": 1792957677480773411
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers-compatibility/compatibility": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers-compatibility/compatibility",
+          "bytes": 6116856,
+          "sha256": "419e8fc08fb9a7396d7305dc1f355a55db0c5f7f12ce29a3f1996af37934bfaa",
+          "mode": 493,
+          "mtime_ns": 1792956301658107684
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/driver.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/driver.o",
+          "bytes": 149200,
+          "sha256": "0437d5db6318ca7a5af063cc9f02ed1a8e9b25bd7de3e4e8ae9c36e8cb6abe03",
+          "mode": 420,
+          "mtime_ns": 1792955625873626442
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writer-check": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writer-check",
+          "bytes": 439848,
+          "sha256": "25beb42f69fcb48b09f9c4102bee0e76002d8dd4c36c0d05a18e9564038f0a1e",
+          "mode": 493,
+          "mtime_ns": 1792955626043337259
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writers.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writers.o",
+          "bytes": 75144,
+          "sha256": "166663d85935e4c464b206512b8266b02e6598b07661d47e96bcb5345ec73bac",
+          "mode": 420,
+          "mtime_ns": 1792955622787975233
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/objects/dopri_phase.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/objects/dopri_phase.o",
+          "bytes": 1253440,
+          "sha256": "418b4c837ef8883c0cee5e57791b8d9f56c569744e9f60025a561ca367c627a7",
+          "mode": 420,
+          "mtime_ns": 1792955949250974525
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/objects/endpoint.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/objects/endpoint.o",
+          "bytes": 984056,
+          "sha256": "fd9424a144a2356a4057d639c517d2266648aa883de8fea6f4cf8c30bcd86805",
+          "mode": 420,
+          "mtime_ns": 1792955941435796487
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/objects/transport.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/objects/transport.o",
+          "bytes": 1416640,
+          "sha256": "3c582032fd4025d69f7a6ec2f36ee651a41b00f92b2d3b0b3edb4ce0ac33c856",
+          "mode": 420,
+          "mtime_ns": 1792955931614258237
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/provider/libvulkan_lvp.so": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/provider/libvulkan_lvp.so",
+          "bytes": 18514544,
+          "sha256": "3d1094d4fe90030272171015b634a5ca5687deca39d1cb1bbb5710be52317ed0",
+          "mode": 493,
+          "mtime_ns": 1792956187684682191
+        },
+        "files/bin/linux-gcc/native-cpu-reachable-tag-writers/provider/lvp_icd.json": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-reachable-tag-writers/provider/lvp_icd.json",
+          "bytes": 206,
+          "sha256": "4157315234858d1a9a6f98c4a3c9e54711f66828a8a32472ca05620f37e8bb98",
+          "mode": 420,
+          "mtime_ns": 1792956187877231528
+        }
+      }
+    }
+  ],
+  "new_products": 9,
+  "production_raw_compilations": 3,
+  "production_CPP_compilations": 0,
+  "diagnostic_ISPC_compilations": 1,
+  "diagnostic_CPP_compilations": 1,
+  "reused_provenance": {
+    "attestations/qualification/0ce77927/native-cpu-normalization-tags-frame-timeout/MANIFEST.json": {
+      "bytes": 142861,
+      "sha256": "8fe4d87b700c37ee129b5abfe072629f7c41a69065c1548e96786293f92bb909",
+      "mode": 420,
+      "mtime_ns": 1792952926699189007
+    },
+    "attestations/qualification/5bc67064/native-cpu-predicated-refinement-finite-compatibility/MANIFEST.json": {
+      "bytes": 55504,
+      "sha256": "8dca5e6da8ccae3443cca10813007b373a061b94eb36567f3523d47015ba7b9d",
+      "mode": 420,
+      "mtime_ns": 1792954935484785302
+    },
+    "attestations/qualification/f878a18f/native-cpu-normalized-arithmetic-frame-timeout/MANIFEST.json": {
+      "bytes": 97934,
+      "sha256": "906e4ca997ad5a1bdc86cdc8327b6c502ded8817bfdf2d7af9f81c31e1ee9ae5",
+      "mode": 420,
+      "mtime_ns": 1792946268291696204
+    }
+  },
+  "superseded_claim": "AJ and AK raw tag invalidation/refresh followed unconditional returns. Their coherent-tag claims are disproved by twelve actual-body stale-tag arithmetic counterexamples. Prior finite numerical observations remain historical; no coherent-tag admission is inherited from them. Only exact AK arithmetic/adapter objects and separately pinned unaffected components are reused.",
+  "inherited_template_labels": "Some original remaining-control scope strings retain P host/Zprovider wording. Actual sealed action executable/ICD/provider identities, observed mappings and original readers bind the reused H host and corrected AL candidate; A1/A2 separately bind the registered stock baseline. The inherited prose is not identity authority. No original record is rewritten.",
+  "scope": "AL moves twelve metadata updates before their original returns; exact inverse restores AJ and canonical9380tuples/public payload/math/guards/masks/order remain. Actual writer regression190512calls/22861440bank/4572288tag words plus12 old arithmetic counterexamples passes. Original fixture build-reader failure remains failed with explicit unchanged-link/GOT/relaxation-target admission. Current provider894function/14target joins, full38/187960words and original C8/all32 pass. Any original ABBA22/Decimal/all8/frame results are recorded above only if actually completed. No full science/Mandatory/native-window/installed-release/public-main readiness claim.",
+  "frame_terminal": {
+    "source": {
+      "revision": "893125b9830643f9a066278dd4726e72a81af5df",
+      "status": ""
+    },
+    "passed": false,
+    "wall_seconds": 300.22928448498715,
+    "peak_sampled_rss_kib": 925460,
+    "minimum_sampled_available_kib": 17732280,
+    "stop_reason": "diagnostic_timeout",
+    "child_exit": -15
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "fixed_writer_calls": 190512,
+  "compared_bank_words": 22861440,
+  "compared_tag_words": 4572288,
+  "old_stale_tag_arithmetic_counterexamples": 12,
+  "witness_bank_words": 1440,
+  "case_tuples": 49,
+  "stages": 3,
+  "writer_forms_per_stage": 4,
+  "executable": {
+    "path": "bin/linux-gcc/native-cpu-reachable-tag-writers/fixture/writer-check",
+    "bytes": 439848,
+    "sha256": "25beb42f69fcb48b09f9c4102bee0e76002d8dd4c36c0d05a18e9564038f0a1e"
+  },
+  "build_admission": {
+    "bytes": 2555,
+    "sha256": "f3c7f4b01cb9aa67aeb7f3883b9067d2d828396cadf661d65803e6e5491625aa"
+  },
+  "linked_code": {
+    "bytes": 117484,
+    "sha256": "4622734139196a7383a3d6000c0977465994136b9ea0aa6aa90bad3a91843a0d"
+  },
+  "scope": "Actual old/fixed writer bodies: twelve stale-tag arithmetic counterexamples versus the original scalar implementation and190512 corrected writer calls with complete bank/tag/mask/index checks. No changed math compilation or renderer workload. Original build-reader failure remains; source/whole-program/provider/performance/science qualification are separate."
+}
