@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "basis": {
+    "path": "out/native-cpu-direct-compound/retained8.cpp",
+    "bytes": 26773,
+    "sha256": "0b47680079327545aff71330f64e15461612fbba81846a255e6ae9f67a4f49b3"
+  },
+  "candidate": {
+    "bytes": 30889,
+    "sha256": "f3d02bfe7d82162eeac4425f12eaafbe46bd3079c0e8e0516155cefa39a60338"
+  },
+  "unchanged_AI_exact_prefix": true,
+  "scope": "Five new private tagged stores. A tag is1 only for the exact unchanged AH normalized predicate on the same register words. Tags are consumed only on active lanes with both operands valid; bad operands are sanitized before the unchanged fast arithmetic and still return original canonical invalid. Multiply retains both high2^54 guards. False-negative tags use the complete original functions. Subtract uses original Add(a,Negate(b)); normalization is invariant under the three sign XORs. Divide/Sqrt use the original functions. Each active destination refreshes its tag from its complete actual result after payload stores; inactive payload/tag words remain unchanged. Both operands and tags load before any write, including aliases. No postcondition theorem, presumed input normalization, strengthened external eligibility or changed arithmetic/precision/FP controls is assumed. Independent scalar-word/std::nextafter and shared ISPC-predicate fixtures, complete writer invalidation and integration controls remain required."
+}

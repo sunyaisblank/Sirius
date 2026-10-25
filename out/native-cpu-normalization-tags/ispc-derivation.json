@@ -1,0 +1,113 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-direct-compound/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 620586,
+        "sha256": "3c8810f75ec68be7cd00db10c1c55a892cf0fcef426f8b3c77c6fb79dad6bf77"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 622708,
+        "sha256": "d9eaaf6f227d10fae25a586a647198e424d73667dc570c3ca3fecad6b04ce72b"
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "register_tag_capacity": 459,
+      "added_private_metadata_bytes_per_packet": 14688,
+      "writer_protocol": {
+        "ScratchWrite_0": "Every partial payload write invalidates this same register tag under the original active mask.",
+        "ScratchWriteUniform_0": "Every partial payload write invalidates this same register tag under the original active mask.",
+        "WriteValue_0": "All five original payload words are written first, then the exact shared integer predicate is computed from that same complete tuple.",
+        "WriteValueUniform_0": "All five original payload words are written first, then the exact shared integer predicate is computed from that same complete tuple.",
+        "RTAddStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTMultiplyStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTSubtractStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTDivideStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTSqrtStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result."
+      },
+      "whole_source_inverse_restores_AI": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-direct-compound/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 788926,
+        "sha256": "edd024784c62f225826a26d11369b5d71fb396bafe9135d2101c74c852c9f1f3"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 791036,
+        "sha256": "e4ee809ad521096b2c85ad95a2b8431b22110f0e17a25101f3264c2767403079"
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "register_tag_capacity": 612,
+      "added_private_metadata_bytes_per_packet": 19584,
+      "writer_protocol": {
+        "ScratchWrite_0": "Every partial payload write invalidates this same register tag under the original active mask.",
+        "ScratchWriteUniform_0": "Every partial payload write invalidates this same register tag under the original active mask.",
+        "WriteValue_0": "All five original payload words are written first, then the exact shared integer predicate is computed from that same complete tuple.",
+        "WriteValueUniform_0": "All five original payload words are written first, then the exact shared integer predicate is computed from that same complete tuple.",
+        "RTAddStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTMultiplyStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTSubtractStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTDivideStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTSqrtStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result."
+      },
+      "whole_source_inverse_restores_AI": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-direct-compound/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 397472,
+        "sha256": "5155a236f9a9289a237e81bc51c810418b9b6d14e30b837413891d359241a0aa"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 399580,
+        "sha256": "b2001fc9cbf3de57bbad20e1c081c30a81458051fba47029677f5bf538613978"
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "register_tag_capacity": 629,
+      "added_private_metadata_bytes_per_packet": 20128,
+      "writer_protocol": {
+        "ScratchWrite_0": "Every partial payload write invalidates this same register tag under the original active mask.",
+        "ScratchWriteUniform_0": "Every partial payload write invalidates this same register tag under the original active mask.",
+        "WriteValue_0": "All five original payload words are written first, then the exact shared integer predicate is computed from that same complete tuple.",
+        "WriteValueUniform_0": "All five original payload words are written first, then the exact shared integer predicate is computed from that same complete tuple.",
+        "RTAddStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTMultiplyStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTSubtractStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTDivideStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result.",
+        "RTSqrtStore_0": "The new CPP entry snapshots both operands/tags, uses the original fast domain only with exact current tags, and refreshes the active destination tag from its actual result."
+      },
+      "whole_source_inverse_restores_AI": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-direct-compound/ispc-derivation.json": {
+      "bytes": 4843,
+      "sha256": "bd59faced9ff4e809e560678e0194e4aa8e6906c535caf0418f82eddea383201"
+    },
+    "out/native-cpu-normalization-tags/derive_ispc.py": {
+      "bytes": 6250,
+      "sha256": "b369bb6f2ad1127553d5cbe72f3a1a7bffc1af8a52a6646b3c3fd65e517ae21f"
+    },
+    "out/native-cpu-normalization-tags/normalization_tag.isph": {
+      "bytes": 821,
+      "sha256": "a33dc7083ccc5e1e7a721c32c84fea7f858d57775aa85ab3bff3812dd60f3dfa"
+    },
+    "bin/linux-gcc/native-cpu-direct-compound/ispc-source/transport.ispc": {
+      "bytes": 620586,
+      "sha256": "3c8810f75ec68be7cd00db10c1c55a892cf0fcef426f8b3c77c6fb79dad6bf77"
+    },
+    "bin/linux-gcc/native-cpu-direct-compound/ispc-source/endpoint.ispc": {
+      "bytes": 788926,
+      "sha256": "edd024784c62f225826a26d11369b5d71fb396bafe9135d2101c74c852c9f1f3"
+    },
+    "bin/linux-gcc/native-cpu-direct-compound/ispc-source/dopri_phase.ispc": {
+      "bytes": 397472,
+      "sha256": "5155a236f9a9289a237e81bc51c810418b9b6d14e30b837413891d359241a0aa"
+    }
+  },
+  "scope": "AJ caches only the unchanged normalized-input predicate alongside the same complete private five-word register. The metadata is initialized with the whole context. Both generic/uniform low-level writes invalidate it, including validity-only clears; both complete tuple writes recompute it after all payload words. Five direct CPP stores also refresh it after writes. All literal tuples, generic evaluation/guards, math/value helpers and public input/output layouts remain. No assumed normalization theorem, literal/physical arithmetic folding, extra limb, persistent/input cache, shader-cache policy change, stronger eligibility, altered precision/FP/ISA/governors/requests/fields/RHS/trials/quartics/order/refusal/rollback. Source derivation only; shared ISPC predicate fixture and focused arithmetic/tag/alias checks, actual code, full38/C8/affected control5/frame required."
+}

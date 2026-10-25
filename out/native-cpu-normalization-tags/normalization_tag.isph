@@ -1,0 +1,15 @@
+// Same integer predicate as AH normalized(). This is private register metadata,
+// recomputed from complete words; it carries no physical value or new limb.
+static inline uint32_t SiriusSpacingWord_0(uint32_t magnitude) {
+    uint32_t exponent = magnitude >> 23;
+    uint32_t shift = ((exponent != 0U) ? exponent - 1U : 0U) & 31U;
+    return (exponent >= 24U) ? ((exponent - 23U) << 23) : (1U << shift);
+}
+static inline uint32_t SiriusNormalizationTag_0(uint32_t hi, uint32_t lo,
+    uint32_t tail, uint32_t error, uint32_t valid) {
+    uint32_t h=hi&2147483647U, l=lo&2147483647U, t=tail&2147483647U;
+    bool eligible = valid == 1U && h <= 2071986176U && error <= 2071986176U &&
+        l <= SiriusSpacingWord_0(h) && t <= SiriusSpacingWord_0(l) &&
+        (h != 0U || (l | t) == 0U);
+    return eligible ? 1U : 0U;
+}
