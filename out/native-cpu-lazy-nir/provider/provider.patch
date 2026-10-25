@@ -1,0 +1,74 @@
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -477,6 +477,16 @@
+ llvmpipe_finalize_nir(struct pipe_screen *screen,
+                       struct nir_shader *nir)
+ {
++#if LP_VULKAN_IEEE32_ENABLED
++   /* Exact SPIR-V/layout admission has already marked these buffer-only
++    * native shaders. Keep the complete NIR for a possible ordinary fallback;
++    * positive native dispatch never consumes its optimized instruction body.
++    */
++   if (nir->info.stage == MESA_SHADER_COMPUTE &&
++       nir->info.cs.llvmpipe_native_cpu_stage >= 1 &&
++       nir->info.cs.llvmpipe_native_cpu_stage <= 3)
++      return NULL;
++#endif
+    lp_build_opt_nir(nir);
+    return NULL;
+ }
+@@ -837,7 +847,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-scalar-zero-v19";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-lazy-nir-v20";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.h
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.h
+@@ -125,6 +125,7 @@
+    bool zero_initialize_shared_memory;
+    bool intergroup_row_owner_eligible;
+    bool intergroup_row_owner_dispatch;
++   bool native_nir_finalized;
+ 
+    int max_global_buffers;
+    struct pipe_resource **global_buffers;
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -1413,6 +1413,22 @@
+ {
+    struct llvmpipe_screen *screen = llvmpipe_screen(lp->pipe.screen);
+ 
++#if LP_VULKAN_IEEE32_ENABLED
++   struct nir_shader *native_nir = shader->base.ir.nir;
++   if (!shader->native_nir_finalized &&
++       native_nir->info.stage == MESA_SHADER_COMPUTE &&
++       native_nir->info.cs.llvmpipe_native_cpu_stage >= 1 &&
++       native_nir->info.cs.llvmpipe_native_cpu_stage <= 3) {
++      /* Reached only when an ordinary variant is actually needed. Run the
++       * identical final optimization before cache serialization and before
++       * generate_compute's variant-specific clone/options/SoA lowering.
++       * Existing context/variant ownership serializes this mutable state.
++       */
++      lp_build_opt_nir(native_nir);
++      shader->native_nir_finalized = true;
++   }
++#endif
++
+    struct lp_compute_shader_variant *variant =
+       MALLOC(sizeof *variant + shader->variant_key_size - sizeof variant->key);
+    if (!variant)
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8U";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8V";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
