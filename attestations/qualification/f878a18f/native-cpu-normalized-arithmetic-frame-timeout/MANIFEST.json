@@ -1,0 +1,1829 @@
+{
+  "schema": "sirius-native-cpu-normalized-arithmetic-terminal-v1",
+  "qualifying_source_revision": "f878a18f633f08fffcd715c6a7b4101fa3b39b7c",
+  "accepted": false,
+  "owners": {
+    "out/native-cpu-normalized-arithmetic/cpp/build/owner.json": {
+      "source": {
+        "revision": "800339f1ae0ffefb9ca5bf4d82782ac1c7703523",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 4.604459234047681,
+      "peak_sampled_rss_kib": 389884,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic/cpp/run/owner.json": {
+      "source": {
+        "revision": "800339f1ae0ffefb9ca5bf4d82782ac1c7703523",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.2694957630010322,
+      "peak_sampled_rss_kib": 27656,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic/domain/build/owner.json": {
+      "source": {
+        "revision": "58c7cd855973d6f67531dfb8e810e6a5823ad186",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 3.3303130130516365,
+      "peak_sampled_rss_kib": 392612,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic/domain/run/owner.json": {
+      "source": {
+        "revision": "58c7cd855973d6f67531dfb8e810e6a5823ad186",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.27317449799738824,
+      "peak_sampled_rss_kib": 27828,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic/provider/build/owner.json": {
+      "source": {
+        "revision": "bbf84f9389a03b7dd2db19afbab542731db86324",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.575037388014607,
+      "peak_sampled_rss_kib": 249452,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic/provider/configure/owner.json": {
+      "source": {
+        "revision": "bbf84f9389a03b7dd2db19afbab542731db86324",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 3.0839125000638887,
+      "peak_sampled_rss_kib": 138636,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/owner.json": {
+      "source": {
+        "revision": "0af543503a054ebd1214647b42d4013e1708edb5",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 117.35844926501159,
+      "peak_sampled_rss_kib": 2533008,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/owner.json": {
+      "source": {
+        "revision": "f878a18f633f08fffcd715c6a7b4101fa3b39b7c",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": false,
+      "child_exit": -15,
+      "wall_seconds": 300.2424300699495,
+      "peak_sampled_rss_kib": 920012,
+      "stop_reason": "diagnostic_timeout"
+    },
+    "out/native-cpu-normalized-arithmetic-cohort/control-8/owner.json": {
+      "source": {
+        "revision": "0af543503a054ebd1214647b42d4013e1708edb5",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 13.537272155983374,
+      "peak_sampled_rss_kib": 839068,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic-compatibility/link/owner.json": {
+      "source": {
+        "revision": "0af543503a054ebd1214647b42d4013e1708edb5",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.5746696869609877,
+      "peak_sampled_rss_kib": 65180,
+      "stop_reason": null
+    },
+    "out/native-cpu-normalized-arithmetic-compatibility/run/owner.json": {
+      "source": {
+        "revision": "0af543503a054ebd1214647b42d4013e1708edb5",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 0.7843797000823542,
+      "peak_sampled_rss_kib": 42684,
+      "stop_reason": null
+    },
+    "out/native-cpu-owned-lower-increments/build/host-build/owner.json": {
+      "source": {
+        "revision": "841b0526c7d088959aca1e91451b8f6b01572378",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 4.603953586076386,
+      "peak_sampled_rss_kib": 357820,
+      "stop_reason": null
+    }
+  },
+  "archives": [
+    {
+      "file": "source-build-and-trial.zip",
+      "identity": {
+        "bytes": 8822114,
+        "sha256": "47bbb39d86dc995d33bcfac98abebc7e092ef840d6e5bc57a8ba2784fcf5e46f",
+        "mode": 420,
+        "mtime_ns": 1792946265805661617
+      },
+      "members": {
+        "files/out/native-cpu-normalized-arithmetic-cohort/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/actions.json",
+          "bytes": 251341,
+          "sha256": "edd1687db52a7f9cea0f92ebaa2446fa96cd7c3cab66ac4cdc82eb8e5acd48dd",
+          "mode": 420,
+          "mtime_ns": 1792945720745340017
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/actions.json",
+          "bytes": 72150,
+          "sha256": "85689ee3e575acaf96548ec07be3e604bf8b8a5a58f4ba0873924a1380be9a06",
+          "mode": 420,
+          "mtime_ns": 1792945753103226414
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/gtest.xml",
+          "bytes": 619,
+          "sha256": "089af4c599a2a8d02d917bc44f076dcf14b80461c59c27acbe88749807b2118f",
+          "mode": 420,
+          "mtime_ns": 1792945879021495957
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/inputs-after.json",
+          "bytes": 1045144,
+          "sha256": "508fca1d069c58b05f7bb73ce5136aa421608a3e7e06c0c81a0657d56a4a0b60",
+          "mode": 420,
+          "mtime_ns": 1792945880830723678
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/inputs-before.json",
+          "bytes": 1045144,
+          "sha256": "508fca1d069c58b05f7bb73ce5136aa421608a3e7e06c0c81a0657d56a4a0b60",
+          "mode": 420,
+          "mtime_ns": 1792945758291000060
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/owner.json",
+          "bytes": 3377,
+          "sha256": "1a8c7f7d85d416e33ccf4302eff14e1593ffa098765951a947176497cc77bf91",
+          "mode": 420,
+          "mtime_ns": 1792945880857897849
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/samples.jsonl",
+          "bytes": 918263,
+          "sha256": "68c08051b18b723a170fac3e5bc3930f45f8367460a606c077e3af2a703032ae",
+          "mode": 420,
+          "mtime_ns": 1792945879273886076
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945758294882592
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/control-5/stdout.log",
+          "bytes": 719,
+          "sha256": "081e976ef354150ca259c5817b13f64de5255faaefa110b0ce5431d6219dcf02",
+          "mode": 420,
+          "mtime_ns": 1792945879021495957
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792945589056958477
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/prepare.py",
+          "bytes": 2826,
+          "sha256": "08b3d23ad26258486ae8f152a7c1b45f51721817474cc176dee27a4b64784f38",
+          "mode": 420,
+          "mtime_ns": 1792945589064724641
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/read_result.py",
+          "bytes": 2558,
+          "sha256": "67870cfa88418452cb3d6133b1510adfb7a2e822a7cdef18e6d59a9e2378f8d4",
+          "mode": 420,
+          "mtime_ns": 1792945589068607724
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/result.json",
+          "bytes": 963,
+          "sha256": "6f7833a3cc57e8e50216e180bae8d3f7160447ec5bcd4e608341da42c2d0224d",
+          "mode": 420,
+          "mtime_ns": 1792945886611058083
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/affected-control/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/affected-control/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792945589056958477
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/actions.json",
+          "bytes": 96825,
+          "sha256": "519a52c9b347e56b0571b3736f709277ced5d18654fc6282768699c4864ec58c",
+          "mode": 420,
+          "mtime_ns": 1792945900365142434
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame-inputs.json",
+          "bytes": 1906,
+          "sha256": "a35ba58223a0212152eb76116cfaba84d8f672060ff9e9ac70ce0fcebb886ec0",
+          "mode": 420,
+          "mtime_ns": 1792945897705970313
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/inputs-after.json",
+          "bytes": 1125775,
+          "sha256": "65bc844698bb495794f90517b524650bd8c4bbea4ab68d5c1c0be6658a3630fe",
+          "mode": 420,
+          "mtime_ns": 1792946216551746946
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/inputs-before.json",
+          "bytes": 1125775,
+          "sha256": "65bc844698bb495794f90517b524650bd8c4bbea4ab68d5c1c0be6658a3630fe",
+          "mode": 420,
+          "mtime_ns": 1792945905173959306
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/owner.json",
+          "bytes": 3991,
+          "sha256": "3a788e759157cb71c2a0ee8c4b62a4f76d0990d3ef35082ff6b94c1a5684c898",
+          "mode": 420,
+          "mtime_ns": 1792946216571151699
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/samples.jsonl",
+          "bytes": 5333476,
+          "sha256": "6cf817b99321669a32256100609222beb6008ae99ac4b5b1bac74a3ca26a547d",
+          "mode": 420,
+          "mtime_ns": 1792946214467676546
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/stderr.log",
+          "bytes": 67274,
+          "sha256": "ac0b10590a55b89818a94397ff422fa89a5bd8a242641ed1a8fe686af265f239",
+          "mode": 420,
+          "mtime_ns": 1792946200213788006
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/frame/stdout.log",
+          "bytes": 829180,
+          "sha256": "1a6a0860c1bea27c703f98072708e36709a292c334e872c67b01d49c4a72cf97",
+          "mode": 420,
+          "mtime_ns": 1792946214456033695
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/prepare.py",
+          "bytes": 15404,
+          "sha256": "e504c4080b3664d0aeb4ecbf05b7231803911110ad5d216836d8966ccf28c474",
+          "mode": 420,
+          "mtime_ns": 1792945589084140052
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/read_result.py",
+          "bytes": 4476,
+          "sha256": "7a061dd862f941d29286b2f391da218b3a3c3460b4eff803fce43aeda50f33e1",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/resource-restore.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/resource-restore.json",
+          "bytes": 5378,
+          "sha256": "5578d213fb93b6384f8959bec06c810c22bd0b9c11a332e11f21879d3180ecb2",
+          "mode": 420,
+          "mtime_ns": 1792945897682678294
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/result.json",
+          "bytes": 2446,
+          "sha256": "9fecd8809438e5e2492bf5e2a62aca73511644dd932f0a6a291c09c10ebe1748",
+          "mode": 420,
+          "mtime_ns": 1792946255818997970
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/cold-frame/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/cold-frame/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/compatibility.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/compatibility.py",
+          "bytes": 4918,
+          "sha256": "73843ba25000345c73f9d417376a4e094a403609f8564fbfe3cd4a3998a3d961",
+          "mode": 420,
+          "mtime_ns": 1792945553422909880
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8-acceptance.json",
+          "bytes": 58295,
+          "sha256": "c57132f0b8057605cc0654d53cc7c410810f199f2d5e50db471cafed5ad5503a",
+          "mode": 420,
+          "mtime_ns": 1792945744451293539
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/gtest.xml",
+          "bytes": 40504,
+          "sha256": "8becaac866c08cf9734ad5458c74847ac1d001d07ebf6edc676c3be51e4a0600",
+          "mode": 420,
+          "mtime_ns": 1792945737803812051
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/inputs-after.json",
+          "bytes": 1043939,
+          "sha256": "4a35bee89f00394355d02f6e858c5fc799178afd82aa28b989a77f5eb1574ac5",
+          "mode": 420,
+          "mtime_ns": 1792945739477341348
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/inputs-before.json",
+          "bytes": 1043939,
+          "sha256": "4a35bee89f00394355d02f6e858c5fc799178afd82aa28b989a77f5eb1574ac5",
+          "mode": 420,
+          "mtime_ns": 1792945724383978638
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/native-observation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/native-observation.json",
+          "bytes": 56887,
+          "sha256": "1bc2137c08db55e220306c25c8cd028c56694f73d8e2fd0ef8cefa4206ff7f11",
+          "mode": 420,
+          "mtime_ns": 1792945737885353068
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/observe.gdb": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/observe.gdb",
+          "bytes": 239,
+          "sha256": "9abcc571778e6ad621b8eec070d7f9395a9138d5a6cfaca5421fdf4fd60e4b3c",
+          "mode": 420,
+          "mtime_ns": 1792945724985874411
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/owner.json",
+          "bytes": 4926,
+          "sha256": "932414edc738cb0d9953354f96ddb17f1817817788c24c9f90298bbf847f5f1d",
+          "mode": 420,
+          "mtime_ns": 1792945739508404281
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/samples.jsonl",
+          "bytes": 248643,
+          "sha256": "48209fdf76a9013db82e620d3ea6dea1a57d47b4bbc44041589d824a70385380",
+          "mode": 420,
+          "mtime_ns": 1792945737900884688
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945724391745036
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/control-8/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/control-8/stdout.log",
+          "bytes": 3932,
+          "sha256": "643514d4bd639439d399cf9fe3c0970a3b92c37bb9880993e60694d80b6eba8a",
+          "mode": 420,
+          "mtime_ns": 1792945737908650500
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/native_observer.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/native_observer.py",
+          "bytes": 12620,
+          "sha256": "65879087f16e5f5b057113e06bd83bab47994e572ecd0bde3816568361e62546",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/prepare.py",
+          "bytes": 4710,
+          "sha256": "8e26f456e54fec67f2870a820e2db51d3589b80137fe3b5245d4a56d49be308a",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/read_result.py",
+          "bytes": 10563,
+          "sha256": "0ccee4f8b56a55fd77f05d4ce214c4bf3c0596ffd3bf3490f211478f916d3ab2",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/run_case.py",
+          "bytes": 1803,
+          "sha256": "70a89563785e82d28a43574a8914740df2b6045c90d19e360b0fd9b1714642cf",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/runtime-transition.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/runtime-transition.json",
+          "bytes": 5979,
+          "sha256": "a9375eabe652e26a42a70da6c3d4800e7c800881050fe573ac93e584847d7745",
+          "mode": 420,
+          "mtime_ns": 1792945720073523940
+        },
+        "files/out/native-cpu-normalized-arithmetic-cohort/runtime_transition.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-cohort/runtime_transition.py",
+          "bytes": 3740,
+          "sha256": "e5556b0730b41b51f252ddb85e8d132595875b40c3c5c149c264f7bf8c06bfd2",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/actions.json",
+          "bytes": 101336,
+          "sha256": "af1d6e1c47dc147958a2d3352fd87691861da50b4d6513c9961045940734861e",
+          "mode": 420,
+          "mtime_ns": 1792945708837725047
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link-proof.json",
+          "bytes": 3741325,
+          "sha256": "33cb24fa191793756e8b6fceac92dfa628259c2fe356ba44667b6f26d46b8ce5",
+          "mode": 420,
+          "mtime_ns": 1792945690536871312
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link-result.json",
+          "bytes": 6916,
+          "sha256": "fc336403f78afc2afa2566cec8ac2aa3ede7d6ca7e9e24cc0d52143944f0d05c",
+          "mode": 420,
+          "mtime_ns": 1792945690832190728
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link.py",
+          "bytes": 3270,
+          "sha256": "f5d43a16506d29ba88ebac641702c1cf580c6e434feb38ee2d9a7e0c3c8ec548",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/inputs-after.json",
+          "bytes": 971675,
+          "sha256": "af34a76b8572e507aeddb65b06bf798e15af18c90e2c8d4b31eabd7e77552c01",
+          "mode": 420,
+          "mtime_ns": 1792945692386503447
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/inputs-before.json",
+          "bytes": 971675,
+          "sha256": "af34a76b8572e507aeddb65b06bf798e15af18c90e2c8d4b31eabd7e77552c01",
+          "mode": 420,
+          "mtime_ns": 1792945688435518451
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/owner.json",
+          "bytes": 2206,
+          "sha256": "5b43e95063a4bc2332047ea834a7307bbf96ee9508c4b1af20010ec29041bdb4",
+          "mode": 420,
+          "mtime_ns": 1792945692405932355
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/runtime-resolution.txt",
+          "bytes": 374,
+          "sha256": "6c3e9b095f472faaea8f6cd7ad90c2f1d56ba18911f64eea4e146a5b09cf5534",
+          "mode": 420,
+          "mtime_ns": 1792945690548528654
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/samples.jsonl",
+          "bytes": 2211,
+          "sha256": "142f9025ea48d827916054e09b12365b78c8b8ca399f30df51e6b5cf6e4aeed7",
+          "mode": 420,
+          "mtime_ns": 1792945690750589310
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945688439402381
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/link/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/link/stdout.log",
+          "bytes": 60,
+          "sha256": "fd87b3fdf1fe916d9b554544e8d197a6dcaf3e970ae009a45787f33d93a473c8",
+          "mode": 420,
+          "mtime_ns": 1792945690832190728
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/prepare.py",
+          "bytes": 7405,
+          "sha256": "1bffff81feb0f776119ddfd71a8efb44e16ae8e6cc12973aa6c1cb8b2ed29493",
+          "mode": 420,
+          "mtime_ns": 1792945340669603241
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/prepared.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/prepared.json",
+          "bytes": 146951,
+          "sha256": "d182657b2df7c3f43b9ed5b400e07c1626a51579df5f14855c5955174147ee00",
+          "mode": 420,
+          "mtime_ns": 1792945682976730923
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/result.json",
+          "bytes": 11823,
+          "sha256": "a613502ce1ad2a15e74f643606a7f2507d6f2facdb9370bd25fb6e304f563a58",
+          "mode": 420,
+          "mtime_ns": 1792945714456273787
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/baseline.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/baseline.bin",
+          "bytes": 751840,
+          "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc",
+          "mode": 420,
+          "mtime_ns": 1792945714157268663
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/calls.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/calls.jsonl",
+          "bytes": 1472,
+          "sha256": "aedd0c24d2b06019b4f7e3314f93e0be17dbfe4c1099276081c4386c6bd8cec3",
+          "mode": 420,
+          "mtime_ns": 1792945714161151542
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/candidate.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/candidate.bin",
+          "bytes": 751840,
+          "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc",
+          "mode": 420,
+          "mtime_ns": 1792945714161151542
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/cases.tsv": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/cases.tsv",
+          "bytes": 1187,
+          "sha256": "c585c14dd3503398447ff38a5cd1a277411eae803ca6eaf733017f8c9b863347",
+          "mode": 420,
+          "mtime_ns": 1792945714091259727
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/comparison.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/comparison.json",
+          "bytes": 268,
+          "sha256": "89ed34eb1e00841f56d41d033a2670114effa68cb5d434a19686def1b07c612a",
+          "mode": 420,
+          "mtime_ns": 1792945714161151542
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/input-after.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/input-after.bin",
+          "bytes": 100672,
+          "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad",
+          "mode": 420,
+          "mtime_ns": 1792945714157268663
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/input-before.bin": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/input-before.bin",
+          "bytes": 100672,
+          "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad",
+          "mode": 420,
+          "mtime_ns": 1792945714091259727
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/inputs-after.json",
+          "bytes": 972892,
+          "sha256": "a6e533373c8fbcfb06641d85d5497e041a21d216af42474742786248c8614ef1",
+          "mode": 420,
+          "mtime_ns": 1792945715990189100
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/inputs-before.json",
+          "bytes": 972892,
+          "sha256": "a6e533373c8fbcfb06641d85d5497e041a21d216af42474742786248c8614ef1",
+          "mode": 420,
+          "mtime_ns": 1792945713745683539
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/owner.json",
+          "bytes": 1671,
+          "sha256": "4caa4231d36f34522b62c946d0e4a5f188245d931d8aa01a152042ab499bff64",
+          "mode": 420,
+          "mtime_ns": 1792945716009605748
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/samples.jsonl",
+          "bytes": 665,
+          "sha256": "a1a17a3b5211fce9f997d94dc5d8308320b0169c872accbd7d57b6ac7c9c57f0",
+          "mode": 420,
+          "mtime_ns": 1792945714273757284
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945713753449296
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run/stdout.log",
+          "bytes": 32,
+          "sha256": "fb1a049de3589cac1237b601f6ddd6d5a3bd990f0b18adb31430b42713931769",
+          "mode": 420,
+          "mtime_ns": 1792945714456273787
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic-compatibility/run_task.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic-compatibility/run_task.py",
+          "bytes": 518,
+          "sha256": "e63294a00c9d79a7403a96d52415feeff39739b41d7e772facc74575f2028585",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/apply_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/apply_provider.py",
+          "bytes": 2185,
+          "sha256": "d9facdcb04d6fa0f6997738f6ffdb334b35ae801422c26bf88ca0cce59a5630b",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/build_cpp.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/build_cpp.py",
+          "bytes": 3112,
+          "sha256": "554650140d6710d684f805e9bb0c6d368658b9e0c3c809a81130165651401bbb",
+          "mode": 420,
+          "mtime_ns": 1792944609624745993
+        },
+        "files/out/native-cpu-normalized-arithmetic/build_domain.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/build_domain.py",
+          "bytes": 1519,
+          "sha256": "7cb521baf9e9e4330093a20e9ff85ee0437d3bcb303c30c98d881717e072ef19",
+          "mode": 420,
+          "mtime_ns": 1792945156490817058
+        },
+        "files/out/native-cpu-normalized-arithmetic/build_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/build_provider.py",
+          "bytes": 402,
+          "sha256": "7350f14b299b523c1003abf89a5342ed28dd4599539dc08f457e84465699cb50",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/configure_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/configure_provider.py",
+          "bytes": 231,
+          "sha256": "7d238db4c256eeb1e1ef6e803858c49f42ec94ec16cc6c1c6daf34902be5f9dd",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp-build-result.json",
+          "bytes": 21677,
+          "sha256": "ffe6a0c424aa94eed40a8b975edd659be7c1338422ccbf5ba19440bd014a1d34",
+          "mode": 420,
+          "mtime_ns": 1792944615582395713
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp-code-inspection.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp-code-inspection.json",
+          "bytes": 14997,
+          "sha256": "2887a59bef0448dbf9426c6d4a553441f465e22558bd5125ac6648180815383e",
+          "mode": 420,
+          "mtime_ns": 1792944715210561790
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/actions.json",
+          "bytes": 48308,
+          "sha256": "b117d7cd694f35f1a981203407389f38bd6791ed4ddd5aafdbb727f9c83781c4",
+          "mode": 420,
+          "mtime_ns": 1792944715264878590
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/build/inputs-after.json",
+          "bytes": 901565,
+          "sha256": "6a1c90065ffa21d00a49351d877ad5646b45f857eef929e834c19fe128e7b617",
+          "mode": 420,
+          "mtime_ns": 1792944616811254413
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/build/inputs-before.json",
+          "bytes": 901565,
+          "sha256": "6a1c90065ffa21d00a49351d877ad5646b45f857eef929e834c19fe128e7b617",
+          "mode": 420,
+          "mtime_ns": 1792944611207503210
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/build/owner.json",
+          "bytes": 3465,
+          "sha256": "a3c3117b1b02c6ba46f3dfe907d8aa9cafba754470fd77dd980956ab997844ae",
+          "mode": 420,
+          "mtime_ns": 1792944616834587170
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/build/samples.jsonl",
+          "bytes": 7914,
+          "sha256": "1c6db8f0d8fcc8d4717eabc725733387afa1d91710e4a68a3bcbaa44a2a27965",
+          "mode": 420,
+          "mtime_ns": 1792944615559062953
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792944611215280794
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/build/stdout.log",
+          "bytes": 60,
+          "sha256": "870f372d96e27eef623b4f9b272695de88f8af604d02a53375fe28163412d366",
+          "mode": 420,
+          "mtime_ns": 1792944615582395713
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/owned_guard.py",
+          "bytes": 20791,
+          "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+          "mode": 420,
+          "mtime_ns": 1792944609624745993
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run/inputs-after.json",
+          "bytes": 902420,
+          "sha256": "ab044e792333cc6a8b86f463c3d4be63d38f03caf8b08ad876320fedf346e889",
+          "mode": 420,
+          "mtime_ns": 1792944717581199731
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run/inputs-before.json",
+          "bytes": 902420,
+          "sha256": "ab044e792333cc6a8b86f463c3d4be63d38f03caf8b08ad876320fedf346e889",
+          "mode": 420,
+          "mtime_ns": 1792944716335695446
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run/owner.json",
+          "bytes": 1968,
+          "sha256": "b236e637d8c63b81c283e1606eade017b3586ff922c418edb53c418d4344ce55",
+          "mode": 420,
+          "mtime_ns": 1792944717608360394
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run/samples.jsonl",
+          "bytes": 222,
+          "sha256": "18de0984d4a6b8cb8d383d48469c4d50f603eae5f7e81275b6a4919dc6c5368c",
+          "mode": 420,
+          "mtime_ns": 1792944716355094300
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792944716347334758
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run/stdout.log",
+          "bytes": 176,
+          "sha256": "530aa2a288301014afeefcb0c44d83c58be3ae7b053e4e2f21f2e700417683e4",
+          "mode": 420,
+          "mtime_ns": 1792944716382252700
+        },
+        "files/out/native-cpu-normalized-arithmetic/cpp/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/cpp/run_owned.py",
+          "bytes": 12531,
+          "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab",
+          "mode": 420,
+          "mtime_ns": 1792944609624745993
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain-build-result.json",
+          "bytes": 14860,
+          "sha256": "a8f8bcc428a836087d1528bad4ee63d350a37c2ce2ff1bc037deb049497ad01f",
+          "mode": 420,
+          "mtime_ns": 1792945161839706876
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/actions.json",
+          "bytes": 49430,
+          "sha256": "46f993599a0140e538f0b9dfe613115a74df8b76e50da47d3f309fd30de893ec",
+          "mode": 420,
+          "mtime_ns": 1792945235598602811
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/build/inputs-after.json",
+          "bytes": 906059,
+          "sha256": "0117a17076fcf6b3c22e990239bb691fa26d1d645cd04d43b12b6d13d979c14d",
+          "mode": 420,
+          "mtime_ns": 1792945163139523955
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/build/inputs-before.json",
+          "bytes": 906059,
+          "sha256": "0117a17076fcf6b3c22e990239bb691fa26d1d645cd04d43b12b6d13d979c14d",
+          "mode": 420,
+          "mtime_ns": 1792945157877562869
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/build/owner.json",
+          "bytes": 2317,
+          "sha256": "cb3edc91d9b5fe0c9d9f6322f8a31701cff0933fefd93438fa2901667a2bef47",
+          "mode": 420,
+          "mtime_ns": 1792945163162893099
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/build/samples.jsonl",
+          "bytes": 5578,
+          "sha256": "2d7b4dc853627adee9f1986a3fc5e1d13a0e92bf4498c3c1940c44a190d0f0ff",
+          "mode": 420,
+          "mtime_ns": 1792945161824169109
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945157885331753
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/build/stdout.log",
+          "bytes": 86,
+          "sha256": "27667551e4dc0a3fc265d08437e82e2e2275c91398b907ecb39710b6cdadb9ec",
+          "mode": 420,
+          "mtime_ns": 1792945161839706876
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/owned_guard.py",
+          "bytes": 20791,
+          "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+          "mode": 420,
+          "mtime_ns": 1792945093877944430
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run/inputs-after.json",
+          "bytes": 906928,
+          "sha256": "8b717dbff5abfc52869173f069e2a7d2dd97d51e5291b08779b405dc93af5f01",
+          "mode": 420,
+          "mtime_ns": 1792945238127495764
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run/inputs-before.json",
+          "bytes": 906928,
+          "sha256": "8b717dbff5abfc52869173f069e2a7d2dd97d51e5291b08779b405dc93af5f01",
+          "mode": 420,
+          "mtime_ns": 1792945236791211830
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run/owner.json",
+          "bytes": 2036,
+          "sha256": "c139f40d321d030d0e97aec7d1ab99eab58622a67e0475d9f5b6e600be1c40c7",
+          "mode": 420,
+          "mtime_ns": 1792945238154687587
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run/samples.jsonl",
+          "bytes": 222,
+          "sha256": "2dded361f9b5d4ac29206a506a01d6d91b8cfdb4a03c03b1de15bf787b1ff1ab",
+          "mode": 420,
+          "mtime_ns": 1792945236810634561
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945236802865469
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run/stdout.log",
+          "bytes": 178,
+          "sha256": "6391eedf95c0be329ba489866d04bbb176408f97edfd66f95fb235902419038d",
+          "mode": 420,
+          "mtime_ns": 1792945236911632765
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain/run_owned.py",
+          "bytes": 12531,
+          "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab",
+          "mode": 420,
+          "mtime_ns": 1792945093877944430
+        },
+        "files/out/native-cpu-normalized-arithmetic/domain_driver.cpp": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/domain_driver.cpp",
+          "bytes": 6064,
+          "sha256": "e5ba992928d3149419a853eb9280030332cad57dc10051350ec8b61fc49ba503",
+          "mode": 420,
+          "mtime_ns": 1792945093877944430
+        },
+        "files/out/native-cpu-normalized-arithmetic/driver.cpp": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/driver.cpp",
+          "bytes": 5644,
+          "sha256": "4fc6552daea67da6e8b13600689cc950855657f5a5ae54da38d81cede10e8ab1",
+          "mode": 420,
+          "mtime_ns": 1792944413199814988
+        },
+        "files/out/native-cpu-normalized-arithmetic/inspect_cpp.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/inspect_cpp.py",
+          "bytes": 2922,
+          "sha256": "c3ea40c7fc0aa506bcb8e985d431688151eb556d61538282e842bd152e8e19c0",
+          "mode": 420,
+          "mtime_ns": 1792944609624745993
+        },
+        "files/out/native-cpu-normalized-arithmetic/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepare_cpp.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepare_cpp.py",
+          "bytes": 8422,
+          "sha256": "9debb60d5a16d1af338f1fc7cc640979059ca206f8693c399c780f015eb90aa3",
+          "mode": 420,
+          "mtime_ns": 1792944609624745993
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepare_domain.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepare_domain.py",
+          "bytes": 3692,
+          "sha256": "e339de8259cde4d49f094b7ca12c98e79682593f3368d710f781df148bd5230e",
+          "mode": 420,
+          "mtime_ns": 1792945156486932619
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepare_provider_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepare_provider_build.py",
+          "bytes": 230,
+          "sha256": "4b9877e3fab9ae6096707c4d2d0f476c4976c1b23aada5bd65e142412f6b826f",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepare_provider_config.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepare_provider_config.py",
+          "bytes": 3601,
+          "sha256": "5e35db6fe39b7044796245875950720442f13ccb2f42b573d5cf2a62660e5703",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepare_provider_patch.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepare_provider_patch.py",
+          "bytes": 4833,
+          "sha256": "cbfd9c7d0498b4eb1fe3265c18b651b742aa90e11ba26e988ec7c9cde5e37a0a",
+          "mode": 420,
+          "mtime_ns": 1792945553422909880
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepared-cpp.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepared-cpp.json",
+          "bytes": 73678,
+          "sha256": "34a81ad863ea67715a23cb1d1ac94cd21d02e981e14e5cd70c8831802058db9e",
+          "mode": 420,
+          "mtime_ns": 1792944610087530726
+        },
+        "files/out/native-cpu-normalized-arithmetic/prepared-domain.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/prepared-domain.json",
+          "bytes": 73104,
+          "sha256": "300f99638bf95fe70b6dafcbd5366f9aff15bdb0d0afae7c845f2284097c470e",
+          "mode": 420,
+          "mtime_ns": 1792945156723883583
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/actions.json",
+          "bytes": 2582087,
+          "sha256": "6487577f26eefa4b6ab38a8f21dbe7701f87bfea1e4a54332c12c56f2a17bf7b",
+          "mode": 420,
+          "mtime_ns": 1792945632813992401
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/build/inputs-after.json",
+          "bytes": 5259330,
+          "sha256": "9ddb3ad435939aef9d08525d3c46a6b23156b7e12a87db1a7097f495950ccc05",
+          "mode": 420,
+          "mtime_ns": 1792945645076006729
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/build/inputs-before.json",
+          "bytes": 5259330,
+          "sha256": "9ddb3ad435939aef9d08525d3c46a6b23156b7e12a87db1a7097f495950ccc05",
+          "mode": 420,
+          "mtime_ns": 1792945639064750956
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/build/owner.json",
+          "bytes": 3120,
+          "sha256": "ce324fb8ee8a9587d6cf37f693109b35f45ccdae0880243f014e91e51609fbf3",
+          "mode": 420,
+          "mtime_ns": 1792945645110929172
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/build/samples.jsonl",
+          "bytes": 7979,
+          "sha256": "6235b329f52d6eb9dd5be6f783892b60806630500b8e7cd1c113321577a2e236",
+          "mode": 420,
+          "mtime_ns": 1792945641393629102
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945639084163248
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/build/stdout.log",
+          "bytes": 688,
+          "sha256": "5320d9ce7f2ef6342a2e569f6bd397ad9f420d59d57e3dbdc89590872849089b",
+          "mode": 420,
+          "mtime_ns": 1792945641587642676
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure-result.json",
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd",
+          "mode": 420,
+          "mtime_ns": 1792945622398610587
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure/inputs-after.json",
+          "bytes": 5232685,
+          "sha256": "3dee7165d3e101c11571204c28e61fceeeef0aeab828fc7eaf18b46016279b3d",
+          "mode": 420,
+          "mtime_ns": 1792945626872452514
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure/inputs-before.json",
+          "bytes": 5232685,
+          "sha256": "3dee7165d3e101c11571204c28e61fceeeef0aeab828fc7eaf18b46016279b3d",
+          "mode": 420,
+          "mtime_ns": 1792945619513545813
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure/owner.json",
+          "bytes": 2360,
+          "sha256": "04a75517bff908bbe26d715f05a578e08e1ea35d4a05ba08dba0487a30820808",
+          "mode": 420,
+          "mtime_ns": 1792945626895753153
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure/samples.jsonl",
+          "bytes": 3889,
+          "sha256": "ae829afb29de6a076ca0c329ea0fa2d0faa4a17396404ef331f6283981dbb123",
+          "mode": 420,
+          "mtime_ns": 1792945622336482679
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792945619525194795
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/configure/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/configure/stdout.log",
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05",
+          "mode": 420,
+          "mtime_ns": 1792945622208343868
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/incremental-dry-run.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/incremental-dry-run.txt",
+          "bytes": 29738,
+          "sha256": "4ce169d7905caf410fdea7165a750509e0ed78ff11156413db5476bd6376717c",
+          "mode": 420,
+          "mtime_ns": 1792945632402451773
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/incremental-plan.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/incremental-plan.json",
+          "bytes": 215731,
+          "sha256": "65025dfecaa263ccd7d5d473990450cd2bb4de81744e4e3dab01981b8ffd83be",
+          "mode": 420,
+          "mtime_ns": 1792945632402451773
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/linked-callback.disassembly.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/linked-callback.disassembly.txt",
+          "bytes": 36648,
+          "sha256": "95ed9561a48a2ff06274f793ed270b6fff7171259861ba6f4850adae7e349b2a",
+          "mode": 420,
+          "mtime_ns": 1792945670318271563
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/linked-native-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/linked-native-proof.json",
+          "bytes": 2575402,
+          "sha256": "6eaf41fcf83f0e5cc60b6525f9ecb141fe5f30c9b118b79b15ca8c382197c104",
+          "mode": 420,
+          "mtime_ns": 1792945673851406930
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/linked-runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/linked-runtime-resolution.txt",
+          "bytes": 1402,
+          "sha256": "6078624c40ce682f7e27988886d9179462f04fec164f4c23021500b5bf8d185c",
+          "mode": 420,
+          "mtime_ns": 1792945671275027233
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792945607631468776
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/provider-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/provider-build-result.json",
+          "bytes": 2475,
+          "sha256": "ff8d266369e37e26a86d89f20cc98a642ae6f5dab1c20adefebe79465896ce6e",
+          "mode": 420,
+          "mtime_ns": 1792945641576001861
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/provider.patch": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/provider.patch",
+          "bytes": 1899,
+          "sha256": "e3225bf7cf2867b6c2fc564b2a2ade97531c63e797d8f8d6545d37242bc93e62",
+          "mode": 420,
+          "mtime_ns": 1792945559557648117
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/review-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/review-admission.json",
+          "bytes": 739,
+          "sha256": "523dc8e8e292660b83195727b52d13cbea7fa3f000159cad131d4ffc3cb6a776",
+          "mode": 420,
+          "mtime_ns": 1792945590765530295
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792945607631468776
+        },
+        "files/out/native-cpu-normalized-arithmetic/provider/source-contract.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/provider/source-contract.json",
+          "bytes": 137944,
+          "sha256": "a84ec549f9bdda41a9cb58580c7f21cf4e652237c1b3e1e52485c4b25dbe01ca",
+          "mode": 420,
+          "mtime_ns": 1792945559561532116
+        },
+        "files/out/native-cpu-normalized-arithmetic/read_linked_native.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/read_linked_native.py",
+          "bytes": 5888,
+          "sha256": "6d5b14ce696a968c7de45ff1b1deeda619dd43c143231a51988a4562cbfa73a8",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-normalized-arithmetic/retained8.cpp": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/retained8.cpp",
+          "bytes": 26175,
+          "sha256": "48fd653683436c31688dfa238b0fecf7a4e237c574a7f8d6fbdf098aa019da25",
+          "mode": 420,
+          "mtime_ns": 1792944609624745993
+        },
+        "files/out/native-cpu-normalized-arithmetic/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-normalized-arithmetic/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792945340661835712
+        },
+        "files/out/native-cpu-owned-lower-increments/build/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/actions.json",
+          "bytes": 32844,
+          "sha256": "da11a3ee49a6c6df3be00b4fdd71e9c3c4effb7d9501cee0d8753ec3731ddb6f",
+          "mode": 420,
+          "mtime_ns": 1792944888809378507
+        },
+        "files/out/native-cpu-owned-lower-increments/build/host-build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/host-build/inputs-after.json",
+          "bytes": 938047,
+          "sha256": "64175dba1a6f91a442ef8620d026ff4a61c0bec2e66efc7f98d305e87fe5407b",
+          "mode": 420,
+          "mtime_ns": 1792944895649319287
+        },
+        "files/out/native-cpu-owned-lower-increments/build/host-build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/host-build/inputs-before.json",
+          "bytes": 938047,
+          "sha256": "64175dba1a6f91a442ef8620d026ff4a61c0bec2e66efc7f98d305e87fe5407b",
+          "mode": 420,
+          "mtime_ns": 1792944890018143211
+        },
+        "files/out/native-cpu-owned-lower-increments/build/host-build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/host-build/owner.json",
+          "bytes": 3468,
+          "sha256": "506fd124a40c68ad10e00fa40689ad3fd9c42c2af16d235c17d7a752e194221f",
+          "mode": 420,
+          "mtime_ns": 1792944895672636787
+        },
+        "files/out/native-cpu-owned-lower-increments/build/host-build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/host-build/samples.jsonl",
+          "bytes": 7915,
+          "sha256": "ba2892877f3ffe10de73979b6f688ae7ce904d4cb8299c6db03e22c7ee25c515",
+          "mode": 420,
+          "mtime_ns": 1792944894362970577
+        },
+        "files/out/native-cpu-owned-lower-increments/build/host-build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/host-build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792944890022029460
+        },
+        "files/out/native-cpu-owned-lower-increments/build/host-build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/host-build/stdout.log",
+          "bytes": 164,
+          "sha256": "26a96b85a448de23a6593ac6222568529c44de19b3ffe18e62468441e820c507",
+          "mode": 420,
+          "mtime_ns": 1792944894448468074
+        },
+        "files/out/native-cpu-owned-lower-increments/build/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/owned_guard.py",
+          "bytes": 20791,
+          "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056",
+          "mode": 420,
+          "mtime_ns": 1792944888405156203
+        },
+        "files/out/native-cpu-owned-lower-increments/build/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build/run_owned.py",
+          "bytes": 12531,
+          "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab",
+          "mode": 420,
+          "mtime_ns": 1792944888405156203
+        },
+        "files/out/native-cpu-owned-lower-increments/build_host.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/build_host.py",
+          "bytes": 3847,
+          "sha256": "df5a7257623c1b828ebed33aa8b1cd3dc855624a1da0849db0d9f23b2d342d5e",
+          "mode": 420,
+          "mtime_ns": 1792944888389609191
+        },
+        "files/out/native-cpu-owned-lower-increments/host-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/host-build-result.json",
+          "bytes": 137701,
+          "sha256": "3db81fc039326a1f2a499554933ff6586c2ccfbed2010f5e5b34d711c5361f5e",
+          "mode": 420,
+          "mtime_ns": 1792944894448468074
+        },
+        "files/out/native-cpu-owned-lower-increments/host-source-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/host-source-proof.json",
+          "bytes": 1228,
+          "sha256": "9083b9bd8827628bddab98906c92ef14799696a5142307506df0130d02f2f958",
+          "mode": 420,
+          "mtime_ns": 1792944716490893085
+        },
+        "files/out/native-cpu-owned-lower-increments/prepare_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/prepare_build.py",
+          "bytes": 5724,
+          "sha256": "aa5c6912f7d1d05a10297fa141c464b47db0cdbee513a98228ea9771a013652d",
+          "mode": 420,
+          "mtime_ns": 1792944888385722439
+        },
+        "files/out/native-cpu-owned-lower-increments/prepared-build.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/prepared-build.json",
+          "bytes": 102996,
+          "sha256": "016587c160e68ca18f17f5ae328c54651365e784922102a50c394ffa74b4babe",
+          "mode": 420,
+          "mtime_ns": 1792944888809378507
+        },
+        "files/out/native-cpu-owned-lower-increments/retained_integrator.cpp": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-owned-lower-increments/retained_integrator.cpp",
+          "bytes": 37247,
+          "sha256": "382aacb6f1dab31164541ad74b3f1ed1f776459dc7026e086cc968a40febca49",
+          "mode": 420,
+          "mtime_ns": 1792944716490893085
+        },
+        "files/out/preserve-native-cpu-normalized-arithmetic.py": {
+          "source": "/home/astra/.project/Sirius/out/preserve-native-cpu-normalized-arithmetic.py",
+          "bytes": 11585,
+          "sha256": "a96f26a25ad4e32ebf9db11c27fd9a596d9899eb4c06f6e51433668d90e3e6b9",
+          "mode": 420,
+          "mtime_ns": 1792945665158426368
+        }
+      }
+    },
+    {
+      "file": "actual-products.zip",
+      "identity": {
+        "bytes": 17633479,
+        "sha256": "4193c6012b2ad3e216c4d28c6eeabd9929cfbebac7b50a25861e8453940cc6bb",
+        "mode": 420,
+        "mtime_ns": 1792946267923060069
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic-compatibility/compatibility": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic-compatibility/compatibility",
+          "bytes": 5395544,
+          "sha256": "0119a7e88cd7acddad3696d4909e4a301fac9c4a4b7f5d82a795ee03d6ec172b",
+          "mode": 493,
+          "mtime_ns": 1792945688936545306
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/domain/abi-check": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/domain/abi-check",
+          "bytes": 257216,
+          "sha256": "8b0362aa8d695b8822a14dedd46588ae7159d13632c886b56e880d2f8ac2fab9",
+          "mode": 493,
+          "mtime_ns": 1792945161279205151
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/domain/driver.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/domain/driver.o",
+          "bytes": 145928,
+          "sha256": "f010139557ea7c77494a647cbf8df22b494707731d01a844bbbed09a4557cb8b",
+          "mode": 420,
+          "mtime_ns": 1792945161119943029
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/objects/rows_adapter.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/objects/rows_adapter.o",
+          "bytes": 116432,
+          "sha256": "c76247be3e6edbefd1a0234e3a1ba866a2dc18965e675a627367bc7e17fc807d",
+          "mode": 420,
+          "mtime_ns": 1792944615516286226
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/probe/abi-check": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/probe/abi-check",
+          "bytes": 257208,
+          "sha256": "91b1dfcc72826c1ff90da6fa44a45b7303f0316dca54f98c49d219c6f794c70a",
+          "mode": 493,
+          "mtime_ns": 1792944615492953468
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/probe/driver.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/probe/driver.o",
+          "bytes": 145152,
+          "sha256": "76c8207ca9397dbabae943930a180759fb6fd3f4cc04a316dcf3bfdeb97197b7",
+          "mode": 420,
+          "mtime_ns": 1792944615345179320
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/probe/retained8.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/probe/retained8.o",
+          "bytes": 112968,
+          "sha256": "008d6536669abd8d774301d90186bafb6cd647a559967d27feeffeabd55d52ab",
+          "mode": 420,
+          "mtime_ns": 1792944612961349005
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/provider/libvulkan_lvp.so": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/provider/libvulkan_lvp.so",
+          "bytes": 17797328,
+          "sha256": "dfa51123fdbfe6308ea5f39930d5a723347c266b57cd89b1ff0893f237aa7d28",
+          "mode": 493,
+          "mtime_ns": 1792945641389748831
+        },
+        "files/bin/linux-gcc/native-cpu-normalized-arithmetic/provider/lvp_icd.json": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/provider/lvp_icd.json",
+          "bytes": 206,
+          "sha256": "afc7a6502f9e10a8146bdab820007a14b06866602b85de8c3844448d9b65f70d",
+          "mode": 420,
+          "mtime_ns": 1792945641556600504
+        },
+        "files/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+          "bytes": 12469552,
+          "sha256": "c96e7640e3231d47cdea77af7acc0baaf87d9ca25a900215039786d79070688b",
+          "mode": 493,
+          "mtime_ns": 1792944894230838080
+        },
+        "files/bin/linux-gcc/native-cpu-owned-lower-increments/matched/audited_backend_tests": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/matched/audited_backend_tests",
+          "bytes": 13781496,
+          "sha256": "e65a6860e565eb37514f10abca8fcb41a4dbd29afd9b4339cc266c733b18caed",
+          "mode": 493,
+          "mtime_ns": 1792944893962686835
+        },
+        "files/bin/linux-gcc/native-cpu-owned-lower-increments/matched/libsirius_backend.a": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/matched/libsirius_backend.a",
+          "bytes": 6871764,
+          "sha256": "660ab5ab7a608d9ecb3d1be7c6b421854c7861ba88549f47e7aaf74c7e37b6b7",
+          "mode": 420,
+          "mtime_ns": 1792944893655673095
+        },
+        "files/bin/linux-gcc/native-cpu-owned-lower-increments/matched/retained_integrator.cpp.o": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/matched/retained_integrator.cpp.o",
+          "bytes": 128536,
+          "sha256": "9822148aa788eff5402f0a0cb6938b595628f7ddee86a2be019222fbe2b05075",
+          "mode": 420,
+          "mtime_ns": 1792944893309796853
+        }
+      }
+    }
+  ],
+  "additional_qualification_claimed": false,
+  "scope": "AH uses guarded normalized arithmetic with complete AG fallback. Bounds preserve original floating point operation order, identities, final normalization/error/refusal, while reducing proved redundant private checks. Divide/sqrt original three corrections/final residual and exact AG raw3/all9380tuples remain. The changed host copies20already-owned lower increments from the same immutable step instead of repeating their expansion; legacy null-curve path remains original. Only one host archive member changes. Fresh49case5927040word and complete-packet17781120word scalar comparisons, full38/all187960words, original C8/all32 and affected original connected-interval control5 must pass; sole original frame decides frame acceptance. Z all8/ABBA22+Decimal are predecessor evidence, not current qualification. Finite scalar comparisons/source bounds do not prove universal math, scientific or release acceptance.",
+  "original_frame": {
+    "attempted": true,
+    "accepted": false,
+    "owner": {
+      "bytes": 3991,
+      "sha256": "3a788e759157cb71c2a0ee8c4b62a4f76d0990d3ef35082ff6b94c1a5684c898"
+    },
+    "XML": null,
+    "stop_reason": "diagnostic_timeout",
+    "child_exit": -15,
+    "wall_seconds": 300.2424300699495,
+    "peak_sampled_rss_kib": 920012,
+    "build": {
+      "bytes": 137701,
+      "sha256": "3db81fc039326a1f2a499554933ff6586c2ccfbed2010f5e5b34d711c5361f5e"
+    },
+    "frame_inputs": {
+      "bytes": 1906,
+      "sha256": "a35ba58223a0212152eb76116cfaba84d8f672060ff9e9ac70ce0fcebb886ec0"
+    },
+    "module_joins": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+        "bytes": 86008,
+        "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      }
+    },
+    "predecessor_Z_controls": {
+      "bytes": 61733,
+      "sha256": "7a949ec66b7d5a14b0426ccec308725b56da627357398dc5607b851873615aac"
+    },
+    "predecessor_Z_benefit": {
+      "bytes": 234821,
+      "sha256": "daf7acb99643527f478e5297707208da1f1b02e188a598030146005b42801f7b"
+    },
+    "predecessor_Z_decimal": {
+      "bytes": 7994,
+      "sha256": "947d8da3fb77f3eee2dfe1d4c03064e1597a6503ef227f4949191ed99bce906d"
+    },
+    "scope": "One original cold128x128/1SPP Kerr runtime profile, unchanged defaults/governors, cache disabled. Original test validates and removes its PPM. Fresh AH full38/C8 and this actual original frame only; broader all22+Decimal/all8 results belong to predecessor Z, with exact source inverse and guarded metadata substitution. No newly executed AD broad-suite or full scientific, Mandatory or release qualification claim."
+  },
+  "runtime_transition": {
+    "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+    "historical_build_dependency": {
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "current_runtime": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "incoming_merged_dependency": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "current_CPP_build_preparation": {
+      "bytes": 73678,
+      "sha256": "34a81ad863ea67715a23cb1d1ac94cd21d02e981e14e5cd70c8831802058db9e"
+    },
+    "package": "zlib1g:amd64",
+    "version": "1:1.3.dfsg-3.1ubuntu2.3",
+    "package_integrity_output": "",
+    "upgrade_log": [
+      "2026-10-25 06:06:09 upgrade zlib1g:amd64 1:1.3.dfsg-3.1ubuntu2.2 1:1.3.dfsg-3.1ubuntu2.3"
+    ],
+    "existing_product_resolution": [
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/matched/audited_backend_tests",
+        "identity": {
+          "bytes": 13781496,
+          "sha256": "e65a6860e565eb37514f10abca8fcb41a4dbd29afd9b4339cc266c733b18caed"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+        "identity": {
+          "bytes": 12469552,
+          "sha256": "c96e7640e3231d47cdea77af7acc0baaf87d9ca25a900215039786d79070688b"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-normalized-arithmetic/provider/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 17797328,
+          "sha256": "dfa51123fdbfe6308ea5f39930d5a723347c266b57cd89b1ff0893f237aa7d28"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-retained-ownership/providers/baseline/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 14768776,
+          "sha256": "cde2d0f8f243448a3f3b28408121412fb03a8bd9c01f5731f9e87a107150e952"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      }
+    ],
+    "scope": "Historical P host receipts pin the old library; the new dense C++ build explicitly pins the current installed library. Preserve both provenances and verify the incoming merged pin against those exact two identities. This cohort uses the current package after product/library-resolution checks; no package change is performed. All other identities, original C8/full38/frame assertions/counts/governors remain. Z broader gates are predecessor supporting evidence only. No historical qualification, numerical equivalence or release claim is transferred across the package update."
+  },
+  "last_reported_tiles": [
+    4603,
+    16384
+  ],
+  "additional_passive_profile_executed": false,
+  "profile_scope": "No profiling study for AH. Historical profiles and source inspection motivate changes; neither transfers performance acceptance to this candidate.",
+  "dense_CPP_ABI_scope": {
+    "focused_owner": {
+      "bytes": 1968,
+      "sha256": "b236e637d8c63b81c283e1606eade017b3586ff922c418edb53c418d4344ce55",
+      "mode": 420,
+      "mtime_ns": 1792944717608360394
+    },
+    "focused_output": {
+      "passed": true,
+      "calls": 49392,
+      "compared_words": 5927040,
+      "active_lane_results": 148176,
+      "case_tuples": 49,
+      "input_alias_and_inactive_words_checked": true,
+      "FP_controls_unchanged": true
+    },
+    "CXX_build": {
+      "bytes": 21677,
+      "sha256": "ffe6a0c424aa94eed40a8b975edd659be7c1338422ccbf5ba19440bd014a1d34",
+      "mode": 420,
+      "mtime_ns": 1792944615582395713
+    },
+    "CXX_code": {
+      "bytes": 14997,
+      "sha256": "2887a59bef0448dbf9426c6d4a553441f465e22558bd5125ac6648180815383e",
+      "mode": 420,
+      "mtime_ns": 1792944715210561790
+    },
+    "complete_packet_owner": {
+      "bytes": 2036,
+      "sha256": "c139f40d321d030d0e97aec7d1ab99eab58622a67e0475d9f5b6e600be1c40c7",
+      "mode": 420,
+      "mtime_ns": 1792945238154687587
+    },
+    "complete_packet_output": {
+      "passed": true,
+      "calls": 148176,
+      "compared_words": 17781120,
+      "active_lane_results": 444528,
+      "case_tuples": 49,
+      "input_alias_and_inactive_words_checked": true,
+      "FP_controls_unchanged": true
+    },
+    "domain_build": {
+      "bytes": 14860,
+      "sha256": "a8f8bcc428a836087d1528bad4ee63d350a37c2ce2ff1bc037deb049497ad01f",
+      "mode": 420,
+      "mtime_ns": 1792945161839706876
+    }
+  },
+  "diagnostic_build_scope": "Zero new CPP compilations or baseline objcopy operations. Reused exact verified R driver and renamed Q baseline; one new link and one fresh full38/all187960word comparison passed. Historical R accounting failures remain historical.",
+  "predecessor_Z_broader_evidence": {
+    "benefit/readers/benefit.json": {
+      "bytes": 234821,
+      "sha256": "daf7acb99643527f478e5297707208da1f1b02e188a598030146005b42801f7b",
+      "mode": 420,
+      "mtime_ns": 1792930676511445536
+    },
+    "benefit/readers/decimal-agreement.json": {
+      "bytes": 7994,
+      "sha256": "947d8da3fb77f3eee2dfe1d4c03064e1597a6503ef227f4949191ed99bce906d",
+      "mode": 420,
+      "mtime_ns": 1792930683157782609
+    },
+    "controls/readers/controls-1-8-acceptance.json": {
+      "bytes": 61733,
+      "sha256": "7a949ec66b7d5a14b0426ccec308725b56da627357398dc5607b851873615aac",
+      "mode": 420,
+      "mtime_ns": 1792931410443288846
+    }
+  },
+  "legacy_human_scope_labels": "Some inherited comments retain predecessor stage names; exact frozen paths/hashes/native PCs/module joins identify AH. Fresh focused/domain/host/full38/C8/affected-control5/frame owners are recorded here. Z broader results remain separately preserved predecessor evidence.",
+  "host_build": {
+    "bytes": 137701,
+    "sha256": "3db81fc039326a1f2a499554933ff6586c2ccfbed2010f5e5b34d711c5361f5e",
+    "mode": 420,
+    "mtime_ns": 1792944894448468074
+  },
+  "host_source_proof": {
+    "source": "src/sirius/backend/retained_integrator.cpp",
+    "basis": {
+      "bytes": 36518,
+      "sha256": "1e650958d952afab60cebe9a871d8a85b819f15bd87632cde73731313dfdb4da"
+    },
+    "derived_path": "out/native-cpu-owned-lower-increments/retained_integrator.cpp",
+    "derived": {
+      "bytes": 37247,
+      "sha256": "382aacb6f1dab31164541ad74b3f1ed1f776459dc7026e086cc968a40febca49"
+    },
+    "full_inverse_restores_original_source": true,
+    "all_other_source_bytes_unchanged": true,
+    "scope": "One local reuse in part0 of a valid curved DP attempt. The same step already produced all40 lower PhaseIncrements inside PhasePacket[trial1]; original Increments(lower) repeats the same six-input CenterDifference, ordered3Extract, Radius and upward float conversion at indices8*group+axis. Copy exactly those20 five-word values from packet[1][40+index]. The curve belongs to this row/attempt, is built before Endpoint and is not modified before this copy. Other trials, four quartics, all40fields, original shader calls/inputs/counts and every error/refusal/rollback/publication remain. Flat/legacy paths retain original calculation. Source reasoning is not machine-checked proof; fresh original host controls/C8/frame remain necessary."
+  },
+  "fresh_affected_control5": {
+    "passed": true,
+    "case": "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+    "owner": {
+      "bytes": 3377,
+      "sha256": "1a8c7f7d85d416e33ccf4302eff14e1593ffa098765951a947176497cc77bf91"
+    },
+    "XML": {
+      "bytes": 619,
+      "sha256": "089af4c599a2a8d02d917bc44f076dcf14b80461c59c27acbe88749807b2118f"
+    },
+    "wall_seconds": 117.35844926501159,
+    "peak_sampled_rss_kib": 2533008,
+    "scope": "One fresh original control5 for changed owned-lower-increment host and AH normalized arithmetic, after current full38/C8. Unmodified original BothProductModes assertions, inputs, independent trials/budgets, endpoint/increment/quarter packets and refusal checks. Original300s/4GiB/2GiB/cache-off. Z broader controls/ABBA remain predecessor evidence, not fresh current qualification. No frame/science/release admission.",
+    "reader": {
+      "bytes": 2558,
+      "sha256": "67870cfa88418452cb3d6133b1510adfb7a2e822a7cdef18e6d59a9e2378f8d4"
+    }
+  },
+  "new_product_members": 13,
+  "current_system_zlib_recovery_member": false,
+  "reused_driver_baseline_runtime_recovery": "R603a155e actual-products.zip preserves the exact driver object, renamed baseline and current f61677c7 system zlib; no duplicate copies here.",
+  "reused_native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-arithmetic-closure/objects/transport.o",
+      "bytes": 881384,
+      "sha256": "a3663c424ac4acfa150ad022abea52964295ac86f196b422913a05f3d053d1b4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-arithmetic-closure/objects/endpoint.o",
+      "bytes": 911296,
+      "sha256": "85286d38e810804432757b2ddef302f2a3138128a6445dac7984a0ebbb5c75f7"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-arithmetic-closure/objects/dopri_phase.o",
+      "bytes": 987128,
+      "sha256": "620f30d1a8685ccce5ffd9dc628486caf38e7197168b21ea26d3ad8063a82cff"
+    }
+  ],
+  "recovery_manifests": {
+    "attestations/qualification/2d971dff/native-cpu-nir-dead-progress-frame-timeout/MANIFEST.json": {
+      "bytes": 83810,
+      "sha256": "3cdfab3ad1f3a76482492cf4069dc0748b4f9ce1753088bdbe75fab72226ffac",
+      "mode": 420,
+      "mtime_ns": 1792827582922129520
+    },
+    "attestations/qualification/37cd12be/native-cpu-upload-aware-staging-rejected-transport12/MANIFEST.json": {
+      "bytes": 60549,
+      "sha256": "8966f6084acc0d9b86c2d4a1f9243181a689f0af78d8f5a5be3bb2845c329dd8",
+      "mode": 420,
+      "mtime_ns": 1792832352304978375
+    },
+    "attestations/qualification/1fdaa56a/native-cpu-worker-occupancy-frame-timeout/MANIFEST.json": {
+      "bytes": 101861,
+      "sha256": "cd8993a3af7feffc81e69a97b26da7ed6b2979d998c74d4e8c83d3f17dd60b84",
+      "mode": 420,
+      "mtime_ns": 1792834568204177115
+    },
+    "attestations/qualification/603a155e/native-cpu-accumulate-inline-frame-timeout/MANIFEST.json": {
+      "bytes": 127988,
+      "sha256": "823a9dd6476a7c6471025c55cb56865deab2f9371934ef1a8a0b132e66f635ff",
+      "mode": 420,
+      "mtime_ns": 1792912003593378577
+    },
+    "attestations/qualification/4595f5a6/native-cpu-product-inline-frame-timeout/MANIFEST.json": {
+      "bytes": 118003,
+      "sha256": "34d1ef679f97a68fee66c45f2646394f48508c529f03e2fbf80d2249e25b8d83",
+      "mode": 420,
+      "mtime_ns": 1792925468433635290
+    },
+    "attestations/qualification/bee63496/native-cpu-task-cardinality-frame-timeout/MANIFEST.json": {
+      "bytes": 85793,
+      "sha256": "fcb519f077bda3709543706118545264698ad4749f48aa5706fd9d5907132abe",
+      "mode": 420,
+      "mtime_ns": 1792929608096052704
+    },
+    "attestations/qualification/7a8e6d48/native-cpu-direct-scratch-frame-timeout/MANIFEST.json": {
+      "bytes": 109652,
+      "sha256": "32f74d5125aa9bc07dd287644d5a19fdca9eebe3a9e8165cd1a20dc95b9815f9",
+      "mode": 420,
+      "mtime_ns": 1792931746746988018
+    },
+    "attestations/qualification/6c79517c/native-cpu-static-registers-frame-timeout/MANIFEST.json": {
+      "bytes": 66115,
+      "sha256": "d637fb454ff2c2220c492dc1866a9abc3e45acc3f4b83179acddd2191cd585e1",
+      "mode": 420,
+      "mtime_ns": 1792932355068057909
+    },
+    "attestations/qualification/fddb9175/native-cpu-predicated-products-frame-timeout/MANIFEST.json": {
+      "bytes": 67332,
+      "sha256": "85e701631e4165849c97bce402e16549dd195afb0ad08b9aad18731ec652086c",
+      "mode": 420,
+      "mtime_ns": 1792933103647085404
+    },
+    "attestations/qualification/2e8224da/native-cpu-dense-arithmetic-frame-timeout/MANIFEST.json": {
+      "bytes": 78309,
+      "sha256": "f8ff2c521a559d6fbf77cd3125e72f58ec894f634a94e69f4392154786c2b655",
+      "mode": 420,
+      "mtime_ns": 1792935013042436438
+    },
+    "attestations/qualification/4e49d817/native-cpu-dense-values-frame-timeout/MANIFEST.json": {
+      "bytes": 73771,
+      "sha256": "c930e6770cc461b91417608e52890bc27bfff4b6b88a115b03ba43705f7dda0a",
+      "mode": 420,
+      "mtime_ns": 1792936900508108930
+    },
+    "attestations/qualification/46bfaaf8/native-cpu-original-frame-route/MANIFEST.json": {
+      "bytes": 13244,
+      "sha256": "15ad37540451473a6353001af1fdda03aa341fef8ab40121a8d4ec38da247128",
+      "mode": 420,
+      "mtime_ns": 1792938257813884547
+    },
+    "attestations/qualification/14b5567d/native-cpu-masked-arithmetic-frame-timeout/MANIFEST.json": {
+      "bytes": 80994,
+      "sha256": "e4d8fe47d9a779b7ad10faac883c29077d4c22b5ff225129bf2a7ab18300ada9",
+      "mode": 420,
+      "mtime_ns": 1792939573452380753
+    },
+    "attestations/qualification/6176354b/native-cpu-demand-submit-frame-timeout/MANIFEST.json": {
+      "bytes": 45133,
+      "sha256": "28a5918f6c809b5f1fc5b4decbb29552f2556a6540e2b4d007f7cbd1df85e67b",
+      "mode": 420,
+      "mtime_ns": 1792940235576161285
+    },
+    "attestations/qualification/8657e016/native-cpu-arithmetic-closure-frame-timeout/MANIFEST.json": {
+      "bytes": 81694,
+      "sha256": "3a93756428c0c292b09132857847c0417dc9c5a32426b8162dc59b600a6678cf",
+      "mode": 420,
+      "mtime_ns": 1792942477894832326
+    }
+  },
+  "resource_payloads": "Original32 cache assets and their existing recovery bundle reused; frame aliases can be retired only after this archive is independently verified and committed/pushed."
+}
