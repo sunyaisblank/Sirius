@@ -5,7 +5,10 @@ R=Path.cwd();W=Path(__file__).resolve().parent;D=R/'bin/linux-gcc/native-cpu-val
 def pin(p):
  with p.open('rb') as f:return dict(bytes=p.stat().st_size,sha256=hashlib.file_digest(f,'sha256').hexdigest())
 assert not os.environ.get('ISPC_ARGS') and not subprocess.check_output(['git','status','--porcelain']).strip()
-assert not D.exists() and not (W/'prepared-ispc-dense-inputs.json').exists()
+assert not (W/'prepared-ispc-dense-inputs.json').exists()
+assert D.is_dir() and {p.name for p in D.iterdir()}=={'rows_adapter.o'}
+adapter=J(W/'cpp-build-result.json')['merged_adapter']
+assert R/adapter['path']==D/'rows_adapter.o' and pin(D/'rows_adapter.o')=={k:adapter[k] for k in ('bytes','sha256')}
 regression=J(W/'fixture/result.json');assert regression['passed'] and regression['old_stale_tag_arithmetic_counterexamples']==24
 assert J(W/'fixture/run/owner.json')['passed'] and J(W/'fixture/build-result.json')['passed']
 derived=J(W/'ispc-derivation.json');assert derived['instructions']==9380
@@ -34,7 +37,7 @@ revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 scope='Compile only three complete-fact raw stages with original ISPC/flags after555660call/66679200bank/13335840fact-word scalar agreement and254016actual-writer calls/24legacy-rich stale-tag witnesses. Same private metadata word adds exact identity/valid facts; all partial writes clear and complete refreshes are before returns. New checked CPP identity-store helper/adapter is reused, no further C++/host/shader compilation here. Original9380tuples, payloads, general arithmetic, fields/RHS/trials/quartics/precision/FP/ISA/count/cache/governors remain. Actual provider/code/full38/C8/affected controls and original performance gates remain separate.'
 prepared=dict(revision=revision,inputs=inputs,objects=objects,fixed_flags=flags,compiler_runtime_resolution=resolution,scope=scope,
  merged_adapter=cpp['merged_adapter'],adapter_input_code_association=cpp['adapter_input_code_association'],adapter_input_objects=cpp['adapter_input_objects'])
-(W/'prepared-ispc-dense-inputs.json').write_text(json.dumps(prepared,indent=2)+'\n');D.mkdir(parents=True)
+(W/'prepared-ispc-dense-inputs.json').write_text(json.dumps(prepared,indent=2)+'\n')
 action=dict(revision=revision,kind='build_only',expected_exit=0,software_provider=False,limits=dict(seconds=300,rss_kib=4194304,reserve_kib=2097152),
  argv=['/usr/bin/python3','-B',str(W/'build_ispc.py')],frozen_inputs=sorted(set(inputs)|{str((W/'prepared-ispc-dense-inputs.json').relative_to(R))}),scope=scope)
 (W/'compile/actions.json').write_text(json.dumps({'ispc-dense':action},indent=2)+'\n');print(json.dumps(dict(new_raw_compilations=3,new_CPP_compilations=0,executed=False)))
