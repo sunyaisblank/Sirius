@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "time_unix": 1792967986.2434008,
+  "status": "cleanup_complete_session_stopping",
+  "source_before_final_record": "8f3f30265e215dd44be4fb6c3e38db3992296420",
+  "stores": [
+    {
+      "plan": "attestations/cleanup/2026-10-26-cold-payloads/plan.json",
+      "paths_absent": 7398,
+      "unique_payloads": 1926,
+      "expanded_unique_allocated_bytes": 45428719616,
+      "new_compressed_allocated_bytes": 6956367872
+    },
+    {
+      "plan": "attestations/cleanup/2026-10-26-generated-snapshots/plan.json",
+      "paths_absent": 640,
+      "unique_payloads": 415,
+      "expanded_unique_allocated_bytes": 3081854976,
+      "new_compressed_allocated_bytes": 334139392
+    },
+    {
+      "plan": "attestations/cleanup/2026-10-26-old-diagnostics/plan.json",
+      "paths_absent": 334,
+      "unique_payloads": 178,
+      "expanded_unique_allocated_bytes": 1365975040,
+      "new_compressed_allocated_bytes": 150605824
+    }
+  ],
+  "total_retired_paths": 8372,
+  "unique_compressed_objects": 2428,
+  "compressed_allocated_bytes": 7441113088,
+  "expanded_unique_allocated_bytes": 49876549632,
+  "checkout_allocated_bytes_before": 84667801600,
+  "checkout_allocated_bytes_after": 42216423424,
+  "checkout_allocated_bytes_reclaimed": 42451378176,
+  "filesystem_available_bytes": {
+    ".": 503866658816,
+    "/mnt/c": 64249757696
+  },
+  "verification": {
+    "all_indexed_original_paths_absent": true,
+    "all_2428_compressed_object_hashes_verified_in_preceding_read_only_check": true,
+    "all_pack_roundtrip_checks_passed": true,
+    "current_native_products_content_mode_mtime_verified": 6,
+    "current_host_products_verified": 3,
+    "original_resource_cache_files_sha256_verified": 32,
+    "current_frozen_paths_present": 14238,
+    "no_cold_retirement_intersects_frozen_paths": true,
+    "historical_frozen_paths_previously_retired": {
+      "resource_aliases": 32,
+      "recoverable_fixture_and_ledgers": 10,
+      "records": [
+        "attestations/qualification/86843614/native-cpu-local-identities-finite-compatibility/RETIRED-DIAGNOSTIC-PRODUCTS.json",
+        "attestations/qualification/86843614/native-cpu-local-identities-finite-compatibility/RETIRED-EXPANDED-LEDGERS.json"
+      ],
+      "recovery_members_reverified": true
+    },
+    "public_source_identical_to": "0109ab462edade524667d20303507aa09adcbaf6",
+    "no_payload_blobs_tracked_in_git": true,
+    "cmake_presets_listed": true
+  },
+  "retained": "Current working source, build/dependency closure, forensic originals, current qualification bundles and one compressed copy of every indexed unique historical payload.",
+  "recovery_index": "attestations/archive-index.json",
+  "payload_location": "Local ignored files within this checkout; Git contains the indexes and recovery tools, not the compressed payloads.",
+  "windows": {
+    "vhd_length_bytes": 731168899072,
+    "offline_compaction_performed": false,
+    "distribution_stopped": false,
+    "online_trim_record": "attestations/cleanup/2026-10-26-cold-payloads/filesystem-trim.json",
+    "prepared_tool": "scripts/maintenance/compact_wsl_store.ps1",
+    "remaining": "Offline VHD compaction can recover host storage after all Ubuntu work is saved. It interrupts this session and other Ubuntu work."
+  },
+  "qualification": "Cleanup integrity and source checks only. No new renderer experiment, scientific qualification or release qualification performed.",
+  "remaining_branches": "Two identified development branches retained with unfinished work; upstream main-only consolidation remains pending readiness.",
+  "stopping_boundary": "User requested cleanup completion and a final synthesized summary. Pause the ultimate goal without declaring it achieved."
+}
