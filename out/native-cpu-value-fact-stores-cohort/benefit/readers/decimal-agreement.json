@@ -1,0 +1,227 @@
+{
+  "agrees_on_all22": true,
+  "all22_pass": true,
+  "checks": [
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_ms": "34.579788000000001",
+      "candidate_ms": "19.095673000000001",
+      "improvement_percent": "44.7779350179937469605673979842286204713748394227107328889686",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_ms": "5.4997719999999997",
+      "candidate_ms": "3.2199620000000000",
+      "improvement_percent": "41.4528093164589336495845273108921778712568799702339226748062",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_ms": "7.1477579999999996",
+      "candidate_ms": "2.3900899999999998",
+      "improvement_percent": "66.5616826982670659281795885236778261479803050790374351219112",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_ms": "20.1046220000000000",
+      "candidate_ms": "12.9556920000000001",
+      "improvement_percent": "35.5586392024679693057646147239177140460536885498269999804025",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_ms": "37.530237999999997",
+      "candidate_ms": "24.908127999999998",
+      "improvement_percent": "33.6318410770536547328989288893122446678005790407386705994707",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_ms": "2.457217",
+      "candidate_ms": "1.6688879999999999",
+      "improvement_percent": "32.0821889153461049634606955755230409035913393078429784589639",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_ms": "5.4493320000000001",
+      "candidate_ms": "3.7269310000000000",
+      "improvement_percent": "31.6075621745931440476087312244300026570461989757643201580267",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_ms": "5.1646100000000002",
+      "candidate_ms": "3.2295370000000001",
+      "improvement_percent": "37.4679404640427839675042079056198254077574916355804055772850",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_ms": "9.5372130000000000",
+      "candidate_ms": "4.8213130000000000",
+      "improvement_percent": "49.4473595168735352770248499220893986534640675425829327708210",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_ms": "11.7606030000000006",
+      "candidate_ms": "8.6155790000000004",
+      "improvement_percent": "26.7420301493044195059370604056057581773454776627138160851713",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "forward",
+      "family": "instance",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": "9090.9114599999998941",
+      "candidate_ms": "512.4269839999999761",
+      "improvement_percent": "94.3633046449228097303539200784742380985063665233872836147746",
+      "minimum_percent": "0",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "complete_call_ms",
+      "baseline_ms": "34.400072999999999",
+      "candidate_ms": "19.949822999999999",
+      "improvement_percent": "42.0064515560766409421994992881742123686626853429704166227405",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint inclusive Dispatch",
+      "baseline_ms": "5.2869570000000001",
+      "candidate_ms": "3.5807390000000001",
+      "improvement_percent": "32.2722125411649833302557115337805219475832405336279083112792",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "endpoint+dense inclusive Dispatch",
+      "baseline_ms": "6.9621300000000002",
+      "candidate_ms": "2.4495290000000001",
+      "improvement_percent": "64.8163852154441237145418078822393803464799455844869214886839",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "legacy",
+      "scope": "transport inclusive Dispatch",
+      "baseline_ms": "20.1588159999999998",
+      "candidate_ms": "13.5491720000000004",
+      "improvement_percent": "32.7878581757976235587234704240330737551597318417219915610097",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "complete_call_ms",
+      "baseline_ms": "40.457298999999999",
+      "candidate_ms": "27.189589000000002",
+      "improvement_percent": "32.7943543635970293714949770521514392617998807125369210089848",
+      "minimum_percent": "5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=12 inclusive Dispatch",
+      "baseline_ms": "2.6757149999999998",
+      "candidate_ms": "1.661027",
+      "improvement_percent": "37.9221254879536825052089245643637312052236179386617188470086",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "dopri_phase:rows=24 inclusive Dispatch",
+      "baseline_ms": "5.7996249999999999",
+      "candidate_ms": "3.5978049999999999",
+      "improvement_percent": "37.9648684182166956995472710428121766415461524290307846032485",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=12 inclusive Dispatch",
+      "baseline_ms": "5.8899340000000003",
+      "candidate_ms": "3.5110410000000001",
+      "improvement_percent": "40.3891282992305190318366063577018503855931310417816030403839",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "endpoint:rows=24 inclusive Dispatch",
+      "baseline_ms": "10.3672900000000002",
+      "candidate_ms": "5.7292080000000003",
+      "improvement_percent": "44.7376508229247933695758327793513373393464872816071058232868",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "modern",
+      "scope": "transport:rows=12 inclusive Dispatch",
+      "baseline_ms": "12.1639460000000002",
+      "candidate_ms": "9.0235069999999999",
+      "improvement_percent": "25.8176006371616599446002039607597740963301882339863380463842",
+      "minimum_percent": "-5",
+      "passed": true
+    },
+    {
+      "direction": "reverse",
+      "family": "instance",
+      "scope": "observed-instance Create and all11 original numerical API windows",
+      "baseline_ms": "10589.3528750000009918",
+      "candidate_ms": "549.4945709999999811",
+      "improvement_percent": "94.8108767600210892997153453922540694010369769609187726734932",
+      "minimum_percent": "0",
+      "passed": true
+    }
+  ],
+  "scope": "Independent Decimal/raw-XML numerical witness only. No additional execution, provenance or scientific acceptance."
+}

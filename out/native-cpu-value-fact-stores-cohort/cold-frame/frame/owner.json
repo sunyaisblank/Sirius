@@ -1,0 +1,83 @@
+{
+  "adopted_children_reaped": [],
+  "argv": [
+    "/usr/bin/cmake",
+    "-DSIRIUS_RENDER_TESTS=/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-owned-lower-increments/frame/sirius_render_tests",
+    "-P",
+    "/home/astra/.project/Sirius/tests/operational/vulkan_runtime_profile.cmake"
+  ],
+  "boot_id": "8f1c52a6-71be-4a3b-928a-e45de899d8d1",
+  "case": "frame",
+  "child_exit": -15,
+  "child_pid": 87451,
+  "child_start_ticks": "80724966",
+  "cleanup_errors": [],
+  "controller": {
+    "pgrp": 87381,
+    "pid": 87381,
+    "ppid": 65097,
+    "rss_kib": 24560,
+    "session": 87381,
+    "start_ticks": "80724695",
+    "state": "R"
+  },
+  "declared_output_environment": {
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/native-cpu-value-fact-stores-cohort/cold-frame/frame/gtest.xml",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-value-fact-stores/provider/lvp_icd.json"
+  },
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "minimum_sampled_available_kib": 16965188,
+  "observed_births": [
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87451,
+      "saved_start_ticks": "80724966"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87452,
+      "saved_start_ticks": "80724967"
+    },
+    {
+      "absent": true,
+      "current_start_ticks": null,
+      "pid": 87453,
+      "saved_start_ticks": "80724968"
+    }
+  ],
+  "passed": false,
+  "peak_sampled_rss_kib": 932388,
+  "provider_mappings": [
+    {
+      "maps": [
+        "7f0486600000-7f048665b000 r--p 00000000 08:30 3292974                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-value-fact-stores/provider/libvulkan_lvp.so",
+        "7f048665b000-7f0486f0c000 r-xp 0005b000 08:30 3292974                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-value-fact-stores/provider/libvulkan_lvp.so",
+        "7f0486f0c000-7f04875fa000 r--p 0090c000 08:30 3292974                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-value-fact-stores/provider/libvulkan_lvp.so",
+        "7f04875fa000-7f0487690000 r--p 00ffa000 08:30 3292974                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-value-fact-stores/provider/libvulkan_lvp.so",
+        "7f0487690000-7f0487695000 rw-p 01090000 08:30 3292974                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-value-fact-stores/provider/libvulkan_lvp.so"
+      ],
+      "owned_session": 87451,
+      "pid": 87453,
+      "start_ticks": "80724968"
+    }
+  ],
+  "remaining_owned_processes": [],
+  "scope": "One original cold OperationalVulkan.RequiredRuntimeDispatch/RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent,128x128 one-SPP Kerr with unchanged defaults, cache-disable policy, governors and original output assertions. All8 controls/all22 gates passed first. Original test removes its own temporary PPM after checking it; TMPDIR only places that original disposable output under renders/. All existing global dependency bytes shared with the new C8 cohort are required exact. No altered feature/property/scene/count/budget, retry or full scientific/Mandatory/release claim. Genuine new host/frame ELF with one changed C++ unit and two audited links; exact AM provider with complete value facts and original identity bank stores, unchanged general arithmetic/AK refinements and scheduler/FP scope; fresh AM all8/all22 controls passed. Only the32 byte-verified historical resource names restored as hardlinks.",
+  "source": {
+    "revision": "d4f1d31e99abd9bfef08a6435c562290b63331be",
+    "status": ""
+  },
+  "source_unchanged": true,
+  "status": "terminal",
+  "stop_reason": "diagnostic_timeout",
+  "wall_seconds": 300.24177848990075,
+  "whole_inputs_unchanged": true
+}

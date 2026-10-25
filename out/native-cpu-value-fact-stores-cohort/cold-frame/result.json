@@ -1,0 +1,60 @@
+{
+  "attempted": true,
+  "accepted": false,
+  "owner": {
+    "bytes": 3880,
+    "sha256": "a1bafceb24f6e2ec8a87a8016371e0d12538ed777a91702354775ab85ae78083"
+  },
+  "XML": null,
+  "stop_reason": "diagnostic_timeout",
+  "child_exit": -15,
+  "wall_seconds": 300.24177848990075,
+  "peak_sampled_rss_kib": 932388,
+  "build": {
+    "bytes": 137701,
+    "sha256": "3db81fc039326a1f2a499554933ff6586c2ccfbed2010f5e5b34d711c5361f5e"
+  },
+  "frame_inputs": {
+    "bytes": 1906,
+    "sha256": "a85b4d3df4a98b2683ec05fe6e42c51a342e38e4546f01163f8f71c8d8859245"
+  },
+  "module_joins": {
+    "Transport": {
+      "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+      "bytes": 86008,
+      "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+      "complete_occurrences": 1,
+      "executable_complete_occurrences": 1,
+      "frame_executable_complete_occurrences": 1
+    },
+    "Endpoint": {
+      "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+      "bytes": 97044,
+      "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+      "complete_occurrences": 1,
+      "executable_complete_occurrences": 1,
+      "frame_executable_complete_occurrences": 1
+    },
+    "DopriPhase": {
+      "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+      "bytes": 59508,
+      "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+      "complete_occurrences": 1,
+      "executable_complete_occurrences": 1,
+      "frame_executable_complete_occurrences": 1
+    }
+  },
+  "controls": {
+    "bytes": 61801,
+    "sha256": "d79b9338c6a09e5f4db5ae1310be4fcea1f66b51b842e686cd3df9110d3a4c3d"
+  },
+  "benefit": {
+    "bytes": 234713,
+    "sha256": "b0798ff8939d8993b7bba112c887d5774cd3c69780b4d5d555e10f2aef564006"
+  },
+  "decimal": {
+    "bytes": 7990,
+    "sha256": "f854b48f0fe75895f909f6434e00e50e9db3a39c96aab8d57500c161d0c8b76d"
+  },
+  "scope": "One original cold128x128/1SPP Kerr runtime profile, unchanged defaults/governors, cache disabled. Original test validates and removes its PPM. No full scientific, Mandatory or release qualification claim."
+}
