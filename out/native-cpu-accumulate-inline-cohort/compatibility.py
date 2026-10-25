@@ -15,7 +15,7 @@ def check(root):
         assert pin(path) == {key: row[key] for key in ('bytes', 'sha256')}
         return path
     work = root / 'out/native-cpu-accumulate-compatibility'
-    for phase in ('link', 'run'):
+    for phase in ('proof', 'run'):
         owner = doc(work / phase / 'owner.json')
         assert owner['status'] == 'terminal' and owner['passed'] and owner['child_exit'] == 0
         assert owner['source_unchanged'] and owner['whole_inputs_unchanged']
@@ -24,10 +24,15 @@ def check(root):
     build = doc(work / 'compile-completion.json')
     assert build['passed'] and build['diagnostic_CPP_compilations'] == 1 and build['diagnostic_links'] == 1
     assert build['additional_CPP_compilations_in_link_continuation'] == 0
+    assert build['additional_links_in_proof_completion'] == 0
     original = doc(work / 'compile/owner.json')
     assert original['status'] == 'terminal' and not original['passed'] and original['child_exit'] == 1
     assert original['source_unchanged'] and original['whole_inputs_unchanged']
     assert not original['cleanup_errors'] and not original['remaining_owned_processes']
+    link_owner = doc(work / 'link/owner.json')
+    assert link_owner['status'] == 'terminal' and not link_owner['passed'] and link_owner['child_exit'] == 1
+    assert link_owner['source_unchanged'] and link_owner['whole_inputs_unchanged']
+    assert not link_owner['cleanup_errors'] and not link_owner['remaining_owned_processes']
     result_path = work / 'result.json'
     result = doc(result_path)
     assert result['passed'] and result['runtime_exit'] == 0
