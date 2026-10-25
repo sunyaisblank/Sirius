@@ -1,0 +1,225 @@
+{
+  "passed": true,
+  "raw_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/transport.o",
+      "bytes": 972480,
+      "sha256": "c94ca9d921d77109eac22229118564469fa869cb5e7b998c71e967acb1e5f488"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/endpoint.o",
+      "bytes": 987648,
+      "sha256": "f84b39acb02bb391cb487dfd46c8763a1f930284bde57d90633f99733ff04f88"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/dopri_phase.o",
+      "bytes": 1051952,
+      "sha256": "1cf1d04629b41806dac340abc53764836e769afa2f6682870a86f022452b5b63"
+    }
+  ],
+  "merged_adapter": {
+    "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/rows_adapter.o",
+    "bytes": 28120,
+    "sha256": "389f31e8cb895f2aff34e32666a77f6e1ecd104714e5007c7d619cea306fafb4"
+  },
+  "adapter_original_and_CPP_code_association": {
+    "passed": true,
+    "executable": {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-masked-arithmetic/objects/rows_adapter.o",
+      "bytes": 28120,
+      "sha256": "389f31e8cb895f2aff34e32666a77f6e1ecd104714e5007c7d619cea306fafb4"
+    },
+    "objects": [
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o",
+          "bytes": 4280,
+          "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "sirius_simd_fmaxf",
+            "bytes": 9,
+            "linked_address": 0,
+            "masked_relocations": [
+              {
+                "offset": 5,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_transport_rows_try_packet",
+            "bytes": 266,
+            "linked_address": 16,
+            "masked_relocations": [
+              {
+                "offset": 150,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 203,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 244,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 113,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_endpoint_rows_try_packet",
+            "bytes": 266,
+            "linked_address": 288,
+            "masked_relocations": [
+              {
+                "offset": 150,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 203,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 244,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 113,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dopri_phase_rows_try_packet",
+            "bytes": 266,
+            "linked_address": 560,
+            "masked_relocations": [
+              {
+                "offset": 150,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 203,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 244,
+                "ELF_type": 4,
+                "bytes": 4
+              },
+              {
+                "offset": 113,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-masked-arithmetic/probe/retained8.o",
+          "bytes": 24656,
+          "sha256": "767222b7d5459e61b8f1515d91ee75b18e6bdabc5c5f17894fb1f6247ea4117c"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "sirius_native_dense_add8",
+            "bytes": 4637,
+            "linked_address": 832,
+            "masked_relocations": [
+              {
+                "offset": 40,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3510,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4633,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_multiply8",
+            "bytes": 17952,
+            "linked_address": 5472,
+            "masked_relocations": [
+              {
+                "offset": 40,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1561,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2529,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3514,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4211,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5175,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6150,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13685,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17948,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Every retained function opcode in exact renamed OLD/new R Transport objects, masking only declared4B PC32/PLT32/REX_GOTPCRELX operands. Linker relaxation disabled. This alone is not relocation-target semantics or numerical acceptance."
+  },
+  "both_dense_ABI_references_in_all3": true,
+  "scope": "Source/ISA and relocatable object joins only. Every original adapter and checked C++ function opcode matches its combined object. Both new call relocations are present in each raw stage. Actual linked helper targets and full38/C8/frame still required; no current renderer performance/scientific acceptance."
+}
