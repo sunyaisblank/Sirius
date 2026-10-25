@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "stages": {
+    "transport": {
+      "basis": {
+        "object": {
+          "path": "bin/linux-gcc/native-cpu-product-inline/objects/transport.o",
+          "bytes": 3161760,
+          "sha256": "38cfe4a1f29b3399baf06d3581066d82a388edcd6a2b1a6311b4b17c6757856e"
+        },
+        "Term_ABI_calls": 0,
+        "code_bytes": 2223106,
+        "helper_code_bytes": {
+          "RPUpAdd_0___vyfvyf": 396,
+          "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 20263,
+          "RTMultiply_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 88148
+        }
+      },
+      "candidate": {
+        "object": {
+          "path": "bin/linux-gcc/native-cpu-predicated-arithmetic/objects/transport.o",
+          "bytes": 3076456,
+          "sha256": "79f964dba7bdb6e65d36102b924645c3b4255539995c140e06292816b4afd861"
+        },
+        "Term_ABI_calls": 0,
+        "code_bytes": 2164348,
+        "helper_code_bytes": {
+          "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 9717,
+          "RTMultiply_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 52890
+        }
+      },
+      "object_code_byte_delta": -58758
+    },
+    "endpoint": {
+      "basis": {
+        "object": {
+          "path": "bin/linux-gcc/native-cpu-product-inline/objects/endpoint.o",
+          "bytes": 3547248,
+          "sha256": "9454d08de30881011eef98564dd95a6c73bf7f2e57d73dabe9031c6c2cc810cc"
+        },
+        "Term_ABI_calls": 0,
+        "code_bytes": 2662256,
+        "helper_code_bytes": {
+          "RPUpAdd_0___vyfvyf": 396,
+          "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 20263,
+          "RTMultiply_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 88148
+        }
+      },
+      "candidate": {
+        "object": {
+          "path": "bin/linux-gcc/native-cpu-predicated-arithmetic/objects/endpoint.o",
+          "bytes": 3445968,
+          "sha256": "c9d20bd9458e0a5a093cf553495639ed7bbca732d452d9b8b2a476cd2f76fca7"
+        },
+        "Term_ABI_calls": 0,
+        "code_bytes": 2590904,
+        "helper_code_bytes": {
+          "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 9717,
+          "RTMultiply_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 52890
+        }
+      },
+      "object_code_byte_delta": -71352
+    },
+    "dopri_phase": {
+      "basis": {
+        "object": {
+          "path": "bin/linux-gcc/native-cpu-product-inline/objects/dopri_phase.o",
+          "bytes": 1868696,
+          "sha256": "bffd432e9b7b23fc13ea9b801e2a4ff32c333018d680905838a38b3ebdb9508f"
+        },
+        "Term_ABI_calls": 0,
+        "code_bytes": 1374331,
+        "helper_code_bytes": {
+          "RPUpAdd_0___vyfvyf": 396,
+          "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 20263,
+          "RTMultiply_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 88148
+        }
+      },
+      "candidate": {
+        "object": {
+          "path": "bin/linux-gcc/native-cpu-predicated-arithmetic/objects/dopri_phase.o",
+          "bytes": 1796560,
+          "sha256": "5741a56921299ca7a1d6cbd4cb3130d5428e52d5b3dfd7906e88565932ca81b7"
+        },
+        "Term_ABI_calls": 0,
+        "code_bytes": 1324679,
+        "helper_code_bytes": {
+          "RTAdd_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 9717,
+          "RTMultiply_0___un_3C_s_5B_vyRetainedTriple_0_5D__3E_un_3C_s_5B_vyRetainedTriple_0_5D__3E_": 52890
+        }
+      },
+      "object_code_byte_delta": -49652
+    }
+  },
+  "scope": "Actual code shape and independent ISA/FP inspection only. All selected original arithmetic expressions and lane result mapping follow source reasoning; full38/C8 and original later gates still required. Static sizes are not runtime frequencies, causal shares or speed evidence."
+}

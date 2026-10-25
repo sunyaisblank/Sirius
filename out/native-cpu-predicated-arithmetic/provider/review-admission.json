@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "source_contract": {
+    "bytes": 27157,
+    "sha256": "ad2b658a6b3ffe26aba95eb9e3544633d133915a1c25b632c935518d40b14e91"
+  },
+  "patch": {
+    "bytes": 2231,
+    "sha256": "32799e56c8d29dd094753c07b42724e2337c1e48b9edce821c5f21ad1ab33719"
+  },
+  "full_source_identity_verified_before_and_after": true,
+  "scope": "Coordinator source review and exact patch application only, not independent or machine-checked correctness. Replaces only three raw SIMD objects after lowering three pure arithmetic primitives to lane selections; exact source patch inverse restores W. Ordered live expressions and result/refusal bits retained by source reasoning, extra masked status restored by the existing worker scope. U scalar, Q scheduling and V deferred NIR remain. Same original query64, pureF/B, D fallback, IEEE32 save/restore, zero-active no-op and JIT recovery; no host/SPV/count/precision/cache/governor changes. Requires original C8/full32 and later unchanged acceptance."
+}
