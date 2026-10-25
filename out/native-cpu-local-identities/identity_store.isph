@@ -1,0 +1,59 @@
+// Same AM complete-fact identity/refusal decision, at the ISPC call site.
+// Only integer words move here. Unknown, legacy or any general active lane
+// returns before a payload load/store, and the unchanged AM helper handles it.
+struct SiriusIdentityWords_0 {
+    uint32_t hi, lo, tail, error, valid;
+};
+static inline SiriusIdentityWords_0 SiriusIdentityRead_0(
+    uniform uint32_t * uniform bank, uniform uint32_t index) {
+    SiriusIdentityWords_0 r;
+    r.hi=bank[(index*5U)*programCount+programIndex];
+    r.lo=bank[(index*5U+1U)*programCount+programIndex];
+    r.tail=bank[(index*5U+2U)*programCount+programIndex];
+    r.error=bank[(index*5U+3U)*programCount+programIndex];
+    r.valid=bank[(index*5U+4U)*programCount+programIndex];
+    return r;
+}
+static inline uint32_t SiriusIdentityNegatedFacts_0(uint32_t m) {
+    return (m&~24U)|((m&8U)<<1)|((m&16U)>>1);
+}
+static inline uniform bool SiriusTryIdentity_0(
+    uniform uint32_t * uniform bank, uniform uint32_t * uniform tags,
+    uniform uint32_t destination, uniform uint32_t ai, uniform uint32_t bi,
+    uniform uint32_t operation) {
+    uint32_t ma=tags[ai*programCount+programIndex];
+    uint32_t mb=tags[bi*programCount+programIndex];
+    if(!all(((ma&2U)!=0U)&((mb&2U)!=0U))) return false;
+    bool live=((ma&32U)!=0U)&((mb&32U)!=0U);
+    bool az=(ma&4U)!=0U, bz=(mb&4U)!=0U;
+    bool z=false, ca=false, cb=false, na=false, nb=false;
+    if(operation==4U) {
+        z=live&(az|bz);live=live&!z;
+        cb=live&((ma&8U)!=0U);live=live&!cb;
+        ca=live&((mb&8U)!=0U);live=live&!ca;
+        nb=live&((ma&16U)!=0U);live=live&!nb;
+        na=live&((mb&16U)!=0U);live=live&!na;
+    } else {
+        cb=live&az;live=live&!cb;
+        ca=live&bz;live=live&!ca;
+        if(operation==3U) {nb=cb;cb=false;}
+    }
+    if(any(live)) return false;
+    SiriusIdentityWords_0 a={0U,0U,0U,0U,0U},b={0U,0U,0U,0U,0U};
+    // Both snapshots precede every store, including destination/source aliases.
+    if(any(ca|na)) a=SiriusIdentityRead_0(bank,ai);
+    if(any(cb|nb)) b=SiriusIdentityRead_0(bank,bi);
+    uint32_t h=select(cb,b.hi,select(ca,a.hi,select(nb,b.hi^2147483648U,select(na,a.hi^2147483648U,0U))));
+    uint32_t l=select(cb,b.lo,select(ca,a.lo,select(nb,b.lo^2147483648U,select(na,a.lo^2147483648U,0U))));
+    uint32_t t=select(cb,b.tail,select(ca,a.tail,select(nb,b.tail^2147483648U,select(na,a.tail^2147483648U,0U))));
+    uint32_t e=select(cb|nb,b.error,select(ca|na,a.error,0U));
+    uint32_t v=select(z,1U,select(cb|nb,b.valid,select(ca|na,a.valid,0U)));
+    uint32_t metadata=select(z,39U,select(cb,mb,select(ca,ma,select(nb,SiriusIdentityNegatedFacts_0(mb),select(na,SiriusIdentityNegatedFacts_0(ma),2U)))));
+    bank[(destination*5U)*programCount+programIndex]=h;
+    bank[(destination*5U+1U)*programCount+programIndex]=l;
+    bank[(destination*5U+2U)*programCount+programIndex]=t;
+    bank[(destination*5U+3U)*programCount+programIndex]=e;
+    bank[(destination*5U+4U)*programCount+programIndex]=v;
+    tags[destination*programCount+programIndex]=metadata;
+    return true;
+}

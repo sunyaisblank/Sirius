@@ -1,0 +1,81 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 622689,
+        "sha256": "c43c70a6bbd1d731db56293679482686cfc40237fed150a2388c67c76c1d3c42"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-local-identities/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 623449,
+        "sha256": "62496f8b6a26876ba5cf89b787da5ad963516fe5c5f85aad3b17ff1e52d65359"
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "whole_source_inverse_restores_AM": true,
+      "unchanged_fallback_wrapper_bodies": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 791017,
+        "sha256": "b493cda291119ffad0125f62c3d407eb0d40f2c236b1b297ee90519c14f2ca1e"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-local-identities/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 791777,
+        "sha256": "2515e05a055ab34db611fda0c897a0230f5138c64da20fd05f0d030f13157246"
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "whole_source_inverse_restores_AM": true,
+      "unchanged_fallback_wrapper_bodies": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 399561,
+        "sha256": "f4db819fed8070ddf29626213a3ee9bc05160d806abc0d62e26585edad808b94"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-local-identities/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 400321,
+        "sha256": "e702643dc2dd70d0d05dbd2556e006149fa2688dcc8978b78c8dbb7525b089e5"
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "whole_source_inverse_restores_AM": true,
+      "unchanged_fallback_wrapper_bodies": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-value-fact-stores/ispc-derivation.json": {
+      "bytes": 4665,
+      "sha256": "38e50d857b888d1d9a09bdd7542d78e7de993701460bfe8893a56cd00a793923"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-local-identities/derive.py": {
+      "bytes": 4128,
+      "sha256": "095127a4b017bb6f3b86f603b49d4bdc06cbb5e5932f16fd82fa26856b85110f"
+    },
+    "out/native-cpu-value-fact-stores/retained8.cpp": {
+      "bytes": 36789,
+      "sha256": "60455d362b1c98b30e9975c35011c6a193ffcf98a5872ddb45036c0e5364961d"
+    },
+    "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/transport.ispc": {
+      "bytes": 622689,
+      "sha256": "c43c70a6bbd1d731db56293679482686cfc40237fed150a2388c67c76c1d3c42"
+    },
+    "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/endpoint.ispc": {
+      "bytes": 791017,
+      "sha256": "b493cda291119ffad0125f62c3d407eb0d40f2c236b1b297ee90519c14f2ca1e"
+    },
+    "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/dopri_phase.ispc": {
+      "bytes": 399561,
+      "sha256": "f4db819fed8070ddf29626213a3ee9bc05160d806abc0d62e26585edad808b94"
+    }
+  },
+  "scope": "One shared integer-only original AM identity/refusal store before the same three Add/Subtract/Multiply C ABI calls in all three stages. All active lanes must have complete coherent metadata and select an original identity/refusal before any store. All payload snapshots precede writes, zero/refusal-only packets load no payload, and unknown/legacy/general packets enter exact unchanged AM helper. No new array/context allocation, arithmetic expression, table/tuple/layer/mask/bounds/input/output/FP/ISA/count/cache/governor/scheduler change; all writers and their tested reachable fact protocol are byte identical. Full inverse restores AM. Actual fixture/code/full38/C8 and original adoption gates remain required."
+}
