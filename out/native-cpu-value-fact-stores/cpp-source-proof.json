@@ -1,0 +1,29 @@
+{
+  "basis": {
+    "path": "out/native-cpu-value-facts/retained8.cpp",
+    "bytes": 34240,
+    "sha256": "8d9cac6f253c5e1df21b6918e572c2a5c0d54355180bcc9314be834e99b6f6f0"
+  },
+  "candidate": {
+    "path": "out/native-cpu-value-fact-stores/retained8.cpp",
+    "bytes": 36789,
+    "sha256": "60455d362b1c98b30e9975c35011c6a193ffcf98a5872ddb45036c0e5364961d"
+  },
+  "exact_inverse_restores_basic_value_facts": true,
+  "metadata_bits": {
+    "normalized": 1,
+    "complete_current_facts": 2,
+    "exact_zero": 4,
+    "exact_one": 8,
+    "exact_minus_one": 16,
+    "nonzero_valid": 32
+  },
+  "argument": [
+    "Complete metadata now certifies all facts and the exact normalization bit. Unknown/legacy/false-negative metadata cannot enter the identity-store path. Partial writes must clear all bits. The valid bit means original valid!=0, not canonical valid1.",
+    "Only packets whose every active lane selects an original identity or invalid-input refusal return early. Multiply preserves zero/a-one/b-one/a-minus/b-minus precedence. Add preserves a-zero before b-zero; Subtract uses the same Add precedence with bitwise negated b. Source valid words and zero signs are copied exactly when the original copies them.",
+    "All selected source payloads and metadata are snapshotted before destination stores. Zero/refusal packets require no payload loads. Copy/negate metadata equals freshly computed complete facts: negation preserves normalization/valid/zero and swaps exact-one/minus-one. Canonical zero facts39 and canonical invalid facts2 are exact.",
+    "Any active general lane, or any active unknown metadata, falls through without a store to the previously checked value-facts implementation. All original untagged arithmetic and nonidentity expressions, Divide/Sqrt refinements, masks/public words/order remain. Fewer unused operations may change unobserved intermediate FP exception flags; original controls and worker full-state restoration remain.",
+    "Source reasoning/exact inverse only, not machine-checked proof or performance/science/release acceptance. Complete original-scalar bank/fact/mask/alias checks and actual new writer regressions precede a provider."
+  ],
+  "scope": "Existing private metadata word, no extra published limb or context array. Original identity/refusal results can be stored directly from coherent facts. No formula, precision eligibility, FP/ISA, canonical9380tuples, fields/RHS/trials/quartics, requests/count/cache/governor change."
+}
