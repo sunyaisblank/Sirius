@@ -1,0 +1,129 @@
+{
+  "actual_original_frame_native_and_CPP_routes_confirmed": true,
+  "owner": {
+    "bytes": 3616,
+    "sha256": "90c8e1a0b434044000dd1e149be69e0fc8043c32c9556640b78f9c6c87a9ae4c"
+  },
+  "observation": {
+    "bytes": 56735,
+    "sha256": "79093c7d1dfba8b1caccce425917cc4bdf4c2dd64d3cc683f97c8411a2fe7931"
+  },
+  "provider": {
+    "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+    "bytes": 17908072,
+    "sha256": "284fc1e2e08d271e41bbc60257cd49155c37f7e4fac12237a067ef64c37d03fb"
+  },
+  "source": {
+    "revision": "46bfaaf8c3a8cde6f2b20886c8307e80477fe0d4",
+    "status": ""
+  },
+  "first_preflight_arguments": [
+    {
+      "function": "sirius_native_endpoint_admit_packet",
+      "capacity": 128,
+      "grid_x": 1,
+      "groups": 1,
+      "handled": true
+    },
+    {
+      "function": "sirius_native_transport_admit_packet",
+      "capacity": 128,
+      "grid_x": 1,
+      "groups": 1,
+      "handled": true
+    },
+    {
+      "function": "sirius_native_dopri_phase_admit_packet",
+      "capacity": 128,
+      "grid_x": 4,
+      "groups": 1,
+      "handled": true
+    }
+  ],
+  "actual_transport_policy": [
+    {
+      "function": "sirius_native_transport_simd_policy",
+      "category": "policy_calls",
+      "entry_sequence": 9,
+      "rows": 1,
+      "workers": 16,
+      "pc": 140737334953264,
+      "library": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+      "pid": 53327,
+      "thread": 3,
+      "mxcsr": 8096,
+      "returned": true,
+      "provider_maps": [
+        "7ffff6600000-7ffff665b000 r--p 00000000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff665b000-7ffff6ec7000 r-xp 0005b000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff6ec7000-7ffff75b5000 r--p 008c7000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff75b5000-7ffff764b000 r--p 00fb5000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff764b000-7ffff7650000 rw-p 0104b000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so"
+      ],
+      "return_sequence": 10,
+      "return_thread": 3,
+      "return_mxcsr": 8096,
+      "selected": false
+    },
+    {
+      "function": "sirius_native_transport_simd_policy",
+      "category": "policy_calls",
+      "entry_sequence": 21,
+      "rows": 5,
+      "workers": 16,
+      "pc": 140737334953264,
+      "library": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+      "pid": 53327,
+      "thread": 3,
+      "mxcsr": 8096,
+      "returned": true,
+      "provider_maps": [
+        "7ffff6600000-7ffff665b000 r--p 00000000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff665b000-7ffff6ec7000 r-xp 0005b000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff6ec7000-7ffff75b5000 r--p 008c7000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff75b5000-7ffff764b000 r--p 00fb5000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff764b000-7ffff7650000 rw-p 0104b000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so"
+      ],
+      "return_sequence": 22,
+      "return_thread": 3,
+      "return_mxcsr": 8096,
+      "selected": false
+    },
+    {
+      "function": "sirius_native_transport_simd_policy",
+      "category": "policy_calls",
+      "entry_sequence": 53,
+      "rows": 64,
+      "workers": 16,
+      "pc": 140737334953264,
+      "library": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+      "pid": 53327,
+      "thread": 3,
+      "mxcsr": 8096,
+      "returned": true,
+      "provider_maps": [
+        "7ffff6600000-7ffff665b000 r--p 00000000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff665b000-7ffff6ec7000 r-xp 0005b000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff6ec7000-7ffff75b5000 r--p 008c7000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff75b5000-7ffff764b000 r--p 00fb5000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so",
+        "7ffff764b000-7ffff7650000 rw-p 0104b000 08:30 3070356                    /home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-values/provider/libvulkan_lvp.so"
+      ],
+      "return_sequence": 54,
+      "return_thread": 3,
+      "return_mxcsr": 8096,
+      "selected": true
+    }
+  ],
+  "completed_SIMD_stages": 3,
+  "active_CPP_functions": [
+    "sirius_native_dense_add8",
+    "sirius_native_dense_multiply8",
+    "sirius_native_dense_values_add8",
+    "sirius_native_dense_values_multiply8"
+  ],
+  "all_first_CPP_masks": 255,
+  "qualifying_frame_completed": false,
+  "runtime_speed_or_causal_share_claimed": false,
+  "independent_math_claimed": false,
+  "scope": "One deliberate first-route diagnostic of the original frame test after software warm-up. Same genuine P ELF/AD provider, original scene and cache policy. Native3/SIMD3 and all4 dense/packing functions executed and returned under IEEE32 scope. The inferior stopped after coverage; this is neither a frame retry/pass nor a timing or whole-frame causal study. It disproves an entirely unreached native/C++ path for this observed prefix only."
+}
