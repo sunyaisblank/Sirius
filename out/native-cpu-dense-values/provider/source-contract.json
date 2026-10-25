@@ -1,0 +1,2733 @@
+{
+  "basis_source_identity": {
+    "bytes": 1483006,
+    "sha256": "4933542f8282290d6e05b25057a570258e1759a7766632dc61d2a7faaa6009d0"
+  },
+  "full_candidate_source_identity": {
+    "bytes": 1483006,
+    "sha256": "00a66c030eef12de16daa6f80c744b018baff9a430ef2ed507ac7a6a6632b2ff"
+  },
+  "modified_files": {
+    "src/gallium/targets/lavapipe/meson.build": {
+      "basis": {
+        "bytes": 3269,
+        "sha256": "3b3d9ed3c427ed3c2811d3f1843e0a85126823b076b56a2060713b59e3d77c22"
+      },
+      "candidate": {
+        "bytes": 3253,
+        "sha256": "2a41e1b32eec0eacec32edbe45b6495d2dbf80b3062cd7e162b88c990b492ecf"
+      }
+    },
+    "src/gallium/drivers/llvmpipe/lp_screen.c": {
+      "basis": {
+        "bytes": 32815,
+        "sha256": "84d3147872b3640a0861a64acd6188d9b647a942976db28e34328ea080d7cc66"
+      },
+      "candidate": {
+        "bytes": 32811,
+        "sha256": "ac8f6b8ba016cc93dda50fcffbcf21fcd6143362fdb244f05e4ea0a8304ab6c3"
+      }
+    },
+    "src/gallium/frontends/lavapipe/lvp_device.c": {
+      "basis": {
+        "bytes": 116202,
+        "sha256": "490b80efcb3a8e9e90a8c75c7fcc7d91968e8b11da5a32b8fc69bdb819a7dec2"
+      },
+      "candidate": {
+        "bytes": 116202,
+        "sha256": "4be46b280051ce5a7a0c2f84aceadc74c52c600c5b1afbc9e6b7f7f1b7e544d0"
+      }
+    }
+  },
+  "patch": {
+    "bytes": 2433,
+    "sha256": "cb10594ddb4416427af4beeedbc33836011e018bf2141ffcfa9db92dc61b9f95"
+  },
+  "native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dense-values/objects/transport.o",
+      "bytes": 973048,
+      "sha256": "24eb1a383d3ba10ba58e56448dd6e3879ef05edf961d27db6e9166f48ca92879"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dense-values/objects/endpoint.o",
+      "bytes": 987168,
+      "sha256": "e0e6945a91ad55b11be2ad89d869922b6b700527f3007e52bde34af085ad4e05"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dense-values/objects/dopri_phase.o",
+      "bytes": 1050848,
+      "sha256": "25ca1259b62fd1ea120eb963987cfdbe2279bbda2ebd16160c83341f3771a93e"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dense-values/objects/rows_adapter.o",
+      "bytes": 15672,
+      "sha256": "88ed76a98a050c916c6f828139f626331866217af227442d26036c1fb0ef6cb0"
+    }
+  ],
+  "source_inputs": {
+    "bin/linux-gcc/src/sirius/backend/retained/retained_kernels.h": {
+      "bytes": 7955767,
+      "sha256": "9940fb7f2a6667caa884253efbb2b0159a05dfbfdaef81f775cb6306ddaaf88d"
+    },
+    "out/native-cpu-slang-bridge/batch-generation.json": {
+      "bytes": 8521,
+      "sha256": "de6d68848c352c3b9262e01822730d25459b725d42f57e4b1769ba93d2cc2428"
+    },
+    "out/native-cpu-slang-bridge/prepare_batch.py": {
+      "bytes": 8809,
+      "sha256": "5aa607cefd69d77bb033146ceeb539dffc7152fa5189f7744cc694753dbd7d68"
+    },
+    "out/native-cpu-slang-bridge/native_packet.hpp": {
+      "bytes": 2271,
+      "sha256": "02a17ea28db707c1572de4137ece237930c220f261f6613ad3bf3de821bd4ce5"
+    },
+    "out/native-cpu-slang-bridge/native_bridge.h": {
+      "bytes": 1055,
+      "sha256": "57d78d5d8a61cdd04f4d9e3301d600c96fc716c3581c7d2cdfb045956798b243"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/transport.cpp": {
+      "bytes": 87927,
+      "sha256": "1b2e56701b29b5c150c861113edc36389772eaca48e92e8c16f6e406e11d6092"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/transport.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.native.hpp": {
+      "bytes": 88052,
+      "sha256": "74d60b6f50864101d797f434b45ef3a8ef107b0b954fb1c0fd721b040c0761cf"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.cpp": {
+      "bytes": 2925,
+      "sha256": "fe8daf2bfc2d4b0e87370b6b559c70f3687166667609c8fadcc54cbe69452083"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/endpoint.cpp": {
+      "bytes": 100678,
+      "sha256": "1cf56b2406c6a034b5bc75361df1fa62cc09b30407a04b1153dc325df4c229f8"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/batch-source/endpoint.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.native.hpp": {
+      "bytes": 100795,
+      "sha256": "25b18fe2dc56f2e98b564cdd19e7909d3babeeb197df6469b857ea0f3ed78393"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.cpp": {
+      "bytes": 2909,
+      "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.cpp": {
+      "bytes": 63700,
+      "sha256": "a2d57dc0d8063b42dcca97f38797b68f5dfeb9bd05ca10073819f5607ac572f9"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/primitive-lowering/dopri_phase.reflection.json": {
+      "bytes": 2155,
+      "sha256": "31c5f7ac7614cd1accb95c468fbef49d6fa2e3f760b203a45a9c7fa4f4831d1f"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 63841,
+      "sha256": "24b18109cac98a3a796981e53263506e7a8b43bf9ff526f5fd7c69da12517705"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.cpp": {
+      "bytes": 2866,
+      "sha256": "e481ae98846a7d8d509e2e3e17e8b8d72ea561e30929a165c85e9026c57d93d6"
+    },
+    "out/native-cpu-active-prefix/native_packet.hpp": {
+      "bytes": 2445,
+      "sha256": "9df6d65d1c89016694a7f242a8fdd61979db6826c4f0d2619b2b8954a9ca6eee"
+    },
+    "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp": {
+      "bytes": 634190,
+      "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+    },
+    "bin/linux-gcc/native-cpu-static-program/typed-batch/endpoint.native.hpp": {
+      "bytes": 812736,
+      "sha256": "90f41000d38684143089e198ad56a6507546b1e9ad38cae95d9ba8fc8b7e5fc8"
+    },
+    "bin/linux-gcc/native-cpu-static-program/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 409325,
+      "sha256": "5173a3682f0afe1811228c44f46d35fb843683ecf058832ddc8f49465541c7e6"
+    },
+    "out/native-cpu-static-program/header-preparation.json": {
+      "bytes": 7943,
+      "sha256": "72c76214e8b0267566801b0e7efec605c2e408f2c9ac084a892c95d7a563ef6d"
+    },
+    "out/native-cpu-scalar-zero/derive.py": {
+      "bytes": 4399,
+      "sha256": "e4f27391fa082b2b5c99ed61795833b98b11611f7d86f5b39a91bdf317f39d4f"
+    },
+    "out/native-cpu-zero-term/source-proof.json": {
+      "bytes": 9828,
+      "sha256": "e9cd6c81af9eb87bb6bf9378a65670dbe6d6d7b61465cc425256b8f518a93bd4"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/transport.native.hpp": {
+      "bytes": 635340,
+      "sha256": "e9d605e77065dd22c7018526c4d8d7bec27960d5c8d2be27306d22f0545d4ea4"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/transport.cpp": {
+      "bytes": 2925,
+      "sha256": "fe8daf2bfc2d4b0e87370b6b559c70f3687166667609c8fadcc54cbe69452083"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.native.hpp": {
+      "bytes": 813886,
+      "sha256": "b95b630d7fdb7a50db8f3551d3e48a3c932b9d5944dabc4b45afe301cc45c698"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.cpp": {
+      "bytes": 2909,
+      "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/dopri_phase.native.hpp": {
+      "bytes": 410475,
+      "sha256": "0808c37704c7f98423bb1b5b0f57c74feef5d27f015b74caf4dc62c6255ca626"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/dopri_phase.cpp": {
+      "bytes": 2866,
+      "sha256": "e481ae98846a7d8d509e2e3e17e8b8d72ea561e30929a165c85e9026c57d93d6"
+    },
+    "/usr/bin/x86_64-linux-gnu-g++-14": {
+      "bytes": 1186944,
+      "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+    },
+    "/usr/bin/python3.12": {
+      "bytes": 8020928,
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f"
+    },
+    "/usr/libexec/gcc/x86_64-linux-gnu/14/cc1plus": {
+      "bytes": 36622952,
+      "sha256": "52fda0dfd1df95d8d9370c39de67e08b6e37dcfe25a2ef977f8451521159e834"
+    },
+    "/usr/libexec/gcc/x86_64-linux-gnu/14/collect2": {
+      "bytes": 434560,
+      "sha256": "a03c6db64a7b078b47079de2e234fb9f07e71108742f5087da4ccd4c92d770ec"
+    },
+    "/usr/bin/x86_64-linux-gnu-as": {
+      "bytes": 745768,
+      "sha256": "7a2ef948033b05ad0c5dcb0d5be059bc68562b5d45713d91aee21df2b4bf4e92"
+    },
+    "/usr/bin/x86_64-linux-gnu-ld.bfd": {
+      "bytes": 1359128,
+      "sha256": "e46a122cc3a29feba3b1d0fc2a274b6e46538be016ebe381370c0801bb98b0b8"
+    },
+    "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33": {
+      "bytes": 2592224,
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+      "bytes": 183024,
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+      "bytes": 952616,
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+      "bytes": 2129424,
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+      "bytes": 236616,
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    },
+    "/usr/bin/ldd": {
+      "bytes": 5382,
+      "sha256": "752803b8baa217b821bd4566c4fbdaec50c01cb32d2796ec056d22d190d4290f"
+    },
+    "out/native-cpu-scalar-zero/prepare_compile.py": {
+      "bytes": 3426,
+      "sha256": "268d6fac3b23d40733f4baa96bffd840793f560bc215d870dc90540748555da9"
+    },
+    "out/native-cpu-scalar-zero/build.py": {
+      "bytes": 2367,
+      "sha256": "ab6cddd6a7a53af757ac84783fd7486145ac5586eae660c51385b576cd528413"
+    },
+    "out/native-cpu-scalar-zero/derivation.json": {
+      "bytes": 7132,
+      "sha256": "84af5c154cb39e12441dc6a239a5f76aa88bb6518a8c164321e2efa7b07f7b08"
+    },
+    "out/native-cpu-scalar-zero/scalar-zero.patch": {
+      "bytes": 4995,
+      "sha256": "ed187af6d536263ccbaa352cf31e1a8058c39c5e982f76da13341f16635f8c81"
+    },
+    "out/native-cpu-scalar-zero/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-scalar-zero/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-host-representation/probe/preparation.json": {
+      "bytes": 6464,
+      "sha256": "723d67d2d628b1835436d5a185ee1d51d833c81e6c395a62af67486fc1391996"
+    },
+    "out/native-cpu-static-program/batch-compile-result.json": {
+      "bytes": 9212,
+      "sha256": "f8434acad86353ab1a345cd35a9f4e6ef338805a2d87974ebacb49d2d9082be2"
+    },
+    "out/native-cpu-row-ownership/cold-frame/run_owned.py": {
+      "bytes": 12531,
+      "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab"
+    },
+    "out/native-cpu-row-ownership/cold-frame/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o": {
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o": {
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o": {
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    "bin/linux-gcc/native-cpu-dispatch-admission/admission.o": {
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/objects/transport.o": {
+      "bytes": 3115824,
+      "sha256": "a0bc1a77106abf466fa621f6c5b93d2e8fbc90ebcf8bf0e9e2a2997397a243bf"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/objects/endpoint.o": {
+      "bytes": 3501304,
+      "sha256": "02bd72733f2eb8e24fadfaac0ddef93e1d9da13687ee88421edb324f837e408a"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/objects/dopri_phase.o": {
+      "bytes": 1822672,
+      "sha256": "a11815e10d4a28bf6b33b217ae59d2db1962a66114c95507d5fa3622d26c8429"
+    },
+    "bin/linux-gcc/native-cpu-simd-packet-policy/objects/rows_adapter.o": {
+      "bytes": 4280,
+      "sha256": "05cd506a9411b9e596d88ef097c2564d4f47da87152631cf8720e10560763c0e"
+    },
+    "out/native-cpu-scalar-zero/cpp-compile-result.json": {
+      "bytes": 14560,
+      "sha256": "0fd97b1d7d8680b3e63358f827e52f28528f88b65f11a3d265adc905ef01f1db"
+    },
+    "out/native-cpu-scalar-zero/compile/cpp/owner.json": {
+      "bytes": 2441,
+      "sha256": "afe5b8c5e86f2ec035c9872237567665a651fce2f8901cf3ec94e4be1c08b814"
+    },
+    "out/native-cpu-scalar-zero/object-code-inspection.json": {
+      "bytes": 5889,
+      "sha256": "ced7ec78243e80c4423bdeb279f79f8bdc9c66473f871e8565f9d6e0d21e06d8"
+    },
+    "out/native-cpu-scalar-zero/prepare_provider_patch.py": {
+      "bytes": 5217,
+      "sha256": "bd1d1baed9c2f0b567326649d563b0fd2dce8c84f84cea16a32387a232b9524b"
+    },
+    "out/native-cpu-scalar-zero-compatibility/result.json": {
+      "bytes": 10607,
+      "sha256": "e64fb215fa9ea55e428cf53b25099bcf18322e9757e58b473c056e67a91f9e59"
+    },
+    "out/native-cpu-scalar-zero-compatibility/run/owner.json": {
+      "bytes": 2117,
+      "sha256": "809caf358b1489ea0670e939324cf64725109908ad45a78195399dd55a4587ad"
+    },
+    "out/native-cpu-zero-term/provider/source-contract.json": {
+      "bytes": 44876,
+      "sha256": "8f593add281e33548b9cc3c40dac1ff8dc92e66919cd8ac2af1df84cd2f8e9e4"
+    },
+    "out/native-cpu-field-simd/provider/source-contract.json": {
+      "bytes": 21271,
+      "sha256": "2c979ad3b7aca059cbce510696b6f6acbbb1383b8079211f44e5c085461de6f9"
+    },
+    "out/native-cpu-field-simd/provider/provider.patch": {
+      "bytes": 6258,
+      "sha256": "c6ceb393a2f9e9156ebca244194edf31a69b5ad3239e39fc5bb1c571902e8111"
+    },
+    "out/native-cpu-scalar-zero/provider/source-contract.json": {
+      "bytes": 16915,
+      "sha256": "e2fa2d175019acaab37d7765e98c10e0218af3317d729c70cb0770734d074c1d"
+    },
+    "out/native-cpu-scalar-zero/provider/provider-build-result.json": {
+      "bytes": 2426,
+      "sha256": "4f362739dd54265e66fd4f6742e13280494f846af4566b23ff64a65dab5c3d58"
+    },
+    "out/native-cpu-scalar-zero/provider/linked-native-proof.json": {
+      "bytes": 7536644,
+      "sha256": "ff44fb87aa578abd456d6eecf846d83139b78d37352a50f20104699f1ff6298a"
+    },
+    "out/native-cpu-scalar-zero-stall/capture/owner.json": {
+      "bytes": 3958,
+      "sha256": "236dd9da1438288f3ca0f91423006004e5f27dd2cc7ea8cbdd2f653971c0e620"
+    },
+    "out/native-cpu-scalar-zero-stall/capture/observation.json": {
+      "bytes": 346,
+      "sha256": "ce4f4cbe97bbab3554196da171760a4af9cfae14348d64e2c41279c9fc9bb2bc"
+    },
+    "out/native-cpu-scalar-zero-stall/capture/all-thread-stacks.txt": {
+      "bytes": 51259,
+      "sha256": "35b1da1edc9e8c7ed1978f25f6c172d698dc3c8f836ce38a981afaed82c249e6"
+    },
+    "out/native-cpu-lazy-nir/prepare_provider_patch.py": {
+      "bytes": 7158,
+      "sha256": "b4574c943a15a997d68fd41e4da97203ac662f3637eb9d8c25c7905f553ab35d"
+    },
+    "out/native-cpu-zero-term/ispc-derivation.json": {
+      "bytes": 21080,
+      "sha256": "11359fc7a57b2874bd626eea998abc2f41a62729b7f7385e69a2abe2322e2e5f"
+    },
+    "out/native-cpu-product-inline/derive_ispc.py": {
+      "bytes": 3039,
+      "sha256": "9f6681f89b12b8ef45b8c564b56817c9dfd07da47c9b26e182f21566fcdb0bf6"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/ispc-source/transport.ispc": {
+      "bytes": 649694,
+      "sha256": "e7ebd38fe8e6d0e62481826d0ea8cf22b415a0507a5d81ef02433bf1d9f29e69"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/ispc-source/endpoint.ispc": {
+      "bytes": 826239,
+      "sha256": "419cc7925cb65b04a2c47f5ffbe8f58fd7e21b2324cc678a63c940c5b97a8656"
+    },
+    "bin/linux-gcc/native-cpu-zero-term/ispc-source/dopri_phase.ispc": {
+      "bytes": 415374,
+      "sha256": "cb571ec2f9071c44828891976254cd83feb6d4eb8302df86370231eae4525162"
+    },
+    "bin/linux-gcc/native-cpu-product-inline/ispc-source/transport.ispc": {
+      "bytes": 649708,
+      "sha256": "0678e7d35c2e896dca0b30561d908bd0b6a4a97268750daf76e27db5cb108489"
+    },
+    "bin/linux-gcc/native-cpu-product-inline/ispc-source/endpoint.ispc": {
+      "bytes": 826253,
+      "sha256": "6e4852ddc1fe53f56e403d87ff753855478b84f35ff06d253e4b8cf1968bddf9"
+    },
+    "bin/linux-gcc/native-cpu-product-inline/ispc-source/dopri_phase.ispc": {
+      "bytes": 415388,
+      "sha256": "4208d1fa9ebd11aa6cab95516da084523e2e9a2bad14cb8c261e29fa705bff70"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libdl.so.2": {
+      "bytes": 14408,
+      "sha256": "c2994527172cc23b7fb0f7d611b71e00a37da27af12c2e5e9e0dc1a742886c96"
+    },
+    "/usr/lib/x86_64-linux-gnu/libpthread.so.0": {
+      "bytes": 14408,
+      "sha256": "90491a21ce44efcf3bd4b65ec82501c091d7ebe7f8d9b341dd01d721001d9ecd"
+    },
+    "out/native-cpu-product-inline/ispc-derivation.json": {
+      "bytes": 21289,
+      "sha256": "b8dd83cd743e3d9ecd6d60c3d394cdab5ceb75facd36ca2f7f3fb13ba2cdf5ba"
+    },
+    "out/native-cpu-product-inline/prepare_ispc_compile.py": {
+      "bytes": 4445,
+      "sha256": "6d66f3dc148f758a8e020c2ede8a428976fbc8424ed7733cc2e705fa1e289970"
+    },
+    "out/native-cpu-product-inline/build_ispc.py": {
+      "bytes": 2427,
+      "sha256": "4a5f90223bf011c4d87295d763cb1ac871f1f9d1e6edb0c025c3252ee39f2836"
+    },
+    "out/native-cpu-product-inline/inspect_objects.py": {
+      "bytes": 3171,
+      "sha256": "809300a4bf0e0de7599e5f9a1f3d015c59901ae669ebdeb436e59139ab23abee"
+    },
+    "out/native-cpu-product-inline/inspect_product.py": {
+      "bytes": 2087,
+      "sha256": "06cd841be974867ff5f150177123a53a8e7ea738b4e0aeae9f456a95ad966a01"
+    },
+    "out/native-cpu-product-inline/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-product-inline/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-zero-term/ispc-zero-compile-result.json": {
+      "bytes": 32236,
+      "sha256": "f415b2b9c725f571ee1fadb875c07af2ff4c4643f0efdd97c8e6f8d64aa22147"
+    },
+    "out/native-cpu-zero-term/compile/ispc-zero/owner.json": {
+      "bytes": 2152,
+      "sha256": "09327de6f96d332c715b8a4c36ec519b8e8fdaab35a6a728ccfa2d4b0c810ae3"
+    },
+    "out/native-cpu-zero-term/inspect_objects.py": {
+      "bytes": 3162,
+      "sha256": "f7153a08cab7ef084e79e5b63392934803e47d690cb31566e1caa918b0ee5288"
+    },
+    "out/native-cpu-simd-rows/inspect_objects.py": {
+      "bytes": 2912,
+      "sha256": "2f4572906c6f266ba0b20fe553ebb0844cf08c8c8e933ea3902554206e5e212e"
+    },
+    "/usr/bin/nm": {
+      "bytes": 44544,
+      "sha256": "910ad8a63896f722374fdf22951d2a436c74e3ac9677511cc56378296bdf86cc"
+    },
+    "/usr/bin/objdump": {
+      "bytes": 390848,
+      "sha256": "d0041e7511460b9ebfd95ce4f9d93c7ffea398ffc1cb2c316a220dd8e533db3d"
+    },
+    "out/native-cpu-lazy-nir/provider/source-contract.json": {
+      "bytes": 18790,
+      "sha256": "90ae997c9bbc3852368b3816b692bc7ad9995c4276a1481f22474c3e26f628e5"
+    },
+    "out/native-cpu-lazy-nir/provider/provider-build-result.json": {
+      "bytes": 2420,
+      "sha256": "c2d8b33f42848f8c695c3648f079e91d660d9e05f8c1d1b1189310f2d5c85a65"
+    },
+    "out/native-cpu-lazy-nir/provider/linked-native-proof.json": {
+      "bytes": 7536641,
+      "sha256": "e5996a441013a6a0895b9576386378aafaed30b59617641037b778e83378f913"
+    },
+    "out/native-cpu-product-inline/ispc-product-compile-result.json": {
+      "bytes": 8163,
+      "sha256": "79cb42b4d42b89f222530d6f70adb6d143504b804a1064a21bf09f1d341114ba"
+    },
+    "out/native-cpu-product-inline/compile/ispc-product/owner.json": {
+      "bytes": 2261,
+      "sha256": "71a941f5a2691a99cbb07b759d5f9cfd8864adbccbbd79a937d9ae8220062189"
+    },
+    "out/native-cpu-product-inline/object-code-inspection-product.json": {
+      "bytes": 9134,
+      "sha256": "f429c32441ef70f991f161b1ab6f8b6ed444b4f692f83ad859bc1d6085b0f4b6"
+    },
+    "out/native-cpu-product-inline/product-code-inspection.json": {
+      "bytes": 40371,
+      "sha256": "cddb00ee20496471f6cba480ac024fc69a6f5c996c114ec6e46f4232b175cda7"
+    },
+    "out/native-cpu-product-inline/prepare_provider_patch.py": {
+      "bytes": 3909,
+      "sha256": "492880ea6b0eab232a1c9a19c524dfc109113869320be9dd96dbbbb01c92dd51"
+    },
+    "out/native-cpu-predicated-arithmetic/derive_ispc.py": {
+      "bytes": 9777,
+      "sha256": "926f828e65e0bae9c27c6eacca9c6952efcf680189cdd416ca044500cc04997d"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/util/u_math.h": {
+      "bytes": 18704,
+      "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 109640,
+      "sha256": "34b1f093c09543c7f1c48873081d014849088b3839316dc6b3671d2b6add9cd1"
+    },
+    "bin/linux-gcc/native-cpu-predicated-arithmetic/ispc-source/transport.ispc": {
+      "bytes": 649095,
+      "sha256": "3bde237bbfe8d335c748fd44c181b94d1a71b9e7b1106fa470a188239c8de731"
+    },
+    "bin/linux-gcc/native-cpu-predicated-arithmetic/ispc-source/endpoint.ispc": {
+      "bytes": 825651,
+      "sha256": "fe5b272aa555a94c05187b2a971cd6893aedeafc1ec958883151acd7c15abb98"
+    },
+    "bin/linux-gcc/native-cpu-predicated-arithmetic/ispc-source/dopri_phase.ispc": {
+      "bytes": 414786,
+      "sha256": "826bb833942dae3095087f6455a961e9ba7b11a7bd7a5773bb3b89debbdcab9c"
+    },
+    "out/native-cpu-predicated-arithmetic/ispc-derivation.json": {
+      "bytes": 27403,
+      "sha256": "28ac58e832ef0fbe739e6198dff373a641a587e3bfa045c636d6a3308ba9ee54"
+    },
+    "out/native-cpu-predicated-arithmetic/prepare_ispc_compile.py": {
+      "bytes": 4579,
+      "sha256": "013cfcf48f0e0bd79f2ac9ac911a0eda8f8d2db1c07238891e8b40a2ec55b90e"
+    },
+    "out/native-cpu-predicated-arithmetic/build_ispc.py": {
+      "bytes": 2440,
+      "sha256": "3ad11d26a2e62ac72c7bbb592a801fa1fbe37cb29b7d457f233db4a55a3ac9a0"
+    },
+    "out/native-cpu-predicated-arithmetic/inspect_objects.py": {
+      "bytes": 3180,
+      "sha256": "2f8c4d7353cd270e6996cd90b83be3357bd199e339460dc7320767a8bafe2e24"
+    },
+    "out/native-cpu-predicated-arithmetic/inspect_predication.py": {
+      "bytes": 2561,
+      "sha256": "7e1408445e8d85a5f057d1ed91934b24d6801d486297bb6ac44a6dbc58fb1b61"
+    },
+    "out/native-cpu-predicated-arithmetic/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-predicated-arithmetic/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-product-inline/provider/source-contract.json": {
+      "bytes": 23061,
+      "sha256": "07077237d201141cc92778459d57e4983e543bc9c5c09f989318d804ff46f57b"
+    },
+    "out/native-cpu-product-inline/provider/provider-build-result.json": {
+      "bytes": 2447,
+      "sha256": "6deb78ac26939897ca8be68e598cc443382c6553082c1d9fc64e69ffe87b9e10"
+    },
+    "out/native-cpu-product-inline/provider/linked-native-proof.json": {
+      "bytes": 7708926,
+      "sha256": "96714a7c9f5c61e4dd9b5166220141664f8f32f2ffeb0600c77ccde37dfd31c7"
+    },
+    "out/native-cpu-predicated-arithmetic/ispc-predicated-compile-result.json": {
+      "bytes": 8835,
+      "sha256": "8b0d31a9b67cf72a608f7d0473f32bebd2c8bb0aa72f47de6c8ad2a1f6c8c484"
+    },
+    "out/native-cpu-predicated-arithmetic/compile/ispc-predicated/owner.json": {
+      "bytes": 2440,
+      "sha256": "35bd2a22dd4dbf1e3d49be2d033f2908f86b49cb58acc283f93ad1e49c645b0a"
+    },
+    "out/native-cpu-predicated-arithmetic/object-code-inspection-predicated.json": {
+      "bytes": 9154,
+      "sha256": "f44c906561e02cbfed0594b32f104456abbddd05d1f98518a8ed516e0540abfe"
+    },
+    "out/native-cpu-predicated-arithmetic/predicated-code-inspection.json": {
+      "bytes": 4078,
+      "sha256": "2e6aa68960b25a127332252e7612c0be2120132a0bbf37f45cfe133e5616bd07"
+    },
+    "out/native-cpu-predicated-arithmetic/prepare_provider_patch.py": {
+      "bytes": 4106,
+      "sha256": "c6ca4f678e5bc9042c9a2319a6e322cd48893c459deb96a08f9499bbf559338b"
+    },
+    "out/native-cpu-predicated-arithmetic/provider/source-contract.json": {
+      "bytes": 27157,
+      "sha256": "ad2b658a6b3ffe26aba95eb9e3544633d133915a1c25b632c935518d40b14e91"
+    },
+    "out/native-cpu-predicated-arithmetic/provider/provider-build-result.json": {
+      "bytes": 2482,
+      "sha256": "d40e9cf190653b8ad3479cfeccdc8be77d9a20f18b727ed82ba2209d55830644"
+    },
+    "out/native-cpu-predicated-arithmetic/provider/linked-native-proof.json": {
+      "bytes": 7351687,
+      "sha256": "39cbfa7e0ef26d106b48c89bcbbb08fb094abc0298387edeafaa6ef030813915"
+    },
+    "out/native-cpu-predicated-arithmetic-compatibility/result.json": {
+      "bytes": 11834,
+      "sha256": "5298ef3ae4484ca2fce42588a0bebdc1ebc9a964b82150d69f1c9acc73140adf"
+    },
+    "out/native-cpu-task-cardinality/prepare_provider_patch.py": {
+      "bytes": 7227,
+      "sha256": "e5275af6929720dd17ce22f668556ab20d8233ecddc04dceeb8d229d28a8497c"
+    },
+    "out/native-cpu-direct-scratch/derive_ispc.py": {
+      "bytes": 8040,
+      "sha256": "e399ece6128bc213780920bbabdb2e67da4570d0ba173137cb8ffec28c03ea29"
+    },
+    "out/native-cpu-task-cardinality-cohort/cold-frame/frame/owner.json": {
+      "bytes": 3855,
+      "sha256": "a768258d12e5d490318e0f48c8c51215d2494ee1a21af60fd92e235580a84281"
+    },
+    "out/native-cpu-task-cardinality-cohort/cold-frame/result.json": {
+      "bytes": 2195,
+      "sha256": "006c489bb3429741ef1850bede9f4a4f1ebb0ef87be1b6d32450d9da78ab35c6"
+    },
+    "attestations/qualification/bee63496/native-cpu-task-cardinality-frame-timeout/MANIFEST.json": {
+      "bytes": 85793,
+      "sha256": "fcb519f077bda3709543706118545264698ad4749f48aa5706fd9d5907132abe"
+    },
+    "bin/linux-gcc/native-cpu-direct-scratch/ispc-source/transport.ispc": {
+      "bytes": 656869,
+      "sha256": "013c7b51a37ff6dca4cab2ca92bcc40993e2a34a3dc40d845df3ad4ecd99c598"
+    },
+    "bin/linux-gcc/native-cpu-direct-scratch/ispc-source/endpoint.ispc": {
+      "bytes": 833425,
+      "sha256": "0b7471bc502e7289178c0c12f36df1559a41352726c96244d6ea72ccb739b114"
+    },
+    "bin/linux-gcc/native-cpu-direct-scratch/ispc-source/dopri_phase.ispc": {
+      "bytes": 422550,
+      "sha256": "e629492d6923d5d3bcd2479cbb2824709ea32908932b84c32d7a25f0fa713c23"
+    },
+    "out/native-cpu-direct-scratch/ispc-derivation.json": {
+      "bytes": 32166,
+      "sha256": "f00cf91c27c9decfb6c68cc1df8d1f0dc5c927b250e1de277df5286d53697717"
+    },
+    "out/native-cpu-direct-scratch/prepare_ispc_compile.py": {
+      "bytes": 5527,
+      "sha256": "39dd567375bde0a9fb1e8faa07c4e727e303c1272e22dcc006953b68354f9855"
+    },
+    "out/native-cpu-direct-scratch/build_ispc.py": {
+      "bytes": 2425,
+      "sha256": "7ceac44d06a5eb99a3d33e2addbc4600809c25b67210122835e0939353f3ced5"
+    },
+    "out/native-cpu-direct-scratch/inspect_objects.py": {
+      "bytes": 3168,
+      "sha256": "b95331bb6ca2a1a5790926ed418c625acf03ac17ccdf18bdb2f122025909e70d"
+    },
+    "out/native-cpu-direct-scratch/inspect_direct.py": {
+      "bytes": 1952,
+      "sha256": "ba91592abe54657f0a548da82526d2daa46699d7ccfa2e177191c14ef679fb5e"
+    },
+    "out/native-cpu-direct-scratch/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-direct-scratch/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-task-cardinality/provider/source-contract.json": {
+      "bytes": 30185,
+      "sha256": "340938f70b7b0aab575b94b36438f87345a31554b9d8999551bbc8b90ce9aef2"
+    },
+    "out/native-cpu-task-cardinality/provider/provider-build-result.json": {
+      "bytes": 2472,
+      "sha256": "e2107e4fa2c023addf3e9f61b42c838129cf3dbeb4d2e90bcf9bf4d26fd380eb"
+    },
+    "out/native-cpu-task-cardinality/provider/linked-native-proof.json": {
+      "bytes": 7351682,
+      "sha256": "c5309c8fecc22a5aab070edb10f37dc2763fa652577523c49f302734e332b222"
+    },
+    "out/native-cpu-direct-scratch/ispc-direct-compile-result.json": {
+      "bytes": 8972,
+      "sha256": "28ae98268fd088632815a0a16cc4b8025006e4da4faf5272dd4c678a81d3dc0c"
+    },
+    "out/native-cpu-direct-scratch/compile/ispc-direct/owner.json": {
+      "bytes": 2527,
+      "sha256": "a9e2076455611c13086655c2199ea79077c6dd7cbaa8a2dbdbce76330698942b"
+    },
+    "out/native-cpu-direct-scratch/object-code-inspection-direct.json": {
+      "bytes": 9136,
+      "sha256": "f26cecfeda09229285e70009ac945dede1817412ae0eae3450e79a9bfdd2692c"
+    },
+    "out/native-cpu-direct-scratch/direct-code-inspection.json": {
+      "bytes": 1743,
+      "sha256": "311fd74869d9f336004b9d689708efeeecd8f895eed315280afd6efd98647820"
+    },
+    "out/native-cpu-direct-scratch/prepare_provider_patch.py": {
+      "bytes": 4236,
+      "sha256": "02e34c948e43946f1ba9c843561470c22eb3542d77ce3ca6b795d7cc2b521b8b"
+    },
+    "out/native-cpu-static-registers/derive_ispc.py": {
+      "bytes": 8422,
+      "sha256": "27f2f68ffa347ea99119faef036f59bae293045d0af42f3ce597b79de078020d"
+    },
+    "out/native-cpu-direct-scratch-cohort/cold-frame/frame/owner.json": {
+      "bytes": 3804,
+      "sha256": "ee492719aa7f444a28059917e313caa099e692ec648de2b4d2bb7c48937bf1c3"
+    },
+    "out/native-cpu-direct-scratch-cohort/cold-frame/result.json": {
+      "bytes": 2196,
+      "sha256": "0fb769b1c739471625af7800a7235948f22f474e5597c1278b1e706a58e829e8"
+    },
+    "attestations/qualification/7a8e6d48/native-cpu-direct-scratch-frame-timeout/MANIFEST.json": {
+      "bytes": 109652,
+      "sha256": "32f74d5125aa9bc07dd287644d5a19fdca9eebe3a9e8165cd1a20dc95b9815f9"
+    },
+    "bin/linux-gcc/native-cpu-static-registers/ispc-source/transport.ispc": {
+      "bytes": 629676,
+      "sha256": "e08f3e58809ccb06cf9438dc10ba4164bddb0070667becd67dc329ff8b643b98"
+    },
+    "bin/linux-gcc/native-cpu-static-registers/ispc-source/endpoint.ispc": {
+      "bytes": 798016,
+      "sha256": "1fc7e8af3d560544a81ec4f2da1c012d19095cca9690168a8004384e9a97196d"
+    },
+    "bin/linux-gcc/native-cpu-static-registers/ispc-source/dopri_phase.ispc": {
+      "bytes": 406511,
+      "sha256": "a1b2479118298fd652d2d98ce081cf07561a14a4cd04176fdc88c5bda64e498d"
+    },
+    "out/native-cpu-static-registers/ispc-derivation.json": {
+      "bytes": 11562,
+      "sha256": "e2b5a66d7f0efc1d7a704f07937b26cb650a40268b07fd04256b4426ef6b6bcc"
+    },
+    "out/native-cpu-static-registers/prepare_ispc_compile.py": {
+      "bytes": 5467,
+      "sha256": "670d614433fdc58dabb8077dbbd472fca19da885b142c79cd0520c6acfdb8b99"
+    },
+    "out/native-cpu-static-registers/build_ispc.py": {
+      "bytes": 2433,
+      "sha256": "d5f3bbee3b4b0a6622c056f740c76272a9bbd7e05e3b37a3f76daeb6ea608f68"
+    },
+    "out/native-cpu-static-registers/inspect_objects.py": {
+      "bytes": 3177,
+      "sha256": "b80ca8cabd64df4bdabf56cf47d75f2a0a41f6d41fa7b489246906253198a455"
+    },
+    "out/native-cpu-static-registers/inspect_static.py": {
+      "bytes": 2033,
+      "sha256": "b829422c5ade7934df2fb280adc39b251149f5707eae2ee9354a7d4150e8505e"
+    },
+    "out/native-cpu-static-registers/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-static-registers/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-direct-scratch/provider/source-contract.json": {
+      "bytes": 32196,
+      "sha256": "59d6813d71d1155907db7fdcd3c6d0146083b679af4bd23904578471d3f9a131"
+    },
+    "out/native-cpu-direct-scratch/provider/provider-build-result.json": {
+      "bytes": 2447,
+      "sha256": "4738bcd6a8bdb3ff490c379323d9675cfca85a5c982fe1e18dafd7f40270e93b"
+    },
+    "out/native-cpu-direct-scratch/provider/linked-native-proof.json": {
+      "bytes": 10781555,
+      "sha256": "5091a4635247d3fdd0759d29f621a72a9f01a48752a1d8eda89eb7fa25bd750b"
+    },
+    "out/native-cpu-static-registers/ispc-registers-compile-result.json": {
+      "bytes": 8809,
+      "sha256": "77c3648ed0d8c26f17d6bdeae66af4c2008763f1ca2ae33d8dbf13f6175938a6"
+    },
+    "out/native-cpu-static-registers/compile/ispc-registers/owner.json": {
+      "bytes": 2589,
+      "sha256": "76303cf4e2934a76aba459cd06dc8a384543f3c8b203884f848bbd2ac51e2286"
+    },
+    "out/native-cpu-static-registers/object-code-inspection-registers.json": {
+      "bytes": 9246,
+      "sha256": "dcb2d09470c9439629fd4bc14ffb5c104c7879088f1616747f15665a72c27bf3"
+    },
+    "out/native-cpu-static-registers/static-register-code-inspection.json": {
+      "bytes": 1810,
+      "sha256": "e39cad7633ca8d159e36b80b735849de20276a9143ebf7915ab03391322f48b3"
+    },
+    "out/native-cpu-static-registers/prepare_provider_patch.py": {
+      "bytes": 4203,
+      "sha256": "4d6e418077127dfa1b602a1495e1b69945f15c6148d8024b88448177aee39144"
+    },
+    "out/native-cpu-predicated-products/derive_ispc.py": {
+      "bytes": 6838,
+      "sha256": "d7945b7ded99bf8f0073fad5776da2c6b354e0e49c2bdb4579b39cd78878df08"
+    },
+    "out/native-cpu-static-registers-cohort/cold-frame/frame/owner.json": {
+      "bytes": 3921,
+      "sha256": "ba0db854155db9d3b276f31cfce47b008e84dfbd4045fc31e413ae29601a1fb5"
+    },
+    "out/native-cpu-static-registers-cohort/cold-frame/result.json": {
+      "bytes": 2448,
+      "sha256": "162e7d37afb54227a161d985c205d294661a65910d9562338685f3c8dd019214"
+    },
+    "attestations/qualification/6c79517c/native-cpu-static-registers-frame-timeout/MANIFEST.json": {
+      "bytes": 66115,
+      "sha256": "d637fb454ff2c2220c492dc1866a9abc3e45acc3f4b83179acddd2191cd585e1"
+    },
+    "bin/linux-gcc/native-cpu-predicated-products/ispc-source/transport.ispc": {
+      "bytes": 630342,
+      "sha256": "616af22dd2cca9888661b1124850917568e19b65096203e2a2e56923496184e7"
+    },
+    "bin/linux-gcc/native-cpu-predicated-products/ispc-source/endpoint.ispc": {
+      "bytes": 798682,
+      "sha256": "518ecc8423a39f4c190a4f575eda1041a088cd0fe512ee10c0a61102cf9b0077"
+    },
+    "bin/linux-gcc/native-cpu-predicated-products/ispc-source/dopri_phase.ispc": {
+      "bytes": 407177,
+      "sha256": "ead4d78222224f740d5738a79247633bd61fa9d0523421afcebddaaecb30313f"
+    },
+    "out/native-cpu-predicated-products/ispc-derivation.json": {
+      "bytes": 8139,
+      "sha256": "f9a8d2654dd3067584d33a00758a474e164c522c71597fc069ddef73d28353e7"
+    },
+    "out/native-cpu-predicated-products/prepare_ispc_compile.py": {
+      "bytes": 5958,
+      "sha256": "b940b75815c43b2324bbc6f33bfdf7f8842483940e49000e45a064fffb44cf33"
+    },
+    "out/native-cpu-predicated-products/build_ispc.py": {
+      "bytes": 2434,
+      "sha256": "8ddd9f82083b9ed66368a6df7e5d8543ab383e8795ff76316dc86b707a43c492"
+    },
+    "out/native-cpu-predicated-products/inspect_objects.py": {
+      "bytes": 3174,
+      "sha256": "e0697264b33496dac6f040b051c6aa1352e3e8a76eec92362bc2dd63f1836b9f"
+    },
+    "out/native-cpu-predicated-products/inspect_products.py": {
+      "bytes": 2033,
+      "sha256": "e96d03d6e3553a0dd0032b0dcc36b3cffb87690300c3ac68d6e6c2f492fd8e7b"
+    },
+    "out/native-cpu-predicated-products/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-predicated-products/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-static-registers/provider/source-contract.json": {
+      "bytes": 36146,
+      "sha256": "769765192729cd2be6fd19b7963bfbfd5e2776745d0ce5f0356b986dbf1f7b1f"
+    },
+    "out/native-cpu-static-registers/provider/provider-build-result.json": {
+      "bytes": 2457,
+      "sha256": "9564941aba00a2ef5c11f32dcc71d5a90f4bfe24626bf1a301a7bceb96341c8f"
+    },
+    "out/native-cpu-static-registers/provider/linked-native-proof.json": {
+      "bytes": 3188795,
+      "sha256": "6ac702e242a42e355dd11622e193773166c620f1d0b8412adb0fce10742741ea"
+    },
+    "out/native-cpu-predicated-products/ispc-products-compile-result.json": {
+      "bytes": 9317,
+      "sha256": "2c7f1b3ef5470c8fcb8089547afc1fabb1d3126cd9c347aaaf9f1a6231a6cc14"
+    },
+    "out/native-cpu-predicated-products/compile/ispc-products/owner.json": {
+      "bytes": 3008,
+      "sha256": "57cfd2d7f09fe1b246f8d60e6f4c8f9a8fc309f1bb6c21ae86ab5c4e6e97cd37"
+    },
+    "out/native-cpu-predicated-products/object-code-inspection-products.json": {
+      "bytes": 9255,
+      "sha256": "45f0b2f0b362bacd7e21338e454bce9d7a6529f2bfe30f407bc344e1d0598dc4"
+    },
+    "out/native-cpu-predicated-products/predicated-product-code-inspection.json": {
+      "bytes": 1819,
+      "sha256": "3bb482347068aca26da7bdd10e4f8e92a1e6829a0dce8b75d96f9de3dddfbffa"
+    },
+    "out/native-cpu-predicated-products/prepare_provider_patch.py": {
+      "bytes": 4401,
+      "sha256": "3f4b6216bd047eedfec14ce43aa9155dafe24490bdb0dea535cc1758ec93c736"
+    },
+    "out/native-cpu-dense-arithmetic/derive_ispc.py": {
+      "bytes": 6584,
+      "sha256": "560f52d68735b07b689ca57d26aef7addbc0f905113092f20b820fcabdc794ee"
+    },
+    "out/native-cpu-dense-arithmetic/retained8.cpp": {
+      "bytes": 10015,
+      "sha256": "e57d49b66e833705febf35f40fb3aed0a27a0ebcb505a58f145a22f5f7a0f711"
+    },
+    "out/native-cpu-dense-arithmetic/cpp-code-inspection.json": {
+      "bytes": 5449,
+      "sha256": "6c57a63d635bb2be86809fa2c28f485fe27afcfe095383229113ee4b6210c7c3"
+    },
+    "out/native-cpu-dense-arithmetic/cpp-build-result.json": {
+      "bytes": 4353,
+      "sha256": "cc7dc02217659fd7a9a9abee137fd4268a6cac00934b9f72cf6da73f61c52166"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/build/owner.json": {
+      "bytes": 3253,
+      "sha256": "dcb609dbba5a7f867a2e3e7677ecac04249926c273bdbe89ff344398bbcfaec0"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/run/owner.json": {
+      "bytes": 1940,
+      "sha256": "1d96b17364a96434488f8f8726c8ce2acf4b7afa4233f3a950b13c2468cbc85a"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/run/stdout.log": {
+      "bytes": 175,
+      "sha256": "a4705279a6e222cac203c9b5be9f7244b968e3cf5091eb71124d782b072d2c68"
+    },
+    "out/native-cpu-predicated-products-cohort/cold-frame/frame/owner.json": {
+      "bytes": 3992,
+      "sha256": "107992021408830959c2b62db91c8210961c4c285df0f484c15ab5f3b67d0066"
+    },
+    "out/native-cpu-predicated-products-cohort/cold-frame/result.json": {
+      "bytes": 2448,
+      "sha256": "8e20e51e701ad5d8c5deb34e3fa4e21b23bf904e9525bb2cd7c71b93ec069e4a"
+    },
+    "attestations/qualification/fddb9175/native-cpu-predicated-products-frame-timeout/MANIFEST.json": {
+      "bytes": 67332,
+      "sha256": "85e701631e4165849c97bce402e16549dd195afb0ad08b9aad18731ec652086c"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/transport.ispc": {
+      "bytes": 624299,
+      "sha256": "9ac822c9e422ba1e60645c8ab186584e4d10e1c4bc82e0e01343c464576baea7"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/endpoint.ispc": {
+      "bytes": 792639,
+      "sha256": "798757c45bf78b02dc00290358532f54b7984a5b273f2d7eeaf8423434d7f40a"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/dopri_phase.ispc": {
+      "bytes": 401142,
+      "sha256": "b72fcac38a74e69f00462346dbb292aa39cbed38ce49584156af8748cf08af82"
+    },
+    "out/native-cpu-dense-arithmetic/ispc-derivation.json": {
+      "bytes": 4954,
+      "sha256": "5c75da4ee17e3df4b880fb87695b19b5cb8d0de873b55fda459a3dfec9da212c"
+    },
+    "out/native-cpu-dense-arithmetic/prepare_ispc_compile.py": {
+      "bytes": 7359,
+      "sha256": "3525a5870f18f7aabf5ffa0504c36b430e5ce8d7826a39d9b0dd609e3a957c9e"
+    },
+    "out/native-cpu-dense-arithmetic/build_ispc.py": {
+      "bytes": 3422,
+      "sha256": "9f8f3060b9fab7964d5b5ef42445f6cadf07e67d17cc91675ad038fdea52eb05"
+    },
+    "out/native-cpu-dense-arithmetic/inspect_objects.py": {
+      "bytes": 3165,
+      "sha256": "8287a9aec59e196b2606d8513c571a61deb6c0c926f80f20d7d081341baffcb1"
+    },
+    "out/native-cpu-dense-arithmetic/inspect_dense.py": {
+      "bytes": 2326,
+      "sha256": "8b0f11170f431704218b983a9a9a8ed12986c3d7b57b845f0446fff351989bb5"
+    },
+    "out/native-cpu-dense-arithmetic/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-dense-arithmetic/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/probe/retained8.o": {
+      "bytes": 11176,
+      "sha256": "9d5f97e3c91f84a83737d89e5d73c91078985fd31d163a9e986c0cef6f3bd33d"
+    },
+    "out/native-cpu-predicated-products/provider/source-contract.json": {
+      "bytes": 40408,
+      "sha256": "951136e82e15bb804fad179adc87f62c3be1e5626eba025ce14ec3b258189fb9"
+    },
+    "out/native-cpu-field-compatibility/elf_proof.py": {
+      "bytes": 1443,
+      "sha256": "faf7dd9d657941df283a36cf9f3b553a066ef18e4e46626689804c35e0ec6cd7"
+    },
+    "out/native-cpu-accumulate-compatibility/elf_proof.py": {
+      "bytes": 7242,
+      "sha256": "278766535b0ddcb9ad2ab97b68805cd851dda31036567a35f8bf5a07afedb0f7"
+    },
+    "out/native-cpu-dense-arithmetic/driver.cpp": {
+      "bytes": 4422,
+      "sha256": "ca4fe6e2a3301e7111adc56d2608fc13f37f92804c4f0a57321fc38d5b17c23f"
+    },
+    "out/native-cpu-dense-arithmetic/prepare_cpp.py": {
+      "bytes": 7539,
+      "sha256": "2eec73970f543255e51d1a60774e02924ba1178e663e4ccebb708559974e2d79"
+    },
+    "out/native-cpu-dense-arithmetic/build_cpp.py": {
+      "bytes": 2263,
+      "sha256": "8e350c3a0ba8e723acacb6b3bf8d8c9dfdb6a3f878dc845228555abc2fcb333e"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/run_owned.py": {
+      "bytes": 154,
+      "sha256": "37466a9e4779a3a322e8917745c1cdf48dba1eab2460d97c49d6eede57d7f048"
+    },
+    "out/native-cpu-dense-arithmetic/cpp/owned_guard.py": {
+      "bytes": 156,
+      "sha256": "cdcd313d17c3af46f6fd66a4f48a9cc690161c98ab04bf697ce6fc66910274bc"
+    },
+    "/home/astra/.project/Sirius/out/native-cpu-dense-arithmetic/retained8.cpp": {
+      "bytes": 10015,
+      "sha256": "e57d49b66e833705febf35f40fb3aed0a27a0ebcb505a58f145a22f5f7a0f711"
+    },
+    "/usr/include/stdc-predef.h": {
+      "bytes": 2462,
+      "sha256": "8db4f65e62cade8ae4d9b77960ee6aee093255acc1b637e3fb37d79179733b15"
+    },
+    "/usr/include/c++/14/bit": {
+      "bytes": 14341,
+      "sha256": "6cc90e4f1095d4ef8f682c1bf81f55a967373b56c5304db3de10052fe8d080de"
+    },
+    "/usr/include/c++/14/concepts": {
+      "bytes": 13024,
+      "sha256": "fc331a5f13ca301f71202be80e3b6a36db3ead7a420e1214c42f8ca14d82347f"
+    },
+    "/usr/include/c++/14/bits/version.h": {
+      "bytes": 80731,
+      "sha256": "10e40fcb417136afe65154d593205bb115f0092b8954ac9e82f29592c744f625"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/c++config.h": {
+      "bytes": 57454,
+      "sha256": "cfdc3713c50dd32fed33b9a2335d04ee941b3d0397f1ecf88dc9999ecca92d01"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/os_defines.h": {
+      "bytes": 3694,
+      "sha256": "733f578676f6b7689cb4113c8c38deda7cd7e8890b5d5b22ab2168bbf0a0a264"
+    },
+    "/usr/include/features.h": {
+      "bytes": 18527,
+      "sha256": "940d486d050fc87420d8ffc008e17f31ffb04467534ad1b039ed25abc52382f9"
+    },
+    "/usr/include/features-time64.h": {
+      "bytes": 1409,
+      "sha256": "345acb98767d04277e413c4951fbb199b0500be23d43cddf17c6cd9fb319a8da"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/wordsize.h": {
+      "bytes": 442,
+      "sha256": "716d8459074e2a082d65a28192b32eddbfd7587348372395b1c283a723ae4c18"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/timesize.h": {
+      "bytes": 1109,
+      "sha256": "8b686ad5fec2c4d6f759a6594d7c216337774d059623677547b7e182cc5269ae"
+    },
+    "/usr/include/x86_64-linux-gnu/sys/cdefs.h": {
+      "bytes": 27011,
+      "sha256": "173afb522c6877dda3be1c93742c2061cd6e748ce395d2b3ae833fb49bfbfc4f"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/long-double.h": {
+      "bytes": 970,
+      "sha256": "40367287cd437d78a05313f6ec52cb0f0a711e1b6711fdcc3699bf2bf28e810f"
+    },
+    "/usr/include/x86_64-linux-gnu/gnu/stubs.h": {
+      "bytes": 384,
+      "sha256": "ef444295a0a9e8f5c40918399a00cc91ba0bd79774110cdf6e652baa6cfadb2e"
+    },
+    "/usr/include/x86_64-linux-gnu/gnu/stubs-64.h": {
+      "bytes": 481,
+      "sha256": "0b6ab3e2ed3ba79b30fe6ba81a68fc41f57965b8d56662763633431b703c9289"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/cpu_defines.h": {
+      "bytes": 1333,
+      "sha256": "048c6257a6d3dbff2470a296b06afbf031e4eb7e3eec47014e011518e4facfd9"
+    },
+    "/usr/include/c++/14/pstl/pstl_config.h": {
+      "bytes": 7937,
+      "sha256": "bb345f04a06da82729897739105e8b69a01fcfaf58c608db36f2fd310a36ccd5"
+    },
+    "/usr/include/c++/14/type_traits": {
+      "bytes": 120443,
+      "sha256": "70799e564c01d30d8cbb40e4fe7b9b0f9440064d3a7cdbe24910ec5dd943b4e2"
+    },
+    "/usr/include/c++/14/ext/numeric_traits.h": {
+      "bytes": 8227,
+      "sha256": "c7f980283e4faca756afa6bfaa9f696b4279e730f49cde0b1880a39ee0d0444a"
+    },
+    "/usr/include/c++/14/bits/cpp_type_traits.h": {
+      "bytes": 14858,
+      "sha256": "04a8ada3863f8afcaf515432d6bc63bfab7bc18f6524de393fb031c355bad0cc"
+    },
+    "/usr/include/c++/14/ext/type_traits.h": {
+      "bytes": 7231,
+      "sha256": "99ad765980f1d7165b0b49ce8f30e52e4defeb83eb0e9be4601a2e7672bd524c"
+    },
+    "/usr/include/c++/14/cstddef": {
+      "bytes": 6696,
+      "sha256": "5bab063802439c257d607c2e427b3740f6cf212c07ca2c257182535d138f01f9"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/stddef.h": {
+      "bytes": 13735,
+      "sha256": "c93f57f1538121cdbc27b59a47f1ed82b078d40e404b46481c83bafadd5deada"
+    },
+    "/usr/include/c++/14/cstdint": {
+      "bytes": 3841,
+      "sha256": "132a07733242bd2a89079029fc16c786a64da490cee70c73febfa2d00b831186"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/stdint.h": {
+      "bytes": 328,
+      "sha256": "86a7914ab7d6a18465a6fb9a7b54f945cad604fdbf3ca0d10e4e0254e0037911"
+    },
+    "/usr/include/stdint.h": {
+      "bytes": 8155,
+      "sha256": "c26c51b07feadd45ca25e9c95e393b6783d580ab318a567c119828191a80bbed"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h": {
+      "bytes": 4286,
+      "sha256": "e86638082f9ce98c82e3022018fa5be175473445c824fe17bd32bf9668582368"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types.h": {
+      "bytes": 8806,
+      "sha256": "371847ed3adab1c19db392034f6a22407d321b1dc5f2440563f4b0b8b6c5386b"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/typesizes.h": {
+      "bytes": 3737,
+      "sha256": "047ee5ab17a95364c4b0f14c3eb0750e84e457c408f9a65a6c225ece585e0c14"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/time64.h": {
+      "bytes": 1340,
+      "sha256": "2be9170ce3621ea6062f10edef68bbc2db09bb454ec4397534263dd37b8f1f6a"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/wchar.h": {
+      "bytes": 1906,
+      "sha256": "893fa450527ce645f17922788097d5fe331e2a53012bab4e724d8a1f63e21aa2"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdint-intn.h": {
+      "bytes": 1037,
+      "sha256": "94286e42e4970304da5cbef69de6695c84132ff8fbd4b6d72d29aeb7406dc5ff"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h": {
+      "bytes": 1049,
+      "sha256": "aeee224a19434556ef4a9a4afad553736789274656ca12463122300b557ce78c"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdint-least.h": {
+      "bytes": 1300,
+      "sha256": "5bf66871bfc18ae6d22c91d03e392c1a4cc5969ca74c5fa31b7510703a496844"
+    },
+    "/usr/include/c++/14/cstring": {
+      "bytes": 3251,
+      "sha256": "8d3ed04b4df6bc5b9110c52bd25e83eb1285c17ea3228609fc937c414dd2b4f3"
+    },
+    "/usr/include/string.h": {
+      "bytes": 19969,
+      "sha256": "c64819b091b17d7fcf14a10da129793f2499879eacb1b361610cbec5162fc24b"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/locale_t.h": {
+      "bytes": 983,
+      "sha256": "1f98dd4e58defd8d3a8b5f7e20d59f6cf1b728bbfb4102578234b822db8e6853"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h": {
+      "bytes": 1661,
+      "sha256": "0edc68d4ae8fd45f8127c6a8fe6936b6312f2835951a3157e51ad8b5dbcb46ad"
+    },
+    "/usr/include/strings.h": {
+      "bytes": 4753,
+      "sha256": "70b41dc65c2239cb814b5f5caa8b068b3854daedf8d6e1c0a05299cf57247536"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/strings_fortified.h": {
+      "bytes": 1240,
+      "sha256": "26836e33fbedd8672b087a148df3035b5d52a6a9fd05d486ab6f3a457700fc3e"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/string_fortified.h": {
+      "bytes": 5625,
+      "sha256": "0cfa3c530938891615ab64ab5dfb72ebd8d02077d29d4410774b8a8ceff628fb"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/immintrin.h": {
+      "bytes": 2888,
+      "sha256": "3090ed857679f62e3e08aa5b0eeaacc8473bafbee756330b060b11f400702240"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/x86gprintrin.h": {
+      "bytes": 6193,
+      "sha256": "03890dec2542929539912e95b8d7c6d1ecf14ce2afad06622712d94ea5164b21"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/ia32intrin.h": {
+      "bytes": 7865,
+      "sha256": "b4e2647de095cb9ec3eecdc7dfcdb38102f5cc8163a613dbe58cfd432cad99c2"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/adxintrin.h": {
+      "bytes": 2832,
+      "sha256": "c7df089020f6af059a1dda04aab9906efdb0300be74fb0ef1a895a0e2f93c528"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/bmiintrin.h": {
+      "bytes": 6149,
+      "sha256": "c5f5a1c337043a56af9323f8d89e97c68ca5bca2f3d9775fac9b6253877abb44"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/bmi2intrin.h": {
+      "bytes": 3355,
+      "sha256": "c6dba3eb97248b479e462227e773f9290b7cd9aace19b8843b879db0a2481c29"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/cetintrin.h": {
+      "bytes": 3334,
+      "sha256": "9dad325b87c793287db5527dbf91711bcf1a65bfe9798eb41829e5541102ac32"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/cldemoteintrin.h": {
+      "bytes": 1615,
+      "sha256": "2ce32225c498dcd46ee40e8e23fc38dddb06bcae53250fda865e40f8e9e6a917"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/clflushoptintrin.h": {
+      "bytes": 1664,
+      "sha256": "85870965f7cf49e58d6c6a6d931ff46ed76f03493f0a68234b114cc09b10ddbe"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/clwbintrin.h": {
+      "bytes": 1586,
+      "sha256": "8d4601444e3009488e05fe285c07f31e48f5a8d53f99324bc3f1742eb5588226"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/clzerointrin.h": {
+      "bytes": 1491,
+      "sha256": "d5756fc39171a207bb08a1eb745293a1aa7919856c4015d8b72d9a5971bae28e"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/cmpccxaddintrin.h": {
+      "bytes": 2907,
+      "sha256": "137444e291d838be99495017f42b0f6b7eb1eb393a3cbaeee18124505ef8a3c7"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/enqcmdintrin.h": {
+      "bytes": 1817,
+      "sha256": "2ac899bbed9114c6711baafab3ae1aeaed437560638427bdf02d8754e7a387c0"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/fxsrintrin.h": {
+      "bytes": 2057,
+      "sha256": "420c12d28970f1cd1683a088dbeab960d8857643291021ca291b1fa4e25819ce"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/lzcntintrin.h": {
+      "bytes": 2365,
+      "sha256": "06b986e8bb03129dbb81cc15454ceaf2b9ffa35888e7e32e76e244e81ebca23a"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/lwpintrin.h": {
+      "bytes": 3406,
+      "sha256": "38af7948d7b5d3d62685c7efa026d5e0f64d4eb1c33954ead5a6da9a76c14fb7"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/movdirintrin.h": {
+      "bytes": 2348,
+      "sha256": "607868d5b010e2dc8bd579e1b0296d6dc44a43428a8c7970ec612df708af26e7"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/mwaitintrin.h": {
+      "bytes": 1710,
+      "sha256": "360440ae13ac045409801878a6518ef6ac86b8edb8c6df0e72023de206c4c99c"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/mwaitxintrin.h": {
+      "bytes": 1747,
+      "sha256": "6e62f48f2be8f0e56c04f068b4e571e2f4e056a059b441a7a895b9ff098350cf"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/pconfigintrin.h": {
+      "bytes": 2355,
+      "sha256": "99954519ddc46ac3dea0dc90daee6210a55300e2474579fe1b13ae7c8fa0060e"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/popcntintrin.h": {
+      "bytes": 1750,
+      "sha256": "8f836d22a174bfb5e70eee98709018aab557b0fc3ae7d2ac429be3ab8c753a9f"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/pkuintrin.h": {
+      "bytes": 1742,
+      "sha256": "d83c08d474274fe2e59cfee56e74b4cd739d9df683b90d2c8e0e80fb4f0d779b"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/prfchiintrin.h": {
+      "bytes": 2009,
+      "sha256": "e2fabeffa9f5d74151ec2db6ac67dfc514f24088897f534848ef01c641535fb9"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/raointintrin.h": {
+      "bytes": 2941,
+      "sha256": "39dbdd66e9610c969b41deff8ace6bee6d6024503dc64426a2999027f0c765ed"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/rdseedintrin.h": {
+      "bytes": 2018,
+      "sha256": "a50f6ee753502493ef45ad4b97dc86e790e6aa67f14485dfc7f477cfde2d4caa"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/rtmintrin.h": {
+      "bytes": 2739,
+      "sha256": "4b5f3d677fe294005b5ddf4ea16b562b244bf5588cb6b6d6674fefc01aa82a6d"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/serializeintrin.h": {
+      "bytes": 1624,
+      "sha256": "1f428b2bce81bb03144661dd1431b98fb5409fb9d4a92b7b663a0891308c472f"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/sgxintrin.h": {
+      "bytes": 7091,
+      "sha256": "e627f6bcccd6752150755f619ae8a1bd06609b6e10eaeb867cf9dc6948d950c4"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/tbmintrin.h": {
+      "bytes": 5248,
+      "sha256": "abf4699807892485887515403ca709bba36334be7854657e9d1fbf815086511f"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/tsxldtrkintrin.h": {
+      "bytes": 1777,
+      "sha256": "8ffd2e73d8a23df738e265b980ee5f799b784ed324c9372c53db7019eca2e6b6"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/uintrintrin.h": {
+      "bytes": 2307,
+      "sha256": "7f2e7c2b1856d492769718de857746e4c3548368ec9a857af4017dc53aa90264"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/waitpkgintrin.h": {
+      "bytes": 2000,
+      "sha256": "448174bdb9e37c13ca7182ed3ca5c4892aa75440e628736cf228c8fbbc6b74be"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/wbnoinvdintrin.h": {
+      "bytes": 1627,
+      "sha256": "1b68c888e5d6b710e21d4e7eba08aa4f937e3a948e75e12d263cfacaa7fe91f1"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/xsaveintrin.h": {
+      "bytes": 2473,
+      "sha256": "77e40503121d8e0a016845a464b05d6c5d478686ddc9b5cf04fce7dcc2c68c4c"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/xsavecintrin.h": {
+      "bytes": 1822,
+      "sha256": "3d94eb81ade63dc97509ed8e724d2661ca9b40cd9e4884fd30a36b0f3182aeaf"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/xsaveoptintrin.h": {
+      "bytes": 1852,
+      "sha256": "00faa6ec664785af7f267d691f14b02c6b4c74fb249d70bc70c60841078d19ef"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/xsavesintrin.h": {
+      "bytes": 2158,
+      "sha256": "ba66f00715d1c3712be59aa80c0eeb8fe97726406d3290162a02047bd0b60eee"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/xtestintrin.h": {
+      "bytes": 1693,
+      "sha256": "75041bb3f71fd5c101ba2b9994dcf1e8a2d87aafca5db626fdc91c778622a350"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/hresetintrin.h": {
+      "bytes": 1627,
+      "sha256": "4bdd7cd9fa8da2f11542a278e004b68b0f1d2f201b8b9431e6d17be7b4f37d98"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/usermsrintrin.h": {
+      "bytes": 1920,
+      "sha256": "149e814213a39fcc4da09c156f31f9e950604e3365ecf6508146b337b3819404"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/mmintrin.h": {
+      "bytes": 31892,
+      "sha256": "48df87b58b8e794dbb7cb1a373d20fc910bbc76da0c42426f31ac95521a9e834"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/xmmintrin.h": {
+      "bytes": 44605,
+      "sha256": "09165554406be92ee7636f45b26adb7c35aad0a3becb7579fd65487ebb549d70"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/mm_malloc.h": {
+      "bytes": 1783,
+      "sha256": "ef4e94b6c5eeed093cc137e31a50d52a58e47209c7f550f1e816957fb4ddf4d1"
+    },
+    "/usr/include/c++/14/stdlib.h": {
+      "bytes": 2305,
+      "sha256": "8d3481df7a7acb9a834cf03ce2012b1b947191a383cc9f232547e8e18e6a36b9"
+    },
+    "/usr/include/c++/14/cstdlib": {
+      "bytes": 6818,
+      "sha256": "6e5357662487fa8a43fa8daf55e3bfe135c18d23926b7143daf2f963b02f6f9d"
+    },
+    "/usr/include/stdlib.h": {
+      "bytes": 41032,
+      "sha256": "21500d5cb6062df47d6507baef6111cc951ceece4e2df26289a420fcf05ebec4"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/waitflags.h": {
+      "bytes": 1697,
+      "sha256": "c1f4b1268f7ed37c33b42020ae59934d7c8073f9fef0740312cc80cdf40b08b8"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/waitstatus.h": {
+      "bytes": 2287,
+      "sha256": "16aa0bd73a56cbb6cbc18095bd7a665bf9795196d056b0ec307b049f3871186c"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/floatn.h": {
+      "bytes": 4457,
+      "sha256": "273e3eac154e0fd777b8e7c6edd9cd64af69a0d215370da12243d5b22378c2dc"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/floatn-common.h": {
+      "bytes": 10325,
+      "sha256": "b31050f2b142f1b5bedfa97158b1baa06575dd0d12dde4531b3815b57069e3da"
+    },
+    "/usr/include/x86_64-linux-gnu/sys/types.h": {
+      "bytes": 5713,
+      "sha256": "049fc3ed84e810730a0b56e2084f9c190f7fbb582de6b55d7aa416dc41b17cd3"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/clock_t.h": {
+      "bytes": 143,
+      "sha256": "81e60e8a8d99b28bc723c14b156d7f7fc8ff663d98a857a3f5aea90431f577e3"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h": {
+      "bytes": 174,
+      "sha256": "dcd64d184855b245e5c7acf21910a0aaca590f1faf094e400da5d30551d11eb0"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/time_t.h": {
+      "bytes": 203,
+      "sha256": "721a557cff3ed308c69719a44ba8f7cd9536f6c602fb8f1b1eea8ed6749ee37d"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/timer_t.h": {
+      "bytes": 159,
+      "sha256": "d96a2452da0d933941273d11d1048ea525f033306892835b0a7a0999b13853aa"
+    },
+    "/usr/include/endian.h": {
+      "bytes": 2299,
+      "sha256": "f6f74f790f21a27aa4ec1007c3f3235babcadeba07cc8a379478b0dfd2e128f8"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/endian.h": {
+      "bytes": 1905,
+      "sha256": "0add7af26d2f4529d28506f0af6506ef687e507e4eddc946171d3e6805e9b9fe"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/endianness.h": {
+      "bytes": 273,
+      "sha256": "659a7060004eda113671a38852c4d1e9cb97a35932bcd1d8540f98c09c180747"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/byteswap.h": {
+      "bytes": 2450,
+      "sha256": "3c1abaa571e19f9b3148b46d0fe2a764a3254d9163a398d71006d6b839e5ab84"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/uintn-identity.h": {
+      "bytes": 1542,
+      "sha256": "f67180898ee0ea2b0d521d38d06eb80f9a28b931399ad37ffcec2c9bcbd24f37"
+    },
+    "/usr/include/x86_64-linux-gnu/sys/select.h": {
+      "bytes": 5039,
+      "sha256": "0cb0fc7af2948c2b02d01268796af8a5992985ee593866e70fd1c08e9c844ebc"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/select.h": {
+      "bytes": 1505,
+      "sha256": "e046dd5c0b229550a439556bd2ca018b9652325ba7e8d6ac5c3ca9b014448e1e"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/sigset_t.h": {
+      "bytes": 195,
+      "sha256": "3db5ded9d98a694e8c7196a06690b2e816ec6bb82689940d281f6504533f37e1"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h": {
+      "bytes": 206,
+      "sha256": "05291a7d38bb1d0da1ed01c09fe85fa2b1f4d5bc708e06bb930efec672db08d5"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h": {
+      "bytes": 411,
+      "sha256": "d2fbcbcb4cc072a11380c826e3c8d58ca08df21e8a2436a3fd9a64ad8b4acd0c"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h": {
+      "bytes": 867,
+      "sha256": "8e7e964087b9c7638be2b5fb0fa01ceab43e4af8393b805b54ac2bd8642a1b98"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/select2.h": {
+      "bytes": 1266,
+      "sha256": "b8b26d025598e1477d7a4ed292df32a799c49f3fd6152dbd79f2f462a6d24a57"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/select-decl.h": {
+      "bytes": 1234,
+      "sha256": "7abad9cff45a26b298eab3b740977ece93eb6e0f5b4dc2aa22d2b6cd1a8ee066"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h": {
+      "bytes": 3072,
+      "sha256": "c47d28c26504ebda1e15d82b9ae74d288c9d68e757c7f37456dc39b131131035"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h": {
+      "bytes": 3912,
+      "sha256": "21f6f60e8a28e6e0166f0b3685d939774b553a27d1f221559f2d8176b8fb2358"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h": {
+      "bytes": 1838,
+      "sha256": "adf5a36ccf71cf7252c97627b133285f53d3d66b499838bb717845dcd8d93571"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h": {
+      "bytes": 1283,
+      "sha256": "ed3a79c28629d75907ef498b30f8db2b6a433d7a49be3a752bad01007599b976"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/struct_mutex.h": {
+      "bytes": 1810,
+      "sha256": "ec8b2058d4ac8e98ebaf6bdcb078000dd4df92b584e2ce6ae79546fb4219cde2"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/struct_rwlock.h": {
+      "bytes": 2027,
+      "sha256": "4b55d768919e8183816e4cdf910f62c7ac5313e70e370b287157e503bd2c26d1"
+    },
+    "/usr/include/alloca.h": {
+      "bytes": 1203,
+      "sha256": "2430efb7a25b526aedff1f1e3b78c88a1aef5a3d73b2bdb9e92bda45930348ea"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h": {
+      "bytes": 1557,
+      "sha256": "4c5e9e9b5f53c543ef6c8c933232e8a9aae0c2a93ef57d178c4edce76fd53531"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdlib-float.h": {
+      "bytes": 1115,
+      "sha256": "ba3d25100d93a324122c4c8121759c689607656aedf0efa148f0bfe8826c9794"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdlib.h": {
+      "bytes": 5779,
+      "sha256": "1b70f2c7745d3ed2f4dff21b6d8afb8f9618441ca5c57ec3420d6173de500f8a"
+    },
+    "/usr/include/c++/14/bits/std_abs.h": {
+      "bytes": 4746,
+      "sha256": "cb17b8a5c00364934dde697b2d21bee5bc5e9747f202f96b1bad4b425bee8161"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/emmintrin.h": {
+      "bytes": 52354,
+      "sha256": "cc64a4915d9df85f6d342742eeb342d357a5dfb481b687819e679e8c152c39a7"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/pmmintrin.h": {
+      "bytes": 4016,
+      "sha256": "16c640d5625f95513ddb9c03305a455b363719bb148255c2e3af5eba99b022f8"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/tmmintrin.h": {
+      "bytes": 8343,
+      "sha256": "a8bd88235dbfa1239bb7ab4a1522a3c60b1b28da6a61f6d12cf3198b1e50b27f"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/smmintrin.h": {
+      "bytes": 28193,
+      "sha256": "8945bcaf25ae6b9369195aed2fd93c6c9f0ebec7abda57885f2cbe394b5e33da"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/wmmintrin.h": {
+      "bytes": 4201,
+      "sha256": "48a1782de01a71b36377fbd07f919e74dd44135cdc365d31f3bfa56442362e32"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avxintrin.h": {
+      "bytes": 53370,
+      "sha256": "77119cac1ba2b61771e813535d34c3948f644eb2e43ff0bfee89cfea8b97af88"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avxvnniintrin.h": {
+      "bytes": 3604,
+      "sha256": "07e8a317ebff333ebc2be0293808b47de033c8023a8a46f0a4a8221c75dd5a3b"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avxifmaintrin.h": {
+      "bytes": 2551,
+      "sha256": "e717a04dab1cff2d91c427f09e7c722294792b9854e7b4012d2acd2a40d815a0"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avxvnniint8intrin.h": {
+      "bytes": 4521,
+      "sha256": "60190a8d931a9253a2a7dda0c1af1535168d84e3ad66e070041b95af9bec93a5"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avxvnniint16intrin.h": {
+      "bytes": 4578,
+      "sha256": "ad93112da7fea42f12774865fe9a1a3804d97ff05835ce9ccae3a2b4bef3d53e"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx2intrin.h": {
+      "bytes": 70021,
+      "sha256": "e67440d116ae730ca1490b0fec678f9673ff2cd398590f75b9301b4bd8f056bc"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512fintrin.h": {
+      "bytes": 529836,
+      "sha256": "07790ba6d3c920328cbbdcd137fbd3fd6bc4ee6b9d8cb1fe930fc1b21d08b4e7"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512erintrin.h": {
+      "bytes": 17705,
+      "sha256": "51556bceb9c333e5068872623bd2bd63f1531536d2cac9574e303ca7bc49d853"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512pfintrin.h": {
+      "bytes": 10296,
+      "sha256": "8367780d72ea6837d62028f197af2a819b96a4bffad5337167f3698768ce34a0"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512cdintrin.h": {
+      "bytes": 5830,
+      "sha256": "80c76dbb60d9cf5db0ed37ed5c1b7e6625497dbeeef0f918f6d37f1aa5159845"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vlintrin.h": {
+      "bytes": 434761,
+      "sha256": "0d840ee3bb191a5b9220fcba8e49e9dc83a04a9107bcbf20cd0e0383d2727a8c"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512bwintrin.h": {
+      "bytes": 104019,
+      "sha256": "0cd0a6e77a39a7def4861ad4c0012ffe26aa4fa2ded18f7b35921d9b61dcb566"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512dqintrin.h": {
+      "bytes": 93594,
+      "sha256": "790e162220cea8d3e4b9f5a0215a3d867a2a3850482451593a09994a74e302dc"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vlbwintrin.h": {
+      "bytes": 164564,
+      "sha256": "020d1f889495e20917a2c66c47eaff0453d4ed57e0aa73862566af41d0500936"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vldqintrin.h": {
+      "bytes": 62221,
+      "sha256": "196a0bee986e444924f5a35bbcde62332900d362712ed6357ab1ab813247d396"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512ifmaintrin.h": {
+      "bytes": 3471,
+      "sha256": "3aeb0b9307fe44b77e7ee9f52fb6657e6ea6b6860cfb68a6da63ceb4101c2ce1"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512ifmavlintrin.h": {
+      "bytes": 4798,
+      "sha256": "8c7f3d636beeb1f0e0253b4d71c04c99c24fdeaa9148e5ca1bd06448fe9513ba"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vbmiintrin.h": {
+      "bytes": 4962,
+      "sha256": "a1487d8454190bda9ae792966b326e4c33afcf3ad8d136502a45754ac1782992"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vbmivlintrin.h": {
+      "bytes": 8456,
+      "sha256": "44223132f5b99fd1f64153d484253f162951638fbbd20a60c3ed7d921897dfd6"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx5124fmapsintrin.h": {
+      "bytes": 6543,
+      "sha256": "ecb3ea0b5704882edcaf8b1c78b389116d5d328364ede37b1c4a8e15da60bfcf"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx5124vnniwintrin.h": {
+      "bytes": 4264,
+      "sha256": "675816666cfce632219f4b401c953562614f3f3b99d9e9b998f250c1ed3c791d"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vpopcntdqintrin.h": {
+      "bytes": 3151,
+      "sha256": "56fb0e09935a1c621106e04091e626c494cf58fe0647f23b50b1317d07f78cfa"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vbmi2intrin.h": {
+      "bytes": 19523,
+      "sha256": "bed55137c9e4887cd7134c9f12944100f044aafb6e165e1ba6af00d9236ea6c0"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vbmi2vlintrin.h": {
+      "bytes": 37036,
+      "sha256": "2e4a2250634a7238dcac31d096f22999846d64bbbebfeae93ad4d2623628f0f9"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vnniintrin.h": {
+      "bytes": 5003,
+      "sha256": "1ca4bd9eccdec69b4ce10662da52583bcc45eb9f41f2cea7aea9bb8e0e91bb6b"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vnnivlintrin.h": {
+      "bytes": 7440,
+      "sha256": "4a66eb890a8c09300991ccdf6c01cfdce23a4a8f0dd75ad8f5c2ec7122fc761d"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vpopcntdqvlintrin.h": {
+      "bytes": 4735,
+      "sha256": "a93d9524936f4300ce73543dab6910615f07446ec04aeacab48e997f02aaa0a6"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512bitalgintrin.h": {
+      "bytes": 3684,
+      "sha256": "5add569cdf5062db99e10d31cba9263bb9d8ba9e7eff03318a3e7dcd26f0585c"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512bitalgvlintrin.h": {
+      "bytes": 5847,
+      "sha256": "6c7d5c6a6102d35b4696f2b705ccbef3fe3f6ba0382f66f2520863cdeb93a98d"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vp2intersectintrin.h": {
+      "bytes": 2139,
+      "sha256": "2c30917de713e30c61c45dcdfc453d5055bae03d846f207de0959aa010189932"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512vp2intersectvlintrin.h": {
+      "bytes": 2678,
+      "sha256": "18505f36493ca4b91c96d74bc0d65c6b9e2ba0d1409239bec58382ccca1a679a"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512fp16intrin.h": {
+      "bytes": 216138,
+      "sha256": "29131f16bd68f49a741338bd426520006fd62d5f9dc595f75aef1aab051fb4bb"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512fp16vlintrin.h": {
+      "bytes": 97801,
+      "sha256": "48cdd43864211fb7f54ddeb1c6d4bd0b768c6959dc19697b764ac607ffd0bc94"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/shaintrin.h": {
+      "bytes": 3204,
+      "sha256": "998e7dac2790daeaeac69f22c75085088715fe9d6777d8abd15c1c35646f9e8c"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/sm3intrin.h": {
+      "bytes": 2382,
+      "sha256": "e53a12c9b685ffe1835a9db077b36e7bfa2145c9fa169b3a9831a8c82f339b47"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/sha512intrin.h": {
+      "bytes": 2162,
+      "sha256": "5bc5014abd411591ec702bb22dad3f7ac3c673e20cf7421d4df40e494ad70a5a"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/sm4intrin.h": {
+      "bytes": 2303,
+      "sha256": "8053149f306b7d82191cff8c03d6d1b54424468375142c0521211fb4c1f0829b"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/fmaintrin.h": {
+      "bytes": 10116,
+      "sha256": "dbe5cd85b5533ceb2caff9c1d5ec32c7828b36763352ef6cdfdbeffdd373e5de"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/f16cintrin.h": {
+      "bytes": 3410,
+      "sha256": "ef2760cd554c27b7ebdc0803c4eb97cfcd0ed5cb3673d9df14c30f38c387c02d"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/gfniintrin.h": {
+      "bytes": 15474,
+      "sha256": "0e723434f693d3e5d835d528f12e47e064c46c654cad8d6d636f6cdf15c76171"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/vaesintrin.h": {
+      "bytes": 3481,
+      "sha256": "bd52dbf233f5d4372f814d84d3a0e15d1be8b597709e9231fefd7735b15209f3"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/vpclmulqdqintrin.h": {
+      "bytes": 2735,
+      "sha256": "dfb93b823bd2f6a555642df70ef6ef0220e160639fbcf9b4666ab4e110a641d2"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512bf16vlintrin.h": {
+      "bytes": 9217,
+      "sha256": "2fe3ad0cd346e9b4bb26fe8e7a28aced3396216d4bcfea78f6aecfdeede0118e"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avx512bf16intrin.h": {
+      "bytes": 5399,
+      "sha256": "1211c73b0a3fbadbc0b4ececca3726b655b882b49a481d7ced0d485690c38ae2"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/avxneconvertintrin.h": {
+      "bytes": 4424,
+      "sha256": "065209a89c631912fb6978f1347c0ccc7a7a45ed0733d6139d362622d663e5b9"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/amxtileintrin.h": {
+      "bytes": 3125,
+      "sha256": "eda8bb862c6d9d242f61a5cc4af651eabe57917afe9a64775d1fa06be64e37c4"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/amxint8intrin.h": {
+      "bytes": 2093,
+      "sha256": "191f24dba1758e7f22d13fbcc50de8f793feb9c61dd0d03801cceb0a793da815"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/amxbf16intrin.h": {
+      "bytes": 1795,
+      "sha256": "17c12d2fd113296fc2b21e76d7a45ff0300fc55fc0811926dd8ab43e14b06c74"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/amxcomplexintrin.h": {
+      "bytes": 2182,
+      "sha256": "bf5f9aff0f502c741705638c157276ed6b939cc342f4066528d01a7ce3d967c5"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/prfchwintrin.h": {
+      "bytes": 1447,
+      "sha256": "4c4ffa3667e6b571693056fbe4091ebfe1b27427d8ba315a82a9bdea9524933c"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/keylockerintrin.h": {
+      "bytes": 4440,
+      "sha256": "4f1f1166fc9abfeef328b23b27b41ef6d5eafde904194b81217413ed03fb36f6"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/amxfp16intrin.h": {
+      "bytes": 1652,
+      "sha256": "8e070fc43fa89589fc589e1db535d7578294faca1dd05d627815e44893700ff0"
+    },
+    "/usr/include/c++/14/limits": {
+      "bytes": 83976,
+      "sha256": "2c17570a59dd8ef0de3aec9a8f7e8c4fbdf369546a45a7382b73a4d3ebc12ef6"
+    },
+    "/home/astra/.project/Sirius/out/native-cpu-dense-arithmetic/driver.cpp": {
+      "bytes": 4422,
+      "sha256": "ca4fe6e2a3301e7111adc56d2608fc13f37f92804c4f0a57321fc38d5b17c23f"
+    },
+    "/usr/include/c++/14/array": {
+      "bytes": 15758,
+      "sha256": "e53f9027e07c3f894d4bdd8fca055bdfd071d964ed0fc6e8b6ac9693e1955093"
+    },
+    "/usr/include/c++/14/compare": {
+      "bytes": 38139,
+      "sha256": "d111d109064c5dc9d1051e0833a2cfbf5e01aa0e64a65924e43fd38cf0a22202"
+    },
+    "/usr/include/c++/14/initializer_list": {
+      "bytes": 3001,
+      "sha256": "e99e57ada509647a0dad224d1406c45c3b1e3335d5fecdc501c356e5cb74b400"
+    },
+    "/usr/include/c++/14/bits/functexcept.h": {
+      "bytes": 4270,
+      "sha256": "67b574b32ae99b7e4736d976e45fcdc16d7cd1a078afa999a724395dd258f6c5"
+    },
+    "/usr/include/c++/14/bits/exception_defines.h": {
+      "bytes": 1645,
+      "sha256": "7b63d08bfbb52ba3bc83d85a5df40f2e4af917e7cf35c8f5fc05865fd310a1f2"
+    },
+    "/usr/include/c++/14/bits/stl_algobase.h": {
+      "bytes": 81261,
+      "sha256": "880930cd866fbbef133685efcaec19c868ae22e90a64ed6e49c59e730395179c"
+    },
+    "/usr/include/c++/14/bits/stl_pair.h": {
+      "bytes": 44466,
+      "sha256": "ff3dea0c8721408bd1330028bd0017417557b13ed92db670318c3a5b3354d6d3"
+    },
+    "/usr/include/c++/14/bits/move.h": {
+      "bytes": 7230,
+      "sha256": "d3a16d546711f8afbb4b4f389eeb861fa57fb862c274d609c16b2dde99f7faa4"
+    },
+    "/usr/include/c++/14/bits/utility.h": {
+      "bytes": 8752,
+      "sha256": "bd9cf887825f7f0d157c2379665e81eaa0c4720c5ac542e89966a70663ddcf23"
+    },
+    "/usr/include/c++/14/bits/stl_iterator_base_types.h": {
+      "bytes": 9711,
+      "sha256": "54297bb3d97c8220ba59c52a7d9355b357cbafb32432bd813c342bcb08f1e0e3"
+    },
+    "/usr/include/c++/14/bits/iterator_concepts.h": {
+      "bytes": 34472,
+      "sha256": "e050f55519180cae565276a5c3eaf1fce6d5ddfbe366af2baf3ba173bc368839"
+    },
+    "/usr/include/c++/14/bits/ptr_traits.h": {
+      "bytes": 8242,
+      "sha256": "dee11a657a744b120c7ccbe0889e5caec6d6c1c87f8c419b30d87e371d9ee090"
+    },
+    "/usr/include/c++/14/bits/ranges_cmp.h": {
+      "bytes": 5878,
+      "sha256": "34a17690020be829b393510065193538c838a9585512530146d9aaa2112c9637"
+    },
+    "/usr/include/c++/14/bits/stl_iterator_base_funcs.h": {
+      "bytes": 8955,
+      "sha256": "60157d6c530f0021175adeaa0c199716eb3c547f3b5480c325cfb1e5fc727cce"
+    },
+    "/usr/include/c++/14/bits/concept_check.h": {
+      "bytes": 3403,
+      "sha256": "1521f15b06dfe8f9644d809e9ae4ac5287bfde853cdb452958d64d97320f746f"
+    },
+    "/usr/include/c++/14/debug/assertions.h": {
+      "bytes": 2367,
+      "sha256": "97e5c8a9401b6736efe231bd8044fa3e28ecf3f1f735f80728f8dd4ad0ebe22f"
+    },
+    "/usr/include/c++/14/bits/stl_iterator.h": {
+      "bytes": 95756,
+      "sha256": "f36156b1e4576318aa7bce1b1f23507608f2b27ec7e4c1a12307dd05631f361b"
+    },
+    "/usr/include/c++/14/new": {
+      "bytes": 8686,
+      "sha256": "322cbd903ef1ebe6521d318f450d9e2f302add0f28d4a8484aed616b2f58f985"
+    },
+    "/usr/include/c++/14/bits/exception.h": {
+      "bytes": 2467,
+      "sha256": "58815b0f379a37954ea1cb7831c719d25eeb28c3c443746a6d9020c461871728"
+    },
+    "/usr/include/c++/14/bits/stl_construct.h": {
+      "bytes": 8815,
+      "sha256": "3ac6458415b6e1e6621eddc0f117e5556ec8205e8683b279a23187ba7e736e49"
+    },
+    "/usr/include/c++/14/debug/debug.h": {
+      "bytes": 6184,
+      "sha256": "254137a19dd5794b36fa5f4c28c5f26ed72c455b596c91ef2ebc864f7949e0c1"
+    },
+    "/usr/include/c++/14/bits/predefined_ops.h": {
+      "bytes": 10177,
+      "sha256": "25478342b5d993b09ebfcc1ee1e372e7391ea160e9222e704cd0b1835558d404"
+    },
+    "/usr/include/c++/14/bits/range_access.h": {
+      "bytes": 11940,
+      "sha256": "fd927e4d7751761d34461b311aa022716a340514d26632f41082620e8f5e3419"
+    },
+    "/usr/include/c++/14/iostream": {
+      "bytes": 3074,
+      "sha256": "405900b25b2ecfda0e3ff3fd52c44b89df95d3fb89987235291abaec4a522d00"
+    },
+    "/usr/include/c++/14/bits/requires_hosted.h": {
+      "bytes": 1388,
+      "sha256": "e3a41079a079eb22fe7e9b45271ab5e8e2a051b3fff4cd4e971ecdc2ab874fe2"
+    },
+    "/usr/include/c++/14/ostream": {
+      "bytes": 31054,
+      "sha256": "44eeabf46fc1c80f21beea49e1b0c908fb5388140c3280cf3e7676336add582b"
+    },
+    "/usr/include/c++/14/ios": {
+      "bytes": 1713,
+      "sha256": "87b12b20dafd5cdf825c077808e968783fc1e7c193bd29e25dc76b34d46ceaf2"
+    },
+    "/usr/include/c++/14/iosfwd": {
+      "bytes": 8406,
+      "sha256": "ceb4ccee611847dae4248142fa296a78ecdac8071331fb120ab92d1920f0f5d0"
+    },
+    "/usr/include/c++/14/bits/stringfwd.h": {
+      "bytes": 2620,
+      "sha256": "2924df219693e1a8dd1848e10080c68ec8161136ce09516d5f3db665f3b594d4"
+    },
+    "/usr/include/c++/14/bits/memoryfwd.h": {
+      "bytes": 2560,
+      "sha256": "e9d0651caa4149f1300905d1fd0ca3d9ebc5bbdc8b754780a8ee37ecd38e3c6f"
+    },
+    "/usr/include/c++/14/bits/postypes.h": {
+      "bytes": 7511,
+      "sha256": "f03a7fd6159d99170168e3d046e384c89dbc2b0f90636a0e6d4c5f99447d0027"
+    },
+    "/usr/include/c++/14/cwchar": {
+      "bytes": 6542,
+      "sha256": "18fa385e496c969c8d46ccacedf0ee7ba92c15a067a73190ebf12a0ba930f11c"
+    },
+    "/usr/include/wchar.h": {
+      "bytes": 39102,
+      "sha256": "8b3fc0b3857d76bfc8423bb97723d5af6919b31fff9b17d8c8fc120f63143865"
+    },
+    "/usr/lib/gcc/x86_64-linux-gnu/14/include/stdarg.h": {
+      "bytes": 4303,
+      "sha256": "7ead4a2428691baf94bec3fd2db8984dbb1c5f597edf0f9bc3068fb43dad22f7"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/wint_t.h": {
+      "bytes": 796,
+      "sha256": "7321a39e4baa04e5d730bfe4e52d00ce82f2ae62dbd8292a4a6a3073b6ae3593"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h": {
+      "bytes": 135,
+      "sha256": "c0608830973c4e1a71219e477b470b7ed77b211dc870410776ec13a1b7bb759a"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h": {
+      "bytes": 564,
+      "sha256": "c561df72d5b987ccbd022059fdb1bcb6899c3e94b403997a0576ef3e1afb0f94"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/__FILE.h": {
+      "bytes": 110,
+      "sha256": "26c909942e8a6bc82725e9c402f393aed9e32d94190257ddf71e1b5f819b4e5e"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/FILE.h": {
+      "bytes": 180,
+      "sha256": "37515f78be386f2edad4746f2947c928f480728c56d9a94e25302ebbdaef3c96"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/wchar2-decl.h": {
+      "bytes": 11461,
+      "sha256": "6ad27ddc21bb1cc01eaf7ffcc7375feaef119977831375436ff3183a297174cf"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/wchar2.h": {
+      "bytes": 9433,
+      "sha256": "8a5fdd43cb94342ed56632dce01be24f5037197f0d0f6d8641b3f7d3b6784b6e"
+    },
+    "/usr/include/c++/14/exception": {
+      "bytes": 5437,
+      "sha256": "6d3df8e388329602940bbfb27371fcccd7a691cc1c16bde94fd2ccf358a288e5"
+    },
+    "/usr/include/c++/14/bits/exception_ptr.h": {
+      "bytes": 8244,
+      "sha256": "ff27108a3ab34a911560be099d9f74465e5cf8e2dbecdd0e242135e3c5f0e921"
+    },
+    "/usr/include/c++/14/bits/cxxabi_init_exception.h": {
+      "bytes": 2227,
+      "sha256": "e85d5fb4543ea09f3cf9c7ab6f9c2d7f92cd97fdf0e93b55d65728791ceedff9"
+    },
+    "/usr/include/c++/14/typeinfo": {
+      "bytes": 8290,
+      "sha256": "be08338fc1be6f3c0c1540a28dc96e00eadf63bc46dbce7eef69296346b93174"
+    },
+    "/usr/include/c++/14/bits/hash_bytes.h": {
+      "bytes": 2146,
+      "sha256": "6a7fde7d1de6b516248501b82bb0187919ec2d52e9c4997e958198ad914ffd3b"
+    },
+    "/usr/include/c++/14/bits/nested_exception.h": {
+      "bytes": 7695,
+      "sha256": "1b84981fd76fac57b681aae2e3c1a20a0bdd45cb7699f74a41b74c820b6ce6fd"
+    },
+    "/usr/include/c++/14/bits/char_traits.h": {
+      "bytes": 29228,
+      "sha256": "f0733d7c2ee61f02362608efc9a8a254c8d8cec26b3321e4edf0df39afd6ab1e"
+    },
+    "/usr/include/c++/14/bits/localefwd.h": {
+      "bytes": 5943,
+      "sha256": "ff9c3209216e63439edf581a0bd92b8dc8867c0478363c4d0d592675e255f15b"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/c++locale.h": {
+      "bytes": 3558,
+      "sha256": "f9912c4e4fb277360df473e1680748db07c28ea79e1537af2365a6b3beed8a7b"
+    },
+    "/usr/include/c++/14/clocale": {
+      "bytes": 1905,
+      "sha256": "dd923cf5496c8575f854d503e10bdaebd456b782d8dc0aaadeddc2cfdbc0501d"
+    },
+    "/usr/include/locale.h": {
+      "bytes": 7675,
+      "sha256": "7c9943e0bbc70204fd4e09d254fda54b769270f6e17b3ac3829af5f87140e4c8"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/locale.h": {
+      "bytes": 1368,
+      "sha256": "753e715e1df1b965f2137a89959779011b943153f1a6d4a88501f1b30d317e93"
+    },
+    "/usr/include/c++/14/cctype": {
+      "bytes": 2401,
+      "sha256": "9523242a6afb141453629e29399b9a81efe8d9a86f28c68e5b8ebf11c40c531e"
+    },
+    "/usr/include/ctype.h": {
+      "bytes": 10969,
+      "sha256": "12ffdd86c923b56f82de6e184c76c64caeba7b75c3916ec61cff1fa36a3d8d32"
+    },
+    "/usr/include/c++/14/bits/ios_base.h": {
+      "bytes": 33070,
+      "sha256": "913a82ba9de0a1591a016dc36d370ae30032ad0c1de193a3a28f6e8644e95370"
+    },
+    "/usr/include/c++/14/ext/atomicity.h": {
+      "bytes": 3784,
+      "sha256": "4043613e093710d823eceb4af88613609484471ea091b016559861647441aafa"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/gthr.h": {
+      "bytes": 5924,
+      "sha256": "14f7a7f640ac8f0f16ae6997060024b8e65fcf2dac3a20ab654ebb5bc137eb5f"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/gthr-default.h": {
+      "bytes": 25558,
+      "sha256": "ecbeb8f39fa6354e2bcb758ec5a04bb55fa33b8ab164f51b2037c5a5fadab948"
+    },
+    "/usr/include/pthread.h": {
+      "bytes": 48379,
+      "sha256": "26eb5331384b27347c5d60d466c82e4fbbf91d920383ecddc479b29fd98dc22b"
+    },
+    "/usr/include/sched.h": {
+      "bytes": 5038,
+      "sha256": "7a22b2f60b4140563dc6613a398a4030f53a30042c3cc9390aaf2e0aedd2f861"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/sched.h": {
+      "bytes": 4112,
+      "sha256": "043d2683a24e16399bcfca1423ef0090151172dfe761af4464f0a9c8d6844a07"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h": {
+      "bytes": 1073,
+      "sha256": "737a8707aef29fbf80889e4a4411aff93d66dfe46b89b5d25fbc79c1f383fbdc"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/cpu-set.h": {
+      "bytes": 4516,
+      "sha256": "99270c57646f3410998ca958496e64c40648be3f429134d00ed8a2f3e7bbeadb"
+    },
+    "/usr/include/time.h": {
+      "bytes": 15124,
+      "sha256": "dba6d309d4b1ca0006342a7a1e08cfc6cb0a210610ff5ad1577d232ddaa10431"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/time.h": {
+      "bytes": 3326,
+      "sha256": "458eb529d0a451d27dfa294b6da982be2f1300f46884da2fa9bee5ad8efc7063"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/timex.h": {
+      "bytes": 6198,
+      "sha256": "1a214847fbda711b4a14f211961593fcb2f5879b16f2f7115b2069dcca83acd3"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h": {
+      "bytes": 760,
+      "sha256": "e7bdda3f42eb0633850ed150fef0a0cf6193cbba8fa740e7505925424a595566"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h": {
+      "bytes": 288,
+      "sha256": "d6299fbc46fc57e7d14635cd5cf69125710ed021ab7305586c84644a03a39f8e"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/setjmp.h": {
+      "bytes": 1287,
+      "sha256": "5fde1724c630063303aa2aae694e758c012616f94910907e909a99d0e15a58d5"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h": {
+      "bytes": 1467,
+      "sha256": "e54be99f52cb6e0b8ffacb2a91db83b8129863381f45c952582faf30a7fce6c5"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h": {
+      "bytes": 1214,
+      "sha256": "e919a98133620696ca672d6d7f62ba24ef819ab85673e953ac7487b1f38faccc"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/atomic_word.h": {
+      "bytes": 1518,
+      "sha256": "56a9e7dac64f83412825649a4024e4f9e7c298f443913f894f930400222615e8"
+    },
+    "/usr/include/x86_64-linux-gnu/sys/single_threaded.h": {
+      "bytes": 1182,
+      "sha256": "8734473bd5a6f39abd074bc2db10501f9cb1b8b31ce8ede1e4f59536eae831aa"
+    },
+    "/usr/include/c++/14/bits/locale_classes.h": {
+      "bytes": 25751,
+      "sha256": "731cca2a580e1c2aa5403f27fdeec131fe1829a124e5bc07d3e70fe8ab560a88"
+    },
+    "/usr/include/c++/14/string": {
+      "bytes": 4331,
+      "sha256": "3a9882f53493027a5729c225d7f83ca3ded240283d236627b22f362960713dc8"
+    },
+    "/usr/include/c++/14/bits/allocator.h": {
+      "bytes": 8815,
+      "sha256": "a7c201885fc96082e7291394ec41a6e838b9b8219dfd034651b1c1459e5d5a97"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/c++allocator.h": {
+      "bytes": 2081,
+      "sha256": "61be0086b7d7f76026dc7d951e072cae202a722597f4995d2fa8f111b58dc7ed"
+    },
+    "/usr/include/c++/14/bits/new_allocator.h": {
+      "bytes": 7442,
+      "sha256": "52ce7d9a6d2367ec341996915df6ade0216caf7c3bc70c801d1506bd79a0a112"
+    },
+    "/usr/include/c++/14/bits/ostream_insert.h": {
+      "bytes": 4080,
+      "sha256": "a11983eca5d325c4975a5d9667b8882eb49678bbbef82174e42e2d475549b194"
+    },
+    "/usr/include/c++/14/bits/cxxabi_forced.h": {
+      "bytes": 1811,
+      "sha256": "4384ee1a2aa74ea6965cce0cefe7b14a11bedc846af79f7f120b35070e7fef81"
+    },
+    "/usr/include/c++/14/bits/stl_function.h": {
+      "bytes": 45260,
+      "sha256": "2c4a38263d14bc937969003835beeafcf72c26b11d5e8233658bd425c4e3cae6"
+    },
+    "/usr/include/c++/14/backward/binders.h": {
+      "bytes": 7307,
+      "sha256": "a5577c02530f5881e1331ef1bd73d69c957e2fbb5d72437530eed4ab2f81a2da"
+    },
+    "/usr/include/c++/14/bits/refwrap.h": {
+      "bytes": 15411,
+      "sha256": "9d141384351b85744fe4a02e8d758a80303d75e1f4c8074827e0233d127690c6"
+    },
+    "/usr/include/c++/14/bits/invoke.h": {
+      "bytes": 6226,
+      "sha256": "e3f32bb2dbad76ff71d8f4d3405264e287484b362dc84782154174530f54ce97"
+    },
+    "/usr/include/c++/14/bits/basic_string.h": {
+      "bytes": 165403,
+      "sha256": "44fec39c0980e5092048972c484513de33b2de7743aa549831adb70de9e45490"
+    },
+    "/usr/include/c++/14/ext/alloc_traits.h": {
+      "bytes": 6695,
+      "sha256": "5ddb91c43a84c9daf24c9dcacaa9067e316f01ec2cb0dac626bd032cbcc05ba1"
+    },
+    "/usr/include/c++/14/bits/alloc_traits.h": {
+      "bytes": 30192,
+      "sha256": "6e08b3d45b8e425722046a172fb8781a3a7328e6fe931b13b050c2dd64e76196"
+    },
+    "/usr/include/c++/14/string_view": {
+      "bytes": 28123,
+      "sha256": "ffa53934870b711586cfc81e993968df4456108c2dc94a51848fda14ef5fbefb"
+    },
+    "/usr/include/c++/14/bits/functional_hash.h": {
+      "bytes": 9005,
+      "sha256": "b11e54c10a345f85c7b2b8c3b9c7e45b9e1321cb91c4dae238b327fc70c6a708"
+    },
+    "/usr/include/c++/14/bits/ranges_base.h": {
+      "bytes": 29590,
+      "sha256": "6d1efb883913327951e175539bd3edbe820d978c22ab9a17c7ea0265a0352459"
+    },
+    "/usr/include/c++/14/bits/max_size_type.h": {
+      "bytes": 22528,
+      "sha256": "62404d5c75c00e680503119ca740f6cfe32edb586033a21c9588e26441f8cac2"
+    },
+    "/usr/include/c++/14/numbers": {
+      "bytes": 7100,
+      "sha256": "1a14982e83269b4f4717e3578994f5d029593604ebcf05908037eb6548b6372d"
+    },
+    "/usr/include/c++/14/bits/string_view.tcc": {
+      "bytes": 7167,
+      "sha256": "4d5f2c41664d015576831d6e7baad34d6c9192c52cff510a02e9d503e065a38d"
+    },
+    "/usr/include/c++/14/charconv": {
+      "bytes": 29830,
+      "sha256": "535b25963b988655d070e853c98a97b3bd93c03972f2fa5600a33d1b6f814730"
+    },
+    "/usr/include/c++/14/bits/charconv.h": {
+      "bytes": 3662,
+      "sha256": "5c8eb62633506ab4f9b4d21e157b914a5a9048dedb1cbf3de8282ad85f4077b1"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/error_constants.h": {
+      "bytes": 5033,
+      "sha256": "4ea68ecfefb7da550e7a19124ecb813fe92cd6574ba78099201804cefbf57948"
+    },
+    "/usr/include/c++/14/cerrno": {
+      "bytes": 1770,
+      "sha256": "7c96e3714e756b5c0403ca8a352e5a0df39ab6f5017cae0f00db8976d87f2abb"
+    },
+    "/usr/include/errno.h": {
+      "bytes": 1679,
+      "sha256": "4e540151a30b70bb8490f8d7e530972d7e448e7e76a2732c9cc26cb25d56c761"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/errno.h": {
+      "bytes": 1426,
+      "sha256": "5484af7e4dec9029686f27eb08f5f33208a3e03e66574aee9ab9d377599783db"
+    },
+    "/usr/include/linux/errno.h": {
+      "bytes": 23,
+      "sha256": "a47fb2f49bce0546a1e88805cec954338abb1b2ac87de042166e8e3a74b23261"
+    },
+    "/usr/include/x86_64-linux-gnu/asm/errno.h": {
+      "bytes": 31,
+      "sha256": "4ee384515a4325315992e61dd957f0fa91f3858fe7c079de59f56edded51de86"
+    },
+    "/usr/include/asm-generic/errno.h": {
+      "bytes": 5648,
+      "sha256": "fb7b5a504015f3a9074c641e7371b250d867d751d90e4a22a8ac17fced3d50af"
+    },
+    "/usr/include/asm-generic/errno-base.h": {
+      "bytes": 1612,
+      "sha256": "2c148e92b8318deeb767fabd60822113e575ee664ff09a1873aed8f7a495793c"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/error_t.h": {
+      "bytes": 894,
+      "sha256": "f8fcd12a0bf9a17df83fd497c7d8e60e85e1594103642de1d6d7dbb5478ac9a0"
+    },
+    "/usr/include/c++/14/ext/string_conversions.h": {
+      "bytes": 3672,
+      "sha256": "6b1a0fe6d5aadaa3ee1e540f40d4a6f3584d20411126a58b37c4097199e79401"
+    },
+    "/usr/include/c++/14/cstdio": {
+      "bytes": 4439,
+      "sha256": "112c306d227dd47e4c5a1397c91290e5c7dc8c659d68da210941dc009db12d14"
+    },
+    "/usr/include/stdio.h": {
+      "bytes": 34649,
+      "sha256": "b4f6709d12c8493e2a42f740845abe2994deb27fc78fb85fcaa6e27228a87d62"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h": {
+      "bytes": 381,
+      "sha256": "603e58ab31ed75b7e0ab09a2ca94e99955f7fbc63310466321ce27c906227eb4"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h": {
+      "bytes": 410,
+      "sha256": "8afae3abf006beb39fd9d4d4bae38745cdf08a91e6217ddf25833c8d4b04751b"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h": {
+      "bytes": 4104,
+      "sha256": "79ad5bbe87e2be78d83990f8e28e0b20163e7ee03b733dc7cbea4eed94b8314f"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h": {
+      "bytes": 2725,
+      "sha256": "aa4c25db20daf845f5d3e57d8aeba4011419c4ed1881992b73229a3f66a5c5c4"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdio_lim.h": {
+      "bytes": 1059,
+      "sha256": "509fc0d1fba9f06fe85d61b6b9c0b2208c8fe8e63af55fcfdd7e4ad5eabe6927"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdio2-decl.h": {
+      "bytes": 6309,
+      "sha256": "c3acb8208277348f1e7df5b44ca92a253947041a6c79e5a04db9d5ffa96327db"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdio.h": {
+      "bytes": 5599,
+      "sha256": "bb9b0feccc1b326b8aee69fd00059b715947fee86b8638e27d07710f2c2895df"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/stdio2.h": {
+      "bytes": 8202,
+      "sha256": "e553964cc1a45a330dc65224bae4e81299a6c4662985926f80151b4ea902cbf6"
+    },
+    "/usr/include/c++/14/bits/basic_string.tcc": {
+      "bytes": 31429,
+      "sha256": "4f8dbb49a708622d994acc0b6ad3e69cf72a746732c4ff2362d078b4699d478d"
+    },
+    "/usr/include/c++/14/bits/memory_resource.h": {
+      "bytes": 16107,
+      "sha256": "ea6ff6770cd8f78d3b667fbba44f8783b95efac5f4bceea216b5397053ee4dff"
+    },
+    "/usr/include/c++/14/bits/uses_allocator.h": {
+      "bytes": 7079,
+      "sha256": "5a12d04cf62dd45d311c9703ca3875b24bf139dff1f1b808f31580d6f0d5aba2"
+    },
+    "/usr/include/c++/14/bits/uses_allocator_args.h": {
+      "bytes": 8721,
+      "sha256": "4c6525b6f7ae452d7e8abc50736242fb2219e8d5ecb9e926b385a59de0bf4505"
+    },
+    "/usr/include/c++/14/tuple": {
+      "bytes": 102058,
+      "sha256": "bf2a50c5a2f765017cec6b5515d17e1c14fb8c7fce0f84f8f52a113141c228dc"
+    },
+    "/usr/include/c++/14/bits/ranges_util.h": {
+      "bytes": 26249,
+      "sha256": "feeb9660777e439287c9989725f15dd4534aeb4581f2f6ebb94de84297266d94"
+    },
+    "/usr/include/c++/14/text_encoding": {
+      "bytes": 16656,
+      "sha256": "01df60f77ef1a3c1be5595bc6395df39d84bda2e965c45b19f4b147141fe7e44"
+    },
+    "/usr/include/c++/14/bits/unicode.h": {
+      "bytes": 30371,
+      "sha256": "4b4f082cc49d6c01006ebdeff465a816557d03a1e23dd2382ebbfad987145a91"
+    },
+    "/usr/include/c++/14/bits/stl_algo.h": {
+      "bytes": 215420,
+      "sha256": "e43393c10d3f7de968db3893cb867ae55455b524c6fd44c60a15ec482454f499"
+    },
+    "/usr/include/c++/14/bits/algorithmfwd.h": {
+      "bytes": 24629,
+      "sha256": "d38df45eb9bb18272b636b9e0cdaa405fadb7a40bd214c5d8b5dca96b15f4de9"
+    },
+    "/usr/include/c++/14/bits/stl_heap.h": {
+      "bytes": 20874,
+      "sha256": "f18f83b2feddf54c7ea289625628b34a2f6d758b697240b3b5d9abaeee6700ce"
+    },
+    "/usr/include/c++/14/bits/uniform_int_dist.h": {
+      "bytes": 13307,
+      "sha256": "6b691ad8aca851dbe9fc5c722d3601a624ca916e4d8132afece20fb90b0553bd"
+    },
+    "/usr/include/c++/14/bits/stl_tempbuf.h": {
+      "bytes": 8874,
+      "sha256": "0522cad180b30cb108f089d470858bd5ac35ec417d3d528d57d7357793d848fe"
+    },
+    "/usr/include/c++/14/bits/unicode-data.h": {
+      "bytes": 26010,
+      "sha256": "ce3f271739a9df8ea3d3b750a7c96200d7874f851bba25e2aa8759025ebee045"
+    },
+    "/usr/include/c++/14/bits/text_encoding-data.h": {
+      "bytes": 24879,
+      "sha256": "c4a32f575f4c38760778314766e1968a9cd958f72e743f5cab2c5344996b715d"
+    },
+    "/usr/include/c++/14/bits/locale_classes.tcc": {
+      "bytes": 11019,
+      "sha256": "9749f2c37c698daa55dd945635ee8c82dce381ca611096d1ab314ec917ead2d9"
+    },
+    "/usr/include/c++/14/system_error": {
+      "bytes": 18387,
+      "sha256": "01757e127ae566d92724238ff4254f30f2e9df29afe5945a4eb9495b29ccd642"
+    },
+    "/usr/include/c++/14/stdexcept": {
+      "bytes": 9878,
+      "sha256": "c7d2ad262dafd3d35f801a27f3a4a41cd5ffde7d1b7d86661b69786a40324456"
+    },
+    "/usr/include/c++/14/streambuf": {
+      "bytes": 29938,
+      "sha256": "b72280e9449f06ff61f6de1640183d140e717761b4a219100e263db8e5ca586c"
+    },
+    "/usr/include/c++/14/bits/streambuf.tcc": {
+      "bytes": 4685,
+      "sha256": "a71b5cd35e827029ca273b9dfeba5446989ab015f147d16120095829c10e1f21"
+    },
+    "/usr/include/c++/14/bits/basic_ios.h": {
+      "bytes": 16229,
+      "sha256": "91c4646cf1d3a4064e15299c7379bedb036ed6e24f009cbf059606ec51b4bcf0"
+    },
+    "/usr/include/c++/14/bits/locale_facets.h": {
+      "bytes": 93926,
+      "sha256": "f617e4cd5ae0835bea1a9b5bae81e983ba037e8075075dd09800b2fe879b9457"
+    },
+    "/usr/include/c++/14/cwctype": {
+      "bytes": 2793,
+      "sha256": "b1090ce6cf18bf690b8cca8ee7c10bc72aa5acd11e52eadc5f45ffe6f228abd8"
+    },
+    "/usr/include/wctype.h": {
+      "bytes": 5549,
+      "sha256": "9ae8c4c9ea7aa89862b4c60edd069ccb04aa81023dfee97ea1dd3150cf10f250"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/wctype-wchar.h": {
+      "bytes": 6307,
+      "sha256": "a52c65766f5bab399a0bc7bdab67722480a8bec7929a6c56c4db340b57957b21"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/ctype_base.h": {
+      "bytes": 2316,
+      "sha256": "07a732f4d92ebe76b57ddc6919fd1428433ba5c1fb977aecfc0f636b5f320327"
+    },
+    "/usr/include/c++/14/bits/streambuf_iterator.h": {
+      "bytes": 15943,
+      "sha256": "dc3cb16fbd660103892ee33ad29e93069e950f646fd40151b1440e9ee00f9fd4"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/ctype_inline.h": {
+      "bytes": 2284,
+      "sha256": "2472fb6991dc6f489a1023beb570a7ca77a45d92df63b38c28f08655faaaf78d"
+    },
+    "/usr/include/c++/14/bits/locale_facets.tcc": {
+      "bytes": 41388,
+      "sha256": "d387c3fc1a596a095e672382bc4e10ebe490e67014b63e62943af231256a028d"
+    },
+    "/usr/include/c++/14/bits/basic_ios.tcc": {
+      "bytes": 5806,
+      "sha256": "cfea2ccba2dcd42173509f0de6a695337bbcb9229cdbd0160ba5dbf2ab49a1af"
+    },
+    "/usr/include/c++/14/format": {
+      "bytes": 131035,
+      "sha256": "09c38c6bcee71e7753775a4ba7e585417b151b757452ba1e75e46cfdcd15aa87"
+    },
+    "/usr/include/c++/14/locale": {
+      "bytes": 1534,
+      "sha256": "8713ab0cae7d381b1ab5569359543f38a1fb40a7d2aeb1df34533840ec4f81bf"
+    },
+    "/usr/include/c++/14/bits/locale_facets_nonio.h": {
+      "bytes": 70756,
+      "sha256": "44d695d7c5d419069625010d4e4740165402eab013cd4708be22531680de39fe"
+    },
+    "/usr/include/c++/14/ctime": {
+      "bytes": 2298,
+      "sha256": "c6485fa4e47d44cf1f5ceb64156cb1ec370190a70e0f22c70961977bb603a925"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/time_members.h": {
+      "bytes": 2924,
+      "sha256": "667060c46b396fadf2cc2927bf7c2a419785cc5d901223408203d261f068cefc"
+    },
+    "/usr/include/x86_64-linux-gnu/c++/14/bits/messages_members.h": {
+      "bytes": 4516,
+      "sha256": "700d17bfff0d14bd89655ce26d390986e1ac1d9380a4b30755735b4a96c529b0"
+    },
+    "/usr/include/libintl.h": {
+      "bytes": 4580,
+      "sha256": "472baf23190900441258b512bc0f65a5b7d81975fa27c7653de4d5865a314c91"
+    },
+    "/usr/include/c++/14/bits/codecvt.h": {
+      "bytes": 25500,
+      "sha256": "cc521ae8ec69c1a49c3f273153d2edb43d2c67309a8186d50211d9c958ba039c"
+    },
+    "/usr/include/c++/14/bits/locale_facets_nonio.tcc": {
+      "bytes": 57030,
+      "sha256": "67057cf81744673ba58d848e82bcd852d7cb1823b74d2e3cf9c192f1644fd52c"
+    },
+    "/usr/include/c++/14/bits/locale_conv.h": {
+      "bytes": 19188,
+      "sha256": "d204ceedcf78f7c1289321f86bfd1f8765a94d6a869b467e0c0b0aefd038c562"
+    },
+    "/usr/include/c++/14/optional": {
+      "bytes": 45091,
+      "sha256": "3483864ecfdcb7667eacb1bf1fc99e25b447e74e2f66475c7c33ad8c60014334"
+    },
+    "/usr/include/c++/14/bits/enable_special_members.h": {
+      "bytes": 12452,
+      "sha256": "c62404772b28e1676e04e9f148543e82f2b886bf8cdd99bc2fdfc6ed0a89f023"
+    },
+    "/usr/include/c++/14/span": {
+      "bytes": 14476,
+      "sha256": "4780d6ffa675c1a2ada946255aa9e240245ef2f9ad093cda08add3b80a5db1eb"
+    },
+    "/usr/include/c++/14/variant": {
+      "bytes": 66366,
+      "sha256": "c1afb5c02c79fedea2151a9dceabd590abc7a29d6a9cdb60e3b711892f5ecb2d"
+    },
+    "/usr/include/c++/14/bits/parse_numbers.h": {
+      "bytes": 7986,
+      "sha256": "eadb6d8d46fc8be3df3985a6d8444926a64e66e16e898f590d5012e91af663e4"
+    },
+    "/usr/include/c++/14/bits/ranges_algobase.h": {
+      "bytes": 18810,
+      "sha256": "2b349544e7550d9f9179e6a21f695df522c31d36909b65cf064a14e03eb3e861"
+    },
+    "/usr/include/c++/14/bits/ostream.tcc": {
+      "bytes": 12113,
+      "sha256": "37fd61fb0af8d7697e60816fc7a3ed47c17fc2e7c63e35955f64401094cb50ed"
+    },
+    "/usr/include/c++/14/istream": {
+      "bytes": 36369,
+      "sha256": "c1768d578f0f084161e89c42bec997ac97db3a9e66d3042f826a9e643b09556a"
+    },
+    "/usr/include/c++/14/bits/istream.tcc": {
+      "bytes": 32556,
+      "sha256": "9fbafb3f336aafda2db9c5bfca483873156dedccb18d40f16aed1e2be822c1f7"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp": {
+      "bytes": 634190,
+      "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+    },
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "/opt/slang/include/slang-cpp-prelude.h": {
+      "bytes": 12741,
+      "sha256": "7ab92888aea2770738f46627f20cd47d1359d89f7b13db94a5d322cd622e67e9"
+    },
+    "/usr/include/c++/14/math.h": {
+      "bytes": 4577,
+      "sha256": "7b7fe53de9136f3f445a90f6822be0b9d7e7e47a58631e8259fe8ecb1e5ebaa9"
+    },
+    "/usr/include/c++/14/cmath": {
+      "bytes": 96937,
+      "sha256": "3b50ad8486fb3d2f7d2c78f41b4cadedae9eca45f2dda70aef0c017bf5e88808"
+    },
+    "/usr/include/math.h": {
+      "bytes": 50939,
+      "sha256": "9d4c8fb59d888255c41cbd29fe98bce22721c9610f252f621f0b1ce1afebe59e"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/math-vector.h": {
+      "bytes": 5402,
+      "sha256": "2e61d60a40caeb9aae5842dfec8d674239b81c0477d2212a5afe801e4be7bf24"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h": {
+      "bytes": 8933,
+      "sha256": "b00b3abd4ea49834f00c91f6f81b645a0b306a13f20ca0f8f4f2c7cc54809c61"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h": {
+      "bytes": 1215,
+      "sha256": "61b9223ce4641088a5c7e5c00c99c5337f27184e0399dc6eaeb6f964f575fc01"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/fp-logb.h": {
+      "bytes": 1012,
+      "sha256": "712626c5021725ef9619d3fa39f67069f2f49029b19454b69d68444b3bb74794"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/fp-fast.h": {
+      "bytes": 1216,
+      "sha256": "fdfbdd785f66fbfb1c09cff9be1268eba9e380333741f6fa2818f3c3cb87fa29"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h": {
+      "bytes": 1863,
+      "sha256": "929a6ea9df8f8201c7a4bad2e1860fe7d839c84e4d72b91d49c29eb7af840f4f"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/mathcalls.h": {
+      "bytes": 14562,
+      "sha256": "9c334a3ae196c1d619c46433e45e0a1266784f9cf7cd23461f1910c0f2d742dc"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h": {
+      "bytes": 1515,
+      "sha256": "f82bd580c084609fa3dbc8d87a4127661fd49a582f57c95225110a6051270fa1"
+    },
+    "/usr/include/x86_64-linux-gnu/bits/iscanonical.h": {
+      "bytes": 2479,
+      "sha256": "03e912c18a01d00126a6d011dfd72042eeb3736ea8af5b79c0ff7742261b0da3"
+    },
+    "/usr/include/c++/14/bits/specfun.h": {
+      "bytes": 47192,
+      "sha256": "d1ff7fdf196c64abdeb87d9952e80eb3e7462b77dfb869fc1d822c63d3b900dd"
+    },
+    "/usr/include/c++/14/tr1/gamma.tcc": {
+      "bytes": 14682,
+      "sha256": "e041ff46b7a3bc9dfcf9f0f71b15e5fa52abe114790316c2d63aa70699712df5"
+    },
+    "/usr/include/c++/14/tr1/special_function_util.h": {
+      "bytes": 5055,
+      "sha256": "40bf289d195fb68711b87f97defac33c21b3107d592802aeb027d8271cbe40e2"
+    },
+    "/usr/include/c++/14/tr1/bessel_function.tcc": {
+      "bytes": 22937,
+      "sha256": "40c0b367051a07499509ee5392fc99ed87d4dcd6f220e748ec253b73e78f5288"
+    },
+    "/usr/include/c++/14/tr1/beta_function.tcc": {
+      "bytes": 5995,
+      "sha256": "101ba4334e53d2b6fe84c1ef85991659581fbcf3364d9907b6c5f5c77bdb2514"
+    },
+    "/usr/include/c++/14/tr1/ell_integral.tcc": {
+      "bytes": 27133,
+      "sha256": "00557e2a59b56dcd656ddfe64a39ed3eb2b0c6a44442208c92542da8b25a07a1"
+    },
+    "/usr/include/c++/14/tr1/exp_integral.tcc": {
+      "bytes": 16013,
+      "sha256": "2e79160df80c29d82da78e107c491842c811354dc41094f96b835a3c35032205"
+    },
+    "/usr/include/c++/14/tr1/hypergeometric.tcc": {
+      "bytes": 28066,
+      "sha256": "1233898cbe80bcaccefd5b9a363a658bb032bf2f8e12f1065c038830f978a3bf"
+    },
+    "/usr/include/c++/14/tr1/legendre_function.tcc": {
+      "bytes": 10661,
+      "sha256": "9ed178f9c8256f37d3c96d6117e8e679b8bbff11537c760bfa3b7563c35aa7f0"
+    },
+    "/usr/include/c++/14/tr1/modified_bessel_func.tcc": {
+      "bytes": 16260,
+      "sha256": "9b2d73560ffcf24bd82bdc9577403db94eb5d047686917d700ba135e4c772bbc"
+    },
+    "/usr/include/c++/14/tr1/poly_hermite.tcc": {
+      "bytes": 3925,
+      "sha256": "df80e6c0d6362b77c5f9df6f2c56b3b6528f62b9802c0ea0e9320c5f75c54eb1"
+    },
+    "/usr/include/c++/14/tr1/poly_laguerre.tcc": {
+      "bytes": 11676,
+      "sha256": "3dd174ec3d58d900916e9336a3e22ad3d56f44f3a3dd645d4797e9ce605ceb3e"
+    },
+    "/usr/include/c++/14/tr1/riemann_zeta.tcc": {
+      "bytes": 14067,
+      "sha256": "16821b451b60741ae6eb4bf82cde785c608b864f0e4d4546f6e286c948298e45"
+    },
+    "/usr/include/assert.h": {
+      "bytes": 5086,
+      "sha256": "538cc7466f2e7b6d34f716f4f4ef601fc6ce940098668c207b1a0d30c8e2341a"
+    },
+    "/opt/slang/include/slang-cpp-scalar-intrinsics.h": {
+      "bytes": 29841,
+      "sha256": "642ae202cd3d9ccca332dd63053a70b7d9d03dcfc0cfaf2348dc30ec3bc246dd"
+    },
+    "/usr/include/c++/14/stdfloat": {
+      "bytes": 1766,
+      "sha256": "3f0bd74281a24b8a49fc2d0df53bff1a5c7aa3f5e6c69550c41bf6ae0d60cbc7"
+    },
+    "/opt/slang/include/slang-cpp-types.h": {
+      "bytes": 37859,
+      "sha256": "f684488b215faedf6b4f07ebc0455b0e6e1874915a6a6f0a68c6fa7ef797dc74"
+    },
+    "/opt/slang/include/slang-cpp-types-core.h": {
+      "bytes": 23649,
+      "sha256": "d1f587e81028726c7849c01b7bc52dba373e35bb082e2522ea5b776f15a52dbf"
+    },
+    "/usr/lib/x86_64-linux-gnu/libgmp.so.10.5.0": {
+      "bytes": 534896,
+      "sha256": "0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmpfr.so.6.2.1": {
+      "bytes": 760464,
+      "sha256": "2156351fa3dedd04a7381c6ac7a8a26efa2d6fb08b80f8a2d644ccdd653710ae"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmpc.so.3.3.1": {
+      "bytes": 134440,
+      "sha256": "91d2b2b0b794028c733431e01acc227ff39ee289384fdf22869c8b42ad3aaa3b"
+    },
+    "/usr/lib/x86_64-linux-gnu/libzstd.so.1.5.5": {
+      "bytes": 755864,
+      "sha256": "0a2128bc10841fb29e76d08d945864dfb0b6a66da5df6df5d8299197439e54bb"
+    },
+    "/usr/lib/x86_64-linux-gnu/libbfd-2.42-system.so": {
+      "bytes": 1479888,
+      "sha256": "edbfd18bfc133c0d77bab7470601e83bd88ed3e578bedce368042f888034e68e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libjansson.so.4.14.0": {
+      "bytes": 64008,
+      "sha256": "c49935a4b3ac599064281b1f257576087806d0dad7ec46f353bd983b052c5e26"
+    },
+    "/usr/lib/x86_64-linux-gnu/libisl.so.23.3.0": {
+      "bytes": 1863352,
+      "sha256": "db4f717fd1678b48e5dddea1cbdd2d239594a70b57e96d0923bfd9533351efa8"
+    },
+    "/usr/lib/x86_64-linux-gnu/libz.so.1.3": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "/usr/lib/x86_64-linux-gnu/libctf.so.0.0.0": {
+      "bytes": 220384,
+      "sha256": "5708839db0b080ef4dafc44c4adaa6976b55de5078aeed35c81d55ab4d0c7841"
+    },
+    "/usr/lib/x86_64-linux-gnu/libsframe.so.1.0.0": {
+      "bytes": 35168,
+      "sha256": "d2e00d05f3713bb0d5eb9f1a212cca2b34cd789a0c4cc0c529ee77827237383f"
+    },
+    "out/native-cpu-predicated-products/provider/provider-build-result.json": {
+      "bytes": 2472,
+      "sha256": "ca2975964bed4db3de9144a9b28224474676fe0c3ed63b1f5a9c72b392101cc1"
+    },
+    "out/native-cpu-predicated-products/provider/linked-native-proof.json": {
+      "bytes": 3076277,
+      "sha256": "4a9fead52fbb66f293e61416901862d65645821760672de8ff6fd982f46954fe"
+    },
+    "out/native-cpu-dense-arithmetic/ispc-dense-compile-result.json": {
+      "bytes": 85945,
+      "sha256": "59e1564a0f2c0b118863bf0e6ae94a9a5a99e932b23bd8d6e2e25e58b32099f5"
+    },
+    "out/native-cpu-dense-arithmetic/compile/ispc-dense/owner.json": {
+      "bytes": 3000,
+      "sha256": "e9e95c661e9152c37f7116a2df10c892e0fd3ebdb1df801d281965b1dfc2d0ca"
+    },
+    "out/native-cpu-dense-arithmetic/object-code-inspection-dense.json": {
+      "bytes": 9588,
+      "sha256": "70b7ae8b23f49345ded22d8ecd84c5de821636f11a08cbd67bf06a75f02c6a0a"
+    },
+    "out/native-cpu-dense-arithmetic/dense-code-inspection.json": {
+      "bytes": 8083,
+      "sha256": "5cda6f1f05f8aadfccf46412f4a19351c750d55472ef659f3e0d8de831a07ea5"
+    },
+    "out/native-cpu-dense-arithmetic/prepare_provider_patch.py": {
+      "bytes": 4406,
+      "sha256": "379c31431c4e39c663db133e7f71f51c955814d2a3871f89770ee598aa84dcfe"
+    },
+    "out/native-cpu-dense-values/derive_ispc.py": {
+      "bytes": 6411,
+      "sha256": "12fa1f8c2c8da48e5125c141f8bff152796840881a4571317543858da82daec1"
+    },
+    "out/native-cpu-dense-values/values_bridge.cpp": {
+      "bytes": 1432,
+      "sha256": "1720549c9a4a997919e0736e2a024d5e103b11c58f71fb1d2007e83d5c834df3"
+    },
+    "out/native-cpu-dense-arithmetic-cohort/cold-frame/frame/owner.json": {
+      "bytes": 3775,
+      "sha256": "2089101bd2417d36fa5a0f1698492f4dc43e29fba77bb5f5124cb5f2cd623cc1"
+    },
+    "out/native-cpu-dense-arithmetic-cohort/cold-frame/result.json": {
+      "bytes": 2447,
+      "sha256": "575390c1f74fdde87a7f00e4dd39d8831faf01209d551b64470678dced4acc64"
+    },
+    "attestations/qualification/2e8224da/native-cpu-dense-arithmetic-frame-timeout/MANIFEST.json": {
+      "bytes": 78309,
+      "sha256": "f8ff2c521a559d6fbf77cd3125e72f58ec894f634a94e69f4392154786c2b655"
+    },
+    "bin/linux-gcc/native-cpu-dense-values/ispc-source/transport.ispc": {
+      "bytes": 623564,
+      "sha256": "6448e05b89ecb423a5a8debfc43c29527246d57ea886c5373ebf9d7f2aa3c5b7"
+    },
+    "bin/linux-gcc/native-cpu-dense-values/ispc-source/endpoint.ispc": {
+      "bytes": 791904,
+      "sha256": "d0590a9bc5001dd1181cf2a4add4806a372929679ed14c6e8b96e858214129ad"
+    },
+    "bin/linux-gcc/native-cpu-dense-values/ispc-source/dopri_phase.ispc": {
+      "bytes": 400409,
+      "sha256": "21f51dd78a044761759a4ef4b1afa18958643eefa823e1a5e3457bd480f4a58c"
+    },
+    "out/native-cpu-dense-values/ispc-derivation.json": {
+      "bytes": 4262,
+      "sha256": "1a15e007fec83f6d9990cfd0ec3eca1c9efcc07897ecb078963c1f7ba77c1e9e"
+    },
+    "out/native-cpu-dense-values/prepare_ispc_compile.py": {
+      "bytes": 7961,
+      "sha256": "9b12fe1a5eab2cffedf5791635f0921409ee28e091c5b9fe1772cdec355d2ea6"
+    },
+    "out/native-cpu-dense-values/build_ispc.py": {
+      "bytes": 3473,
+      "sha256": "6a7dbe4ab62634a42f61ba705860191a18835546e5ec54acec7b343ac7670314"
+    },
+    "out/native-cpu-dense-values/inspect_objects.py": {
+      "bytes": 3168,
+      "sha256": "df3f041cc48f07482f2b0eaaaa773338aa3e034ae7a35d4178a35c98f783c16b"
+    },
+    "out/native-cpu-dense-values/inspect_values.py": {
+      "bytes": 1683,
+      "sha256": "1633c8a16f94f456b8c29e7f95f5338af5b32c78f6cb3bc9a6f7ee02a8388c36"
+    },
+    "out/native-cpu-dense-values/compile/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-dense-values/compile/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "bin/linux-gcc/native-cpu-dense-values/objects/values_bridge.o": {
+      "bytes": 2304,
+      "sha256": "e979c1a91425596386efd46ec76ef2c185094fc8ceb2e7a36435445daea1d681"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/objects/rows_adapter.o": {
+      "bytes": 14608,
+      "sha256": "dcf62dc1594ded8dc6e0b550abf9b5cbce43d9fe2d5055a027375ead35b8e2b7"
+    },
+    "out/native-cpu-dense-values/bridge-build-result.json": {
+      "bytes": 1694,
+      "sha256": "b495778b70469a3adc9842c1affc7e7010000a589e3a1e4cc09f4c46fdf35df9"
+    },
+    "out/native-cpu-dense-values/bridge/build/owner.json": {
+      "bytes": 2281,
+      "sha256": "a414f01a87659053deb94b172afe4da2fcc2b715e202f4d226bf469a7763db35"
+    },
+    "out/native-cpu-dense-values/bridge-code-inspection.json": {
+      "bytes": 891,
+      "sha256": "2c5d03fb8448aea6b03dbd91c4a4ab342bd7733cc257423c51fd0f4333feaadb"
+    },
+    "out/native-cpu-dense-arithmetic/provider/source-contract.json": {
+      "bytes": 111059,
+      "sha256": "f039cb13c466925b2d1d28438721c9c1ee04e0759fc94bfc6bf167850d5382d6"
+    },
+    "out/native-cpu-dense-arithmetic/prepared-cpp.json": {
+      "bytes": 72166,
+      "sha256": "a62b1f2976b5785594ed2ae5eb1fccc72f57a207e599952499e5c62237565724"
+    },
+    "out/native-cpu-dense-values/prepare_bridge.py": {
+      "bytes": 3802,
+      "sha256": "bb72263d184a4bc208c9cc875205ee3273a2f45584fb5ef04ad771417d98ac99"
+    },
+    "out/native-cpu-dense-values/build_bridge.py": {
+      "bytes": 1204,
+      "sha256": "c5b5c4476bc4d8461f0621727e01a4a52eed73b683777c440816caf08247f0b3"
+    },
+    "out/native-cpu-dense-values/bridge/owned_guard.py": {
+      "bytes": 150,
+      "sha256": "00d67e8f715e82bbdff70cfed86ae122a7aeef14b1879dc90f5a2e043ea40397"
+    },
+    "out/native-cpu-dense-values/bridge/run_owned.py": {
+      "bytes": 148,
+      "sha256": "fc24db2d9c1a86dc9c1fb56c2e3d5904276204b0f3844f47396820a46ed4f3cc"
+    },
+    "/home/astra/.project/Sirius/out/native-cpu-dense-values/values_bridge.cpp": {
+      "bytes": 1432,
+      "sha256": "1720549c9a4a997919e0736e2a024d5e103b11c58f71fb1d2007e83d5c834df3"
+    },
+    "out/native-cpu-dense-arithmetic/provider/provider-build-result.json": {
+      "bytes": 2456,
+      "sha256": "335e6e6766ed4fa41459340ec95282b00d8b8e03726170bbd52a612081488f0b"
+    },
+    "out/native-cpu-dense-arithmetic/provider/linked-native-proof.json": {
+      "bytes": 2884873,
+      "sha256": "35310cfb04661c97f6d62b81f2ea06a365169d3cf22a452fd3a8ffe1ff98ba53"
+    },
+    "out/native-cpu-dense-values/ispc-values-compile-result.json": {
+      "bytes": 89642,
+      "sha256": "5039fa45159590461e717d3789e5a9c1786a7a074b5940627460925c42f923f3"
+    },
+    "out/native-cpu-dense-values/compile/ispc-values/owner.json": {
+      "bytes": 3025,
+      "sha256": "674d5147e93a9ff6dadbbd1658205ccec9599b5185046be2e2d4aa74f4712725"
+    },
+    "out/native-cpu-dense-values/object-code-inspection-values.json": {
+      "bytes": 10096,
+      "sha256": "fae1a791bc7ae3dc359c1b689b81056193f0fadf647968e8889e87b055139c7a"
+    },
+    "out/native-cpu-dense-values/values-code-inspection.json": {
+      "bytes": 9055,
+      "sha256": "8167ab71c90a7dee3df4494999e190aed6856c6d243bb204a52c5cc4d4cfb354"
+    },
+    "out/native-cpu-dense-values/prepare_provider_patch.py": {
+      "bytes": 4371,
+      "sha256": "af64ecd834c4d693afa6db6b326ffb473f5b4f9683d996506389bf99e1f1ef78"
+    }
+  },
+  "new_native_compilations": 3,
+  "guard_shared_byte_authority": "out/native-cpu-active-prefix/native_packet.hpp",
+  "scope": "AD replaces remaining compound ISPC RTAdd/RTMultiply bodies with initialized explicit five-column word-buffer calls to small C++ packing adapters. Exact previously checked AC dense arithmetic object and original I are reused byte-for-byte through an opcode-checked relocatable link with the new packing object; no arithmetic compilation or source change. AC direct scratch calls remain. All9380ordered tuples and other original row/control/refusal/rollback/publication remain, with live lane masks, complete operand snapshots and inactive-word preservation. Same eight-object graph, U scalar3/pureF/I policy/Y FP and scheduling/full SPIRV. Only four Meson object paths/private UUID/cache IDs change in three files. Actual linked target/full38/C8 and sole original frame required; broader Z evidence remains predecessor evidence. No math-oracle/performance/science/release claim."
+}
