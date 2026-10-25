@@ -1,0 +1,103 @@
+{
+  "status": "source derived; not renderer-qualified",
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 622776,
+        "sha256": "2b88bd86794520f8bf657fadaff3c82016258ae6c9070b2b9f212105826f7a28"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 618443,
+        "sha256": "2b70301974dabd29fb93199b1d5eeec72f58d98da9138e1dac7604a54f244f37"
+      },
+      "instructions": 3144,
+      "inverse_restores_exact_AE_source": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 791116,
+        "sha256": "c30ef52a95c4fb980a0d843a13d0a0c492caac16fe3ea30abce9bb38e90c141a"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 786783,
+        "sha256": "e6545ddafa857fd3dc74b3112296f2a119aaeb6eebf42e6560c30efd4e65766f"
+      },
+      "instructions": 4148,
+      "inverse_restores_exact_AE_source": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 399621,
+        "sha256": "7ac670d20184f454da15a9828b76c07865545e649602c938c593d9677c8a509f"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 395332,
+        "sha256": "82655b470d380e401102ab475866e614ca8b35b2ad739f9cd90c87a95611dc5f"
+      },
+      "instructions": 2088,
+      "inverse_restores_exact_AE_source": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-masked-arithmetic/ispc-derivation.json": {
+      "bytes": 4333,
+      "sha256": "ee17de44a82698085455aa46588d6289e8fa20b7d4f9e2ad37b39a23d0c25e24"
+    },
+    "out/native-cpu-arithmetic-closure/derive_ispc.py": {
+      "bytes": 6069,
+      "sha256": "f0f132f49608fceeabb1f74ba863f440da4db588c8dce81e8a1c46edfa5f40cc"
+    },
+    "out/native-cpu-arithmetic-closure/retained8.cpp": {
+      "bytes": 19916,
+      "sha256": "ae938e3c8c70d38e6f772a5a22f4cde622e76d80adce6d8cbbda7c6acbc06a4a"
+    },
+    "out/native-cpu-arithmetic-closure/cpp-code-inspection.json": {
+      "bytes": 11048,
+      "sha256": "6f9787db1b795cb549f40f637d3f0a63976738abe1f9920eeda05eb549ecbd56"
+    },
+    "out/native-cpu-arithmetic-closure/cpp-build-result.json": {
+      "bytes": 4374,
+      "sha256": "d0e0dad37d5b50b59f03e9d141408bd5acd45165340c109791cddf0771f2f21e"
+    },
+    "out/native-cpu-arithmetic-closure/cpp/run/owner.json": {
+      "bytes": 1965,
+      "sha256": "7919d9b4227db8448243b73d06c1ab4f81ba2fc4d8453bceb0eafa8de924bbd6"
+    },
+    "out/native-cpu-arithmetic-closure/cpp/run/stdout.log": {
+      "bytes": 175,
+      "sha256": "b956b9e6f55a0cf1d573c1fb8a9fbbe363532519b1a90b2f3adbeb2f9abdcfe8"
+    },
+    "src/sirius/kernels/retained_triple.slang": {
+      "bytes": 15525,
+      "sha256": "c035d93912824a7321a30700433aa20911408a4734de50b44cad15971db10426"
+    },
+    "src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    "src/sirius/kernels/retained_scalar.slang": {
+      "bytes": 3102,
+      "sha256": "904d863d0bccf80b7599af01f2521885ae75e658de655715fb00ea6f0313f2dc"
+    },
+    "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/transport.ispc": {
+      "bytes": 622776,
+      "sha256": "2b88bd86794520f8bf657fadaff3c82016258ae6c9070b2b9f212105826f7a28"
+    },
+    "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/endpoint.ispc": {
+      "bytes": 791116,
+      "sha256": "c30ef52a95c4fb980a0d843a13d0a0c492caac16fe3ea30abce9bb38e90c141a"
+    },
+    "bin/linux-gcc/native-cpu-masked-arithmetic/ispc-source/dopri_phase.ispc": {
+      "bytes": 399621,
+      "sha256": "7ac670d20184f454da15a9828b76c07865545e649602c938c593d9677c8a509f"
+    }
+  },
+  "scope": "Only original pure RTDivide/RTSqrt bodies route one initialized scratch bank to the checked complete C++ refinement closure. The same three corrections, final residual, original seed/exponent/scaling/rounding/refusal and five-word results remain; eleven nested compound Add/Multiply pack/ABI/unpack boundaries become in-unit compositions on a full refinement path. Existing AE Store and compound Add/Multiply calls remain. All9380tuples and other row/control/refusal/rollback/publication/FP/scheduling contracts are unchanged; inverse restores exact AE source. Fresh23760call/2851200word comparison is supporting finite compatibility, not independent numerical proof; actual linked joins/full38/C8/original frame remain required."
+}

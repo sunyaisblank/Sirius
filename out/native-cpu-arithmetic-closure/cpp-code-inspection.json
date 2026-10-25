@@ -1,0 +1,443 @@
+{
+  "passed": true,
+  "helper_object": {
+    "path": "bin/linux-gcc/native-cpu-arithmetic-closure/probe/retained8.o",
+    "bytes": 124400,
+    "sha256": "8a3b4730cf89143b7e8aef207ab99dbeeb2a5b690505f05dae77231df40d6a56"
+  },
+  "executable": {
+    "path": "bin/linux-gcc/native-cpu-arithmetic-closure/probe/abi-check",
+    "bytes": 269328,
+    "sha256": "6d2c44e359f6b516a59d69bf2670504bd33c9a32fcbe8cf248f8e887e01ea100"
+  },
+  "EVEX": 0,
+  "forbidden_FMA_FP_control_x87_extensions": [],
+  "mnemonics": [
+    "add",
+    "and",
+    "call",
+    "cmp",
+    "cs",
+    "data16",
+    "dec",
+    "endbr64",
+    "je",
+    "jmp",
+    "jne",
+    "lea",
+    "leave",
+    "mov",
+    "nop",
+    "nopl",
+    "nopw",
+    "push",
+    "ret",
+    "shl",
+    "shlx",
+    "sub",
+    "test",
+    "vaddps",
+    "vbroadcastss",
+    "vcmpleps",
+    "vcmpltps",
+    "vdivps",
+    "vmovaps",
+    "vmovd",
+    "vmovdqa",
+    "vmovdqu",
+    "vmovmskps",
+    "vmulps",
+    "vpaddd",
+    "vpand",
+    "vpandn",
+    "vpblendvb",
+    "vpbroadcastd",
+    "vpcmpeqd",
+    "vpcmpgtd",
+    "vpminud",
+    "vpor",
+    "vpslld",
+    "vpsllvd",
+    "vpsrad",
+    "vpsrld",
+    "vpsrlvd",
+    "vpsubd",
+    "vpxor",
+    "vsqrtps",
+    "vsubps",
+    "vxorps",
+    "vzeroupper",
+    "xchg",
+    "xor"
+  ],
+  "linked_code": {
+    "passed": true,
+    "executable": {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-arithmetic-closure/probe/abi-check",
+      "bytes": 269328,
+      "sha256": "6d2c44e359f6b516a59d69bf2670504bd33c9a32fcbe8cf248f8e887e01ea100"
+    },
+    "objects": [
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-arithmetic-closure/probe/retained8.o",
+          "bytes": 124400,
+          "sha256": "8a3b4730cf89143b7e8aef207ab99dbeeb2a5b690505f05dae77231df40d6a56"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "sirius_native_dense_add8",
+            "bytes": 4637,
+            "linked_address": 112960,
+            "masked_relocations": [
+              {
+                "offset": 40,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3510,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4633,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_multiply8",
+            "bytes": 17952,
+            "linked_address": 117600,
+            "masked_relocations": [
+              {
+                "offset": 40,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1561,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2529,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3514,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 4211,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5175,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6150,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13685,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17948,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_divide8",
+            "bytes": 50786,
+            "linked_address": 135552,
+            "masked_relocations": [
+              {
+                "offset": 43,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 129,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1701,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2087,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2181,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2603,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 2837,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3030,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3337,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 8169,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 9346,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 10293,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 11272,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 13381,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 14371,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15435,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 16049,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17056,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 18105,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 24515,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 26956,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 27953,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 29002,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 29673,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 30709,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 31763,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 39760,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 41716,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 43122,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 46382,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 50782,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_sqrt8",
+            "bytes": 47097,
+            "linked_address": 186352,
+            "masked_relocations": [
+              {
+                "offset": 15,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 48,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1083,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 5574,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 6939,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 7848,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 8849,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 11334,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 12799,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 15426,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 17391,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 21259,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22977,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 22986,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 24046,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 25092,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 27857,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 37076,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 38474,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 42410,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 47093,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Every retained function opcode in exact renamed OLD/new R Transport objects, masking only declared4B PC32/PLT32/REX_GOTPCRELX operands. Linker relaxation disabled. This alone is not relocation-target semantics or numerical acceptance."
+  },
+  "scope": "Actual guarded-v3 helper code/ISA and every retained function opcode join to the focused test ELF. No execution, numerical agreement, runtime gain, whole-renderer or scientific/release claim."
+}
