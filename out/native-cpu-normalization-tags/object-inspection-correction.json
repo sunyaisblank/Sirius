@@ -1,0 +1,19 @@
+{
+  "failed_checker": {
+    "path": "out/native-cpu-normalization-tags/inspect_objects.py",
+    "bytes": 4284,
+    "sha256": "2922747ba9f8ade040a01dee756c3d28b3a94d2b464121b33f3f266bb51e164f"
+  },
+  "failure": "Reader required tagged sqrt8 in every raw stage. Only Transport/Endpoint have static Sqrt sites; DopriPhase retains original generic sqrt8 but has zero tagged sites.",
+  "canonical_static_sqrt_sites": {
+    "transport": 3,
+    "endpoint": 3,
+    "dopri_phase": 0
+  },
+  "replacement_readers": [
+    "inspect_tagged_objects.py",
+    "inspect_tagged_dense.py"
+  ],
+  "raw_compilations_repeated": 0,
+  "original_frozen_checkers_unchanged": true
+}

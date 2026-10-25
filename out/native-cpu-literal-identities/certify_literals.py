@@ -57,7 +57,7 @@ for slug,item in old['stages'].items():
      sites.append({'instruction':i,'layer':layer,'tuple':[op,dst,a,b,c],'a_class':ac,'b_class':bc,'result_class':result,'kind':selected});counts[selected]+=1
     state[dst]=result;i+=1
   assert i==n
-  families[str(family)]={'program_offset':offset,'instructions':n,'registers':registers,'layers':len(calls),'sites':sites};total+=n
+  families[str(family)]={'program_offset':offset,'instructions':n,'registers':registers,'layers':len(calls),'site_count':len(sites),'site_sha256':hashlib.sha256(json.dumps(sites,sort_keys=True,separators=(',',':')).encode()).hexdigest()};total+=n
  stages[slug]={'source':{'path':str(p.relative_to(R)),**pin(p)},'canonical_table':{'path':str(table.relative_to(R)),**pin(table)},'families':families,'identity_sites':dict(sorted(counts.items()))};allcounts.update(counts)
 assert total==9380
 result={'instructions':total,'stages':stages,'identity_sites':dict(sorted(allcounts.items())),'source_inputs':inputs,
