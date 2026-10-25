@@ -15,6 +15,30 @@ review = json.loads((P / 'review-admission.json').read_text())
 assert review['passed']
 base = json.loads((R / 'out/native-cpu-demand-submit/provider/actions.json').read_text())['build']
 inputs = {name for name in base['frozen_inputs'] if not (R / name).is_relative_to(B)}
+# The previous build froze three incidental interpreter-cache files. They
+# were archived/pushed and deliberately retired after that terminal run. They
+# are historical metadata, not inputs to this fresh Python -B/no-bytecode job.
+retired_names={f'out/native-cpu-masked-arithmetic/__pycache__/{name}.cpython-312.pyc'
+               for name in ('build_cpp','inspect_cpp','prepare_cpp')}
+missing={name for name in inputs if not (R/name).is_file()}
+assert missing==retired_names
+manifest=R/'attestations/qualification/14b5567d/native-cpu-masked-arithmetic-frame-timeout/MANIFEST.json'
+metadata=next(a for a in json.loads(manifest.read_text())['archives'] if a['file']=='source-build-and-trial.zip')
+archive=manifest.parent/metadata['file']
+assert hashlib.sha256(archive.read_bytes()).hexdigest()==metadata['identity']['sha256']
+assert subprocess.check_output(['git','show','@{upstream}:'+str(archive.relative_to(R))])==archive.read_bytes()
+old_receipt=R/'out/native-cpu-demand-submit/provider/build/inputs-before.json'
+old_inputs=json.loads(old_receipt.read_text());retired=[]
+import zipfile
+with zipfile.ZipFile(archive) as z:
+    assert z.testzip() is None
+    for name in sorted(retired_names):
+        member='files/'+name;v=metadata['members'][member];data=z.read(member)
+        assert len(data)==v['bytes'] and hashlib.sha256(data).hexdigest()==v['sha256']
+        assert {key:old_inputs[name][key] for key in ('bytes','sha256')}=={key:v[key] for key in ('bytes','sha256')}
+        retired.append({'path':name,'archive_member':member,'bytes':v['bytes'],'sha256':v['sha256']})
+inputs-=retired_names
+inputs|={str(p.relative_to(R)) for p in (manifest,archive,old_receipt)}
 inputs |= set(json.loads((P / 'source-contract.json').read_text())['source_inputs'])
 inputs |= {str(path.relative_to(R)) for path in S.rglob('*') if path.is_file()}
 inputs |= {str(path.relative_to(R)) for path in W.rglob('*') if path.is_file()
@@ -49,6 +73,7 @@ action = {
     'limits': {'seconds': 60, 'rss_kib': 4194304, 'reserve_kib': 2097152},
     'argv': ['/usr/bin/python3', '-B', str(W / 'configure_provider.py')],
     'frozen_inputs': sorted(inputs), 'software_provider': False, 'build_environment': env,
+    'retired_historical_disposable_inputs': retired,
     'scope': 'Reconfigure existing private Mesa build once to reuse8 native objects with three raw SIMD objects calling the checked dense C++ arithmetic plus the combined original adapter/helper object; same existing build options/toolchain. All prior object/archive/provider contents remain sealed. No shader/native execution or benefit/science/release qualification.',
 }
 assert not (P / 'actions.json').exists()
