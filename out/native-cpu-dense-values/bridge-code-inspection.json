@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "object": {
+    "path": "bin/linux-gcc/native-cpu-dense-values/objects/values_bridge.o",
+    "bytes": 2304,
+    "sha256": "e979c1a91425596386efd46ec76ef2c185094fc8ceb2e7a36435445daea1d681"
+  },
+  "undefined_symbols": [
+    "                 U __stack_chk_fail",
+    "                 U memcpy",
+    "                 U sirius_native_dense_add8",
+    "                 U sirius_native_dense_multiply8"
+  ],
+  "mnemonics": [
+    "and",
+    "call",
+    "endbr64",
+    "jne",
+    "lea",
+    "mov",
+    "nopl",
+    "pop",
+    "push",
+    "ret",
+    "sub",
+    "xor"
+  ],
+  "forbidden_vector_math_or_FP_control": [],
+  "scope": "New baseline packing object only: initialized buffer copies and calls to unchanged AC dense math, no arithmetic implementation or ISA expansion. Complete partial-link opcode joins and actual linked targets plus full38/C8/frame still required."
+}
