@@ -33,17 +33,32 @@ with zipfile.ZipFile(archive) as z:
 assert len(rows)==12
 targets={str((R/r['path']).resolve()) for r in rows}
 checked=0;privileged=[]
+metadata_check="""from pathlib import Path
+import json,os,sys
+p=Path(sys.argv[1]);targets=set(json.loads(sys.argv[3]));matches=[];count=0
+try:
+ if p.stat().st_uid==int(sys.argv[2]):
+  for fd in (p/'fd').iterdir():
+   try:target=os.readlink(fd)
+   except FileNotFoundError:continue
+   count+=1
+   if target in targets:matches.append(fd.name)
+except FileNotFoundError:pass
+print(json.dumps(dict(matches=matches,descriptors_checked=count)))
+"""
 for p in Path('/proc').iterdir():
  if not p.name.isdecimal():continue
  try:
   if p.stat().st_uid!=os.getuid():continue
-  for fd in (p/'fd').iterdir():
-   try:target=os.readlink(fd)
-   except FileNotFoundError:continue
-   except PermissionError:
-    target=subprocess.check_output(['sudo','-n','/usr/bin/readlink',str(fd)],text=True).rstrip('\n')
-    privileged.append(dict(pid=int(p.name),fd=fd.name))
-   assert target not in targets,(p,fd,target)
+  try:
+   for fd in (p/'fd').iterdir():
+    try:target=os.readlink(fd)
+    except FileNotFoundError:continue
+    assert target not in targets,(p,fd,target)
+  except PermissionError:
+   value=json.loads(subprocess.check_output(['sudo','-n','/usr/bin/python3','-B','-c',metadata_check,str(p),str(os.getuid()),json.dumps(sorted(targets))],text=True))
+   assert not value['matches'],(p,value)
+   privileged.append(dict(pid=int(p.name),descriptors_checked=value['descriptors_checked']))
   checked+=1
  except (FileNotFoundError,ProcessLookupError):continue
 report=dict(status='started',source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
