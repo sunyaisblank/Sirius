@@ -1,0 +1,96 @@
+{
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 622708,
+        "sha256": "06e56c09af6c23779eb4c1c2563afaa36f00721c5bbc3e46c5418615bc8ffa9e"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 622689,
+        "sha256": "c43c70a6bbd1d731db56293679482686cfc40237fed150a2388c67c76c1d3c42"
+      },
+      "counterexample_basis_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/transport.ispc",
+      "counterexample_basis": {
+        "bytes": 622708,
+        "sha256": "d9eaaf6f227d10fae25a586a647198e424d73667dc570c3ca3fecad6b04ce72b"
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "whole_source_inverse_restores_AL": true,
+      "all_four_writers_update_before_only_return": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 791036,
+        "sha256": "55492333bed6f0cc6b02e110e2141988d32ef682ed564a22b0a5bc208961a3ee"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 791017,
+        "sha256": "b493cda291119ffad0125f62c3d407eb0d40f2c236b1b297ee90519c14f2ca1e"
+      },
+      "counterexample_basis_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/endpoint.ispc",
+      "counterexample_basis": {
+        "bytes": 791036,
+        "sha256": "e4ee809ad521096b2c85ad95a2b8431b22110f0e17a25101f3264c2767403079"
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "whole_source_inverse_restores_AL": true,
+      "all_four_writers_update_before_only_return": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 399580,
+        "sha256": "b45ae5e43d8112bd73a02cbc7f28c25c0f1e4520d7a15df7c5a76654cfdfad54"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-value-fact-stores/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 399561,
+        "sha256": "f4db819fed8070ddf29626213a3ee9bc05160d806abc0d62e26585edad808b94"
+      },
+      "counterexample_basis_path": "bin/linux-gcc/native-cpu-normalization-tags/ispc-source/dopri_phase.ispc",
+      "counterexample_basis": {
+        "bytes": 399580,
+        "sha256": "b2001fc9cbf3de57bbad20e1c081c30a81458051fba47029677f5bf538613978"
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "whole_source_inverse_restores_AL": true,
+      "all_four_writers_update_before_only_return": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-reachable-tag-writers/ispc-derivation.json": {
+      "bytes": 7593,
+      "sha256": "0ccfa060b1634ddba22618edde798d0c453406dda6f00cf90e4ed9e06f4360bd"
+    },
+    "out/native-cpu-value-fact-stores/derive_ispc.py": {
+      "bytes": 3496,
+      "sha256": "b9b956355f49b29f8572c315f9ebcee3068d5d34ebe4aa60a4ae5a33f28626f1"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "out/native-cpu-normalization-tags/normalization_tag.isph": {
+      "bytes": 821,
+      "sha256": "a33dc7083ccc5e1e7a721c32c84fea7f858d57775aa85ab3bff3812dd60f3dfa"
+    },
+    "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/transport.ispc": {
+      "bytes": 622708,
+      "sha256": "06e56c09af6c23779eb4c1c2563afaa36f00721c5bbc3e46c5418615bc8ffa9e"
+    },
+    "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/endpoint.ispc": {
+      "bytes": 791036,
+      "sha256": "55492333bed6f0cc6b02e110e2141988d32ef682ed564a22b0a5bc208961a3ee"
+    },
+    "bin/linux-gcc/native-cpu-reachable-tag-writers/ispc-source/dopri_phase.ispc": {
+      "bytes": 399580,
+      "sha256": "b45ae5e43d8112bd73a02cbc7f28c25c0f1e4520d7a15df7c5a76654cfdfad54"
+    }
+  },
+  "scope": "Replace only the shared metadata include and two complete-write predicate calls per stage. Existing one-word private metadata now carries exact normalization/identity/nonzero-valid facts and completeness; all partial writes still clear before their original returns. Every complete tuple refresh is reachable after five payload stores. Same arrays/offsets/published words, masks, canonical9380tuples, arithmetic, guards, precision/count/cache/governors. Exact inverse restores corrected AL. Original AJ bad writers retained only for counterexamples, never current runtime."
+}
