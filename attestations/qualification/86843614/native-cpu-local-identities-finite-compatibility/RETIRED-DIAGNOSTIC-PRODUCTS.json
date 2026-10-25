@@ -1,0 +1,53 @@
+{
+  "status": "complete",
+  "source": "7d00847002f1ca2e8d300b953f58c87e8d3dbe49",
+  "members": [
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/fixture/driver.o",
+      "archive": "attestations/qualification/86843614/native-cpu-local-identities-finite-compatibility/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-local-identities/fixture/driver.o",
+      "sha256": "0e738bbe1bd38fa02879ca8264722a804547bf20f1d012172411b8a61806c8ab",
+      "bytes": 151760,
+      "allocated_bytes": 155648,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/fixture/fixture.o",
+      "archive": "attestations/qualification/86843614/native-cpu-local-identities-finite-compatibility/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-local-identities/fixture/fixture.o",
+      "sha256": "22cf4c79a1b14a5569e00a02376143753bcc1c60331a59d494daec0cbd0b6248",
+      "bytes": 9088,
+      "allocated_bytes": 12288,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/fixture/abi-check",
+      "archive": "attestations/qualification/86843614/native-cpu-local-identities-finite-compatibility/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-local-identities/fixture/abi-check",
+      "sha256": "8a93453c838c486271fda79a7bcf91475908b1faa301676aa36da1804e3e798b",
+      "bytes": 389464,
+      "allocated_bytes": 393216,
+      "removed": true
+    }
+  ],
+  "recovery_archives": [
+    {
+      "path": "attestations/qualification/86843614/native-cpu-local-identities-finite-compatibility/actual-products.zip",
+      "sha256": "4a8016ffb0a11b7e4f34325234aa36053be62f2ca7233092bbb1d82cd10ef7ca",
+      "verified_members": 9
+    }
+  ],
+  "same_user_map_and_fd_tables_checked": 29,
+  "privileged_read_only_metadata_checks": [
+    {
+      "pid": 243,
+      "descriptors_checked": 39
+    },
+    {
+      "pid": 247,
+      "descriptors_checked": 7
+    }
+  ],
+  "gross_allocated_bytes_retired": 561152,
+  "scope": "Three untracked recovered diagnostic products only: renamed original scalar-reference driver, integer-only ISPC fixture object and linked ABI check. Full pushed archive SHA/CRC/member/mode/time verified. No current AN/H non-fixture frozen-input, Ninja, same-user mapped or open-FD consumer. The sole historical fixture action is terminal, all births absent, and preserved in pushed recovery. All current raw/provider/full38 products, unchanged AM math/provider and unique source/concise evidence/resources/reusable caches retained. Gross retired allocation, not net drive gain or scientific/release qualification."
+}
