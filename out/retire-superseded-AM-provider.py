@@ -4,7 +4,7 @@ import hashlib,json,os,stat,subprocess,zipfile
 R=Path.cwd();W=R/'out/native-cpu-local-identities';C=R/'out/native-cpu-local-identities-cohort';D=R/'out/native-cpu-local-identities-compatibility';J=lambda p:json.loads(p.read_text())
 assert not subprocess.check_output(['git','status','--porcelain']).strip()
 assert subprocess.check_output(['git','rev-parse','HEAD'])==subprocess.check_output(['git','rev-parse','@{upstream}'])
-source=J(C/'control-8/owner.json')['source']['revision'];bundles=list((R/'attestations/qualification'/source[:8]).glob('native-cpu-local-identities-*/MANIFEST.json'));assert len(bundles)==1
+source=J(C/'benefit/runtime/a1/owner.json')['source']['revision'];bundles=list((R/'attestations/qualification'/source[:8]).glob('native-cpu-local-identities-*/MANIFEST.json'));assert len(bundles)==1
 manifest_path=bundles[0];manifest=J(manifest_path);assert manifest['all22_original_gates_pass'] and manifest['all8_original_controls_pass']
 for p in [manifest_path,*(manifest_path.parent/a['file'] for a in manifest['archives'])]:
  assert subprocess.check_output(['git','show','@{upstream}:'+str(p.relative_to(R))])==p.read_bytes()
