@@ -1,6 +1,6 @@
 """One existing3s USER-PC capture during the sole original frame, never a render."""
 from pathlib import Path
-import hashlib,json,os,resource,subprocess,time
+import hashlib,json,os,re,resource,subprocess,time
 R=Path.cwd();W=Path(__file__).resolve().parent;F=W/'frame';J=lambda p:json.loads(p.read_text())
 def pin(p):
  with p.open('rb') as f:return {'bytes':p.stat().st_size,'sha256':hashlib.file_digest(f,'sha256').hexdigest()}
@@ -20,7 +20,12 @@ try:
   owner=J(F/'owner.json');assert owner['source']=={'revision':record['source'],'status':''}
   if owner['status']=='terminal':raise RuntimeError('original frame terminated before profile trigger')
   stdout=F/'stdout.log'
-  if not stdout.exists() or b'Tile' not in stdout.read_bytes():time.sleep(.1);continue
+  # Require actual completed work; configuration text and zero progress
+  # do not establish a steady rendering phase. Existing output reservations
+  # still prohibit recapture of an already attempted phase.
+  if not stdout.exists():time.sleep(.1);continue
+  progress=re.findall(rb'\bTile\s+(\d+)\s*/\s*(\d+)',stdout.read_bytes())
+  if not any(0<int(done)<=int(total) for done,total in progress):time.sleep(.1);continue
   matches=[]
   for path in Path('/proc').iterdir():
    if not path.name.isdecimal():continue
