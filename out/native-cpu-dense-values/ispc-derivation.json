@@ -1,0 +1,81 @@
+{
+  "status": "contingent source only; not compiled or executed",
+  "instructions": 9380,
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 624299,
+        "sha256": "9ac822c9e422ba1e60645c8ab186584e4d10e1c4bc82e0e01343c464576baea7"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-dense-values/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 623564,
+        "sha256": "6448e05b89ecb423a5a8debfc43c29527246d57ea886c5373ebf9d7f2aa3c5b7"
+      },
+      "instructions": 3144,
+      "inverse_restores_exact_AC_source": true
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 792639,
+        "sha256": "798757c45bf78b02dc00290358532f54b7984a5b273f2d7eeaf8423434d7f40a"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-dense-values/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 791904,
+        "sha256": "d0590a9bc5001dd1181cf2a4add4806a372929679ed14c6e8b96e858214129ad"
+      },
+      "instructions": 4148,
+      "inverse_restores_exact_AC_source": true
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 401142,
+        "sha256": "b72fcac38a74e69f00462346dbb292aa39cbed38ce49584156af8748cf08af82"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-dense-values/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 400409,
+        "sha256": "21f51dd78a044761759a4ef4b1afa18958643eefa823e1a5e3457bd480f4a58c"
+      },
+      "instructions": 2088,
+      "inverse_restores_exact_AC_source": true
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-dense-arithmetic/ispc-derivation.json": {
+      "bytes": 4954,
+      "sha256": "5c75da4ee17e3df4b880fb87695b19b5cb8d0de873b55fda459a3dfec9da212c"
+    },
+    "out/native-cpu-dense-values/derive_ispc.py": {
+      "bytes": 6411,
+      "sha256": "12fa1f8c2c8da48e5125c141f8bff152796840881a4571317543858da82daec1"
+    },
+    "out/native-cpu-dense-values/values_bridge.cpp": {
+      "bytes": 1432,
+      "sha256": "1720549c9a4a997919e0736e2a024d5e103b11c58f71fb1d2007e83d5c834df3"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/transport.ispc": {
+      "bytes": 624299,
+      "sha256": "9ac822c9e422ba1e60645c8ab186584e4d10e1c4bc82e0e01343c464576baea7"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/endpoint.ispc": {
+      "bytes": 792639,
+      "sha256": "798757c45bf78b02dc00290358532f54b7984a5b273f2d7eeaf8423434d7f40a"
+    },
+    "bin/linux-gcc/native-cpu-dense-arithmetic/ispc-source/dopri_phase.ispc": {
+      "bytes": 401142,
+      "sha256": "b72fcac38a74e69f00462346dbb292aa39cbed38ce49584156af8748cf08af82"
+    }
+  },
+  "scope": "Route remaining compound Add/Multiply calls to the exact checked AC dense arithmetic through initialized explicit five-column word buffers and the live lane mask. AC direct scratch Store calls remain. New C++ adapters only snapshot a/b/old-output, invoke the existing checked scratch ABI and copy its destination back. No arithmetic source or original dense object changes. All ordered tuples and other original row/control/refusal/rollback/publication remain; inverse restores exact AC source.",
+  "reasoning": [
+    "Packing writes the original five operand words for each executing lane into fully initialized 8-lane buffers; no varying-struct layout assumption. All snapshots precede external writes.",
+    "The C++ adapter snapshots both inputs and old output into distinct local bank registers before invoking the unchanged AC helper. The existing helper contract changes only active destination words; copying that bank destination back preserves inactive output, including aliases.",
+    "Exact original dense object/opcodes and pinned FP scope must be reused. Fresh actual linked targets/full38/C8 and the original frame remain necessary. Source reasoning is not machine-checked proof or independent math/scientific qualification.",
+    "Compile/run only after a preserved AC original-frame rejection; discard unused contingent output if AC succeeds."
+  ]
+}

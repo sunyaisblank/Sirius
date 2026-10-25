@@ -1,0 +1,50 @@
+{
+  "source": "2e8224da9cf29cb96ddc5c904baa2e5ac57efeab",
+  "status": "complete",
+  "members": [
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-products/provider/libvulkan_lvp.so",
+      "member": "files/bin/linux-gcc/native-cpu-predicated-products/provider/libvulkan_lvp.so",
+      "sha256": "c6ea27546be4d6fde562a2fea741561874f8d8b665900f541908a313eabb7ec9",
+      "bytes": 18460160,
+      "allocated_bytes": 18460672,
+      "mode": 493,
+      "mtime_ns": 1792932672670394375,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-products/provider/lvp_icd.json",
+      "member": "files/bin/linux-gcc/native-cpu-predicated-products/provider/lvp_icd.json",
+      "sha256": "a2f6b6041e069d2186fcfc23afe8612ce7554668122ac3f2ee26d1b60b4b0edc",
+      "bytes": 204,
+      "allocated_bytes": 4096,
+      "mode": 420,
+      "mtime_ns": 1792932672840531156,
+      "removed": true
+    }
+  ],
+  "archive": "attestations/qualification/fddb9175/native-cpu-predicated-products-frame-timeout/actual-products.zip",
+  "archive_sha256": "b6254f682dab5e323e65058397fa9866ddc4ea731668c00e9d272c7696c92f0f",
+  "verified_product_members": 6,
+  "same_user_maps_checked": 32,
+  "privileged_read_only_maps_checks": [
+    243,
+    247
+  ],
+  "gross_allocated_bytes_retired": 18464768,
+  "scope": "Two untracked AB provider names only, independently SHA/CRC/mode verified against all pushed archive products, excluded from all current AC/contingent AD frozen inputs/build commands/process maps. AB source/native objects/component/evidence and all active AC/contingent AD inputs/caches/resources retained. Gross retired allocation, not net drive gain.",
+  "volume_observation": {
+    "before": {
+      "wall_time": 1792934890.8169825,
+      "available_bytes": 398730641408,
+      "free_bytes": 453722996736
+    },
+    "after": {
+      "wall_time": 1792934912.7632933,
+      "available_bytes": 398767099904,
+      "free_bytes": 453759455232
+    },
+    "observed_available_change_bytes": 36458496,
+    "scope": "Observed Linux filesystem availability across combined AA/AB provider-pair retirement, including concurrent current rendering and system allocations. Gross retired inode allocation is recorded separately; no exclusive volume-delta attribution or Windows changes."
+  }
+}
