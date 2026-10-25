@@ -13,7 +13,11 @@ def apply(root, work, expected):
     def pin(path):
         with path.open('rb') as stream:
             return {'bytes': path.stat().st_size, 'sha256': hashlib.file_digest(stream, 'sha256').hexdigest()}
-    assert expected[name] == old and pin(Path(name)) == current
+    incoming = expected[name]
+    assert incoming in (old, current) and pin(Path(name)) == current
+    cpp_preparation = root / 'out/native-cpu-dense-arithmetic/prepared-cpp.json'
+    cpp = json.loads(cpp_preparation.read_text())
+    assert cpp['inputs'][name] == current
     version = subprocess.check_output(['dpkg-query', '-W', '-f=${Version}', 'zlib1g:amd64'], text=True)
     assert version == '1:1.3.dfsg-3.1ubuntu2.3'
     verification = subprocess.check_output(['dpkg', '-V', 'zlib1g:amd64'], text=True)
@@ -37,9 +41,10 @@ def apply(root, work, expected):
                             'resolution': re.sub(r'0x[0-9a-fA-F]+', '0xADDRESS', output)})
     assert pin(Path(name)) == current
     record = {'path': name, 'historical_build_dependency': old, 'current_runtime': current,
+              'incoming_merged_dependency': incoming, 'current_CPP_build_preparation': pin(cpp_preparation),
               'package': 'zlib1g:amd64', 'version': version, 'package_integrity_output': verification,
               'upgrade_log': log, 'existing_product_resolution': resolutions,
-              'scope': 'Preserved P/R builds predate the system package upgrade; the V provider was built against the current runtime. Only the historical P host dependency pin is superseded for this fresh cohort. Historical build receipts/products stay unchanged. Only this current runtime dependency pin is superseded; all other original expected identities and original C8/ABBA22+Decimal/all8/frame assertions/counts/governors remain. Both ABBA arms use the same current system library. No historical qualification, numerical equivalence or release claim is transferred across the update.'}
+              'scope': 'Historical P host receipts pin the old library; the new dense C++ build explicitly pins the current installed library. Preserve both provenances and verify the incoming merged pin against those exact two identities. This cohort uses the current package after product/library-resolution checks; no package change is performed. All other identities, original C8/full38/frame assertions/counts/governors remain. Z broader gates are predecessor supporting evidence only. No historical qualification, numerical equivalence or release claim is transferred across the package update.'}
     with (work / 'runtime-transition.json').open('x') as stream:
         json.dump(record, stream, indent=2)
         stream.write('\n')
