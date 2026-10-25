@@ -79,6 +79,9 @@ if not sys.argv[1:]:
         assert path.is_file()
         tools.add(path)
     for path in list(tools):
+        with path.open('rb') as stream:
+            if stream.read(4) != b'\x7fELF':
+                continue
         resolution = subprocess.check_output(['/usr/bin/ldd', '-r', str(path)], text=True, stderr=subprocess.STDOUT)
         assert 'undefined symbol' not in resolution and 'not found' not in resolution
         tools |= {Path(name).resolve() for name in re.findall(r'(/[^\s()]+)', resolution) if Path(name).is_file()}
