@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "root": "/home/astra/.project/Sirius",
+  "source": "9b8d67638622645de16a1644fcc248952e923785",
+  "script_sha256": "f65ada6d74af22af3a2aba39f188009808a686237d24c8db7c9ce9973999e42c",
+  "helper_sha256": "4e820ac57a6d47ef4c38da5d5ee6c839c4a8d4b816b13d8608a1ec098fe0ef46",
+  "created_unix": 1792966214.2639346,
+  "same_user_processes_checked": 30,
+  "protected_paths": 14280,
+  "records": [
+    {
+      "path": "attestations/scientific-core/4bcd987/p6-colour-kernel-parity-current-source/files/out/p6-colour-kernel-parity-current-source/shader-phase/cache/AMD/DxcCache/691bb9b3.f24b5cc.a4a986a3.e99a56f7.0.parc",
+      "sha256": "ad0a7c2208865c315e2999af343e70a56f0c233953480734bf319e0015b3ad4b",
+      "before": {
+        "bytes": 1048576,
+        "mode": 448,
+        "mtime_ns": 1791971107044771627,
+        "uid": 1000,
+        "gid": 1000,
+        "device": 2096,
+        "inode": 1760591,
+        "links": 1,
+        "allocated_bytes": 1048576,
+        "xattrs_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    },
+    {
+      "path": "attestations/software-vulkan/4bcd987/multiply64-ordinary-jit-screen/files/out/portable-multiply64-jit/capture-candidate-endpoint-normal/jit-10.elf",
+      "sha256": "f34a5dc647882a519ae630a4e8402b3fd44873d711614c8da83419c13e8ff916",
+      "before": {
+        "bytes": 1049120,
+        "mode": 420,
+        "mtime_ns": 1792003956524211059,
+        "uid": 1000,
+        "gid": 1000,
+        "device": 2096,
+        "inode": 1880167,
+        "links": 1,
+        "allocated_bytes": 1052672,
+        "xattrs_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "objects": {
+    "ad0a7c2208865c315e2999af343e70a56f0c233953480734bf319e0015b3ad4b": {
+      "source_path": "attestations/scientific-core/4bcd987/p6-colour-kernel-parity-current-source/files/out/p6-colour-kernel-parity-current-source/shader-phase/cache/AMD/DxcCache/691bb9b3.f24b5cc.a4a986a3.e99a56f7.0.parc",
+      "bytes": 1048576
+    },
+    "f34a5dc647882a519ae630a4e8402b3fd44873d711614c8da83419c13e8ff916": {
+      "source_path": "attestations/software-vulkan/4bcd987/multiply64-ordinary-jit-screen/files/out/portable-multiply64-jit/capture-candidate-endpoint-normal/jit-10.elf",
+      "bytes": 1049120
+    }
+  },
+  "expanded_unique_allocated_bytes": 2101248,
+  "scope": "Two original payload paths, selected for a retirement/restore pilot of the full verified cold archive.",
+  "restore_command": "python3 -B scripts/maintenance/archive_cold_payloads.py restore attestations/cleanup/2026-10-26-cold-payloads/plan.json --path <original-relative-path>",
+  "parent_plan": "attestations/cleanup/2026-10-26-cold-payloads/plan.json"
+}
