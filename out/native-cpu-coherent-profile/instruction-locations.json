@@ -1,0 +1,103 @@
+{
+  "source": "30236102ce123a8e28eab57995bf40cf13480d39",
+  "recorded_CPP_samples": 398,
+  "sampled_instruction_kinds": {
+    "stack operand": 82,
+    "other": 316
+  },
+  "stack_operand_examples": [
+    [
+      "vpaddd -0xa70(%rbp),%ymm0,%ymm0",
+      3
+    ],
+    [
+      "vmovdqa -0xc10(%rbp),%ymm14",
+      3
+    ],
+    [
+      "vmovdqa -0x70(%rbp),%ymm0",
+      2
+    ],
+    [
+      "vpblendvb %ymm2,-0x490(%rbp),%ymm11,%ymm1",
+      2
+    ],
+    [
+      "vmovaps %ymm10,-0x710(%rbp)",
+      2
+    ],
+    [
+      "vmovdqa -0x490(%rbp),%ymm4",
+      2
+    ],
+    [
+      "vmovdqa -0x4b0(%rbp),%ymm10",
+      2
+    ],
+    [
+      "vmovdqa -0x2d0(%rbp),%ymm3",
+      2
+    ],
+    [
+      "vpand  -0x470(%rbp),%ymm7,%ymm1",
+      2
+    ],
+    [
+      "vmovdqa %ymm2,-0x9d0(%rbp)",
+      1
+    ],
+    [
+      "vmovdqa -0xf90(%rbp),%ymm11",
+      1
+    ],
+    [
+      "vmovaps %ymm9,-0xe30(%rbp)",
+      1
+    ],
+    [
+      "vmovdqa %ymm4,-0x1110(%rbp)",
+      1
+    ],
+    [
+      "vmovdqa -0xcd0(%rbp),%ymm14",
+      1
+    ],
+    [
+      "vpxor  -0x2d0(%rbp),%ymm1,%ymm5",
+      1
+    ],
+    [
+      "vmovdqa -0x18f0(%rbp),%ymm4",
+      1
+    ],
+    [
+      "vpor   -0x1610(%rbp),%ymm5,%ymm1",
+      1
+    ],
+    [
+      "vpaddd -0x1010(%rbp),%ymm8,%ymm8",
+      1
+    ],
+    [
+      "vmovdqa -0x1410(%rbp),%ymm4",
+      1
+    ],
+    [
+      "vmovdqa %ymm12,-0x4d0(%rbp)",
+      1
+    ]
+  ],
+  "provider": {
+    "path": "bin/linux-gcc/native-cpu-local-identities/provider/libvulkan_lvp.so",
+    "bytes": 18203424,
+    "sha256": "6719ee5c88e8b579e45f69d98bcfa87cd992b1131abf87f048e04b4747bad6ad"
+  },
+  "cpu_flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm",
+  "cache_sizes": {
+    "index2": "1024K",
+    "index0": "32K",
+    "index3": "16384K",
+    "index1": "32K"
+  },
+  "scope": "Decode only existing USER-PC records into exact current ELF instructions. A sampled stack operand is an observed instruction address, not a measured cache miss, spill latency, causal bottleneck, whole-frame share or speedup. Source inspection distinguishes saved locals from other stack traffic. CPU flags/cache metadata describe this machine, not a portable ISA admission check. No new capture/execution or ISA/flag sweep."
+}
