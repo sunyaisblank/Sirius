@@ -51,7 +51,7 @@ for root in (W, C, D):
         assert not owner['cleanup_errors'] and not owner['remaining_owned_processes']
         assert owner['observed_births'] and all(row['absent'] for row in owner['observed_births'])
         if not owner['passed']:
-            assert path == C / 'cold-frame/frame/owner.json'
+            assert path in (C / 'cold-frame/frame/owner.json', C / 'controls/runtime/control-4/owner.json')
         for row in owner['observed_births']:
             process = Path('/proc') / str(row['pid']) / 'stat'
             if boot == owner['boot_id'] and process.exists():
@@ -62,7 +62,7 @@ for root in (W, C, D):
                 assert actual != str(row['saved_start_ticks']), (path, row)
         owners[str(path.relative_to(R))] = {key: owner.get(key) for key in
             ('source', 'status', 'passed', 'child_exit', 'wall_seconds', 'peak_sampled_rss_kib', 'stop_reason')}
-assert len(owners) == 18
+assert len(owners) == 19
 assert frame_owner['source']['revision'] == revision
 progress = re.findall(rb'Tile\s+(\d+)\s*/\s*(\d+)', (C / 'cold-frame/frame/stdout.log').read_bytes())
 compiled = doc(W / 'ispc-product-compile-result.json')
@@ -106,6 +106,7 @@ def archive(name, files):
     return {'file': name, 'identity': identity(path), 'members': members}
 
 
+pin_abort = identity(C / 'controls/runtime/control-4/owner.json')
 bundles = [archive('source-build-and-trial.zip', source_files), archive('actual-products.zip', product_files)]
 references = {}
 for name in (
@@ -123,6 +124,7 @@ manifest = {'schema': 'sirius-native-cpu-product-inline-terminal-v1',
             'original_frame': frame, 'runtime_transition': doc(C / 'runtime-transition.json'),
             'last_reported_tiles': list(map(int, progress[-1])) if progress else None,
             'additional_passive_profile_executed': False,
+            'C4_infrastructure_abort': {'owner': pin_abort, 'scope': 'Copied historical runner attempted its absent control4 observer and sent its own debugger SIGINT after45s. Aborted with no GTest XML/verdict; retained unchanged. C4-C7 subsequently run once uninstrumented after explicit harness correction; C1-C3 not repeated.'},
             'profile_scope': 'No repeated profiling study for W. Historical R profile supports the arithmetic premise only; it is not current W execution or performance evidence.',
             'diagnostic_build_scope': 'Zero new CPP compilations or baseline objcopy operations. Reused exact verified R driver and renamed Q baseline; one new link and one fresh full38/all187960word comparison passed. Historical R accounting failures remain historical.',
             'legacy_human_scope_labels': 'Inherited comments may retain prior stage letters. Structured frozen paths/object hashes/native PC and module/code joins identify W. Original frame/ABBA action scopes identify actual W. No source/action edits occurred during live phases.',

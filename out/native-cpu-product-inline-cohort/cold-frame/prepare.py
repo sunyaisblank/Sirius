@@ -148,7 +148,7 @@ elif mode == 'frame-actions':
     for path in dependencies:
         if str(path) in c8_inputs:
             assert pin(path) == {key: c8_inputs[str(path)][key] for key in ('bytes', 'sha256')}
-    inputs = {R / name for name in doc(P / 'controls/runtime/actions.json')['control-7']['frozen_inputs']}
+    inputs = {R / name for name in doc(P / 'controls/runtime-unobserved/actions.json')['control-7']['frozen_inputs']}
     inputs |= dependencies | {EXE, ARCHIVE, HOST, MANIFEST, F / 'build-result.json', F / 'link-recipe.json', F / 'actions.json',
         Path(provider['library']), Path(provider['ICD']), Path('/usr/bin/cmake'), Path('/usr/bin/python3'), Path('/etc/ld.so.cache'),
         R / 'tests/operational/vulkan_runtime_profile.cmake', R / 'out/native-cpu-row-ownership/compiler-result.json',
@@ -165,7 +165,7 @@ elif mode == 'frame-actions':
         inputs.add(P / name)
     for control in range(1, 8):
         for name in ('owner.json', 'gtest.xml', 'inputs-before.json', 'inputs-after.json'):
-            inputs.add(P / 'controls/runtime' / ('control-' + str(control)) / name)
+            inputs.add(P / ('controls/runtime' if control <= 3 else 'controls/runtime-unobserved') / ('control-' + str(control)) / name)
     assert all(path.is_file() for path in inputs)
     temp = R / ('renders/native-cpu-product-inline-cohort-' + revision[:8] + '/cold-frame-tmp')
     assert not temp.exists()
