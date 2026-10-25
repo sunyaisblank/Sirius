@@ -1,0 +1,28 @@
+{
+  "basis": {
+    "path": "out/native-cpu-predicated-refinement/retained8.cpp",
+    "bytes": 31345,
+    "sha256": "12233bd0e95161c5d4293fea4423bf830a0a9494d86243c19b57cb977fe0cc29"
+  },
+  "candidate": {
+    "path": "out/native-cpu-value-facts/retained8.cpp",
+    "bytes": 34240,
+    "sha256": "8d9cac6f253c5e1df21b6918e572c2a5c0d54355180bcc9314be834e99b6f6f0"
+  },
+  "exact_inverse_restores_AK": true,
+  "metadata_bits": {
+    "normalized": 1,
+    "known_identity_facts": 2,
+    "exact_zero": 4,
+    "exact_one": 8,
+    "exact_minus_one": 16
+  },
+  "argument": [
+    "Each identity bit is the original RTExact numeric equality for the same five words, including signed zeros and any nonzero valid word. Known with no identity means all three exact predicates are false. Unknown metadata recomputes facts, never assumes nonidentity.",
+    "Original outer valid checks and Multiply zero/a-one/b-one/a-minus/b-minus precedence remain. Add zero precedence and Subtract sign flips remain. Complete source tuples are read before any destination write. No copy is replaced by a reconstructed constant except the original Multiply zero case.",
+    "Only nonidentity active valid lanes enter the original extracted fast general bodies, under the unchanged actual normalization and high2^54 Multiply bounds. Other lanes select their original identity/refusal; unknown/negative-normalization metadata retains original fallback. Inactive arithmetic operands are sanitized without changing observable words or FP controls.",
+    "All original untagged arithmetic, Divide/Sqrt three corrections, final residual/radius/refusal, published five words, masks and alias handling remain. Complete tag stores now add exact facts; partial stores must invalidate all bits before reuse. No assumed postcondition normalization or literal/physical arithmetic folding.",
+    "This is source reasoning plus exact extraction/inverse, not machine-checked proof, numerical/performance/frame/scientific/release acceptance. Focused original-scalar full-bank/fact/mask/alias checks and actual ISPC writers are required before a provider."
+  ],
+  "scope": "One richer existing private metadata word, no extra payload/limb/register array. Cached identity tests replace repeated full-value predicates; every nonidentity expression/order is extracted from the unchanged original fast bodies. No shader/program/count/precision/FP/ISA/governor change."
+}

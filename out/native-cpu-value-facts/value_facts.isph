@@ -1,0 +1,13 @@
+// Existing private word only. Every complete write computes all these facts;
+// zero means unknown after initialization or any partial payload write.
+#include "/home/astra/.project/Sirius/out/native-cpu-normalization-tags/normalization_tag.isph"
+static inline uint32_t SiriusValueFacts_0(uint32_t hi,uint32_t lo,
+    uint32_t tail,uint32_t error,uint32_t valid) {
+    uint32_t lower=(lo|tail|error)&2147483647U;
+    bool clean=valid!=0U && lower==0U;
+    uint32_t facts=2U;
+    if(clean && (hi&2147483647U)==0U) facts|=4U;
+    if(clean && hi==1065353216U) facts|=8U;
+    if(clean && hi==3212836864U) facts|=16U;
+    return facts|SiriusNormalizationTag_0(hi,lo,tail,error,valid);
+}
