@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Archive inactive historical payloads once per SHA256, then retire expansions.
 
-Metadata, source, current inputs, Git-tracked files, forensic originals and
-existing recovery archives remain in place. `restore PLAN --path OLD_PATH`
+Working source, concise metadata, current inputs, Git-tracked files and
+forensic originals remain in place. Old expanded ledgers, generated source
+snapshots and uncompressed diagnostic packages can be selected explicitly. `restore PLAN --path OLD_PATH`
 restores an exact payload without overwriting an existing file. Compressed
 objects remain local under the plan directory; the index is suitable for Git.
 """
@@ -79,7 +80,7 @@ def make_plan(path,scope):
   objects.setdefault(row['sha256'],dict(source_path=row['path'],bytes=row['before']['bytes']))
   inodes[(row['before']['device'],row['before']['inode'])]=row['before']
  p=dict(schema=1,root=str(R),scope_name=scope,source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),script_sha256=digest(SCRIPT),helper_sha256=digest(BASE),created_unix=time.time(),same_user_processes_checked=processes,protected_paths=len(excluded),records=records,objects=objects,expanded_unique_allocated_bytes=sum(v['allocated_bytes'] for v in inodes.values()),
-  scope='Cold untracked historical binary/input/resource snapshots only, at least1MiB. Current frozen inputs and open/mapped files, Git-tracked files, source/metadata, current qualification, forensic originals and existing archives excluded. Preserve every unique byte and original file mode/mtime/owner/group in a local compressed content-addressed archive; remove only verified expanded copies. All old paths are recoverable with this script; no overwrite of newer state, Git history rewrite or system capability change.',restore_command='python3 -B scripts/maintenance/archive_cold_payloads.py restore '+str(path.relative_to(R))+' --path <original-relative-path>')
+  scope='Explicit '+scope+' scope, at least1MiB. Current frozen inputs and open/mapped files, Git-tracked files, working source, concise metadata and forensic originals excluded. Generated scope selects historical captured headers/assembly and expanded ledgers; diagnostics scope selects old expanded ledgers, raw captures and uncompressed source packages. Preserve every unique byte and original file mode/mtime/owner/group in the local compressed content-addressed archive; remove only verified expansions. Old paths are recoverable without overwriting newer state. No Git history rewrite or system capability change.',restore_command='python3 -B scripts/maintenance/archive_cold_payloads.py restore '+str(path.relative_to(R))+' --path <original-relative-path>')
  write(path,p);print(json.dumps(dict(planned_paths=len(records),unique_payloads=len(objects),expanded_unique_allocated_bytes=p['expanded_unique_allocated_bytes'])))
 
 def pack(path):
