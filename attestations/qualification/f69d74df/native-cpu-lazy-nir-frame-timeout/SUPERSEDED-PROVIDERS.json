@@ -1,0 +1,100 @@
+{
+  "schema": "sirius-superseded-provider-retirement-v1",
+  "source": "64efeca1e8781f3388e9c110c081333cb187335d",
+  "status": "complete",
+  "members": [
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/provider/libvulkan_lvp.so",
+      "archive": "attestations/qualification/115b86f3/native-cpu-zero-term-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-zero-term/provider/libvulkan_lvp.so",
+      "bytes": 21787248,
+      "allocated_bytes": 21790720,
+      "sha256": "501f28dc4dc24ca5d2d723f4e7730d98dea35909cf73a1995c3c8b19aefe0b90",
+      "mode": 493,
+      "mtime_ns": 1792912695277079688,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-zero-term/provider/lvp_icd.json",
+      "archive": "attestations/qualification/115b86f3/native-cpu-zero-term-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-zero-term/provider/lvp_icd.json",
+      "bytes": 194,
+      "allocated_bytes": 4096,
+      "sha256": "3507a12c7b2ed05d5108d3a0133095231c939d7ec3d88051e15db66a84f43430",
+      "mode": 420,
+      "mtime_ns": 1792912695450206387,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/provider/libvulkan_lvp.so",
+      "archive": "attestations/qualification/fb50bb2a/native-cpu-scalar-zero-control3-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-scalar-zero/provider/libvulkan_lvp.so",
+      "bytes": 21791336,
+      "allocated_bytes": 21794816,
+      "sha256": "19fc0abd7fb806916982b826f14b20cdca31ea65564fd4ee53fb0d2374952534",
+      "mode": 493,
+      "mtime_ns": 1792919109044157822,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/provider/lvp_icd.json",
+      "archive": "attestations/qualification/fb50bb2a/native-cpu-scalar-zero-control3-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-scalar-zero/provider/lvp_icd.json",
+      "bytes": 196,
+      "allocated_bytes": 4096,
+      "sha256": "24c520d942d7f75285196d230be9a20e67165e7f6c244c725f7dbb2b0ca7f34d",
+      "mode": 420,
+      "mtime_ns": 1792919109247283721,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so",
+      "archive": "attestations/qualification/f69d74df/native-cpu-lazy-nir-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-lazy-nir/provider/libvulkan_lvp.so",
+      "bytes": 21791336,
+      "allocated_bytes": 21794816,
+      "sha256": "200a889fe0786706c003f4be6ee4eed300563b98a69dda47e594a8940f676dc8",
+      "mode": 493,
+      "mtime_ns": 1792921606261973216,
+      "removed": true
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-lazy-nir/provider/lvp_icd.json",
+      "archive": "attestations/qualification/f69d74df/native-cpu-lazy-nir-frame-timeout/actual-products.zip",
+      "member": "files/bin/linux-gcc/native-cpu-lazy-nir/provider/lvp_icd.json",
+      "bytes": 193,
+      "allocated_bytes": 4096,
+      "sha256": "dfa2ff2f39e15f2554174e609597100138c98edabb9974d17f9140c43682123b",
+      "mode": 420,
+      "mtime_ns": 1792921606429259742,
+      "removed": true
+    }
+  ],
+  "recovery": [
+    {
+      "archive": "attestations/qualification/115b86f3/native-cpu-zero-term-frame-timeout/actual-products.zip",
+      "sha256": "c34efc54fb2d0bdc5edb4a19ec1988c0ff15d5a8c3835f6624930c7880dcc029",
+      "independently_verified_product_members": 6
+    },
+    {
+      "archive": "attestations/qualification/fb50bb2a/native-cpu-scalar-zero-control3-timeout/actual-products.zip",
+      "sha256": "ee329ec96347b0d658aa52653449b75d7498cbf383dc88bb19386c95951599ab",
+      "independently_verified_product_members": 7
+    },
+    {
+      "archive": "attestations/qualification/f69d74df/native-cpu-lazy-nir-frame-timeout/actual-products.zip",
+      "sha256": "9d561617294f673d86ec970586f7ae01688afeb8710e20c2653d9a7e799d2d58",
+      "independently_verified_product_members": 2
+    }
+  ],
+  "gross_allocated_bytes_retired": 65392640,
+  "gross_logical_bytes_retired": 65370503,
+  "checked_same_user_maps": 30,
+  "privileged_read_only_maps_checks": [
+    243,
+    247,
+    64700,
+    64712
+  ],
+  "scope": "Six exact archived untracked S/U/V provider files only. W provider/current frozen inputs/native objects/source generators/active build cache/original resources unchanged. Product archives were independently CRC/SHA/mode verified and checked against pushed Git bytes before unlink. Gross retired allocation is not net project or filesystem space gain."
+}
