@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "stages": {
+    "transport": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-direct-scratch/objects/transport.o",
+        "bytes": 3014376,
+        "sha256": "9ee698f2f248ae1519dfef2fabe3e5ae934867ea0c4db1a9c8ba9f2bcc15349f"
+      },
+      "shared_store_helpers": {
+        "RTAddStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_": 10601,
+        "RTMultiplyStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_": 53005
+      },
+      "total_code_bytes": 1755239
+    },
+    "endpoint": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-direct-scratch/objects/endpoint.o",
+        "bytes": 3334976,
+        "sha256": "1f196b4084028c67e2b911ba7bfda4f113075277d7f6b1800bb26930c3c9200d"
+      },
+      "shared_store_helpers": {
+        "RTAddStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_": 10634,
+        "RTMultiplyStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_": 53038
+      },
+      "total_code_bytes": 1984321
+    },
+    "dopri_phase": {
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-direct-scratch/objects/dopri_phase.o",
+        "bytes": 1792640,
+        "sha256": "ab766d59255f782769a3468eaad10ad3beec2ec74dda62fd475dd933cdfed3b9"
+      },
+      "shared_store_helpers": {
+        "RTAddStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_": 10601,
+        "RTMultiplyStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_": 53005
+      },
+      "total_code_bytes": 1129267
+    }
+  },
+  "scope": "Object shape plus separate ISA/FP inspection only; code size is not a performance measure. Requires whole-program opcode/module joins and full38/C8/original later gates. No runtime, equivalence, frame or scientific/release claim."
+}

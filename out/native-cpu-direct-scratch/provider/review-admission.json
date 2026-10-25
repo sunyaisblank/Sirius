@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "source_contract": {
+    "bytes": 32196,
+    "sha256": "59d6813d71d1155907db7fdcd3c6d0146083b679af4bd23904578471d3f9a131"
+  },
+  "patch": {
+    "bytes": 2226,
+    "sha256": "5eb66c2598e61e07aedbdfb7edae849c81f737112665e2b562e9536f8015ea01"
+  },
+  "full_source_identity_verified_before_and_after": true,
+  "scope": "Coordinator source review and exact patch application only, not independent or machine-checked correctness. Replaces only three raw SIMD objects after routing original Add/Multiply return expressions through the original private scratch writer. Exact source inverse restores X; operands captured before writes, same arithmetic bodies and Y FP/scheduling scope retained. U scalar, Q scheduling and V deferred NIR remain. Same original query64, pureF/B, D fallback, IEEE32 save/restore, zero-active no-op and JIT recovery; no host/SPV/count/precision/cache/governor changes. Requires original C8/full32 and later unchanged acceptance."
+}
