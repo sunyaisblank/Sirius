@@ -1,0 +1,209 @@
+{
+  "passed": true,
+  "helper_object": {
+    "path": "bin/linux-gcc/native-cpu-dense-arithmetic/probe/retained8.o",
+    "bytes": 11176,
+    "sha256": "9d5f97e3c91f84a83737d89e5d73c91078985fd31d163a9e986c0cef6f3bd33d"
+  },
+  "executable": {
+    "path": "bin/linux-gcc/native-cpu-dense-arithmetic/probe/abi-check",
+    "bytes": 158736,
+    "sha256": "18a283e4ff2696ec4e983b950901d843fc21fb1c8802f4d459d6d6d0e40aa191"
+  },
+  "EVEX": 0,
+  "forbidden_FMA_FP_control_x87_extensions": [],
+  "mnemonics": [
+    "add",
+    "and",
+    "call",
+    "cmp",
+    "data16",
+    "endbr64",
+    "je",
+    "jmp",
+    "jne",
+    "lea",
+    "leave",
+    "mov",
+    "nop",
+    "nopl",
+    "nopw",
+    "pop",
+    "push",
+    "ret",
+    "shl",
+    "sub",
+    "test",
+    "vaddps",
+    "vbroadcastss",
+    "vcmpeqps",
+    "vmovaps",
+    "vmovd",
+    "vmovdqa",
+    "vmovdqu",
+    "vmovmskps",
+    "vmulps",
+    "vpaddd",
+    "vpand",
+    "vpandn",
+    "vpblendvb",
+    "vpbroadcastd",
+    "vpcmpeqd",
+    "vpcmpgtd",
+    "vpminud",
+    "vpor",
+    "vpsubd",
+    "vpxor",
+    "vsubps",
+    "vxorps",
+    "vzeroupper",
+    "xchg",
+    "xor"
+  ],
+  "linked_code": {
+    "passed": true,
+    "executable": {
+      "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-arithmetic/probe/abi-check",
+      "bytes": 158736,
+      "sha256": "18a283e4ff2696ec4e983b950901d843fc21fb1c8802f4d459d6d6d0e40aa191"
+    },
+    "objects": [
+      {
+        "object": {
+          "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dense-arithmetic/probe/retained8.o",
+          "bytes": 11176,
+          "sha256": "9d5f97e3c91f84a83737d89e5d73c91078985fd31d163a9e986c0cef6f3bd33d"
+        },
+        "all_retained_function_opcodes_match": true,
+        "functions": [
+          {
+            "symbol": "_ZN12_GLOBAL__N_14termENS_6TripleEDv8_fDv8_j",
+            "bytes": 796,
+            "linked_address": 112592,
+            "masked_relocations": []
+          },
+          {
+            "symbol": "_ZN12_GLOBAL__N_17productENS_6TripleEDv8_fS1_Dv8_j",
+            "bytes": 947,
+            "linked_address": 113392,
+            "masked_relocations": [
+              {
+                "offset": 293,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 640,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 648,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 943,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "_ZN12_GLOBAL__N_115rounded_productENS_6TripleEDv8_fS1_Dv8_j",
+            "bytes": 932,
+            "linked_address": 114352,
+            "masked_relocations": [
+              {
+                "offset": 293,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 439,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 615,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 623,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 636,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 658,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 928,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_add8",
+            "bytes": 1745,
+            "linked_address": 115296,
+            "masked_relocations": [
+              {
+                "offset": 237,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1741,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          },
+          {
+            "symbol": "sirius_native_dense_multiply8",
+            "bytes": 3697,
+            "linked_address": 117056,
+            "masked_relocations": [
+              {
+                "offset": 197,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 432,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 497,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 1346,
+                "ELF_type": 2,
+                "bytes": 4
+              },
+              {
+                "offset": 3693,
+                "ELF_type": 4,
+                "bytes": 4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "scope": "Every retained function opcode in exact renamed OLD/new R Transport objects, masking only declared4B PC32/PLT32/REX_GOTPCRELX operands. Linker relaxation disabled. This alone is not relocation-target semantics or numerical acceptance."
+  },
+  "scope": "Actual guarded-v3 helper code/ISA and every retained function opcode join to the focused test ELF. No execution, numerical agreement, runtime gain, whole-renderer or scientific/release claim."
+}
