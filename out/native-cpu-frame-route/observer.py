@@ -15,7 +15,7 @@ provider = Path(settings['runtime_provider']).resolve(strict=True)
 observation = {'calls': [], 'preflight_calls': [], 'simd_calls': [],
                'simd_parent_calls': [], 'capability_calls': [],
                'policy_calls': [], 'scalar_calls': [], 'scalar_parent_calls': [],
-               'failures': [], 'inferior_exit': None, 'dense_calls': [], 'capture_complete': False}
+               'failures': [], 'inferior_exit': None, 'dense_calls': [], 'capture_complete': False, 'provider_loads': []}
 armed = False
 breakpoints = []
 parents = {}
@@ -232,8 +232,16 @@ class Entered(gdb.Breakpoint):
 
 def loaded(event):
     global armed
-    if armed or not event.new_objfile.filename or Path(event.new_objfile.filename).resolve() != provider:
+    if not event.new_objfile.filename or Path(event.new_objfile.filename).resolve() != provider:
         return
+    observation['provider_loads'].append(event.new_objfile.filename)
+    for old_breakpoint in breakpoints:
+        if old_breakpoint.is_valid():
+            old_breakpoint.delete()
+    breakpoints.clear()
+    parents.clear()
+    parent_breakpoints.clear()
+    save()
     breakpoints.append(CapabilityEntered())
     breakpoints.append(PolicyEntered())
     for slug in ('transport', 'endpoint', 'dopri_phase'):
