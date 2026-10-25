@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "library": "bin/linux-gcc/native-cpu-predicated-refinement/provider/libvulkan_lvp.so",
+  "library_identity": {
+    "bytes": 17596808,
+    "sha256": "107edb829f7c45a714a36a09c9edb400fe35a22c041c76c44defc4f99cd7f96c"
+  },
+  "ICD": "bin/linux-gcc/native-cpu-predicated-refinement/provider/lvp_icd.json",
+  "ICD_identity": {
+    "bytes": 206,
+    "sha256": "1e9cc50e2a3990e5f2db217ab16161d9e49d047e48257d5a10a37d0f06c3a2ca"
+  },
+  "actual_build_target": "bin/linux-gcc/lavapipe-acqrel-ordering/src/gallium/targets/lavapipe/libvulkan_lvp.so",
+  "target_identity": {
+    "bytes": 17596808,
+    "sha256": "107edb829f7c45a714a36a09c9edb400fe35a22c041c76c44defc4f99cd7f96c"
+  },
+  "reused_build_inputs_unchanged": 862,
+  "native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-normalization-tags/objects/transport.o",
+      "bytes": 783304,
+      "sha256": "6cb5a9320eadde8eccfe9bb71ba4721f8c1cfb7fde34d870f4eb9e0d0d842429"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-normalization-tags/objects/endpoint.o",
+      "bytes": 778168,
+      "sha256": "03158b335dbf47577d643ddab044a5a2a3724fa6915f4a2baf5a72628f63680f"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-normalization-tags/objects/dopri_phase.o",
+      "bytes": 854264,
+      "sha256": "9c95c41dd4945e7b3b53be5a77b9e1b8c2293bf09566b6da996ccca52b49f14f"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-predicated-refinement/objects/rows_adapter.o",
+      "bytes": 235760,
+      "sha256": "30241226fdf18a91cd827662f7ba917edfa2ed6c2ef64a5769167a2a7a886af2"
+    }
+  ],
+  "scope": "One private provider build only. No loading/execution/FP equivalence/benefit/scientific/release qualification or adoption."
+}
