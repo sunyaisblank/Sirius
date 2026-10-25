@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "common_identity_include": {
+    "path": "out/native-cpu-local-identities/identity_store.isph",
+    "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+  },
+  "fixture_result": {
+    "path": "out/native-cpu-local-identities/fixture/result.json",
+    "sha256": "de957d8b19ad14dc6fc69296cc795dd215519382d33d52ee54c3b4e2f8747a2b"
+  },
+  "stages": [
+    {
+      "stage": "transport",
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-local-identities/objects/transport.o",
+        "bytes": 1042176,
+        "sha256": "04bc4c45bf21b7df05ac4fb95283aba9e7b208cd73d336b83093bb26c33b8728"
+      },
+      "wrappers": [
+        {
+          "wrapper": "0000000000006e00 <RTAddStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "401a4e41320469ccd75fee2cb5121ef72aa8cae9c750eca018b32ee088c17bf2",
+          "integer_identity_return_and_original_fallback_present": true
+        },
+        {
+          "wrapper": "00000000000079e0 <RTSubtractStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "495c14509b857dffd56837ce2494f26caa083b72e1d33719615a2a9aa96f3037",
+          "integer_identity_return_and_original_fallback_present": true
+        },
+        {
+          "wrapper": "00000000000071c0 <RTMultiplyStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "c33ce8b041f9a0f6c0210289b625e3c60e1b2a0fab3f6d9cbc1e963bdfeb773b",
+          "integer_identity_return_and_original_fallback_present": true
+        }
+      ]
+    },
+    {
+      "stage": "endpoint",
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-local-identities/objects/endpoint.o",
+        "bytes": 934344,
+        "sha256": "1330cf6875d0db24aaad70f407da8607285d651cbc38e6d471c8247e6e398a54"
+      },
+      "wrappers": [
+        {
+          "wrapper": "0000000000018d90 <RTAddStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "19b2bc3d41e9d4387b6272c8ba79899354aa3c8c9cb67ddd694006f870aa58fb",
+          "integer_identity_return_and_original_fallback_present": true
+        },
+        {
+          "wrapper": "0000000000019970 <RTSubtractStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "57ccb1b97f2372da50c0ab8ae89c1ad26f87d727302a1ae9deba2a4d490ad78c",
+          "integer_identity_return_and_original_fallback_present": true
+        },
+        {
+          "wrapper": "0000000000019150 <RTMultiplyStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "ea79e9b4de1674367af0774cea2fc32f88d8c6d581a724a97aeea7b58271a63b",
+          "integer_identity_return_and_original_fallback_present": true
+        }
+      ]
+    },
+    {
+      "stage": "dopri_phase",
+      "object": {
+        "path": "bin/linux-gcc/native-cpu-local-identities/objects/dopri_phase.o",
+        "bytes": 1193360,
+        "sha256": "0dc138c31434c91f1af671f81513a9a5ce6e35a20eab05846a7c12e5b19e766d"
+      },
+      "wrappers": [
+        {
+          "wrapper": "0000000000003c40 <RTAddStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "500a7d4dd1cd1523d712fbe794d2618695a4fc2cde71ddc0837b6f872aa93ad2",
+          "integer_identity_return_and_original_fallback_present": true
+        },
+        {
+          "wrapper": "0000000000004820 <RTSubtractStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "0a6feeac6227b3f0adc99f1cb3f2e11c0910bb66821b2af29844485a1ddc6fa0",
+          "integer_identity_return_and_original_fallback_present": true
+        },
+        {
+          "wrapper": "0000000000004000 <RTMultiplyStore_0___unuunuunuunuun_3C_s_5B_vyKernelContext_0_5D__3E_>:",
+          "disassembly_sha256": "04e7a5da9cea6a6baafde04c70fa5ae095174c6bbeb2a83eb0ac267b359508d6",
+          "integer_identity_return_and_original_fallback_present": true
+        }
+      ]
+    }
+  ],
+  "scope": "All nine actual raw Add/Subtract/Multiply wrappers contain an early return and the same original AM fallback relocation. The new decision/store body is integer-only; no vector FP arithmetic is present in those wrappers. The same forced-inline include passes the scalar-reference fixture. This establishes emitted mechanism and source association, not runtime hit counts, timing improvement or renderer/scientific qualification."
+}
