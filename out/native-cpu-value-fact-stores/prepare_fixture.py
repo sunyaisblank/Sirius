@@ -25,7 +25,7 @@ if mode=='build':
  helper,=[x['object'] for x in math['compilations'] if x['name']=='retained8']
  assert pin(R/helper['path'])=={k:helper[k] for k in ('bytes','sha256')};inputs[helper['path']]=pin(R/helper['path'])
  for p in [*W.glob('*.py'),W/'writer_driver.cpp',W/'cases.inc',W/'writers.ispc',W/'writer-fixture-source.json',W/'ispc-derivation.json',F/'run_owned.py',F/'owned_guard.py',R/'out/native-cpu-normalization-tags/normalization_tag.isph',W/'value_facts.isph',R/'out/native-cpu-reachable-tag-writers/admit_fixture_build.py',Path('/usr/include/elf.h'),R/'out/native-cpu-field-compatibility/elf_proof.py',W/'cpp-build-result.json']:
-  inputs[str(p.relative_to(R))]=pin(p)
+  inputs[str(p.relative_to(R)) if p.is_relative_to(R) else str(p)]=pin(p)
  for tool in [Path(ispc[0]),Path(flags[0])]:
   inputs[str(tool.resolve())]=pin(tool.resolve())
   resolution=subprocess.check_output(['ldd','-r',str(tool)],text=True,stderr=subprocess.STDOUT)
