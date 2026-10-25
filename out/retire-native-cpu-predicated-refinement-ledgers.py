@@ -32,7 +32,7 @@ with zipfile.ZipFile(archive) as z:
    rows.append(dict(path=name,sha256=v['sha256'],bytes=s.st_size,allocated_bytes=s.st_blocks*512,removed=False))
 assert len(rows)==12
 targets={str((R/r['path']).resolve()) for r in rows}
-checked=0
+checked=0;privileged=[]
 for p in Path('/proc').iterdir():
  if not p.name.isdecimal():continue
  try:
@@ -40,12 +40,15 @@ for p in Path('/proc').iterdir():
   for fd in (p/'fd').iterdir():
    try:target=os.readlink(fd)
    except FileNotFoundError:continue
+   except PermissionError:
+    target=subprocess.check_output(['sudo','-n','/usr/bin/readlink',str(fd)],text=True).rstrip('\n')
+    privileged.append(dict(pid=int(p.name),fd=fd.name))
    assert target not in targets,(p,fd,target)
   checked+=1
  except (FileNotFoundError,ProcessLookupError):continue
 report=dict(status='started',source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
  recovered_archive=str(archive.relative_to(R)),archive_sha256=metadata['identity']['sha256'],members=rows,
- current_same_user_fd_tables_checked=checked,gross_allocated_bytes_retired=sum(r['allocated_bytes'] for r in rows),
+ current_same_user_fd_tables_checked=checked,privileged_read_only_fd_link_checks=privileged,gross_allocated_bytes_retired=sum(r['allocated_bytes'] for r in rows),
  scope='Twelve expanded compiler/configure/build ledgers only, whole SHA/CRC/member/mode/time verified against pushed source archive, no live owned birth/open same-user FD or current C8/C5 frozen-input consumer. Actual products, original/AJ sources, current C8/C5/full38 records, all eight owner outcomes, useful caches and scoped reconstruction recipe remain. Gross retired allocation, not net drive gain or qualification.')
 record=B/'RETIRED-EXPANDED-LEDGERS.json';assert not record.exists()
 def save():record.write_text(json.dumps(report,indent=2)+'\n')
