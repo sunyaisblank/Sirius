@@ -1,0 +1,849 @@
+{
+  "schema": "sirius-native-cpu-demand-submit-terminal-v1",
+  "qualifying_source_revision": "6176354b51a56d5f8140016862628fab5c9c1c6b",
+  "accepted": false,
+  "owners": {
+    "out/native-cpu-demand-submit/provider/build/owner.json": {
+      "source": {
+        "revision": "33cd47f73626a3c381aa270696068dacb7e4d0f6",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.823963769013062,
+      "peak_sampled_rss_kib": 252732,
+      "stop_reason": null
+    },
+    "out/native-cpu-demand-submit/provider/configure/owner.json": {
+      "source": {
+        "revision": "33cd47f73626a3c381aa270696068dacb7e4d0f6",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 2.8247703700326383,
+      "peak_sampled_rss_kib": 140724,
+      "stop_reason": null
+    },
+    "out/native-cpu-demand-submit-cohort/cold-frame/frame/owner.json": {
+      "source": {
+        "revision": "6176354b51a56d5f8140016862628fab5c9c1c6b",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": false,
+      "child_exit": -15,
+      "wall_seconds": 300.2550187680172,
+      "peak_sampled_rss_kib": 923484,
+      "stop_reason": "diagnostic_timeout"
+    },
+    "out/native-cpu-demand-submit-cohort/control-8/owner.json": {
+      "source": {
+        "revision": "33cd47f73626a3c381aa270696068dacb7e4d0f6",
+        "status": ""
+      },
+      "status": "terminal",
+      "passed": true,
+      "child_exit": 0,
+      "wall_seconds": 14.73777768900618,
+      "peak_sampled_rss_kib": 840112,
+      "stop_reason": null
+    }
+  },
+  "archives": [
+    {
+      "file": "source-build-and-trial.zip",
+      "identity": {
+        "bytes": 5023881,
+        "sha256": "77f4fa372da32f76f1899e14fd4fa9d709ccc5b5b3d0b9726ead7465ed9371c5",
+        "mode": 420,
+        "mtime_ns": 1792940234822716031
+      },
+      "members": {
+        "files/out/native-cpu-demand-submit-cohort/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/actions.json",
+          "bytes": 259434,
+          "sha256": "3dc254be4c2571ab81fcf3550ea758eb3c2a35c97024652978d128ef388b3972",
+          "mode": 420,
+          "mtime_ns": 1792939840654385009
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/actions.json",
+          "bytes": 89551,
+          "sha256": "2f1767377f7688247179c53e9de8d7aaf118f652a81e2e214a971d01e8026d4e",
+          "mode": 420,
+          "mtime_ns": 1792939904634980071
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame-inputs.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame-inputs.json",
+          "bytes": 1904,
+          "sha256": "685d2afadf42b654320f1fd0a9a71f9c973a0916985bea3d5cdde5fad5645f81",
+          "mode": 420,
+          "mtime_ns": 1792939904224951999
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame/inputs-after.json",
+          "bytes": 1079851,
+          "sha256": "5743ad3b8c52a4772c7eb521be7dd1817153ce0a357c82ff74319706be7f4b15",
+          "mode": 420,
+          "mtime_ns": 1792940216289561139
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame/inputs-before.json",
+          "bytes": 1079851,
+          "sha256": "5743ad3b8c52a4772c7eb521be7dd1817153ce0a357c82ff74319706be7f4b15",
+          "mode": 420,
+          "mtime_ns": 1792939906532824279
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame/owner.json",
+          "bytes": 3924,
+          "sha256": "032c7a17ae21d020abaae0ca79dd718402c4804c625948af7ff50e16ef6ee3e8",
+          "mode": 420,
+          "mtime_ns": 1792940216316877203
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame/samples.jsonl",
+          "bytes": 5295978,
+          "sha256": "edd4fe91982ac451b114e6b7fffe60bc65028b7dbfb5462fdaa93cd6f3ebf9c7",
+          "mode": 420,
+          "mtime_ns": 1792940214041839012
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame/stderr.log",
+          "bytes": 68185,
+          "sha256": "096f63484052544b731aeab56ecb646f121074e2180957dcdbd80a53b9417dd2",
+          "mode": 420,
+          "mtime_ns": 1792940199387373958
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/frame/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/frame/stdout.log",
+          "bytes": 695815,
+          "sha256": "9a15a04aa9cc47dd5057a9a9a58da34364613897092b2c2e97197736c8d0f49f",
+          "mode": 420,
+          "mtime_ns": 1792940213979402285
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/prepare.py",
+          "bytes": 14920,
+          "sha256": "ac36a1af2d9992b83f82294ba332511af5c76b33bfd6b1658724156ec824a677",
+          "mode": 420,
+          "mtime_ns": 1792939700002673645
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/read_result.py",
+          "bytes": 4471,
+          "sha256": "d0ae04139b041698f7ed38e44a8b4c8fdfba0847ee54657e2eaf0bd7fe25d569",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/resource-restore.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/resource-restore.json",
+          "bytes": 5376,
+          "sha256": "b6c036e79fec27152e93bbc6435ff8e81c1f6c29057c88d5d456d2906756ec12",
+          "mode": 420,
+          "mtime_ns": 1792939904205426852
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/result.json",
+          "bytes": 2463,
+          "sha256": "38d1110f388069e5263b2b503df0a2a92929a585b8b6ea5bd8d2ce53acbc246a",
+          "mode": 420,
+          "mtime_ns": 1792940234377675829
+        },
+        "files/out/native-cpu-demand-submit-cohort/cold-frame/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/cold-frame/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/compatibility.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/compatibility.py",
+          "bytes": 4860,
+          "sha256": "df2e2412d281c0d30c816df03fd7ff0dd0f3fb4bd75e412763ce094b023d052c",
+          "mode": 420,
+          "mtime_ns": 1792939731915614894
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8-acceptance.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8-acceptance.json",
+          "bytes": 58099,
+          "sha256": "819354d72cebedd694ac36f872e9de489f195f9f435497abb1933207dbe3f264",
+          "mode": 420,
+          "mtime_ns": 1792939881769364562
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8-reader-summary.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8-reader-summary.txt",
+          "bytes": 71,
+          "sha256": "ebda8d19c5ae0d1f37f0aac02a5fd9f7de3a0e6d9895389e027df757e8536194",
+          "mode": 420,
+          "mtime_ns": 1792939881769364562
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/gtest.xml": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/gtest.xml",
+          "bytes": 40769,
+          "sha256": "55dd42b09893818265f3e35f1b10f3f729b720909d3cb3cdb2fb14ad33af9405",
+          "mode": 420,
+          "mtime_ns": 1792939866161294252
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/inputs-after.json",
+          "bytes": 1027356,
+          "sha256": "3694b25d5ee2b4184a3968ac4141948c4e44611534655e78931ed267c68f5ff9",
+          "mode": 420,
+          "mtime_ns": 1792939867895891036
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/inputs-before.json",
+          "bytes": 1027356,
+          "sha256": "3694b25d5ee2b4184a3968ac4141948c4e44611534655e78931ed267c68f5ff9",
+          "mode": 420,
+          "mtime_ns": 1792939851243345936
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/native-observation.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/native-observation.json",
+          "bytes": 55352,
+          "sha256": "9f27f466404581bc0188b296acdd4bef84487f22fdabb02036a4d39459a2a20a",
+          "mode": 420,
+          "mtime_ns": 1792939866247242742
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/observe.gdb": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/observe.gdb",
+          "bytes": 231,
+          "sha256": "721ca90436d85b79f14f87135e1416b7be7d8fdd2339972fbb8516d66b103c59",
+          "mode": 420,
+          "mtime_ns": 1792939851905944244
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/owner.json",
+          "bytes": 5094,
+          "sha256": "f8a73c34a89168f59b9705c1373a5eb6f6c79440c12c9691075ba60927be6188",
+          "mode": 420,
+          "mtime_ns": 1792939867931051781
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/samples.jsonl",
+          "bytes": 268435,
+          "sha256": "fba52a73f1dd46bb95cb660b121e8ca42d3409e4a4852e4ff6f53317005e58a8",
+          "mode": 420,
+          "mtime_ns": 1792939866274589989
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792939851270614419
+        },
+        "files/out/native-cpu-demand-submit-cohort/control-8/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/control-8/stdout.log",
+          "bytes": 3932,
+          "sha256": "6bc04488c1c588d43be31be30673540d2ada62c70e4736344b96dc413058e42c",
+          "mode": 420,
+          "mtime_ns": 1792939866270683240
+        },
+        "files/out/native-cpu-demand-submit-cohort/native_observer.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/native_observer.py",
+          "bytes": 12612,
+          "sha256": "56ef5fb2542c3af974b6521eb23784478fad403f7b98bf380396bb723a495706",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/prepare.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/prepare.py",
+          "bytes": 4698,
+          "sha256": "8872f070785dbc9acaed476f1316e2d4238c6e3a87ad1d9b46ba0180261e93ee",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/read_result.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/read_result.py",
+          "bytes": 10563,
+          "sha256": "52f50214f5fc92676c8ef6c99d5323153a3cf8b6b2a9e20f700e3e237faadbf2",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/run_case.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/run_case.py",
+          "bytes": 1803,
+          "sha256": "70a89563785e82d28a43574a8914740df2b6045c90d19e360b0fd9b1714642cf",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit-cohort/runtime-transition.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/runtime-transition.json",
+          "bytes": 5967,
+          "sha256": "7f2dc99ebc1dca98f3cca44d0ed01e2206106f311e6852a5c05a84a2358c52de",
+          "mode": 420,
+          "mtime_ns": 1792939839910105924
+        },
+        "files/out/native-cpu-demand-submit-cohort/runtime_transition.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit-cohort/runtime_transition.py",
+          "bytes": 3726,
+          "sha256": "d76807e8f95cb7ca84230ed3a2c7a15ec28583ba3df10313470bd759c6e992a7",
+          "mode": 420,
+          "mtime_ns": 1792939699998768072
+        },
+        "files/out/native-cpu-demand-submit/apply_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/apply_provider.py",
+          "bytes": 2122,
+          "sha256": "14e47a3c7d15f49085861e2e87880e6a67ff25321b19a9804fec3103bc65dad6",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/build_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/build_provider.py",
+          "bytes": 394,
+          "sha256": "f3f21ef6b9eece5a4af8aec9fbf082e47efbce98623b5625dd2eaf0342dc1a93",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/configure_provider.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/configure_provider.py",
+          "bytes": 231,
+          "sha256": "7d238db4c256eeb1e1ef6e803858c49f42ec94ec16cc6c1c6daf34902be5f9dd",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/inspect_submit.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/inspect_submit.py",
+          "bytes": 2061,
+          "sha256": "2c6a733dbe854cd73ff71d2e3a4e463fb0c6b0d0c0e69dea5a984eb29b5d36a0",
+          "mode": 420,
+          "mtime_ns": 1792939879827960373
+        },
+        "files/out/native-cpu-demand-submit/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/prepare_provider_build.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/prepare_provider_build.py",
+          "bytes": 230,
+          "sha256": "4b9877e3fab9ae6096707c4d2d0f476c4976c1b23aada5bd65e142412f6b826f",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/prepare_provider_config.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/prepare_provider_config.py",
+          "bytes": 3600,
+          "sha256": "a93e4c78f98ca94a681361ff1b64cfbf555801ae2c9206a6f7a1c1c2332789e8",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/prepare_provider_patch.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/prepare_provider_patch.py",
+          "bytes": 5367,
+          "sha256": "a7b78776ff41c87819fecfd35a8cebc764ee41b7965dfcb1756cf36d73e3eba9",
+          "mode": 420,
+          "mtime_ns": 1792939657504786906
+        },
+        "files/out/native-cpu-demand-submit/provider/actions.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/actions.json",
+          "bytes": 2561479,
+          "sha256": "99f5e4446b559e836e650529ca56483ac4edbc4aaac3611d042cc05f6afd3574",
+          "mode": 420,
+          "mtime_ns": 1792939794939438436
+        },
+        "files/out/native-cpu-demand-submit/provider/build/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/build/inputs-after.json",
+          "bytes": 5204046,
+          "sha256": "8e6136dc4220301726be7609ec0388677bca4cb1636916bfa47df957a4faf63c",
+          "mode": 420,
+          "mtime_ns": 1792939805119665817
+        },
+        "files/out/native-cpu-demand-submit/provider/build/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/build/inputs-before.json",
+          "bytes": 5204046,
+          "sha256": "8e6136dc4220301726be7609ec0388677bca4cb1636916bfa47df957a4faf63c",
+          "mode": 420,
+          "mtime_ns": 1792939798958759935
+        },
+        "files/out/native-cpu-demand-submit/provider/build/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/build/owner.json",
+          "bytes": 3112,
+          "sha256": "ff2649a6defc151da25cdfd2772932a287ece3b26cc9c7a1e6ec8fae48a8458a",
+          "mode": 420,
+          "mtime_ns": 1792939805186067299
+        },
+        "files/out/native-cpu-demand-submit/provider/build/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/build/samples.jsonl",
+          "bytes": 7955,
+          "sha256": "47df4e51d84528d07c22eaba4726cc24057ffee1b066245dcd08c5870cc465c4",
+          "mode": 420,
+          "mtime_ns": 1792939801572626052
+        },
+        "files/out/native-cpu-demand-submit/provider/build/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/build/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792939799009552549
+        },
+        "files/out/native-cpu-demand-submit/provider/build/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/build/stdout.log",
+          "bytes": 688,
+          "sha256": "ac0ec64e35f30bbd39b6ee19e8d0681a0cf3226b10f10c4a8d6ffacb7373a27f",
+          "mode": 420,
+          "mtime_ns": 1792939801607790169
+        },
+        "files/out/native-cpu-demand-submit/provider/configure-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure-result.json",
+          "bytes": 582,
+          "sha256": "783018131ffed70d3b05f525530368a94f3f937d6f4fcb7fecf657ad305365bd",
+          "mode": 420,
+          "mtime_ns": 1792939759453313687
+        },
+        "files/out/native-cpu-demand-submit/provider/configure/inputs-after.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure/inputs-after.json",
+          "bytes": 5177545,
+          "sha256": "7b3e0244e849dfd8ff7a9834d6b4710b166746b3d7930ec236cc2b9f87b97b92",
+          "mode": 420,
+          "mtime_ns": 1792939762570966123
+        },
+        "files/out/native-cpu-demand-submit/provider/configure/inputs-before.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure/inputs-before.json",
+          "bytes": 5177545,
+          "sha256": "7b3e0244e849dfd8ff7a9834d6b4710b166746b3d7930ec236cc2b9f87b97b92",
+          "mode": 420,
+          "mtime_ns": 1792939756621027597
+        },
+        "files/out/native-cpu-demand-submit/provider/configure/owner.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure/owner.json",
+          "bytes": 2352,
+          "sha256": "b9fca7c6c4e4a79b752473bd5c48c122bc0516beaf12991d3dbff5bf28a55708",
+          "mode": 420,
+          "mtime_ns": 1792939762598317158
+        },
+        "files/out/native-cpu-demand-submit/provider/configure/samples.jsonl": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure/samples.jsonl",
+          "bytes": 3418,
+          "sha256": "517633d0d6e8c7918660d0bf6ac10c7b64f578e937f1fcaf8e8723310c07f447",
+          "mode": 420,
+          "mtime_ns": 1792939759215010994
+        },
+        "files/out/native-cpu-demand-submit/provider/configure/stderr.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "mtime_ns": 1792939756652280409
+        },
+        "files/out/native-cpu-demand-submit/provider/configure/stdout.log": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/configure/stdout.log",
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05",
+          "mode": 420,
+          "mtime_ns": 1792939759293143023
+        },
+        "files/out/native-cpu-demand-submit/provider/incremental-dry-run.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/incremental-dry-run.txt",
+          "bytes": 29731,
+          "sha256": "53b7a6d214dd5e6a72193f1d4edd1b31e2177db1f66e0ddfb2d0fffa9810cb5a",
+          "mode": 420,
+          "mtime_ns": 1792939794517469019
+        },
+        "files/out/native-cpu-demand-submit/provider/incremental-plan.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/incremental-plan.json",
+          "bytes": 215724,
+          "sha256": "345df128705d3b0094d4af3f22195bec99ed1cea3282e197f6837dd48bca7311",
+          "mode": 420,
+          "mtime_ns": 1792939794517469019
+        },
+        "files/out/native-cpu-demand-submit/provider/link-check-summary.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/link-check-summary.txt",
+          "bytes": 139,
+          "sha256": "38980b41579c33b62954edf2d8da262100d290c80c15927fc165f34da7ab1cdb",
+          "mode": 420,
+          "mtime_ns": 1792939811747444888
+        },
+        "files/out/native-cpu-demand-submit/provider/linked-callback.disassembly.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/linked-callback.disassembly.txt",
+          "bytes": 36592,
+          "sha256": "d84bdf68f03d1c29c2b325b997c386024b49d4c4ca72bc6d6bd75de638c27b0e",
+          "mode": 420,
+          "mtime_ns": 1792939808392868310
+        },
+        "files/out/native-cpu-demand-submit/provider/linked-native-proof.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/linked-native-proof.json",
+          "bytes": 2624842,
+          "sha256": "3482d19d18a0e0a2cfeef6a177e819ce92562b687500db0417c45d08a7c17c57",
+          "mode": 420,
+          "mtime_ns": 1792939811747444888
+        },
+        "files/out/native-cpu-demand-submit/provider/linked-runtime-resolution.txt": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/linked-runtime-resolution.txt",
+          "bytes": 1402,
+          "sha256": "d27258c9b57ca7080603d4d42a56d5f6c412355b8e3da93d80ce29d220dc4621",
+          "mode": 420,
+          "mtime_ns": 1792939809396702482
+        },
+        "files/out/native-cpu-demand-submit/provider/owned_guard.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/owned_guard.py",
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2",
+          "mode": 420,
+          "mtime_ns": 1792939740511131161
+        },
+        "files/out/native-cpu-demand-submit/provider/provider-build-result.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/provider-build-result.json",
+          "bytes": 2452,
+          "sha256": "1e37840ef9512905762a1de71f4658c4f0fcd53349b352d6d6b7c997bcfe129e",
+          "mode": 420,
+          "mtime_ns": 1792939801599975920
+        },
+        "files/out/native-cpu-demand-submit/provider/provider.patch": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/provider.patch",
+          "bytes": 1710,
+          "sha256": "91e85bd6f1a7b6bcc4737fece29886b4566b45b883a355995df11455f29b7327",
+          "mode": 420,
+          "mtime_ns": 1792939658809671704
+        },
+        "files/out/native-cpu-demand-submit/provider/review-admission.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/review-admission.json",
+          "bytes": 724,
+          "sha256": "3e6fc270db77ee91e7c46eafdfbf7f7582fc0b643127bd08a4ea9f319736df32",
+          "mode": 420,
+          "mtime_ns": 1792939701682069664
+        },
+        "files/out/native-cpu-demand-submit/provider/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792939740511131161
+        },
+        "files/out/native-cpu-demand-submit/provider/source-contract.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/provider/source-contract.json",
+          "bytes": 124739,
+          "sha256": "fb93168947ebc3301dc63905f573e6870829ac7c1c6f4c78f00f7246aacbc237",
+          "mode": 420,
+          "mtime_ns": 1792939658809671704
+        },
+        "files/out/native-cpu-demand-submit/read_linked_native.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/read_linked_native.py",
+          "bytes": 4993,
+          "sha256": "26c0a60a292b2f396990947a1e2d13f5c5951a7f0584032e6419b059a3dc8862",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/run_owned.py": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/run_owned.py",
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895",
+          "mode": 420,
+          "mtime_ns": 1792939624361742105
+        },
+        "files/out/native-cpu-demand-submit/submit-code-inspection.json": {
+          "source": "/home/astra/.project/Sirius/out/native-cpu-demand-submit/submit-code-inspection.json",
+          "bytes": 1108,
+          "sha256": "33f621a1ab7ca397d5cde695f768c5e9d83b9ced3110129542c84d6a2a9543a9",
+          "mode": 420,
+          "mtime_ns": 1792939879909991534
+        },
+        "files/out/preserve-native-cpu-demand-submit.py": {
+          "source": "/home/astra/.project/Sirius/out/preserve-native-cpu-demand-submit.py",
+          "bytes": 8907,
+          "sha256": "188bc8ee1f0c98f8ba5e1b16cdda35a7519afdc28a92443d91ec79143a59b74d",
+          "mode": 420,
+          "mtime_ns": 1792939796903612583
+        }
+      }
+    },
+    {
+      "file": "actual-products.zip",
+      "identity": {
+        "bytes": 4483685,
+        "sha256": "d3906964ac0c0cdfd1c6b98e725e98c38f1cbaeeac51cb590bfe1bae931f4604",
+        "mode": 420,
+        "mtime_ns": 1792940235462949306
+      },
+      "members": {
+        "files/bin/linux-gcc/native-cpu-demand-submit/provider/libvulkan_lvp.so": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-demand-submit/provider/libvulkan_lvp.so",
+          "bytes": 17924016,
+          "sha256": "1cf037d00739c71d60ddfb9a503594ef2d8cca2ebb291e8119e380e9db2d4689",
+          "mode": 493,
+          "mtime_ns": 1792939801392898336
+        },
+        "files/bin/linux-gcc/native-cpu-demand-submit/provider/lvp_icd.json": {
+          "source": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-demand-submit/provider/lvp_icd.json",
+          "bytes": 198,
+          "sha256": "68b22ac32e6aa675b31d705ac43783a59794752e2457dc9cb67f2a3e27fbe3b3",
+          "mode": 420,
+          "mtime_ns": 1792939801572626052
+        }
+      }
+    }
+  ],
+  "additional_qualification_claimed": false,
+  "scope": "AF retains existing Mesa on-demand submit with unresolved-dependency thread fallback in the private IEEE32 provider, removing forced queue-thread startup. Same ordered driver callback, wait/signal/error/completion code and FP save/restore remain. All8 AE native object bytes and opcode joins are unchanged: reuse AE focused/full38 results, with their original owners rather than fresh claims. Fresh AF provider configure/build/code joins and original C8/all32+51markers+54joins passed; original frame result is decisive. Z broader gates remain predecessor evidence. No independent math, speedup, scientific/release/main/780M/large-scene/original-July completion claim.",
+  "original_frame": {
+    "attempted": true,
+    "accepted": false,
+    "owner": {
+      "bytes": 3924,
+      "sha256": "032c7a17ae21d020abaae0ca79dd718402c4804c625948af7ff50e16ef6ee3e8"
+    },
+    "XML": null,
+    "stop_reason": "diagnostic_timeout",
+    "child_exit": -15,
+    "wall_seconds": 300.2550187680172,
+    "peak_sampled_rss_kib": 923484,
+    "build": {
+      "bytes": 153300,
+      "sha256": "cddf15f81f65322165134ed83f02a0e920d39a59467ae189cfb39f891d8fffee"
+    },
+    "frame_inputs": {
+      "bytes": 1904,
+      "sha256": "685d2afadf42b654320f1fd0a9a71f9c973a0916985bea3d5cdde5fad5645f81"
+    },
+    "module_joins": {
+      "Transport": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-transport.spv",
+        "bytes": 86008,
+        "sha256": "1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "Endpoint": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-endpoint.spv",
+        "bytes": 97044,
+        "sha256": "e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      },
+      "DopriPhase": {
+        "module": "bin/linux-gcc/native-cpu-row-ownership/modules/owned-dopri_phase.spv",
+        "bytes": 59508,
+        "sha256": "f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+        "complete_occurrences": 1,
+        "executable_complete_occurrences": 1,
+        "frame_executable_complete_occurrences": 1
+      }
+    },
+    "predecessor_Z_controls": {
+      "bytes": 61733,
+      "sha256": "7a949ec66b7d5a14b0426ccec308725b56da627357398dc5607b851873615aac"
+    },
+    "predecessor_Z_benefit": {
+      "bytes": 234821,
+      "sha256": "daf7acb99643527f478e5297707208da1f1b02e188a598030146005b42801f7b"
+    },
+    "predecessor_Z_decimal": {
+      "bytes": 7994,
+      "sha256": "947d8da3fb77f3eee2dfe1d4c03064e1597a6503ef227f4949191ed99bce906d"
+    },
+    "scope": "One original cold128x128/1SPP Kerr runtime profile, unchanged defaults/governors, cache disabled. Original test validates and removes its PPM. Exact AE full38 reused; fresh AF C8 and this actual original frame only; broader all22+Decimal/all8 results belong to predecessor Z, with exact source inverse and guarded metadata substitution. No newly executed AD broad-suite or full scientific, Mandatory or release qualification claim."
+  },
+  "runtime_transition": {
+    "path": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+    "historical_build_dependency": {
+      "bytes": 113000,
+      "sha256": "86200da370f20476a2507e9097a789b5ef97269b4ca8d5e164ad82dab9d99892"
+    },
+    "current_runtime": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "incoming_merged_dependency": {
+      "bytes": 113000,
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242"
+    },
+    "current_CPP_build_preparation": {
+      "bytes": 39434,
+      "sha256": "e4068ccd80e98c3797f800c2c4fb0c1d742621a396106aff5958bb72d5347ead"
+    },
+    "package": "zlib1g:amd64",
+    "version": "1:1.3.dfsg-3.1ubuntu2.3",
+    "package_integrity_output": "",
+    "upgrade_log": [
+      "2026-10-25 06:06:09 upgrade zlib1g:amd64 1:1.3.dfsg-3.1ubuntu2.2 1:1.3.dfsg-3.1ubuntu2.3"
+    ],
+    "existing_product_resolution": [
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-upload-aware-staging/matched/audited_backend_tests",
+        "identity": {
+          "bytes": 13781496,
+          "sha256": "6200bc95e5e1679ff8b763807818685b646ac901c7325eb7e78f82dd3339dda1"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-upload-aware-staging/frame/sirius_render_tests",
+        "identity": {
+          "bytes": 12465456,
+          "sha256": "777b749acea49efc33e697cd076628d7cb80b28cc7ad0313caf56f1932996d84"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibvulkan.so.1 => /lib/x86_64-linux-gnu/libvulkan.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-demand-submit/provider/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 17924016,
+          "sha256": "1cf037d00739c71d60ddfb9a503594ef2d8cca2ebb291e8119e380e9db2d4689"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      },
+      {
+        "path": "/home/astra/.project/Sirius/bin/linux-gcc/native-retained-ownership/providers/baseline/libvulkan_lvp.so",
+        "identity": {
+          "bytes": 14768776,
+          "sha256": "cde2d0f8f243448a3f3b28408121412fb03a8bd9c01f5731f9e87a107150e952"
+        },
+        "resolution": "\tlinux-vdso.so.1 (0xADDRESS)\n\tlibLLVM.so.21.1 => /lib/x86_64-linux-gnu/libLLVM.so.21.1 (0xADDRESS)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0xADDRESS)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0xADDRESS)\n\tlibdrm.so.2 => /lib/x86_64-linux-gnu/libdrm.so.2 (0xADDRESS)\n\tlibexpat.so.1 => /lib/x86_64-linux-gnu/libexpat.so.1 (0xADDRESS)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0xADDRESS)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0xADDRESS)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0xADDRESS)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0xADDRESS)\n\tlibffi.so.8 => /lib/x86_64-linux-gnu/libffi.so.8 (0xADDRESS)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0xADDRESS)\n\tlibxml2.so.2 => /lib/x86_64-linux-gnu/libxml2.so.2 (0xADDRESS)\n\t/lib64/ld-linux-x86-64.so.2 (0xADDRESS)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0xADDRESS)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0xADDRESS)\n\tlibicuuc.so.74 => /lib/x86_64-linux-gnu/libicuuc.so.74 (0xADDRESS)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0xADDRESS)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0xADDRESS)\n\tlibicudata.so.74 => /lib/x86_64-linux-gnu/libicudata.so.74 (0xADDRESS)\n"
+      }
+    ],
+    "scope": "Historical P host receipts pin the old library; the new dense C++ build explicitly pins the current installed library. Preserve both provenances and verify the incoming merged pin against those exact two identities. This cohort uses the current package after product/library-resolution checks; no package change is performed. All other identities, original C8/full38/frame assertions/counts/governors remain. Z broader gates are predecessor supporting evidence only. No historical qualification, numerical equivalence or release claim is transferred across the package update."
+  },
+  "last_reported_tiles": [
+    3858,
+    16384
+  ],
+  "additional_passive_profile_executed": false,
+  "profile_scope": "No profiling study for AF. Historical R profile supports the arithmetic premise only; it is not current AF execution or performance evidence.",
+  "dense_CPP_ABI_scope": {
+    "focused_owner": {
+      "bytes": 1943,
+      "sha256": "7c78ac5354e5abefc2bb4cfe0220cbaed54ef497c2359c14f617bce3fefcd361",
+      "mode": 420,
+      "mtime_ns": 1792938944178276938
+    },
+    "focused_output": {
+      "passed": true,
+      "calls": 11880,
+      "compared_words": 1425600,
+      "active_lane_results": 35640,
+      "case_tuples": 33,
+      "input_alias_and_inactive_words_checked": true,
+      "FP_controls_unchanged": true
+    },
+    "CXX_build": {
+      "bytes": 2942,
+      "sha256": "ebb4e4ec6a3ba99094f84645318549389e63ed9d7fb598f4956d0fd77895ead3",
+      "mode": 420,
+      "mtime_ns": 1792938931999879260
+    },
+    "CXX_code": {
+      "bytes": 4043,
+      "sha256": "ae6e5abbcc35dbb9fa280e3e7e9fdd07fa490b8b2dea8ebcde17dcaee4d79e5c",
+      "mode": 420,
+      "mtime_ns": 1792938937450139226
+    }
+  },
+  "diagnostic_build_scope": "Zero new native/diagnostic CPP/ISPC compilations, standalone links or workloads. All8 native object bytes and actual relocated opcodes match AE; its passed full38 comparison is reused within that unchanged-object bound. Current C8 is fresh AF, not reused.",
+  "predecessor_Z_broader_evidence": {
+    "benefit/readers/benefit.json": {
+      "bytes": 234821,
+      "sha256": "daf7acb99643527f478e5297707208da1f1b02e188a598030146005b42801f7b",
+      "mode": 420,
+      "mtime_ns": 1792930676511445536
+    },
+    "benefit/readers/decimal-agreement.json": {
+      "bytes": 7994,
+      "sha256": "947d8da3fb77f3eee2dfe1d4c03064e1597a6503ef227f4949191ed99bce906d",
+      "mode": 420,
+      "mtime_ns": 1792930683157782609
+    },
+    "controls/readers/controls-1-8-acceptance.json": {
+      "bytes": 61733,
+      "sha256": "7a949ec66b7d5a14b0426ccec308725b56da627357398dc5607b851873615aac",
+      "mode": 420,
+      "mtime_ns": 1792931410443288846
+    }
+  },
+  "legacy_human_scope_labels": "Some inherited comments retain predecessor names. Exact paths/hashes/native PCs identify AF. Native focused/full38 evidence is explicitly reused from unchanged AE objects; AF C8/frame is fresh. Z broader results are predecessor evidence.",
+  "new_product_members": 2,
+  "current_system_zlib_recovery_member": false,
+  "reused_driver_baseline_runtime_recovery": "R603a155e actual-products.zip preserves the exact driver object, renamed baseline and current f61677c7 system zlib; no duplicate copies here.",
+  "reused_native_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o",
+      "bytes": 263040,
+      "sha256": "37569a26c7cf6e8ce2c2902f66c20b27c67e3b00752eb3becfb55ee8e14109a4"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-dispatch-admission/admission.o",
+      "bytes": 194704,
+      "sha256": "b8587c2f6c834b72b8378c4634a92837e3644e4fd494ce283897711559c4c616"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/transport.o",
+      "bytes": 972480,
+      "sha256": "c94ca9d921d77109eac22229118564469fa869cb5e7b998c71e967acb1e5f488"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/endpoint.o",
+      "bytes": 987648,
+      "sha256": "f84b39acb02bb391cb487dfd46c8763a1f930284bde57d90633f99733ff04f88"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/dopri_phase.o",
+      "bytes": 1051952,
+      "sha256": "1cf1d04629b41806dac340abc53764836e769afa2f6682870a86f022452b5b63"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-masked-arithmetic/objects/rows_adapter.o",
+      "bytes": 28120,
+      "sha256": "389f31e8cb895f2aff34e32666a77f6e1ecd104714e5007c7d619cea306fafb4"
+    }
+  ],
+  "recovery_manifests": {
+    "attestations/qualification/14b5567d/native-cpu-masked-arithmetic-frame-timeout/MANIFEST.json": {
+      "bytes": 80994,
+      "sha256": "e4d8fe47d9a779b7ad10faac883c29077d4c22b5ff225129bf2a7ab18300ada9",
+      "mode": 420,
+      "mtime_ns": 1792939573452380753
+    },
+    "attestations/qualification/46bfaaf8/native-cpu-original-frame-route/MANIFEST.json": {
+      "bytes": 13244,
+      "sha256": "15ad37540451473a6353001af1fdda03aa341fef8ab40121a8d4ec38da247128",
+      "mode": 420,
+      "mtime_ns": 1792938257813884547
+    },
+    "attestations/qualification/7a8e6d48/native-cpu-direct-scratch-frame-timeout/MANIFEST.json": {
+      "bytes": 109652,
+      "sha256": "32f74d5125aa9bc07dd287644d5a19fdca9eebe3a9e8165cd1a20dc95b9815f9",
+      "mode": 420,
+      "mtime_ns": 1792931746746988018
+    }
+  },
+  "resource_payloads": "Original32 cache assets and their existing recovery bundle reused; frame aliases can be retired only after this archive is independently verified and committed/pushed."
+}
