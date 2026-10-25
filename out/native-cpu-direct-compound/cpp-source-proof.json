@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "basis": {
+    "path": "out/native-cpu-normalized-arithmetic/retained8.cpp",
+    "bytes": 26175,
+    "sha256": "48fd653683436c31688dfa238b0fecf7a4e237c574a7f8d6fbdf098aa019da25"
+  },
+  "candidate": {
+    "bytes": 26773,
+    "sha256": "0b47680079327545aff71330f64e15461612fbba81846a255e6ae9f67a4f49b3"
+  },
+  "unchanged_AH_exact_prefix": true,
+  "original_scalar": {
+    "path": "bin/linux-gcc/native-cpu-static-program/typed-batch/transport.native.hpp",
+    "bytes": 634190,
+    "sha256": "69c51283732962583174adcc762bb2f259a6948cab26eb8ca6003ebac881de4e"
+  },
+  "original_subtract_body": "{\n\n#line 130\n    RetainedTriple_0 _S95 = RTNegate_0(b_19);\n\n#line 130\n    RetainedTriple_0 _S96 = _S95;\n\n#line 130\n    RetainedTriple_0 _S97 = RTAdd_0(a_26, &_S96);\n\n#line 130\n    return _S97;\n}",
+  "scope": "Only one new direct-bank entry composes unchanged AH read/negate/add/write. Both operands snapshot before writes; masks, inactive words and alias semantics retained. Exact arithmetic semantics use original scalar subtraction composition, not a new formula. All prior AH source byte-identical. Finite fixture and actual linked-code checks still required."
+}

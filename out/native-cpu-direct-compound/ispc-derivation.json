@@ -1,0 +1,127 @@
+{
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 618443,
+        "sha256": "2b70301974dabd29fb93199b1d5eeec72f58d98da9138e1dac7604a54f244f37"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-direct-compound/ispc-source/transport.ispc",
+      "derived": {
+        "bytes": 620586,
+        "sha256": "3c8810f75ec68be7cd00db10c1c55a892cf0fcef426f8b3c77c6fb79dad6bf77"
+      },
+      "opcode_sites": {
+        "0": 10,
+        "1": 77,
+        "2": 947,
+        "3": 10,
+        "4": 1482,
+        "5": 240,
+        "6": 3,
+        "7": 308,
+        "8": 2,
+        "9": 10,
+        "10": 20,
+        "11": 35
+      },
+      "literal_instruction_calls_preserved": 3144,
+      "inverse_restores_exact_AG_source": true,
+      "changed_function": "EvaluateOneStatic_0",
+      "new_direct_stores": [
+        "RTSubtractStore_0",
+        "RTDivideStore_0",
+        "RTSqrtStore_0"
+      ]
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 786783,
+        "sha256": "e6545ddafa857fd3dc74b3112296f2a119aaeb6eebf42e6560c30efd4e65766f"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-direct-compound/ispc-source/endpoint.ispc",
+      "derived": {
+        "bytes": 788926,
+        "sha256": "edd024784c62f225826a26d11369b5d71fb396bafe9135d2101c74c852c9f1f3"
+      },
+      "opcode_sites": {
+        "0": 11,
+        "1": 103,
+        "2": 1607,
+        "3": 197,
+        "4": 1963,
+        "5": 154,
+        "6": 3,
+        "7": 40,
+        "8": 2,
+        "9": 11,
+        "10": 5,
+        "11": 52
+      },
+      "literal_instruction_calls_preserved": 4148,
+      "inverse_restores_exact_AG_source": true,
+      "changed_function": "EvaluateOneStatic_0",
+      "new_direct_stores": [
+        "RTSubtractStore_0",
+        "RTDivideStore_0",
+        "RTSqrtStore_0"
+      ]
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 395332,
+        "sha256": "82655b470d380e401102ab475866e614ca8b35b2ad739f9cd90c87a95611dc5f"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-direct-compound/ispc-source/dopri_phase.ispc",
+      "derived": {
+        "bytes": 397472,
+        "sha256": "5155a236f9a9289a237e81bc51c810418b9b6d14e30b837413891d359241a0aa"
+      },
+      "opcode_sites": {
+        "0": 29,
+        "1": 322,
+        "2": 585,
+        "3": 284,
+        "4": 661,
+        "5": 45,
+        "7": 2,
+        "11": 160
+      },
+      "literal_instruction_calls_preserved": 2088,
+      "inverse_restores_exact_AG_source": true,
+      "changed_function": "EvaluateOneStatic_0",
+      "new_direct_stores": [
+        "RTSubtractStore_0",
+        "RTDivideStore_0",
+        "RTSqrtStore_0"
+      ]
+    }
+  },
+  "instructions": 9380,
+  "additional_direct_opcode_sites": 936,
+  "source_inputs": {
+    "out/native-cpu-arithmetic-closure/ispc-derivation.json": {
+      "bytes": 4836,
+      "sha256": "0b9aa58da0d22a50b1b48783e1bf34d9b36e1de5c876c72cb478d06c3e18aff3"
+    },
+    "out/native-cpu-direct-compound/derive_ispc.py": {
+      "bytes": 5700,
+      "sha256": "9c2748c3cb1b4e564d54a49398e9131edf79a30b3c2077b469859c37a2e8900e"
+    },
+    "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/transport.ispc": {
+      "bytes": 618443,
+      "sha256": "2b70301974dabd29fb93199b1d5eeec72f58d98da9138e1dac7604a54f244f37"
+    },
+    "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/endpoint.ispc": {
+      "bytes": 786783,
+      "sha256": "e6545ddafa857fd3dc74b3112296f2a119aaeb6eebf42e6560c30efd4e65766f"
+    },
+    "bin/linux-gcc/native-cpu-arithmetic-closure/ispc-source/dopri_phase.ispc": {
+      "bytes": 395332,
+      "sha256": "82655b470d380e401102ab475866e614ca8b35b2ad739f9cd90c87a95611dc5f"
+    }
+  },
+  "scope": "AI extends the existing direct-bank opcode2/4 path to opcode3/5/6. Only three new store trampolines, the subtract ABI declaration and the static opcode dispatch branch change. All9380ordered literal tuples, original generic evaluator, original arithmetic/value helpers and nonstatic users remain byte-identical. Binary destination/a/b and unary destination/a guards have original outcomes; numerical invalid values are still stored and return true, as before, not turned into structural rejection. Complete operand snapshots precede writes, including reused destination aliases; current lanemask and private register layout remain. No rational precomputation, host-rounded constants, FP/ISA flags, precision, eligibility, requests, fields, trials, quartics, scheduler, queue or governor change. Fresh focused/full38/C8/affected original control5 and original frame remain required."
+}
