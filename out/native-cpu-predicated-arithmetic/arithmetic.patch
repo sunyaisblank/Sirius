@@ -1,0 +1,834 @@
+--- a/transport.ispc
++++ b/transport.ispc
+@@ -189,36 +189,9 @@
+ #line 5 "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang"
+ static void RetainedSum32_0(float a_2, float b_2, varying float * uniform hi_1, varying float * uniform lo_1)
+ {
+-
+-#line 5
+-    float _S16;
+-
+-#line 5
+-    float _S17;
+-    if(((RPBits_0(a_2)) & 2147483647U) < ((RPBits_0(b_2)) & 2147483647U))
+-    {
+-
+-#line 6
+-        _S16 = b_2;
+-
+-#line 6
+-        _S17 = a_2;
+-
+-#line 6
+-    }
+-    else
+-    {
+-
+-#line 6
+-        _S16 = a_2;
+-
+-#line 6
+-        _S17 = b_2;
+-
+-#line 6
+-    }
+-
+-#line 52
++    bool SiriusSwap = ((RPBits_0(a_2)) & 2147483647U) < ((RPBits_0(b_2)) & 2147483647U);
++    float _S16 = select(SiriusSwap, b_2, a_2);
++    float _S17 = select(SiriusSwap, a_2, b_2);
+     float _S18 = OrderedAdd32_0(_S16, _S17);
+ 
+ #line 52
+@@ -432,55 +405,11 @@
+ #line 90
+ static float RPUpAdd_0(float a_5, float b_5)
+ {
+-
+-#line 90
+-    bool _S21;
+-    if(!RPBounded_0(a_5, 2105540608U))
+-    {
+-
+-#line 91
+-        _S21 = true;
+-
+-#line 91
+-    }
+-    else
+-    {
+-
+-#line 91
+-        _S21 = !RPBounded_0(b_5, 2105540608U);
+-
+-#line 91
+-    }
+-
+-#line 91
+-    if(_S21)
+-    {
+-
+-#line 91
+-        return RPFailureBound_0();
+-    }
+-
+-#line 92
+-    float _S22 = RPZero_0();
+-
+-#line 92
+-    if(RPScalarEqual_0(a_5, _S22))
+-    {
+-
+-#line 92
+-        return b_5;
+-    }
+-
+-#line 92
+-    if(RPScalarEqual_0(b_5, _S22))
+-    {
+-
+-#line 92
+-        return a_5;
+-    }
+-
+-#line 107
+-    return RPFromBits_0(RPBits_0(OrderedAdd32_0(a_5, b_5)) + 1U);
++    bool SiriusBounded = RPBounded_0(a_5, 2105540608U) & RPBounded_0(b_5, 2105540608U);
++    float SiriusRounded = RPFromBits_0(RPBits_0(OrderedAdd32_0(a_5, b_5)) + 1U);
++    float SiriusNonzeroA = select(RPScalarEqual_0(b_5, RPZero_0()), a_5, SiriusRounded);
++    float SiriusSelected = select(RPScalarEqual_0(a_5, RPZero_0()), b_5, SiriusNonzeroA);
++    return select(SiriusBounded, SiriusSelected, RPFailureBound_0());
+ }
+ 
+ 
+@@ -838,55 +767,23 @@
+ #line 83 "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang"
+ static inline RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_16, float x_4)
+ {
+-
+-#line 83
+-    bool _S33;
+-
+-#line 102
+-    if((a_16->valid_0) == 0U)
+-    {
+-
+-#line 102
+-        _S33 = true;
+-
+-#line 102
+-    }
+-    else
+-    {
+-
+-#line 102
+-        _S33 = !RPBounded_0(x_4, 2071986176U);
+-
+-#line 102
+-    }
+-
+-#line 102
+-    if(_S33)
+-    {
+-
+-#line 102
+-        return RTInvalid_0();
+-    }
+-
+-    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.
+-    if ((RPBits_0(x_4) & 2147483647U) == 0U)
+-    {
+-        if (!RPBounded_0(a_16->hi_0, 2105540608U) ||
+-            !RPBounded_0(a_16->lo_0, 2105540608U) ||
+-            !RPBounded_0(a_16->tail_0, 2105540608U) ||
+-            !RPBounded_0(a_16->error_0, 2105540608U))
+-            return RTInvalid_0();
+-        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;
+-        RetainedTriple_0 SiriusZeroTermResult;
+-        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->hi_0;
+-        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->lo_0;
+-        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_16->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_16->tail_0;
+-        SiriusZeroTermResult.error_0 = ((RPBits_0(a_16->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_16->error_0;
+-        SiriusZeroTermResult.valid_0 = 1U;
+-        return SiriusZeroTermResult;
+-    }
+-
+-#line 103
++    bool SiriusIsZero = (RPBits_0(x_4) & 2147483647U) == 0U;
++    bool SiriusZeroGood = (a_16->valid_0 != 0U) &
++        RPBounded_0(a_16->hi_0, 2105540608U) &
++        RPBounded_0(a_16->lo_0, 2105540608U) &
++        RPBounded_0(a_16->tail_0, 2105540608U) &
++        RPBounded_0(a_16->error_0, 2105540608U);
++    bool SiriusPositiveZero = RPBits_0(x_4) == 0U;
++    RetainedTriple_0 SiriusZero;
++    SiriusZero.hi_0 = select(SiriusPositiveZero & ((RPBits_0(a_16->hi_0) & 2147483647U) == 0U), RPZero_0(), a_16->hi_0);
++    SiriusZero.lo_0 = select(SiriusPositiveZero & ((RPBits_0(a_16->lo_0) & 2147483647U) == 0U), RPZero_0(), a_16->lo_0);
++    SiriusZero.tail_0 = select(SiriusPositiveZero & ((RPBits_0(a_16->tail_0) & 2147483647U) == 0U), RPZero_0(), a_16->tail_0);
++    SiriusZero.error_0 = select((RPBits_0(a_16->error_0) & 2147483647U) == 0U, RPZero_0(), a_16->error_0);
++    SiriusZero.valid_0 = 1U;
++    // Preserve the cheap zero result when every currently executing lane has it.
++    if (all(SiriusIsZero & SiriusZeroGood))
++        return SiriusZero;
++
+     float hi_6;
+ 
+ #line 103
+@@ -910,88 +807,19 @@
+ 
+     RetainedSum32_0(a_16->tail_0, second_0, &tail_4, &last_0);
+     float error_3 = RPUpAdd_0(a_16->error_0, RPAbs_0(last_0));
+-
+-
+-
+-    if(!RPBounded_0(hi_6, 2105540608U))
+-    {
+-
+-#line 111
+-        _S33 = true;
+-
+-#line 111
+-    }
+-    else
+-    {
+-
+-#line 111
+-        _S33 = !RPBounded_0(lo_6, 2105540608U);
+-
+-#line 111
+-    }
+-
+-#line 111
+-    if(_S33)
+-    {
+-
+-#line 111
+-        _S33 = true;
+-
+-#line 111
+-    }
+-    else
+-    {
+-
+-#line 111
+-        _S33 = !RPBounded_0(tail_4, 2105540608U);
+-
+-#line 111
+-    }
+-    if(_S33)
+-    {
+-
+-#line 112
+-        _S33 = true;
+-
+-#line 112
+-    }
+-    else
+-    {
+-
+-#line 112
+-        _S33 = !RPBounded_0(error_3, 2105540608U);
+-
+-#line 112
+-    }
+-
+-#line 111
+-    if(_S33)
+-    {
+-
+-#line 112
+-        return RTInvalid_0();
+-    }
+-
+-#line 113
+-    RetainedTriple_0 r_4;
+-
+-#line 113
+-    (&r_4)->hi_0 = hi_6;
+-
+-#line 113
+-    (&r_4)->lo_0 = lo_6;
+-
+-#line 113
+-    (&r_4)->tail_0 = tail_4;
+-
+-#line 113
+-    (&r_4)->error_0 = error_3;
+-
+-#line 113
+-    (&r_4)->valid_0 = 1U;
+-
+-#line 113
+-    return r_4;
++    bool SiriusGeneralGood = (a_16->valid_0 != 0U) & RPBounded_0(x_4, 2071986176U) &
++        RPBounded_0(hi_6, 2105540608U) &
++        RPBounded_0(lo_6, 2105540608U) &
++        RPBounded_0(tail_4, 2105540608U) &
++        RPBounded_0(error_3, 2105540608U);
++    bool SiriusGood = (SiriusIsZero & SiriusZeroGood) | ((!SiriusIsZero) & SiriusGeneralGood);
++    RetainedTriple_0 SiriusResult;
++    SiriusResult.hi_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.hi_0, hi_6), RPZero_0());
++    SiriusResult.lo_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.lo_0, lo_6), RPZero_0());
++    SiriusResult.tail_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.tail_0, tail_4), RPZero_0());
++    SiriusResult.error_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.error_0, error_3), RPZero_0());
++    SiriusResult.valid_0 = select(SiriusGood, 1U, 0U);
++    return SiriusResult;
+ }
+ 
+ 
+--- a/endpoint.ispc
++++ b/endpoint.ispc
+@@ -153,36 +153,9 @@
+ #line 5 "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang"
+ static void RetainedSum32_0(float a_2, float b_2, varying float * uniform hi_1, varying float * uniform lo_1)
+ {
+-
+-#line 5
+-    float _S2;
+-
+-#line 5
+-    float _S3;
+-    if(((RPBits_0(a_2)) & 2147483647U) < ((RPBits_0(b_2)) & 2147483647U))
+-    {
+-
+-#line 6
+-        _S2 = b_2;
+-
+-#line 6
+-        _S3 = a_2;
+-
+-#line 6
+-    }
+-    else
+-    {
+-
+-#line 6
+-        _S2 = a_2;
+-
+-#line 6
+-        _S3 = b_2;
+-
+-#line 6
+-    }
+-
+-#line 52
++    bool SiriusSwap = ((RPBits_0(a_2)) & 2147483647U) < ((RPBits_0(b_2)) & 2147483647U);
++    float _S2 = select(SiriusSwap, b_2, a_2);
++    float _S3 = select(SiriusSwap, a_2, b_2);
+     float _S4 = OrderedAdd32_0(_S2, _S3);
+ 
+ #line 52
+@@ -516,55 +489,11 @@
+ #line 90
+ static float RPUpAdd_0(float a_6, float b_5)
+ {
+-
+-#line 90
+-    bool _S8;
+-    if(!RPBounded_0(a_6, 2105540608U))
+-    {
+-
+-#line 91
+-        _S8 = true;
+-
+-#line 91
+-    }
+-    else
+-    {
+-
+-#line 91
+-        _S8 = !RPBounded_0(b_5, 2105540608U);
+-
+-#line 91
+-    }
+-
+-#line 91
+-    if(_S8)
+-    {
+-
+-#line 91
+-        return RPFailureBound_0();
+-    }
+-
+-#line 92
+-    float _S9 = RPZero_0();
+-
+-#line 92
+-    if(RPScalarEqual_0(a_6, _S9))
+-    {
+-
+-#line 92
+-        return b_5;
+-    }
+-
+-#line 92
+-    if(RPScalarEqual_0(b_5, _S9))
+-    {
+-
+-#line 92
+-        return a_6;
+-    }
+-
+-#line 107
+-    return RPFromBits_0(RPBits_0(OrderedAdd32_0(a_6, b_5)) + 1U);
++    bool SiriusBounded = RPBounded_0(a_6, 2105540608U) & RPBounded_0(b_5, 2105540608U);
++    float SiriusRounded = RPFromBits_0(RPBits_0(OrderedAdd32_0(a_6, b_5)) + 1U);
++    float SiriusNonzeroA = select(RPScalarEqual_0(b_5, RPZero_0()), a_6, SiriusRounded);
++    float SiriusSelected = select(RPScalarEqual_0(a_6, RPZero_0()), b_5, SiriusNonzeroA);
++    return select(SiriusBounded, SiriusSelected, RPFailureBound_0());
+ }
+ 
+ 
+@@ -908,55 +837,23 @@
+ #line 83 "/home/astra/.project/Sirius/src/sirius/kernels/retained_triple.slang"
+ static inline RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_13, float x_4)
+ {
+-
+-#line 83
+-    bool _S30;
+-
+-#line 102
+-    if((a_13->valid_0) == 0U)
+-    {
+-
+-#line 102
+-        _S30 = true;
+-
+-#line 102
+-    }
+-    else
+-    {
+-
+-#line 102
+-        _S30 = !RPBounded_0(x_4, 2071986176U);
+-
+-#line 102
+-    }
+-
+-#line 102
+-    if(_S30)
+-    {
+-
+-#line 102
+-        return RTInvalid_0();
+-    }
+-
+-    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.
+-    if ((RPBits_0(x_4) & 2147483647U) == 0U)
+-    {
+-        if (!RPBounded_0(a_13->hi_0, 2105540608U) ||
+-            !RPBounded_0(a_13->lo_0, 2105540608U) ||
+-            !RPBounded_0(a_13->tail_0, 2105540608U) ||
+-            !RPBounded_0(a_13->error_0, 2105540608U))
+-            return RTInvalid_0();
+-        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;
+-        RetainedTriple_0 SiriusZeroTermResult;
+-        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->hi_0;
+-        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->lo_0;
+-        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_13->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_13->tail_0;
+-        SiriusZeroTermResult.error_0 = ((RPBits_0(a_13->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_13->error_0;
+-        SiriusZeroTermResult.valid_0 = 1U;
+-        return SiriusZeroTermResult;
+-    }
+-
+-#line 103
++    bool SiriusIsZero = (RPBits_0(x_4) & 2147483647U) == 0U;
++    bool SiriusZeroGood = (a_13->valid_0 != 0U) &
++        RPBounded_0(a_13->hi_0, 2105540608U) &
++        RPBounded_0(a_13->lo_0, 2105540608U) &
++        RPBounded_0(a_13->tail_0, 2105540608U) &
++        RPBounded_0(a_13->error_0, 2105540608U);
++    bool SiriusPositiveZero = RPBits_0(x_4) == 0U;
++    RetainedTriple_0 SiriusZero;
++    SiriusZero.hi_0 = select(SiriusPositiveZero & ((RPBits_0(a_13->hi_0) & 2147483647U) == 0U), RPZero_0(), a_13->hi_0);
++    SiriusZero.lo_0 = select(SiriusPositiveZero & ((RPBits_0(a_13->lo_0) & 2147483647U) == 0U), RPZero_0(), a_13->lo_0);
++    SiriusZero.tail_0 = select(SiriusPositiveZero & ((RPBits_0(a_13->tail_0) & 2147483647U) == 0U), RPZero_0(), a_13->tail_0);
++    SiriusZero.error_0 = select((RPBits_0(a_13->error_0) & 2147483647U) == 0U, RPZero_0(), a_13->error_0);
++    SiriusZero.valid_0 = 1U;
++    // Preserve the cheap zero result when every currently executing lane has it.
++    if (all(SiriusIsZero & SiriusZeroGood))
++        return SiriusZero;
++
+     float hi_6;
+ 
+ #line 103
+@@ -980,88 +877,19 @@
+ 
+     RetainedSum32_0(a_13->tail_0, second_0, &tail_3, &last_0);
+     float error_3 = RPUpAdd_0(a_13->error_0, RPAbs_0(last_0));
+-
+-
+-
+-    if(!RPBounded_0(hi_6, 2105540608U))
+-    {
+-
+-#line 111
+-        _S30 = true;
+-
+-#line 111
+-    }
+-    else
+-    {
+-
+-#line 111
+-        _S30 = !RPBounded_0(lo_6, 2105540608U);
+-
+-#line 111
+-    }
+-
+-#line 111
+-    if(_S30)
+-    {
+-
+-#line 111
+-        _S30 = true;
+-
+-#line 111
+-    }
+-    else
+-    {
+-
+-#line 111
+-        _S30 = !RPBounded_0(tail_3, 2105540608U);
+-
+-#line 111
+-    }
+-    if(_S30)
+-    {
+-
+-#line 112
+-        _S30 = true;
+-
+-#line 112
+-    }
+-    else
+-    {
+-
+-#line 112
+-        _S30 = !RPBounded_0(error_3, 2105540608U);
+-
+-#line 112
+-    }
+-
+-#line 111
+-    if(_S30)
+-    {
+-
+-#line 112
+-        return RTInvalid_0();
+-    }
+-
+-#line 113
+-    RetainedTriple_0 r_5;
+-
+-#line 113
+-    (&r_5)->hi_0 = hi_6;
+-
+-#line 113
+-    (&r_5)->lo_0 = lo_6;
+-
+-#line 113
+-    (&r_5)->tail_0 = tail_3;
+-
+-#line 113
+-    (&r_5)->error_0 = error_3;
+-
+-#line 113
+-    (&r_5)->valid_0 = 1U;
+-
+-#line 113
+-    return r_5;
++    bool SiriusGeneralGood = (a_13->valid_0 != 0U) & RPBounded_0(x_4, 2071986176U) &
++        RPBounded_0(hi_6, 2105540608U) &
++        RPBounded_0(lo_6, 2105540608U) &
++        RPBounded_0(tail_3, 2105540608U) &
++        RPBounded_0(error_3, 2105540608U);
++    bool SiriusGood = (SiriusIsZero & SiriusZeroGood) | ((!SiriusIsZero) & SiriusGeneralGood);
++    RetainedTriple_0 SiriusResult;
++    SiriusResult.hi_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.hi_0, hi_6), RPZero_0());
++    SiriusResult.lo_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.lo_0, lo_6), RPZero_0());
++    SiriusResult.tail_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.tail_0, tail_3), RPZero_0());
++    SiriusResult.error_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.error_0, error_3), RPZero_0());
++    SiriusResult.valid_0 = select(SiriusGood, 1U, 0U);
++    return SiriusResult;
+ }
+ 
+ 
+--- a/dopri_phase.ispc
++++ b/dopri_phase.ispc
+@@ -152,36 +152,9 @@
+ #line 5 "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang"
+ static void RetainedSum32_0(float a_2, float b_2, varying float * uniform hi_1, varying float * uniform lo_1)
+ {
+-
+-#line 5
+-    float _S2;
+-
+-#line 5
+-    float _S3;
+-    if(((RPBits_0(a_2)) & 2147483647U) < ((RPBits_0(b_2)) & 2147483647U))
+-    {
+-
+-#line 6
+-        _S2 = b_2;
+-
+-#line 6
+-        _S3 = a_2;
+-
+-#line 6
+-    }
+-    else
+-    {
+-
+-#line 6
+-        _S2 = a_2;
+-
+-#line 6
+-        _S3 = b_2;
+-
+-#line 6
+-    }
+-
+-#line 52
++    bool SiriusSwap = ((RPBits_0(a_2)) & 2147483647U) < ((RPBits_0(b_2)) & 2147483647U);
++    float _S2 = select(SiriusSwap, b_2, a_2);
++    float _S3 = select(SiriusSwap, a_2, b_2);
+     float _S4 = OrderedAdd32_0(_S2, _S3);
+ 
+ #line 52
+@@ -388,55 +361,11 @@
+ #line 90 "/home/astra/.project/Sirius/src/sirius/kernels/retained_pair.slang"
+ static float RPUpAdd_0(float a_6, float b_6)
+ {
+-
+-#line 90
+-    bool _S7;
+-    if(!RPBounded_0(a_6, 2105540608U))
+-    {
+-
+-#line 91
+-        _S7 = true;
+-
+-#line 91
+-    }
+-    else
+-    {
+-
+-#line 91
+-        _S7 = !RPBounded_0(b_6, 2105540608U);
+-
+-#line 91
+-    }
+-
+-#line 91
+-    if(_S7)
+-    {
+-
+-#line 91
+-        return RPFailureBound_0();
+-    }
+-
+-#line 92
+-    float _S8 = RPZero_0();
+-
+-#line 92
+-    if(RPScalarEqual_0(a_6, _S8))
+-    {
+-
+-#line 92
+-        return b_6;
+-    }
+-
+-#line 92
+-    if(RPScalarEqual_0(b_6, _S8))
+-    {
+-
+-#line 92
+-        return a_6;
+-    }
+-
+-#line 107
+-    return RPFromBits_0(RPBits_0(OrderedAdd32_0(a_6, b_6)) + 1U);
++    bool SiriusBounded = RPBounded_0(a_6, 2105540608U) & RPBounded_0(b_6, 2105540608U);
++    float SiriusRounded = RPFromBits_0(RPBits_0(OrderedAdd32_0(a_6, b_6)) + 1U);
++    float SiriusNonzeroA = select(RPScalarEqual_0(b_6, RPZero_0()), a_6, SiriusRounded);
++    float SiriusSelected = select(RPScalarEqual_0(a_6, RPZero_0()), b_6, SiriusNonzeroA);
++    return select(SiriusBounded, SiriusSelected, RPFailureBound_0());
+ }
+ 
+ 
+@@ -710,55 +639,23 @@
+ #line 83
+ static inline RetainedTriple_0 RTAccumulateTerm_0(varying RetainedTriple_0 * uniform a_11, float x_4)
+ {
+-
+-#line 83
+-    bool _S16;
+-
+-#line 102
+-    if((a_11->valid_0) == 0U)
+-    {
+-
+-#line 102
+-        _S16 = true;
+-
+-#line 102
+-    }
+-    else
+-    {
+-
+-#line 102
+-        _S16 = !RPBounded_0(x_4, 2071986176U);
+-
+-#line 102
+-    }
+-
+-#line 102
+-    if(_S16)
+-    {
+-
+-#line 102
+-        return RTInvalid_0();
+-    }
+-
+-    // Exact original outputs for either sign of zero, under the existing IEEE32 scope.
+-    if ((RPBits_0(x_4) & 2147483647U) == 0U)
+-    {
+-        if (!RPBounded_0(a_11->hi_0, 2105540608U) ||
+-            !RPBounded_0(a_11->lo_0, 2105540608U) ||
+-            !RPBounded_0(a_11->tail_0, 2105540608U) ||
+-            !RPBounded_0(a_11->error_0, 2105540608U))
+-            return RTInvalid_0();
+-        bool SiriusZeroTermPositive = RPBits_0(x_4) == 0U;
+-        RetainedTriple_0 SiriusZeroTermResult;
+-        SiriusZeroTermResult.hi_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->hi_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->hi_0;
+-        SiriusZeroTermResult.lo_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->lo_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->lo_0;
+-        SiriusZeroTermResult.tail_0 = (SiriusZeroTermPositive && ((RPBits_0(a_11->tail_0) & 2147483647U) == 0U)) ? RPZero_0() : a_11->tail_0;
+-        SiriusZeroTermResult.error_0 = ((RPBits_0(a_11->error_0) & 2147483647U) == 0U) ? RPZero_0() : a_11->error_0;
+-        SiriusZeroTermResult.valid_0 = 1U;
+-        return SiriusZeroTermResult;
+-    }
+-
+-#line 103
++    bool SiriusIsZero = (RPBits_0(x_4) & 2147483647U) == 0U;
++    bool SiriusZeroGood = (a_11->valid_0 != 0U) &
++        RPBounded_0(a_11->hi_0, 2105540608U) &
++        RPBounded_0(a_11->lo_0, 2105540608U) &
++        RPBounded_0(a_11->tail_0, 2105540608U) &
++        RPBounded_0(a_11->error_0, 2105540608U);
++    bool SiriusPositiveZero = RPBits_0(x_4) == 0U;
++    RetainedTriple_0 SiriusZero;
++    SiriusZero.hi_0 = select(SiriusPositiveZero & ((RPBits_0(a_11->hi_0) & 2147483647U) == 0U), RPZero_0(), a_11->hi_0);
++    SiriusZero.lo_0 = select(SiriusPositiveZero & ((RPBits_0(a_11->lo_0) & 2147483647U) == 0U), RPZero_0(), a_11->lo_0);
++    SiriusZero.tail_0 = select(SiriusPositiveZero & ((RPBits_0(a_11->tail_0) & 2147483647U) == 0U), RPZero_0(), a_11->tail_0);
++    SiriusZero.error_0 = select((RPBits_0(a_11->error_0) & 2147483647U) == 0U, RPZero_0(), a_11->error_0);
++    SiriusZero.valid_0 = 1U;
++    // Preserve the cheap zero result when every currently executing lane has it.
++    if (all(SiriusIsZero & SiriusZeroGood))
++        return SiriusZero;
++
+     float hi_4;
+ 
+ #line 103
+@@ -782,88 +679,19 @@
+ 
+     RetainedSum32_0(a_11->tail_0, second_0, &tail_4, &last_0);
+     float error_3 = RPUpAdd_0(a_11->error_0, RPAbs_0(last_0));
+-
+-
+-
+-    if(!RPBounded_0(hi_4, 2105540608U))
+-    {
+-
+-#line 111
+-        _S16 = true;
+-
+-#line 111
+-    }
+-    else
+-    {
+-
+-#line 111
+-        _S16 = !RPBounded_0(lo_4, 2105540608U);
+-
+-#line 111
+-    }
+-
+-#line 111
+-    if(_S16)
+-    {
+-
+-#line 111
+-        _S16 = true;
+-
+-#line 111
+-    }
+-    else
+-    {
+-
+-#line 111
+-        _S16 = !RPBounded_0(tail_4, 2105540608U);
+-
+-#line 111
+-    }
+-    if(_S16)
+-    {
+-
+-#line 112
+-        _S16 = true;
+-
+-#line 112
+-    }
+-    else
+-    {
+-
+-#line 112
+-        _S16 = !RPBounded_0(error_3, 2105540608U);
+-
+-#line 112
+-    }
+-
+-#line 111
+-    if(_S16)
+-    {
+-
+-#line 112
+-        return RTInvalid_0();
+-    }
+-
+-#line 113
+-    RetainedTriple_0 r_3;
+-
+-#line 113
+-    (&r_3)->hi_0 = hi_4;
+-
+-#line 113
+-    (&r_3)->lo_0 = lo_4;
+-
+-#line 113
+-    (&r_3)->tail_0 = tail_4;
+-
+-#line 113
+-    (&r_3)->error_0 = error_3;
+-
+-#line 113
+-    (&r_3)->valid_0 = 1U;
+-
+-#line 113
+-    return r_3;
++    bool SiriusGeneralGood = (a_11->valid_0 != 0U) & RPBounded_0(x_4, 2071986176U) &
++        RPBounded_0(hi_4, 2105540608U) &
++        RPBounded_0(lo_4, 2105540608U) &
++        RPBounded_0(tail_4, 2105540608U) &
++        RPBounded_0(error_3, 2105540608U);
++    bool SiriusGood = (SiriusIsZero & SiriusZeroGood) | ((!SiriusIsZero) & SiriusGeneralGood);
++    RetainedTriple_0 SiriusResult;
++    SiriusResult.hi_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.hi_0, hi_4), RPZero_0());
++    SiriusResult.lo_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.lo_0, lo_4), RPZero_0());
++    SiriusResult.tail_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.tail_0, tail_4), RPZero_0());
++    SiriusResult.error_0 = select(SiriusGood, select(SiriusIsZero, SiriusZero.error_0, error_3), RPZero_0());
++    SiriusResult.valid_0 = select(SiriusGood, 1U, 0U);
++    return SiriusResult;
+ }
+ 
+ static RetainedTriple_0 RTAdd_0(varying RetainedTriple_0 * uniform a_12, varying RetainedTriple_0 * uniform b_8)
