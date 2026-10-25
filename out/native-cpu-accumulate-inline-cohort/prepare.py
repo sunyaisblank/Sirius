@@ -58,4 +58,11 @@ source = source.replace('nativeCPU providerR with Transport worker occupancy sch
     'nativeCPU providerR with unchanged Q Transport scheduling and new inline3 objects; fresh Transport compatibility required')
 source = source.replace('First actual rows/pure/SIMD8 entries and returns perstage observed passively;',
     'First actual rows/pure returns and policy-selected implementations observed passively; changed Transport SIMD separately has fresh full38-case compatibility;')
+before = 'for name, value in expected.items():'
+assert source.count(before) == 1
+source = source.replace(before, """runtime_namespace = {}
+runtime_source = work / 'runtime_transition.py'
+exec(compile(runtime_source.read_text(), str(runtime_source), 'exec'), runtime_namespace)
+runtime_namespace['apply'](root, work, expected)
+for name, value in expected.items():""")
 exec(compile(source, str(basis), "exec"))
