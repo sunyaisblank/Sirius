@@ -72,7 +72,7 @@ for name in ('derive_ispc.py', 'ispc-derivation.json', 'prepare_ispc_compile.py'
              'inspect_objects.py', 'inspect_dense.py', 'compile/run_owned.py', 'compile/owned_guard.py'):
     path = W / name
     inputs[str(path.relative_to(R))] = pin(path)
-for path in (B / 'ispc-products-compile-result.json', B / 'compile/ispc-products/owner.json',
+for path in (B / 'ispc-dense-compile-result.json', B / 'compile/ispc-dense/owner.json',
              R / 'out/native-cpu-simd-rows/inspect_objects.py',
              R / 'out/native-cpu-row-ownership/cold-frame/run_owned.py',
              R / 'out/native-cpu-row-ownership/cold-frame/owned_guard.py',
