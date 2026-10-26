@@ -67,10 +67,13 @@ def instructions(path):
     return result
 
 
-def rename_reference(original, output, old, new):
-    assert not output.exists()
-    subprocess.run(['objcopy', '--redefine-sym', old + '=' + new,
-                    str(original), str(output)], check=True)
+def rename_reference(original, output, old, new, recovered=False):
+    if recovered:
+        assert output.exists()
+    else:
+        assert not output.exists()
+        subprocess.run(['objcopy', '--redefine-sym', old + '=' + new,
+                        str(original), str(output)], check=True)
     a, b = Elf(original), Elf(output)
     inverse = {new: old}
     assert any(not s['section'] and s['name'] == old for s in a.symbols)
@@ -80,7 +83,10 @@ def rename_reference(original, output, old, new):
     assert a.names == b.names
     for i, section in enumerate(a.sections):
         if section[2] & 2:
-            assert section == b.sections[i], a.names[i]
+            # File positions can move; allocated payloads and their runtime
+            # properties, symbols and relocation semantics must remain exact.
+            assert tuple(section[k] for k in (1, 2, 3, 5, 8, 9)) == tuple(
+                b.sections[i][k] for k in (1, 2, 3, 5, 8, 9)), a.names[i]
             assert a.bytes(i) == b.bytes(i), a.names[i]
     def relocs(elf, names):
         return sorted((elf.section_name(section), offset, kind, addend,
@@ -96,7 +102,7 @@ phase, = sys.argv[1:]
 proof = verify_inputs()
 if phase.startswith('prepare-'):
     step = phase.removeprefix('prepare-')
-    assert step in ('build', 'link', 'run')
+    assert step in ('build', 'finish-build', 'link', 'run')
     assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
     inputs = set(proof['source_inputs']) | set(proof['derived'])
     inputs |= {row['path'] for row in proof['reused_objects']}
@@ -121,8 +127,15 @@ if phase.startswith('prepare-'):
     ]
     inputs |= set(fixture_paths)
     if step != 'build':
-        owner('build')
-        assert doc(W / 'code-proof.json')['passed']
+        if step == 'finish-build':
+            failed = doc(W / 'build/owner.json')
+            assert failed['status'] == 'terminal' and not failed['passed']
+            assert failed['source_unchanged'] and failed['whole_inputs_unchanged']
+            assert not failed['remaining_owned_processes'] and not failed['cleanup_errors']
+            inputs.add('attestations/qualification/ed9bf462/native-cpu-v4-raw-fixture-copy-check-failure/MANIFEST.json')
+        else:
+            owner('finish-build')
+            assert doc(W / 'code-proof.json')['passed']
         inputs |= {str(p.relative_to(R)) for p in O.glob('*.o')}
     if step == 'run':
         owner('link')
@@ -158,6 +171,25 @@ elif phase == 'build':
     write(W / 'build-result.json', dict(passed=True, raw_compilations=commands,
         adapter_compile_argv=adapter, gate_compile_argv=gate,
         fixture_reference_renames=renames,
+        products=[named(p) for p in sorted(O.glob('*.o'))],
+        original_math_and_raw3_recompiled=False))
+elif phase == 'finish-build':
+    sealed = doc(R / 'attestations/qualification/ed9bf462/native-cpu-v4-raw-fixture-copy-check-failure/MANIFEST.json')
+    assert sealed['compiler_and_raw_arithmetic_not_failed'] and sealed['no_numerical_workload_run']
+    assert len(sealed['products']) == 6
+    for name, expected in sealed['products'].items():
+        assert pin(R / name) == expected, name
+    renames = []
+    for stage, original in (
+        ('transport', R / 'bin/linux-gcc/native-cpu-accumulate-compatibility/driver.o'),
+        ('endpoint', R / 'bin/linux-gcc/native-cpu-endpoint-header-domain/driver.o')):
+        renames.append(rename_reference(original, O / (stage + '-driver.o'),
+            'sirius_simd_' + stage + '_packet', 'sirius_simd_v4_' + stage + '_packet',
+            recovered=stage == 'transport'))
+    write(W / 'build-result.json', dict(passed=True,
+        original_compile_phase_passed=False, original_failure=sealed['failure'],
+        fixture_copy_verification_completed=True, fixture_reference_renames=renames,
+        recovered_products=sealed['products'], new_compilations=0,
         products=[named(p) for p in sorted(O.glob('*.o'))],
         original_math_and_raw3_recompiled=False))
 elif phase == 'link':
