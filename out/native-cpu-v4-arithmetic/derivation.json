@@ -1,0 +1,27 @@
+{
+  "original_source": {
+    "bytes": 36789,
+    "sha256": "60455d362b1c98b30e9975c35011c6a193ffcf98a5872ddb45036c0e5364961d"
+  },
+  "exports": [
+    "sirius_native_dense_add8",
+    "sirius_native_dense_multiply8",
+    "sirius_native_dense_divide8",
+    "sirius_native_dense_sqrt8",
+    "sirius_native_dense_subtract8",
+    "sirius_native_tagged_add8",
+    "sirius_native_tagged_multiply8",
+    "sirius_native_tagged_subtract8",
+    "sirius_native_tagged_divide8",
+    "sirius_native_tagged_sqrt8"
+  ],
+  "optional": {
+    "bytes": 804,
+    "sha256": "bcd7804fc7935de78846bf6317d9545b7df78afa934957d74691e74927b028d5"
+  },
+  "dispatch": {
+    "bytes": 9999,
+    "sha256": "ab1512b576709665846a60b5e68f0c4dc9dbe86c08a84e794c18622037117445"
+  },
+  "scope": "Same original five-word/eight-lane arithmetic source and FP operation order. Optional v4 object behind baseline-compiled OS-aware builtin guard; original v3 object, provider guard, raw stages, scalar tails, host, SPIR-V, public ABI, allocations/layouts/counts/precision/FP policy remain. No IFUNC, LTO, global initializer, buffer, setting or acceptance claim."
+}
