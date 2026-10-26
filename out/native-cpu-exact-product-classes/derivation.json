@@ -1,0 +1,191 @@
+{
+  "prepared_only": true,
+  "compiled": false,
+  "executed": false,
+  "source_inputs": {
+    "attestations/qualification/77c01da7/native-cpu-exact-product-residual-finite-compatibility/MANIFEST.json": {
+      "bytes": 18206,
+      "sha256": "ed84fbd90ec00cb221888f9e9cfc0ed48adf385ffb46acb425b86e9b02085853"
+    },
+    "out/native-cpu-exact-product-residual/component.py": {
+      "bytes": 13019,
+      "sha256": "11c8f32c32925343747d5bce10ed04f31028729ab54f08ad4c9a8ebf1ad24a9e"
+    },
+    "out/native-cpu-exact-product-residual/retained8.cpp": {
+      "bytes": 38852,
+      "sha256": "167df813bc9c56fea5c1da11aaf2c2a6120437f0f59ed31e422fa616b59a6471"
+    },
+    "out/native-cpu-exact-product-residual/optional.cpp": {
+      "bytes": 768,
+      "sha256": "14ab07cafe1113506a88c70379e07548f283b8ffdf0d794595383f50049f5ab0"
+    },
+    "out/native-cpu-exact-product-residual/derivation.json": {
+      "bytes": 9475,
+      "sha256": "a0c3944b74e87341fa59087cc85ecbfec62f40aa1c3894cf361422de4b1e2bd4"
+    },
+    "out/native-cpu-value-fact-stores/retained8.cpp": {
+      "bytes": 36789,
+      "sha256": "60455d362b1c98b30e9975c35011c6a193ffcf98a5872ddb45036c0e5364961d"
+    },
+    "out/native-cpu-value-fact-stores/prepared-cpp.json": {
+      "bytes": 73766,
+      "sha256": "0631a88a4f7deb207073ee2c4219526ef77f2b668e128d6587cae24226f5c053"
+    },
+    "out/native-cpu-value-fact-stores/cpp-build-result.json": {
+      "bytes": 37451,
+      "sha256": "60c215d747ce87f5d2127f03d2ecb8937429f11c0a611472e7fa2aa30719945d"
+    },
+    "out/native-cpu-v4-arithmetic/optional.cpp": {
+      "bytes": 804,
+      "sha256": "bcd7804fc7935de78846bf6317d9545b7df78afa934957d74691e74927b028d5"
+    },
+    "out/native-cpu-v4-arithmetic/dispatch.cpp": {
+      "bytes": 9999,
+      "sha256": "ab1512b576709665846a60b5e68f0c4dc9dbe86c08a84e794c18622037117445"
+    },
+    "out/native-cpu-v4-arithmetic/component.py": {
+      "bytes": 7458,
+      "sha256": "73ec96434f84b870382c5dbbf8d93efb39d80f2963ec08d62f41cacee7d781f0"
+    },
+    "out/native-cpu-v4-arithmetic/derivation.json": {
+      "bytes": 1119,
+      "sha256": "4bfaf91e35be759cdec724798f6a08db4e1438fae7e355b69b527d3ab63bb803"
+    },
+    "attestations/qualification/fecafd04/native-cpu-v4-arithmetic-finite-compatibility/MANIFEST.json": {
+      "bytes": 14336,
+      "sha256": "70220651fa964503111d9ada142217e12b884da836b1568d9a9b9ac017df5e19"
+    },
+    "src/sirius/kernels/retained_pair.slang": {
+      "bytes": 18139,
+      "sha256": "395dd782f3309b22f0fb481a2bf2a898489e700043c248c0fad2e53dd2fbe304"
+    },
+    "out/native-cpu-slang-bridge/shaders/retained_scalar.slang": {
+      "bytes": 3815,
+      "sha256": "5e74f8059512b417c2236f360264cd6f980603e06ae5e34bed5b39cabefe574e"
+    }
+  },
+  "derivation_script": {
+    "bytes": 8947,
+    "sha256": "29cf8ed5e15fc97448b3bb59b1b0f34b6d5d6b60f003d06561bd2ed450937197"
+  },
+  "base_finite_manifest": {
+    "path": "attestations/qualification/77c01da7/native-cpu-exact-product-residual-finite-compatibility/MANIFEST.json",
+    "bytes": 18206,
+    "sha256": "ed84fbd90ec00cb221888f9e9cfc0ed48adf385ffb46acb425b86e9b02085853"
+  },
+  "base_compile_result": {
+    "archive": {
+      "path": "attestations/qualification/77c01da7/native-cpu-exact-product-residual-finite-compatibility/component.zip",
+      "bytes": 2686707,
+      "sha256": "6a94f780a6a1e338036ec0592d00e9894d35132969c8252347672ea8b5aea9c0"
+    },
+    "member": "out/native-cpu-exact-product-residual/compile-result.json",
+    "bytes": 1292,
+    "sha256": "f5ba702a1567423e6df6238fc8bfd48f300dfca490b012e25049e57f9eecdc49"
+  },
+  "base_optional_object": {
+    "path": "bin/linux-gcc/native-cpu-exact-product-residual/optional.o",
+    "bytes": 239344,
+    "sha256": "795d7149454944bf54e63fdb5e7027f64a51be2238f6df5124f0a55afb177361"
+  },
+  "derived": {
+    "retained8.cpp": {
+      "bytes": 40480,
+      "sha256": "3e92369bc7336adea5eba70b95cc88eedc473b6abe534f8e16413bd98e4aa28f"
+    },
+    "optional.cpp": {
+      "bytes": 773,
+      "sha256": "fa21033fb825f350275823174373cb54f45c5ef6b6ccf5b5f55468552ad4cd73"
+    }
+  },
+  "one_function_changed": "product32",
+  "inverse_to_Double_source_exact": true,
+  "unchanged_Double_guard_and_body_and_original_fallback": true,
+  "original_v3_object": {
+    "path": "bin/linux-gcc/native-cpu-value-fact-stores/probe/retained8.o",
+    "bytes": 238520,
+    "sha256": "007dcf466adf1e513c6c60f7a67ee3692dfe7f2d6d13fd5602609f4edb69ff92"
+  },
+  "reused_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/v3.o",
+      "bytes": 238552,
+      "sha256": "0af01ed41b0189bc047b10b7d853a0e4ebdbb5c6eb02f729870401c2eb24f287"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/dispatch.o",
+      "bytes": 4704,
+      "sha256": "d7b9aa5ae74d4b791b9e6df59d0e2c10d3ae5fd079aeacf15b80a899e40b6411"
+    }
+  ],
+  "original_compiler": {
+    "path": "/usr/bin/x86_64-linux-gnu-g++-14",
+    "bytes": 1186944,
+    "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84"
+  },
+  "compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-fPIC",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-isystem",
+    "/opt/slang/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-static-program/typed-batch",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-active-prefix",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+    "-march=x86-64-v4",
+    "-mtune=znver4",
+    "-mfpmath=sse",
+    "-fexcess-precision=standard",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-fno-unsafe-math-optimizations",
+    "-frounding-math",
+    "-ffp-contract=off",
+    "-mprefer-vector-width=256",
+    "-c",
+    "/home/astra/.project/Sirius/out/native-cpu-exact-product-classes/optional.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-exact-product-classes/optional.o"
+  ],
+  "compiler_flags_identical_to_sealed_Double": true,
+  "compile_source_and_output_paths_only_changed": true,
+  "unchanged_export_macro_lines": [
+    "#define sirius_native_dense_add8 sirius_native_v4_dense_add8",
+    "#define sirius_native_dense_multiply8 sirius_native_v4_dense_multiply8",
+    "#define sirius_native_dense_divide8 sirius_native_v4_dense_divide8",
+    "#define sirius_native_dense_sqrt8 sirius_native_v4_dense_sqrt8",
+    "#define sirius_native_dense_subtract8 sirius_native_v4_dense_subtract8",
+    "#define sirius_native_tagged_add8 sirius_native_v4_tagged_add8",
+    "#define sirius_native_tagged_multiply8 sirius_native_v4_tagged_multiply8",
+    "#define sirius_native_tagged_subtract8 sirius_native_v4_tagged_subtract8",
+    "#define sirius_native_tagged_divide8 sirius_native_v4_tagged_divide8",
+    "#define sirius_native_tagged_sqrt8 sirius_native_v4_tagged_sqrt8"
+  ],
+  "classes": {
+    "preconditions": "RNE, gradual underflow, DAZ/FTZ off, masked exceptions and no contraction; all eight lanes must satisfy each class.",
+    "A": {
+      "guard": "Both operands normal, abs<=2^60, lower12 mantissa bits zero, biased exponent sum>=128.",
+      "proof": "Each significand has at most12 bits. Both4097 splits and the normal at-most24-bit product are exact/flag-free; split lows are+0. The original final residual is+0 for all input signs.",
+      "result": "Original float multiply high; low+0."
+    },
+    "B": {
+      "guard": "Both operands normal and abs<=2^60; at least one has all23 fraction bits zero. Select B as power if both qualify; selected other biased exponent>=24, joint sum>=151.",
+      "proof": "Other split lows lie on2^(eOther-23)>=2^-126. Power scaling is exact and nonzero low*power products lie on2^(eA+eB-23)>=2^-126. All omitted operations are flag-free. The original residual zero has otherLow sign only; the power sign is never XORed.",
+      "order": "Run unchanged split32(selectedOther) before original mul(a,b), retaining exactly its sticky flags. Mixed selected sides/signs work lane-wise.",
+      "result": "Original float multiply high; low=bitcast(bits(otherLow)&0x80000000)."
+    },
+    "remainder": "Literal previous Double source, including zero-residual fallback and every operation outside this primitive."
+  },
+  "scope": "Source derivation only. OldDouble finite execution is provenance, not acceptance of these classes. Original AM source/v3/baseline dispatcher, five-word ABI, metadata, masks, all other functions/operations and strict flags remain unchanged. No build/workload/provider/benefit/frame/scientific/release claim; no claim of closing the~3.5x frame gap."
+}
