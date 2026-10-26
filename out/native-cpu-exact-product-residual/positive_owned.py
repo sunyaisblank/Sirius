@@ -43,7 +43,8 @@ if phase in ('prepare-build', 'prepare-run'):
     actions = doc(W / 'actions.json')
     inputs = set(actions['run']['frozen_inputs'])
     inputs |= {str(p.relative_to(R)) for p in W.iterdir() if p.is_file()}
-    inputs |= {'/usr/bin/gdb', 'out/native-cpu-accumulate-compatibility/elf_proof.py'}
+    inputs |= {'/usr/bin/gdb', 'out/native-cpu-accumulate-compatibility/elf_proof.py',
+               'out/native-cpu-field-compatibility/elf_proof.py'}
     if phase == 'prepare-build':
         args = list(proof['compile_argv'])
         args = args[:args.index('-c')]

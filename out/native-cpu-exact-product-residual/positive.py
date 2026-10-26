@@ -21,8 +21,8 @@ def pin(path):
 
 # Bind this one actual linked instruction to the already inspected object.
 assert executable==root/'bin/linux-gcc/native-cpu-exact-product-residual/positive-check'
-helper=root/'out/native-cpu-accumulate-compatibility/elf_proof.py'
-assert pin(helper)['sha256']=='278766535b0ddcb9ad2ab97b68805cd851dda31036567a35f8bf5a07afedb0f7'
+helper=root/'out/native-cpu-field-compatibility/elf_proof.py'
+assert pin(helper)['sha256']=='faf7dd9d657941df283a36cf9f3b553a066ef18e4e46626689804c35e0ec6cd7'
 spec=importlib.util.spec_from_file_location('positive_existing_elf',helper)
 elf_module=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(elf_module)
