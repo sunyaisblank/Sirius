@@ -1,0 +1,118 @@
+{
+  "accepted": false,
+  "source": {
+    "revision": "cc3564e50fe83948d729a95b9a60e1c71e224806",
+    "status": ""
+  },
+  "arithmetic_case_started": false,
+  "owner": {
+    "adopted_children_reaped": [],
+    "argv": [
+      "/usr/bin/gdb",
+      "-q",
+      "-nx",
+      "-batch",
+      "-x",
+      "/home/astra/.project/Sirius/out/native-cpu-exact-product-residual/positive.gdb",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-exact-product-residual/positive-check"
+    ],
+    "boot_id": "de103855-6d1e-498f-b17f-a09b9e630710",
+    "case": "positive-run",
+    "child_exit": 1,
+    "child_pid": 56767,
+    "child_start_ticks": "6049738",
+    "cleanup_errors": [],
+    "controller": {
+      "pgrp": 56694,
+      "pid": 56694,
+      "ppid": 5888,
+      "rss_kib": 25212,
+      "session": 56694,
+      "start_ticks": "6049603",
+      "state": "R"
+    },
+    "declared_output_environment": {
+      "GTEST_OUTPUT": ""
+    },
+    "limits": {
+      "reserve_kib": 2097152,
+      "rss_kib": 4194304,
+      "seconds": 300
+    },
+    "minimum_sampled_available_kib": 20568000,
+    "observed_births": [
+      {
+        "absent": true,
+        "current_start_ticks": null,
+        "pid": 56767,
+        "saved_start_ticks": "6049738"
+      }
+    ],
+    "passed": false,
+    "peak_sampled_rss_kib": 26236,
+    "provider_mappings": [],
+    "remaining_owned_processes": [],
+    "scope": "One fixed eight-lane positive product via real dispatcher versus sealed v3, complete bank/canaries/immutable inputs, independent dyadic center and exact MXCSR flags/state. Passive first-residual PC/register read only; no inferior calls, data/register writes, retries, sampling for success or timing/adoption claim.",
+    "source": {
+      "revision": "cc3564e50fe83948d729a95b9a60e1c71e224806",
+      "status": ""
+    },
+    "source_unchanged": true,
+    "status": "terminal",
+    "stop_reason": null,
+    "wall_seconds": 0.2749977499988745,
+    "whole_inputs_unchanged": true
+  },
+  "archive": {
+    "file": "setup.zip",
+    "bytes": 414380,
+    "sha256": "484c41ea2ae8f93e0e058e1858a85872d3e0edeb152cbf52f3cdb2e541e07d52"
+  },
+  "members": {
+    "out/native-cpu-exact-product-residual/actions.json": {
+      "bytes": 127238,
+      "sha256": "cd3b112cacacf3308811f6ab4e4da2991f1f07ffe48de9b020565653fff8527e"
+    },
+    "out/native-cpu-exact-product-residual/positive.cpp": {
+      "bytes": 3343,
+      "sha256": "44f419d76bbd173a42c19c755044e1aa62fcf16c9fcf8c30426ebef71c94cc3a"
+    },
+    "out/native-cpu-exact-product-residual/positive.py": {
+      "bytes": 4963,
+      "sha256": "92d3a1b413c5b72e7b14ffbfc3e5ea2465504c1c17efcbf639e5adfba82dd029"
+    },
+    "out/native-cpu-exact-product-residual/positive.gdb": {
+      "bytes": 314,
+      "sha256": "cabbabbeac8459e59eb9a9674d5d3f0793b0d922e5c050e5859f5d5bf2068947"
+    },
+    "out/native-cpu-exact-product-residual/positive_owned.py": {
+      "bytes": 4990,
+      "sha256": "5f052ea69baafcac8fe26f73555cb903817e0585d41d269bfd4be001a283ea59"
+    },
+    "out/native-cpu-exact-product-residual/positive-run/stdout.log": {
+      "bytes": 298,
+      "sha256": "0d271fc7077d97fa6824c19a7d3c1cc8168da7a82c3e8eba865ef4bb9bd570d8"
+    },
+    "out/native-cpu-exact-product-residual/positive-run/owner.json": {
+      "bytes": 1686,
+      "sha256": "711570bcefa9b6d50725472e52feaafccf57f8b31b0ad01aefbf7594f88156d1"
+    },
+    "out/native-cpu-exact-product-residual/positive-run/samples.jsonl": {
+      "bytes": 220,
+      "sha256": "16fae5653ae827e12152c91711e53d8ad77a5a2cbecda1743ee598afbceb1f60"
+    },
+    "out/native-cpu-exact-product-residual/positive-run/stderr.log": {
+      "bytes": 181,
+      "sha256": "5c155948d6b8cfe685413c2ed1200cbbf7abde8fb9081963fa3dac853ddc6103"
+    },
+    "out/native-cpu-exact-product-residual/positive-run/inputs-after.json": {
+      "bytes": 1126006,
+      "sha256": "8c0569cb456c1ef4b33597de8967a90c0fd1073c4b5ccc70aa525be63494e569"
+    },
+    "out/native-cpu-exact-product-residual/positive-run/inputs-before.json": {
+      "bytes": 1126006,
+      "sha256": "8c0569cb456c1ef4b33597de8967a90c0fd1073c4b5ccc70aa525be63494e569"
+    }
+  },
+  "cause": "Older ELF reader skipped SHT_DYNSYM, causing KeyError6 in PIE RELA processing before observer installation/run. Switch to existing field-compatibility reader; original compiled math/fixture remain valid."
+}
