@@ -1,0 +1,58 @@
+{
+  "basis": {
+    "out/native-cpu-active-prefix/native_packet.hpp": {
+      "bytes": 2445,
+      "sha256": "9df6d65d1c89016694a7f242a8fdd61979db6826c4f0d2619b2b8954a9ca6eee"
+    },
+    "out/native-cpu-dispatch-admission/admission.cpp": {
+      "bytes": 2187,
+      "sha256": "a3d26fd74ab50ee679d0407f14eb6028af27e989df8230059e8ea1cca0e5faa8"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.cpp": {
+      "bytes": 2909,
+      "sha256": "4125493de03b1445187075a42457c23121713682578ba6a87ee0af92af3c7072"
+    },
+    "src/sirius/kernels/retained_endpoint.slang": {
+      "bytes": 38824,
+      "sha256": "5b91a7b68bac17b12d8fa9650df2273745992eb0a71f58845e4bd6cd23eb620d"
+    },
+    "bin/linux-gcc/native-cpu-scalar-zero/typed-batch/endpoint.native.hpp": {
+      "bytes": 813886,
+      "sha256": "b95b630d7fdb7a50db8f3551d3e48a3c932b9d5944dabc4b45afe301cc45c698"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "out/native-cpu-dispatch-admission/batch-compile-result.json": {
+      "bytes": 7614,
+      "sha256": "ccb2749de6917ff74bfbb998b34338241aa9f0996b43e9426caeb482d10ebd66"
+    },
+    "out/native-cpu-scalar-zero/cpp-compile-result.json": {
+      "bytes": 14560,
+      "sha256": "0fd97b1d7d8680b3e63358f827e52f28528f88b65f11a3d265adc905ef01f1db"
+    }
+  },
+  "derived": {
+    "native_packet.hpp": {
+      "bytes": 3767,
+      "sha256": "9da2464ac8812752e7091ccad7e53ff7c276e2666d6a9750f18aa4c66bab91b7"
+    },
+    "admission.cpp": {
+      "bytes": 2165,
+      "sha256": "5dd4535e222d8e82546627ea0174e3f31b3deb45648790da92ade40f5499585d"
+    },
+    "endpoint.cpp": {
+      "bytes": 2915,
+      "sha256": "5d54fbc79103a44bf017eb30e8a2be9e80e1ff93557b89c6622b83ade10bf025"
+    }
+  },
+  "admitted_program_difference": {
+    "stage": "Endpoint",
+    "relative_word": 11241,
+    "bytes": 4,
+    "canonical": 612,
+    "allowed": "Any uint32; the unchanged shader owns acceptance/refusal"
+  },
+  "scope": "One shared preflight/scalar-worker predicate. All original bounds/alignment/alias/grid/capacity checks remain. All other program bytes and Transport/DopriPhase stay strict; no shader, row/field/count/layout, arithmetic, FP, scheduler, input or output rewrite. Source premise does not identify the prior timeout cost."
+}
