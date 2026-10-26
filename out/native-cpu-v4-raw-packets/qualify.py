@@ -226,7 +226,12 @@ elif phase == 'link':
 elif phase == 'run':
     results = []
     for stage in ('transport', 'endpoint'):
-        result = subprocess.run([str(B / (stage + '-check'))], check=True,
+        argv = [str(B / (stage + '-check'))]
+        if stage == 'transport':
+            folder = W / 'run' / 'transport'
+            folder.mkdir(exist_ok=False)
+            argv.append(str(folder))
+        result = subprocess.run(argv, check=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         write(W / (stage + '-output.json'), dict(stdout=result.stdout, stderr=result.stderr))
         print(result.stdout, end='')
