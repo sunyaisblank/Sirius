@@ -114,5 +114,37 @@
       "sha256": "8c0569cb456c1ef4b33597de8967a90c0fd1073c4b5ccc70aa525be63494e569"
     }
   },
-  "cause": "Older ELF reader skipped SHT_DYNSYM, causing KeyError6 in PIE RELA processing before observer installation/run. Switch to existing field-compatibility reader; original compiled math/fixture remain valid."
+  "cause": "Older ELF reader skipped SHT_DYNSYM, causing KeyError6 in PIE RELA processing before observer installation/run. Switch to existing field-compatibility reader; original compiled math/fixture remain valid.",
+  "retired_expanded_setup_outputs": [
+    {
+      "path": "out/native-cpu-exact-product-residual/positive-run/stdout.log",
+      "bytes": 298,
+      "sha256": "0d271fc7077d97fa6824c19a7d3c1cc8168da7a82c3e8eba865ef4bb9bd570d8"
+    },
+    {
+      "path": "out/native-cpu-exact-product-residual/positive-run/owner.json",
+      "bytes": 1686,
+      "sha256": "711570bcefa9b6d50725472e52feaafccf57f8b31b0ad01aefbf7594f88156d1"
+    },
+    {
+      "path": "out/native-cpu-exact-product-residual/positive-run/samples.jsonl",
+      "bytes": 220,
+      "sha256": "16fae5653ae827e12152c91711e53d8ad77a5a2cbecda1743ee598afbceb1f60"
+    },
+    {
+      "path": "out/native-cpu-exact-product-residual/positive-run/stderr.log",
+      "bytes": 181,
+      "sha256": "5c155948d6b8cfe685413c2ed1200cbbf7abde8fb9081963fa3dac853ddc6103"
+    },
+    {
+      "path": "out/native-cpu-exact-product-residual/positive-run/inputs-after.json",
+      "bytes": 1126006,
+      "sha256": "8c0569cb456c1ef4b33597de8967a90c0fd1073c4b5ccc70aa525be63494e569"
+    },
+    {
+      "path": "out/native-cpu-exact-product-residual/positive-run/inputs-before.json",
+      "bytes": 1126006,
+      "sha256": "8c0569cb456c1ef4b33597de8967a90c0fd1073c4b5ccc70aa525be63494e569"
+    }
+  ]
 }
