@@ -152,5 +152,12 @@
     }
   },
   "cause": "GDB sources the AP wrapper without adding its directory to sys.path; wrapper imports rebind before inherited bootstrap runs.",
-  "scope": "Terminal harness-setup failure before GDB run; no C8/renderer/provider admission. Preserve before import bootstrap repair; no changed scene, limit, cache or renderer."
+  "scope": "Terminal harness-setup failure before GDB run; no C8/renderer/provider admission. Preserve before import bootstrap repair; no changed scene, limit, cache or renderer.",
+  "additional_preserved_inputs": {
+    "out/native-cpu-endpoint-header-cohort/runtime-transition.json": {
+      "artifact": "runtime-transition.json",
+      "bytes": 5982,
+      "sha256": "c519197927a2e80cd5cd7753f1475556a781c2b79e3ca26fbcfa43c3ad0b2a34"
+    }
+  }
 }
