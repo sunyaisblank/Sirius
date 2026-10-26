@@ -1,0 +1,68 @@
+{
+  "source_revision": "80710d0f",
+  "accepted": false,
+  "archive": {
+    "path": "attestations/qualification/80710d0f/native-cpu-v4-raw-link-association-check-failure/setup.zip",
+    "bytes": 2414287,
+    "sha256": "33b9318af63ea23f56a2ba82c6a487b4132ceb1fb24f34483a75e3740e278fc2"
+  },
+  "members": {
+    "out/native-cpu-v4-raw-packets/link/inputs-after.json": {
+      "bytes": 1167610,
+      "sha256": "7024a0a23f251eaf422731fddbb2d74a28572f38781cf776972ef475a576df50"
+    },
+    "out/native-cpu-v4-raw-packets/link/inputs-before.json": {
+      "bytes": 1167610,
+      "sha256": "7024a0a23f251eaf422731fddbb2d74a28572f38781cf776972ef475a576df50"
+    },
+    "out/native-cpu-v4-raw-packets/link/owner.json": {
+      "bytes": 1718,
+      "sha256": "0571766afb8cba95cfcdb1e30a061be8509e06dd474158d8ae42767493659362"
+    },
+    "out/native-cpu-v4-raw-packets/link/samples.jsonl": {
+      "bytes": 904,
+      "sha256": "7fa501f86f5096b3bc31579ba1c4b88bd2cac1e54aeca742f65fcfce37cd9cfc"
+    },
+    "out/native-cpu-v4-raw-packets/link/stderr.log": {
+      "bytes": 443,
+      "sha256": "8ef506e023cc2ebd29bb530b9f2b855fe05937d6447fdaa903edf9708adde82c"
+    },
+    "out/native-cpu-v4-raw-packets/link/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-v4-raw-packets/qualify.py": {
+      "bytes": 12105,
+      "sha256": "ec8aedea5fc683b1478e986285631137600d292b646a49f8622b88a7bfa7bc91"
+    },
+    "out/native-cpu-v4-raw-packets/check_code.py": {
+      "bytes": 5979,
+      "sha256": "df89dcc7ea9810224e55b9622807589f923713453ba7b21add6a12a0c8e6ceb5"
+    },
+    "out/native-cpu-v4-raw-packets/code-proof.json": {
+      "bytes": 13935,
+      "sha256": "b0199712b0f4043a224d3c5cabc123dbc64692e7687a940038111c882e0bebb0"
+    },
+    "out/native-cpu-v4-raw-packets/build-result.json": {
+      "bytes": 4342,
+      "sha256": "f47e75c285be6acf69e836d6553fa4110e6fd391ae7d511ce1dbda93d8e66697"
+    },
+    "out/native-cpu-v4-raw-packets/actions.json": {
+      "bytes": 122451,
+      "sha256": "6fce3859ed236e8043ab79da78c0e47475ab6d4238753f20fbd78a3ac57c050d"
+    },
+    "bin/linux-gcc/native-cpu-v4-raw-packets/transport-check": {
+      "bytes": 7489664,
+      "sha256": "788345c332f7d0657201ea0466216b582b6b4788255f7ee6862eaeca12acf08f"
+    }
+  },
+  "products": {
+    "bin/linux-gcc/native-cpu-v4-raw-packets/transport-check": {
+      "bytes": 7489664,
+      "sha256": "788345c332f7d0657201ea0466216b582b6b4788255f7ee6862eaeca12acf08f"
+    }
+  },
+  "all_owned_processes_reaped": true,
+  "no_numerical_workload_run": true,
+  "failure": "Transport link command returned0, then expanded whole-object ELF association checker stopped. Endpoint not linked and no numerical executable was run. Diagnose association boundary without recompiling or relinking Transport."
+}
