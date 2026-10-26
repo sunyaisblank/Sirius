@@ -1,0 +1,36 @@
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -5,9 +5,9 @@
+   [ 'lavapipe_target.c' ],
+   objects : files(
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-scalar-zero/objects/endpoint.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-endpoint-header-domain/endpoint.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-dispatch-admission/admission.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-endpoint-header-domain/admission.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-local-identities/objects/transport.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-local-identities/objects/endpoint.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-local-identities/objects/dopri_phase.o',
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -847,7 +847,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-v4-arithmetic-v39";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-endpoint-header-v40";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AO";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AP";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
