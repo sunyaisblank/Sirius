@@ -1,0 +1,502 @@
+{
+  "finite_component_passed": true,
+  "provider_adopted": false,
+  "compiled_source_revision": "5d6ba43c14bfce2144d59b17e6ec89a98553ad7b",
+  "executed_source_revision": "cbe7a8ea6f2070310ac9d02223dbf96bbda1fa57",
+  "archive": {
+    "path": "attestations/qualification/5d6ba43c/native-cpu-packed-math-boundary-finite-compatibility/component.zip",
+    "bytes": 6466534,
+    "sha256": "3b249c81c6ae61adbb27639e358ff95d520d1963dad19688771905b5c32e724d"
+  },
+  "members": {
+    "bin/linux-gcc/native-cpu-packed-math-boundary/endpoint-check": {
+      "bytes": 5349072,
+      "sha256": "638f367f827c7aba8483242cdb3caa60bd5acccdf3a008ccc2d55242cd11007e"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc": {
+      "bytes": 403846,
+      "sha256": "71df339357a7343dbcc61dbf27a9a9b01da014019060a5197e1fb0e1842a24b5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc": {
+      "bytes": 795296,
+      "sha256": "c71e3ed970319588bce85d4172962db77cdc60781151179a84ede596bffdf0b5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc": {
+      "bytes": 626970,
+      "sha256": "ac9cbdfbb505e2ba5931ad714aaaf9f54c00d34f5c839cfbd38e5101bdde990b"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/cpu_gate.o": {
+      "bytes": 2096,
+      "sha256": "04ec5e99f1dda456c8c232185c3c31a5f7a689cadd03d7bf2cd7e45b961e86c5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o": {
+      "bytes": 601320,
+      "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint-driver.o": {
+      "bytes": 363616,
+      "sha256": "9f30f40b5cf0f99fd654f8b799fa37fb5c8667e508e52016577974a21e9546fe"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o": {
+      "bytes": 863920,
+      "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport-driver.o": {
+      "bytes": 482160,
+      "sha256": "9e35acc8fc7f1587c9fb8692532eeacbdc899a4ef1393ae6bcc5181433719b3c"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o": {
+      "bytes": 993648,
+      "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/transport-check": {
+      "bytes": 7686992,
+      "sha256": "d835a5984c0312fd322e938fb491ac2d8ebc03dd29b455c92960f68e08ed5b2a"
+    },
+    "out/native-cpu-packed-math-boundary/actions.json": {
+      "bytes": 13570,
+      "sha256": "a5b3d3212626ab4663396da13fdfe1e29f1bc265b4091cee95472716ad12bc4d"
+    },
+    "out/native-cpu-packed-math-boundary/build/inputs-after.json": {
+      "bytes": 1068012,
+      "sha256": "a8e977283c9c489448429cb86f67ea9bb0adb5f7dc89aff29ea69d3770473b05"
+    },
+    "out/native-cpu-packed-math-boundary/build/inputs-before.json": {
+      "bytes": 1068012,
+      "sha256": "a8e977283c9c489448429cb86f67ea9bb0adb5f7dc89aff29ea69d3770473b05"
+    },
+    "out/native-cpu-packed-math-boundary/build/owner.json": {
+      "bytes": 2145,
+      "sha256": "a3bd03d5dcf07b536a4a8f2d6ab8cf5d96fa8e176559b50dfe2205a67d9f99bd"
+    },
+    "out/native-cpu-packed-math-boundary/build/samples.jsonl": {
+      "bytes": 17722,
+      "sha256": "1a3328055af20389d611d9b077b96629af36fb3d2229f8e4e4c5d2e391bcae54"
+    },
+    "out/native-cpu-packed-math-boundary/build/stderr.log": {
+      "bytes": 31402,
+      "sha256": "b71409c4ce87412ad6feb7c7e7f2dfde2fb911687a8ae145689952840f98c102"
+    },
+    "out/native-cpu-packed-math-boundary/build/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-packed-math-boundary/build-result.json": {
+      "bytes": 3808,
+      "sha256": "e230e672651616ea52130bb2b76636ba22565f9f3deeb8edffea362945fced71"
+    },
+    "out/native-cpu-packed-math-boundary/check_code.py": {
+      "bytes": 3054,
+      "sha256": "f73c8a00218751d72f1764050a44823b5746687377688fb5730a9994f45f169d"
+    },
+    "out/native-cpu-packed-math-boundary/code-proof.json": {
+      "bytes": 4178,
+      "sha256": "663b1800ddbc29965d5893c4a59f7ae4f26f99418eeb844505c7d991d1687c8d"
+    },
+    "out/native-cpu-packed-math-boundary/compatibility.json": {
+      "bytes": 1700,
+      "sha256": "030b9a276c7a3eb2ff6766e8b63cd4d59038f48bc0f54740a02e562bf0c32107"
+    },
+    "out/native-cpu-packed-math-boundary/component.py": {
+      "bytes": 16570,
+      "sha256": "d169ae5c49d58549b4720f0043ac96d9fa74d51cebaa56f9098693d29c2bde69"
+    },
+    "out/native-cpu-packed-math-boundary/derivation.json": {
+      "bytes": 25969,
+      "sha256": "20ab98d2edce9cd0c895ad4fafb928f264b16711984d0b7155c91b4000cee73d"
+    },
+    "out/native-cpu-packed-math-boundary/endpoint-link-proof.json": {
+      "bytes": 6420352,
+      "sha256": "372f141f6effcb41c360fa0a4074bc7fd6862a77a276bea91698a6eba1806279"
+    },
+    "out/native-cpu-packed-math-boundary/endpoint-output.json": {
+      "bytes": 782,
+      "sha256": "eb3093f1fd505702f045b7fbb17531c96f6917064c1b942c66ac20ccd8c64254"
+    },
+    "out/native-cpu-packed-math-boundary/link/inputs-after.json": {
+      "bytes": 1070628,
+      "sha256": "209da3bf6d2d94200f0ca432198ab55c36a962930b8c7832406331b9ec1e61a1"
+    },
+    "out/native-cpu-packed-math-boundary/link/inputs-before.json": {
+      "bytes": 1070628,
+      "sha256": "209da3bf6d2d94200f0ca432198ab55c36a962930b8c7832406331b9ec1e61a1"
+    },
+    "out/native-cpu-packed-math-boundary/link/owner.json": {
+      "bytes": 2522,
+      "sha256": "204295e9e2bf13263d5f783b7bd6440df166e6af952b589d7277d13482c2284d"
+    },
+    "out/native-cpu-packed-math-boundary/link/samples.jsonl": {
+      "bytes": 4021,
+      "sha256": "1a713c2285bdcbfd10b8a509d750fb1739b8d9cae49bc6b32619dc865f7ab822"
+    },
+    "out/native-cpu-packed-math-boundary/link/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-packed-math-boundary/link/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-packed-math-boundary/link-result.json": {
+      "bytes": 5095,
+      "sha256": "e025693efe4e8b8f242bd5e632716002289218262fd16e0def777ffbf22748f7"
+    },
+    "out/native-cpu-packed-math-boundary/owned_guard.py": {
+      "bytes": 287,
+      "sha256": "0f202d05d6d8a4e69670401618c744ee9214715d3be0697780e82e5bc77d3803"
+    },
+    "out/native-cpu-packed-math-boundary/packinghelper.isph": {
+      "bytes": 2016,
+      "sha256": "b22326460ff2fdec4b3e507228f5ecd792cea82e33cf1f599647d893691cd874"
+    },
+    "out/native-cpu-packed-math-boundary/qualify.py": {
+      "bytes": 7932,
+      "sha256": "3b5202c6b5fce215ba16011eeac194951d9259860ed6709c7d6f0b457a92a6a4"
+    },
+    "out/native-cpu-packed-math-boundary/run/inputs-after.json": {
+      "bytes": 1073161,
+      "sha256": "49665f43c3e00d1124ec7659fd073fb21865f404c69824811852f3f86b53406c"
+    },
+    "out/native-cpu-packed-math-boundary/run/inputs-before.json": {
+      "bytes": 1073161,
+      "sha256": "49665f43c3e00d1124ec7659fd073fb21865f404c69824811852f3f86b53406c"
+    },
+    "out/native-cpu-packed-math-boundary/run/owner.json": {
+      "bytes": 1886,
+      "sha256": "412ce8bee67a69691f6e8a57b3b03a077f37e9eaa23825d4c34fe7383e593326"
+    },
+    "out/native-cpu-packed-math-boundary/run/samples.jsonl": {
+      "bytes": 903,
+      "sha256": "726ee90ae9147cfc0f918e10da0bea0428e9818f7cd8c3eb52524c323d618529"
+    },
+    "out/native-cpu-packed-math-boundary/run/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-packed-math-boundary/run/stdout.log": {
+      "bytes": 976,
+      "sha256": "60ff04c5126e5134ad6a49b91a86519396318003a9b6aa973068b188d1d50c5e"
+    },
+    "out/native-cpu-packed-math-boundary/run/transport/baseline.bin": {
+      "bytes": 751840,
+      "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc"
+    },
+    "out/native-cpu-packed-math-boundary/run/transport/calls.jsonl": {
+      "bytes": 1472,
+      "sha256": "aedd0c24d2b06019b4f7e3314f93e0be17dbfe4c1099276081c4386c6bd8cec3"
+    },
+    "out/native-cpu-packed-math-boundary/run/transport/candidate.bin": {
+      "bytes": 751840,
+      "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc"
+    },
+    "out/native-cpu-packed-math-boundary/run/transport/cases.tsv": {
+      "bytes": 1187,
+      "sha256": "c585c14dd3503398447ff38a5cd1a277411eae803ca6eaf733017f8c9b863347"
+    },
+    "out/native-cpu-packed-math-boundary/run/transport/input-after.bin": {
+      "bytes": 100672,
+      "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad"
+    },
+    "out/native-cpu-packed-math-boundary/run/transport/input-before.bin": {
+      "bytes": 100672,
+      "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad"
+    },
+    "out/native-cpu-packed-math-boundary/run_owned.py": {
+      "bytes": 285,
+      "sha256": "7947f27bf667415a82b6b2df215bc10efb45f2cd4d11fcd6571e6ad37ece7888"
+    },
+    "out/native-cpu-packed-math-boundary/transport-link-proof.json": {
+      "bytes": 9313550,
+      "sha256": "7ff5e99dcda6e22098e46c3b09d912bd56ab3a59ae5775ffeb0e8b2f10276474"
+    },
+    "out/native-cpu-packed-math-boundary/transport-output.json": {
+      "bytes": 328,
+      "sha256": "ca562b34ee03cab80aab6688d64c3a692aff55741fdc84485a35462d00821031"
+    }
+  },
+  "products": {
+    "bin/linux-gcc/native-cpu-packed-math-boundary/transport-check": {
+      "bytes": 7686992,
+      "sha256": "d835a5984c0312fd322e938fb491ac2d8ebc03dd29b455c92960f68e08ed5b2a"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/endpoint-check": {
+      "bytes": 5349072,
+      "sha256": "638f367f827c7aba8483242cdb3caa60bd5acccdf3a008ccc2d55242cd11007e"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint-driver.o": {
+      "bytes": 363616,
+      "sha256": "9f30f40b5cf0f99fd654f8b799fa37fb5c8667e508e52016577974a21e9546fe"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o": {
+      "bytes": 863920,
+      "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o": {
+      "bytes": 993648,
+      "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/cpu_gate.o": {
+      "bytes": 2096,
+      "sha256": "04ec5e99f1dda456c8c232185c3c31a5f7a689cadd03d7bf2cd7e45b961e86c5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport-driver.o": {
+      "bytes": 482160,
+      "sha256": "9e35acc8fc7f1587c9fb8692532eeacbdc899a4ef1393ae6bcc5181433719b3c"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o": {
+      "bytes": 601320,
+      "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+    }
+  },
+  "owners": [
+    {
+      "path": "out/native-cpu-packed-math-boundary/build/owner.json",
+      "bytes": 2145,
+      "sha256": "a3bd03d5dcf07b536a4a8f2d6ab8cf5d96fa8e176559b50dfe2205a67d9f99bd",
+      "source": {
+        "revision": "5d6ba43c14bfce2144d59b17e6ec89a98553ad7b",
+        "status": ""
+      },
+      "wall_seconds": 13.297790520009585,
+      "peak_sampled_rss_kib": 210580,
+      "all_owned_births_reaped": true
+    },
+    {
+      "path": "out/native-cpu-packed-math-boundary/link/owner.json",
+      "bytes": 2522,
+      "sha256": "204295e9e2bf13263d5f783b7bd6440df166e6af952b589d7277d13482c2284d",
+      "source": {
+        "revision": "cbe7a8ea6f2070310ac9d02223dbf96bbda1fa57",
+        "status": ""
+      },
+      "wall_seconds": 3.845080794999376,
+      "peak_sampled_rss_kib": 90384,
+      "all_owned_births_reaped": true
+    },
+    {
+      "path": "out/native-cpu-packed-math-boundary/run/owner.json",
+      "bytes": 1886,
+      "sha256": "412ce8bee67a69691f6e8a57b3b03a077f37e9eaa23825d4c34fe7383e593326",
+      "source": {
+        "revision": "cbe7a8ea6f2070310ac9d02223dbf96bbda1fa57",
+        "status": ""
+      },
+      "wall_seconds": 0.7841949909925461,
+      "peak_sampled_rss_kib": 50652,
+      "all_owned_births_reaped": true
+    }
+  ],
+  "total_owned_wall_seconds": 17.927066306001507,
+  "new_raw_compilations": 3,
+  "new_CXX_compilations": 0,
+  "fixture_runs_per_fixture": 1,
+  "math_component_manifest": {
+    "path": "attestations/qualification/ca334e6e/native-cpu-exact-product-zero-residual-finite-compatibility/MANIFEST.json",
+    "bytes": 16372,
+    "sha256": "44d228597b02d724ad7a5b0ebfe8d69073bf306977bacd3a93013d1462213a66"
+  },
+  "new_optional_math": {
+    "path": "bin/linux-gcc/native-cpu-exact-product-zero-residual/optional.o",
+    "bytes": 256280,
+    "sha256": "31594a31204d85e8fec6ef1463807c5c1117eddc6fe4e8ad297f4f02362ed59f"
+  },
+  "original_v3_dispatcher_AQ_baseline_adapter_and_first7_AP_native_objects_reused": true,
+  "original_fixture_objects_restored_exactly_from_sealed_archive": true,
+  "results": {
+    "transport": {
+      "passed": true,
+      "case_count": 38,
+      "active_rows": 38,
+      "capacity_rows": 40,
+      "packets_per_implementation": 5,
+      "raw_calls": 10,
+      "compared_output_words": 187960,
+      "input_unchanged": true,
+      "inactive_sentinels_preserved": true,
+      "full_word_match": true,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    },
+    "endpoint": {
+      "passed": true,
+      "selection_rows": 23,
+      "capacity": 32,
+      "header_values": 6,
+      "layouts": 2,
+      "reference_rows": 138,
+      "scalar_packets": 360,
+      "raw_packets": 24,
+      "pure_calls": 21199,
+      "other_program_word_refusals": 21142,
+      "boundary_refusals": 21,
+      "compared_output_words": 5189312960,
+      "compared_input_words": 601713080,
+      "whole3829_words_and_inactive_capacity_and_canaries": true,
+      "input_immutable": true,
+      "MXCSR_controls_unchanged": true,
+      "caller_MXCSR_state_restored": true,
+      "scope": "Finite selector/routing compatibility against unchanged generated scalar shader and checked-in original input builders; direct unchanged raw Endpoint plus scalar tails, not provider integration, independent numerical or performance/scientific/release qualification"
+    }
+  },
+  "complete_link_association": {
+    "transport": {
+      "objects": 17,
+      "functions": 1582,
+      "declared_GOT_fields": 2
+    },
+    "endpoint": {
+      "objects": 15,
+      "functions": 1412,
+      "declared_GOT_fields": 0
+    }
+  },
+  "code": {
+    "passed": true,
+    "objects": [
+      {
+        "stage": "transport",
+        "original": {
+          "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/transport.o",
+          "bytes": 891864,
+          "sha256": "5ca7314395137d70363c5fba342973d1fd233dfbd8f56b8d30dddaa1d9da9642"
+        },
+        "candidate": {
+          "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o",
+          "bytes": 993648,
+          "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+        },
+        "original_instructions": 95833,
+        "candidate_instructions": 103071,
+        "original_stack_address_operands": 11248,
+        "candidate_stack_address_operands": 17494,
+        "new_mnemonics": [
+          "jae"
+        ],
+        "undefined": [
+          "memset",
+          "sirius_native_v4_dense_add8",
+          "sirius_native_v4_dense_divide8",
+          "sirius_native_v4_dense_multiply8",
+          "sirius_native_v4_dense_sqrt8",
+          "sirius_native_v4_tagged_add8",
+          "sirius_native_v4_tagged_divide8",
+          "sirius_native_v4_tagged_multiply8",
+          "sirius_native_v4_tagged_sqrt8",
+          "sirius_native_v4_tagged_subtract8",
+          "sirius_simd_fmaxf"
+        ],
+        "store_wrappers_eliminated": true,
+        "no_FMA": true
+      },
+      {
+        "stage": "endpoint",
+        "original": {
+          "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/endpoint.o",
+          "bytes": 803928,
+          "sha256": "58b31cf3aa432c5fcdd2e0a87646a55dc04dd5839f6da014d9c3f8caa4c99665"
+        },
+        "candidate": {
+          "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o",
+          "bytes": 863920,
+          "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+        },
+        "original_instructions": 103892,
+        "candidate_instructions": 104433,
+        "original_stack_address_operands": 14678,
+        "candidate_stack_address_operands": 18870,
+        "new_mnemonics": [
+          "or",
+          "setae",
+          "sete"
+        ],
+        "undefined": [
+          "memset",
+          "sirius_native_v4_dense_add8",
+          "sirius_native_v4_dense_divide8",
+          "sirius_native_v4_dense_multiply8",
+          "sirius_native_v4_dense_sqrt8",
+          "sirius_native_v4_tagged_add8",
+          "sirius_native_v4_tagged_divide8",
+          "sirius_native_v4_tagged_multiply8",
+          "sirius_native_v4_tagged_sqrt8",
+          "sirius_native_v4_tagged_subtract8",
+          "sirius_simd_fmaxf"
+        ],
+        "store_wrappers_eliminated": true,
+        "no_FMA": true
+      },
+      {
+        "stage": "dopri_phase",
+        "original": {
+          "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/dopri_phase.o",
+          "bytes": 583992,
+          "sha256": "1cc765a150ce5a60000dc3065d94e7c0f045750a0a2df22bd674e0d2478944e0"
+        },
+        "candidate": {
+          "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o",
+          "bytes": 601320,
+          "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+        },
+        "original_instructions": 65064,
+        "candidate_instructions": 64569,
+        "original_stack_address_operands": 10023,
+        "candidate_stack_address_operands": 11295,
+        "new_mnemonics": [
+          "or",
+          "setae"
+        ],
+        "undefined": [
+          "memset",
+          "sirius_native_v4_dense_add8",
+          "sirius_native_v4_dense_divide8",
+          "sirius_native_v4_dense_multiply8",
+          "sirius_native_v4_dense_sqrt8",
+          "sirius_native_v4_tagged_add8",
+          "sirius_native_v4_tagged_divide8",
+          "sirius_native_v4_tagged_multiply8",
+          "sirius_native_v4_tagged_subtract8",
+          "sirius_simd_fmaxf"
+        ],
+        "store_wrappers_eliminated": true,
+        "no_FMA": true
+      }
+    ],
+    "allowed_new_mnemonics": "Baseline x86 jae/or/setae/sete only; all other opcodes drawn from the previously reviewed same-target raw objects.",
+    "explicit_compiler_private_temporary_bytes_per_store": 576,
+    "scope": "Static source/object acceptance and wrapper elimination only. Stack-address counts include LEA/frame references and are not spills or traffic. No stack-slot reuse, full-bank SSA, throughput, provider/frame or scientific/release claim."
+  },
+  "source_math_call_boundaries": {
+    "transport": {
+      "dense_private_calls": 4,
+      "tagged_private_calls": 5,
+      "full_original_bank_passed_to_CXX_math": false
+    },
+    "endpoint": {
+      "dense_private_calls": 4,
+      "tagged_private_calls": 5,
+      "full_original_bank_passed_to_CXX_math": false
+    },
+    "dopri_phase": {
+      "dense_private_calls": 4,
+      "tagged_private_calls": 5,
+      "full_original_bank_passed_to_CXX_math": false
+    }
+  },
+  "compiler_private_storage": {
+    "payload_words": 120,
+    "tag_words": 24,
+    "bytes": 576,
+    "slots": {
+      "destination": 0,
+      "a": 1,
+      "b": 2
+    },
+    "physical_lanes": 8,
+    "stack_reuse_established": false,
+    "host_allocations_changed": false,
+    "KernelContext_layout_changed": false
+  },
+  "all9380_literal_operators_and_original_masks_preserved": true,
+  "limitations": "Finite coupled packed-boundary plus reviewed zero-residual-math compatibility only. Transport38/all187960words and focused Endpoint/all3829rowwords+inactivecapacity/canaries+malformed-header/refusal checks pass once each. Source shows all C++ math calls use private banks; five RTStore wrappers are absent in emitted objects. Instructions/stack-address counts disclose costs, do not establish SROA, stack-slot reuse, spills/traffic or speed. DopriPhase compiled/linked but not executed; no actual packet selection/provider/C8/all8/ABBA/frame/scientific/release admission. Compiler-private576B stack arrays do not change original KernelContext layout, host/shader allocation counts, publicABI, scenes/rows/fields/RHS/trials/precision/cache/governors.",
+  "next_required_gate": "One coordinated provider composition and fresh original C8/adoption gates for both changed raw3 and optional math. Preserve the original AQ failed-frame identity; no unchanged renderer retry."
+}
