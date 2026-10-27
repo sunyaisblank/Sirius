@@ -1,0 +1,596 @@
+{
+  "prepared_only": true,
+  "compiled": false,
+  "executed": false,
+  "source_inputs": {
+    "out/native-cpu-v4-raw-packets/derivation.json": {
+      "bytes": 129718,
+      "sha256": "f50b0e9c73272be4a7945fb88a2c8437cba1c5df8c62e6450354987cd1f2aa8a"
+    },
+    "out/native-cpu-v4-raw-packets/component.py": {
+      "bytes": 13618,
+      "sha256": "a9a2b06be656a5f15bab970d3906a5099ce295a9cf0ba2111e85fe47f9ee80b5"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "out/native-cpu-value-fact-stores/retained8.cpp": {
+      "bytes": 36789,
+      "sha256": "60455d362b1c98b30e9975c35011c6a193ffcf98a5872ddb45036c0e5364961d"
+    },
+    "out/native-cpu-v4-arithmetic/optional.cpp": {
+      "bytes": 804,
+      "sha256": "bcd7804fc7935de78846bf6317d9545b7df78afa934957d74691e74927b028d5"
+    },
+    "out/native-cpu-v4-raw-provider/provider/source-contract.json": {
+      "bytes": 119007,
+      "sha256": "edd1786861ae446611b6b90fd1b48d1c7b67a9bfa4318d921d0e85efc664bf3d"
+    },
+    "out/native-cpu-v4-raw-provider/provider/linked-native-proof.json": {
+      "bytes": 16998774,
+      "sha256": "73c9fb917bbfdad6c79b75722448141ab61f5f686db61a5ba2b0953cc1ce2ea4"
+    },
+    "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/MANIFEST.json": {
+      "bytes": 34105,
+      "sha256": "b41bc17d44c4757c51415a1282da22692c85cbd589e92c11724e47da01cdc19b"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html": {
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/component.zip": {
+      "bytes": 7379009,
+      "sha256": "f82c009e3363d8b3a6cdb5c01dcb7790b4b6a5e3e056b54328f565754a337bef"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    },
+    "out/native-cpu-packed-math-boundary/component.py": {
+      "bytes": 16570,
+      "sha256": "d169ae5c49d58549b4720f0043ac96d9fa74d51cebaa56f9098693d29c2bde69"
+    },
+    "bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/transport.ispc": {
+      "bytes": 624271,
+      "sha256": "975497b521d69cce3093c8ddae032cc79cd51efd5c689b62698ced261dfda771"
+    },
+    "bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/endpoint.ispc": {
+      "bytes": 792597,
+      "sha256": "66fc1b689b5ebf83e14ef89ca47920c7cb7bc504d5460d1ad70842d125edde06"
+    },
+    "bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/dopri_phase.ispc": {
+      "bytes": 401147,
+      "sha256": "368be8d819c6b831c586f0f70717fa43b7d54f866d7b8534c94433c78ec41254"
+    }
+  },
+  "derived": {
+    "out/native-cpu-packed-math-boundary/packinghelper.isph": {
+      "bytes": 2016,
+      "sha256": "b22326460ff2fdec4b3e507228f5ecd792cea82e33cf1f599647d893691cd874"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc": {
+      "bytes": 626970,
+      "sha256": "ac9cbdfbb505e2ba5931ad714aaaf9f54c00d34f5c839cfbd38e5101bdde990b"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc": {
+      "bytes": 795296,
+      "sha256": "c71e3ed970319588bce85d4172962db77cdc60781151179a84ede596bffdf0b5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc": {
+      "bytes": 403846,
+      "sha256": "71df339357a7343dbcc61dbf27a9a9b01da014019060a5197e1fb0e1842a24b5"
+    }
+  },
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 624271,
+        "sha256": "975497b521d69cce3093c8ddae032cc79cd51efd5c689b62698ced261dfda771"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc",
+      "literal_instruction_calls": 3144,
+      "whole_source_inverse_restores_AQ": true,
+      "changed_functions": [
+        {
+          "name": "RTAddStore_0",
+          "original": {
+            "bytes": 684,
+            "sha256": "b278e8513c3c255272a6fd25826b68a7c0af7757625f7d5beef20dfd80b62520"
+          },
+          "candidate": {
+            "bytes": 1205,
+            "sha256": "535478f6938c1c0d899c0ec0e66c831340176b532de23567de5513bf4822f5d3"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTMultiplyStore_0",
+          "original": {
+            "bytes": 694,
+            "sha256": "34c48ffbcada4ac3fb1b5eebf3b2ea7e6a4a862b35fe94d89f5839d11f82a4b4"
+          },
+          "candidate": {
+            "bytes": 1215,
+            "sha256": "06cf7352ea3b226608c4302b736b7634fa6614a4dc17186a19160d17694493d8"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTSubtractStore_0",
+          "original": {
+            "bytes": 694,
+            "sha256": "9eff8cd42936cc00166dc0255f370e6f3c34b36d56a8463dc5805e25f2746b06"
+          },
+          "candidate": {
+            "bytes": 1215,
+            "sha256": "8ab50d870c8cd9236111fb83428b62c5049456ee5631e7bd71cdc1533b88732f"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTDivideStore_0",
+          "original": {
+            "bytes": 467,
+            "sha256": "6d289bf6020af0cea0b44f12fc624a616213e92db0702cc03c13507b2148677e"
+          },
+          "candidate": {
+            "bytes": 988,
+            "sha256": "5bf92e06fc989769d8c9060164a4491bcba48df19f61b73b914b1e20986d4789"
+          },
+          "identity_shortcut_bytes_unchanged": false
+        },
+        {
+          "name": "RTSqrtStore_0",
+          "original": {
+            "bytes": 463,
+            "sha256": "203d872cdf29ba443852bf9bbc1b242f9da3b770a72a320b696b16be30907769"
+          },
+          "candidate": {
+            "bytes": 984,
+            "sha256": "6108d6970e37c5654ac0afe0a5e3b44224c524a64e2df97d44a75e9e3fdb7d89"
+          },
+          "identity_shortcut_bytes_unchanged": false
+        }
+      ],
+      "preprocessor_symbol_map": {
+        "sirius_simd_transport_packet": "sirius_simd_v4_transport_packet",
+        "sirius_native_dense_add8": "sirius_native_v4_dense_add8",
+        "sirius_native_dense_multiply8": "sirius_native_v4_dense_multiply8",
+        "sirius_native_dense_subtract8": "sirius_native_v4_dense_subtract8",
+        "sirius_native_dense_divide8": "sirius_native_v4_dense_divide8",
+        "sirius_native_dense_sqrt8": "sirius_native_v4_dense_sqrt8",
+        "sirius_native_tagged_add8": "sirius_native_v4_tagged_add8",
+        "sirius_native_tagged_multiply8": "sirius_native_v4_tagged_multiply8",
+        "sirius_native_tagged_subtract8": "sirius_native_v4_tagged_subtract8",
+        "sirius_native_tagged_divide8": "sirius_native_v4_tagged_divide8",
+        "sirius_native_tagged_sqrt8": "sirius_native_v4_tagged_sqrt8"
+      },
+      "EvaluateStaticLayer_and_EvaluateOneStatic_scopes_unchanged": true,
+      "original_export_and_all_external_declarations_unchanged": true,
+      "original_compile_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/transport.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-v4-raw-packets/objects/transport.o"
+      ]
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 792597,
+        "sha256": "66fc1b689b5ebf83e14ef89ca47920c7cb7bc504d5460d1ad70842d125edde06"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc",
+      "literal_instruction_calls": 4148,
+      "whole_source_inverse_restores_AQ": true,
+      "changed_functions": [
+        {
+          "name": "RTAddStore_0",
+          "original": {
+            "bytes": 684,
+            "sha256": "b278e8513c3c255272a6fd25826b68a7c0af7757625f7d5beef20dfd80b62520"
+          },
+          "candidate": {
+            "bytes": 1205,
+            "sha256": "535478f6938c1c0d899c0ec0e66c831340176b532de23567de5513bf4822f5d3"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTMultiplyStore_0",
+          "original": {
+            "bytes": 694,
+            "sha256": "34c48ffbcada4ac3fb1b5eebf3b2ea7e6a4a862b35fe94d89f5839d11f82a4b4"
+          },
+          "candidate": {
+            "bytes": 1215,
+            "sha256": "06cf7352ea3b226608c4302b736b7634fa6614a4dc17186a19160d17694493d8"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTSubtractStore_0",
+          "original": {
+            "bytes": 694,
+            "sha256": "9eff8cd42936cc00166dc0255f370e6f3c34b36d56a8463dc5805e25f2746b06"
+          },
+          "candidate": {
+            "bytes": 1215,
+            "sha256": "8ab50d870c8cd9236111fb83428b62c5049456ee5631e7bd71cdc1533b88732f"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTDivideStore_0",
+          "original": {
+            "bytes": 467,
+            "sha256": "6d289bf6020af0cea0b44f12fc624a616213e92db0702cc03c13507b2148677e"
+          },
+          "candidate": {
+            "bytes": 988,
+            "sha256": "5bf92e06fc989769d8c9060164a4491bcba48df19f61b73b914b1e20986d4789"
+          },
+          "identity_shortcut_bytes_unchanged": false
+        },
+        {
+          "name": "RTSqrtStore_0",
+          "original": {
+            "bytes": 463,
+            "sha256": "203d872cdf29ba443852bf9bbc1b242f9da3b770a72a320b696b16be30907769"
+          },
+          "candidate": {
+            "bytes": 984,
+            "sha256": "6108d6970e37c5654ac0afe0a5e3b44224c524a64e2df97d44a75e9e3fdb7d89"
+          },
+          "identity_shortcut_bytes_unchanged": false
+        }
+      ],
+      "preprocessor_symbol_map": {
+        "sirius_simd_endpoint_packet": "sirius_simd_v4_endpoint_packet",
+        "sirius_native_dense_add8": "sirius_native_v4_dense_add8",
+        "sirius_native_dense_multiply8": "sirius_native_v4_dense_multiply8",
+        "sirius_native_dense_subtract8": "sirius_native_v4_dense_subtract8",
+        "sirius_native_dense_divide8": "sirius_native_v4_dense_divide8",
+        "sirius_native_dense_sqrt8": "sirius_native_v4_dense_sqrt8",
+        "sirius_native_tagged_add8": "sirius_native_v4_tagged_add8",
+        "sirius_native_tagged_multiply8": "sirius_native_v4_tagged_multiply8",
+        "sirius_native_tagged_subtract8": "sirius_native_v4_tagged_subtract8",
+        "sirius_native_tagged_divide8": "sirius_native_v4_tagged_divide8",
+        "sirius_native_tagged_sqrt8": "sirius_native_v4_tagged_sqrt8"
+      },
+      "EvaluateStaticLayer_and_EvaluateOneStatic_scopes_unchanged": true,
+      "original_export_and_all_external_declarations_unchanged": true,
+      "original_compile_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/endpoint.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-v4-raw-packets/objects/endpoint.o"
+      ]
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 401147,
+        "sha256": "368be8d819c6b831c586f0f70717fa43b7d54f866d7b8534c94433c78ec41254"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc",
+      "literal_instruction_calls": 2088,
+      "whole_source_inverse_restores_AQ": true,
+      "changed_functions": [
+        {
+          "name": "RTAddStore_0",
+          "original": {
+            "bytes": 684,
+            "sha256": "b278e8513c3c255272a6fd25826b68a7c0af7757625f7d5beef20dfd80b62520"
+          },
+          "candidate": {
+            "bytes": 1205,
+            "sha256": "535478f6938c1c0d899c0ec0e66c831340176b532de23567de5513bf4822f5d3"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTMultiplyStore_0",
+          "original": {
+            "bytes": 694,
+            "sha256": "34c48ffbcada4ac3fb1b5eebf3b2ea7e6a4a862b35fe94d89f5839d11f82a4b4"
+          },
+          "candidate": {
+            "bytes": 1215,
+            "sha256": "06cf7352ea3b226608c4302b736b7634fa6614a4dc17186a19160d17694493d8"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTSubtractStore_0",
+          "original": {
+            "bytes": 694,
+            "sha256": "9eff8cd42936cc00166dc0255f370e6f3c34b36d56a8463dc5805e25f2746b06"
+          },
+          "candidate": {
+            "bytes": 1215,
+            "sha256": "8ab50d870c8cd9236111fb83428b62c5049456ee5631e7bd71cdc1533b88732f"
+          },
+          "identity_shortcut_bytes_unchanged": true
+        },
+        {
+          "name": "RTDivideStore_0",
+          "original": {
+            "bytes": 467,
+            "sha256": "6d289bf6020af0cea0b44f12fc624a616213e92db0702cc03c13507b2148677e"
+          },
+          "candidate": {
+            "bytes": 988,
+            "sha256": "5bf92e06fc989769d8c9060164a4491bcba48df19f61b73b914b1e20986d4789"
+          },
+          "identity_shortcut_bytes_unchanged": false
+        },
+        {
+          "name": "RTSqrtStore_0",
+          "original": {
+            "bytes": 463,
+            "sha256": "203d872cdf29ba443852bf9bbc1b242f9da3b770a72a320b696b16be30907769"
+          },
+          "candidate": {
+            "bytes": 984,
+            "sha256": "6108d6970e37c5654ac0afe0a5e3b44224c524a64e2df97d44a75e9e3fdb7d89"
+          },
+          "identity_shortcut_bytes_unchanged": false
+        }
+      ],
+      "preprocessor_symbol_map": {
+        "sirius_simd_dopri_phase_packet": "sirius_simd_v4_dopri_phase_packet",
+        "sirius_native_dense_add8": "sirius_native_v4_dense_add8",
+        "sirius_native_dense_multiply8": "sirius_native_v4_dense_multiply8",
+        "sirius_native_dense_subtract8": "sirius_native_v4_dense_subtract8",
+        "sirius_native_dense_divide8": "sirius_native_v4_dense_divide8",
+        "sirius_native_dense_sqrt8": "sirius_native_v4_dense_sqrt8",
+        "sirius_native_tagged_add8": "sirius_native_v4_tagged_add8",
+        "sirius_native_tagged_multiply8": "sirius_native_v4_tagged_multiply8",
+        "sirius_native_tagged_subtract8": "sirius_native_v4_tagged_subtract8",
+        "sirius_native_tagged_divide8": "sirius_native_v4_tagged_divide8",
+        "sirius_native_tagged_sqrt8": "sirius_native_v4_tagged_sqrt8"
+      },
+      "EvaluateStaticLayer_and_EvaluateOneStatic_scopes_unchanged": true,
+      "original_export_and_all_external_declarations_unchanged": true,
+      "original_compile_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-v4-raw-packets/ispc-source/dopri_phase.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-v4-raw-packets/objects/dopri_phase.o"
+      ]
+    }
+  },
+  "raw_compilations": [
+    {
+      "stage": "transport",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o"
+      ],
+      "output": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o"
+    },
+    {
+      "stage": "endpoint",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o"
+      ],
+      "output": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o"
+    },
+    {
+      "stage": "dopri_phase",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o"
+      ],
+      "output": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o"
+    }
+  ],
+  "literal_instruction_calls_preserved": 9380,
+  "compiler": {
+    "path": "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+    "bytes": 211552768,
+    "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e",
+    "version_output": "Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.32.0 (build commit 2b17b0ef24032610 @ 20261012, LLVM 23.1.2)\n"
+  },
+  "raw_component_manifest": "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/MANIFEST.json",
+  "reused_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-endpoint-header-domain/endpoint.o",
+      "bytes": 263152,
+      "sha256": "7730ce37e8eb50ec8e83abd9430401e6faf99e2ad4bc8bf1f4bda4c36b486847"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-endpoint-header-domain/admission.o",
+      "bytes": 194776,
+      "sha256": "0a9a768f2605e70c7be24ed3c8e3177b2e7301dfced4b7eb002d6a38fc8d3d20"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/objects/transport.o",
+      "bytes": 1042176,
+      "sha256": "04bc4c45bf21b7df05ac4fb95283aba9e7b208cd73d336b83093bb26c33b8728"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/objects/endpoint.o",
+      "bytes": 934344,
+      "sha256": "1330cf6875d0db24aaad70f407da8607285d651cbc38e6d471c8247e6e398a54"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/objects/dopri_phase.o",
+      "bytes": 1193360,
+      "sha256": "0dc138c31434c91f1af671f81513a9a5ce6e35a20eab05846a7c12e5b19e766d"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/rows_adapter.o",
+      "bytes": 4760,
+      "sha256": "c9ee8c3c860673d0db9014b8d08b5cf95a38d4b999a6e74ce9da409f3c832d62"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/optional.o",
+      "bytes": 230080,
+      "sha256": "6ce5a0739d17c9a6bbc06350478b9ef22a60beb7687cc79102df1d8c3c89d99b"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/dispatch.o",
+      "bytes": 4704,
+      "sha256": "d7b9aa5ae74d4b791b9e6df59d0e2c10d3ae5fd079aeacf15b80a899e40b6411"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/v3.o",
+      "bytes": 238552,
+      "sha256": "0af01ed41b0189bc047b10b7d853a0e4ebdbb5c6eb02f729870401c2eb24f287"
+    }
+  ],
+  "compiler_private_storage": {
+    "payload_words": 120,
+    "tag_words": 24,
+    "bytes": 576,
+    "slots": {
+      "destination": 0,
+      "a": 1,
+      "b": 2
+    },
+    "physical_lanes": 8,
+    "stack_reuse_established": false,
+    "host_allocations_changed": false,
+    "KernelContext_layout_changed": false
+  },
+  "mask_and_FP_proof": [
+    "Original Add/Multiply/Subtract integer identity shortcut executes first with byte-identical source; its return still bypasses packing and C++.",
+    "Capture lanemask before the unmasked snapshot. Only uniform-index integer loads/stores occur there; all original physical scratch/tag lanes are initialized by the unchanged full-context memset.",
+    "The pinned ISPC guide restores the incoming mask after unmasked. The same extern C call occurs outside unmasked, retains original any-active call gating and receives the captured original mask. No new mask0 skip or forced C call exists.",
+    "Destination, both operands and all three tags are snapshotted for all8 lanes before C++ or any original-bank store. This preserves inactive operand words used by full-vector C++ arithmetic and its FP flags.",
+    "The unchanged C++ helper reads complete source operands before destination writes; fixed distinct temporary slots preserve original d/a/b aliases and ai==bi values. Its inactive destination merges see exact original destination words/tags.",
+    "Only destination payload and destination tag are copied back, under the restored original execution mask. Unknown/legacy metadata, signed zeros, invalid stored results and unchanged source/input words retain their original meanings.",
+    "Sqrt still fills temporary B/tagB from original SiriusB; the original canonical call passes B=A. Unchanged C++ tagged_sqrt ignores b_index, so fixed b=2 remains a filled, unused slot.",
+    "Marshalling performs no FP operations or FP-control writes; the direct v4 symbol mappings and original strict target flags are unchanged. Exact generated-code/mask/flag equivalence remains a future qualification gate."
+  ],
+  "local_semantics": {
+    "guide": {
+      "path": "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html",
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "sections": [
+      "re-establishing-the-execution-mask",
+      "interoperability-with-the-application"
+    ],
+    "source_review_GO": true,
+    "compiler_or_runtime_validation": false
+  },
+  "required_postcompile_gate": {
+    "before_any_link_or_runtime": true,
+    "inspect_all_executable_sections": true,
+    "reject_unknown_or_non_v4_instructions": true,
+    "reject_FMA_x87_FP_control_writes_and_reassociation": true,
+    "guard": "Unchanged baseline-compiled sirius_native_v4_supported uses the sealed OS-aware x86-64-v4 builtin; original groups8/v3/admission ordering precedes it.",
+    "target_features": [
+      "AVX512F",
+      "AVX512DQ",
+      "AVX512CD",
+      "AVX512BW",
+      "AVX512VL"
+    ],
+    "cpu_feature_scope": "skx tuning can enable instructions outside v4. Help support is not an emitted-ISA proof; ADX/cache-flush/random/MPX/TSX/PKU/SGX/XSAVE/monitor and every unknown extension must be rejected unless separately within the sealed guard.",
+    "inspect_actual_wrapper_inlining": true,
+    "record_stack_and_code_size": true,
+    "prove_original_banks_do_not_escape_to_external_math": true,
+    "compare_exact_whole_bank_alias_masks_metadata_and_FP_flags": true,
+    "original_provider_cohort_benefit_controls_frame_gates_still_required": true
+  },
+  "scope": "Source-only local escape-narrowing hypothesis. Five shared RT*Store bodies become inline; one private integer-packing include is added. All9380 ordered tuples, layer/evaluator scopes, exact8lane public ABI, AQ export/helper symbol mappings, arithmetic source, FP/ISA flags, private KernelContext layout, host/shader buffers, counts, policy, scheduling, cache and governors are unchanged. Each general helper call introduces explicit compiler-private576B temporary storage; stack reuse, SROA/SSA, spills, speed and frame completion are unproven. No compiler, link, provider, workload, timing, compatibility transfer or scientific/release acceptance. Coupling to another separately qualified arithmetic component is a later owner decision.",
+  "reference_optional_raw_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/transport.o",
+      "bytes": 891864,
+      "sha256": "5ca7314395137d70363c5fba342973d1fd233dfbd8f56b8d30dddaa1d9da9642"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/endpoint.o",
+      "bytes": 803928,
+      "sha256": "58b31cf3aa432c5fcdd2e0a87646a55dc04dd5839f6da014d9c3f8caa4c99665"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/dopri_phase.o",
+      "bytes": 583992,
+      "sha256": "1cc765a150ce5a60000dc3065d94e7c0f045750a0a2df22bd674e0d2478944e0"
+    }
+  ]
+}
