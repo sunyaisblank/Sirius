@@ -15,7 +15,8 @@ B = R / 'bin/linux-gcc/native-cpu-v4-raw-packets'
 O = B / 'objects'
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(R / 'out/native-cpu-field-compatibility'))
-from elf_proof import Elf, associate
+from elf_proof import Elf
+from fixture_elf import associate
 
 
 def doc(path):
@@ -52,6 +53,12 @@ def verify_inputs():
             assert pin(R / name) == expected, name
     for row in proof['reused_objects']:
         assert pin(R / row['path']) == {k: row[k] for k in ('bytes', 'sha256')}
+    original = doc(R / 'out/native-cpu-accumulate-compatibility/compile-completion.json')
+    for key in ('driver_object', 'renamed_baseline_object'):
+        row = original[key]
+        assert pin(R / row['path']) == {k: row[k] for k in ('bytes', 'sha256')}
+    endpoint = doc(R / 'out/native-cpu-endpoint-header-domain/driver-build-result.json')
+    assert pin(R / 'bin/linux-gcc/native-cpu-endpoint-header-domain/driver.o') == endpoint['driver']
     return proof
 
 
@@ -102,7 +109,7 @@ phase, = sys.argv[1:]
 proof = verify_inputs()
 if phase.startswith('prepare-'):
     step = phase.removeprefix('prepare-')
-    assert step in ('build', 'finish-build', 'link', 'run')
+    assert step in ('build', 'finish-build', 'link', 'finish-link', 'run')
     assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
     inputs = set(proof['source_inputs']) | set(proof['derived'])
     inputs |= {row['path'] for row in proof['reused_objects']}
@@ -136,9 +143,16 @@ if phase.startswith('prepare-'):
         else:
             owner('finish-build')
             assert doc(W / 'code-proof.json')['passed']
+            if step == 'finish-link':
+                failed = doc(W / 'link/owner.json')
+                assert failed['status'] == 'terminal' and not failed['passed']
+                assert failed['source_unchanged'] and failed['whole_inputs_unchanged']
+                assert not failed['remaining_owned_processes'] and not failed['cleanup_errors']
+                inputs.add('attestations/qualification/80710d0f/native-cpu-v4-raw-link-association-check-failure/MANIFEST.json')
+                inputs.add(str((B / 'transport-check').relative_to(R)))
         inputs |= {str(p.relative_to(R)) for p in O.glob('*.o')}
     if step == 'run':
-        owner('link')
+        owner('finish-link')
         inputs |= {str((B / name).relative_to(R)) for name in ('transport-check', 'endpoint-check')}
         inputs |= set(doc(W / 'link-result.json')['runtime_libraries'])
     actions = {} if step == 'build' else doc(W / 'actions.json')
@@ -192,7 +206,7 @@ elif phase == 'finish-build':
         recovered_products=sealed['products'], new_compilations=0,
         products=[named(p) for p in sorted(O.glob('*.o'))],
         original_math_and_raw3_recompiled=False))
-elif phase == 'link':
+elif phase in ('link', 'finish-link'):
     assert doc(W / 'code-proof.json')['passed']
     old = doc(R / 'out/native-cpu-accumulate-compatibility/compile-completion.json')
     ap = doc(R / 'out/native-cpu-endpoint-header-provider/provider/source-contract.json')
@@ -207,10 +221,14 @@ elif phase == 'link':
         if stage == 'transport':
             selected += [R / old['renamed_baseline_object']['path'], O / 'rows_adapter.o']
         executable = B / (stage + '-check')
-        assert not executable.exists()
         argv = [proof['adapter_compile_argv'][0], *map(str, selected),
                 '-Wl,--no-relax', '-lm', '-o', str(executable)]
-        subprocess.run(argv, check=True)
+        if phase == 'finish-link' and stage == 'transport':
+            sealed = doc(R / 'attestations/qualification/80710d0f/native-cpu-v4-raw-link-association-check-failure/MANIFEST.json')
+            assert pin(executable) == sealed['products'][str(executable.relative_to(R))]
+        else:
+            assert not executable.exists()
+            subprocess.run(argv, check=True)
         association = associate(executable, [dict(path=str(p), **pin(p)) for p in selected])
         write(W / (stage + '-link-proof.json'), association)
         resolution = subprocess.check_output(['ldd', '-r', str(executable)],
@@ -237,6 +255,6 @@ elif phase == 'run':
         print(result.stdout, end='')
         results.append(dict(stage=stage, exit=result.returncode))
     write(W / 'compatibility.json', dict(passed=True, fixtures=results,
-        limitations='Original finite Transport38 and focused Endpoint fixture only. DopriPhase object linked but not executed; no performance, hit-rate, provider, C8/all8/ABBA/frame, scientific or release admission.'))
+        limitations='Original finite Transport38 and focused Endpoint fixture call raw-v4 directly under a baseline v4 constructor guard. New packet-level selection is static-code-only. DopriPhase object linked but not executed; no performance, hit-rate, provider, C8/all8/ABBA/frame, scientific or release admission.'))
 else:
     raise ValueError(phase)
