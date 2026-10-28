@@ -238,6 +238,24 @@ void foldFixedIndices(Function &F,const DataLayout &DL) {
     Changed=false;
     for(auto &BB:F)for(auto I=BB.begin(),End=BB.end();I!=End;) {
       Instruction *Inst=&*I++;
+      if(auto *Phi=dyn_cast<PHINode>(Inst);Phi && Phi->getType()->isPointerTy()) {
+        int64_t CommonOffset=0;
+        auto *Base=dyn_cast<AllocaInst>(GetPointerBaseWithConstantOffset(
+            Phi->getIncomingValue(0),CommonOffset,DL));
+        bool Same=Base;
+        for(Value *Incoming:Phi->incoming_values()) {
+          int64_t ThisOffset=0;
+          Same &= GetPointerBaseWithConstantOffset(Incoming,ThisOffset,DL)==Base && ThisOffset==CommonOffset;
+        }
+        if(Same) {
+          // Both original edges denote the identical new local address.
+          // Materialize it after initialization, dominating the cloned CFG;
+          // this changes no memory operation, edge, mask or pointer choice.
+          IRBuilder<> Entry(F.getEntryBlock().getTerminator());
+          Value *Canonical=Entry.CreateConstGEP1_64(Entry.getInt8Ty(),Base,CommonOffset,"value.same.address");
+          Phi->replaceAllUsesWith(Canonical);Phi->eraseFromParent();Changed=true;continue;
+        }
+      }
       if(!(isa<CastInst>(Inst) || isa<BinaryOperator>(Inst) || isa<GetElementPtrInst>(Inst) || isa<ICmpInst>(Inst)))continue;
       if(Inst->getType()->isFPOrFPVectorTy() || llvm::any_of(Inst->operands(),[](const Use &U){return U->getType()->isFPOrFPVectorTy();}))continue;
       if(auto *C=ConstantFoldInstruction(Inst,DL)) {

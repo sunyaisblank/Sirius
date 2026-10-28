@@ -27,9 +27,15 @@ def write(path, value):
 
 
 phase, = sys.argv[1:]
+suffix = '-joins' if phase.endswith('-joins') else ''
+base_phase = phase.removesuffix(suffix) if suffix else phase
+plan_path = W / ('value-joins-plan.json' if suffix else 'value-plan.json')
 outputs = {'value-plugin': 'value_abi.so', 'value-lower': 'dp-value.bc',
            'value-optimize': 'dp-value.O2.bc'}
-if phase == 'prepare':
+if suffix:
+    outputs = {'value-plugin': 'value_abi.joins.so', 'value-lower': 'dp-value.joins.bc',
+               'value-optimize': 'dp-value.joins.O2.bc'}
+if base_phase == 'prepare':
     assert not subprocess.check_output(['git', 'status', '--porcelain']).strip()
     owner = json.loads((W / 'optimize/owner.json').read_text())
     assert owner['passed'] and owner['status'] == 'terminal'
@@ -47,6 +53,8 @@ if phase == 'prepare':
                            '-mcpu=skylake-avx512', '-mattr=-fma', str(B / outputs['value-lower']),
                            '-o', str(B / outputs['value-optimize'])],
     }
+    commands = {k + suffix: v for k, v in commands.items()}
+    outputs = {k + suffix: v for k, v in outputs.items()}
     paths = [*W.glob('*.py'), W / 'value_abi.cpp', W / 'value_abi_contract.json',
              W / 'scope_contract.json', W / 'private_math.cpp', W / 'link-result.json',
              W / 'link-plan.json', W / 'optimize-result.json', W / 'toolchain.json',
@@ -56,35 +64,42 @@ if phase == 'prepare':
              R / 'bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc',
              R / 'out/native-cpu-row-ownership/cold-frame/run_owned.py',
              R / 'out/native-cpu-row-ownership/cold-frame/owned_guard.py']
+    if suffix:
+        failed = json.loads((W / 'value-lower/owner.json').read_text())
+        assert failed['status'] == 'terminal' and not failed['passed'] and not failed['remaining_owned_processes']
+        paths += [W / 'value-lower/owner.json', W / 'value-lower/stderr.log']
     for name in ('clang++', 'opt', 'llvm-dis', 'llvm-config'):
         row = json.loads((W / 'toolchain.json').read_text())['tools'][name]
         path = R / row['resolved']
         assert pin(path) == {k: row[k] for k in ('bytes', 'sha256')}
         paths.append(path)
     inputs = {str(p.relative_to(R)): pin(p) for p in paths}
-    write(W / 'value-plan.json', dict(commands=commands, outputs=outputs, inputs=inputs,
+    write(plan_path, dict(commands=commands, outputs=outputs, inputs=inputs,
         exports=previous['exports'],
         hypothesis='A shared value core per arithmetic body plus tiny inlined adapters and initialized-local masked-memory normalization removes the observed packed-bank escape. No blanket arithmetic-body duplication or new workload.'))
     actions = json.loads((W / 'actions.json').read_text())
-    dependencies = {'value-plugin': [], 'value-lower': ['value_abi.so'], 'value-optimize': ['dp-value.bc']}
+    dependencies = {'value-plugin' + suffix: [],
+                    'value-lower' + suffix: [outputs['value-plugin' + suffix]],
+                    'value-optimize' + suffix: [outputs['value-lower' + suffix]]}
     for name in commands:
         assert name not in actions and not (W / name).exists()
         actions[name] = dict(revision=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
             kind='diagnostic', expected_exit=0, software_provider=False,
             limits=dict(seconds=300, rss_kib=4194304, reserve_kib=2097152),
             argv=['/usr/bin/python3', '-B', str(W / 'value.py'), name],
-            frozen_inputs=sorted(inputs) + ['out/native-cpu-strict-ir-linking/value-plan.json'] +
+            frozen_inputs=sorted(inputs) + [str(plan_path.relative_to(R))] +
                           [str((B / n).relative_to(R)) for n in dependencies[name]],
             scope='Exact-module private value-interface compiler/structural gate only. One shared strict arithmetic body per operation; no numerical fixture, provider rebuild, original renderer or speed/adoption claim. Original public/scalar/fallback implementations unchanged.')
     (W / 'actions.json').write_text(json.dumps(actions, indent=2) + '\n')
     print(json.dumps(dict(prepared=list(commands), compiler_run=False)))
 else:
-    plan = json.loads((W / 'value-plan.json').read_text())
+    plan = json.loads(plan_path.read_text())
     assert phase in plan['commands']
     for name, expected in plan['inputs'].items():
         assert pin(R / name) == expected, name
-    prior = {'value-lower': 'value-plugin', 'value-optimize': 'value-lower'}.get(phase)
+    prior = {'value-lower': 'value-plugin', 'value-optimize': 'value-lower'}.get(base_phase)
     if prior:
+        prior += suffix
         owner = json.loads((W / prior / 'owner.json').read_text())
         assert owner['passed'] and owner['status'] == 'terminal'
         output = json.loads((W / (prior + '-result.json')).read_text())['output']
@@ -94,7 +109,7 @@ else:
     subprocess.run(plan['commands'][phase], check=True)
     result = dict(phase=phase, argv=plan['commands'][phase],
                   output=dict(path=str(output.relative_to(R)), **pin(output)))
-    if phase == 'value-plugin':
+    if base_phase == 'value-plugin':
         undefined = {line.split()[-1] for line in subprocess.check_output(
             ['nm', '-D', str(output)], text=True).splitlines() if ' U ' in line and '_ZN4llvm' in line}
         exported = {line.split()[-1] for line in subprocess.check_output(
@@ -113,7 +128,7 @@ else:
         assert not re.search(r'^\s+.*\b(?:fneg|fadd|fsub|fmul|fdiv|fcmp|call)\s+(?:fast|reassoc|nnan|ninf|nsz|arcp|contract|afn)\b', text, re.M)
         assert not re.search(r'@llvm\.(?:experimental\.constrained\.)?(?:fma|fmuladd)\.', text)
         constrained = Counter(re.findall(r'\bcall\s+.*?@(llvm\.experimental\.constrained\.[^ (]+)\(', text))
-        if phase == 'value-lower':
+        if base_phase == 'value-lower':
             assert dict(constrained) == json.loads((W / 'link-result.json').read_text())['constrained_calls']
         result.update(ir=dict(path=str(text_path.relative_to(R)), **pin(text_path)),
             definitions=len(headers), definition_headers=headers,
@@ -126,7 +141,7 @@ else:
             structural_gate='Adoption requires elimination of original480/96-byte packed banks and pointer adapters. IR aggregate values may still spill/use stack at machine level. No speed or numerical claim.')
     write(W / (phase + '-result.json'), result)
     print(json.dumps({k: v for k, v in result.items() if k not in ('argv', 'definition_headers', 'constrained_calls')}))
-    if phase == 'value-optimize':
+    if base_phase == 'value-optimize':
         assert result['core_definitions'] == 8, result['core_definitions']
         assert result['adapter_calls'] == 0, result['adapter_calls']
         assert result['packed_payload_allocas'] == result['packed_tag_allocas'] == 0, (
