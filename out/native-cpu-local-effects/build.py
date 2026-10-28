@@ -24,6 +24,7 @@ if phase=='prepare':
  assert not subprocess.check_output(['git','status','--porcelain']).strip()
  assert not O.exists();O.mkdir()
  review=doc(V/'private_finite_closure.json')
+ assert review['decision']=='GO_REMOVE_ONLY_OTHER_READ'
  config=shlex.split(subprocess.check_output([str(D/'llvm-config'),'--cxxflags'],text=True))
  commands=dict(plugin=[str(D/'clang++'),*config,'-O2','-fPIC','-shared',str(V/'local_value_effects.cpp'),str(D.parent.parent/'sha256-only.a'),'-Wl,--exclude-libs,ALL','-o',str(O/'local_value_effects.so')])
  outputs=dict(plugin='local_value_effects.so')

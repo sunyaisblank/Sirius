@@ -1,0 +1,108 @@
+{
+  "schema": "private_value_ordinary_memory_closure_v1",
+  "decision": "GO_REMOVE_ONLY_OTHER_READ",
+  "source_only": true,
+  "source_inputs": {
+    "bin/linux-gcc/native-cpu-register-value/math.bc": {
+      "bytes": 297520,
+      "sha256": "6e98d3a0e81e092fbc6adb9404a378ae8ea8ddc1d9ee355ee8e959e6813628e0"
+    },
+    "bin/linux-gcc/native-cpu-register-value/dp.bc": {
+      "bytes": 8644344,
+      "sha256": "53df413939ca1fc894726e34f39daa30c804ecba2b5fbf933d2700bce91e5567"
+    },
+    "bin/linux-gcc/native-cpu-register-value/transport.bc": {
+      "bytes": 13019408,
+      "sha256": "76baefdefa21317c002eef960bb756e7a8c471f02e1f96e19649b7a8da8a03fb"
+    },
+    "bin/linux-gcc/native-cpu-register-value/endpoint.bc": {
+      "bytes": 17593448,
+      "sha256": "1bf9f678fdf60b93eb555cbe0873bf454f0b0b0e3795b804069f77e720b6aa5d"
+    },
+    "bin/linux-gcc/native-cpu-register-value/math.ll": {
+      "bytes": 2789823,
+      "sha256": "17058f97fb8e50a2e0f3516d1a46f24def29220c68da3bbf6ad521c6a952cfe6"
+    },
+    "out/native-cpu-strict-ir-linking/local_value_effects.cpp": {
+      "bytes": 9098,
+      "sha256": "d7fbd8d79fffb623161836b8b14a387d699044d7d07d169ae77faf577975af65"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_abi.cpp": {
+      "bytes": 28405,
+      "sha256": "4cbefca757c267222e0bcde0e6818776ec058ab70fa6913d470785716abab1e6"
+    },
+    "out/native-cpu-exact-product-zero-residual/retained8.cpp": {
+      "bytes": 39893,
+      "sha256": "9286f36aa1b2e563bbd501894eb642e0628784409a23a7a2e153ead328759e68"
+    }
+  },
+  "permitted_change": {
+    "boundary": "Only nine private value-core definitions, their exact declarations in three raw modules, and direct core calls",
+    "old": "InaccessibleModRef | OtherRef; six math definitions already InaccessibleModRef",
+    "new": "InaccessibleModRef; every ordinary location remains NoModRef",
+    "preserve": [
+      "strictfp",
+      "round.dynamic",
+      "fpexcept.strict",
+      "all FP instructions/types/order/predicates",
+      "no fast math or FMA",
+      "cc92 and fixed integer-vector/aggregate ABI",
+      "all raw-entry effects",
+      "all pointer-adapter ArgMem effects",
+      "internal pointer-helper effects"
+    ]
+  },
+  "actual_math_inventory": {
+    "definitions": 12,
+    "value_cores": 9,
+    "internal_slow_helpers": 2,
+    "internal_lambda_helpers": 1,
+    "globals": 0,
+    "inttoptr": 0,
+    "ptrtoint": 0,
+    "atomic": 0,
+    "volatile": 0,
+    "invoke": 0,
+    "inline_asm": 0,
+    "indirect_calls": 0,
+    "opaque_numerical_calls": 0,
+    "pointer_loads": 2,
+    "pointer_stores": 30,
+    "constant_GEPs": 513,
+    "dynamic_GEPs": 0,
+    "direct_internal_calls": {
+      "slow_add": 15,
+      "slow_multiply": 10,
+      "fast_term_lambda": 24
+    }
+  },
+  "local_pointer_proof": [
+    "The nine value cores accept only integer vectors and an integer mask, and return only integer-vector aggregates. No caller pointer, external address or pointer-valued result crosses that boundary.",
+    "cloneMath replaces original bank/tag pointer arguments by new local allocas, initializes them from value arguments and zero private D, and fixes all indices. The exact input pins and full-module fingerprints bind this derivation.",
+    "The only two pointer reloads are fast_term lambda captures at math.ll604/608. Its source captures only local x and by-value Triple a. All30 pointer stores initialize those local closure objects (6 tagged-add,6 tagged-subtract,18 tagged-multiply); loaded pointees are those local F/Triple allocations.",
+    "Internal slow helpers receive only local byval copies and local sret destinations. Lambda sret destinations are likewise core-local. Internal helper pointers do not escape to globals, returned values, callbacks or other opaque users.",
+    "All ordinary loads/stores and memcpy/memset/lifetime accesses are therefore rooted in core-owned or internally copied local storage. Personality is only a declaration/reference; nounwind bodies contain no invoke or exception path.",
+    "Constrained FP and noalias-scope intrinsics keep their full inaccessible-memory effects. This proves absence of ordinary memory access at the outer value boundary for all input bitpatterns; no finite-value, canonical-metadata or ignored-exception assumption is needed."
+  ],
+  "pass_review": {
+    "status": "GO_after_exact_existing-summary_fix",
+    "guard": "Math permits exactly InaccessibleRW or InaccessibleRW|OtherRef; raw core declarations and direct calls require exactly the conservative latter. Equality checks reject effects at every other location.",
+    "pointer_inventory": "12defs/2pointerloads/30pointerstores/no dynamic GEP or new channel checked against separately loaded pinned math in every mode",
+    "mutation": "Only private names and nine-core/direct-call memory summaries; full forward/inverse module fingerprint and verifier checks retain everything else",
+    "source_issues_remaining": []
+  },
+  "finite_FP_obligation": {
+    "status": "UNPROVED_AND_NOT_REQUIRED_FOR_SELECTED_REFINEMENT",
+    "ordinary_FP_conversion_authorized": false,
+    "memory_none_authorized": false,
+    "note": "Fast_product does not clear every inactive operand, so active-domain bounds alone cannot prove all physical arithmetic finite. This artifact authorizes no FP-model or NaN-behavior change."
+  },
+  "qualification": {
+    "builds_run_by_reviewer": false,
+    "tests": false,
+    "workloads": false,
+    "profiling": false,
+    "Git": false,
+    "performance_or_numerical_or_provider_acceptance_claim": false
+  }
+}
