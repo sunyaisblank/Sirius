@@ -44,6 +44,9 @@ assert acceptance['passed'] and acceptance['all32_readbacks_match_preserved_orig
 assert acceptance['optional_math']['all_selected_optional_math_observed']
 proof = doc(R / 'out/native-cpu-closed-dp-unwind-provider/provider/linked-native-proof.json')
 assert proof['passed']
+assert all(proof['closed_dp_unwind_table'][key] is True for key in (
+    'asynchronous', 'full_function_FDE', 'complete_GP_save_rules',
+    'shrinkwrap_and_epilogues_checked', 'exact_relative_CFI_matches_repaired_object'))
 library = R / proof['library']
 assert pin(library) == proof['library_identity']
 products.append(library)
