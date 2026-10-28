@@ -1,0 +1,33 @@
+// Compiler-private marshalling only; the target remains exactly eight lanes.
+// Uniform indices retain the original static guards. All source words, including
+// inactive physical lanes, were initialized by the unchanged full-context memset.
+// The temporary d/a/b slots are 0/1/2. No original bank pointer reaches C++.
+static inline void SiriusPackedMathSnapshot_0(
+    uniform uint32_t * uniform bank, uniform uint32_t * uniform tags,
+    uniform uint32_t destination, uniform uint32_t ai, uniform uint32_t bi,
+    uniform uint32_t * uniform packed, uniform uint32_t * uniform packedTags) {
+    unmasked {
+        for (uniform uint32_t component = 0U; component < 5U; ++component) {
+            packed[component*programCount+programIndex] = 0U;
+            packed[(5U+component)*programCount+programIndex] =
+                bank[(ai*5U+component)*programCount+programIndex];
+            packed[(10U+component)*programCount+programIndex] =
+                bank[(bi*5U+component)*programCount+programIndex];
+        }
+        packedTags[programIndex] = 0U;
+        packedTags[programCount+programIndex] = tags[ai*programCount+programIndex];
+        packedTags[2U*programCount+programIndex] = tags[bi*programCount+programIndex];
+    }
+    // ISPC restores the incoming mask here. There is no external call above.
+}
+
+static inline void SiriusPackedMathCopyBack_0(
+    uniform uint32_t * uniform bank, uniform uint32_t * uniform tags,
+    uniform uint32_t destination,
+    uniform uint32_t * uniform packed, uniform uint32_t * uniform packedTags) {
+    // The incoming execution mask is unchanged; no unmasked stores to the bank.
+    for (uniform uint32_t component = 0U; component < 5U; ++component)
+        bank[(destination*5U+component)*programCount+programIndex] =
+            packed[component*programCount+programIndex];
+    tags[destination*programCount+programIndex] = packedTags[programIndex];
+}

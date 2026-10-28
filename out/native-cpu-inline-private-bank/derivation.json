@@ -1,0 +1,1891 @@
+{
+  "prepared_only": true,
+  "compiled": false,
+  "executed": false,
+  "source_inputs": {
+    "attestations/qualification/5d6ba43c/native-cpu-packed-math-boundary-finite-compatibility/MANIFEST.json": {
+      "bytes": 20970,
+      "sha256": "12489ed18cdc6d429538d9c9b5b09ea685dbdbe7140cea83f3073a781647ca5d"
+    },
+    "attestations/qualification/ca334e6e/native-cpu-exact-product-zero-residual-finite-compatibility/MANIFEST.json": {
+      "bytes": 16372,
+      "sha256": "44d228597b02d724ad7a5b0ebfe8d69073bf306977bacd3a93013d1462213a66"
+    },
+    "out/native-cpu-packed-math-provider/provider/linked-native-proof.json": {
+      "bytes": 17317041,
+      "sha256": "e11cd5d2752722faf4385d7fa231adfcb28e9df3e02d83eab979937b57e79f7d"
+    },
+    "out/native-cpu-packed-math-provider/provider/source-contract.json": {
+      "bytes": 123815,
+      "sha256": "45949340a43c89f78194064b6a4cc45fff844bedc58ef96e9f9e630862e01ecf"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html": {
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "out/native-cpu-packed-math-boundary/packinghelper.isph": {
+      "bytes": 2016,
+      "sha256": "b22326460ff2fdec4b3e507228f5ecd792cea82e33cf1f599647d893691cd874"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "attestations/qualification/5d6ba43c/native-cpu-packed-math-boundary-finite-compatibility/component.zip": {
+      "bytes": 6466534,
+      "sha256": "3b249c81c6ae61adbb27639e358ff95d520d1963dad19688771905b5c32e724d"
+    },
+    "attestations/qualification/ca334e6e/native-cpu-exact-product-zero-residual-finite-compatibility/component.zip": {
+      "bytes": 2588049,
+      "sha256": "b0b5238d7be0317e590cf32511325ce93fdd9bcde2b35deccba298b39b87ee1e"
+    },
+    "out/native-cpu-inline-private-bank/component.py": {
+      "bytes": 13887,
+      "sha256": "fd41d41fe225158b18f87af255c6e6f00ed1d11c627bc7d1513d0b6479dab718"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc": {
+      "bytes": 626970,
+      "sha256": "ac9cbdfbb505e2ba5931ad714aaaf9f54c00d34f5c839cfbd38e5101bdde990b"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o": {
+      "bytes": 993648,
+      "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc": {
+      "bytes": 795296,
+      "sha256": "c71e3ed970319588bce85d4172962db77cdc60781151179a84ede596bffdf0b5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o": {
+      "bytes": 863920,
+      "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc": {
+      "bytes": 403846,
+      "sha256": "71df339357a7343dbcc61dbf27a9a9b01da014019060a5197e1fb0e1842a24b5"
+    },
+    "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o": {
+      "bytes": 601320,
+      "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    }
+  },
+  "derived": {
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc": {
+      "bytes": 626976,
+      "sha256": "0fc91ff0b756fddd055d5c0322f5eece0557a64799ef31893933be33cdba10f6"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc": {
+      "bytes": 795302,
+      "sha256": "d8ae7cdde50211537678ec197f18c374edd2cec653974d9d0b7c33c50db8c1e1"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc": {
+      "bytes": 403852,
+      "sha256": "f9c1197a5c06814705d6bf7f46cf0e8ce217d7f42534627fadbfa208f51dac8b"
+    }
+  },
+  "stages": {
+    "transport": {
+      "basis_path": "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc",
+      "basis": {
+        "bytes": 626970,
+        "sha256": "ac9cbdfbb505e2ba5931ad714aaaf9f54c00d34f5c839cfbd38e5101bdde990b"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc",
+      "literal_instruction_calls": 3144,
+      "layer_scopes_unchanged": 159,
+      "whole_source_inverse_restores_parent": true,
+      "sole_opcode_inline_qualifier": true,
+      "helper_include_rebound": true,
+      "expected_removed_EvaluateOneStatic_functions": [
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu4Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1293,
+          "linked_address": 3046864,
+          "masked_relocations": [
+            {
+              "offset": 170,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 192,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 206,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 215,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 244,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 681,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 995,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1107,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1116,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1173,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1207,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu9Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1518,
+          "linked_address": 3053104,
+          "masked_relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 158,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 178,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 236,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 572,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 658,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 718,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 767,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 783,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1127,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1154,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1165,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1189,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1214,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1224,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1234,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1249,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1291,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1301,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1311,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1326,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1356,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1366,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1376,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1394,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1404,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1414,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1424,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1434,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu2Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1078,
+          "linked_address": 3054928,
+          "masked_relocations": [
+            {
+              "offset": 164,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 189,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 634,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 986,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu8Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1262,
+          "linked_address": 3056208,
+          "masked_relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 61,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 82,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 141,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 331,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 370,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 390,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 424,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 448,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 458,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 556,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 570,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 587,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 596,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 612,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 622,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 632,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 907,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 918,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 946,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 971,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 981,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 991,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1006,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1048,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1058,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1068,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1083,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1113,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1123,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1133,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1150,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1160,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1170,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1190,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu3Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1027,
+          "linked_address": 3444256,
+          "masked_relocations": [
+            {
+              "offset": 98,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 114,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 123,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 537,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 804,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 830,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 907,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 917,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 939,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 948,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu11Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 960,
+          "linked_address": 3454016,
+          "masked_relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 557,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 584,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 595,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 623,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 648,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 658,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 668,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 683,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 725,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 735,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 745,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 760,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 790,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 800,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 810,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 827,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 837,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 847,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 857,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 867,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        }
+      ],
+      "original_compile_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/transport.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o"
+      ],
+      "preprocessor_symbol_map": {
+        "sirius_simd_transport_packet": "sirius_simd_v4_transport_packet",
+        "sirius_native_dense_add8": "sirius_native_v4_dense_add8",
+        "sirius_native_dense_multiply8": "sirius_native_v4_dense_multiply8",
+        "sirius_native_dense_subtract8": "sirius_native_v4_dense_subtract8",
+        "sirius_native_dense_divide8": "sirius_native_v4_dense_divide8",
+        "sirius_native_dense_sqrt8": "sirius_native_v4_dense_sqrt8",
+        "sirius_native_tagged_add8": "sirius_native_v4_tagged_add8",
+        "sirius_native_tagged_multiply8": "sirius_native_v4_tagged_multiply8",
+        "sirius_native_tagged_subtract8": "sirius_native_v4_tagged_subtract8",
+        "sirius_native_tagged_divide8": "sirius_native_v4_tagged_divide8",
+        "sirius_native_tagged_sqrt8": "sirius_native_v4_tagged_sqrt8"
+      }
+    },
+    "endpoint": {
+      "basis_path": "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc",
+      "basis": {
+        "bytes": 795296,
+        "sha256": "c71e3ed970319588bce85d4172962db77cdc60781151179a84ede596bffdf0b5"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc",
+      "literal_instruction_calls": 4148,
+      "layer_scopes_unchanged": 195,
+      "whole_source_inverse_restores_parent": true,
+      "sole_opcode_inline_qualifier": true,
+      "helper_include_rebound": true,
+      "expected_removed_EvaluateOneStatic_functions": [
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu4Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1296,
+          "linked_address": 3715120,
+          "masked_relocations": [
+            {
+              "offset": 173,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 195,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 209,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 218,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 247,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 684,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 998,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1110,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1119,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1176,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1210,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu9Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1534,
+          "linked_address": 3716416,
+          "masked_relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 158,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 184,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 242,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 590,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 674,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 734,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 783,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 799,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1143,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1170,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1181,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1205,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1230,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1240,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1250,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1265,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1307,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1317,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1327,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1342,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1372,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1382,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1392,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1410,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1420,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1430,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1440,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1450,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu8Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1271,
+          "linked_address": 3718160,
+          "masked_relocations": [
+            {
+              "offset": 5,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 61,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 88,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 147,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 340,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 379,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 399,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 433,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 457,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 467,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 565,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 579,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 596,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 605,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 621,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 631,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 641,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 916,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 927,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 955,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 980,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 990,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1000,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1015,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1057,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1067,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1077,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1092,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1122,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1132,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1142,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1159,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1169,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1179,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1189,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1199,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu2Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1081,
+          "linked_address": 3722880,
+          "masked_relocations": [
+            {
+              "offset": 167,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 183,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 192,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 637,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 989,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu11Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1048,
+          "linked_address": 3742384,
+          "masked_relocations": [
+            {
+              "offset": 666,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 693,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 704,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 732,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 757,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 767,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 777,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 792,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 834,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 844,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 854,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 869,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 905,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 915,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 929,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 944,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 954,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 964,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 974,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 984,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu3Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1143,
+          "linked_address": 3780336,
+          "masked_relocations": [
+            {
+              "offset": 159,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 175,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 184,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 629,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 901,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 927,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1016,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1026,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1042,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1051,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        }
+      ],
+      "original_compile_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/endpoint.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o"
+      ],
+      "preprocessor_symbol_map": {
+        "sirius_simd_endpoint_packet": "sirius_simd_v4_endpoint_packet",
+        "sirius_native_dense_add8": "sirius_native_v4_dense_add8",
+        "sirius_native_dense_multiply8": "sirius_native_v4_dense_multiply8",
+        "sirius_native_dense_subtract8": "sirius_native_v4_dense_subtract8",
+        "sirius_native_dense_divide8": "sirius_native_v4_dense_divide8",
+        "sirius_native_dense_sqrt8": "sirius_native_v4_dense_sqrt8",
+        "sirius_native_tagged_add8": "sirius_native_v4_tagged_add8",
+        "sirius_native_tagged_multiply8": "sirius_native_v4_tagged_multiply8",
+        "sirius_native_tagged_subtract8": "sirius_native_v4_tagged_subtract8",
+        "sirius_native_tagged_divide8": "sirius_native_v4_tagged_divide8",
+        "sirius_native_tagged_sqrt8": "sirius_native_v4_tagged_sqrt8"
+      }
+    },
+    "dopri_phase": {
+      "basis_path": "bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc",
+      "basis": {
+        "bytes": 403846,
+        "sha256": "71df339357a7343dbcc61dbf27a9a9b01da014019060a5197e1fb0e1842a24b5"
+      },
+      "derived_path": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc",
+      "literal_instruction_calls": 2088,
+      "layer_scopes_unchanged": 45,
+      "whole_source_inverse_restores_parent": true,
+      "sole_opcode_inline_qualifier": true,
+      "helper_include_rebound": true,
+      "expected_removed_EvaluateOneStatic_functions": [
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu2Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1078,
+          "linked_address": 4347408,
+          "masked_relocations": [
+            {
+              "offset": 164,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 189,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 634,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 986,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu3Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1148,
+          "linked_address": 4353728,
+          "masked_relocations": [
+            {
+              "offset": 164,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 180,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 189,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 634,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 906,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 932,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1021,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1031,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1047,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1056,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu4Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1293,
+          "linked_address": 4370576,
+          "masked_relocations": [
+            {
+              "offset": 170,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 192,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 206,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 215,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 244,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 681,
+              "ELF_type": 4,
+              "bytes": 4
+            },
+            {
+              "offset": 995,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1107,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1116,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1173,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 1207,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        },
+        {
+          "symbol": "EvaluateOneStatic_0___Cunu11Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "bytes": 1038,
+          "linked_address": 4483552,
+          "masked_relocations": [
+            {
+              "offset": 656,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 683,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 694,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 722,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 747,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 757,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 767,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 782,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 824,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 834,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 844,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 859,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 895,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 905,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 919,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 934,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 944,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 954,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 964,
+              "ELF_type": 2,
+              "bytes": 4
+            },
+            {
+              "offset": 974,
+              "ELF_type": 2,
+              "bytes": 4
+            }
+          ]
+        }
+      ],
+      "original_compile_argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/ispc-source/dopri_phase.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o"
+      ],
+      "preprocessor_symbol_map": {
+        "sirius_simd_dopri_phase_packet": "sirius_simd_v4_dopri_phase_packet",
+        "sirius_native_dense_add8": "sirius_native_v4_dense_add8",
+        "sirius_native_dense_multiply8": "sirius_native_v4_dense_multiply8",
+        "sirius_native_dense_subtract8": "sirius_native_v4_dense_subtract8",
+        "sirius_native_dense_divide8": "sirius_native_v4_dense_divide8",
+        "sirius_native_dense_sqrt8": "sirius_native_v4_dense_sqrt8",
+        "sirius_native_tagged_add8": "sirius_native_v4_tagged_add8",
+        "sirius_native_tagged_multiply8": "sirius_native_v4_tagged_multiply8",
+        "sirius_native_tagged_subtract8": "sirius_native_v4_tagged_subtract8",
+        "sirius_native_tagged_divide8": "sirius_native_v4_tagged_divide8",
+        "sirius_native_tagged_sqrt8": "sirius_native_v4_tagged_sqrt8"
+      }
+    }
+  },
+  "raw_compilations": [
+    {
+      "stage": "transport",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/objects/transport.o"
+      ],
+      "output": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/objects/transport.o"
+    },
+    {
+      "stage": "endpoint",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint.o"
+      ],
+      "output": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint.o"
+    },
+    {
+      "stage": "dopri_phase",
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc",
+        "-O2",
+        "--target=avx512skx-x8",
+        "--cpu=skx",
+        "--arch=x86-64",
+        "--addressing=32",
+        "--PIC",
+        "--opt=disable-fma",
+        "--math-lib=system",
+        "--emit-obj",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/objects/dopri_phase.o"
+      ],
+      "output": "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-inline-private-bank/objects/dopri_phase.o"
+    }
+  ],
+  "reference_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o",
+      "bytes": 993648,
+      "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o",
+      "bytes": 863920,
+      "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o",
+      "bytes": 601320,
+      "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+    }
+  ],
+  "reused_objects": [
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/transport.o",
+      "bytes": 206512,
+      "sha256": "06d6769d09ed9bbabc8fce7b97748358f8721bbdcab8fa4ec15dba6718184f81"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-endpoint-header-domain/endpoint.o",
+      "bytes": 263152,
+      "sha256": "7730ce37e8eb50ec8e83abd9430401e6faf99e2ad4bc8bf1f4bda4c36b486847"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-scalar-zero/objects/dopri_phase.o",
+      "bytes": 138152,
+      "sha256": "ffb626bc3898cd6f860f077378f68e4c800f2f772fbbb878fec3eff580dbeb95"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-endpoint-header-domain/admission.o",
+      "bytes": 194776,
+      "sha256": "0a9a768f2605e70c7be24ed3c8e3177b2e7301dfced4b7eb002d6a38fc8d3d20"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/objects/transport.o",
+      "bytes": 1042176,
+      "sha256": "04bc4c45bf21b7df05ac4fb95283aba9e7b208cd73d336b83093bb26c33b8728"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/objects/endpoint.o",
+      "bytes": 934344,
+      "sha256": "1330cf6875d0db24aaad70f407da8607285d651cbc38e6d471c8247e6e398a54"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-local-identities/objects/dopri_phase.o",
+      "bytes": 1193360,
+      "sha256": "0dc138c31434c91f1af671f81513a9a5ce6e35a20eab05846a7c12e5b19e766d"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/rows_adapter.o",
+      "bytes": 4760,
+      "sha256": "c9ee8c3c860673d0db9014b8d08b5cf95a38d4b999a6e74ce9da409f3c832d62"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/dispatch.o",
+      "bytes": 4704,
+      "sha256": "d7b9aa5ae74d4b791b9e6df59d0e2c10d3ae5fd079aeacf15b80a899e40b6411"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-v4-arithmetic/v3.o",
+      "bytes": 238552,
+      "sha256": "0af01ed41b0189bc047b10b7d853a0e4ebdbb5c6eb02f729870401c2eb24f287"
+    },
+    {
+      "path": "bin/linux-gcc/native-cpu-exact-product-zero-residual/optional.o",
+      "bytes": 256280,
+      "sha256": "31594a31204d85e8fec6ef1463807c5c1117eddc6fe4e8ad297f4f02362ed59f"
+    }
+  ],
+  "literal_instruction_calls_preserved": 9380,
+  "compiler": {
+    "path": "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+    "bytes": 211552768,
+    "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e",
+    "version_output": "Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.32.0 (build commit 2b17b0ef24032610 @ 20261012, LLVM 23.1.2)\n"
+  },
+  "parent_component_manifest": {
+    "path": "attestations/qualification/5d6ba43c/native-cpu-packed-math-boundary-finite-compatibility/MANIFEST.json",
+    "bytes": 20970,
+    "sha256": "12489ed18cdc6d429538d9c9b5b09ea685dbdbe7140cea83f3073a781647ca5d"
+  },
+  "math_component_manifest": {
+    "path": "attestations/qualification/ca334e6e/native-cpu-exact-product-zero-residual-finite-compatibility/MANIFEST.json",
+    "bytes": 16372,
+    "sha256": "44d228597b02d724ad7a5b0ebfe8d69073bf306977bacd3a93013d1462213a66"
+  },
+  "parent_static_proof": {
+    "path": "out/native-cpu-packed-math-provider/provider/linked-native-proof.json",
+    "bytes": 17317041,
+    "sha256": "e11cd5d2752722faf4385d7fa231adfcb28e9df3e02d83eab979937b57e79f7d"
+  },
+  "packing_helper": {
+    "basis_path": "out/native-cpu-packed-math-boundary/packinghelper.isph",
+    "basis": {
+      "bytes": 2016,
+      "sha256": "b22326460ff2fdec4b3e507228f5ecd792cea82e33cf1f599647d893691cd874"
+    },
+    "derived_path": "out/native-cpu-inline-private-bank/packinghelper.isph",
+    "derived": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "whole_helper_inverse_restores_parent": true,
+    "zero_private_destination_payload_words": 40,
+    "zero_private_destination_tag_words": 8,
+    "full8_A_B_words_and_tags_unchanged": true,
+    "original_unmasked_scope_and_masked_copyback_byte_identical": true,
+    "original_destination_parameter_retained_unused": true
+  },
+  "compiler_private_storage": {
+    "payload_words": 120,
+    "tag_words": 24,
+    "bytes": 576,
+    "slots": {
+      "destination": 0,
+      "a": 1,
+      "b": 2
+    },
+    "physical_lanes": 8,
+    "stack_reuse_established": false,
+    "host_allocations_changed": false,
+    "KernelContext_layout_changed": false
+  },
+  "source_proof": [
+    "Only each stage sole EvaluateOneStatic declaration gains inline, plus the helper include path. ISPC inline forces expansion according to the exact pinned local guide. All399 layers, generic evaluator, layer/header bounds and9380 ordered tuples retain exact bytes.",
+    "Within the existing unmasked snapshot block only private destination slot0 changes to integer zero: all40 payload words and8 tag words. SourceA/B payload and tags retain all physical8 lanes and exact words, including inactive/unknown metadata.",
+    "Root and arithmetic_review source plus existing emitted-write review established that all5 unchanged tagged C++ functions compute active destination payload/tags solely from A/B. OriginalD appears only in integer inactive-lane merges; by-value Triple computation does not feed that merge back into write_tag.",
+    "Canonical helper arguments remain d0/a1/b2. Private inactiveD is discarded by unchanged original-mask copyback; active outputs/tags are fully written. Source alias snapshots remain before any original-bank write. Original Add/Subtract/Multiply identity shortcuts still precede packing.",
+    "Captured mask, existing unmasked scope, C++call placement/gating, full A/B snapshots and masked copyback are unchanged. No mask0 skip, unmasked C++call, FP operation/control write, arithmetic/radius/formula change or original destination publication is added.",
+    "Generic fallback, original scalar/v3 paths, exact eight-lane ABI, original AQ symbol mappings and strict target flags remain. Same explicit576B private arrays; no KernelContext/host/shader buffer/count/cache/governor change."
+  ],
+  "required_postcompile_gate": {
+    "before_any_link_or_runtime": true,
+    "expected_removed_EvaluateOneStatic_functions": 16,
+    "reject_remaining_EvaluateOneStatic_symbols_or_calls": true,
+    "inspect_all_executable_sections": true,
+    "reject_unknown_or_non_v4_ISA_FMA_x87_FP_control_writes": true,
+    "record_actual_code_and_stack_changes": true,
+    "require_original_finite_and_adoption_gates": true,
+    "no_SSA_stack_reuse_or_performance_inference": true
+  },
+  "scope": "Source-only next structural candidate after preserved AR frame failure. Three forced opcode inline qualifiers and integer zero-initialization of private D only. All original semantics/counts/limits and remaining scope barriers stay. Prospective3raw compiles only; no compile/link/provider/workload/timing or qualification transfer. Parent static16scope elimination is the future emitted-code decision; full SSA, stack reuse, spills and speed are unproven."
+}
