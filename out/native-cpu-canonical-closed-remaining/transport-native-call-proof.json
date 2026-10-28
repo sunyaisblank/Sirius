@@ -1,0 +1,159 @@
+{
+  "passed": true,
+  "kind": "INDEPENDENT_READ_ONLY_NATIVE_CFG_CALL_MERGE_REVIEW",
+  "object": {
+    "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.closed.o",
+    "bytes": 3571376,
+    "sha256": "c98d747b85ed217df3884cfb50c0bd419be4e90845d0b3d9248d2f5a098d1473"
+  },
+  "IR": {
+    "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.closed.ll",
+    "bytes": 100758392,
+    "sha256": "74659d5931b8d75a21cd74afcd01cdf098d0110d93dba74ee72b158a57e54a46"
+  },
+  "IR_call_count": 2711,
+  "native_relocation_count": 2696,
+  "dense_divide_IR_sites": 16,
+  "dense_divide_native_targets": 1,
+  "all_16_original_call_paths_reach_the_same_exact_target": true,
+  "exact_call": {
+    "instruction_offset": "0xa1c5",
+    "PLT32_field": "0xa1c6",
+    "addend": -4
+  },
+  "coefficient_loop": {
+    "initial_index_at": "0xa178",
+    "selector": "0xa29b",
+    "masked_five_word_stores": [
+      "0xa1ee",
+      "0xa20a"
+    ],
+    "index_increment": "0xa210",
+    "pointer_increment_160": "0xa213",
+    "compare_25": "0xa21a",
+    "conditional_exit": "0xa295",
+    "original_trip_count": 25,
+    "one_dense_divide_per_cache_iteration": true
+  },
+  "constant_cases": {
+    "6": {
+      "native_root": "0xa34f",
+      "numerator": 9,
+      "denominator": 40
+    },
+    "7": {
+      "native_root": "0xa65c",
+      "numerator": -56,
+      "denominator": 15
+    },
+    "8": {
+      "native_root": "0xa587",
+      "numerator": 32,
+      "denominator": 9
+    },
+    "9": {
+      "native_root": "0xa5ce",
+      "numerator": -25360,
+      "denominator": 2187
+    },
+    "10": {
+      "native_root": "0xa4b2",
+      "numerator": 64448,
+      "denominator": 6561
+    },
+    "11": {
+      "native_root": "0xa6a3",
+      "numerator": -212,
+      "denominator": 729
+    },
+    "12": {
+      "native_root": "0xa731",
+      "numerator": -355,
+      "denominator": 33
+    },
+    "13": {
+      "native_root": "0xa615",
+      "numerator": 46732,
+      "denominator": 5247
+    },
+    "14": {
+      "native_root": "0xa7bf",
+      "numerator": 49,
+      "denominator": 176
+    },
+    "15": {
+      "native_root": "0xa540",
+      "numerator": -5103,
+      "denominator": 18656
+    },
+    "16": {
+      "native_root": "0xa778",
+      "numerator": 500,
+      "denominator": 1113
+    },
+    "17": {
+      "native_root": "0xa46b",
+      "numerator": 125,
+      "denominator": 192
+    },
+    "18": {
+      "native_root": "0xa4f9",
+      "numerator": -2187,
+      "denominator": 6784
+    },
+    "19": {
+      "native_root": "0xa6ea",
+      "numerator": 11,
+      "denominator": 84
+    }
+  },
+  "table_cases": {
+    "C": {
+      "indices": [
+        0,
+        5
+      ],
+      "denominator_root": "0xa2af",
+      "table_index": "k+1",
+      "denominator": "cd",
+      "numerator": "cn"
+    },
+    "E": {
+      "indices": [
+        20,
+        24
+      ],
+      "denominator_root": "0xa2fa",
+      "table_index": "k-18",
+      "denominator": "ed",
+      "numerator": "en"
+    },
+    "common_dynamic_numerator_root": "0xa410",
+    "table_rodata_offsets": {
+      "cd": "0x1c0",
+      "cn": "0x200",
+      "ed": "0x140",
+      "en": "0x180"
+    }
+  },
+  "argument_join": {
+    "denominator_conversion_precedes_numerator": true,
+    "numerator_hi": "YMM0",
+    "numerator_valid": "YMM4",
+    "denominator_hi": "YMM5",
+    "denominator_valid": "YMM9",
+    "other_components_zero": [
+      "YMM1",
+      "YMM2",
+      "YMM3",
+      "YMM6",
+      "YMM7",
+      "YMM8"
+    ],
+    "original_active_mask": "k6 zero-extended into EAX at0xa1a9",
+    "returns": "YMM0..4 stored to same coefficient slot under unchanged k6"
+  },
+  "method": "Independent source review decoded13 relocation-backed switch entries plus bounded default, actual integer pool words and all conditional successors of two table paths and14 constant roots to the one call. Every route is acyclic, has no earlier call/return/loop escape, and joins the same source coefficient loop. Retained LLVM/binary products only; no code generation or workload repeated.",
+  "numerical_qualification_transferred": false,
+  "scope": "This accounts for static16-to1 native common-tail joining. Dynamic coefficient work is unchanged: one division on each original25-loop iteration. No timing, numerical/provider/scientific/release acceptance follows from this audit."
+}
