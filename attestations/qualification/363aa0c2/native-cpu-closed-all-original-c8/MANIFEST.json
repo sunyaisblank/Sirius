@@ -1,0 +1,428 @@
+{
+  "status": "CLOSED_THREE_STAGE_PROVIDER_ORIGINAL_C8_ALL32_PASS_BROADER_GATES_OPEN",
+  "candidate_revision": "363aa0c24c8dc8ba54a1e1e2a22bc4f57675adef",
+  "custody_revision": "213bcd92830af8a0ff036dd2e79c65ef71ec7f05",
+  "owners": {
+    "out/native-cpu-closed-all-component/build/owner.json": {
+      "identity": {
+        "bytes": 1878,
+        "sha256": "d658fdd5774e6897b833b2dfd970393688a1366e9ccd2fdcf7d8378f02898a51"
+      },
+      "source": {
+        "revision": "464e295f5e4aec57119c04a9746fc1c0a384d126",
+        "status": ""
+      },
+      "wall_seconds": 7.402771571010817,
+      "peak_sampled_rss_kib": 130924
+    },
+    "out/native-cpu-closed-all-provider/provider/build/owner.json": {
+      "identity": {
+        "bytes": 3233,
+        "sha256": "2442ef34348fc68001e2ddb63d0c1884f6bbb94080c409157f76e760616fed13"
+      },
+      "source": {
+        "revision": "363aa0c24c8dc8ba54a1e1e2a22bc4f57675adef",
+        "status": ""
+      },
+      "wall_seconds": 9.699945541011402,
+      "peak_sampled_rss_kib": 276572
+    },
+    "out/native-cpu-closed-all-provider/provider/configure/owner.json": {
+      "identity": {
+        "bytes": 2280,
+        "sha256": "84888a9cf6d370bb810b2b897f6cddfb564f97236282703f4aa74bfea4ef9485"
+      },
+      "source": {
+        "revision": "363aa0c24c8dc8ba54a1e1e2a22bc4f57675adef",
+        "status": ""
+      },
+      "wall_seconds": 9.733184753014939,
+      "peak_sampled_rss_kib": 143268
+    },
+    "out/native-cpu-closed-all-cohort/control-8/owner.json": {
+      "identity": {
+        "bytes": 5451,
+        "sha256": "5673bb3c221fd4f6387d5ad392241b5d1c183930574ee952c2e2b7293a59b7cb"
+      },
+      "source": {
+        "revision": "363aa0c24c8dc8ba54a1e1e2a22bc4f57675adef",
+        "status": ""
+      },
+      "wall_seconds": 17.765796689025592,
+      "peak_sampled_rss_kib": 1252292
+    }
+  },
+  "predecessor": {
+    "attestations/qualification/dc584b05/native-cpu-closed-remaining-context-native-gates/MANIFEST.json": {
+      "bytes": 54993,
+      "sha256": "01e6c6626f6c027b8bfb1d8d053d987334cbefa54d0d37fa21f6e145caaa6c6d"
+    }
+  },
+  "bundles": {
+    "source-and-evidence": {
+      "path": "attestations/qualification/363aa0c2/native-cpu-closed-all-original-c8/source-and-evidence.zip",
+      "bytes": 8867681,
+      "sha256": "76bee3c61d640b3e910ebf13cddad49a95c2cf9b8b451ca3298e8ddf785c3f48",
+      "members": {
+        "out/native-cpu-closed-all-cohort/actions.json": {
+          "bytes": 382453,
+          "sha256": "c7b344f8e4dea07fff71a6481ed4f7e0a81baa68f16036b254fd9f6c767183bb"
+        },
+        "out/native-cpu-closed-all-cohort/compatibility.py": {
+          "bytes": 4652,
+          "sha256": "8d2108725e66ad46c9f8ca5e6c4ca6f898de920dff1e1690af75135a8ab52a1d"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/gtest.xml": {
+          "bytes": 40801,
+          "sha256": "d286afc0742cd56467ca5f8cb047f857a635302db862b3f731e1429debb1ae97"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/inputs-after.json": {
+          "bytes": 1489982,
+          "sha256": "4a736d07d630793d143a5e4fb61d47dcfb0b5617dc1b155e73245c9f408525c2"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/inputs-before.json": {
+          "bytes": 1489982,
+          "sha256": "4a736d07d630793d143a5e4fb61d47dcfb0b5617dc1b155e73245c9f408525c2"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/native-observation.json": {
+          "bytes": 114612,
+          "sha256": "e2c2ec48de4ab8a9e0ddc3a24822c4871658edad63115bd7b48c09e5197515cf"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/observe.gdb": {
+          "bytes": 228,
+          "sha256": "d6660d8c821eaf3f60f2f7e8a1b0d6a1c8ea294b623982a77837434b995276f6"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/owner.json": {
+          "bytes": 5451,
+          "sha256": "5673bb3c221fd4f6387d5ad392241b5d1c183930574ee952c2e2b7293a59b7cb"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/samples.jsonl": {
+          "bytes": 288480,
+          "sha256": "1de96f763e5395cc6c7003655eb597af18ac60929c1003396a466e04686c0567"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-closed-all-cohort/control-8/stdout.log": {
+          "bytes": 5078,
+          "sha256": "97c5018bdb277e8a5a5bd1abbe28041c79038f7372064387fbda86dcb60293c9"
+        },
+        "out/native-cpu-closed-all-cohort/control-8-acceptance.json": {
+          "bytes": 60479,
+          "sha256": "f0eaa6e077851fa3b4932f2104549c0d420a040914739a4cade62d2ceb62c19d"
+        },
+        "out/native-cpu-closed-all-cohort/dispatch_observer.py": {
+          "bytes": 3880,
+          "sha256": "5efc50566648b8d9142751e166b8de915c7c0a475d50c359d03ddc7b432e83e9"
+        },
+        "out/native-cpu-closed-all-cohort/native_observer.py": {
+          "bytes": 254,
+          "sha256": "ffa3209f2573c39cfa95085854ca2fe54cbe948dbf6860fb86e55ca00a227bde"
+        },
+        "out/native-cpu-closed-all-cohort/optional_math.py": {
+          "bytes": 6696,
+          "sha256": "8d2d3d6bc9382560335c09355f7d0e4b9094a8984c728843f3830cb6b6da9b75"
+        },
+        "out/native-cpu-closed-all-cohort/optional_observer.py": {
+          "bytes": 7774,
+          "sha256": "220cb1bbebb0acae349fca14cb3b9f9ad12ff806c096efcafcc54bed77a8bf03"
+        },
+        "out/native-cpu-closed-all-cohort/owned_guard.py": {
+          "bytes": 137,
+          "sha256": "ab5a3e58e47311e363842cfa04715f475483ee05f8bd63391a4b8a67787c0d92"
+        },
+        "out/native-cpu-closed-all-cohort/prepare.py": {
+          "bytes": 1828,
+          "sha256": "c29c04ddc8511eb701dcbd268d16e788628842ffac9d4595f92a1f3b402dab92"
+        },
+        "out/native-cpu-closed-all-cohort/read_result.py": {
+          "bytes": 137,
+          "sha256": "94e821db4f0e14db2daf09bdc5d5a8267b3247d40c779b04a8d7f33390c63d26"
+        },
+        "out/native-cpu-closed-all-cohort/rebind.py": {
+          "bytes": 2755,
+          "sha256": "b2a859237d9fb4ed1691a32c08cd9570bdf19c431ebc99b455c1a44477c4c46b"
+        },
+        "out/native-cpu-closed-all-cohort/run_case.py": {
+          "bytes": 131,
+          "sha256": "c8aa0b3f3622a278f1edc3839d4334e6c1dc61d814b68fa5425a6609dd7d20fd"
+        },
+        "out/native-cpu-closed-all-cohort/run_owned.py": {
+          "bytes": 133,
+          "sha256": "7d832b5c9edc5518e0aca52e1325368744ae40215bf7978f4ead4ab2740672ef"
+        },
+        "out/native-cpu-closed-all-cohort/runtime-transition.json": {
+          "bytes": 5977,
+          "sha256": "b6eaff0e5d47e584ca941bd040c753e2c9039c884aed22085580fff88c74afc7"
+        },
+        "out/native-cpu-closed-all-cohort/runtime_transition.py": {
+          "bytes": 151,
+          "sha256": "d3c3b1a3c6115c55e791132e45c793c64c7c0c26b2aa9980382d40ae880dde19"
+        },
+        "out/native-cpu-closed-all-component/actions.json": {
+          "bytes": 28907,
+          "sha256": "d00e4041ed1b68b152e777328679946c0e759ce85ca2df00723b6684f503d67f"
+        },
+        "out/native-cpu-closed-all-component/build/inputs-after.json": {
+          "bytes": 1273294,
+          "sha256": "397de6fdb130463f3ac91446b1af7fa851f8641d340eb4fb341076519686ae2a"
+        },
+        "out/native-cpu-closed-all-component/build/inputs-before.json": {
+          "bytes": 1273294,
+          "sha256": "397de6fdb130463f3ac91446b1af7fa851f8641d340eb4fb341076519686ae2a"
+        },
+        "out/native-cpu-closed-all-component/build/owner.json": {
+          "bytes": 1878,
+          "sha256": "d658fdd5774e6897b833b2dfd970393688a1366e9ccd2fdcf7d8378f02898a51"
+        },
+        "out/native-cpu-closed-all-component/build/samples.jsonl": {
+          "bytes": 6759,
+          "sha256": "c8dcf76ad93a99529600986948192c51e8a921556a844ec8ef835e92463d3f9a"
+        },
+        "out/native-cpu-closed-all-component/build/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-closed-all-component/build/stdout.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-closed-all-component/build-plan.json": {
+          "bytes": 76772,
+          "sha256": "9434404291512884d70e2795e55b068146fa9dba2b8e4aa7a69eff9c75795ab7"
+        },
+        "out/native-cpu-closed-all-component/build-result.json": {
+          "bytes": 4382,
+          "sha256": "d161a3835ae10fdc3fafd5f47f33010ac6e65c82365e7f6f4ac42faac7118721"
+        },
+        "out/native-cpu-closed-all-component/build.py": {
+          "bytes": 4274,
+          "sha256": "e30e72a1e58da47f24e8be8ef36e5aae0338dc70ca46a9b174d567276a93ab6f"
+        },
+        "out/native-cpu-closed-all-component/component.py": {
+          "bytes": 13070,
+          "sha256": "0f5b54ffb77e8e4434df23c0cd1945d5e6ae25d8a15ea6be625b39e946abf32a"
+        },
+        "out/native-cpu-closed-all-component/derivation.json": {
+          "bytes": 2057,
+          "sha256": "676119626e56881e68dfece0d8087a3c33bee5ff7ec3d6cbeb37c8be163b156d"
+        },
+        "out/native-cpu-closed-all-component/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-closed-all-component/rows_adapter.cpp": {
+          "bytes": 9097,
+          "sha256": "e5ee89449d7c76459544cbbd17808e618c01f51f1948695d9ba3bfab1ed03b6f"
+        },
+        "out/native-cpu-closed-all-component/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-closed-all-provider/apply_provider.py": {
+          "bytes": 1435,
+          "sha256": "aa323c9c197d2a96aa14f810f02203695d93c4b9243827c3bcefa244dc6d7bad"
+        },
+        "out/native-cpu-closed-all-provider/authority.py": {
+          "bytes": 402,
+          "sha256": "d6ad8f95c3929d9a0277e974f0027fc15140bbfe6b5fe5bd71a86e4a5d524a9e"
+        },
+        "out/native-cpu-closed-all-provider/build_provider.py": {
+          "bytes": 639,
+          "sha256": "318b2b65a2cda39e468c4d4dbb34c8ef16bdf660fa42a804855c82a4efccf6a0"
+        },
+        "out/native-cpu-closed-all-provider/component_gate.py": {
+          "bytes": 824,
+          "sha256": "6253e02c78602d5915f00f4b92d1c79980872de3fd4e186d218c012d70763687"
+        },
+        "out/native-cpu-closed-all-provider/configure_provider.py": {
+          "bytes": 740,
+          "sha256": "f9b2d91a06afde17620cb2e8528eda8e3809e11396f7407b2c9b71a429ad3ab4"
+        },
+        "out/native-cpu-closed-all-provider/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-closed-all-provider/prepare_provider_build.py": {
+          "bytes": 1577,
+          "sha256": "60bc7f7d86579f7311cdaf2c88112ddd39e6cf7d80bbc1d220a496fa6448aa71"
+        },
+        "out/native-cpu-closed-all-provider/provider/actions.json": {
+          "bytes": 2741739,
+          "sha256": "26ad1143fa8e98bdd58623f630e5aec5dbeaebc6826ca9baabf5de7151fcb62e"
+        },
+        "out/native-cpu-closed-all-provider/provider/build/inputs-after.json": {
+          "bytes": 5831594,
+          "sha256": "857ba933dd90cb63335ca0107be9613f48793b5a45df5b5ef26741f423a725ea"
+        },
+        "out/native-cpu-closed-all-provider/provider/build/inputs-before.json": {
+          "bytes": 5831594,
+          "sha256": "857ba933dd90cb63335ca0107be9613f48793b5a45df5b5ef26741f423a725ea"
+        },
+        "out/native-cpu-closed-all-provider/provider/build/owner.json": {
+          "bytes": 3233,
+          "sha256": "2442ef34348fc68001e2ddb63d0c1884f6bbb94080c409157f76e760616fed13"
+        },
+        "out/native-cpu-closed-all-provider/provider/build/samples.jsonl": {
+          "bytes": 13902,
+          "sha256": "d4cac8c055dcfa2fe34eec6a397ee73e0dfb6f210a9ce790ecc13a6ff8aa3881"
+        },
+        "out/native-cpu-closed-all-provider/provider/build/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-closed-all-provider/provider/build/stdout.log": {
+          "bytes": 688,
+          "sha256": "0a85d9f06a22110d85eb859e56f5bee1202f154d88cfb2f39467e9c74b2b721b"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure/inputs-after.json": {
+          "bytes": 5804985,
+          "sha256": "f973beba8150e923e55e49d58e1e0851d0c1e9104a54672bf97f9a4ce0cec772"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure/inputs-before.json": {
+          "bytes": 5804985,
+          "sha256": "f973beba8150e923e55e49d58e1e0851d0c1e9104a54672bf97f9a4ce0cec772"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure/owner.json": {
+          "bytes": 2280,
+          "sha256": "84888a9cf6d370bb810b2b897f6cddfb564f97236282703f4aa74bfea4ef9485"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure/samples.jsonl": {
+          "bytes": 9854,
+          "sha256": "b063ea92e8ff80e73dfde4d1242ef1ce18edace5116cae38971bbdc04412c4e0"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure/stdout.log": {
+          "bytes": 13627,
+          "sha256": "6a5f3f0f43948a9f006e1440a0a5461ae1157bc5ed4ca31a8ce0dc0b010ada05"
+        },
+        "out/native-cpu-closed-all-provider/provider/configure-result.json": {
+          "bytes": 647,
+          "sha256": "476a2bb12afb1a17253250492667daff7fe0d52815e3cd608af46dc6d8fbab13"
+        },
+        "out/native-cpu-closed-all-provider/provider/incremental-dry-run.txt": {
+          "bytes": 29742,
+          "sha256": "4ecf02d23326b9bb3468a56ddf3c101ca79767c8fdc4445f874f646149216ab3"
+        },
+        "out/native-cpu-closed-all-provider/provider/incremental-plan.json": {
+          "bytes": 215735,
+          "sha256": "3575dbc2a90eb0e9a9956df88fa81521bc47fd2f461463c62a72e4635922de4e"
+        },
+        "out/native-cpu-closed-all-provider/provider/linked-native-proof.json": {
+          "bytes": 103366098,
+          "sha256": "d02669f9d6a2de0e69fb591aafb10722570fa7e918602b3877d84a78bcb9f8e9"
+        },
+        "out/native-cpu-closed-all-provider/provider/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-closed-all-provider/provider/provider-build-result.json": {
+          "bytes": 2479,
+          "sha256": "58654fe50a8697523417627524fa7d47968186edfe5f60ed1aa57aca1faed7fd"
+        },
+        "out/native-cpu-closed-all-provider/provider/provider.patch": {
+          "bytes": 1871,
+          "sha256": "ea828cde453b8e7e6587144044d16af2c773822f2b1a717843cf3b84210d89c2"
+        },
+        "out/native-cpu-closed-all-provider/provider/review-admission.json": {
+          "bytes": 810,
+          "sha256": "2e2ef552838ca4c17305d8a12578e5f2325d8bed80e3390dd8f773476f46c108"
+        },
+        "out/native-cpu-closed-all-provider/provider/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-closed-all-provider/provider/source-contract.json": {
+          "bytes": 235302,
+          "sha256": "47eefdaaeefd9442f2272e94f8ee2a9bb16dd4cbdf701233d328cf17127ecf9b"
+        },
+        "out/native-cpu-closed-all-provider/provider.py": {
+          "bytes": 7933,
+          "sha256": "4bb653a05bde013572a5ff9d10c590b36d471700e410868bb53aaf6fa57cc49b"
+        },
+        "out/native-cpu-closed-all-provider/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-closed-all-provider/unwind.py": {
+          "bytes": 5413,
+          "sha256": "c16bb9615e905f7dc09d335830959aa026cc6e0f6d182ee04c9bb6ce6afe2bfd"
+        },
+        "out/native-cpu-closed-all-provider/verify_provider.py": {
+          "bytes": 8507,
+          "sha256": "7b33a9356f195da28bd4d868394ac54cf813d92de6241a53edfc156cc8557291"
+        },
+        "out/seal-closed-all-c8.py": {
+          "bytes": 6637,
+          "sha256": "4908e28355f470a134bd7cd31ebbcbc13ceacb3e86bd53ed165545e0c9f7d4ee"
+        }
+      }
+    },
+    "products": {
+      "path": "attestations/qualification/363aa0c2/native-cpu-closed-all-original-c8/products.zip",
+      "bytes": 11810499,
+      "sha256": "ec042ceb140a38194448bfc1ce359f9bbc9491753a40d2b9ab3efd093a522d00",
+      "members": {
+        "bin/linux-gcc/native-cpu-closed-all-component/adapter-only.o": {
+          "bytes": 7688,
+          "sha256": "09ae8a5473d9b2a28d7f43855c4961f26f646b92e1ed4f54ae9821dff8b04703"
+        },
+        "bin/linux-gcc/native-cpu-closed-all-component/rows_adapter.o": {
+          "bytes": 23179072,
+          "sha256": "f2292a4c5f6b19f6b77fb75ab7809811f464e8652e18805cb760316ff4fd664b"
+        },
+        "bin/linux-gcc/native-cpu-closed-all-provider/provider/libvulkan_lvp.so": {
+          "bytes": 36071536,
+          "sha256": "b25c4b649ed369b1f6f869d5f6567dee25a44ad72b3660e12ddc7906c5661e98"
+        }
+      }
+    }
+  },
+  "library": {
+    "path": "bin/linux-gcc/native-cpu-closed-all-provider/provider/libvulkan_lvp.so",
+    "bytes": 36071536,
+    "sha256": "b25c4b649ed369b1f6f869d5f6567dee25a44ad72b3660e12ddc7906c5661e98"
+  },
+  "original_C8_acceptance": {
+    "bytes": 60479,
+    "sha256": "f0eaa6e077851fa3b4932f2104549c0d420a040914739a4cade62d2ceb62c19d"
+  },
+  "optional_math": {
+    "selected_simd_stages": [
+      "dopri_phase",
+      "endpoint"
+    ],
+    "observed_optional_math_stages": [
+      "dopri_phase",
+      "endpoint"
+    ],
+    "unobserved_optional_math_stages": [],
+    "all_selected_optional_math_observed": true,
+    "provider_linked_proof": {
+      "bytes": 103366098,
+      "sha256": "d02669f9d6a2de0e69fb591aafb10722570fa7e918602b3877d84a78bcb9f8e9"
+    },
+    "genuine_private_FP_scope_observed": true,
+    "shared_core_functions_observed": [
+      "sirius_local_value_dense_add8",
+      "sirius_local_value_tagged_divide8"
+    ],
+    "component_numerical_qualification_transferred": false,
+    "scope": "First shared-value core entry/return in each first selected new scoped raw interval only, inside the actual same-thread positive live-job callback and statically joined full MXCSR save/mask/restore scope. Exact core/raw/provider/CPU-cache PCs and unchanged original C8/all32 assertions are separate evidence. RDI return storage and FP payloads are not read or fabricated; no inferior calls or memory/register/FP/feature writes. Intermediate sticky flags need not match outside the original quarantine. No older-hardware, benefit/all8/frame/scientific/release qualification is claimed."
+  },
+  "C8_observed_scalar_stages": [
+    "transport"
+  ],
+  "C8_observed_closed_SIMD_stages": [
+    "endpoint",
+    "dopri_phase"
+  ],
+  "closed_SIMD_stages_unobserved_by_first_packet_C8": [
+    "transport"
+  ],
+  "scope": "Actual eleven-part component and nine reused strict local math cores, final exact code/relocation/ISA/FP/live-job/callback joins and full GP/FDE object-to-library proofs for all three closed entries. One original C8 completes all32 full-buffer digest assertions and all3 first native row/pure returns. Its original Transport12 policy remains scalar; only first selected Endpoint/DP SIMD and local-core entry/return paths are passively observed, so no closed Transport SIMD runtime coverage is invented. Counts,51markers54modulejoins, original executable/inputs/assertions/cache/governors and limits are unchanged. C8 debugger timing is not performance evidence. No ABBA22/Decimal/all8, original frame, physical hardware, full scientific/release/main acceptance or qualification transfer; all eight ultimate-goal subgoals remain open."
+}
