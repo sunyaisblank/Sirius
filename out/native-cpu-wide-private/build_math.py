@@ -86,6 +86,8 @@ else:
     i = order.index(phase)
     if i:
         terminal(order[i - 1])
+        previous = doc(W / (order[i - 1] + '-result.json'))['output']
+        assert pin(R / previous['path']) == {k:previous[k] for k in ('bytes', 'sha256')}
     output = B / {'math-source':'wide-math.ll', 'math-verify':'wide-math.bc', 'math-native':'wide-math.o'}[phase]
     assert not output.exists()
     subprocess.run(plan['commands'][phase], check=True)
