@@ -1,0 +1,266 @@
+{
+  "status": "FIRST_DP_STRUCTURAL_GATE_NOT_MET_STOP",
+  "custody_revision": "a4ee2385504123f564d8313616c9cb3423453823",
+  "owners": {
+    "derive": {
+      "identity": {
+        "bytes": 1834,
+        "sha256": "5c32c82a7da75114a556b6ed13f6443fe33414b5f5a3d8cb47515851e65ac203"
+      },
+      "source": {
+        "revision": "2f6182f7a03e4f335330b89ef8351b4e35e22877",
+        "status": ""
+      },
+      "seconds": 1.298832976986887
+    },
+    "emit": {
+      "identity": {
+        "bytes": 1830,
+        "sha256": "7765e8eb0152869ccb9a72920614d9230642c912416a946e5313c837b28c9c7b"
+      },
+      "source": {
+        "revision": "2f6182f7a03e4f335330b89ef8351b4e35e22877",
+        "status": ""
+      },
+      "seconds": 21.25890023598913
+    }
+  },
+  "structural_gate": {
+    "status": "STOP_BEFORE_COUPLED_EMISSION_OR_RUNTIME",
+    "IR": {
+      "path": "bin/linux-gcc/native-cpu-canonical-metadata/dopri_phase.ll",
+      "bytes": 54493690,
+      "sha256": "c998ab64bd4297cc06b9e308636b0c750e7059f3a1c01c88650b950c0707e781"
+    },
+    "compiled": true,
+    "source_inverse_and_all9380_tuple_check_preserved": true,
+    "static_fast_path": {
+      "entry": "if_then35",
+      "reachable_blocks": 331,
+      "fallback_entry_unreachable": true,
+      "dynamic_root_gathers": 0,
+      "dynamic_ReadValue_calls": 0,
+      "ordered_layer_calls": 45,
+      "whole_context_layer_calls": 45,
+      "root_publication_calls": 200,
+      "escaping_root_temporaries": 200,
+      "root_temporary_representation_bytes": 32000,
+      "root_addressing_improved": true,
+      "layer_bank_interface_narrowed": false
+    },
+    "required_gate_met": false,
+    "reason": "Literal root addressing was emitted, but every layer still receives the complete KernelContext and all200 publication temporaries escape through WriteStored calls. This does not establish the required narrower bank/SSA interface or sufficient execution benefit. Stop before emitting T/E or new acceptance/frame work; address layer interface first.",
+    "scope": "Source/ordinary-IR structural evidence only; no strict conversion/native object/numerical/provider/speed/scientific/release claim."
+  },
+  "archive": {
+    "path": "attestations/qualification/2f6182f7/native-cpu-canonical-metadata-first-gate/source-and-evidence.zip",
+    "bytes": 6333084,
+    "sha256": "8f64258bced84d18d1e40d45f66f583598cacde1d132b09cce4c597a227b8969",
+    "members": {
+      "bin/linux-gcc/native-cpu-canonical-metadata/dopri_phase.ll": {
+        "bytes": 54493690,
+        "sha256": "c998ab64bd4297cc06b9e308636b0c750e7059f3a1c01c88650b950c0707e781"
+      },
+      "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.ispc": {
+        "bytes": 676527,
+        "sha256": "e54e879d061af9bbcd1d97d0997b121a7b1309ee44cb604e9acf82adb3472d25"
+      },
+      "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.publication.ispc": {
+        "bytes": 756241,
+        "sha256": "c4c1936fa1bb19e82a0f4ff388335ffb985b7ddfa8e576754bc5ad2574c68b75"
+      },
+      "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/endpoint.ispc": {
+        "bytes": 1145627,
+        "sha256": "a63acdba53ffd1d62fcda7eeefdd7198fd61edfe8a598bcddbafb4e4a1d65ffb"
+      },
+      "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/endpoint.publication.ispc": {
+        "bytes": 1242957,
+        "sha256": "5728c1ecff0723ac68e97c13c82269c024a5b15cbb3870c29c92fae7c770c4c8"
+      },
+      "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/transport.ispc": {
+        "bytes": 731886,
+        "sha256": "44094ad9241927715f91959e3fbac5f935bdb7bddd7bc8585750939abd0e8c1a"
+      },
+      "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/transport.publication.ispc": {
+        "bytes": 771952,
+        "sha256": "761703bd80a16343ac894cec29a11a0ff2211d550f444e48b872846330011a11"
+      },
+      "out/native-cpu-canonical-metadata/actions.json": {
+        "bytes": 5564,
+        "sha256": "6b6fa56a7132cb6cb7774f8eb1c5b48509d714f80f45bb31d9da315056dcc6d2"
+      },
+      "out/native-cpu-canonical-metadata/derive/inputs-after.json": {
+        "bytes": 1150590,
+        "sha256": "5790d15ff32982b481d52aea4a3f4dfd2bc71805a208fc91181cd4de01dc920b"
+      },
+      "out/native-cpu-canonical-metadata/derive/inputs-before.json": {
+        "bytes": 1150590,
+        "sha256": "5790d15ff32982b481d52aea4a3f4dfd2bc71805a208fc91181cd4de01dc920b"
+      },
+      "out/native-cpu-canonical-metadata/derive/owner.json": {
+        "bytes": 1834,
+        "sha256": "5c32c82a7da75114a556b6ed13f6443fe33414b5f5a3d8cb47515851e65ac203"
+      },
+      "out/native-cpu-canonical-metadata/derive/samples.jsonl": {
+        "bytes": 1600,
+        "sha256": "9814cf0ed79cbdd6f5358d66f84914439b339ce0f3d48d65df5cad6982c24e20"
+      },
+      "out/native-cpu-canonical-metadata/derive/stderr.log": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "out/native-cpu-canonical-metadata/derive/stdout.log": {
+        "bytes": 2929,
+        "sha256": "660d134939e32c47124da6733e4a63b48f39da0b18f10cadb0e66500a8b7764e"
+      },
+      "out/native-cpu-canonical-metadata/derive-result.json": {
+        "bytes": 740,
+        "sha256": "f6afd990fcfad4c74b48aac42cbfb713040f8b9134800b02832fbc795e5336b5"
+      },
+      "out/native-cpu-canonical-metadata/emit/inputs-after.json": {
+        "bytes": 1151517,
+        "sha256": "82327748c82fbca27c16e386e82c084886f2221a41b642106eb44eac59c4c0b5"
+      },
+      "out/native-cpu-canonical-metadata/emit/inputs-before.json": {
+        "bytes": 1151517,
+        "sha256": "82327748c82fbca27c16e386e82c084886f2221a41b642106eb44eac59c4c0b5"
+      },
+      "out/native-cpu-canonical-metadata/emit/owner.json": {
+        "bytes": 1830,
+        "sha256": "7765e8eb0152869ccb9a72920614d9230642c912416a946e5313c837b28c9c7b"
+      },
+      "out/native-cpu-canonical-metadata/emit/samples.jsonl": {
+        "bytes": 27424,
+        "sha256": "3357f3317f223ad2f512bf0afb494a09034da00cbc7452c931a3635e3a2da233"
+      },
+      "out/native-cpu-canonical-metadata/emit/stderr.log": {
+        "bytes": 9014,
+        "sha256": "7b3ed62d8b09ed3a93ec7989146f7fbec9e0be664166ce4366c255fdc2d97a3d"
+      },
+      "out/native-cpu-canonical-metadata/emit/stdout.log": {
+        "bytes": 158,
+        "sha256": "56bb9a9ec2bbeed3c154e0e31daa98e75ae962ea7d6195fa707050204a935bb2"
+      },
+      "out/native-cpu-canonical-metadata/emit-result.json": {
+        "bytes": 5995,
+        "sha256": "45a803530f151a5e0f7364b9b0a95dbe84fb0a1518cfd565032a497efc73e4d9"
+      },
+      "out/native-cpu-canonical-metadata/emit.py": {
+        "bytes": 3999,
+        "sha256": "d1ba6f740b3e3e7e04f16a78365a8aa475e06bf02647f4f2b80efd20bf866892"
+      },
+      "out/native-cpu-canonical-metadata/inspect.py": {
+        "bytes": 3218,
+        "sha256": "c0a575a5a8d2449ed066426a31daa306f03429498af9de387424f46cd38e3546"
+      },
+      "out/native-cpu-canonical-metadata/owned_guard.py": {
+        "bytes": 295,
+        "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+      },
+      "out/native-cpu-canonical-metadata/plan.json": {
+        "bytes": 5850,
+        "sha256": "2cbf56b3c14e45d7872d940f54beb456d397945c3e4a1e853f8e77f5d380cce7"
+      },
+      "out/native-cpu-canonical-metadata/publication-source.json": {
+        "bytes": 2975,
+        "sha256": "065b4138410a45c59d0ad31edcf66a6d7b6bf19e01575d988841c6c7fb9e2bdf"
+      },
+      "out/native-cpu-canonical-metadata/run_owned.py": {
+        "bytes": 293,
+        "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+      },
+      "out/native-cpu-canonical-metadata/seal.py": {
+        "bytes": 2840,
+        "sha256": "f0d245e5cca23947900aab56226b72c35e561282836af65c47ddcbb2f69c948a"
+      },
+      "out/native-cpu-canonical-metadata/structural-gate.json": {
+        "bytes": 1330,
+        "sha256": "f0746399380706b3c3674e6575ad1794820bdb0851a4d4d43f8693064c119cf5"
+      },
+      "out/native-cpu-strict-ir-linking/canonical_metadata.py": {
+        "bytes": 12405,
+        "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+      },
+      "out/native-cpu-strict-ir-linking/canonical_metadata_contract.json": {
+        "bytes": 14846,
+        "sha256": "05eb2b2bad9417c7bdddc44ed2aae4942ca5d1feed379829f4db6d0ff998b822"
+      },
+      "out/native-cpu-strict-ir-linking/canonical_publication.py": {
+        "bytes": 4806,
+        "sha256": "e12c7282f57349eadbc1d72d6579d05c902ccbb56018878e55a85c2c0e4f9490"
+      }
+    }
+  },
+  "publication_source": {
+    "generator": {
+      "path": "out/native-cpu-strict-ir-linking/canonical_publication.py",
+      "bytes": 4806,
+      "sha256": "e12c7282f57349eadbc1d72d6579d05c902ccbb56018878e55a85c2c0e4f9490"
+    },
+    "stages": {
+      "dopri_phase": {
+        "input": {
+          "bytes": 676527,
+          "sha256": "e54e879d061af9bbcd1d97d0997b121a7b1309ee44cb604e9acf82adb3472d25"
+        },
+        "output": {
+          "path": "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.publication.ispc",
+          "bytes": 756241,
+          "sha256": "c4c1936fa1bb19e82a0f4ff388335ffb985b7ddfa8e576754bc5ad2574c68b75"
+        },
+        "source_proof": {
+          "publication_records_removed": 200,
+          "all5_source_words_loaded_before_any_store": true,
+          "same_original_five_OUTPUT_WORD_lvalues_in_order": true,
+          "bit_pattern_identity": true,
+          "complete_source_inverse_exact": true,
+          "original_fallback_unchanged": true,
+          "compiler_or_speed_claim": false
+        }
+      },
+      "transport": {
+        "input": {
+          "bytes": 731886,
+          "sha256": "44094ad9241927715f91959e3fbac5f935bdb7bddd7bc8585750939abd0e8c1a"
+        },
+        "output": {
+          "path": "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/transport.publication.ispc",
+          "bytes": 771952,
+          "sha256": "761703bd80a16343ac894cec29a11a0ff2211d550f444e48b872846330011a11"
+        },
+        "source_proof": {
+          "publication_records_removed": 80,
+          "all5_source_words_loaded_before_any_store": true,
+          "same_original_five_OUTPUT_WORD_lvalues_in_order": true,
+          "bit_pattern_identity": true,
+          "complete_source_inverse_exact": true,
+          "original_fallback_unchanged": true,
+          "compiler_or_speed_claim": false
+        }
+      },
+      "endpoint": {
+        "input": {
+          "bytes": 1145627,
+          "sha256": "a63acdba53ffd1d62fcda7eeefdd7198fd61edfe8a598bcddbafb4e4a1d65ffb"
+        },
+        "output": {
+          "path": "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/endpoint.publication.ispc",
+          "bytes": 1242957,
+          "sha256": "5728c1ecff0723ac68e97c13c82269c024a5b15cbb3870c29c92fae7c770c4c8"
+        },
+        "source_proof": {
+          "publication_records_removed": 240,
+          "all5_source_words_loaded_before_any_store": true,
+          "same_original_five_OUTPUT_WORD_lvalues_in_order": true,
+          "bit_pattern_identity": true,
+          "complete_source_inverse_exact": true,
+          "original_fallback_unchanged": true,
+          "compiler_or_speed_claim": false
+        }
+      }
+    },
+    "precondition": "Existing same-thread positive immutable-program admission; internal scratch is disjoint from global output. All required roots validated before first publication. No source buffer/layout/allocation/count/arithmetic/rounding/tolerance change.",
+    "scope": "Only inline the literal5word representation publication of the already-generated canonical fast branch. No compilation, runtime, numerical or speed qualification."
+  },
+  "scope": "First unchanged-flags ISPC emission of the new canonical DP source. Literal roots succeeded, whole-context layer escape remained; T/E emission and all runtime/acceptance/frame work stopped. Later inline-publication source removes520 escaping record constructions in source only and remains uncompiled. No strict/native/provider/numerical/speed/scientific/hardware/release qualification."
+}
