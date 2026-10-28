@@ -48,7 +48,7 @@ if phase == 'prepare':
                  str(B / outputs['math']), '-o', str(B / outputs['link'])],
         'optimize': [str(D / 'opt'), '-passes=internalize,default<O2>,verify', '-verify-each',
                      '-internalize-public-api-list=' + ','.join(exports),
-                     '-mcpu=skylake-avx512', '-mattr=-fma', str(B / outputs['link']),
+                     '-mcpu=skylake-avx512', str(B / outputs['link']),
                      '-o', str(B / outputs['optimize'])],
     }
     paths = [*W.glob('*.py'), W / 'private_math.cpp', W / 'scope_contract.json',

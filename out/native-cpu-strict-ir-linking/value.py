@@ -50,7 +50,7 @@ if base_phase == 'prepare':
                         str(B / 'dp-linked.bc'), '-o', str(B / outputs['value-lower'])],
         'value-optimize': [str(D / 'opt'), '-passes=internalize,default<O2>,function(sroa),globaldce,verify',
                            '-verify-each', '-internalize-public-api-list=' + ','.join(previous['exports']),
-                           '-mcpu=skylake-avx512', '-mattr=-fma', str(B / outputs['value-lower']),
+                           '-mcpu=skylake-avx512', str(B / outputs['value-lower']),
                            '-o', str(B / outputs['value-optimize'])],
     }
     commands = {k + suffix: v for k, v in commands.items()}
