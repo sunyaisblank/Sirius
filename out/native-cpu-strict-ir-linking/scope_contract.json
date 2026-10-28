@@ -1,0 +1,77 @@
+{
+  "status": "source_only_exact_module_source_semantic_proof",
+  "llvm": "23.1.2",
+  "pass": "sirius-constrain-dp",
+  "input": {
+    "path": "bin/linux-gcc/native-cpu-strict-ir-linking/dopri_phase.ll",
+    "bytes": 53181007,
+    "sha256": "be998fd307e38ca7944aee9150db28ab88c627690873ee0343be38914df79401",
+    "binding": "Producer verifies this exact input pin BEFORE any rewrite and runs conversion first on a separate output, before llvm-link or optimization. The pass independently rechecks the original file SHA, parses it in a separate LLVM23.1.2 context, and compares complete canonical module-print SHA fingerprints after normalizing only ModuleID. Exact source/triple/layout, definitions, exports, calls, vocabulary and predicate counts are additionally checked. No force or trust switch exists."
+  },
+  "new_names": {
+    "sirius_simd_v4_dopri_phase_packet": "sirius_scope_dp_packet",
+    "sirius_simd_v4_dopri_phase_packet___masked_clone_suffix": "sirius_scope_dp_packet___same_suffix",
+    "math_reference_prefix": ["sirius_native_v4_", "sirius_scope_v4_"],
+    "visibility": "hidden, dso_local; existing internal function linkage retained",
+    "opaque_fmaxf": "sirius_simd_fmaxf unchanged; original libm adapter remains opaque"
+  },
+  "preconditions": [
+    "New hidden entry is reachable only through the same genuine admitted Vulkan job and original OS-aware ISA guard, within cs_exec_fn's existing same-thread FP scope.",
+    "Saved full MXCSR is retained and restored on every normal return. The scope sets (saved|0x1f80)&~0xe040: all six FP traps masked, RNE, DAZ and FTZ off.",
+    "Existing DopriPhase views, extents, canonical-program authority, packet/tail routing, input/output disjointness and synchronous lifetime rules remain unchanged.",
+    "No FP-status observer, FP-control mutation, errno-sensitive replacement, new opaque callback or new exit may enter the hidden call chain.",
+    "All live active-lane FP operands must be initialized. Any undefined/poison lanes changed by freeze must be excluded from all visible values, memory addresses and routing/control decisions."
+  ],
+  "conversion": {
+    "fadd_v8f32": 15,
+    "fsub_v8f32": 16,
+    "fcmp_v8f32": 690,
+    "quiet_predicates": {"oeq": 675, "une": 1, "uno": 1},
+    "signaling_predicates": {"oge": 5, "ole": 5, "ogt": 2, "ugt": 1},
+    "rounding": "round.dynamic",
+    "exceptions": "fpexcept.strict",
+    "strictfp": "All copied definitions and all their calls; no forced inlining.",
+    "memory_effects": "Constrained intrinsics model the FP environment as inaccessible memory. Union inaccessible-memory read/write into copied definitions and nonintrinsic calls so stale ordinary-IR memory(read) annotations cannot erase strict effects; preserve original accessible-memory/alias facts. Representation-only intrinsic effects remain exact.",
+    "retained_representation_operations": {"fneg": 2, "llvm.fabs.v8f32": 1276},
+    "unchanged": "FP operand/result types and order, predicates, CFG, all integer/representation operations, pointers, indices, masks and loads/stores. FP operands gain elementwise freeze; math pointer-ABI call arguments stay exact and the two scalar opaque-fmaxf operands gain only freeze. No FMA or fast-math flags.",
+    "private_math_link": "A separately renamed strict C++ math copy must define the matching sirius_scope_v4_ references. The conversion pass does not compile or import it. Old public/raw/scalar/math objects remain byte-identical."
+  },
+  "poison_policy": {
+    "proof_kind": "Reviewed source/LLVM semantic refinement for the exact pinned module; NOT a machine-checked whole-program lane/initialization analysis. Local ValueTracking rediscovery is not a required premise.",
+    "freeze_sites": "Only the two v8f32 operands at each of721 copied fadd/fsub/fcmp sites, plus the two scalar FP operands of the one existing opaque-fmaxf call. No pointers, indices, masks, integer values, memory contents or representation operations are frozen or rewritten.",
+    "defined_values": "Elementwise freeze preserves every defined bit pattern, including signed zero, NaNs, infinities and handled-invalid metadata. It does not quiet a defined signaling NaN or fabricate a live active input.",
+    "entry_active_mask": "The ordinary export uses programIndex < groups; the masked clone intersects that predicate with its original incoming <8 x i1> __mask argument. ComputeOwnedRow receives that exact mask; all later narrowing/restoration and memory masks remain unchanged.",
+    "source_initialization": [
+      "Both original DP export forms memset the complete120832-byte varying KernelContext before ComputeOwnedRow; the parsed IR retains the exact memset and all offsets/masks.",
+      "Original admission proves every scheduled owned row passes the integer extent/header checks preceding its complete4149-word staged-output clear. Subsequent arithmetic/metadata refusals therefore retain fully initialized output words.",
+      "Admitted input views consist of initialized uint32 words. Masked ReadOriginal gathers define active requested words; ordinary NaN/invalid bits are values, not LLVM poison. Original varying masks and ordered writes determine which temporary values are live.",
+      "Packed marshalling snapshots all8 physical A/B payloads/tags from the memset-initialized context, zeroes privateD, preserves alias snapshots and copies back only under the original mask. Native pointer-ABI helpers therefore retain their original initialized physical bank inputs.",
+      "Opaque-fmaxf scalar extraction occurs only in the unchanged foreach_active loop with the existing mask and valid lane index. Its live scalar arguments are source-defined; freeze does not change their values."
+    ],
+    "refinement_argument": "Freeze restricts undef/poison choices and is bit-identical on defined elements. Poison arithmetic alone is not immediate UB; no blanket UB waiver is used. On every source-defined visible path the initialization and unchanged mask/lifetime invariants define all live values. Excluded undefined elements may acquire fixed choices, but cannot acquire a new visible value/control use on such a path. Newly exposed excluded-lane FP status is separately quarantined by the observer-free, all-traps-masked, full-MXCSR-restore scope.",
+    "reject_domain_changes": "Any different module fingerprint/source/vocabulary/call/observer is rejected. Arbitrary modules, changed initialization, weakened masks, missing admission, active uninitialized buffers, or paths outside the established FP scope are unsupported and must not use the hidden entry."
+  },
+  "observable_boundary": "Excluded-lane comparison flags may differ inside this private scope because the closed code does not read them and full MXCSR is restored before return. This does not relax strict intrinsic exception metadata or any direct public math-helper sticky-flag contract.",
+  "scope_source_authorities": {
+    "initialization_and_active_rows": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc",
+    "physical_bank_snapshot": "out/native-cpu-inline-private-bank/packinghelper.isph",
+    "scope_controls": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/util/u_math.h:util_fpstate_set_ieee32",
+    "same_thread_save_and_full_restore": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c:cs_exec_fn",
+    "no_arithmetic_status_reader": "out/native-cpu-exact-product-zero-residual/retained8.cpp and exact pinned DP IR; opaque fmaxf retains the observed existing libm target"
+  },
+  "postconditions": [
+    "Identical complete visible output words, inactive/sentinel words, immutable input bytes, routing/refusal behavior and errno; caller full MXCSR restored bit-exactly.",
+    "No input pointer/index/mask or active undefined value is fabricated by freeze. The source proof is bound to the exact module fingerprint and original admission/initialization/lifetime conditions.",
+    "New output is separately named. Existing public raw/scalar/math implementations and fallback objects remain exact."
+  ],
+  "primary_sources": {
+    "IRBuilder": "https://github.com/llvm/llvm-project/blob/llvmorg-23.1.2/llvm/include/llvm/IR/IRBuilder.h",
+    "ConstrainedOps": "https://github.com/llvm/llvm-project/blob/llvmorg-23.1.2/llvm/include/llvm/IR/ConstrainedOps.def",
+    "strict_environment_memory_effects": "https://github.com/llvm/llvm-project/blob/llvmorg-23.1.2/llvm/include/llvm/IR/Intrinsics.td#L1256",
+    "x86_predicate_lowering": "https://github.com/llvm/llvm-project/blob/llvmorg-23.1.2/llvm/lib/Target/X86/X86ISelLowering.cpp#L22365",
+    "plugin_API_v2": "https://github.com/llvm/llvm-project/blob/llvmorg-23.1.2/llvm/include/llvm/Plugins/PassPlugin.h",
+    "freeze": "https://llvm.org/docs/LangRef.html#freeze-instruction",
+    "opaque_fmaxf": "https://github.com/bminor/glibc/blob/glibc-2.39/sysdeps/x86_64/fpu/s_fmaxf.S"
+  },
+  "qualification": "Source only. No plugin compile/load, conversion, verifier execution, link, numerical run, private-PC observation, speed or provider adoption has occurred. LLVM shared-library/config contents and later linked target compatibility remain root-owned checks."
+}
