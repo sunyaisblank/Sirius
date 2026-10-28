@@ -1,0 +1,17 @@
+{
+  "status": "APPEND_ONLY_DESCRIPTION_CORRECTION_NO_ACCEPTANCE_CHANGE",
+  "source_IR": {
+    "path": "bin/linux-gcc/native-cpu-canonical-closed-dp/dp.closed.ll",
+    "bytes": 43874147,
+    "sha256": "6a86140bbb8fa7f179255df906522dae6ea1cc38d3cd9e44f02084a724c8fdd9"
+  },
+  "verified_archived_source": "attestations/qualification/4332fb95/native-cpu-closed-dp-original-c8-attempt/source-and-evidence.zip",
+  "exact_surviving_alloca": "%staged_output = alloca [33192 x i32], align 64",
+  "surviving_transactional_staging_bytes": 132768,
+  "eliminated_private_context_bytes": 120832,
+  "corrects": [
+    "attestations/qualification/4332fb95/native-cpu-closed-dp-original-c8-attempt/MANIFEST.json#scope",
+    "attestations/qualification/620a0c6e/native-cpu-closed-dp-unwind-original-c8/MANIFEST.json#scope"
+  ],
+  "scope": "The earlier phrase one small alloca was incorrect. The remaining alloca is132768bytes of original transactional output staging, preserved for whole-state rollback. The separate120832-byte KernelContext was eliminated. Existing manifests, bundles, objects, numerical verdicts and their hashes remain unchanged; this corrects only the allocation-size description."
+}
