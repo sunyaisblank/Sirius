@@ -1,0 +1,185 @@
+{
+  "phase": "context",
+  "source_only": true,
+  "pass_name": "sirius-closed-dp-context",
+  "input": {
+    "path": "bin/linux-gcc/native-cpu-canonical-closed-dp/dp.value.bc",
+    "bytes": 10646600,
+    "sha256": "3f69125b95e0a6282a3e7dfa2d7617a0ea933af22dd2aa411314a8b1c76a2cf0"
+  },
+  "source_inputs": {
+    "out/native-cpu-strict-ir-linking/derive_closed_dp_passes.py": {
+      "bytes": 16138,
+      "sha256": "0e935b15ec6047f0125dcf5641f689f56cd12d4f57b16bb9ca06f8229e86e825"
+    },
+    "out/native-cpu-strict-ir-linking/constrain_scope.cpp": {
+      "bytes": 14483,
+      "sha256": "fa6b225b21edb880054e006504ec1c401155bbd2448c68c250be953ababf8fab"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_abi.cpp": {
+      "bytes": 28405,
+      "sha256": "4cbefca757c267222e0bcde0e6818776ec058ab70fa6913d470785716abab1e6"
+    },
+    "out/native-cpu-strict-ir-linking/scope_contract.json": {
+      "bytes": 9197,
+      "sha256": "adef7709ec5c94c55442840a30023a5db00972ab4d078ea625950bf8b2391cf9"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_private_dp.py": {
+      "bytes": 9467,
+      "sha256": "a9fbfbd69cbb4ebc1aad739fda95c39352a7d3281f1e03ca5e3ef4c96dd12508"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_private_dp_contract.json": {
+      "bytes": 11905,
+      "sha256": "242e1e101927473daea1c0cb8a9238d438e5f569a27d6218e01b56c6b46a674e"
+    },
+    "bin/linux-gcc/native-cpu-local-effects/math.bc": {
+      "bytes": 296980,
+      "sha256": "93e076866edeb28c329a65a81dad1485a2717a8104ec4b7879002c78a9e6a6a1"
+    },
+    "bin/linux-gcc/native-cpu-local-effects/math.o": {
+      "bytes": 259216,
+      "sha256": "69f9d771c5cf2d0de63e32ac70ac534961e9283a02753047784902e3ee54cdbe"
+    },
+    "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.publication.ispc": {
+      "bytes": 756241,
+      "sha256": "c4c1936fa1bb19e82a0f4ff388335ffb985b7ddfa8e576754bc5ad2574c68b75"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_metadata.py": {
+      "bytes": 12405,
+      "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_metadata_contract.json": {
+      "bytes": 14846,
+      "sha256": "05eb2b2bad9417c7bdddc44ed2aae4942ca5d1feed379829f4db6d0ff998b822"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_publication.py": {
+      "bytes": 4806,
+      "sha256": "e12c7282f57349eadbc1d72d6579d05c902ccbb56018878e55a85c2c0e4f9490"
+    },
+    "out/native-cpu-strict-ir-linking/plan.json": {
+      "bytes": 6044,
+      "sha256": "8aac559eee1e5280f8a1a2530ce299882741cd8508484fc4c3c916e24f5cfeff"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "out/native-cpu-dispatch-admission-token/native_packet.hpp": {
+      "bytes": 4155,
+      "sha256": "ad11ddc83d3de03405e89885badc1e4655fdfcca77519a686abe18824b5fba7d"
+    },
+    "out/native-cpu-dispatch-admission-token/admitted_bridge.h": {
+      "bytes": 2144,
+      "sha256": "e57b146aa86c3d6c6ca3de8c53565f1b77106e860f132478cc76a763646e6afe"
+    },
+    "out/native-cpu-shared-value-component/rows_adapter.cpp": {
+      "bytes": 9091,
+      "sha256": "8e9b4d4849a4a7f46ffb0daa2b5627071a5e5ff30de3ffac260e1353596e1e83"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "bytes": 9452,
+      "sha256": "8ba26cc5ab648e4cea37d5df3219dc002f4ff70f846c2418aba5bdac68fa3587"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/sirius_native_bridge.h": {
+      "bytes": 2523,
+      "sha256": "c6eaf07c31e0b6e74e962b916154568946f79688f75e797391e8f9b066e91702"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 109640,
+      "sha256": "34b1f093c09543c7f1c48873081d014849088b3839316dc6b3671d2b6add9cd1"
+    },
+    "bin/linux-gcc/native-cpu-canonical-closed-dp/ispc-source/dopri_phase.ispc": {
+      "bytes": 710648,
+      "sha256": "7e3dc7d0c602d7720248b5c8536e0d7b8ac295dc611afc77227b606f85cadef6"
+    },
+    "out/native-cpu-strict-ir-linking/closed_dp_scope_contract.json": {
+      "bytes": 7752,
+      "sha256": "2f09b17bcc6e751d48bca4932bf379f9d61ab2b8ff8594db7a7b34ddf89c1e11"
+    },
+    "out/native-cpu-strict-ir-linking/constrain_closed_dp.cpp": {
+      "bytes": 14471,
+      "sha256": "1a11e4fbda3ca1c169c2253ef1bf1022813daa8b9b53c33ffeb273daf109bfa3"
+    },
+    "out/native-cpu-canonical-closed-dp/scope-result.json": {
+      "bytes": 1501,
+      "sha256": "da30615e0dd2becabdf4a81f2ec6d9b6220a3ffd831ace4062ebc92850c8245e"
+    },
+    "out/native-cpu-canonical-closed-dp/scope/owner.json": {
+      "bytes": 2184,
+      "sha256": "3b2a8865c64beacdd298dddc2a280658aeeee5fd7f0bff871d08c02118493441"
+    },
+    "bin/linux-gcc/native-cpu-canonical-closed-dp/dp.strict.bc": {
+      "bytes": 10643076,
+      "sha256": "29254954b0a3193882ee6031f6d1a5cb926b2997aa735a763736e3b5e6605b09"
+    },
+    "out/native-cpu-strict-ir-linking/derive_closed_dp_context.py": {
+      "bytes": 22855,
+      "sha256": "ffd94f50726aa20895ce91d6820dee67cb722f142bbd4798556d52b31ca0814d"
+    },
+    "out/native-cpu-strict-ir-linking/closed_dp_value_contract.json": {
+      "bytes": 7565,
+      "sha256": "ab5cc503b48c52bba1928609e504d465bf75601a6c4087c12c2141c6ef3087ba"
+    },
+    "out/native-cpu-canonical-closed-dp/value-result.json": {
+      "bytes": 2159,
+      "sha256": "0b6295c0974fd3222b3d604660c1d4c7f4d8ab9403dddb9e9dbcf3d08b6315df"
+    },
+    "out/native-cpu-canonical-closed-dp/value/owner.json": {
+      "bytes": 1836,
+      "sha256": "0da0b8263b6d0230637927f1b6ee85decc1a8ebee166a4ddd0d86143a4c7dac5"
+    },
+    "out/native-cpu-canonical-closed-dp/value/inputs-before.json": {
+      "bytes": 1161736,
+      "sha256": "de31095a9c1723060cb9a77bb3e7e62914b16fa42dc3f6817b685b89f8ac97e1"
+    },
+    "out/native-cpu-canonical-closed-dp/value/inputs-after.json": {
+      "bytes": 1161736,
+      "sha256": "de31095a9c1723060cb9a77bb3e7e62914b16fa42dc3f6817b685b89f8ac97e1"
+    },
+    "out/native-cpu-canonical-closed-dp/value-audit/owner.json": {
+      "bytes": 1676,
+      "sha256": "7338a138e42caea30839310354649d61a18a6adb2c30ce40e10221ae878ef86d"
+    },
+    "out/native-cpu-canonical-closed-dp/value-audit/inputs-before.json": {
+      "bytes": 1157457,
+      "sha256": "7a366a16b107f40cc6335b906a41da3bd0569675162b59fd233d3384a5f95d5b"
+    },
+    "out/native-cpu-canonical-closed-dp/value-audit/inputs-after.json": {
+      "bytes": 1157457,
+      "sha256": "7a366a16b107f40cc6335b906a41da3bd0569675162b59fd233d3384a5f95d5b"
+    },
+    "bin/linux-gcc/native-cpu-canonical-closed-dp/dp.value.bc": {
+      "bytes": 10646600,
+      "sha256": "3f69125b95e0a6282a3e7dfa2d7617a0ea933af22dd2aa411314a8b1c76a2cf0"
+    }
+  },
+  "output": {
+    "path": "out/native-cpu-strict-ir-linking/closed_dp_context.cpp",
+    "bytes": 15731,
+    "sha256": "8ace0313e386b42825354546b30d2e891f3ac65921810c2dbe1d2734150830e1"
+  },
+  "private_scope": "Same genuine positive canonical job, full10689-word admission/immutable views, required200/lane0, original shapes/masks/120832-byte initialization/4149-word clear, full MXCSR save/masked RNE/DAZ-FTZ-off/restore; original public/fallback objects remain exact.",
+  "source_proof": "Exact private DP source/table/caller/physical initialization proofs preserved; complete120832-byte owned context is zeroed before its GlobalParams store and every arithmetic access. No unproved lane, pointer or data freeze.",
+  "pipeline": "Pre-DCE the internalized unused masked export; mark defined internal RAW helpers alwaysinline; run AlwaysInliner once and post-DCE. Math9 stays external cc92/inaccessibleRW. Then independently prove one exact initialized constant-address context and normalize only its32-byte masked vector fields.",
+  "initialization": "Require the exact source-bound context layout, one allocation, one complete zero memset, and dominance over every context load/store/memset/masked access. Full8 physical payload/tag/status initialization and original defined masks justify load/select/store. Preserve passthroughs and alignment, including inactive lanes.",
+  "confinement": "Offset0 pointer loads/stores retain actual GlobalParams. Stop the walk at loaded external pointers; never normalize global views, output, staged output, publication temporaries, other allocas, callbacks or unknown/dynamic context addresses. No compact IO, slot-copy interface, FP effect rewrite or math definition inlining.",
+  "inventory": "Ordinary raw inlining may expand static call/FP counts. Compare complete constrained/FP-representation/math inventory from post-inline to post-normalization only; never require old1576 to remain after inlining.",
+  "next_gate": "Root focused SROA/local cleanup must eliminate the owned KernelContext and all raw helper/layer escapes before native emission or costly acceptance. Actual memory/address/stack/code/ISA/noFMA evidence is required; source/inlining alone is no speed/SSA or numerical claim.",
+  "qualification": "Source preparation only; no compile/load/pass/cleanup/native/runtime/provider/scientific/release qualification or acceptance transfer."
+}
