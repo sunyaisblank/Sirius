@@ -1,0 +1,45 @@
+{
+  "status": "RECOVERY_AND_OWNED_CONSUMER_REAPING_VERIFIED_PENDING_UNLINK",
+  "files": [
+    {
+      "path": "out/native-cpu-canonical-closed-remaining/endpoint-residual-serialization-diagnostic/from-bc.ll",
+      "bytes": 119473814,
+      "sha256": "46bcf17beabf9b74d882bc70eca31b99f70669dea90172788b674b665acecbd8",
+      "allocated_bytes": 119480320,
+      "recover_from": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.closed.bc",
+        "bytes": 19497068,
+        "sha256": "2c794bcf6a0171171366e62c45ea0011e0480045abc6dff4ff58ac5bbf746075"
+      },
+      "recovery_argv": [
+        "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/opt",
+        "-passes=verify",
+        "-S",
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.closed.bc",
+        "-o",
+        "out/native-cpu-canonical-closed-remaining/endpoint-residual-serialization-diagnostic/from-bc.ll"
+      ]
+    },
+    {
+      "path": "out/native-cpu-canonical-closed-remaining/endpoint-residual-serialization-diagnostic/from-text.ll",
+      "bytes": 119473814,
+      "sha256": "7c8fcac1ccdfdbec214cdc7551c5825cf6e090df56805cff8c56f5a101b72130",
+      "allocated_bytes": 119480320,
+      "recover_from": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.closed.ll",
+        "bytes": 119473814,
+        "sha256": "46bcf17beabf9b74d882bc70eca31b99f70669dea90172788b674b665acecbd8"
+      },
+      "recovery_argv": [
+        "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/opt",
+        "-passes=verify",
+        "-S",
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.closed.ll",
+        "-o",
+        "out/native-cpu-canonical-closed-remaining/endpoint-residual-serialization-diagnostic/from-text.ll"
+      ]
+    }
+  ],
+  "comparison_proof": "comment-order-proof.json",
+  "only_generated_comments_reordered": true
+}
