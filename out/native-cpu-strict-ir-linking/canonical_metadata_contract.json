@@ -1,0 +1,261 @@
+{
+  "status": "source_only_uncompiled_independent_candidate",
+  "kind": "Pinned ISPC source generator, not an LLVM module rewrite",
+  "generator": {
+    "bytes": 12405,
+    "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+  },
+  "source_inputs": {
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc": {
+      "bytes": 403852,
+      "sha256": "f9c1197a5c06814705d6bf7f46cf0e8ce217d7f42534627fadbfa208f51dac8b"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc": {
+      "bytes": 626976,
+      "sha256": "0fc91ff0b756fddd055d5c0322f5eece0557a64799ef31893933be33cdba10f6"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc": {
+      "bytes": 795302,
+      "sha256": "d8ae7cdde50211537678ec197f18c374edd2cec653974d9d0b7c33c50db8c1e1"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "out/native-cpu-dispatch-admission-token/native_packet.hpp": {
+      "bytes": 4155,
+      "sha256": "ad11ddc83d3de03405e89885badc1e4655fdfcca77519a686abe18824b5fba7d"
+    },
+    "out/native-cpu-dispatch-admission-token/admitted_bridge.h": {
+      "bytes": 2144,
+      "sha256": "e57b146aa86c3d6c6ca3de8c53565f1b77106e860f132478cc76a763646e6afe"
+    },
+    "out/native-cpu-inline-private-bank/derivation.json": {
+      "bytes": 54448,
+      "sha256": "177e18838b100fc013020724c0ea69500870b78c0ae789cbebe6c41db687761c"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_abi.cpp": {
+      "bytes": 28405,
+      "sha256": "4cbefca757c267222e0bcde0e6818776ec058ab70fa6913d470785716abab1e6"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_contract.json": {
+      "bytes": 14669,
+      "sha256": "cff4005bf2d9f4e8a90d8fcbe109a4eaac093ec35c6ef14cb43bb30f86147d45"
+    },
+    "out/native-cpu-strict-ir-linking/plan.json": {
+      "bytes": 6044,
+      "sha256": "8aac559eee1e5280f8a1a2530ce299882741cd8508484fc4c3c916e24f5cfeff"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html": {
+      "bytes": 446723,
+      "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "bytes": 9452,
+      "sha256": "8ba26cc5ab648e4cea37d5df3219dc002f4ff70f846c2418aba5bdac68fa3587"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/sirius_native_bridge.h": {
+      "bytes": 2523,
+      "sha256": "c6eaf07c31e0b6e74e962b916154568946f79688f75e797391e8f9b066e91702"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 109640,
+      "sha256": "34b1f093c09543c7f1c48873081d014849088b3839316dc6b3671d2b6add9cd1"
+    }
+  },
+  "derived_sources": {
+    "dopri_phase": {
+      "bytes": 676527,
+      "sha256": "e54e879d061af9bbcd1d97d0997b121a7b1309ee44cb604e9acf82adb3472d25"
+    },
+    "transport": {
+      "bytes": 731886,
+      "sha256": "44094ad9241927715f91959e3fbac5f935bdb7bddd7bc8585750939abd0e8c1a"
+    },
+    "endpoint": {
+      "bytes": 1145627,
+      "sha256": "a63acdba53ffd1d62fcda7eeefdd7198fd61edfe8a598bcddbafb4e4a1d65ffb"
+    }
+  },
+  "source_findings": {
+    "dopri_phase": {
+      "stage": "dopri_phase",
+      "source_inverse_exact": true,
+      "original_fallback_body_unchanged": true,
+      "opcode_layer_definitions_and_tuple_order_unchanged": true,
+      "branches": 1,
+      "layer_calls": 45,
+      "validation_roots": 200,
+      "publication_roots": 200,
+      "canonical_programs": [
+        {
+          "offset": 0,
+          "count": 2088,
+          "registers": 629,
+          "prefix": null
+        }
+      ]
+    },
+    "transport": {
+      "stage": "transport",
+      "source_inverse_exact": true,
+      "original_fallback_body_unchanged": true,
+      "opcode_layer_definitions_and_tuple_order_unchanged": true,
+      "branches": 2,
+      "layer_calls": 159,
+      "validation_roots": 80,
+      "publication_roots": 80,
+      "canonical_programs": [
+        {
+          "offset": 0,
+          "count": 2587,
+          "registers": 459,
+          "prefix": null
+        },
+        {
+          "offset": 13096,
+          "count": 557,
+          "registers": 459,
+          "prefix": null
+        }
+      ]
+    },
+    "endpoint": {
+      "stage": "endpoint",
+      "source_inverse_exact": true,
+      "original_fallback_body_unchanged": true,
+      "opcode_layer_definitions_and_tuple_order_unchanged": true,
+      "branches": 4,
+      "layer_calls": 195,
+      "validation_roots": 240,
+      "publication_roots": 240,
+      "canonical_programs": [
+        {
+          "offset": 0,
+          "count": 2205,
+          "registers": 612,
+          "prefix": 250
+        },
+        {
+          "offset": 11240,
+          "count": 1943,
+          "registers": 612,
+          "prefix": 202
+        }
+      ]
+    }
+  },
+  "invocation": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/astra/.project/Sirius/out/native-cpu-strict-ir-linking/canonical_metadata.py",
+    "derive"
+  ],
+  "prospective_emit_commands": {
+    "dopri_phase": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.ispc",
+      "-O2",
+      "--target=avx512skx-x8",
+      "--cpu=skx",
+      "--arch=x86-64",
+      "--addressing=32",
+      "--PIC",
+      "--opt=disable-fma",
+      "--math-lib=system",
+      "--emit-llvm-text",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-metadata/dopri_phase.ll"
+    ],
+    "transport": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/transport.ispc",
+      "-O2",
+      "--target=avx512skx-x8",
+      "--cpu=skx",
+      "--arch=x86-64",
+      "--addressing=32",
+      "--PIC",
+      "--opt=disable-fma",
+      "--math-lib=system",
+      "--emit-llvm-text",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-metadata/transport.ll"
+    ],
+    "endpoint": [
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/endpoint.ispc",
+      "-O2",
+      "--target=avx512skx-x8",
+      "--cpu=skx",
+      "--arch=x86-64",
+      "--addressing=32",
+      "--PIC",
+      "--opt=disable-fma",
+      "--math-lib=system",
+      "--emit-llvm-text",
+      "-o",
+      "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-metadata/endpoint.ll"
+    ]
+  },
+  "writes_when_later_invoked": "Only three uniquely named generated ISPC sources under bin/linux-gcc/native-cpu-canonical-metadata/ispc-source; never overwrite. Derivation summary goes to stdout. No compiler, provider, frame, action or Git invocation exists in the generator.",
+  "preconditions": [
+    "New separately named raw exports may be linked only behind the existing same-thread genuine positive native_preflight_passed job and unchanged pointer/extent/grid/range/alias/ISA guards, inside the full original saved/set/restored FP scope.",
+    "Pure preflight proves every byte of the five complete programs in the three pinned tables, except Endpoint relative word11241. The identical input and descriptor table stay immutable through the original synchronous wait; output is disjoint.",
+    "The generated source is not a new generic public implementation. Existing public and old private raw/native objects remain exact; any later private callback change must be separately verified.",
+    "No old exact-module strict/shared pass accepts this derived source automatically. Newly emitted raw modules require their own complete byte hashes, independent parse/canonical fingerprints, strict FP source proof and checked vocabulary/call inventories before any body transformation or native emission."
+  ],
+  "specialization": {
+    "scope": "Seven fast branches for five canonical programs: DP1, Transport2, Endpoint2 programs times required20/100 phases. Only the export-binding macro and one insertion at EvaluateProgram entry differ; removing exactly that insertion and reversing exactly one macro restores the complete original file byte-for-byte.",
+    "active_lane_guard": "Require a nonempty existing lanemask, then all(original program base/count/register count/layer count/prefix/required/lane0 predicates) over currently active lanes. ISPC all() ignores inactive lanes as documented in the pinned primary guide, section Cross-Program-Instance Operations. No pointer, mask or data is frozen. Every empty, mixed-program/phase or unrecognized call takes the original fallback with its original mask and control schedule.",
+    "metadata_authority": "Parse all layer start/end pairs from the unchanged EvaluateKnownLayer cases and verify them against every boundary in the exact table. Verify every original layer tuple against all five corresponding instruction records; require root bounds, contiguous nonempty <=64-op layers, endpoint prefix at a boundary, complete program lengths and all9380 tuples. No arithmetic record is dropped, duplicated or rewritten.",
+    "dynamic_root_boundary": "The canonical fast path uses only literal retainedScratch[5*root+component] expressions, not ReadValue_0 or a runtime root lookup. Five representation loads stay ordered as in ReadValue_0; ScratchAddress is separately checked to be index*5+component. Publication passes the unchanged RetainedTriple by address to unchanged WriteStored_0 after all validation, preserving five-word order.",
+    "DP_and_Endpoint": "Reset retainedStatus under the original lane0 condition; call exactly the original static layers in order and check retainedStatus after each executed layer. For Endpoint20 execute [0,prefix), for Endpoint100 execute [prefix,count); retain the already-established roots from the first phase. Validate every required root in order, with the original early-return semantics, before any publication.",
+    "Transport": "Keep the live stage value in publication addresses. For original lane0 invocation validate all40 roots in order, OR refusals into retainedStatus without early exit exactly as before, check that status once, then publish all40 roots in order. Other lane values use the original fallback.",
+    "Endpoint_exempt_word": "SelectEndpointProgram_0 and the live specialized-header register comparison at suffix11241 remain outside the insertion and byte-identical. Non612 specialized headers retain their original selection refusal and zero/internal output behavior. The generator never replaces or ignores this live word.",
+    "unchanged": "Complete generic fallback, row-data reads, all shape/header/refusal tests outside EvaluateProgram, opcode and layer bodies/order, identity/private-pack helpers, all8 physical A/B payloads/tags, strict arithmetic and masks, root publication sequencing, staged/global I/O and layout/counts/host/shaders/cache/governors. No blanket inlining or interface/toolchain/ISA change.",
+    "allocations": "No host/shader buffer, array or allocation extent changes. Fast-path root blocks spell out the existing RetainedTriple representation locally; compiler-private materialization/lifetime/stack reuse must be measured from emitted code and are not claimed unchanged. The existing KernelContext, staged output and noinline layer scopes remain."
+  },
+  "required_postcompile_gate": [
+    "First source inverse/all9380 tuple and exact emit-argv checks, original eight-lane ABI and target closure, complete new IR hashes/fingerprints, strict constrained FP inventory/round.dynamic/fpexcept.strict/no-contract, unchanged scoped C++ math and actual no-FMA/ISA gates.",
+    "Prove actual constant byte-offset root accesses and disappearance of metadata root gathers/ReadValue full-context calls on each specialized fast path, with unchanged original metadata/fallback behavior reachable when the all-active guard fails. Whole-module fallback gathers remain legitimate and must not be counted as newly removed.",
+    "Compare actual live bank interfaces/context escapes/dynamic gather and native memory/address traffic against AU per T/E/DP. A new condition or larger code alone is not a structural benefit. If original bank traffic remains on the specialized path, stop; no expensive acceptance or frame on that premise.",
+    "Do not infer full SSA or narrower noinline layer interfaces: original layer calls still receive KernelContext. Confirm any actual narrowing/SROA from emitted IR/code, including new root temporaries and stack/code growth under unchanged300s4GiB2GiB ownership bounds.",
+    "Only a materially passed compiler/static gate can justify fresh current genuine-job C8/all32, sole original ABBA22 and independentDecimal, all8 ordered controls, then unchanged original sole frame. This candidate supplies no numerical/performance/provider/adoption/scientific/release qualification and does not inherit AU acceptance."
+  ],
+  "qualification": {
+    "generated_sources_written": false,
+    "compiler_run": false,
+    "IR_generated": false,
+    "numerical_run": false,
+    "provider_adopted": false,
+    "performance_claim": false,
+    "source_transform_checked_in_memory": true,
+    "derivation_producer_invoked": false
+  },
+  "independence": "Independent source hypothesis only. No integration with the separately owned register-call value ABI route; no new acceptance workload or frame is requested by this source preparation."
+}

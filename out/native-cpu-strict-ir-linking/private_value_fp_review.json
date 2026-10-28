@@ -1,0 +1,698 @@
+{
+  "schema": "private_value_fp_source_review_v1",
+  "source_only": true,
+  "decision": {
+    "metadata_specialization": "GO_ONLY_INSIDE_EXISTING_PRIVATE_SCOPE",
+    "unrestricted_precise_ordinary_fp": "NOT_PROVED_FOR_EXACT_NAN_WORDS",
+    "memory_none_on_retained_constrained_intrinsics": "NOT_AUTHORIZED",
+    "selected_next_change": "Root chose separately copied X86_RegCall ABI first; no FP-model implementation authorized"
+  },
+  "source_inputs": {
+    "out/native-cpu-exact-product-zero-residual/retained8.cpp": {
+      "bytes": 39893,
+      "sha256": "9286f36aa1b2e563bbd501894eb642e0628784409a23a7a2e153ead328759e68"
+    },
+    "out/native-cpu-strict-ir-linking/private_math.cpp": {
+      "bytes": 1075,
+      "sha256": "3b1682e0e71fcb83a5e9e59c62b04aee78ddc5e7193f88a29f9d5fec8fd1acf3"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_abi.cpp": {
+      "bytes": 28405,
+      "sha256": "4cbefca757c267222e0bcde0e6818776ec058ab70fa6913d470785716abab1e6"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_contract.json": {
+      "bytes": 14669,
+      "sha256": "cff4005bf2d9f4e8a90d8fcbe109a4eaac093ec35c6ef14cb43bb30f86147d45"
+    },
+    "out/native-cpu-strict-ir-linking/scope_contract.json": {
+      "bytes": 9197,
+      "sha256": "adef7709ec5c94c55442840a30023a5db00972ab4d078ea625950bf8b2391cf9"
+    },
+    "out/native-cpu-shared-value-provider/verify_provider.py": {
+      "bytes": 45281,
+      "sha256": "55bf38021c9b70292338e9470e4105d7910114c1f8b24fac5e0442eef5904c09"
+    },
+    "out/native-cpu-shared-value-provider/provider/linked-native-proof.json": {
+      "bytes": 103757603,
+      "sha256": "5f2d0b9c831548e62345f756fee06251f7f14fc5cc3eb9114c229c61faf5701f"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/private-math.ll": {
+      "bytes": 2924494,
+      "sha256": "b4b86594cd44ae597a73f3fea745aafe84a60e1d3421e3c3bb7441f45afd07ca"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/shared-math.O2.ll": {
+      "bytes": 2789755,
+      "sha256": "5075b6ad8ff45f93e1f8b26d98d1e239a5c3d0e3f28852b1be3dede1c3b51dd3"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/IR/Intrinsics.td": {
+      "bytes": 160903,
+      "sha256": "b5a8d57479913bdc760451288d21f594d272bb02f9853e1959f1497def9d659c"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/IR/FPEnv.h": {
+      "bytes": 3227,
+      "sha256": "ab7599d6726ab2c2c043d0ce520a66b3227b63ef52328b73e799eeef187418c1"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/util/u_math.h": {
+      "bytes": 18704,
+      "sha256": "79b6f37db6056fcc31b6e08860bc0c40026f0dfebef701008b2dc89d71a79fef"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 109640,
+      "sha256": "34b1f093c09543c7f1c48873081d014849088b3839316dc6b3671d2b6add9cd1"
+    }
+  },
+  "proven_scope": {
+    "entry": "New hidden private entries only, positive genuine same-thread admitted cs_exec_fn job",
+    "set_mxcsr": "(saved | 0x1f80) & ~0xe040",
+    "traps_masked": true,
+    "round_nearest_even": true,
+    "daz": false,
+    "ftz": false,
+    "saved_full_mxcsr": true,
+    "restored_full_mxcsr": true,
+    "final_code_proof": "AU verify_provider.py binds get/set/restore, preserved r13d, entry dominance and every normal return after packet_mode",
+    "no_fp_status_or_rounding_observer_in_math": true,
+    "no_errno_or_opaque_numerical_call_in_math": true,
+    "raw_opaque_fmaxf": "Keep original adapter and already-bound non-observing libm target; never substitute a new callback",
+    "public_contract": "All old raw/scalar/GCC math entrypoints/objects and direct helper sticky-flag contracts remain exact"
+  },
+  "metadata_only_proposal": {
+    "new_names_required": true,
+    "substitutions": {
+      "fpexcept.strict": "fpexcept.ignore",
+      "round.dynamic": "round.tonearest"
+    },
+    "leave_intrinsics_without_rounding_operand_unchanged_except_exception_metadata": true,
+    "preserve": [
+      "constrained intrinsic IDs",
+      "strictfp definitions and calls",
+      "FP types and every narrowing",
+      "operand order",
+      "predicates",
+      "CFG",
+      "all integer/bit representation operations",
+      "all masks and memory accesses",
+      "existing initialized operands/freezes",
+      "fixed nine-core value ABI",
+      "no fast-math flags",
+      "no contraction/FMA",
+      "same denormal mode"
+    ],
+    "justification": "The existing source/final-code scope establishes precisely the masked/unobserved-exception and actual-RNE preconditions of these metadata values. Floating results remain constrained; public/internal status observers are not removed.",
+    "memory_effects": "Keep Other Ref | Inaccessible ModRef on core declarations/definitions/calls. Keep ArgMem ModRef on pointer adapters. Do not relabel live constrained intrinsics or strict cores memory(none).",
+    "optimization_limit": "No claim that LLVM23 consumes these metadata to eliminate full core calls or produces any useful change."
+  },
+  "ordinary_fp_boundary": {
+    "default_environment_semantics_compatible": true,
+    "local_value_memory_closure": "Core value arguments carry no pointers. Original byval/sret/lambda/memcpy/memset storage is core-local; no ordinary global/TLS/errno/numerical callback access was found.",
+    "blocker": "Fixed-RNE/no-fast ordinary FP still permits NaN-result sign/payload choices and unchanged SNaN propagation. Constrained math guarantees quiet NaN results. Source product32, next-word bounds and refusal code bitcast intermediate FP results, so status quarantine alone is not an exact-word NaN/use proof.",
+    "example": "LLVM permits ordinary fmul(SNaN,1.0) -> SNaN; this is not claimed as a demonstrated visible nine-core mismatch.",
+    "unchanged_bits": "Integer/select/copy/fneg/fabs-only NaN passthrough stays bit-preserving; signed-zero and subnormal semantics must remain exact.",
+    "additional_proof_needed": "Before any ordinary/pure-core change, prove all computed-NaN bit uses unobservable/equivalent on the complete admitted domain, or preserve those sites on an exact constrained route. Do not infer this merely from finite fixtures or default precise flags."
+  },
+  "llvm23_sdk": {
+    "constrained_intrinsics_declaration": "Intrinsics.td:1377 IntrProperties=[IntrInaccessibleMemOnly,IntrStrictFP], independent of metadata arguments",
+    "parsed_current_shared_math": {
+      "strict_exception_operands": 5345,
+      "dynamic_rounding_operands": 3259,
+      "ignore_exception_operands": 0
+    }
+  },
+  "primary_sources": {
+    "constrained_metadata": "https://llvm.org/docs/LangRef.html#constrained-floating-point-intrinsics",
+    "default_environment": "https://llvm.org/docs/LangRef.html#floating-point-environment",
+    "nan_rules": "https://llvm.org/docs/LangRef.html#behavior-of-floating-point-nan-values",
+    "precise_mode": "https://clang.llvm.org/docs/UsersManual.html#controlling-floating-point-behavior",
+    "version_scope": "Semantic documentation is live primary documentation; declaration-effect evidence is the exact pinned local LLVM23 SDK. No exact-version online-source claim."
+  },
+  "regcall_review": {
+    "source_semantics": "Changing only the private calling convention need not change FP metadata or memory effects",
+    "required": [
+      "Same cc92 on every declaration/definition/call",
+      "External hidden fixed signatures retained through O2",
+      "Actual V4/SKX caller/callee register, stack and return agreement",
+      "Baseline adapter never calls cc92 directly",
+      "Old v3/public/math objects and guard stay unchanged"
+    ],
+    "qualification": "Not inspected or qualified here; root owns the new copy and native gate"
+  },
+  "limits": {
+    "compilers_run": false,
+    "tests_run": false,
+    "workloads_run": false,
+    "profiling_run": false,
+    "model_or_existing_source_modified": false,
+    "performance_or_scientific_or_release_claim": false
+  },
+  "register_source_and_callee_MIR_review": {
+    "source_review": "PASS",
+    "source_inputs": {
+      "out/native-cpu-strict-ir-linking/register_value_abi.cpp": {
+        "bytes": 7575,
+        "sha256": "a30172cbedba58af683370096d9a8a7280d8c4b0db583d53807bd7e355742cf6"
+      },
+      "out/native-cpu-register-value/build.py": {
+        "bytes": 7763,
+        "sha256": "a1b36dd2fe2167e07b85abe5737e1e5851613547e02c4cbb6cd6e30e1ef4dfcf"
+      },
+      "out/native-cpu-register-value/math-lower-result.json": {
+        "bytes": 4287,
+        "sha256": "03f4b5794ba295f7fcfd9d44b32791228a4eeb87b60790b434a36ac8bea176ff"
+      },
+      "out/native-cpu-register-value/math-native-result.json": {
+        "bytes": 14705,
+        "sha256": "7ff4642c4802397e6102121e72241627d0c804bcd86210741fad93143927dd05"
+      },
+      "out/native-cpu-register-value/math-native/stderr.log": {
+        "bytes": 2303741,
+        "sha256": "bb6a8596d896f56617c7b525884f4f97b9eb59ef1c83fae19935513ad200b105"
+      },
+      "bin/linux-gcc/native-cpu-register-value/math.ll": {
+        "bytes": 2789823,
+        "sha256": "17058f97fb8e50a2e0f3516d1a46f24def29220c68da3bbf6ad521c6a952cfe6"
+      },
+      "bin/linux-gcc/native-cpu-register-value/math.o": {
+        "bytes": 259240,
+        "sha256": "a9fb90157e190c125dbc22eb3f5995717d5f15e19fa7bb395214a379cc8a6994"
+      },
+      "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/IR/CallingConv.h": {
+        "bytes": 11959,
+        "sha256": "6c6ffa106e002efc57e6ff833f63f8205e1742b0c46f5c3a393ecc11df3fbe0d"
+      }
+    },
+    "setter_only": [
+      "Only separately named core definitions/declarations/direct calls change FastCC\u2192X86_RegCall(92)",
+      "Only two raw export names per stage change scope\u2192register",
+      "Full input raw SHA+size and independently parsed canonical Module fingerprint",
+      "Exact core type/CC/linkage/visibility/attributes/direct use counts before edits",
+      "Forward verifier plus exact inverse full-module fingerprint and reproducibility"
+    ],
+    "source_issues_found": [],
+    "no_fp_or_memory_effect_relaxation": true,
+    "independent_emitted_math_LL_text_inverse_equal_except_ModuleID": true,
+    "callee_MIR_rows": [
+      {
+        "function": "sirius_register_value_dense_add8",
+        "formal_vector_inputs": 10,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 1
+      },
+      {
+        "function": "sirius_register_value_dense_multiply8",
+        "formal_vector_inputs": 10,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 1
+      },
+      {
+        "function": "sirius_register_value_dense_divide8",
+        "formal_vector_inputs": 10,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 5
+      },
+      {
+        "function": "sirius_register_value_dense_sqrt8",
+        "formal_vector_inputs": 10,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 5
+      },
+      {
+        "function": "sirius_register_value_tagged_add8",
+        "formal_vector_inputs": 12,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "ymm10",
+          "ymm11",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4",
+            "ymm5"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 4
+      },
+      {
+        "function": "sirius_register_value_tagged_subtract8",
+        "formal_vector_inputs": 12,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "ymm10",
+          "ymm11",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4",
+            "ymm5"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 4
+      },
+      {
+        "function": "sirius_register_value_tagged_multiply8",
+        "formal_vector_inputs": 12,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "ymm10",
+          "ymm11",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4",
+            "ymm5"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 19
+      },
+      {
+        "function": "sirius_register_value_tagged_divide8",
+        "formal_vector_inputs": 12,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4",
+            "ymm5"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 5
+      },
+      {
+        "function": "sirius_register_value_tagged_sqrt8",
+        "formal_vector_inputs": 12,
+        "mask_input": "eax",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "eax"
+        ],
+        "return_registers": [
+          [
+            "ymm0",
+            "ymm1",
+            "ymm2",
+            "ymm3",
+            "ymm4",
+            "ymm5"
+          ]
+        ],
+        "fixed_frame_objects": [],
+        "fixed_stack_references": 0,
+        "no_core_sret_livein": true,
+        "expected_returns": true,
+        "internal_sret_calls": 5
+      }
+    ],
+    "callee_interpretation": "All core inputs/outputs are register ABI. Unused formal arguments remain in IR but need no live-in machine register. Positive local frame objects and RDI for unchanged internal fastcc slow/lambda calls remain; this is not a claim that entire functions are stack-free.",
+    "remaining_caller_checks": [
+      "Every direct call/declaration/definition keeps exact cc92 and fixed types",
+      "All3 native raw core relocations retain exact per-op counts/targets",
+      "Actual caller uses EAX mask, denseYMM0..9 or taggedYMM0..11 and observes returnYMM0..4/5; no hidden sret argument or extra incoming stack vectors at this core boundary",
+      "V4/SKX register/clobber/preservation mapping agrees. Use existing native assembly or diagnostic MIR from a first not-yet-started compile; no repeated codegen/workload is required."
+    ],
+    "qualification": "Source and actual root-produced callee MIR/object inspection only; caller and numerical/provider/runtime/speed qualification are not supplied here. No compiler, codegen, tests, workload, profiling or Git run by reviewer."
+  },
+  "transport_known_codegen_call_merge_review": {
+    "decision": "GO_EXACT_PINNED_STATIC_RECOVERY_ONLY",
+    "source_inputs": {
+      "bin/linux-gcc/native-cpu-register-value/transport.o": {
+        "bytes": 3158032,
+        "sha256": "00bd80cb8d795a78e8ed91087fe4b61dfd4cf94b3558c6c426cb605433ffbed8"
+      },
+      "bin/linux-gcc/native-cpu-register-value/transport.ll": {
+        "bytes": 68973160,
+        "sha256": "08427017331daa4da6c5e4b90f77d26bab1e33e840e2b951e446d528a672e157"
+      },
+      "bin/linux-gcc/native-cpu-strict-ir-linking/shared-transport.O2.ll": {
+        "bytes": 68948777,
+        "sha256": "140a804b3bf16f4e0953b9dcc816d5ce0f63608214d0d0d51f1081ff7de4bfa0"
+      },
+      "out/native-cpu-register-value/transport-native/owner.json": {
+        "bytes": 1757,
+        "sha256": "24cd449a4578b262305f0d75715dbe1c48a80a02b4bc30a4a5093bce3b0e83cf"
+      },
+      "out/native-cpu-accumulate-compatibility/elf_proof.py": {
+        "bytes": 7242,
+        "sha256": "278766535b0ddcb9ad2ab97b68805cd851dda31036567a35f8bf5a07afedb0f7"
+      },
+      "out/native-cpu-register-value/transport-lower-result.json": {
+        "bytes": 4055,
+        "sha256": "157d1259246e52e13d95e769414888a41e3e7d01c5e824c8eee9358b08695343"
+      },
+      "out/native-cpu-register-value/transport-lower/stderr.log": {
+        "bytes": 227,
+        "sha256": "363f690ef32344fd83120215582874eb9be75f5ddddab893106b9ea0c266a94a"
+      },
+      "out/native-cpu-register-value/dp-native-result.json": {
+        "bytes": 32689,
+        "sha256": "9ed86668b84216de87d4594f4e29ba4bf085034adb408c79ba1217a925147080"
+      },
+      "out/native-cpu-register-value/endpoint-native-result.json": {
+        "bytes": 77402,
+        "sha256": "b12f39a81158bb07be0150ece085d4a73a0c4331593056b0ffdbb4ff6ef829c9"
+      }
+    },
+    "original_failed_owner_preserved": true,
+    "failed_gate": "IR2701 vs native2700 static call multiplicity; not an executed arithmetic fixture",
+    "independently_normalized_LL_inverse_equal": true,
+    "IR_core_calls": {
+      "sirius_register_value_dense_multiply8": 7,
+      "sirius_register_value_dense_add8": 8,
+      "sirius_register_value_dense_divide8": 3,
+      "sirius_register_value_tagged_multiply8": 1482,
+      "sirius_register_value_tagged_add8": 947,
+      "sirius_register_value_tagged_divide8": 240,
+      "sirius_register_value_tagged_sqrt8": 3,
+      "sirius_register_value_tagged_subtract8": 10,
+      "sirius_register_value_dense_sqrt8": 1
+    },
+    "native_core_PLT32_relocations": {
+      "sirius_register_value_dense_multiply8": 7,
+      "sirius_register_value_dense_add8": 8,
+      "sirius_register_value_dense_divide8": 2,
+      "sirius_register_value_tagged_multiply8": 1482,
+      "sirius_register_value_tagged_add8": 947,
+      "sirius_register_value_tagged_divide8": 240,
+      "sirius_register_value_tagged_sqrt8": 3,
+      "sirius_register_value_tagged_subtract8": 10,
+      "sirius_register_value_dense_sqrt8": 1
+    },
+    "only_difference": {
+      "target": "sirius_register_value_dense_divide8",
+      "IR": 3,
+      "native": 2
+    },
+    "IR_paths": {
+      "function": "ComputeOwnedRow_0___s_5B_vyRowID_5D_unuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+      "selector": "if_exit1674:iv<6 -> C;otherwise iv>19 -> E;iv6..19 retain fixed-coefficient RTDivide helper paths",
+      "C_call": {
+        "line": 589003,
+        "block": "RTConstant_0___vyf.exit1740",
+        "numerator": "cn[iv+1]",
+        "denominator": "cd[iv+1]"
+      },
+      "E_call": {
+        "line": 589131,
+        "block": "RTConstant_0___vyf.exit1879",
+        "numerator": "en[iv-18]",
+        "denominator": "ed[iv-18]"
+      },
+      "common": "Same active mask; A/B low,tail,error allzero; path-specific high/valid; common result phi at CacheCoefficientStructural.exit:589380, all5 cache columns and iv++ until25"
+    },
+    "native_tables": [
+      {
+        "symbol": "cd_0",
+        "section": ".rodata",
+        "offset": "0x1c0",
+        "i32_values": [
+          1,
+          5,
+          10,
+          5,
+          9,
+          1,
+          1
+        ],
+        "lea_relocation_field": "0x2214dc",
+        "ELF_type": 2,
+        "addend": 444,
+        "rip_next_bias": 4,
+        "table_target_exact": true,
+        "index": "iv+1"
+      },
+      {
+        "symbol": "cn_0",
+        "section": ".rodata",
+        "offset": "0x200",
+        "i32_values": [
+          0,
+          1,
+          3,
+          4,
+          8,
+          1,
+          1
+        ],
+        "lea_relocation_field": "0x22174f",
+        "ELF_type": 2,
+        "addend": 508,
+        "rip_next_bias": 4,
+        "table_target_exact": true,
+        "index": "iv+1"
+      },
+      {
+        "symbol": "ed_0",
+        "section": ".rodata",
+        "offset": "0x140",
+        "i32_values": [
+          57600,
+          1,
+          16695,
+          1920,
+          339200,
+          525,
+          40
+        ],
+        "lea_relocation_field": "0x221569",
+        "ELF_type": 2,
+        "addend": 316,
+        "rip_next_bias": 4,
+        "table_target_exact": true,
+        "index": "iv-18"
+      },
+      {
+        "symbol": "en_0",
+        "section": ".rodata",
+        "offset": "0x180",
+        "i32_values": [
+          71,
+          0,
+          -71,
+          71,
+          -17253,
+          22,
+          -1
+        ],
+        "lea_relocation_field": "0x22189e",
+        "ELF_type": 2,
+        "addend": 380,
+        "rip_next_bias": 4,
+        "table_target_exact": true,
+        "index": "iv-18"
+      }
+    ],
+    "native_CFG": {
+      "loop_index": "r15",
+      "C_test": [
+        "0x2214cf:cmp r15,5",
+        "0x2214d3:ja 0x221560"
+      ],
+      "E_test": [
+        "0x221560:cmp r15,20",
+        "0x221564:jb 0x2215e4 (fixed-coefficient paths)"
+      ],
+      "C_tail_edges": [
+        "0x2217a9:je 0x2213ff",
+        "0x221806:je 0x2213ea",
+        "0x221812:jmp 0x2213ea"
+      ],
+      "C_argument_setup": "0x221408:YMM0=Ahi;0x22140e:YMM5=Bhi from[rsp+0x960];0x22141f:YMM4=Avalid;0x221425:YMM9=Bvalid from[rsp+0x980]",
+      "E_tail_edges": [
+        "0x2218fa:jmp 0x22196e",
+        "0x22199c:jmp 0x22142d"
+      ],
+      "E_argument_setup": "0x221977:YMM0=Ahi;0x22197d:YMM5=Bhi from[rsp+0x920];0x22198e:YMM4=Avalid;0x221994:YMM9=Bvalid from[rsp+0x940]",
+      "merged_tail": "0x22142d..0x221441:zeroYMM1/2/3/6/7/8;0x221446:loadEAX identical saved8bitmask;0x22144d:one exact targetcall (PLT32@0x22144e)",
+      "results": "0x221452..0x221492:originalmaskK3 restored; returnYMM0..4 masked/stored to5 coefficient columns[r14-0x80,-0x60,-0x40,-0x20,0]",
+      "loop": "0x221498:inc r15;0x22149b:add r14,0xa0;0x2214a2:cmp r15,25;continue0x2214cf or exit0x222388",
+      "other_divide": "RTDivide native@0xb00 retains corecall@0xb61/PLT32@0xb62,EAXmask,YMM0..9 inputs/YMM0..4 returns"
+    },
+    "semantic_limit": "Mutually exclusive IR sites share one native tail AFTER path-specific strict coefficient conversions/classification. No dynamic call is removed, added, speculated or moved across path FP operations. Static-site explanation is not a full numerical proof.",
+    "receipt_policy": "Keep all8241 exact IR calls. Permit only pinned Transport2701IR->2700native with this precise target/CFG mapping; every other per-op counter must match. DP1581 and Endpoint3959 native receipts are now separately present, yielding8240 native relocations. Preserve failed owner; root owns fresh read-only recovery receipt without recompilation.",
+    "reviewer_execution": {
+      "codegen": false,
+      "workloads": false,
+      "tests": false,
+      "profiling": false,
+      "Git": false
+    }
+  }
+}
