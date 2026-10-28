@@ -1,0 +1,918 @@
+{
+  "status": "STRICT_VALUE_COMPILER_GATES_PASS_CONTEXT_AND_NUMERICAL_GATES_PENDING",
+  "custody_revision": "683c4390d4ddccf7a29f3fac8d2bcf3af154c149",
+  "predecessors": {
+    "attestations/qualification/d970f13e/native-cpu-closed-remaining-first-emit/MANIFEST.json": {
+      "bytes": 165024,
+      "sha256": "f3ff38f74dcbd1ed520e1e205218b0475cb34fff038cae893867dfce19630526"
+    },
+    "attestations/qualification/620a0c6e/native-cpu-closed-dp-unwind-original-c8/MANIFEST.json": {
+      "bytes": 22958,
+      "sha256": "3521b941e2c5aded85b6949846de6efc64cdd98b63b7ac9044a191c51dd6184b"
+    },
+    "attestations/qualification/620a0c6e/native-cpu-closed-dp-unwind-original-c8/ALLOCATION_CORRECTION.json": {
+      "bytes": 1186,
+      "sha256": "0e5e6c6b3b87749bbfccccac4be9fcb9f106c56df9031487ea2e65e5c2476a71"
+    }
+  },
+  "owners": {
+    "scope-plugin-transport": {
+      "path": "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/owner.json",
+      "identity": {
+        "bytes": 2231,
+        "sha256": "b92b2c160413a2a0b9282bace72146ff2827e4b8eb09440005618c1835cf1d76"
+      },
+      "source": {
+        "revision": "0de5e321d7b22f432b505737ef6b077a9e1c84bb",
+        "status": ""
+      },
+      "wall_seconds": 3.8664319580129813,
+      "peak_sampled_rss_kib": 388208
+    },
+    "scope-transport": {
+      "path": "out/native-cpu-canonical-closed-remaining/scope-transport/owner.json",
+      "identity": {
+        "bytes": 2217,
+        "sha256": "94c6760cf419462f7200c66aa7134d0e964a6c4105a76204121b28bec860a80e"
+      },
+      "source": {
+        "revision": "0de5e321d7b22f432b505737ef6b077a9e1c84bb",
+        "status": ""
+      },
+      "wall_seconds": 14.585973118024413,
+      "peak_sampled_rss_kib": 753784
+    },
+    "value-plugin-transport": {
+      "path": "out/native-cpu-canonical-closed-remaining/value-plugin-transport/owner.json",
+      "identity": {
+        "bytes": 2230,
+        "sha256": "4d44f7a52d4363f5881ed62c8c8401ba3eb8850dd39c38d9aaee6122e885d8da"
+      },
+      "source": {
+        "revision": "e25fbcd3c68a7d88bbf330f44fab89ba1ea6aa5d",
+        "status": ""
+      },
+      "wall_seconds": 3.584065144008491,
+      "peak_sampled_rss_kib": 396228
+    },
+    "value-transport": {
+      "path": "out/native-cpu-canonical-closed-remaining/value-transport/owner.json",
+      "identity": {
+        "bytes": 2216,
+        "sha256": "066dcb9331b443f168fcc12bd81564aedd5aa6e9e6a6dc14ba405bfd6ae1ff3c"
+      },
+      "source": {
+        "revision": "e25fbcd3c68a7d88bbf330f44fab89ba1ea6aa5d",
+        "status": ""
+      },
+      "wall_seconds": 10.46523583799717,
+      "peak_sampled_rss_kib": 584584
+    },
+    "scope-plugin-endpoint": {
+      "path": "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/owner.json",
+      "identity": {
+        "bytes": 2229,
+        "sha256": "446775af195549400d399ac0a7b5dc500aae5960eb00a0a27792cc85d7ec0c91"
+      },
+      "source": {
+        "revision": "0de5e321d7b22f432b505737ef6b077a9e1c84bb",
+        "status": ""
+      },
+      "wall_seconds": 3.3457767640065867,
+      "peak_sampled_rss_kib": 389240
+    },
+    "scope-endpoint": {
+      "path": "out/native-cpu-canonical-closed-remaining/scope-endpoint/owner.json",
+      "identity": {
+        "bytes": 2216,
+        "sha256": "9f74f6027295504ece562f3a06c02b581dfaf1860c32c07a9963024a86678822"
+      },
+      "source": {
+        "revision": "0de5e321d7b22f432b505737ef6b077a9e1c84bb",
+        "status": ""
+      },
+      "wall_seconds": 20.395999322005082,
+      "peak_sampled_rss_kib": 1004648
+    },
+    "value-plugin-endpoint": {
+      "path": "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/owner.json",
+      "identity": {
+        "bytes": 2229,
+        "sha256": "4a81632138d02cd723cca10a06bd2207ae3bc94925e942299489a5c3c16eec85"
+      },
+      "source": {
+        "revision": "e25fbcd3c68a7d88bbf330f44fab89ba1ea6aa5d",
+        "status": ""
+      },
+      "wall_seconds": 3.5850576339871623,
+      "peak_sampled_rss_kib": 409660
+    },
+    "value-endpoint": {
+      "path": "out/native-cpu-canonical-closed-remaining/value-endpoint/owner.json",
+      "identity": {
+        "bytes": 2215,
+        "sha256": "0f6cafd91ec0c7899acfd5ade200ac5df24ca4586a97e7b6630a62624aa595f2"
+      },
+      "source": {
+        "revision": "e25fbcd3c68a7d88bbf330f44fab89ba1ea6aa5d",
+        "status": ""
+      },
+      "wall_seconds": 15.051950594992377,
+      "peak_sampled_rss_kib": 752944
+    }
+  },
+  "results": {
+    "scope-plugin-transport": {
+      "phase": "scope-plugin-transport",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/scope.so",
+        "bytes": 84296,
+        "sha256": "aee3e9b27551fb183d44689e98c00660fa191a1ecf1f7405819dbd7dedc4ec85"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.ll",
+        "bytes": 82880982,
+        "sha256": "2f409751b514fa3fd8fe9adba623a6cfd9ae3e3adad056251c9ba09b97529562"
+      },
+      "scope_contract": {
+        "bytes": 31599,
+        "sha256": "2939b49cc8b6ccb88b32bc7bde5f5f66250215ad79135d18d547d8feb1ea2683"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/clang++",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include",
+        "-std=c++17",
+        "-D_GNU_SOURCE",
+        "-D_GLIBCXX_USE_CXX11_ABI=1",
+        "-D__STDC_CONSTANT_MACROS",
+        "-D__STDC_FORMAT_MACROS",
+        "-D__STDC_LIMIT_MACROS",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-O2",
+        "-fPIC",
+        "-shared",
+        "/home/astra/.project/Sirius/out/native-cpu-strict-ir-linking/constrain_closed_transport.cpp",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/sha256-only.a",
+        "-Wl,--exclude-libs,ALL",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/scope.so"
+      ]
+    },
+    "scope-transport": {
+      "phase": "scope-transport",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc",
+        "bytes": 15974620,
+        "sha256": "854b153dca6b18d2ebb7b8c8065af76fe7596b8f3d599cb82ae8520fec64f4b8"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.ll",
+        "bytes": 82880982,
+        "sha256": "2f409751b514fa3fd8fe9adba623a6cfd9ae3e3adad056251c9ba09b97529562"
+      },
+      "scope_contract": {
+        "bytes": 31599,
+        "sha256": "2939b49cc8b6ccb88b32bc7bde5f5f66250215ad79135d18d547d8feb1ea2683"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/opt",
+        "-load-pass-plugin=/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/scope.so",
+        "-passes=sirius-constrain-closed-transport,verify",
+        "-verify-each",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/transport.ll",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc"
+      ],
+      "ir": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.ll",
+        "bytes": 83470870,
+        "sha256": "81a3dc14fd8ee37ac11d4436d0608287ab29bc5be94d3969060c8bf404f3b5ed"
+      },
+      "definitions": 156,
+      "constrained_calls": {
+        "llvm.experimental.constrained.fadd.v8f32": 79,
+        "llvm.experimental.constrained.fsub.v8f32": 13,
+        "llvm.experimental.constrained.fcmp.v8f32": 326,
+        "llvm.experimental.constrained.fcmps.v8f32": 36,
+        "llvm.experimental.constrained.sitofp.v8f32.v8i32": 6
+      },
+      "pointer_calls": {
+        "sirius_closed_transport_scope_v4_dense_divide8": 3,
+        "sirius_closed_transport_scope_v4_tagged_multiply8": 1482,
+        "sirius_closed_transport_scope_v4_tagged_add8": 947,
+        "sirius_closed_transport_scope_v4_tagged_divide8": 240,
+        "sirius_closed_transport_scope_v4_tagged_sqrt8": 3,
+        "sirius_closed_transport_scope_v4_tagged_subtract8": 10,
+        "sirius_closed_transport_scope_v4_dense_multiply8": 6,
+        "sirius_closed_transport_scope_v4_dense_add8": 7
+      },
+      "value_calls": {},
+      "ordinary_fneg": 7
+    },
+    "value-plugin-transport": {
+      "phase": "value-plugin-transport",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/value.so",
+        "bytes": 151496,
+        "sha256": "b372cd624be408aa307edcb75f556b0c357a96cc31996409dd6044b8ca5433e0"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc",
+        "bytes": 15974620,
+        "sha256": "854b153dca6b18d2ebb7b8c8065af76fe7596b8f3d599cb82ae8520fec64f4b8"
+      },
+      "scope_contract": {
+        "bytes": 31599,
+        "sha256": "2939b49cc8b6ccb88b32bc7bde5f5f66250215ad79135d18d547d8feb1ea2683"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/clang++",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include",
+        "-std=c++17",
+        "-D_GNU_SOURCE",
+        "-D_GLIBCXX_USE_CXX11_ABI=1",
+        "-D__STDC_CONSTANT_MACROS",
+        "-D__STDC_FORMAT_MACROS",
+        "-D__STDC_LIMIT_MACROS",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-O2",
+        "-fPIC",
+        "-shared",
+        "/home/astra/.project/Sirius/out/native-cpu-strict-ir-linking/closed_transport_value_abi.cpp",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/sha256-only.a",
+        "-Wl,--exclude-libs,ALL",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/value.so"
+      ]
+    },
+    "value-transport": {
+      "phase": "value-transport",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.value.bc",
+        "bytes": 16012504,
+        "sha256": "7d810098cf634829e40b4bfc3d4758ac276378a85114369b1cd95ca4ae0630a4"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc",
+        "bytes": 15974620,
+        "sha256": "854b153dca6b18d2ebb7b8c8065af76fe7596b8f3d599cb82ae8520fec64f4b8"
+      },
+      "scope_contract": {
+        "bytes": 31599,
+        "sha256": "2939b49cc8b6ccb88b32bc7bde5f5f66250215ad79135d18d547d8feb1ea2683"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/opt",
+        "-load-pass-plugin=/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/value.so",
+        "-passes=sirius-closed-value-transport,verify",
+        "-verify-each",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-transport/transport.value.bc"
+      ],
+      "source_value_contract": {
+        "bytes": 12730,
+        "sha256": "6854d06caef0a6b2204a9f7bff02bb7a95049ecc3bff1a89bbba3446ac7a1593"
+      },
+      "accepted_artifact_owner": "out/native-cpu-canonical-closed-remaining/value-transport/owner.json",
+      "ir": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.value.ll",
+        "bytes": 83513369,
+        "sha256": "39cc731a332f81d6933e9cf77d93ff10fe57fdfbb1afe4c01015eda32ffbde25"
+      },
+      "definitions": 164,
+      "constrained_calls": {
+        "llvm.experimental.constrained.fadd.v8f32": 79,
+        "llvm.experimental.constrained.fsub.v8f32": 13,
+        "llvm.experimental.constrained.fcmp.v8f32": 326,
+        "llvm.experimental.constrained.fcmps.v8f32": 36,
+        "llvm.experimental.constrained.sitofp.v8f32.v8i32": 6
+      },
+      "pointer_calls": {
+        "sirius_closed_transport_scope_v4_dense_divide8": 3,
+        "sirius_closed_transport_scope_v4_tagged_multiply8": 1482,
+        "sirius_closed_transport_scope_v4_tagged_add8": 947,
+        "sirius_closed_transport_scope_v4_tagged_divide8": 240,
+        "sirius_closed_transport_scope_v4_tagged_sqrt8": 3,
+        "sirius_closed_transport_scope_v4_tagged_subtract8": 10,
+        "sirius_closed_transport_scope_v4_dense_multiply8": 6,
+        "sirius_closed_transport_scope_v4_dense_add8": 7
+      },
+      "value_calls": {
+        "sirius_local_value_tagged_add8": 1,
+        "sirius_local_value_tagged_multiply8": 1,
+        "sirius_local_value_tagged_subtract8": 1,
+        "sirius_local_value_tagged_divide8": 1,
+        "sirius_local_value_tagged_sqrt8": 1,
+        "sirius_local_value_dense_divide8": 1,
+        "sirius_local_value_dense_add8": 1,
+        "sirius_local_value_dense_multiply8": 1
+      },
+      "ordinary_fneg": 7
+    },
+    "scope-plugin-endpoint": {
+      "phase": "scope-plugin-endpoint",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/scope.so",
+        "bytes": 80544,
+        "sha256": "d38cb669929b87523cf7fd2f0876b39453dbc7c54655582cb86c0c4294a35760"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.ll",
+        "bytes": 117820770,
+        "sha256": "2424c39a5178d82d9c6d406af62601c73a5577ae32639fc39029762fbb5c6968"
+      },
+      "scope_contract": {
+        "bytes": 36181,
+        "sha256": "53cf16827f51056d03aa744bebfa4bd10038556cd5d4315384fd7d4d26d32e71"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/clang++",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include",
+        "-std=c++17",
+        "-D_GNU_SOURCE",
+        "-D_GLIBCXX_USE_CXX11_ABI=1",
+        "-D__STDC_CONSTANT_MACROS",
+        "-D__STDC_FORMAT_MACROS",
+        "-D__STDC_LIMIT_MACROS",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-O2",
+        "-fPIC",
+        "-shared",
+        "/home/astra/.project/Sirius/out/native-cpu-strict-ir-linking/constrain_closed_endpoint.cpp",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/sha256-only.a",
+        "-Wl,--exclude-libs,ALL",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/scope.so"
+      ]
+    },
+    "scope-endpoint": {
+      "phase": "scope-endpoint",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.bc",
+        "bytes": 22586828,
+        "sha256": "df5c9c7054f4056a9d1ebf7a97718889d511d1435b884e0a72758ec944c74ac9"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.ll",
+        "bytes": 117820770,
+        "sha256": "2424c39a5178d82d9c6d406af62601c73a5577ae32639fc39029762fbb5c6968"
+      },
+      "scope_contract": {
+        "bytes": 36181,
+        "sha256": "53cf16827f51056d03aa744bebfa4bd10038556cd5d4315384fd7d4d26d32e71"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/opt",
+        "-load-pass-plugin=/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/scope.so",
+        "-passes=sirius-constrain-closed-endpoint,verify",
+        "-verify-each",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.ll",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.bc"
+      ],
+      "ir": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.ll",
+        "bytes": 118657782,
+        "sha256": "3c2990a4200dea5a5eefdbd1d3953bc69def01a84873c071725f812775e96b9e"
+      },
+      "definitions": 190,
+      "constrained_calls": {
+        "llvm.experimental.constrained.fcmp.v8f32": 442,
+        "llvm.experimental.constrained.fadd.v8f32": 96,
+        "llvm.experimental.constrained.fcmps.v8f32": 28,
+        "llvm.experimental.constrained.fsub.v8f32": 13,
+        "llvm.experimental.constrained.fmul.v8f32": 1
+      },
+      "pointer_calls": {
+        "sirius_closed_endpoint_scope_v4_dense_multiply8": 12,
+        "sirius_closed_endpoint_scope_v4_dense_add8": 11,
+        "sirius_closed_endpoint_scope_v4_dense_divide8": 6,
+        "sirius_closed_endpoint_scope_v4_dense_sqrt8": 1,
+        "sirius_closed_endpoint_scope_v4_tagged_add8": 1607,
+        "sirius_closed_endpoint_scope_v4_tagged_multiply8": 1963,
+        "sirius_closed_endpoint_scope_v4_tagged_sqrt8": 3,
+        "sirius_closed_endpoint_scope_v4_tagged_divide8": 154,
+        "sirius_closed_endpoint_scope_v4_tagged_subtract8": 197
+      },
+      "value_calls": {},
+      "ordinary_fneg": 16
+    },
+    "value-plugin-endpoint": {
+      "phase": "value-plugin-endpoint",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/value.so",
+        "bytes": 151496,
+        "sha256": "1e3b24b2e7a2f4c247b8de8c1ed4388987829bbe8de38111757a11b0df810eb4"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.bc",
+        "bytes": 22586828,
+        "sha256": "df5c9c7054f4056a9d1ebf7a97718889d511d1435b884e0a72758ec944c74ac9"
+      },
+      "scope_contract": {
+        "bytes": 36181,
+        "sha256": "53cf16827f51056d03aa744bebfa4bd10038556cd5d4315384fd7d4d26d32e71"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/clang++",
+        "-I/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include",
+        "-std=c++17",
+        "-D_GNU_SOURCE",
+        "-D_GLIBCXX_USE_CXX11_ABI=1",
+        "-D__STDC_CONSTANT_MACROS",
+        "-D__STDC_FORMAT_MACROS",
+        "-D__STDC_LIMIT_MACROS",
+        "-fno-exceptions",
+        "-fno-rtti",
+        "-O2",
+        "-fPIC",
+        "-shared",
+        "/home/astra/.project/Sirius/out/native-cpu-strict-ir-linking/closed_endpoint_value_abi.cpp",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/sha256-only.a",
+        "-Wl,--exclude-libs,ALL",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/value.so"
+      ]
+    },
+    "value-endpoint": {
+      "phase": "value-endpoint",
+      "output": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.value.bc",
+        "bytes": 22601688,
+        "sha256": "61321c43b452dcc98d0c3ed1a45623012437f2aedf6c47d3e8ebe799b3d02aaa"
+      },
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.bc",
+        "bytes": 22586828,
+        "sha256": "df5c9c7054f4056a9d1ebf7a97718889d511d1435b884e0a72758ec944c74ac9"
+      },
+      "scope_contract": {
+        "bytes": 36181,
+        "sha256": "53cf16827f51056d03aa744bebfa4bd10038556cd5d4315384fd7d4d26d32e71"
+      },
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/bin/opt",
+        "-load-pass-plugin=/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/value.so",
+        "-passes=sirius-closed-value-endpoint,verify",
+        "-verify-each",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.bc",
+        "-o",
+        "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.value.bc"
+      ],
+      "source_value_contract": {
+        "bytes": 12734,
+        "sha256": "08ee08a9fbf42e3c34a50cd4d0c19f9069accd4d2a16eeb806995c7910f6f50f"
+      },
+      "accepted_artifact_owner": "out/native-cpu-canonical-closed-remaining/value-endpoint/owner.json",
+      "ir": {
+        "path": "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.value.ll",
+        "bytes": 118718287,
+        "sha256": "b8d18365bd16b406dd894de643582c911dee5814478d2dd9d9e3cfc4e1f7cf6f"
+      },
+      "definitions": 199,
+      "constrained_calls": {
+        "llvm.experimental.constrained.fcmp.v8f32": 442,
+        "llvm.experimental.constrained.fadd.v8f32": 96,
+        "llvm.experimental.constrained.fcmps.v8f32": 28,
+        "llvm.experimental.constrained.fsub.v8f32": 13,
+        "llvm.experimental.constrained.fmul.v8f32": 1
+      },
+      "pointer_calls": {
+        "sirius_closed_endpoint_scope_v4_dense_multiply8": 12,
+        "sirius_closed_endpoint_scope_v4_dense_add8": 11,
+        "sirius_closed_endpoint_scope_v4_dense_divide8": 6,
+        "sirius_closed_endpoint_scope_v4_dense_sqrt8": 1,
+        "sirius_closed_endpoint_scope_v4_tagged_add8": 1607,
+        "sirius_closed_endpoint_scope_v4_tagged_multiply8": 1963,
+        "sirius_closed_endpoint_scope_v4_tagged_sqrt8": 3,
+        "sirius_closed_endpoint_scope_v4_tagged_divide8": 154,
+        "sirius_closed_endpoint_scope_v4_tagged_subtract8": 197
+      },
+      "value_calls": {
+        "sirius_local_value_tagged_add8": 1,
+        "sirius_local_value_tagged_multiply8": 1,
+        "sirius_local_value_tagged_subtract8": 1,
+        "sirius_local_value_tagged_divide8": 1,
+        "sirius_local_value_tagged_sqrt8": 1,
+        "sirius_local_value_dense_divide8": 1,
+        "sirius_local_value_dense_sqrt8": 1,
+        "sirius_local_value_dense_add8": 1,
+        "sirius_local_value_dense_multiply8": 1
+      },
+      "ordinary_fneg": 16
+    }
+  },
+  "bundles": {
+    "source-and-evidence": {
+      "path": "attestations/qualification/0de5e321/native-cpu-closed-remaining-strict-value-gates/source-and-evidence.zip",
+      "bytes": 41756579,
+      "sha256": "845a49d0213ecd612b3e0e6cb9d03bda3e1e1e10644294866e69a1ac536e25ff",
+      "members": {
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.ll": {
+          "bytes": 118657782,
+          "sha256": "3c2990a4200dea5a5eefdbd1d3953bc69def01a84873c071725f812775e96b9e"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.value.ll": {
+          "bytes": 118718287,
+          "sha256": "b8d18365bd16b406dd894de643582c911dee5814478d2dd9d9e3cfc4e1f7cf6f"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.ll": {
+          "bytes": 83470870,
+          "sha256": "81a3dc14fd8ee37ac11d4436d0608287ab29bc5be94d3969060c8bf404f3b5ed"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.value.ll": {
+          "bytes": 83513369,
+          "sha256": "39cc731a332f81d6933e9cf77d93ff10fe57fdfbb1afe4c01015eda32ffbde25"
+        },
+        "out/native-cpu-canonical-closed-remaining/actions.json": {
+          "bytes": 55825,
+          "sha256": "f8ff6fe38432fb0e480feb37beac89611a7f19a79113a147cf434b8d96af1749"
+        },
+        "out/native-cpu-canonical-closed-remaining/context.py": {
+          "bytes": 10905,
+          "sha256": "bca3b7202055fbc19ac9b71c074e4c3fea61c00a36b03109074356a162f1b05d"
+        },
+        "out/native-cpu-canonical-closed-remaining/derive-result.json": {
+          "bytes": 44956,
+          "sha256": "ffddbeb682645ca8115649799d8dbb448c9e06fc6223a6efb63c443c0c9313a4"
+        },
+        "out/native-cpu-canonical-closed-remaining/emit.py": {
+          "bytes": 10421,
+          "sha256": "c37a08f5d77f4dd59569760298afc7148b8d11a637607388bf8ea59c00751b0d"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-inventory.json": {
+          "bytes": 78754,
+          "sha256": "3bdc6f7ebd63509ce1adc777e08be9aac6ad11be70b63858a695cd7647a4913a"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-scope-plan.json": {
+          "bytes": 13062,
+          "sha256": "5b62dd12bd8e654e62eb89373b79be70d4c3200265263fa7f9878e8413938238"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-scope-plugin-result.json": {
+          "bytes": 1345,
+          "sha256": "30b8984fe9b1831debb089de92b2a90b4b5b0dba78e4e2d4ea5f8dc66a7d72d4"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-scope-prior-actions.json": {
+          "bytes": 21790,
+          "sha256": "910c02431d880cde5d1e5b11ee19fc298d8f70745a527aceb2b8b844e888cf84"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-scope-result.json": {
+          "bytes": 2185,
+          "sha256": "7bd95d5f3cd3232b146de5b64625862c9b9c7178adaadeb02b73d8632d780d0f"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-value-plan.json": {
+          "bytes": 13448,
+          "sha256": "7e31af083006fd4f98f89b7bcf324e8b93667c71d5b6eb4e8b40e0f3f0179f28"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-value-plugin-result.json": {
+          "bytes": 1352,
+          "sha256": "c4165e16706c665fb62bdc667ff826c1edbe0f719b4a804d88cbfce369aaefd7"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-value-prior-actions.json": {
+          "bytes": 44383,
+          "sha256": "5143b269783666ddef6cbb710ac742820b3bfc42aa0e286c2f110e5c77250a8c"
+        },
+        "out/native-cpu-canonical-closed-remaining/endpoint-value-result.json": {
+          "bytes": 2816,
+          "sha256": "2b5f72c63e71a0ea5d1d20f8097322c2af3b9cb504c3832421241bd4ee468821"
+        },
+        "out/native-cpu-canonical-closed-remaining/native_check.py": {
+          "bytes": 3819,
+          "sha256": "99852530e00968fc81f577774e224791fcba4c197e8b8a436ac41914f0c5303e"
+        },
+        "out/native-cpu-canonical-closed-remaining/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-canonical-closed-remaining/pipeline.py": {
+          "bytes": 10340,
+          "sha256": "08d1464b8925e6b2477dfe63cb7f1695639ff446eef6ecaa0d0b4b42db4fad2f"
+        },
+        "out/native-cpu-canonical-closed-remaining/plan.json": {
+          "bytes": 7272,
+          "sha256": "b6f8b9774e5342b8eb3dacdff251015f806dad8ae0d0d65f035a087784af29fb"
+        },
+        "out/native-cpu-canonical-closed-remaining/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-endpoint/inputs-after.json": {
+          "bytes": 1191126,
+          "sha256": "7c5a29e4f0e5f34b4bdfbb37d393ea6bd46487cc31de0ab6c7e6f618b6c9f1c3"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-endpoint/inputs-before.json": {
+          "bytes": 1191126,
+          "sha256": "7c5a29e4f0e5f34b4bdfbb37d393ea6bd46487cc31de0ab6c7e6f618b6c9f1c3"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-endpoint/owner.json": {
+          "bytes": 2216,
+          "sha256": "9f74f6027295504ece562f3a06c02b581dfaf1860c32c07a9963024a86678822"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-endpoint/samples.jsonl": {
+          "bytes": 24319,
+          "sha256": "db74efdaced7104f1af5a574f3f652d9d9d9014e6a90f872ffe3a3cb036c53c2"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-endpoint/stderr.log": {
+          "bytes": 197,
+          "sha256": "42164c90429d8a5e9393dcf4aeda2b4d937936e571bd89bd3552e9aa665dd183"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-endpoint/stdout.log": {
+          "bytes": 238,
+          "sha256": "c448ef96d4d2e95e467727a055af501f3734da1a5c269b8d725c7a94ac30db14"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/inputs-after.json": {
+          "bytes": 1190211,
+          "sha256": "ee0da30293d3e8868520e159255974ff7754397e45790fe2dabde3a7085a332a"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/inputs-before.json": {
+          "bytes": 1190211,
+          "sha256": "ee0da30293d3e8868520e159255974ff7754397e45790fe2dabde3a7085a332a"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/owner.json": {
+          "bytes": 2229,
+          "sha256": "446775af195549400d399ac0a7b5dc500aae5960eb00a0a27792cc85d7ec0c91"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/samples.jsonl": {
+          "bytes": 5476,
+          "sha256": "cd2670bc835f371a60abd6fd2892e66ffd59350daa380c15279438355b7bee7a"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-endpoint/stdout.log": {
+          "bytes": 212,
+          "sha256": "37d6a12496682e6857ad0d2253d1274b6d404e84a4655091c0329725fcdbf06e"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/inputs-after.json": {
+          "bytes": 1190229,
+          "sha256": "37d810c684504541ebaecc65a24680da627dd5814f76e80c45556d05f714fda5"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/inputs-before.json": {
+          "bytes": 1190229,
+          "sha256": "37d810c684504541ebaecc65a24680da627dd5814f76e80c45556d05f714fda5"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/owner.json": {
+          "bytes": 2231,
+          "sha256": "b92b2c160413a2a0b9282bace72146ff2827e4b8eb09440005618c1835cf1d76"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/samples.jsonl": {
+          "bytes": 6409,
+          "sha256": "2aedb0b47ece84f14f750e0da08550e104163f2220b4af7bfd82d81d4b3e32ec"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-plugin-transport/stdout.log": {
+          "bytes": 214,
+          "sha256": "21ac68640a4c7564505fb863e6cf4118e04e43ae301deeb916cf598fd7940a6c"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-transport/inputs-after.json": {
+          "bytes": 1191150,
+          "sha256": "73fd33ab603708b003bf529d85e4d56a7f47c78e39a6a20703dd3fd6fa41f842"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-transport/inputs-before.json": {
+          "bytes": 1191150,
+          "sha256": "73fd33ab603708b003bf529d85e4d56a7f47c78e39a6a20703dd3fd6fa41f842"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-transport/owner.json": {
+          "bytes": 2217,
+          "sha256": "94c6760cf419462f7200c66aa7134d0e964a6c4105a76204121b28bec860a80e"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-transport/samples.jsonl": {
+          "bytes": 17210,
+          "sha256": "7828f14d7018020e2392a7ee045ab82d2a2696a8f0609b1cd7e172a680d37ff7"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-transport/stderr.log": {
+          "bytes": 198,
+          "sha256": "18566782cb8018bd1ca603a771ad1b30641fe40112b5c4b3950d71688e1e3564"
+        },
+        "out/native-cpu-canonical-closed-remaining/scope-transport/stdout.log": {
+          "bytes": 241,
+          "sha256": "8e499e90b6712f6a6799bf7d444f7632725c0c8a255981d970190b2f18e99301"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-inventory.json": {
+          "bytes": 63604,
+          "sha256": "dc70234786b0febcedae9f871269db668920f882988a2424c925a4f817a4e18e"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-scope-plan.json": {
+          "bytes": 13083,
+          "sha256": "d826e8632ff014fa7752b1e5ab122868857cee0c6a14ef1c5b0cc3403411d787"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-scope-plugin-result.json": {
+          "bytes": 1350,
+          "sha256": "30f03e125118331e2141b3fbaa41a7620bc6f4c805c2f6db97d9015e48d61769"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-scope-prior-actions.json": {
+          "bytes": 10643,
+          "sha256": "c5d499304138c61c15b27914dfdbbf5008d46f07839d6ff3a945758c691a405c"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-scope-result.json": {
+          "bytes": 2153,
+          "sha256": "ed02379c8ec2507a2dc4353e775b781920c0ca25458969674b957061733240d5"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-value-plan.json": {
+          "bytes": 13472,
+          "sha256": "4a6af9b50196cf2c68f73b753647190180ba77cec6c5a44783d932f0dca168b7"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-value-plugin-result.json": {
+          "bytes": 1358,
+          "sha256": "86321f2d808de1b1398d7efb98c88fb3de2f80a4a9a42437af602513b51c4c48"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-value-prior-actions.json": {
+          "bytes": 32906,
+          "sha256": "4bdca7835c1e8e396316bbc3b7887971c55a8488bad2ecd0e7bd1aff549ee1ea"
+        },
+        "out/native-cpu-canonical-closed-remaining/transport-value-result.json": {
+          "bytes": 2745,
+          "sha256": "ac3afb42408491a29caac1f78f700b944c2c53b396997fad5be8dd999bfad426"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-endpoint/inputs-after.json": {
+          "bytes": 1192343,
+          "sha256": "08b21fc4e92e91ea27b60d4a9410e1ed65e36fe66fe6bcf75852ade673cf8ed6"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-endpoint/inputs-before.json": {
+          "bytes": 1192343,
+          "sha256": "08b21fc4e92e91ea27b60d4a9410e1ed65e36fe66fe6bcf75852ade673cf8ed6"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-endpoint/owner.json": {
+          "bytes": 2215,
+          "sha256": "0f6cafd91ec0c7899acfd5ade200ac5df24ca4586a97e7b6630a62624aa595f2"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-endpoint/samples.jsonl": {
+          "bytes": 17178,
+          "sha256": "57810d0acd191e286f1bf3f05e35c351d2c4c958f5f7bd9415d728b7a6417f8a"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-endpoint/stderr.log": {
+          "bytes": 361,
+          "sha256": "7738c27298503475d0c805c43a87fc32a46abf5b4e316b672c3eca9a1fa7d944"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-endpoint/stdout.log": {
+          "bytes": 237,
+          "sha256": "fb715f98b603d2b931b86a45b9bf74bc27dc7e22cbb4b79eae8c69a70f5e41f6"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/inputs-after.json": {
+          "bytes": 1191427,
+          "sha256": "453fc1c620520a7f269fda97c3fdc7d8246e3b9c5018d871358e3e39b0b85f41"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/inputs-before.json": {
+          "bytes": 1191427,
+          "sha256": "453fc1c620520a7f269fda97c3fdc7d8246e3b9c5018d871358e3e39b0b85f41"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/owner.json": {
+          "bytes": 2229,
+          "sha256": "4a81632138d02cd723cca10a06bd2207ae3bc94925e942299489a5c3c16eec85"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/samples.jsonl": {
+          "bytes": 6067,
+          "sha256": "cc1bea11dba6a7c3dc82e5932bcbea9900b44e7c9a52bcd911bf737603e2dc1e"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-endpoint/stdout.log": {
+          "bytes": 213,
+          "sha256": "4807142c237b542a194ac6a7da9c82a1d5efa7cc74f9bd7dbd4d56d137a4aa8c"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-transport/inputs-after.json": {
+          "bytes": 1191446,
+          "sha256": "a5db79b12dff1f0dd04bf2a9beae0db1c57386bac38757be2454a52866b5eec0"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-transport/inputs-before.json": {
+          "bytes": 1191446,
+          "sha256": "a5db79b12dff1f0dd04bf2a9beae0db1c57386bac38757be2454a52866b5eec0"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-transport/owner.json": {
+          "bytes": 2230,
+          "sha256": "4d44f7a52d4363f5881ed62c8c8401ba3eb8850dd39c38d9aaee6122e885d8da"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-transport/samples.jsonl": {
+          "bytes": 6067,
+          "sha256": "eae20f31537ab3c093a49b881f353dcd9b5aa7fd857b998c52566fa70aa03998"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-transport/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-plugin-transport/stdout.log": {
+          "bytes": 215,
+          "sha256": "741703f353a16671424942704e767df13bb3ab4d3f81a6aacfa7f87e3e73dca0"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-transport/inputs-after.json": {
+          "bytes": 1192368,
+          "sha256": "153de41d96986bcb8848d9fcc4ac66b958848e1cb3b53ee5456e90609209b779"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-transport/inputs-before.json": {
+          "bytes": 1192368,
+          "sha256": "153de41d96986bcb8848d9fcc4ac66b958848e1cb3b53ee5456e90609209b779"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-transport/owner.json": {
+          "bytes": 2216,
+          "sha256": "066dcb9331b443f168fcc12bd81564aedd5aa6e9e6a6dc14ba405bfd6ae1ff3c"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-transport/samples.jsonl": {
+          "bytes": 11801,
+          "sha256": "6dad286faae8e5431d86c2eef519a4c6a5a2ebb73ad10d70716b8c8baec520db"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-transport/stderr.log": {
+          "bytes": 363,
+          "sha256": "1e5623a9c8196ca355f91d501cd3a44fa17f4384d03347c552df7a9c9a3174dd"
+        },
+        "out/native-cpu-canonical-closed-remaining/value-transport/stdout.log": {
+          "bytes": 240,
+          "sha256": "d6ff578b359ef66f19a4336a2db25bd986e05d45ddfa0fb3765ed5c11e8dcc37"
+        },
+        "out/native-cpu-strict-ir-linking/closed_endpoint_scope_contract.json": {
+          "bytes": 36181,
+          "sha256": "53cf16827f51056d03aa744bebfa4bd10038556cd5d4315384fd7d4d26d32e71"
+        },
+        "out/native-cpu-strict-ir-linking/closed_endpoint_value_abi.cpp": {
+          "bytes": 27906,
+          "sha256": "98aa6b3cb5e049e4178ddb4a908925325b312e539aaea6fd7a3e41cdb9bb860a"
+        },
+        "out/native-cpu-strict-ir-linking/closed_endpoint_value_contract.json": {
+          "bytes": 12734,
+          "sha256": "08ee08a9fbf42e3c34a50cd4d0c19f9069accd4d2a16eeb806995c7910f6f50f"
+        },
+        "out/native-cpu-strict-ir-linking/closed_transport_scope_contract.json": {
+          "bytes": 31599,
+          "sha256": "2939b49cc8b6ccb88b32bc7bde5f5f66250215ad79135d18d547d8feb1ea2683"
+        },
+        "out/native-cpu-strict-ir-linking/closed_transport_value_abi.cpp": {
+          "bytes": 27907,
+          "sha256": "7813be3e79bd4dc52be218baf74e42a4fdb1b14748eb3b0ba33c7eff544cc470"
+        },
+        "out/native-cpu-strict-ir-linking/closed_transport_value_contract.json": {
+          "bytes": 12730,
+          "sha256": "6854d06caef0a6b2204a9f7bff02bb7a95049ecc3bff1a89bbba3446ac7a1593"
+        },
+        "out/native-cpu-strict-ir-linking/constrain_closed_endpoint.cpp": {
+          "bytes": 19885,
+          "sha256": "42c0cda16f983d1ab459a6733c7986b4623cda1cff47602782d4014ccd760c98"
+        },
+        "out/native-cpu-strict-ir-linking/constrain_closed_transport.cpp": {
+          "bytes": 21058,
+          "sha256": "8eaeda4565788206700ac274fb565ce69b0d45cb781846f60947a94d4dd8d34b"
+        },
+        "out/native-cpu-strict-ir-linking/derive_closed_remaining_passes.py": {
+          "bytes": 27854,
+          "sha256": "e4c20c01d025ab9c6bbaee1e60552395c536d1bc935cbb69576971ff5e37ab8e"
+        },
+        "out/native-cpu-strict-ir-linking/private_finite_closure.json": {
+          "bytes": 5541,
+          "sha256": "1e1da4cf26685c5f42007a5a4d574562c48ec74c012a973d94057ddf5c4f860c"
+        },
+        "out/seal-closed-remaining-strict-value.py": {
+          "bytes": 5542,
+          "sha256": "0373a6093132eaebdc57b13e87152c0b9b0f6ffb022de10bd3df97f1651f1b3e"
+        }
+      }
+    },
+    "products": {
+      "path": "attestations/qualification/0de5e321/native-cpu-closed-remaining-strict-value-gates/products.zip",
+      "bytes": 43136173,
+      "sha256": "c84f7d5dd7d85c669863c129008bac5fbc557aa24727088ec273329478846407",
+      "members": {
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.strict.bc": {
+          "bytes": 22586828,
+          "sha256": "df5c9c7054f4056a9d1ebf7a97718889d511d1435b884e0a72758ec944c74ac9"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/endpoint.value.bc": {
+          "bytes": 22601688,
+          "sha256": "61321c43b452dcc98d0c3ed1a45623012437f2aedf6c47d3e8ebe799b3d02aaa"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/scope.so": {
+          "bytes": 80544,
+          "sha256": "d38cb669929b87523cf7fd2f0876b39453dbc7c54655582cb86c0c4294a35760"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-endpoint/value.so": {
+          "bytes": 151496,
+          "sha256": "1e3b24b2e7a2f4c247b8de8c1ed4388987829bbe8de38111757a11b0df810eb4"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-transport/scope.so": {
+          "bytes": 84296,
+          "sha256": "aee3e9b27551fb183d44689e98c00660fa191a1ecf1f7405819dbd7dedc4ec85"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc": {
+          "bytes": 15974620,
+          "sha256": "854b153dca6b18d2ebb7b8c8065af76fe7596b8f3d599cb82ae8520fec64f4b8"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.value.bc": {
+          "bytes": 16012504,
+          "sha256": "7d810098cf634829e40b4bfc3d4758ac276378a85114369b1cd95ca4ae0630a4"
+        },
+        "bin/linux-gcc/native-cpu-canonical-closed-transport/value.so": {
+          "bytes": 151496,
+          "sha256": "b372cd624be408aa307edcb75f556b0c357a96cc31996409dd6044b8ca5433e0"
+        }
+      }
+    }
+  },
+  "scope": "First builds/executions of exact Transport/Endpoint strict and value passes, eight PASS compiler owners. Both full modules/source/layouts/casts/caller/table/FP inventories are pinned. T6 full8 casts are guarded as defined exactly representable integers; E original scale/comparison checks remain. Original quiet/signaling, dynamic rounding, strict exceptions, fneg/fabs and all2698/3954 raw call sites remain accounted for; pre-inline typed wrapper calls are8/9. Same local9 math definitions are reused without recompilation, with cc92/inaccessibleRW and unconditional private ordinary-memory closure. Original transaction staging remains mandatory: T150368B and E122528B; DP132768B staging is separately corrected in the linked append-only record. No context promotion/native/FDE/provider/runtime/numerical/benefit/all8/ABBA/frame/scientific/hardware/release acceptance is inferred. All eight ultimate-goal subgoals remain open."
+}
