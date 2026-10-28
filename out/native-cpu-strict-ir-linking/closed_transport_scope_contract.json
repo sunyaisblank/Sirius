@@ -1,0 +1,1400 @@
+{
+  "phase": "scope",
+  "stage": "transport",
+  "source_only": true,
+  "pass_name": "sirius-constrain-closed-transport",
+  "source_inputs": {
+    "out/native-cpu-strict-ir-linking/derive_closed_remaining_passes.py": {
+      "bytes": 27854,
+      "sha256": "e4c20c01d025ab9c6bbaee1e60552395c536d1bc935cbb69576971ff5e37ab8e"
+    },
+    "out/native-cpu-strict-ir-linking/constrain_remaining.cpp": {
+      "bytes": 19987,
+      "sha256": "5e70b3b62c3d5d0badf8070be3d6bcc43a7c10aeb80094b98d74b36d9065d5e7"
+    },
+    "out/native-cpu-strict-ir-linking/remaining_scope_review.json": {
+      "bytes": 11232,
+      "sha256": "dbced6f6b516ef0e3e1fcbd672dab66d9c76581a2e624d73f07ba51d7f205055"
+    },
+    "out/native-cpu-strict-ir-linking/constrain_scope.cpp": {
+      "bytes": 14483,
+      "sha256": "fa6b225b21edb880054e006504ec1c401155bbd2448c68c250be953ababf8fab"
+    },
+    "out/native-cpu-strict-ir-linking/scope_contract.json": {
+      "bytes": 9197,
+      "sha256": "adef7709ec5c94c55442840a30023a5db00972ab4d078ea625950bf8b2391cf9"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_abi.cpp": {
+      "bytes": 28405,
+      "sha256": "4cbefca757c267222e0bcde0e6818776ec058ab70fa6913d470785716abab1e6"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_private_remaining.py": {
+      "bytes": 14753,
+      "sha256": "1cf6545fcc1c11939cabd20b80d4f16023cd020d264ba8cff2c9c37ae1536237"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_private_remaining_contract.json": {
+      "bytes": 58311,
+      "sha256": "f2f9b0ec0fb0930485eaf0016d219327044f65602d22a9696b47e9450f98e1cc"
+    },
+    "out/native-cpu-strict-ir-linking/private_finite_closure.json": {
+      "bytes": 5541,
+      "sha256": "1e1da4cf26685c5f42007a5a4d574562c48ec74c012a973d94057ddf5c4f860c"
+    },
+    "bin/linux-gcc/native-cpu-local-effects/math.bc": {
+      "bytes": 296980,
+      "sha256": "93e076866edeb28c329a65a81dad1485a2717a8104ec4b7879002c78a9e6a6a1"
+    },
+    "bin/linux-gcc/native-cpu-local-effects/math.o": {
+      "bytes": 259216,
+      "sha256": "69f9d771c5cf2d0de63e32ac70ac534961e9283a02753047784902e3ee54cdbe"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_metadata.py": {
+      "bytes": 12405,
+      "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_metadata_contract.json": {
+      "bytes": 14846,
+      "sha256": "05eb2b2bad9417c7bdddc44ed2aae4942ca5d1feed379829f4db6d0ff998b822"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_publication.py": {
+      "bytes": 4806,
+      "sha256": "e12c7282f57349eadbc1d72d6579d05c902ccbb56018878e55a85c2c0e4f9490"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_private_dp.py": {
+      "bytes": 9467,
+      "sha256": "a9fbfbd69cbb4ebc1aad739fda95c39352a7d3281f1e03ca5e3ef4c96dd12508"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_private_dp_contract.json": {
+      "bytes": 11905,
+      "sha256": "242e1e101927473daea1c0cb8a9238d438e5f569a27d6218e01b56c6b46a674e"
+    },
+    "out/native-cpu-strict-ir-linking/plan.json": {
+      "bytes": 6044,
+      "sha256": "8aac559eee1e5280f8a1a2530ce299882741cd8508484fc4c3c916e24f5cfeff"
+    },
+    "out/native-cpu-dispatch-admission-token/native_packet.hpp": {
+      "bytes": 4155,
+      "sha256": "ad11ddc83d3de03405e89885badc1e4655fdfcca77519a686abe18824b5fba7d"
+    },
+    "out/native-cpu-dispatch-admission-token/admitted_bridge.h": {
+      "bytes": 2144,
+      "sha256": "e57b146aa86c3d6c6ca3de8c53565f1b77106e860f132478cc76a763646e6afe"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc": {
+      "bytes": 626976,
+      "sha256": "0fc91ff0b756fddd055d5c0322f5eece0557a64799ef31893933be33cdba10f6"
+    },
+    "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/transport.publication.ispc": {
+      "bytes": 771952,
+      "sha256": "761703bd80a16343ac894cec29a11a0ff2211d550f444e48b872846330011a11"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc": {
+      "bytes": 795302,
+      "sha256": "d8ae7cdde50211537678ec197f18c374edd2cec653974d9d0b7c33c50db8c1e1"
+    },
+    "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/endpoint.publication.ispc": {
+      "bytes": 1242957,
+      "sha256": "5728c1ecff0723ac68e97c13c82269c024a5b15cbb3870c29c92fae7c770c4c8"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+      "bytes": 64160,
+      "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+      "bytes": 85168,
+      "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "bytes": 9452,
+      "sha256": "8ba26cc5ab648e4cea37d5df3219dc002f4ff70f846c2418aba5bdac68fa3587"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/sirius_native_bridge.h": {
+      "bytes": 2523,
+      "sha256": "c6eaf07c31e0b6e74e962b916154568946f79688f75e797391e8f9b066e91702"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 109640,
+      "sha256": "34b1f093c09543c7f1c48873081d014849088b3839316dc6b3671d2b6add9cd1"
+    },
+    "bin/linux-gcc/native-cpu-register-value/math.bc": {
+      "bytes": 297520,
+      "sha256": "6e98d3a0e81e092fbc6adb9404a378ae8ea8ddc1d9ee355ee8e959e6813628e0"
+    },
+    "bin/linux-gcc/native-cpu-register-value/dp.bc": {
+      "bytes": 8644344,
+      "sha256": "53df413939ca1fc894726e34f39daa30c804ecba2b5fbf933d2700bce91e5567"
+    },
+    "bin/linux-gcc/native-cpu-register-value/transport.bc": {
+      "bytes": 13019408,
+      "sha256": "76baefdefa21317c002eef960bb756e7a8c471f02e1f96e19649b7a8da8a03fb"
+    },
+    "bin/linux-gcc/native-cpu-register-value/endpoint.bc": {
+      "bytes": 17593448,
+      "sha256": "1bf9f678fdf60b93eb555cbe0873bf454f0b0b0e3795b804069f77e720b6aa5d"
+    },
+    "bin/linux-gcc/native-cpu-register-value/math.ll": {
+      "bytes": 2789823,
+      "sha256": "17058f97fb8e50a2e0f3516d1a46f24def29220c68da3bbf6ad521c6a952cfe6"
+    },
+    "out/native-cpu-strict-ir-linking/local_value_effects.cpp": {
+      "bytes": 9098,
+      "sha256": "d7fbd8d79fffb623161836b8b14a387d699044d7d07d169ae77faf577975af65"
+    },
+    "out/native-cpu-exact-product-zero-residual/retained8.cpp": {
+      "bytes": 39893,
+      "sha256": "9286f36aa1b2e563bbd501894eb642e0628784409a23a7a2e153ead328759e68"
+    },
+    "bin/linux-gcc/native-cpu-canonical-closed-transport/ispc-source/transport.ispc": {
+      "bytes": 780343,
+      "sha256": "e3e55ac5f9a9cf8d32f3414ae29c4681702e07099cffd574a761980543c8e8b7"
+    },
+    "out/native-cpu-canonical-closed-remaining/derive-result.json": {
+      "bytes": 44956,
+      "sha256": "ffddbeb682645ca8115649799d8dbb448c9e06fc6223a6efb63c443c0c9313a4"
+    },
+    "out/native-cpu-canonical-closed-remaining/derive/owner.json": {
+      "bytes": 2201,
+      "sha256": "42a183c2c3e13db0dca849eaec98b152c420922e409cc51d31ef338b6b7da8b0"
+    },
+    "out/native-cpu-canonical-closed-remaining/derive/inputs-before.json": {
+      "bytes": 1180551,
+      "sha256": "2e16b511e9bc97138f7f9e272f8e9586f3133eddf985a2aec0628bc44bbe8df4"
+    },
+    "out/native-cpu-canonical-closed-remaining/derive/inputs-after.json": {
+      "bytes": 1180551,
+      "sha256": "2e16b511e9bc97138f7f9e272f8e9586f3133eddf985a2aec0628bc44bbe8df4"
+    },
+    "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.ll": {
+      "bytes": 82880982,
+      "sha256": "2f409751b514fa3fd8fe9adba623a6cfd9ae3e3adad056251c9ba09b97529562"
+    },
+    "out/native-cpu-canonical-closed-remaining/transport-inventory.json": {
+      "bytes": 63604,
+      "sha256": "dc70234786b0febcedae9f871269db668920f882988a2424c925a4f817a4e18e"
+    },
+    "out/native-cpu-canonical-closed-remaining/emit-transport/owner.json": {
+      "bytes": 2218,
+      "sha256": "1525a79ea141d520ddfc4a24d4d9ec0115c749030fc99b86393ba6282ecc8a7e"
+    },
+    "out/native-cpu-canonical-closed-remaining/emit-transport/inputs-before.json": {
+      "bytes": 1182371,
+      "sha256": "dd111ed68299ab87845beeb012e9d4d9f40a667f3305ce9d0f8c0c4d5aea3cea"
+    },
+    "out/native-cpu-canonical-closed-remaining/emit-transport/inputs-after.json": {
+      "bytes": 1182371,
+      "sha256": "dd111ed68299ab87845beeb012e9d4d9f40a667f3305ce9d0f8c0c4d5aea3cea"
+    }
+  },
+  "output": {
+    "path": "out/native-cpu-strict-ir-linking/constrain_closed_transport.cpp",
+    "bytes": 21058,
+    "sha256": "8eaeda4565788206700ac274fb565ce69b0d45cb781846f60947a94d4dd8d34b"
+  },
+  "input": {
+    "path": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.ll",
+    "bytes": 82880982,
+    "sha256": "2f409751b514fa3fd8fe9adba623a6cfd9ae3e3adad056251c9ba09b97529562"
+  },
+  "actual_inventory": {
+    "ops": {
+      "fadd": 79,
+      "fsub": 13,
+      "fcmp": 362,
+      "fneg": 7,
+      "sitofp": 6
+    },
+    "predicates": {
+      "oeq": 304,
+      "oge": 22,
+      "une": 12,
+      "ogt": 12,
+      "uno": 10,
+      "ole": 2
+    },
+    "definitions": 156,
+    "external_calls": {
+      "sirius_native_v4_tagged_add8": 947,
+      "sirius_native_v4_tagged_multiply8": 1482,
+      "sirius_native_v4_tagged_subtract8": 10,
+      "sirius_native_v4_tagged_divide8": 240,
+      "sirius_native_v4_tagged_sqrt8": 3,
+      "sirius_native_v4_dense_divide8": 3,
+      "sirius_native_v4_dense_add8": 7,
+      "sirius_native_v4_dense_multiply8": 6,
+      "sirius_simd_fmaxf": 10,
+      "llvm.memset.p0.i32": 18,
+      "llvm.cttz.i64": 11,
+      "llvm.ctlz.v8i32": 2,
+      "llvm.masked.load.v8i32.p0": 29579,
+      "llvm.masked.store.v8i32.p0": 36979,
+      "llvm.x86.avx512.mask.gather3div8.si": 10,
+      "llvm.x86.avx512.mask.scatterdiv8.si": 16,
+      "llvm.lifetime.start.p0": 5380,
+      "llvm.lifetime.end.p0": 5380,
+      "llvm.experimental.noalias.scope.decl": 26514,
+      "llvm.fabs.v8f32": 308,
+      "llvm.usub.sat.v8i32": 892
+    },
+    "total_calls": 107992,
+    "math_calls": {
+      "sirius_native_v4_dense_divide8": 3,
+      "sirius_native_v4_tagged_multiply8": 1482,
+      "sirius_native_v4_tagged_add8": 947,
+      "sirius_native_v4_tagged_divide8": 240,
+      "sirius_native_v4_tagged_sqrt8": 3,
+      "sirius_native_v4_tagged_subtract8": 10,
+      "sirius_native_v4_dense_multiply8": 6,
+      "sirius_native_v4_dense_add8": 7
+    },
+    "math_declarations": [
+      "sirius_native_v4_tagged_add8",
+      "sirius_native_v4_tagged_multiply8",
+      "sirius_native_v4_tagged_subtract8",
+      "sirius_native_v4_tagged_divide8",
+      "sirius_native_v4_tagged_sqrt8",
+      "sirius_native_v4_dense_divide8",
+      "sirius_native_v4_dense_add8",
+      "sirius_native_v4_dense_multiply8"
+    ],
+    "context": {
+      "bytes": 92192,
+      "output_words": 4699,
+      "IR": "{ ptr, [2295 x <8 x i32>], [459 x <8 x i32>], <8 x i32>, [125 x <8 x i32>] }",
+      "source_fields": [
+        "uniform GlobalParams_0* uniform globalParams_0;",
+        "uint32_t retainedScratch_0[2295];",
+        "uint32_t SiriusNormalized_0[459];",
+        "uint32_t retainedStatus_0;",
+        "uint32_t retainedCoefficients_0[125];"
+      ]
+    },
+    "full_context_zero_memsets": 2
+  },
+  "source_inverse_exact": true,
+  "new_exports": [
+    "sirius_closed_transport_packet",
+    "sirius_closed_transport_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+  ],
+  "pointer_math_prefix": "sirius_closed_transport_scope_v4_",
+  "future_strict_output": "bin/linux-gcc/native-cpu-canonical-closed-transport/transport.strict.bc",
+  "source_proof": {
+    "source_inverse_to_publication_exact": true,
+    "source_inverse_to_AS_exact": true,
+    "unchanged_outside_export_binding_and_EvaluateProgram": true,
+    "generic_fallback_removed_only_from_new_private_body": true,
+    "canonical_tuple_records_match_exact_tables": true,
+    "original_tuple_records": 3144,
+    "complete_context_memset_and_full8_physical_packing_unchanged": true,
+    "supported_callers_lane0": true,
+    "mixed_families_supported": true,
+    "homogeneous_all_active_guard_absent": true,
+    "per_layer_family_order": [
+      [
+        0,
+        0,
+        "EvaluateStaticLayer_0_0_0"
+      ],
+      [
+        0,
+        1,
+        "EvaluateStaticLayer_1_0_0"
+      ],
+      [
+        1,
+        0,
+        "EvaluateStaticLayer_0_1_0"
+      ],
+      [
+        1,
+        1,
+        "EvaluateStaticLayer_1_1_0"
+      ],
+      [
+        2,
+        0,
+        "EvaluateStaticLayer_0_2_0"
+      ],
+      [
+        2,
+        1,
+        "EvaluateStaticLayer_1_2_0"
+      ],
+      [
+        3,
+        0,
+        "EvaluateStaticLayer_0_3_0"
+      ],
+      [
+        3,
+        1,
+        "EvaluateStaticLayer_1_3_0"
+      ],
+      [
+        4,
+        0,
+        "EvaluateStaticLayer_0_4_0"
+      ],
+      [
+        4,
+        1,
+        "EvaluateStaticLayer_1_4_0"
+      ],
+      [
+        5,
+        0,
+        "EvaluateStaticLayer_0_5_0"
+      ],
+      [
+        5,
+        1,
+        "EvaluateStaticLayer_1_5_0"
+      ],
+      [
+        6,
+        0,
+        "EvaluateStaticLayer_0_6_0"
+      ],
+      [
+        6,
+        1,
+        "EvaluateStaticLayer_1_6_0"
+      ],
+      [
+        7,
+        0,
+        "EvaluateStaticLayer_0_7_0"
+      ],
+      [
+        7,
+        1,
+        "EvaluateStaticLayer_1_7_0"
+      ],
+      [
+        8,
+        0,
+        "EvaluateStaticLayer_0_8_0"
+      ],
+      [
+        8,
+        1,
+        "EvaluateStaticLayer_1_8_0"
+      ],
+      [
+        9,
+        0,
+        "EvaluateStaticLayer_0_9_0"
+      ],
+      [
+        9,
+        1,
+        "EvaluateStaticLayer_1_9_0"
+      ],
+      [
+        10,
+        0,
+        "EvaluateStaticLayer_0_10_0"
+      ],
+      [
+        10,
+        1,
+        "EvaluateStaticLayer_1_10_0"
+      ],
+      [
+        11,
+        0,
+        "EvaluateStaticLayer_0_11_0"
+      ],
+      [
+        11,
+        1,
+        "EvaluateStaticLayer_1_11_0"
+      ],
+      [
+        12,
+        0,
+        "EvaluateStaticLayer_0_12_0"
+      ],
+      [
+        12,
+        1,
+        "EvaluateStaticLayer_1_12_0"
+      ],
+      [
+        13,
+        0,
+        "EvaluateStaticLayer_0_13_0"
+      ],
+      [
+        13,
+        1,
+        "EvaluateStaticLayer_1_13_0"
+      ],
+      [
+        14,
+        0,
+        "EvaluateStaticLayer_0_14_0"
+      ],
+      [
+        14,
+        1,
+        "EvaluateStaticLayer_1_14_0"
+      ],
+      [
+        15,
+        0,
+        "EvaluateStaticLayer_0_15_0"
+      ],
+      [
+        15,
+        1,
+        "EvaluateStaticLayer_1_15_0"
+      ],
+      [
+        16,
+        0,
+        "EvaluateStaticLayer_0_16_0"
+      ],
+      [
+        16,
+        1,
+        "EvaluateStaticLayer_1_16_0"
+      ],
+      [
+        17,
+        0,
+        "EvaluateStaticLayer_0_17_0"
+      ],
+      [
+        17,
+        1,
+        "EvaluateStaticLayer_1_17_0"
+      ],
+      [
+        18,
+        0,
+        "EvaluateStaticLayer_0_18_0"
+      ],
+      [
+        18,
+        1,
+        "EvaluateStaticLayer_1_18_0"
+      ],
+      [
+        19,
+        0,
+        "EvaluateStaticLayer_0_19_0"
+      ],
+      [
+        19,
+        1,
+        "EvaluateStaticLayer_1_19_0"
+      ],
+      [
+        20,
+        0,
+        "EvaluateStaticLayer_0_20_0"
+      ],
+      [
+        20,
+        1,
+        "EvaluateStaticLayer_1_20_0"
+      ],
+      [
+        21,
+        0,
+        "EvaluateStaticLayer_0_21_0"
+      ],
+      [
+        21,
+        1,
+        "EvaluateStaticLayer_1_21_0"
+      ],
+      [
+        22,
+        0,
+        "EvaluateStaticLayer_0_22_0"
+      ],
+      [
+        22,
+        1,
+        "EvaluateStaticLayer_1_22_0"
+      ],
+      [
+        23,
+        0,
+        "EvaluateStaticLayer_0_23_0"
+      ],
+      [
+        23,
+        1,
+        "EvaluateStaticLayer_1_23_0"
+      ],
+      [
+        24,
+        0,
+        "EvaluateStaticLayer_0_24_0"
+      ],
+      [
+        24,
+        1,
+        "EvaluateStaticLayer_1_24_0"
+      ],
+      [
+        25,
+        0,
+        "EvaluateStaticLayer_0_25_0"
+      ],
+      [
+        25,
+        1,
+        "EvaluateStaticLayer_1_25_0"
+      ],
+      [
+        26,
+        0,
+        "EvaluateStaticLayer_0_26_0"
+      ],
+      [
+        26,
+        1,
+        "EvaluateStaticLayer_1_26_0"
+      ],
+      [
+        27,
+        0,
+        "EvaluateStaticLayer_0_27_0"
+      ],
+      [
+        27,
+        1,
+        "EvaluateStaticLayer_1_27_0"
+      ],
+      [
+        28,
+        0,
+        "EvaluateStaticLayer_0_28_0"
+      ],
+      [
+        28,
+        1,
+        "EvaluateStaticLayer_1_28_0"
+      ],
+      [
+        29,
+        0,
+        "EvaluateStaticLayer_0_29_0"
+      ],
+      [
+        29,
+        1,
+        "EvaluateStaticLayer_1_29_0"
+      ],
+      [
+        30,
+        0,
+        "EvaluateStaticLayer_0_30_0"
+      ],
+      [
+        30,
+        1,
+        "EvaluateStaticLayer_1_30_0"
+      ],
+      [
+        31,
+        0,
+        "EvaluateStaticLayer_0_31_0"
+      ],
+      [
+        31,
+        1,
+        "EvaluateStaticLayer_1_31_0"
+      ],
+      [
+        32,
+        0,
+        "EvaluateStaticLayer_0_32_0"
+      ],
+      [
+        32,
+        1,
+        "EvaluateStaticLayer_1_32_0"
+      ],
+      [
+        33,
+        0,
+        "EvaluateStaticLayer_0_33_0"
+      ],
+      [
+        33,
+        1,
+        "EvaluateStaticLayer_1_33_0"
+      ],
+      [
+        34,
+        0,
+        "EvaluateStaticLayer_0_34_0"
+      ],
+      [
+        34,
+        1,
+        "EvaluateStaticLayer_1_34_0"
+      ],
+      [
+        35,
+        0,
+        "EvaluateStaticLayer_0_35_0"
+      ],
+      [
+        35,
+        1,
+        "EvaluateStaticLayer_1_35_0"
+      ],
+      [
+        36,
+        0,
+        "EvaluateStaticLayer_0_36_0"
+      ],
+      [
+        36,
+        1,
+        "EvaluateStaticLayer_1_36_0"
+      ],
+      [
+        37,
+        0,
+        "EvaluateStaticLayer_0_37_0"
+      ],
+      [
+        37,
+        1,
+        "EvaluateStaticLayer_1_37_0"
+      ],
+      [
+        38,
+        0,
+        "EvaluateStaticLayer_0_38_0"
+      ],
+      [
+        38,
+        1,
+        "EvaluateStaticLayer_1_38_0"
+      ],
+      [
+        39,
+        0,
+        "EvaluateStaticLayer_0_39_0"
+      ],
+      [
+        39,
+        1,
+        "EvaluateStaticLayer_1_39_0"
+      ],
+      [
+        40,
+        0,
+        "EvaluateStaticLayer_0_40_0"
+      ],
+      [
+        40,
+        1,
+        "EvaluateStaticLayer_1_40_0"
+      ],
+      [
+        41,
+        0,
+        "EvaluateStaticLayer_0_41_0"
+      ],
+      [
+        41,
+        1,
+        "EvaluateStaticLayer_1_41_0"
+      ],
+      [
+        42,
+        0,
+        "EvaluateStaticLayer_0_42_0"
+      ],
+      [
+        43,
+        0,
+        "EvaluateStaticLayer_0_43_0"
+      ],
+      [
+        44,
+        0,
+        "EvaluateStaticLayer_0_44_0"
+      ],
+      [
+        45,
+        0,
+        "EvaluateStaticLayer_0_45_0"
+      ],
+      [
+        46,
+        0,
+        "EvaluateStaticLayer_0_46_0"
+      ],
+      [
+        47,
+        0,
+        "EvaluateStaticLayer_0_47_0"
+      ],
+      [
+        48,
+        0,
+        "EvaluateStaticLayer_0_48_0"
+      ],
+      [
+        49,
+        0,
+        "EvaluateStaticLayer_0_49_0"
+      ],
+      [
+        50,
+        0,
+        "EvaluateStaticLayer_0_50_0"
+      ],
+      [
+        51,
+        0,
+        "EvaluateStaticLayer_0_51_0"
+      ],
+      [
+        52,
+        0,
+        "EvaluateStaticLayer_0_52_0"
+      ],
+      [
+        53,
+        0,
+        "EvaluateStaticLayer_0_53_0"
+      ],
+      [
+        54,
+        0,
+        "EvaluateStaticLayer_0_54_0"
+      ],
+      [
+        55,
+        0,
+        "EvaluateStaticLayer_0_55_0"
+      ],
+      [
+        56,
+        0,
+        "EvaluateStaticLayer_0_56_0"
+      ],
+      [
+        57,
+        0,
+        "EvaluateStaticLayer_0_57_0"
+      ],
+      [
+        58,
+        0,
+        "EvaluateStaticLayer_0_58_0"
+      ],
+      [
+        59,
+        0,
+        "EvaluateStaticLayer_0_59_0"
+      ],
+      [
+        60,
+        0,
+        "EvaluateStaticLayer_0_60_0"
+      ],
+      [
+        61,
+        0,
+        "EvaluateStaticLayer_0_61_0"
+      ],
+      [
+        62,
+        0,
+        "EvaluateStaticLayer_0_62_0"
+      ],
+      [
+        63,
+        0,
+        "EvaluateStaticLayer_0_63_0"
+      ],
+      [
+        64,
+        0,
+        "EvaluateStaticLayer_0_64_0"
+      ],
+      [
+        65,
+        0,
+        "EvaluateStaticLayer_0_65_0"
+      ],
+      [
+        66,
+        0,
+        "EvaluateStaticLayer_0_66_0"
+      ],
+      [
+        67,
+        0,
+        "EvaluateStaticLayer_0_67_0"
+      ],
+      [
+        68,
+        0,
+        "EvaluateStaticLayer_0_68_0"
+      ],
+      [
+        69,
+        0,
+        "EvaluateStaticLayer_0_69_0"
+      ],
+      [
+        70,
+        0,
+        "EvaluateStaticLayer_0_70_0"
+      ],
+      [
+        71,
+        0,
+        "EvaluateStaticLayer_0_71_0"
+      ],
+      [
+        72,
+        0,
+        "EvaluateStaticLayer_0_72_0"
+      ],
+      [
+        73,
+        0,
+        "EvaluateStaticLayer_0_73_0"
+      ],
+      [
+        74,
+        0,
+        "EvaluateStaticLayer_0_74_0"
+      ],
+      [
+        75,
+        0,
+        "EvaluateStaticLayer_0_75_0"
+      ],
+      [
+        76,
+        0,
+        "EvaluateStaticLayer_0_76_0"
+      ],
+      [
+        77,
+        0,
+        "EvaluateStaticLayer_0_77_0"
+      ],
+      [
+        78,
+        0,
+        "EvaluateStaticLayer_0_78_0"
+      ],
+      [
+        79,
+        0,
+        "EvaluateStaticLayer_0_79_0"
+      ],
+      [
+        80,
+        0,
+        "EvaluateStaticLayer_0_80_0"
+      ],
+      [
+        81,
+        0,
+        "EvaluateStaticLayer_0_81_0"
+      ],
+      [
+        82,
+        0,
+        "EvaluateStaticLayer_0_82_0"
+      ],
+      [
+        83,
+        0,
+        "EvaluateStaticLayer_0_83_0"
+      ],
+      [
+        84,
+        0,
+        "EvaluateStaticLayer_0_84_0"
+      ],
+      [
+        85,
+        0,
+        "EvaluateStaticLayer_0_85_0"
+      ],
+      [
+        86,
+        0,
+        "EvaluateStaticLayer_0_86_0"
+      ],
+      [
+        87,
+        0,
+        "EvaluateStaticLayer_0_87_0"
+      ],
+      [
+        88,
+        0,
+        "EvaluateStaticLayer_0_88_0"
+      ],
+      [
+        89,
+        0,
+        "EvaluateStaticLayer_0_89_0"
+      ],
+      [
+        90,
+        0,
+        "EvaluateStaticLayer_0_90_0"
+      ],
+      [
+        91,
+        0,
+        "EvaluateStaticLayer_0_91_0"
+      ],
+      [
+        92,
+        0,
+        "EvaluateStaticLayer_0_92_0"
+      ],
+      [
+        93,
+        0,
+        "EvaluateStaticLayer_0_93_0"
+      ],
+      [
+        94,
+        0,
+        "EvaluateStaticLayer_0_94_0"
+      ],
+      [
+        95,
+        0,
+        "EvaluateStaticLayer_0_95_0"
+      ],
+      [
+        96,
+        0,
+        "EvaluateStaticLayer_0_96_0"
+      ],
+      [
+        97,
+        0,
+        "EvaluateStaticLayer_0_97_0"
+      ],
+      [
+        98,
+        0,
+        "EvaluateStaticLayer_0_98_0"
+      ],
+      [
+        99,
+        0,
+        "EvaluateStaticLayer_0_99_0"
+      ],
+      [
+        100,
+        0,
+        "EvaluateStaticLayer_0_100_0"
+      ],
+      [
+        101,
+        0,
+        "EvaluateStaticLayer_0_101_0"
+      ],
+      [
+        102,
+        0,
+        "EvaluateStaticLayer_0_102_0"
+      ],
+      [
+        103,
+        0,
+        "EvaluateStaticLayer_0_103_0"
+      ],
+      [
+        104,
+        0,
+        "EvaluateStaticLayer_0_104_0"
+      ],
+      [
+        105,
+        0,
+        "EvaluateStaticLayer_0_105_0"
+      ],
+      [
+        106,
+        0,
+        "EvaluateStaticLayer_0_106_0"
+      ],
+      [
+        107,
+        0,
+        "EvaluateStaticLayer_0_107_0"
+      ],
+      [
+        108,
+        0,
+        "EvaluateStaticLayer_0_108_0"
+      ],
+      [
+        109,
+        0,
+        "EvaluateStaticLayer_0_109_0"
+      ],
+      [
+        110,
+        0,
+        "EvaluateStaticLayer_0_110_0"
+      ],
+      [
+        111,
+        0,
+        "EvaluateStaticLayer_0_111_0"
+      ],
+      [
+        112,
+        0,
+        "EvaluateStaticLayer_0_112_0"
+      ],
+      [
+        113,
+        0,
+        "EvaluateStaticLayer_0_113_0"
+      ],
+      [
+        114,
+        0,
+        "EvaluateStaticLayer_0_114_0"
+      ],
+      [
+        115,
+        0,
+        "EvaluateStaticLayer_0_115_0"
+      ],
+      [
+        116,
+        0,
+        "EvaluateStaticLayer_0_116_0"
+      ]
+    ],
+    "original_layer_call_sites": 159,
+    "required_roots": 40,
+    "root_positions": 40,
+    "all_root_validation_before_any_publication": true,
+    "original_combined_mask_five_word_store_order": true,
+    "publication_word_store_sites": 200,
+    "programs": [
+      {
+        "offset": 0,
+        "count": 2587,
+        "registers": 459,
+        "prefix": null,
+        "roots": [
+          14,
+          21,
+          2,
+          60,
+          4,
+          413,
+          253,
+          158,
+          145,
+          412,
+          300,
+          343,
+          41,
+          231,
+          182,
+          142,
+          372,
+          280,
+          232,
+          324,
+          41,
+          385,
+          209,
+          258,
+          196,
+          178,
+          92,
+          289,
+          41,
+          282,
+          243,
+          377,
+          387,
+          143,
+          216,
+          394,
+          41,
+          210,
+          165,
+          6
+        ],
+        "boundaries": [
+          0,
+          40,
+          47,
+          87,
+          100,
+          108,
+          113,
+          116,
+          118,
+          119,
+          120,
+          121,
+          139,
+          197,
+          225,
+          241,
+          246,
+          251,
+          315,
+          345,
+          366,
+          384,
+          389,
+          393,
+          394,
+          395,
+          397,
+          399,
+          407,
+          421,
+          439,
+          451,
+          470,
+          487,
+          506,
+          530,
+          578,
+          590,
+          614,
+          626,
+          634,
+          650,
+          654,
+          658,
+          662,
+          663,
+          665,
+          680,
+          688,
+          702,
+          766,
+          830,
+          860,
+          890,
+          909,
+          934,
+          963,
+          1027,
+          1091,
+          1155,
+          1219,
+          1259,
+          1297,
+          1344,
+          1385,
+          1439,
+          1478,
+          1542,
+          1606,
+          1670,
+          1733,
+          1789,
+          1831,
+          1893,
+          1924,
+          1960,
+          1985,
+          2015,
+          2039,
+          2062,
+          2116,
+          2158,
+          2190,
+          2215,
+          2260,
+          2284,
+          2311,
+          2332,
+          2347,
+          2358,
+          2378,
+          2393,
+          2405,
+          2414,
+          2429,
+          2438,
+          2447,
+          2453,
+          2459,
+          2463,
+          2466,
+          2469,
+          2475,
+          2481,
+          2484,
+          2487,
+          2490,
+          2493,
+          2496,
+          2499,
+          2502,
+          2505,
+          2506,
+          2507,
+          2542,
+          2557,
+          2572,
+          2587
+        ]
+      },
+      {
+        "offset": 13096,
+        "count": 557,
+        "registers": 459,
+        "prefix": null,
+        "roots": [
+          135,
+          0,
+          10,
+          86,
+          44,
+          23,
+          123,
+          117,
+          103,
+          104,
+          52,
+          54,
+          44,
+          47,
+          127,
+          122,
+          85,
+          90,
+          91,
+          92,
+          44,
+          58,
+          51,
+          17,
+          29,
+          37,
+          105,
+          39,
+          44,
+          128,
+          132,
+          35,
+          70,
+          40,
+          38,
+          32,
+          44,
+          34,
+          33,
+          28
+        ],
+        "boundaries": [
+          0,
+          37,
+          47,
+          57,
+          60,
+          71,
+          73,
+          74,
+          75,
+          90,
+          117,
+          130,
+          135,
+          139,
+          140,
+          142,
+          150,
+          158,
+          192,
+          208,
+          221,
+          238,
+          270,
+          294,
+          319,
+          324,
+          329,
+          350,
+          355,
+          375,
+          391,
+          407,
+          427,
+          436,
+          441,
+          472,
+          488,
+          500,
+          512,
+          524,
+          530,
+          545,
+          557
+        ]
+      }
+    ]
+  },
+  "cast_proof": {
+    "vector_casts": 6,
+    "Rational_argument_casts": 2,
+    "direct_constant_splat_callers": 14,
+    "Rational_coefficient_max_abs": 64448,
+    "all_lane0_table_broadcasts": 4,
+    "initialized_tables": [
+      "cn_0",
+      "cd_0",
+      "en_0",
+      "ed_0"
+    ],
+    "coefficient_max_abs": 339200,
+    "exact_FP32_integer_range": true,
+    "integer_freeze": false,
+    "index_source_proof": "Original25-iteration loop: cn/cd iv+1 only iv<6 ->1..6; en/ed iv-18 only iv>=20 ->2..6. Full pinned source/IR identity preserves these guards.",
+    "conversion": "Same original six full8 casts -> constrained sitofp.v8f32.v8i32, dynamic/strict; every physical integer lane already defined and exactly representable, including signs. No integer/pointer/mask freeze or noundef strengthening."
+  },
+  "reused_implementation": "Pinned constrain_remaining.cpp/remaining_scope_review.json (original constrain_scope FP mapping). Only exact source/config/export/inventory bindings and authorized six fully defined Transport vector-cast checks/lowering differ. Original FP-only freezes, quiet/signaling map, types/order/CFG/memory masks, strict calls/effects and Endpoint2^-44 fmul/olt checks remain.",
+  "private_scope": "Genuine positive current canonical Vulkan job, original complete program/admission/extents/grid/alias/immutable-view guards; mixed family/phase masks and exact physical snapshots preserved; full context initialization and active output clear per actual stage. Saved/masked/RNE/DAZ-FTZ-off/full-restored MXCSR and no observer remain mandatory. Old public/fallback/math entries stay exact.",
+  "future_native_unwind_gate": "Before first native emission, final ordinary private entry must carry async uwtable; require exact whole-function FDE/CFA/GP/return/call checks in object and final DSO. This generator performs no context normalization/native emission.",
+  "qualification": "Source-only derived pass; no compiler/load/conversion/numerical/performance/provider acceptance or all32 transfer."
+}
