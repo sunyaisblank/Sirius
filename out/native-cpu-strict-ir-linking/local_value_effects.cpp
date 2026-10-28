@@ -98,16 +98,18 @@ struct LocalEffects : PassInfoMixin<LocalEffects> {
   LLVMContext MC;auto Math=read(MC,Profiles[0]);closedMath(*Math);
   SmallVector<FunctionEdit,12> Functions;SmallVector<CallEdit,2000> Calls;unsigned Cores=0;
   auto Effects=MemoryEffects::inaccessibleMemOnly(ModRefInfo::ModRef);
+  auto Conservative=Effects|MemoryEffects::otherMemOnly(ModRefInfo::Ref);
   for(Function &F:M)if(F.getName().starts_with(Old)) {
    if(F.getCallingConv()!=CallingConv::X86_RegCall || !F.hasFnAttribute(Attribute::StrictFP) || !F.doesNotThrow() || !numeric(F.getReturnType()))reject("core interface changed");
    for(Argument &A:F.args())if(!numeric(A.getType()))reject("pointer operand at value boundary");
    auto ME=F.getMemoryEffects();
-   if(ME.getModRef(IRMemLocation::Other)!=ModRefInfo::Ref || ME.getModRef(IRMemLocation::InaccessibleMem)!=ModRefInfo::ModRef)reject("old core effects differ");
+   if(ME!=Conservative && (StringRef(P->Name)!="math" || ME!=Effects))reject("old core effects differ");
    std::string Name=F.getName().str(),Replacement=Name;Replacement.replace(0,Old.size(),New.str());
    if(M.getNamedValue(Replacement))reject("name collision");
    Functions.push_back({&F,Name,Replacement,ME,true});++Cores;
    for(User *U:F.users()) {
     auto *Call=dyn_cast<CallBase>(U);if(!Call || Call->getCalledFunction()!=&F || Call->getCallingConv()!=CallingConv::X86_RegCall || !Call->hasFnAttr(Attribute::StrictFP))reject("unexpected core use");
+    if(Call->getMemoryEffects()!=Conservative)reject("old call effects differ");
     Calls.push_back({Call,Call->getMemoryEffects()});
    }
   }
