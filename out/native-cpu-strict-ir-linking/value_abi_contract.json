@@ -1,0 +1,116 @@
+{
+  "status": "source_only_exact_module_private_value_interface",
+  "llvm": "23.1.2",
+  "plugin_API": 2,
+  "pass": "sirius-value-dp",
+  "input": {
+    "path": "bin/linux-gcc/native-cpu-strict-ir-linking/dp-linked.bc",
+    "bytes": 10834592,
+    "sha256": "5269b49f16dab73c86ff3262504984af87680253834d2f6b83659509e8d056a5",
+    "binding": "Independently SHA256 and parse the pinned original in a separate LLVM context on every invocation. Compare the full canonical module-print fingerprint after normalizing ModuleID only; no trust/force, inventory-only, earlier-pass or different-module path exists."
+  },
+  "source_inputs": {
+    "out/native-cpu-strict-ir-linking/constrain_scope.cpp": {
+      "bytes": 14483,
+      "sha256": "fa6b225b21edb880054e006504ec1c401155bbd2448c68c250be953ababf8fab"
+    },
+    "out/native-cpu-strict-ir-linking/scope_contract.json": {
+      "bytes": 9197,
+      "sha256": "adef7709ec5c94c55442840a30023a5db00972ab4d078ea625950bf8b2391cf9"
+    },
+    "out/native-cpu-strict-ir-linking/private_math.cpp": {
+      "bytes": 1075,
+      "sha256": "3b1682e0e71fcb83a5e9e59c62b04aee78ddc5e7193f88a29f9d5fec8fd1acf3"
+    },
+    "out/native-cpu-exact-product-zero-residual/retained8.cpp": {
+      "bytes": 39893,
+      "sha256": "9286f36aa1b2e563bbd501894eb642e0628784409a23a7a2e153ead328759e68"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc": {
+      "bytes": 403852,
+      "sha256": "f9c1197a5c06814705d6bf7f46cf0e8ce217d7f42534627fadbfa208f51dac8b"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/Transforms/IPO/ArgumentPromotion.h": {
+      "bytes": 1290,
+      "sha256": "9175bbfaf902d705d7793bc1dbc8fae19633687f52a0eaa9746d08462c817d16"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/Transforms/Utils/Cloning.h": {
+      "bytes": 21753,
+      "sha256": "a64dac650ca2eb949a0b572d672a75d6e8a60fd8256dc11f0e104ae0e4051f5b"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/IR/IntrinsicInst.h": {
+      "bytes": 61883,
+      "sha256": "2e695b261f7578b2a2351c0f86259a50772654f44f8ba387ccf18d5db93e6e1b"
+    }
+  },
+  "input_calls": {
+    "dense_add8": 3,
+    "dense_multiply8": 1,
+    "dense_divide8": 1,
+    "dense_sqrt8": 1,
+    "tagged_add8": 585,
+    "tagged_subtract8": 284,
+    "tagged_multiply8": 661,
+    "tagged_divide8": 45
+  },
+  "input_inventory": {
+    "calls": 1581,
+    "data_banks": 1581,
+    "tag_banks": 1575,
+    "referenced_math_functions": 8,
+    "unchanged_explicit_slow_noinline_functions": 2
+  },
+  "common_indices": {
+    "dense": {
+      "destination": 2,
+      "a": 0,
+      "b": 1
+    },
+    "tagged": {
+      "destination": 0,
+      "a": 1,
+      "b": 2
+    }
+  },
+  "new_interface": {
+    "core_prefix": "sirius_value_core_",
+    "linkage": "internal fastcc noinline strictfp",
+    "inputs": "Ten <8 x i32> A/B payload vectors in original hi/lo/tail/error/valid column order; tagged cores additionally receive two <8 x i32> metadata vectors; original unchanged i32 mask last. No incoming bank/tag/payload pointers, destination or operand indices.",
+    "returns": "Literal LLVM aggregate of five <8 x i32> destination columns; tagged adds the sixth <8 x i32> destination tag. Actual IR value interface, avoiding C++ aggregate byval/sret frontend lowering.",
+    "body": "Clone the exact original helper CFG once into each of eight cores; map original bank/tag formals to newly initialized local15/3-vector banks, bind indices to the verified common constants, map mask unchanged, and replace retvoid only with integer result loads and aggregate return. Fold constant integer index expressions only. All original strict FP instructions/operands/metadata/CFG order are cloned; complete module constrained-FP inventory must remain identical before/after this pass.",
+    "adapters": "Original private helper names become small internal alwaysinline pointer adapters: full initialized A/B/tag loads, one shared core call, full destination/tag stores, returnvoid. The original call sites, original masks and outer math-call gating are unchanged. Whole-vector private destination stores are exact because both original and cloned helper retain initialized-zero inactive destination words/tags.",
+    "other_definitions": "Two original slow_* functions retain noinline/strictfp. Unreferenced math definitions remain untouched for ordinary subsequent DCE. Public/GCC/native-provider objects and the two private raw packet signatures are untouched."
+  },
+  "initialization_proof": {
+    "kind": "Reviewed exact-source/module semantic proof plus local bounds/dominance/lifetime checks; not a whole-program lane or ValueTracking proof engine.",
+    "physical_bank_authority": "The source-bound private snapshot reads all eight physical A/B payload/tag lanes from the original fully memset-initialized KernelContext, zeroes destination payload/tag, and preserves alias snapshots. Existing dense SiriusBank is fully zeroed before its masked operand stores in the exact input.",
+    "local_checks": [
+      "Each math argument is its own scalar alloca [120 x i32] or [24 x i32], in address space0; no allocation sharing between math call sites, pointer capture, dynamic/interior helper pointer or unknown use.",
+      "All original private allocation GEPs and memory access widths remain constant and in bounds. Volatile/atomic accesses and unsupported pointer uses fail closed.",
+      "Every32-byte physical column has a dominating full-zero initializer or an ordinary full-vector store before the call; each old destination column/tag is zero with no dominating nonzero/masked overwrite.",
+      "A declared lifetime-start must dominate its call; no lifetime-end may dominate that call. Function-scope allocas without explicit lifetime intrinsics retain their automatic lifetime.",
+      "Each normalized masked-memory operation has complete initialized32-byte storage dominating it; ordinary full-width memory is valid for every physical lane, independent of mask.",
+      "New core-local banks are completely initialized by construction; after binding/folding fixed indices their complete pointer uses are bounded ordinary loads/stores or constant nonvolatile memcpy/memset. No new local bank address may escape into an opaque helper."
+    ],
+    "lifetime_and_alias": "All ten payload vectors and both tag vectors contain eight initialized source-defined integer lanes each. Extra integer reads inside a private initialized temporary have no FP or volatile/atomic effect, including identity/refusal paths which originally skipped payload reads. Both A/B snapshots precede any original destination publication; original raw view/input-output disjointness and synchronous job lifetime still apply.",
+    "mask_and_inactive": "The old i32 math mask passes unchanged to the cloned core. Original masked public/context copyback remains exact. No input pointer/index/mask or memory content is frozen, fabricated or globally made unmasked."
+  },
+  "masked_memory_normalization": {
+    "allowlist": "Only original3156 inspected private alloca roots passed to these1581 calls, never original KernelContext, descriptor, input/output or other allocation.",
+    "LLVM23_signature": "masked_load(ptr, v8i1 mask, v8i32 passthrough); masked_store(v8i32 value, ptr, v8i1 mask). Preserve exact pointer-argument alignment attribute.",
+    "load": "Ordinary aligned v8i32 load followed by select(original mask, loaded vector, original passthrough).",
+    "store": "Ordinary aligned v8i32 load followed by select(original mask, original value, old vector) and ordinary aligned store.",
+    "effects": "Representation and private ordinary memory only; no FP arithmetic, predicate, FENV/status access, pointer/index/mask freeze or external access is introduced. Dynamic indices, bounds or initialization not established by exact domain/local checks stop the pass."
+  },
+  "FP_and_memory_effects": "All original core function/call strictfp, target/denormal/FP attributes and constrained intrinsic round.dynamic/fpexcept.strict operands survive cloning. No fast flags/contraction/FMA or synthetic exception setting. Original helper function FP/memory effects are retained; no memory(none) waiver is added. Original full-MXCSR-save/RNE/masked/DAZ-FTZ-off scope and restoration are prerequisites; this transformation grants no new rounding-mode domain.",
+  "argument_promotion": "LLVM23 ArgumentPromotionPass default MaxElements is2; Triple has5 vector fields. Changing that cap does not create the missing value-return protocol for writable scratch/tag arguments. This pass explicitly supplies that protocol without duplicating all arithmetic at1581 callers.",
+  "next_structural_gate": {
+    "producer_owned_pipeline": "sirius-value-dp on exact PRE-O2 input; then one default<O2>,function(sroa),globaldce,verify pipeline with the exact existing two-export internalize list.",
+    "required": "Eight shared noinline value cores; adapters disappear, original1581 packed480-byte arrays and1575 tag96-byte arrays plus new core-local equivalents disappear. No new ordinary FP, fast math or FP-state writes. Stop if packed allocation elimination or exact scope/ABI/FP evidence fails.",
+    "limitations": "Source preparation only. Actual opt/compile/structural result, native ISA/PC proof and complete finite compatibility remain unexecuted. LLVM aggregate arguments/returns can later lower to stack arguments/spills; no register-only implementation, speed, provider/cohort/frame/scientific/release qualification follows."
+  }
+}

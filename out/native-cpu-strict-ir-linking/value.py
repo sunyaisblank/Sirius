@@ -110,6 +110,8 @@ else:
         assert headers and all('strictfp' in attrs[re.search(r'#(\d+)', row)[1]] for row in headers)
         ordinary = Counter(re.findall(r'^\s+%[^=]+ = (fadd|fsub|fmul|fdiv|frem|fcmp|fpext|fptrunc|sitofp|uitofp|fptosi|fptoui)\b', text, re.M))
         assert not ordinary, ordinary
+        assert not re.search(r'^\s+.*\b(?:fneg|fadd|fsub|fmul|fdiv|fcmp|call)\s+(?:fast|reassoc|nnan|ninf|nsz|arcp|contract|afn)\b', text, re.M)
+        assert not re.search(r'@llvm\.(?:experimental\.constrained\.)?(?:fma|fmuladd)\.', text)
         constrained = Counter(re.findall(r'\bcall\s+.*?@(llvm\.experimental\.constrained\.[^ (]+)\(', text))
         if phase == 'value-lower':
             assert dict(constrained) == json.loads((W / 'link-result.json').read_text())['constrained_calls']
@@ -124,3 +126,8 @@ else:
             structural_gate='Adoption requires elimination of original480/96-byte packed banks and pointer adapters. IR aggregate values may still spill/use stack at machine level. No speed or numerical claim.')
     write(W / (phase + '-result.json'), result)
     print(json.dumps({k: v for k, v in result.items() if k not in ('argv', 'definition_headers', 'constrained_calls')}))
+    if phase == 'value-optimize':
+        assert result['core_definitions'] == 8, result['core_definitions']
+        assert result['adapter_calls'] == 0, result['adapter_calls']
+        assert result['packed_payload_allocas'] == result['packed_tag_allocas'] == 0, (
+            result['packed_payload_allocas'], result['packed_tag_allocas'])
