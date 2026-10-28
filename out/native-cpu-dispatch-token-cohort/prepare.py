@@ -9,3 +9,15 @@ anchor = 'exec(compile(source, str(basis), "exec"))'
 assert source.count(anchor) == 1
 source = source.replace(anchor, 'source = seal_authorities(source)\n' + anchor, 1)
 exec(compile(source, '/home/astra/.project/Sirius/out/native-cpu-local-identities-cohort/prepare.py', 'exec'))
+
+# Describe this producer's actual object identities in future owner receipts.
+# The pinned predecessor assertions, executable and frozen inputs stay exact.
+import json
+from pathlib import Path
+_scope_path = Path.cwd() / 'out/native-cpu-dispatch-token-cohort/actions.json'
+_scope_actions = json.loads(_scope_path.read_text())
+_scope_old = 'unchanged Transport/DopriPhase scalar objects and verified Endpoint scalar/pure admission extension at relative word11241'
+_scope_new = 'new guarded/admitted scalar3 and adapter, unchanged pure admission including the Endpoint header domain at relative word11241'
+assert _scope_actions['control-8']['scope'].count(_scope_old) == 1
+_scope_actions['control-8']['scope'] = _scope_actions['control-8']['scope'].replace(_scope_old, _scope_new, 1)
+_scope_path.write_text(json.dumps(_scope_actions, indent=2) + '\n')
