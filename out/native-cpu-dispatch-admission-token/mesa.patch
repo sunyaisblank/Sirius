@@ -1,0 +1,45 @@
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -89,6 +89,27 @@
+          job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
+    }
+    }
++   /* Complete preflight belongs to this exact live synchronous job.
++    * Only the repeated immutable-program comparison is omitted below;
++    * private entries retain every original view/header/packet guard.
++    * Existing ordinary/refusal/JIT paths remain fully guarded.
++    */
++   if (!preflight && job->native_preflight_passed) {
++      switch (job->native_cpu_stage) {
++      case 1:
++         return sirius_native_transport_rows_admitted_packet(input->u, input->num_elements,
++            (void *)output->u, output->num_elements, x, y, z,
++            job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
++      case 2:
++         return sirius_native_endpoint_rows_admitted_packet(input->u, input->num_elements,
++            (void *)output->u, output->num_elements, x, y, z,
++            job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
++      case 3:
++         return sirius_native_dopri_phase_rows_admitted_packet(input->u, input->num_elements,
++            (void *)output->u, output->num_elements, x, y, z,
++            job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
++      }
++   }
+    switch (job->native_cpu_stage) {
+    case 1:
+       return sirius_native_transport_rows_try_packet(input->u, input->num_elements,
+--- a/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
++++ b/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
+@@ -32,6 +32,12 @@
+ bool sirius_native_endpoint_rows_try_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
+ bool sirius_native_dopri_phase_rows_try_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
+ 
++// Private dispatch-admitted workers: only the existing job-local positive
++// preflight branch may call these; all public entries stay fully guarded.
++__attribute__((visibility("hidden"))) bool sirius_native_transport_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++__attribute__((visibility("hidden"))) bool sirius_native_endpoint_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++__attribute__((visibility("hidden"))) bool sirius_native_dopri_phase_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++
+ // Pure runtime ISA/OS-state query; scalar baseline remains supported.
+ bool sirius_native_simd_supported(void) SIRIUS_NATIVE_NOEXCEPT;
+ 
