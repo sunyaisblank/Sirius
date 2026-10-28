@@ -1,0 +1,219 @@
+{
+  "status": "source_only_four_exact_input_shared_value_ABI",
+  "llvm": "23.1.2",
+  "plugin_API": 2,
+  "modes": {
+    "dp": {
+      "pass": "sirius-shared-dp",
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-strict-ir-linking/dopri_phase.strict.sha256.bc",
+        "bytes": 10451600,
+        "sha256": "bbdf247215b4f5f36f9872f55d202db879dbbb9d9301dbecdc863c27fa0c0979"
+      },
+      "exports": [
+        "sirius_scope_dp_packet",
+        "sirius_scope_dp_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+      ],
+      "pointer_call_counts": {
+        "dense_add8": 3,
+        "dense_multiply8": 1,
+        "dense_divide8": 1,
+        "dense_sqrt8": 1,
+        "tagged_add8": 585,
+        "tagged_subtract8": 284,
+        "tagged_multiply8": 661,
+        "tagged_divide8": 45,
+        "tagged_sqrt8": 0
+      },
+      "total_pointer_calls": 1581,
+      "data_banks": 1581,
+      "tag_banks": 1575,
+      "definitions_added": "Only tiny internal alwaysinline adapters; nine external hidden fixed-type core declarations, no heavy math definitions."
+    },
+    "transport": {
+      "pass": "sirius-shared-transport",
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-strict-ir-linking/transport.strict.bc",
+        "bytes": 16091084,
+        "sha256": "6e81247821df090e23b1859f726e756559e5e6b4487d95a6e71233bbb8b60d1f"
+      },
+      "exports": [
+        "sirius_scope_transport_packet",
+        "sirius_scope_transport_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+      ],
+      "pointer_call_counts": {
+        "dense_add8": 8,
+        "dense_multiply8": 7,
+        "dense_divide8": 3,
+        "dense_sqrt8": 1,
+        "tagged_add8": 947,
+        "tagged_subtract8": 10,
+        "tagged_multiply8": 1482,
+        "tagged_divide8": 240,
+        "tagged_sqrt8": 3
+      },
+      "total_pointer_calls": 2701,
+      "data_banks": 2701,
+      "tag_banks": 2682,
+      "definitions_added": "Only tiny internal alwaysinline adapters; nine external hidden fixed-type core declarations, no heavy math definitions."
+    },
+    "endpoint": {
+      "pass": "sirius-shared-endpoint",
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-strict-ir-linking/endpoint.strict.bc",
+        "bytes": 22512336,
+        "sha256": "4dd9a944b89573a654fceddbeb47dd1f7c9c1833e3c5a4ef9282f9e9dfb6ed74"
+      },
+      "exports": [
+        "sirius_scope_endpoint_packet",
+        "sirius_scope_endpoint_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+      ],
+      "pointer_call_counts": {
+        "dense_add8": 13,
+        "dense_multiply8": 13,
+        "dense_divide8": 7,
+        "dense_sqrt8": 2,
+        "tagged_add8": 1607,
+        "tagged_subtract8": 197,
+        "tagged_multiply8": 1963,
+        "tagged_divide8": 154,
+        "tagged_sqrt8": 3
+      },
+      "total_pointer_calls": 3959,
+      "data_banks": 3959,
+      "tag_banks": 3924,
+      "definitions_added": "Only tiny internal alwaysinline adapters; nine external hidden fixed-type core declarations, no heavy math definitions."
+    },
+    "math": {
+      "pass": "sirius-shared-math",
+      "input": {
+        "path": "bin/linux-gcc/native-cpu-strict-ir-linking/private-math.bc",
+        "bytes": 344448,
+        "sha256": "f9108d507569ce44730aface0011c44247e181c7bdadf0b8466dbd3ab907c982"
+      },
+      "exports": [
+        "sirius_shared_value_dense_add8",
+        "sirius_shared_value_dense_multiply8",
+        "sirius_shared_value_dense_divide8",
+        "sirius_shared_value_dense_sqrt8",
+        "sirius_shared_value_tagged_add8",
+        "sirius_shared_value_tagged_subtract8",
+        "sirius_shared_value_tagged_multiply8",
+        "sirius_shared_value_tagged_divide8",
+        "sirius_shared_value_tagged_sqrt8"
+      ],
+      "definitions_added": "Nine separately named shared noinline cores, original strict arithmetic cloned once each. Remove corresponding original pointer exports after cloning; unused dense_subtract8 remains for ordinary DCE.",
+      "slow_noinline_definitions_preserved": 2
+    }
+  },
+  "source_inputs": {
+    "out/native-cpu-strict-ir-linking/value_abi.cpp": {
+      "bytes": 23802,
+      "sha256": "b675124485d9572227cbcc845623c674b4b1bfb0c9afc2801f87bbe6734c9e69"
+    },
+    "out/native-cpu-strict-ir-linking/value_abi_contract.json": {
+      "bytes": 10131,
+      "sha256": "896a5002b1ef9a89d106b7bbf41a52188f102f5860d5c5eb43143c61097092c0"
+    },
+    "out/native-cpu-strict-ir-linking/private_math.cpp": {
+      "bytes": 1075,
+      "sha256": "3b1682e0e71fcb83a5e9e59c62b04aee78ddc5e7193f88a29f9d5fec8fd1acf3"
+    },
+    "out/native-cpu-strict-ir-linking/scope_contract.json": {
+      "bytes": 9197,
+      "sha256": "adef7709ec5c94c55442840a30023a5db00972ab4d078ea625950bf8b2391cf9"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-exact-product-zero-residual/retained8.cpp": {
+      "bytes": 39893,
+      "sha256": "9286f36aa1b2e563bbd501894eb642e0628784409a23a7a2e153ead328759e68"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc": {
+      "bytes": 626976,
+      "sha256": "0fc91ff0b756fddd055d5c0322f5eece0557a64799ef31893933be33cdba10f6"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc": {
+      "bytes": 795302,
+      "sha256": "d8ae7cdde50211537678ec197f18c374edd2cec653974d9d0b7c33c50db8c1e1"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc": {
+      "bytes": 403852,
+      "sha256": "f9c1197a5c06814705d6bf7f46cf0e8ce217d7f42534627fadbfa208f51dac8b"
+    }
+  },
+  "input_binding": "Each pass name chooses one immutable input path/byte count/SHA. Independently hash and parse that original in another LLVM context; require complete canonical module-print fingerprint equality, normalizing ModuleID only. There is no force/trust/inventory-only or different-module admission.",
+  "referenced_core_names": [
+    "sirius_shared_value_dense_add8",
+    "sirius_shared_value_dense_multiply8",
+    "sirius_shared_value_dense_divide8",
+    "sirius_shared_value_dense_sqrt8",
+    "sirius_shared_value_tagged_add8",
+    "sirius_shared_value_tagged_subtract8",
+    "sirius_shared_value_tagged_multiply8",
+    "sirius_shared_value_tagged_divide8",
+    "sirius_shared_value_tagged_sqrt8"
+  ],
+  "fixed_ABI": {
+    "linkage": "external hidden dso_local fastcc noinline strictfp nounwind on every shared declaration and definition",
+    "dense": "(ten <8 x i32> payload vectors, original i32 mask) -> literal LLVM struct of five <8 x i32> destination vectors",
+    "tagged": "(ten <8 x i32> payload vectors, two <8 x i32> input tag vectors, original i32 mask) -> literal LLVM struct of six <8 x i32> vectors (five payload plus destination tag)",
+    "vector_order": "A hi/lo/tail/error/valid, B hi/lo/tail/error/valid, then tagA/tagB for tagged. Each vector retains all eight physical source-defined integer lanes.",
+    "common_indices": {
+      "dense": [
+        2,
+        0,
+        1
+      ],
+      "tagged": [
+        0,
+        1,
+        2
+      ]
+    },
+    "sqrt": "The added tagged_sqrt8 clones the unchanged original unary body. Its old B index/value are still semantically ignored; fixed declared interface retains all ten payload/two tag vectors. External linkage and preserved roots prevent optimization from dropping unused parameters independently in different modules.",
+    "machine_limit": "LLVM value signatures are fixed; native fastcc can still use hidden return buffers, stack arguments and spills. DP actual prior code exhibited128-byte stack input and192-byte hidden return for a tagged core; no register-only or speed claim follows."
+  },
+  "raw_mode_checks": [
+    "Require the exact original two ordinary/masked hidden exports, exact per-helper direct CallInst counts and existing strictfp call scope. Original pointer declarations keep their pointer/u32 types and nounwind contract.",
+    "Every call must use dense d2/a0/b1 or tagged d0/a1/b2, unchanged original i32 mask, one separate scalar [120 x i32] bank and optional [24 x i32] tag bank in address space0, with no bank shared by call sites.",
+    "Reuse the reviewed original local constant-offset bounds/use, dominating complete32-byte column initialization/zero destination, and lifetime checks. No dynamic pointer escape, volatile/atomic memory or unsupported allocation user is admitted.",
+    "Normalize masked memory only on these exact validated private bank/tag roots, with their original mask, passthrough and pointer alignment. LLVM23 masked_load becomes full initialized load+select; masked_store becomes full initialized load+select+store.",
+    "Tiny adapters snapshot the ten initialized payload vectors and two initialized tag vectors before their one core call, then store only destination/tag results into the private temporary. Original outer context/output masked copyback, aliases, scope, row-data reads and math-call gating remain unchanged.",
+    "No raw core body is imported or instantiated. Original raw FP instruction inventory must stay exactly equal before/after this pass; no pointer/index/mask freeze or new FP operation is introduced."
+  ],
+  "math_mode_checks": [
+    "Require exact original nine pointer definitions and strict/nounwind source closure. All existing nonintrinsic math calls must reach definitions in that exact standalone module; no opaque callback is introduced.",
+    "Reject ordinary nonargument/errno writes in original definition memory summaries. Two original slow_* functions retain noinline/strictfp. The reviewed retained source accesses only incoming bank/tag words, newly local copies, readonly constants and the strict inaccessible FP environment.",
+    "Clone each original helper CFG once with new initialized local15-vector bank/3-vector tag array. Bind original bank/tag pointers to those locals, original fixed indices to constants and mask to the unchanged value parameter. Replace retvoid only with integer result loads and aggregate return.",
+    "Retain reviewed constant-index folding and same-local-address pointer-PHI canonicalization only. New local bank access must remain constant, inbounds and ordinary (or bounded constant memcpy/memset); no local-bank address may escape to an opaque call.",
+    "Delete each of those nine original pointer exports only after cloning its complete arithmetic body. Keep unused dense_subtract8 for ordinary DCE. Require whole-module constrained-FP inventory equality and LLVM verifier success after transformation."
+  ],
+  "memory_effects": {
+    "cores": "MemoryEffects::otherMemOnly(ModRefInfo::Ref) | MemoryEffects::inaccessibleMemOnly(ModRefInfo::ModRef), identically on declarations/definitions and adapter core calls. ArgMem, ErrnoMem and target-specific ordinary writes are absent.",
+    "proof": "Every incoming parameter is an integer vector or mask, never an address. Original formal bank/tag pointers now denote newly initialized nonescaping private arrays; all their original stores are local. Existing slow/value helper pointers refer only to those local copies, and the exact module has no nonintrinsic external callback. The source has no errno/global write or FP-status/control reader; readonly constant/local-closure loads justify conservative Other Read, while strict FP effects remain inaccessible ReadWrite. This is source-bound proof plus local checks, not a universal whole-program alias claim.",
+    "adapters": "Original pointer adapters retain ArgMem ReadWrite union the common core effect. They are not falsely declared readonly or argmemnone. Raw old call sites may retain conservative effects until inlined. No memory(none) or forced inaccessible-only annotation is used."
+  },
+  "unchanged_FP": "Clone all original FP operations, predicates, CFG control/operation order, constrained round.dynamic/fpexcept.strict operands and FP metadata. The original saved/full-restored MXCSR RNE/masked/DAZ-FTZ-off job scope remains mandatory. No broader rounding domain, flag suppression, speculative arithmetic, contraction or FMA intrinsic is authorized.",
+  "target_features": "Never append -fma or use llc -mattr=-fma: LLVM23 clears dependent AVX512 capabilities. Preserve full existing SKX/v4 capability closure and boolean mask ABI, strict/no-contract semantics and an independent actual-machine FMA rejection gate. The pass rejects a preexisting explicit -fma feature token.",
+  "source_initialization_argument": "Exact AS source initializes whole KernelContext; packed snapshots read all eight physical A/B payload/tag lanes and zero private destination/tag. Existing dense banks are fully zeroed before masked operand stores in the pinned IR. Initialized private integer reads may be made ordinary without new FP/volatile/atomic behavior. Both operands are snapped before any original write, and existing masked global copyback preserves inactive/public words. This is the same reviewed source-bound proof used by value_abi.cpp, not a new lane-engine assumption.",
+  "producer_requirements": {
+    "math_optimizer_roots": [
+      "sirius_shared_value_dense_add8",
+      "sirius_shared_value_dense_multiply8",
+      "sirius_shared_value_dense_divide8",
+      "sirius_shared_value_dense_sqrt8",
+      "sirius_shared_value_tagged_add8",
+      "sirius_shared_value_tagged_subtract8",
+      "sirius_shared_value_tagged_multiply8",
+      "sirius_shared_value_tagged_divide8",
+      "sirius_shared_value_tagged_sqrt8"
+    ],
+    "raw_optimizer_roots": "Exactly each mode exports pair above; shared definitions are never internalized into a raw module.",
+    "post_O2_structural_gates": "All raw480/96-byte packed banks and tiny adapters must disappear. All new math-local equivalent banks must disappear. Verify every shared core still has the exact unchanged value FunctionType, hidden external fastcc noinline strictfp identity, common sound effects and no ordinary FP/fast flags; nine definitions once in math object, matching declarations/calls in each raw module.",
+    "link_gates": "Separate raw3 plus exactly one shared9-core native math object. Join every call relocation to the actual hidden core definition and complete original raw/helper functions, reject FMA and unsupported ISA/state instructions, and preserve original guarded fallback/public GCC object identities.",
+    "qualification": "New source only. Root must own one bounded compiler/static gate followed by required fresh exact finite/runtime evidence. Prior single-DP structural/codegen gates or historical cohorts confer no numerical, all-stage, performance, provider/frame/scientific/release acceptance."
+  }
+}

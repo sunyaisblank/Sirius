@@ -1,0 +1,64 @@
+{
+  "prepared_only": true,
+  "compiler_run": false,
+  "source_inputs": {
+    "out/native-cpu-dispatch-admission-token/derivation.json": {
+      "bytes": 19860,
+      "sha256": "ede88f20bc09bd782816c4829c1bea581aa59e9082d46f7babe1b6f7bae65ebf"
+    },
+    "out/native-cpu-dispatch-admission-token/rows_adapter.cpp": {
+      "bytes": 8436,
+      "sha256": "012c7f0fbc03300cf3642b1aa282a05d2979c9cee2440ab204e136c1d206e96e"
+    },
+    "out/native-cpu-dispatch-admission-token/admitted_bridge.h": {
+      "bytes": 2144,
+      "sha256": "e57b146aa86c3d6c6ca3de8c53565f1b77106e860f132478cc76a763646e6afe"
+    },
+    "out/native-cpu-dispatch-admission-token/native_packet.hpp": {
+      "bytes": 4155,
+      "sha256": "ad11ddc83d3de03405e89885badc1e4655fdfcca77519a686abe18824b5fba7d"
+    }
+  },
+  "derived": {
+    "path": "out/native-cpu-shared-value-component/rows_adapter.cpp",
+    "bytes": 9091,
+    "sha256": "8e9b4d4849a4a7f46ffb0daa2b5627071a5e5ff30de3ffac260e1353596e1e83"
+  },
+  "compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-fPIC",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-isystem",
+    "/opt/slang/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-static-program/typed-batch",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-active-prefix",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+    "-march=x86-64",
+    "-mtune=znver4",
+    "-mfpmath=sse",
+    "-fexcess-precision=standard",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-fno-unsafe-math-optimizations",
+    "-frounding-math",
+    "-ffp-contract=off",
+    "-c",
+    "/home/astra/.project/Sirius/out/native-cpu-shared-value-component/rows_adapter.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-shared-value-component/rows_adapter.o"
+  ],
+  "public_wrapper_prefix_byte_preserved": true,
+  "private_change": "Only three admitted v4 raw callbacks change to their separately named strict value modules. All existing admission/ISA/FP/grid/range/alias/row guards and scalar/AVX2 fallbacks remain exact.",
+  "scope": "Source preparation only; no runtime scope or numerical compatibility/adoption inferred. Required genuine job flag/full-MXCSR scope and coupled native3+shared9core link must be proved before qualification."
+}
