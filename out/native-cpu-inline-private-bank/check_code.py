@@ -60,6 +60,7 @@ def inspect(p):
     elf=Elf(p)
     executable={i for i,s in enumerate(elf.sections) if s[2]&4 and s[5]}
     assert executable
+    section_bytes={i:elf.bytes(i) for i in executable}
     text=subprocess.check_output(['objdump','-d','-z','-M','intel','--wide','--insn-width=16',str(p)],text=True)
     rows=[];covered={i:0 for i in executable};section=None
     for line in text.splitlines():
@@ -72,7 +73,7 @@ def inspect(p):
         assert section in executable,(p,line)
         address=int(m[1],16);code=bytes.fromhex(m[2]);assembly=m[3]
         assert 0<len(code)<=15 and address==elf.sections[section][3]+covered[section],(p,line)
-        assert elf.bytes(section)[covered[section]:covered[section]+len(code)]==code
+        assert section_bytes[section][covered[section]:covered[section]+len(code)]==code
         covered[section]+=len(code)
         op,_,args=assembly.partition(' ')
         while op in ('{evex}','{vex}','data16','addr32','cs','ds','ss','es','fs','gs',
@@ -86,7 +87,7 @@ def inspect(p):
         rows.append(dict(section=elf.names[section],address=address,bytes=len(code),op=op,args=args,
                          encoding_form=form(op,code)))
     assert covered=={i:elf.sections[i][5] for i in executable},(p,covered)
-    return elf,rows,[dict(name=elf.names[i],bytes=covered[i],sha256=hashlib.sha256(elf.bytes(i)).hexdigest()) for i in sorted(executable)]
+    return elf,rows,[dict(name=elf.names[i],bytes=covered[i],sha256=hashlib.sha256(section_bytes[i]).hexdigest()) for i in sorted(executable)]
 
 
 proof=doc(W/'derivation.json');built=doc(W/'build-result.json')
