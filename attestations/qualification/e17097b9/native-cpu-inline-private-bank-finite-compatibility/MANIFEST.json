@@ -1,0 +1,1348 @@
+{
+  "finite_component_passed": true,
+  "provider_adopted": false,
+  "compiled_source_revision": "e17097b9a6d0a93571d63a5a6fa53680201cb105",
+  "executed_source_revision": "e17097b9a6d0a93571d63a5a6fa53680201cb105",
+  "archive": {
+    "path": "attestations/qualification/e17097b9/native-cpu-inline-private-bank-finite-compatibility/component.zip",
+    "bytes": 10462956,
+    "sha256": "bbe723c238042fe256722d82a1032d838da7eb9a96cb3afbcc1e530e72eadb64"
+  },
+  "members": {
+    "bin/linux-gcc/native-cpu-inline-private-bank/endpoint-check": {
+      "bytes": 12306992,
+      "sha256": "abc8480ef3d5e464937254bd4eb53044ce6aca7692de0d301ef503a42b2a15d6"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc": {
+      "bytes": 403852,
+      "sha256": "f9c1197a5c06814705d6bf7f46cf0e8ce217d7f42534627fadbfa208f51dac8b"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc": {
+      "bytes": 795302,
+      "sha256": "d8ae7cdde50211537678ec197f18c374edd2cec653974d9d0b7c33c50db8c1e1"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc": {
+      "bytes": 626976,
+      "sha256": "0fc91ff0b756fddd055d5c0322f5eece0557a64799ef31893933be33cdba10f6"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/cpu_gate.o": {
+      "bytes": 2096,
+      "sha256": "04ec5e99f1dda456c8c232185c3c31a5f7a689cadd03d7bf2cd7e45b961e86c5"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/dopri_phase.o": {
+      "bytes": 2438712,
+      "sha256": "5f6a79dd19817031ac6d180c46761f317f4bc0f53b908865fd528a8b768c5ab1"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint-driver.o": {
+      "bytes": 363616,
+      "sha256": "9f30f40b5cf0f99fd654f8b799fa37fb5c8667e508e52016577974a21e9546fe"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint.o": {
+      "bytes": 5018192,
+      "sha256": "39a33f821780caf92fa435da33e23cea659fa59f62dcdd3e0087821461e88a90"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/transport-driver.o": {
+      "bytes": 482160,
+      "sha256": "9e35acc8fc7f1587c9fb8692532eeacbdc899a4ef1393ae6bcc5181433719b3c"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/transport.o": {
+      "bytes": 3732232,
+      "sha256": "3cbd66c1e54076f7c66552f5b42f504229a2a6a39bf9969973fba5d3e89c2d06"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/transport-check": {
+      "bytes": 14640808,
+      "sha256": "8733beec30445d5043517584ee3dc27eaf6805f036c13d7b355a466312b2557e"
+    },
+    "out/native-cpu-inline-private-bank/actions.json": {
+      "bytes": 15013,
+      "sha256": "ae4ae2ceb686af7088dba6e64a26a93c393264c7f742a4f5472a460d261658b8"
+    },
+    "out/native-cpu-inline-private-bank/build/inputs-after.json": {
+      "bytes": 1087031,
+      "sha256": "e338bd5f8a9ae7b1124829b6aae952ffeb2feac5f36e0e3b75e300a2b905dd0d"
+    },
+    "out/native-cpu-inline-private-bank/build/inputs-before.json": {
+      "bytes": 1087031,
+      "sha256": "e338bd5f8a9ae7b1124829b6aae952ffeb2feac5f36e0e3b75e300a2b905dd0d"
+    },
+    "out/native-cpu-inline-private-bank/build/owner.json": {
+      "bytes": 2856,
+      "sha256": "8867064edb838453f585476b364e60430b88f9259d4f76c98b5abb55ae254dd6"
+    },
+    "out/native-cpu-inline-private-bank/build/samples.jsonl": {
+      "bytes": 276969,
+      "sha256": "64e95447bd02542f3d1f28a17548b88bcb6a8e4622f09b586d606a0c0f3a13f3"
+    },
+    "out/native-cpu-inline-private-bank/build/stderr.log": {
+      "bytes": 31402,
+      "sha256": "b71409c4ce87412ad6feb7c7e7f2dfde2fb911687a8ae145689952840f98c102"
+    },
+    "out/native-cpu-inline-private-bank/build/stdout.log": {
+      "bytes": 103,
+      "sha256": "80747416d9a95296e80d140da6b37f9c39e16ed8f4344aa71c1c250f9eb0961a"
+    },
+    "out/native-cpu-inline-private-bank/build-result.json": {
+      "bytes": 3796,
+      "sha256": "92c34653d66f55d86dd8bc37bc05676e72f39f1c28f7fb9ea4c360c50ab30397"
+    },
+    "out/native-cpu-inline-private-bank/check_code.py": {
+      "bytes": 8798,
+      "sha256": "83ddf4256284eb71d3377589f3b964e2953b4a0789a02e6be5f97fb76739f671"
+    },
+    "out/native-cpu-inline-private-bank/code-proof.json": {
+      "bytes": 26328,
+      "sha256": "921df3f328816de6ff1d1ed5852eca1a7d3d22a6365a3ef3e1a0d53cba0f392d"
+    },
+    "out/native-cpu-inline-private-bank/compatibility.json": {
+      "bytes": 1714,
+      "sha256": "ef96adbdbe793daeaec9512b2d852e8fe9640e35d92b3d4181b9779ed3d9f270"
+    },
+    "out/native-cpu-inline-private-bank/component.py": {
+      "bytes": 13887,
+      "sha256": "fd41d41fe225158b18f87af255c6e6f00ed1d11c627bc7d1513d0b6479dab718"
+    },
+    "out/native-cpu-inline-private-bank/derivation.json": {
+      "bytes": 54448,
+      "sha256": "177e18838b100fc013020724c0ea69500870b78c0ae789cbebe6c41db687761c"
+    },
+    "out/native-cpu-inline-private-bank/endpoint-link-proof.json": {
+      "bytes": 14487866,
+      "sha256": "b23c6bbe3847cf9b526feecc38f5b83a27674a01afbd9c2edded6e2881dd499b"
+    },
+    "out/native-cpu-inline-private-bank/endpoint-output.json": {
+      "bytes": 782,
+      "sha256": "eb3093f1fd505702f045b7fbb17531c96f6917064c1b942c66ac20ccd8c64254"
+    },
+    "out/native-cpu-inline-private-bank/link/inputs-after.json": {
+      "bytes": 1089371,
+      "sha256": "d6f9f0c0e527d80f87527191788a54a9891c19ab17abdfd0404856f2bb007139"
+    },
+    "out/native-cpu-inline-private-bank/link/inputs-before.json": {
+      "bytes": 1089371,
+      "sha256": "d6f9f0c0e527d80f87527191788a54a9891c19ab17abdfd0404856f2bb007139"
+    },
+    "out/native-cpu-inline-private-bank/link/owner.json": {
+      "bytes": 2470,
+      "sha256": "a63d5c85ae934d3f0ea74d95757a68437ea8caf60946d42721dcfba537ebc86b"
+    },
+    "out/native-cpu-inline-private-bank/link/samples.jsonl": {
+      "bytes": 13927,
+      "sha256": "303fe680b7ddf25695a97ef6993228dbe0e344985599a1a394199ddcb3356095"
+    },
+    "out/native-cpu-inline-private-bank/link/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-inline-private-bank/link/stdout.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-inline-private-bank/link-result.json": {
+      "bytes": 5083,
+      "sha256": "f37f316a545ef9c53b5bd509996f47b3681c647427e7874e03bc36badbbea121"
+    },
+    "out/native-cpu-inline-private-bank/owned_guard.py": {
+      "bytes": 287,
+      "sha256": "0f202d05d6d8a4e69670401618c744ee9214715d3be0697780e82e5bc77d3803"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-inline-private-bank/qualify.py": {
+      "bytes": 9521,
+      "sha256": "50ea00185aacdba637ea968af8534613973bb0be033409fa50ad3fcf4f6f745a"
+    },
+    "out/native-cpu-inline-private-bank/run/inputs-after.json": {
+      "bytes": 1091898,
+      "sha256": "b24695d2648fe0c812530047448c7bf212a814c98c48414718558a403b668fc4"
+    },
+    "out/native-cpu-inline-private-bank/run/inputs-before.json": {
+      "bytes": 1091898,
+      "sha256": "b24695d2648fe0c812530047448c7bf212a814c98c48414718558a403b668fc4"
+    },
+    "out/native-cpu-inline-private-bank/run/owner.json": {
+      "bytes": 1955,
+      "sha256": "0d6cf3622ef79ee37734af2d9f9cf8295dd8d7d8d02490ce64ef41a3a3a089a9"
+    },
+    "out/native-cpu-inline-private-bank/run/samples.jsonl": {
+      "bytes": 1131,
+      "sha256": "3cf18a4ea31c758533a8dee2526d58a073b13349cd919737651f14401774b531"
+    },
+    "out/native-cpu-inline-private-bank/run/stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "out/native-cpu-inline-private-bank/run/stdout.log": {
+      "bytes": 976,
+      "sha256": "60ff04c5126e5134ad6a49b91a86519396318003a9b6aa973068b188d1d50c5e"
+    },
+    "out/native-cpu-inline-private-bank/run/transport/baseline.bin": {
+      "bytes": 751840,
+      "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc"
+    },
+    "out/native-cpu-inline-private-bank/run/transport/calls.jsonl": {
+      "bytes": 1472,
+      "sha256": "aedd0c24d2b06019b4f7e3314f93e0be17dbfe4c1099276081c4386c6bd8cec3"
+    },
+    "out/native-cpu-inline-private-bank/run/transport/candidate.bin": {
+      "bytes": 751840,
+      "sha256": "b111264fcfd7bbaf46ab031bd83b6261fd3f569e5fabad677b29a82c581c13fc"
+    },
+    "out/native-cpu-inline-private-bank/run/transport/cases.tsv": {
+      "bytes": 1187,
+      "sha256": "c585c14dd3503398447ff38a5cd1a277411eae803ca6eaf733017f8c9b863347"
+    },
+    "out/native-cpu-inline-private-bank/run/transport/input-after.bin": {
+      "bytes": 100672,
+      "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad"
+    },
+    "out/native-cpu-inline-private-bank/run/transport/input-before.bin": {
+      "bytes": 100672,
+      "sha256": "b5e12c5c4ecc23ee8a8da2832bce2cf51da91cf3086d06944b52cc74e5b4c6ad"
+    },
+    "out/native-cpu-inline-private-bank/run_owned.py": {
+      "bytes": 285,
+      "sha256": "7947f27bf667415a82b6b2df215bc10efb45f2cd4d11fcd6571e6ad37ece7888"
+    },
+    "out/native-cpu-inline-private-bank/transport-link-proof.json": {
+      "bytes": 17381270,
+      "sha256": "63f24d3903234111eafb5c8e2032cd30a1e63ed1bb4cf596d63a189ea2df5e5e"
+    },
+    "out/native-cpu-inline-private-bank/transport-output.json": {
+      "bytes": 328,
+      "sha256": "ca562b34ee03cab80aab6688d64c3a692aff55741fdc84485a35462d00821031"
+    }
+  },
+  "products": {
+    "bin/linux-gcc/native-cpu-inline-private-bank/transport-check": {
+      "bytes": 14640808,
+      "sha256": "8733beec30445d5043517584ee3dc27eaf6805f036c13d7b355a466312b2557e"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/endpoint-check": {
+      "bytes": 12306992,
+      "sha256": "abc8480ef3d5e464937254bd4eb53044ce6aca7692de0d301ef503a42b2a15d6"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint-driver.o": {
+      "bytes": 363616,
+      "sha256": "9f30f40b5cf0f99fd654f8b799fa37fb5c8667e508e52016577974a21e9546fe"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint.o": {
+      "bytes": 5018192,
+      "sha256": "39a33f821780caf92fa435da33e23cea659fa59f62dcdd3e0087821461e88a90"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/transport.o": {
+      "bytes": 3732232,
+      "sha256": "3cbd66c1e54076f7c66552f5b42f504229a2a6a39bf9969973fba5d3e89c2d06"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/cpu_gate.o": {
+      "bytes": 2096,
+      "sha256": "04ec5e99f1dda456c8c232185c3c31a5f7a689cadd03d7bf2cd7e45b961e86c5"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/transport-driver.o": {
+      "bytes": 482160,
+      "sha256": "9e35acc8fc7f1587c9fb8692532eeacbdc899a4ef1393ae6bcc5181433719b3c"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/objects/dopri_phase.o": {
+      "bytes": 2438712,
+      "sha256": "5f6a79dd19817031ac6d180c46761f317f4bc0f53b908865fd528a8b768c5ab1"
+    }
+  },
+  "owners": [
+    {
+      "path": "out/native-cpu-inline-private-bank/build/owner.json",
+      "bytes": 2856,
+      "sha256": "8867064edb838453f585476b364e60430b88f9259d4f76c98b5abb55ae254dd6",
+      "source": {
+        "revision": "e17097b9a6d0a93571d63a5a6fa53680201cb105",
+        "status": ""
+      },
+      "all_owned_births_reaped": true,
+      "wall_seconds": 204.14035807200707,
+      "peak_sampled_rss_kib": 945412
+    },
+    {
+      "path": "out/native-cpu-inline-private-bank/link/owner.json",
+      "bytes": 2470,
+      "sha256": "a63d5c85ae934d3f0ea74d95757a68437ea8caf60946d42721dcfba537ebc86b",
+      "source": {
+        "revision": "e17097b9a6d0a93571d63a5a6fa53680201cb105",
+        "status": ""
+      },
+      "all_owned_births_reaped": true,
+      "wall_seconds": 15.334308476012666,
+      "peak_sampled_rss_kib": 192456
+    },
+    {
+      "path": "out/native-cpu-inline-private-bank/run/owner.json",
+      "bytes": 1955,
+      "sha256": "0d6cf3622ef79ee37734af2d9f9cf8295dd8d7d8d02490ce64ef41a3a3a089a9",
+      "source": {
+        "revision": "e17097b9a6d0a93571d63a5a6fa53680201cb105",
+        "status": ""
+      },
+      "all_owned_births_reaped": true,
+      "wall_seconds": 1.0407997190195601,
+      "peak_sampled_rss_kib": 72564
+    }
+  ],
+  "total_owned_wall_seconds": 220.5154662670393,
+  "new_raw_compilations": 3,
+  "new_CXX_compilations": 0,
+  "fixture_runs_per_fixture": 1,
+  "parent_component_manifest": {
+    "path": "attestations/qualification/5d6ba43c/native-cpu-packed-math-boundary-finite-compatibility/MANIFEST.json",
+    "bytes": 20970,
+    "sha256": "12489ed18cdc6d429538d9c9b5b09ea685dbdbe7140cea83f3073a781647ca5d"
+  },
+  "math_component_manifest": {
+    "path": "attestations/qualification/ca334e6e/native-cpu-exact-product-zero-residual-finite-compatibility/MANIFEST.json",
+    "bytes": 16372,
+    "sha256": "44d228597b02d724ad7a5b0ebfe8d69073bf306977bacd3a93013d1462213a66"
+  },
+  "new_optional_math": {
+    "path": "bin/linux-gcc/native-cpu-exact-product-zero-residual/optional.o",
+    "bytes": 256280,
+    "sha256": "31594a31204d85e8fec6ef1463807c5c1117eddc6fe4e8ad297f4f02362ed59f"
+  },
+  "original_v3_dispatcher_AQ_baseline_adapter_and_first7_AP_native_objects_reused": true,
+  "original_fixture_objects_restored_exactly_from_sealed_archive": true,
+  "results": {
+    "transport": {
+      "passed": true,
+      "case_count": 38,
+      "active_rows": 38,
+      "capacity_rows": 40,
+      "packets_per_implementation": 5,
+      "raw_calls": 10,
+      "compared_output_words": 187960,
+      "input_unchanged": true,
+      "inactive_sentinels_preserved": true,
+      "full_word_match": true,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    },
+    "endpoint": {
+      "passed": true,
+      "selection_rows": 23,
+      "capacity": 32,
+      "header_values": 6,
+      "layouts": 2,
+      "reference_rows": 138,
+      "scalar_packets": 360,
+      "raw_packets": 24,
+      "pure_calls": 21199,
+      "other_program_word_refusals": 21142,
+      "boundary_refusals": 21,
+      "compared_output_words": 5189312960,
+      "compared_input_words": 601713080,
+      "whole3829_words_and_inactive_capacity_and_canaries": true,
+      "input_immutable": true,
+      "MXCSR_controls_unchanged": true,
+      "caller_MXCSR_state_restored": true,
+      "scope": "Finite selector/routing compatibility against unchanged generated scalar shader and checked-in original input builders; direct unchanged raw Endpoint plus scalar tails, not provider integration, independent numerical or performance/scientific/release qualification"
+    }
+  },
+  "complete_link_association": {
+    "transport": {
+      "objects": 17,
+      "functions": 1567,
+      "declared_GOT_fields": 2
+    },
+    "endpoint": {
+      "objects": 15,
+      "functions": 1397,
+      "declared_GOT_fields": 0
+    }
+  },
+  "code": {
+    "passed": true,
+    "objects": [
+      {
+        "stage": "transport",
+        "original": {
+          "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o",
+          "bytes": 993648,
+          "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+        },
+        "candidate": {
+          "path": "bin/linux-gcc/native-cpu-inline-private-bank/objects/transport.o",
+          "bytes": 3732232,
+          "sha256": "3cbd66c1e54076f7c66552f5b42f504229a2a6a39bf9969973fba5d3e89c2d06"
+        },
+        "original_shape": {
+          "instructions": 103071,
+          "instruction_bytes": 643032,
+          "stack_address_operands": 17494,
+          "address_operand_instructions": 47483
+        },
+        "candidate_shape": {
+          "instructions": 411850,
+          "instruction_bytes": 2829608,
+          "stack_address_operands": 84374,
+          "address_operand_instructions": 220644
+        },
+        "original_instructions": 103071,
+        "candidate_instructions": 411850,
+        "original_stack_address_operands": 17494,
+        "candidate_stack_address_operands": 84374,
+        "executable_sections": [
+          {
+            "name": ".text",
+            "bytes": 2829608,
+            "sha256": "cea323c05fbec758eda2438d7a9b773900c9262f8892b41c6bcbb98a1d1ba11e"
+          }
+        ],
+        "reference_executable_sections": [
+          {
+            "name": ".text",
+            "bytes": 643032,
+            "sha256": "7a6668d1552ce276c62dde1ad33d0f0d4d83badc13a907582199ab72d5958c95"
+          }
+        ],
+        "original_mnemonics": {
+          "add": 163,
+          "and": 41,
+          "call": 2971,
+          "cmp": 397,
+          "div": 9,
+          "imul": 3,
+          "inc": 13,
+          "ja": 3,
+          "jae": 2,
+          "jb": 2,
+          "je": 5328,
+          "jmp": 137,
+          "jne": 94,
+          "kandb": 1411,
+          "kandnb": 2798,
+          "kmovb": 9,
+          "kmovd": 598,
+          "kmovq": 745,
+          "kmovw": 5376,
+          "knotb": 49,
+          "korb": 1284,
+          "kortestb": 3836,
+          "kshiftrb": 15,
+          "ktestb": 589,
+          "kxnorb": 39,
+          "kxorb": 885,
+          "lea": 1162,
+          "mov": 11476,
+          "movsxd": 1,
+          "movzx": 25,
+          "nop": 167,
+          "or": 3,
+          "pop": 238,
+          "push": 238,
+          "ret": 180,
+          "rol": 3,
+          "setae": 5,
+          "sete": 3,
+          "setne": 1,
+          "shl": 60,
+          "shr": 1,
+          "sub": 152,
+          "test": 606,
+          "tzcnt": 3,
+          "vaddps": 25,
+          "vandps": 26,
+          "vblendmps": 29,
+          "vbroadcastss": 53,
+          "vcmpeqps": 58,
+          "vcmpleps": 5,
+          "vcmpltps": 2,
+          "vcmpneqps": 22,
+          "vcmpnleps": 21,
+          "vcmpunordps": 2,
+          "vcvtdq2ps": 4,
+          "vextracti128": 77,
+          "vinserti128": 31,
+          "vinserti32x4": 2,
+          "vmaxps": 2,
+          "vmovaps": 5130,
+          "vmovd": 16,
+          "vmovdqa": 4329,
+          "vmovdqa32": 1908,
+          "vmovdqa64": 57,
+          "vmovdqu": 4751,
+          "vmovdqu32": 7602,
+          "vmovdqu8": 174,
+          "vmovss": 8,
+          "vmovups": 4590,
+          "vpaddd": 1696,
+          "vpand": 1236,
+          "vpandd": 1612,
+          "vpandn": 115,
+          "vpblendmd": 7,
+          "vpbroadcastd": 2041,
+          "vpbroadcastq": 5,
+          "vpcmpeqd": 1793,
+          "vpcmpgtd": 849,
+          "vpcmpgtw": 4,
+          "vpcmpleud": 788,
+          "vpcmpltd": 7,
+          "vpcmpltud": 405,
+          "vpcmpneqd": 335,
+          "vpcmpnleud": 13,
+          "vpcmpnltud": 25,
+          "vpextrd": 12,
+          "vpgatherqd": 84,
+          "vpinsrd": 6,
+          "vplzcntd": 2,
+          "vpmaxud": 1220,
+          "vpmovd2m": 1,
+          "vpmovm2d": 410,
+          "vpmovm2w": 300,
+          "vpmovw2m": 2653,
+          "vpmovzxdq": 122,
+          "vpmulld": 5,
+          "vpor": 814,
+          "vpord": 4358,
+          "vpscatterqd": 48,
+          "vpslld": 36,
+          "vpsllvd": 802,
+          "vpsllw": 2657,
+          "vpsrld": 1219,
+          "vpsubd": 28,
+          "vpternlogd": 403,
+          "vptest": 5,
+          "vptestmb": 174,
+          "vptestmd": 880,
+          "vptestnmb": 4,
+          "vptestnmd": 1271,
+          "vpxor": 1149,
+          "vpxord": 18,
+          "vsubps": 13,
+          "vxorps": 43,
+          "vzeroupper": 2993,
+          "xchg": 7,
+          "xor": 358
+        },
+        "candidate_mnemonics": {
+          "add": 30,
+          "and": 164,
+          "call": 2931,
+          "cmp": 399,
+          "div": 9,
+          "imul": 3,
+          "inc": 10,
+          "ja": 3,
+          "jb": 2,
+          "je": 15506,
+          "jmp": 2626,
+          "jne": 2573,
+          "kandb": 1643,
+          "kandnb": 489,
+          "kmovb": 7,
+          "kmovd": 740,
+          "kmovq": 3244,
+          "kmovw": 11252,
+          "knotb": 180,
+          "korb": 4377,
+          "kortestb": 3966,
+          "kshiftrb": 15,
+          "ktestb": 10713,
+          "kxnorb": 129,
+          "kxorb": 12800,
+          "lea": 6219,
+          "mov": 9007,
+          "movsxd": 1,
+          "movzx": 142,
+          "nop": 161,
+          "pop": 585,
+          "push": 585,
+          "ret": 172,
+          "rol": 12,
+          "sete": 2,
+          "setne": 1,
+          "shl": 27,
+          "shr": 1,
+          "sub": 142,
+          "test": 2992,
+          "tzcnt": 12,
+          "vaddps": 82,
+          "vandps": 75,
+          "vblendmps": 77,
+          "vbroadcastss": 73,
+          "vcmpeqps": 298,
+          "vcmpleps": 5,
+          "vcmpltps": 3,
+          "vcmpneqps": 85,
+          "vcmpnleps": 21,
+          "vcmpunordps": 11,
+          "vcvtdq2ps": 4,
+          "vextracti128": 77,
+          "vinserti128": 31,
+          "vinserti32x4": 2,
+          "vmaxps": 11,
+          "vmovaps": 30674,
+          "vmovd": 16,
+          "vmovdqa": 20327,
+          "vmovdqa32": 45740,
+          "vmovdqa64": 57,
+          "vmovdqu": 7296,
+          "vmovdqu32": 66292,
+          "vmovdqu8": 174,
+          "vmovss": 26,
+          "vmovups": 30141,
+          "vpaddd": 4786,
+          "vpand": 9720,
+          "vpandd": 1794,
+          "vpblendmd": 7,
+          "vpbroadcastd": 14497,
+          "vpbroadcastq": 5,
+          "vpcmpeqd": 2009,
+          "vpcmpgtd": 982,
+          "vpcmpgtw": 4,
+          "vpcmpleud": 742,
+          "vpcmpltd": 20,
+          "vpcmpltud": 437,
+          "vpcmpneqd": 335,
+          "vpcmpnleud": 13,
+          "vpcmpnltud": 135,
+          "vpextrd": 12,
+          "vpgatherqd": 84,
+          "vpinsrd": 6,
+          "vplzcntd": 3,
+          "vpmaxud": 1373,
+          "vpmovd2m": 1,
+          "vpmovm2d": 464,
+          "vpmovm2w": 182,
+          "vpmovw2m": 170,
+          "vpmovzxdq": 122,
+          "vpmulld": 5,
+          "vpor": 2359,
+          "vpord": 7449,
+          "vpscatterqd": 48,
+          "vpslld": 37,
+          "vpsllvd": 867,
+          "vpsllw": 174,
+          "vpsrld": 4297,
+          "vpsubd": 86,
+          "vpternlogd": 3394,
+          "vptest": 5,
+          "vptestmb": 174,
+          "vptestmd": 12725,
+          "vptestnmb": 4,
+          "vptestnmd": 3885,
+          "vpxor": 28195,
+          "vpxord": 8868,
+          "vsubps": 13,
+          "vxorps": 96,
+          "vzeroupper": 3063,
+          "xchg": 11,
+          "xor": 2722
+        },
+        "new_mnemonics": [],
+        "new_encoding_forms": [],
+        "removed_EvaluateOneStatic_functions": [
+          "EvaluateOneStatic_0___Cunu4Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu9Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu2Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu8Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu3Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu11Cunu459___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_"
+        ],
+        "EvaluateOneStatic_symbols_calls_absent": true,
+        "undefined": [
+          "memset",
+          "sirius_native_v4_dense_add8",
+          "sirius_native_v4_dense_divide8",
+          "sirius_native_v4_dense_multiply8",
+          "sirius_native_v4_dense_sqrt8",
+          "sirius_native_v4_tagged_add8",
+          "sirius_native_v4_tagged_divide8",
+          "sirius_native_v4_tagged_multiply8",
+          "sirius_native_v4_tagged_sqrt8",
+          "sirius_native_v4_tagged_subtract8",
+          "sirius_simd_fmaxf"
+        ],
+        "exports": [
+          "sirius_simd_v4_transport_packet",
+          "sirius_simd_v4_transport_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+        ],
+        "no_FMA": true,
+        "no_x87": true,
+        "no_FP_control_writes": true,
+        "all_executable_bytes_decoded": true,
+        "only_sealed_AR_instruction_forms": true
+      },
+      {
+        "stage": "endpoint",
+        "original": {
+          "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o",
+          "bytes": 863920,
+          "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+        },
+        "candidate": {
+          "path": "bin/linux-gcc/native-cpu-inline-private-bank/objects/endpoint.o",
+          "bytes": 5018192,
+          "sha256": "39a33f821780caf92fa435da33e23cea659fa59f62dcdd3e0087821461e88a90"
+        },
+        "original_shape": {
+          "instructions": 104433,
+          "instruction_bytes": 599788,
+          "stack_address_operands": 18870,
+          "address_operand_instructions": 42289
+        },
+        "candidate_shape": {
+          "instructions": 572435,
+          "instruction_bytes": 3930940,
+          "stack_address_operands": 121266,
+          "address_operand_instructions": 309042
+        },
+        "original_instructions": 104433,
+        "candidate_instructions": 572435,
+        "original_stack_address_operands": 18870,
+        "candidate_stack_address_operands": 121266,
+        "executable_sections": [
+          {
+            "name": ".text",
+            "bytes": 3930940,
+            "sha256": "29ce392f9930360eaa31b1d8a801dd442c3eb1b759b374739f390775b548d212"
+          }
+        ],
+        "reference_executable_sections": [
+          {
+            "name": ".text",
+            "bytes": 599788,
+            "sha256": "9853fc8088767f2ed874f42ee19760cf03ae981de6b22b9eb8bc9bc3b7fff6be"
+          }
+        ],
+        "original_mnemonics": {
+          "add": 201,
+          "and": 48,
+          "call": 4238,
+          "cmove": 1,
+          "cmp": 490,
+          "div": 9,
+          "imul": 2,
+          "inc": 8,
+          "ja": 1,
+          "jae": 4,
+          "jb": 1,
+          "je": 5696,
+          "jmp": 148,
+          "jne": 108,
+          "kandb": 1113,
+          "kandnb": 4172,
+          "kmovb": 10,
+          "kmovd": 759,
+          "kmovq": 579,
+          "kmovw": 7012,
+          "knotb": 75,
+          "korb": 1254,
+          "kortestb": 4620,
+          "kshiftrb": 25,
+          "ktestb": 420,
+          "kxnorb": 36,
+          "kxorb": 632,
+          "lea": 678,
+          "mov": 16664,
+          "movzx": 37,
+          "nop": 223,
+          "or": 3,
+          "pop": 309,
+          "push": 309,
+          "ret": 213,
+          "rol": 3,
+          "setae": 5,
+          "sete": 1,
+          "shl": 54,
+          "sub": 204,
+          "test": 278,
+          "tzcnt": 3,
+          "vaddps": 36,
+          "vandps": 44,
+          "vblendmps": 51,
+          "vbroadcastss": 43,
+          "vcmpeqps": 87,
+          "vcmpgeps": 1,
+          "vcmpgtps": 2,
+          "vcmpleps": 7,
+          "vcmpltps": 4,
+          "vcmpneqps": 20,
+          "vcmpnleps": 8,
+          "vcmpnltps": 2,
+          "vcmpunordps": 2,
+          "vextracti128": 129,
+          "vextracti32x4": 12,
+          "vinsertf128": 2,
+          "vinserti128": 90,
+          "vinserti32x4": 14,
+          "vmaxps": 2,
+          "vmovaps": 3714,
+          "vmovd": 16,
+          "vmovdqa": 5844,
+          "vmovdqa32": 1651,
+          "vmovdqa64": 307,
+          "vmovdqu": 4403,
+          "vmovdqu32": 6800,
+          "vmovdqu8": 263,
+          "vmovss": 4,
+          "vmovups": 2923,
+          "vmulps": 1,
+          "vpaddd": 789,
+          "vpand": 495,
+          "vpandd": 630,
+          "vpandn": 167,
+          "vpblendmd": 16,
+          "vpbroadcastd": 897,
+          "vpbroadcastq": 4,
+          "vpcmpeqd": 849,
+          "vpcmpgtd": 374,
+          "vpcmpgtw": 2,
+          "vpcmpleud": 305,
+          "vpcmpltd": 11,
+          "vpcmpltud": 161,
+          "vpcmpneqd": 414,
+          "vpcmpnleud": 24,
+          "vpcmpnltud": 17,
+          "vpextrd": 12,
+          "vpgatherqd": 230,
+          "vpinsrd": 6,
+          "vplzcntd": 4,
+          "vpmaxud": 487,
+          "vpmovd2m": 1,
+          "vpmovm2d": 172,
+          "vpmovm2w": 375,
+          "vpmovw2m": 4033,
+          "vpmovzxdq": 250,
+          "vpmulld": 6,
+          "vpor": 309,
+          "vpord": 4622,
+          "vpscatterqd": 48,
+          "vpslld": 65,
+          "vpsllvd": 307,
+          "vpsllw": 4035,
+          "vpsrld": 477,
+          "vpsubd": 55,
+          "vpternlogd": 156,
+          "vptest": 4,
+          "vptestmb": 275,
+          "vptestmd": 365,
+          "vptestnmb": 30,
+          "vptestnmd": 533,
+          "vpxor": 492,
+          "vpxord": 53,
+          "vsubps": 13,
+          "vxorps": 51,
+          "vzeroupper": 4267,
+          "xchg": 7,
+          "xor": 410
+        },
+        "candidate_mnemonics": {
+          "add": 22,
+          "and": 219,
+          "call": 4189,
+          "cmove": 1,
+          "cmp": 483,
+          "div": 9,
+          "imul": 2,
+          "inc": 5,
+          "jb": 1,
+          "je": 21367,
+          "jmp": 4182,
+          "jne": 3937,
+          "kandb": 1447,
+          "kandnb": 650,
+          "kmovb": 7,
+          "kmovd": 935,
+          "kmovq": 4433,
+          "kmovw": 14918,
+          "knotb": 244,
+          "korb": 5380,
+          "kortestb": 4834,
+          "kshiftrb": 25,
+          "ktestb": 16015,
+          "kxnorb": 190,
+          "kxorb": 18054,
+          "lea": 8546,
+          "mov": 12906,
+          "movzx": 208,
+          "nop": 202,
+          "pop": 773,
+          "push": 773,
+          "ret": 204,
+          "rol": 13,
+          "shl": 22,
+          "sub": 195,
+          "test": 3958,
+          "tzcnt": 13,
+          "vaddps": 99,
+          "vandps": 93,
+          "vblendmps": 104,
+          "vbroadcastss": 65,
+          "vcmpeqps": 406,
+          "vcmpgeps": 1,
+          "vcmpgtps": 2,
+          "vcmpleps": 7,
+          "vcmpltps": 5,
+          "vcmpneqps": 98,
+          "vcmpnleps": 8,
+          "vcmpnltps": 2,
+          "vcmpunordps": 12,
+          "vextracti128": 129,
+          "vextracti32x4": 12,
+          "vinsertf128": 2,
+          "vinserti128": 90,
+          "vinserti32x4": 14,
+          "vmaxps": 12,
+          "vmovaps": 44519,
+          "vmovd": 16,
+          "vmovdqa": 29576,
+          "vmovdqa32": 69225,
+          "vmovdqa64": 507,
+          "vmovdqu": 8359,
+          "vmovdqu32": 97470,
+          "vmovdqu8": 263,
+          "vmovss": 24,
+          "vmovups": 43711,
+          "vmulps": 1,
+          "vpaddd": 5101,
+          "vpand": 12297,
+          "vpandd": 1252,
+          "vpblendmd": 16,
+          "vpbroadcastd": 18857,
+          "vpbroadcastq": 3,
+          "vpcmpeqd": 1126,
+          "vpcmpgtd": 545,
+          "vpcmpgtw": 2,
+          "vpcmpleud": 289,
+          "vpcmpltd": 20,
+          "vpcmpltud": 211,
+          "vpcmpneqd": 414,
+          "vpcmpnleud": 24,
+          "vpcmpnltud": 133,
+          "vpextrd": 12,
+          "vpgatherqd": 230,
+          "vpinsrd": 6,
+          "vplzcntd": 5,
+          "vpmaxud": 700,
+          "vpmovd2m": 1,
+          "vpmovm2d": 236,
+          "vpmovm2w": 214,
+          "vpmovw2m": 207,
+          "vpmovzxdq": 250,
+          "vpmulld": 6,
+          "vpor": 2368,
+          "vpord": 8905,
+          "vpscatterqd": 48,
+          "vpslld": 66,
+          "vpsllvd": 408,
+          "vpsllw": 209,
+          "vpsrld": 4751,
+          "vpsubd": 119,
+          "vpternlogd": 4315,
+          "vptest": 3,
+          "vptestmb": 275,
+          "vptestmd": 17691,
+          "vptestnmb": 30,
+          "vptestnmd": 4559,
+          "vpxor": 42078,
+          "vpxord": 11792,
+          "vsubps": 13,
+          "vxorps": 82,
+          "vzeroupper": 4373,
+          "xchg": 17,
+          "xor": 3982
+        },
+        "new_mnemonics": [],
+        "new_encoding_forms": [],
+        "removed_EvaluateOneStatic_functions": [
+          "EvaluateOneStatic_0___Cunu4Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu9Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu8Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu2Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu11Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu3Cunu612___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_"
+        ],
+        "EvaluateOneStatic_symbols_calls_absent": true,
+        "undefined": [
+          "memset",
+          "sirius_native_v4_dense_add8",
+          "sirius_native_v4_dense_divide8",
+          "sirius_native_v4_dense_multiply8",
+          "sirius_native_v4_dense_sqrt8",
+          "sirius_native_v4_tagged_add8",
+          "sirius_native_v4_tagged_divide8",
+          "sirius_native_v4_tagged_multiply8",
+          "sirius_native_v4_tagged_sqrt8",
+          "sirius_native_v4_tagged_subtract8",
+          "sirius_simd_fmaxf"
+        ],
+        "exports": [
+          "sirius_simd_v4_endpoint_packet",
+          "sirius_simd_v4_endpoint_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+        ],
+        "no_FMA": true,
+        "no_x87": true,
+        "no_FP_control_writes": true,
+        "all_executable_bytes_decoded": true,
+        "only_sealed_AR_instruction_forms": true
+      },
+      {
+        "stage": "dopri_phase",
+        "original": {
+          "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o",
+          "bytes": 601320,
+          "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+        },
+        "candidate": {
+          "path": "bin/linux-gcc/native-cpu-inline-private-bank/objects/dopri_phase.o",
+          "bytes": 2438712,
+          "sha256": "5f6a79dd19817031ac6d180c46761f317f4bc0f53b908865fd528a8b768c5ab1"
+        },
+        "original_shape": {
+          "instructions": 64569,
+          "instruction_bytes": 379545,
+          "stack_address_operands": 11295,
+          "address_operand_instructions": 28449
+        },
+        "candidate_shape": {
+          "instructions": 267073,
+          "instruction_bytes": 1819369,
+          "stack_address_operands": 51790,
+          "address_operand_instructions": 141711
+        },
+        "original_instructions": 64569,
+        "candidate_instructions": 267073,
+        "original_stack_address_operands": 11295,
+        "candidate_stack_address_operands": 51790,
+        "executable_sections": [
+          {
+            "name": ".text",
+            "bytes": 1819369,
+            "sha256": "1f09bb70ae726d1df54cecf84319b8059ff78aef7670607f55a027c22a694812"
+          }
+        ],
+        "reference_executable_sections": [
+          {
+            "name": ".text",
+            "bytes": 379545,
+            "sha256": "cb3c1c5be3dcfa26308bb2a0b024c3450f0edd1273f195b9a5cb9e2a1de9fbff"
+          }
+        ],
+        "original_mnemonics": {
+          "add": 55,
+          "and": 23,
+          "call": 2192,
+          "cmp": 143,
+          "div": 9,
+          "imul": 2,
+          "inc": 4,
+          "ja": 1,
+          "jae": 4,
+          "je": 3304,
+          "jmp": 221,
+          "jne": 43,
+          "kandb": 766,
+          "kandnb": 1793,
+          "kmovb": 7,
+          "kmovd": 170,
+          "kmovq": 458,
+          "kmovw": 3655,
+          "knotb": 35,
+          "korb": 557,
+          "kortestb": 2444,
+          "kshiftrb": 14,
+          "ktestb": 378,
+          "kxnorb": 12,
+          "kxorb": 508,
+          "lea": 1865,
+          "mov": 8040,
+          "movzx": 11,
+          "nop": 66,
+          "or": 3,
+          "pop": 106,
+          "push": 106,
+          "ret": 61,
+          "rol": 2,
+          "setae": 6,
+          "shl": 34,
+          "sub": 53,
+          "test": 387,
+          "tzcnt": 2,
+          "vaddps": 15,
+          "vandps": 19,
+          "vblendmps": 20,
+          "vbroadcastss": 336,
+          "vcmpeqps": 35,
+          "vcmpleps": 10,
+          "vcmpltps": 1,
+          "vcmpneqps": 9,
+          "vcmpnleps": 2,
+          "vcmpunordps": 1,
+          "vextracti128": 60,
+          "vextracti32x4": 8,
+          "vinserti128": 25,
+          "vinserti32x4": 3,
+          "vmaxps": 1,
+          "vmovaps": 2199,
+          "vmovd": 14,
+          "vmovdqa": 4207,
+          "vmovdqa32": 496,
+          "vmovdqa64": 225,
+          "vmovdqu": 1881,
+          "vmovdqu32": 4189,
+          "vmovdqu8": 67,
+          "vmovss": 2,
+          "vmovups": 875,
+          "vpaddd": 1136,
+          "vpand": 1464,
+          "vpandd": 409,
+          "vpandn": 38,
+          "vpblendmd": 167,
+          "vpbroadcastd": 2629,
+          "vpcmpeqd": 1304,
+          "vpcmpgtd": 558,
+          "vpcmpleud": 12,
+          "vpcmpltd": 6,
+          "vpcmpltud": 266,
+          "vpcmpneqd": 108,
+          "vpcmpnleud": 14,
+          "vpcmpnltud": 524,
+          "vpextrd": 12,
+          "vpgatherqd": 74,
+          "vpinsrd": 6,
+          "vplzcntd": 1,
+          "vpmaxud": 799,
+          "vpmovd2m": 1,
+          "vpmovm2d": 270,
+          "vpmovm2w": 105,
+          "vpmovw2m": 1750,
+          "vpmovzxdq": 108,
+          "vpmulld": 5,
+          "vpor": 791,
+          "vpord": 2654,
+          "vpscatterqd": 44,
+          "vpslld": 31,
+          "vpsllvd": 527,
+          "vpsllw": 1750,
+          "vpsrld": 824,
+          "vpsubd": 16,
+          "vpternlogd": 266,
+          "vptestmb": 68,
+          "vptestmd": 559,
+          "vptestnmb": 7,
+          "vptestnmd": 816,
+          "vpxor": 169,
+          "vpxord": 15,
+          "vsubps": 16,
+          "vxorps": 26,
+          "vzeroupper": 1871,
+          "xchg": 3,
+          "xor": 110
+        },
+        "candidate_mnemonics": {
+          "add": 9,
+          "and": 48,
+          "call": 2029,
+          "cmp": 128,
+          "div": 9,
+          "imul": 2,
+          "inc": 3,
+          "je": 11160,
+          "jmp": 2189,
+          "jne": 1726,
+          "kandb": 1720,
+          "kandnb": 618,
+          "kmovb": 4,
+          "kmovd": 195,
+          "kmovq": 2588,
+          "kmovw": 6119,
+          "knotb": 507,
+          "korb": 2513,
+          "kortestb": 2635,
+          "kshiftrb": 14,
+          "ktestb": 8076,
+          "kxnorb": 489,
+          "kxorb": 7856,
+          "lea": 5083,
+          "mov": 5731,
+          "movzx": 40,
+          "nop": 57,
+          "pop": 175,
+          "push": 175,
+          "ret": 57,
+          "rol": 2,
+          "shl": 7,
+          "sub": 45,
+          "test": 2044,
+          "tzcnt": 2,
+          "vaddps": 15,
+          "vandps": 19,
+          "vblendmps": 20,
+          "vbroadcastss": 336,
+          "vcmpeqps": 671,
+          "vcmpleps": 10,
+          "vcmpltps": 1,
+          "vcmpneqps": 168,
+          "vcmpnleps": 2,
+          "vcmpunordps": 1,
+          "vextracti128": 60,
+          "vextracti32x4": 8,
+          "vinserti128": 25,
+          "vinserti32x4": 3,
+          "vmaxps": 1,
+          "vmovaps": 19304,
+          "vmovd": 14,
+          "vmovdqa": 14247,
+          "vmovdqa32": 27857,
+          "vmovdqa64": 225,
+          "vmovdqu": 3757,
+          "vmovdqu32": 41951,
+          "vmovdqu8": 67,
+          "vmovss": 2,
+          "vmovups": 18783,
+          "vpaddd": 3375,
+          "vpand": 6108,
+          "vpandd": 1611,
+          "vpblendmd": 167,
+          "vpbroadcastd": 10185,
+          "vpcmpeqd": 1940,
+          "vpcmpgtd": 876,
+          "vpcmpleud": 10,
+          "vpcmpltd": 6,
+          "vpcmpltud": 425,
+          "vpcmpneqd": 108,
+          "vpcmpnleud": 14,
+          "vpcmpnltud": 844,
+          "vpextrd": 12,
+          "vpgatherqd": 74,
+          "vpinsrd": 6,
+          "vplzcntd": 1,
+          "vpmaxud": 1276,
+          "vpmovd2m": 1,
+          "vpmovm2d": 429,
+          "vpmovm2w": 63,
+          "vpmovw2m": 56,
+          "vpmovzxdq": 108,
+          "vpmulld": 5,
+          "vpor": 1769,
+          "vpord": 4734,
+          "vpscatterqd": 44,
+          "vpslld": 31,
+          "vpsllvd": 845,
+          "vpsllw": 56,
+          "vpsrld": 2904,
+          "vpsubd": 16,
+          "vpternlogd": 2028,
+          "vptestmb": 68,
+          "vptestmd": 7597,
+          "vptestnmb": 7,
+          "vptestnmd": 3138,
+          "vpxor": 17172,
+          "vpxord": 3975,
+          "vsubps": 16,
+          "vxorps": 26,
+          "vzeroupper": 1742,
+          "xchg": 7,
+          "xor": 1596
+        },
+        "new_mnemonics": [],
+        "new_encoding_forms": [],
+        "removed_EvaluateOneStatic_functions": [
+          "EvaluateOneStatic_0___Cunu2Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu3Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu4Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_",
+          "EvaluateOneStatic_0___Cunu11Cunu629___unuunuunuunuvyuunuun_3C_s_5B_vyKernelContext_0_5D__3E_"
+        ],
+        "EvaluateOneStatic_symbols_calls_absent": true,
+        "undefined": [
+          "memset",
+          "sirius_native_v4_dense_add8",
+          "sirius_native_v4_dense_divide8",
+          "sirius_native_v4_dense_multiply8",
+          "sirius_native_v4_dense_sqrt8",
+          "sirius_native_v4_tagged_add8",
+          "sirius_native_v4_tagged_divide8",
+          "sirius_native_v4_tagged_multiply8",
+          "sirius_native_v4_tagged_subtract8",
+          "sirius_simd_fmaxf"
+        ],
+        "exports": [
+          "sirius_simd_v4_dopri_phase_packet",
+          "sirius_simd_v4_dopri_phase_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+        ],
+        "no_FMA": true,
+        "no_x87": true,
+        "no_FP_control_writes": true,
+        "all_executable_bytes_decoded": true,
+        "only_sealed_AR_instruction_forms": true
+      }
+    ],
+    "removed_EvaluateOneStatic_functions": 16,
+    "all_executable_sections_checked": true,
+    "unknown_or_non_v4_forms_rejected": true,
+    "opcode_authority": {
+      "path": "out/native-cpu-packed-math-provider/provider/linked-native-proof.json",
+      "bytes": 17317041,
+      "sha256": "e11cd5d2752722faf4385d7fa231adfcb28e9df3e02d83eab979937b57e79f7d"
+    },
+    "reference_objects": [
+      {
+        "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/transport.o",
+        "bytes": 993648,
+        "sha256": "c967e32a6aff81e6b4de2f131dfd75d2bb39178ead31fe38cb706eaefe99a2e8"
+      },
+      {
+        "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/endpoint.o",
+        "bytes": 863920,
+        "sha256": "a6aea72bdcbc784eef6be688a7c480b575aaceb95f97f28f5870d8c03da9933d"
+      },
+      {
+        "path": "bin/linux-gcc/native-cpu-packed-math-boundary/objects/dopri_phase.o",
+        "bytes": 601320,
+        "sha256": "1bc1e0f38b55be5e095831738a1ccb2ee5262b1f69579c0857f8c0ac798e5b03"
+      }
+    ],
+    "new_ISA_vocabulary_admitted": [],
+    "explicit_compiler_private_temporary_bytes_per_store": 576,
+    "scope": "Static changed-AS raw3 gate only. Every executable byte is decoded; mnemonic and conservative opcode/prefix/map/width forms must be observed in sealed AR raw3. No arbitrary ISA additions. All16 original opcode functions and their symbol/relocation/call references must disappear. Code/stack/address counts include frame/LEA uses and are not spills, traffic, full-bank SSA, stack reuse, timing or scientific/release acceptance."
+  },
+  "source_math_call_boundaries": {
+    "transport": {
+      "dense_private_calls": 4,
+      "tagged_private_calls": 5,
+      "full_original_bank_passed_to_CXX_math": false
+    },
+    "endpoint": {
+      "dense_private_calls": 4,
+      "tagged_private_calls": 5,
+      "full_original_bank_passed_to_CXX_math": false
+    },
+    "dopri_phase": {
+      "dense_private_calls": 4,
+      "tagged_private_calls": 5,
+      "full_original_bank_passed_to_CXX_math": false
+    }
+  },
+  "compiler_private_storage": {
+    "payload_words": 120,
+    "tag_words": 24,
+    "bytes": 576,
+    "slots": {
+      "destination": 0,
+      "a": 1,
+      "b": 2
+    },
+    "physical_lanes": 8,
+    "stack_reuse_established": false,
+    "host_allocations_changed": false,
+    "KernelContext_layout_changed": false
+  },
+  "all9380_literal_operators_and_original_masks_preserved": true,
+  "only3_opcode_inline_qualifiers_and48_integer_privateD_zero_words": true,
+  "source_proof": [
+    "Only each stage sole EvaluateOneStatic declaration gains inline, plus the helper include path. ISPC inline forces expansion according to the exact pinned local guide. All399 layers, generic evaluator, layer/header bounds and9380 ordered tuples retain exact bytes.",
+    "Within the existing unmasked snapshot block only private destination slot0 changes to integer zero: all40 payload words and8 tag words. SourceA/B payload and tags retain all physical8 lanes and exact words, including inactive/unknown metadata.",
+    "Root and arithmetic_review source plus existing emitted-write review established that all5 unchanged tagged C++ functions compute active destination payload/tags solely from A/B. OriginalD appears only in integer inactive-lane merges; by-value Triple computation does not feed that merge back into write_tag.",
+    "Canonical helper arguments remain d0/a1/b2. Private inactiveD is discarded by unchanged original-mask copyback; active outputs/tags are fully written. Source alias snapshots remain before any original-bank write. Original Add/Subtract/Multiply identity shortcuts still precede packing.",
+    "Captured mask, existing unmasked scope, C++call placement/gating, full A/B snapshots and masked copyback are unchanged. No mask0 skip, unmasked C++call, FP operation/control write, arithmetic/radius/formula change or original destination publication is added.",
+    "Generic fallback, original scalar/v3 paths, exact eight-lane ABI, original AQ symbol mappings and strict target flags remain. Same explicit576B private arrays; no KernelContext/host/shader buffer/count/cache/governor change."
+  ],
+  "limitations": "Finite AS private-bank opcode-inline and zeroD compatibility only. Original Transport38/all187960words and focused Endpoint/all3829rowwords+inactivecapacity/canaries+malformed-header/refusal checks pass once. All16 opcode functions disappear; no new instruction forms admitted, no FMA/x87/FP-control writes. Static instructions/stack-address operands grow substantially: this is code-size cost, not dynamic traffic/spills/SSA/stack reuse or speed evidence. DopriPhase compiled/linked but not executed. No provider/C8/all8/ABBA/frame/scientific/Mandatory/eight-domain/release qualification. Original scenes/rows/fields/RHS/trials/publicABI/layout/host or shader allocations/cache/worklimits/governors unchanged. Build wall includes compiler plus emitted-code check; no isolated compiler timing is claimed. Checker repeatedly slices complete executable sections per instruction; correct but avoidably costly. Its future implementation should cache section bytes once, without repeating this successful compile or gate.",
+  "next_required_gate": "Bind this sealed component and unchanged zero-residual math into one distinct provider. Fresh C8 first, sole originalABBA22+independentDecimal, thenC1..7, then one originalframe only if all gates pass. No unchangedAR retry."
+}
