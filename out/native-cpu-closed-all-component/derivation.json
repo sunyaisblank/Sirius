@@ -1,0 +1,57 @@
+{
+  "prepared_only": true,
+  "compiler_run": false,
+  "source_inputs": {
+    "out/native-cpu-closed-dp-component/rows_adapter.cpp": {
+      "bytes": 9093,
+      "sha256": "dcb841d105eea00200bdadad9d818efffb31eff1980ea3e8c0e8f871388fa2b5"
+    },
+    "out/native-cpu-closed-dp-component/derivation.json": {
+      "bytes": 2248,
+      "sha256": "3f78e5488d6ea413ec821ab3be8c2eb5ee7ae7776bbb129557f75ad27627cbbd"
+    }
+  },
+  "derived": {
+    "path": "out/native-cpu-closed-all-component/rows_adapter.cpp",
+    "bytes": 9097,
+    "sha256": "e5ee89449d7c76459544cbbd17808e618c01f51f1948695d9ba3bfab1ed03b6f"
+  },
+  "compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-fPIC",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-isystem",
+    "/opt/slang/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-static-program/typed-batch",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-active-prefix",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+    "-march=x86-64",
+    "-mtune=znver4",
+    "-mfpmath=sse",
+    "-fexcess-precision=standard",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-fno-unsafe-math-optimizations",
+    "-frounding-math",
+    "-ffp-contract=off",
+    "-c",
+    "/home/astra/.project/Sirius/out/native-cpu-closed-all-component/rows_adapter.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-closed-all-component/adapter-only.o"
+  ],
+  "source_inverse_exact": true,
+  "public_wrapper_prefix_byte_preserved": true,
+  "private_change": "Only the two private admitted T/E v4 target identifiers change scope->closed (declaration+call for each). DP and all public/scalar/AVX2/old-v4 code remain exact.",
+  "scope": "Source only; complete positive current-job preflight/full saved-restored FPscope required. No numerical transfer. Current original genuine C8 is required."
+}
