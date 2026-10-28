@@ -3,17 +3,17 @@
 static inline varying bool SiriusSubgroup8All_0(varying bool value) {
     uniform uint32_t incoming = (uniform uint32_t)lanemask();
     varying bool active = (incoming & (1U << programIndex)) != 0U;
-    varying bool selected = select(active, value, true);
+    varying bool selected = active ? value : true;
     uniform bool low = all(selected | (programIndex >= 8));
     uniform bool high = all(selected | (programIndex < 8));
-    return select(programIndex < 8, low, high);
+    return (programIndex < 8) ? low : high;
 }
 
 static inline varying bool SiriusSubgroup8Any_0(varying bool value) {
     uniform uint32_t incoming = (uniform uint32_t)lanemask();
     varying bool active = (incoming & (1U << programIndex)) != 0U;
-    varying bool selected = select(active, value, false);
+    varying bool selected = active ? value : false;
     uniform bool low = any(selected & (programIndex < 8));
     uniform bool high = any(selected & (programIndex >= 8));
-    return select(programIndex < 8, low, high);
+    return (programIndex < 8) ? low : high;
 }
