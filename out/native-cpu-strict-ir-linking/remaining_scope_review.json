@@ -1,0 +1,89 @@
+{
+  "status": "source_only_fixed_Transport_and_Endpoint_conversion",
+  "llvm": "23.1.2",
+  "inventory_method": "Independent streaming read of both exact emitted IR files: SHA256/bytes, definition/export counts, opcode and predicate counts, every external target count and total calls. No compiler/pipeline/workload executed for this review.",
+  "binding": "Producer verifies each raw SHA before any rewrite. Each pass independently rereads the pinned original, checks SHA/bytes, parses it in a separate LLVM context and compares complete canonical module-print SHA fingerprints after normalizing only ModuleID. Source/triple/layout, opcodes/predicates, all external declarations/calls, total calls, definitions and private-name collisions are checked before mutation. There is no force/trust switch or generic module mode.",
+  "stages": {
+    "transport": {
+      "pass": "sirius-constrain-transport",
+      "input": {"path": "bin/linux-gcc/native-cpu-strict-ir-linking/transport.ll", "bytes": 82985450, "sha256": "09fd91a972e0b716ff2312f95c8940c8d9b606ff114e168d9d99b15136901584"},
+      "source": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/transport.ispc",
+      "new_export": "sirius_scope_transport_packet",
+      "definitions": 169,
+      "exports_including_masked_clone": 2,
+      "ordinary_fp": {"fadd": 82, "fsub": 13, "fcmp": 388, "fneg": 7, "sitofp": 4},
+      "predicates": {"oeq": 320, "une": 18, "uno": 11, "oge": 23, "ole": 2, "ogt": 14},
+      "quiet_comparisons": 349,
+      "signaling_comparisons": 39,
+      "total_calls": 108093,
+      "internal_calls": 218,
+      "external_math_calls": {"tagged_add8": 947, "tagged_multiply8": 1482, "tagged_subtract8": 10, "tagged_divide8": 240, "tagged_sqrt8": 3, "dense_divide8": 3, "dense_sqrt8": 1, "dense_add8": 8, "dense_multiply8": 7},
+      "math_calls_total": 2701,
+      "opaque_fmaxf_calls": 11,
+      "intrinsic_calls": {"llvm.memset.p0.i32": 21, "llvm.cttz.i64": 12, "llvm.ctlz.v8i32": 3, "llvm.masked.load.v8i32.p0": 29579, "llvm.masked.store.v8i32.p0": 36851, "llvm.x86.avx512.mask.gather3div8.si": 84, "llvm.x86.avx512.mask.scatterdiv8.si": 48, "llvm.lifetime.start.p0": 5428, "llvm.lifetime.end.p0": 5428, "llvm.experimental.noalias.scope.decl": 26513, "llvm.fabs.v8f32": 304, "llvm.usub.sat.v8i32": 864, "llvm.memset.p0.i64": 28},
+      "intrinsic_calls_total": 105163,
+      "context_memset_bytes": 92192,
+      "active_output_clear_words_per_row": 4699,
+      "cast_proof": {
+        "sites": [{"table": "cd_0", "line": 709276}, {"table": "cn_0", "line": 709319}, {"table": "ed_0", "line": 709407}, {"table": "en_0", "line": 709450}],
+        "original_shape": "Each source vector is insertelement(poison, initialized scalar i32 coefficient load, lane0). Lanes1..7 are poison. Each vector sitofp has exactly one use: an existing all-lane0 FP shuffle.",
+        "index_proof": "Uniform induction variable starts0, increments1 and exits at25. cn/cd use iv+1 only when iv<6, so indices1..6; en/ed use iv-18 only when iv>=20, so indices2..6. Every table is initialized internal constant[7xi32].",
+        "values": {"cn_0": [0, 1, 3, 4, 8, 1, 1], "cd_0": [1, 5, 10, 5, 9, 1, 1], "en_0": [71, 0, -71, 71, -17253, 22, -1], "ed_0": [57600, 1, 16695, 1920, 339200, 525, 40]},
+        "exactness": "Every magnitude <=339200<2^24; signed i32-to-f32 conversion is exact, including signs, under all rounding modes and introduces no conversion exception.",
+        "rewrite": "At the original cast location, constrained sitofp.f32.i32 consumes the existing scalar load with round.dynamic/fpexcept.strict. Insert the FP result at lane0 of an otherwise-poison v8f32, replace only the old cast value and retain the original shuffle. No integer freeze, pointer/index/mask rewrite, scalar-load change or other-lane evaluation.",
+        "closed_checks": "Require exact cast/source/destination types, poison insertion at lane0, initialized immutable seven-element integer table, each coefficient within exact float32 integer range, one cast per table, sole original zero-index shuffle use, and the full original module fingerprint."
+      }
+    },
+    "endpoint": {
+      "pass": "sirius-constrain-endpoint",
+      "input": {"path": "bin/linux-gcc/native-cpu-strict-ir-linking/endpoint.ll", "bytes": 117127171, "sha256": "f1af24efea9ee6632063486343addb746610f53cee9d66ce4761dad2520bd014"},
+      "source": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/endpoint.ispc",
+      "new_export": "sirius_scope_endpoint_packet",
+      "definitions": 204,
+      "exports_including_masked_clone": 2,
+      "ordinary_fp": {"fadd": 99, "fsub": 13, "fmul": 1, "fcmp": 484, "fneg": 16},
+      "predicates": {"oeq": 431, "une": 10, "uno": 12, "oge": 9, "ole": 3, "ogt": 16, "olt": 3},
+      "quiet_comparisons": 453,
+      "signaling_comparisons": 31,
+      "total_calls": 157944,
+      "internal_calls": 216,
+      "external_math_calls": {"tagged_add8": 1607, "tagged_multiply8": 1963, "tagged_subtract8": 197, "tagged_divide8": 154, "tagged_sqrt8": 3, "dense_divide8": 7, "dense_sqrt8": 2, "dense_add8": 13, "dense_multiply8": 13},
+      "math_calls_total": 3959,
+      "opaque_fmaxf_calls": 12,
+      "intrinsic_calls": {"llvm.memset.p0.i32": 37, "llvm.cttz.i64": 13, "llvm.ctlz.v8i32": 5, "llvm.masked.load.v8i32.p0": 45730, "llvm.masked.store.v8i32.p0": 52028, "llvm.masked.store.v8f32.p0": 8, "llvm.x86.avx512.mask.gather3div8.si": 230, "llvm.x86.avx512.mask.scatterdiv8.si": 48, "llvm.lifetime.start.p0": 7894, "llvm.lifetime.end.p0": 7894, "llvm.experimental.noalias.scope.decl": 39154, "llvm.fabs.v8f32": 311, "llvm.usub.sat.v8i32": 404, "llvm.memset.p0.i64": 1},
+      "intrinsic_calls_total": 153757,
+      "context_memset_bytes": 117792,
+      "active_output_clear_words_per_row": 3829,
+      "added_arithmetic_proof": "The sole fmul, IR line3931, is denominatorScale v8f32 multiplied by splat(float bits0x29800000), exactly2^-44. Require this constant at every lane; convert to constrained FMul with unchanged v8f32 precision/order, round.dynamic/fpexcept.strict and FP-only operand freeze. Retain subsequent bitcast/integer word+1 and all original zero/bounds/refusal branches.",
+      "added_comparison_proof": "Three olt sites at4029/4042/4243 implement source RPScalarLess(a,b). They require constrained fcmps with predicate olt and fpexcept.strict, matching LLVM23's signaling x86 ordering predicate. No comparison predicate or mask changes.",
+      "header_domain": "Original shared Endpoint admission and specialized header selection/refusal remain exact, including the permitted program word11241 and all other canonical program words. New hidden routing must inherit the same genuine preflight authority."
+    }
+  },
+  "shared_conversion": {
+    "types": "All original add/sub/mul/comparison operands are eight-lane float32. Preserve result types, primitive order and predicates. Scalarization applies only to the four proven coefficient casts and reinserts the same vector result shape.",
+    "strict": "round.dynamic where applicable, fpexcept.strict, strictfp on copied definitions and every call; no FMA, fast flags or forced inlining.",
+    "memory_effects": "Union inaccessible-memory read/write into copied definitions and nonintrinsic calls; preserve accessible-memory/alias facts. Unchanged exception-free representation/integer/memory intrinsics retain their exact effects.",
+    "representation": "Original fneg/fabs and every integer operation, pointer, index, CFG edge, memory mask and load/store remain unchanged. FP-only freezes are inserted for copied FP arithmetic/comparison operands and original opaque-fmaxf scalar arguments.",
+    "names": "Rename both ordinary exports and masked clones to the stated sirius_scope_* names; rename only the nine actual sirius_native_v4_* math references to sirius_scope_v4_*. All become hidden/dso_local. Existing internal linkage stays internal. Opaque sirius_simd_fmaxf remains unchanged.",
+    "external_closure": "Only the exact counted math references, existing opaque fmaxf and listed LLVM intrinsics are admitted. tagged_sqrt8 already exists in the private math copy. Added memset64 and Endpoint float32 masked-store are memory operations, not numerical callbacks or FP observers."
+  },
+  "source_semantic_scope_proof": [
+    "This is a reviewed source/LLVM refinement argument for the two exact pinned modules, NOT a machine-checked whole-program lane analysis or a waiver for arbitrary IR.",
+    "Both ordinary and masked export forms zero their complete context before ComputeOwnedRow. Original admission proves every scheduled owned active row reaches the full staged-output clear before subsequent arithmetic/metadata refusal.",
+    "Ordinary export active mask is programIndex<groups; masked clone intersects that predicate with the existing incoming<8xi1> __mask. Original varying masks, ordered writes, alias snapshots, full physical A/B initialization and masked copyback remain exact.",
+    "Initialized uint32 input bits, including NaNs and handled-invalid encodings, are defined values. Elementwise FP freeze preserves every defined bit. It refines excluded undef/poison choices and does not fabricate an active input; no blanket claim that poison arithmetic immediately causes UB is used.",
+    "New hidden entries may execute only inside genuine admitted synchronous Vulkan jobs, retaining original pointer/extents/disjointness/per-row guards, tails and OS-aware ISA selection.",
+    "cs_exec_fn saves/restores the full same-thread MXCSR. util_fpstate_set_ieee32 sets(saved|0x1f80)&~0xe040: every trap masked, RNE, DAZ/FTZ off. No FP-status/control observer exists in the closed numerical code; unchanged fmaxf neither reads MXCSR status nor writes errno. Excluded-lane exception differences are contained until full restoration.",
+    "Required postconditions remain identical complete visible output/input/sentinel behavior, routing/refusal, errno and restored caller MXCSR. Old public raw/scalar/math objects and direct public math sticky-flag contracts remain exact. No cache/layout/allocation/count/governor or Vulkan-route changes are authorized by these passes."
+  ],
+  "source_authorities": {
+    "original_scope_contract": "out/native-cpu-strict-ir-linking/scope_contract.json",
+    "packet_source_prefix": "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/",
+    "initialized_bank_snapshot": "out/native-cpu-inline-private-bank/packinghelper.isph",
+    "scope_controls": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/util/u_math.h:util_fpstate_set_ieee32",
+    "same_thread_full_restore": "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c:cs_exec_fn",
+    "LLVM_API": "bin/linux-gcc/native-cpu-strict-ir-linking/toolchain/include/llvm/IR/IRBuilder.h and ConstrainedOps.def",
+    "x86_scalar_conversion": "https://github.com/llvm/llvm-project/blob/llvmorg-23.1.2/llvm/lib/Target/X86/X86ISelLowering.cpp#L18953"
+  },
+  "qualification_limits": "Source only. No remaining-stage plugin compile/load, conversion, LLVM verifier execution, link, numerical/flag fixture, PC observation, timing or provider adoption performed. Producer, SDK/plugin linkage and all subsequent execution remain root-owned."
+}
