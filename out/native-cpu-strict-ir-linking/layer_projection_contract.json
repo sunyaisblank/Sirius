@@ -1,0 +1,176 @@
+{
+  "status": "source_only_uncompiled_DP_fallback_hypothesis",
+  "pass_name": "sirius-project-dp",
+  "llvm": "23.1.2",
+  "plugin_API": 2,
+  "source": {
+    "bytes": 17865,
+    "sha256": "0a5a778e3c71be2e1b0f6f36f31f68186d97acce837dce1f3c3d586511fd2ace"
+  },
+  "input": {
+    "path": "bin/linux-gcc/native-cpu-local-effects/dp.cleanup.bc",
+    "bytes": 8644532,
+    "sha256": "a2f52cebde91547a09f0693776f7e017ec1f447893895b1e360e4cd460b5bf6e"
+  },
+  "input_binding": "Independently hash the complete original file and parse it in a separate LLVM23 context. Require complete canonical module-print fingerprints to match, normalizing ModuleID only. No trust/force option, accepting arbitrary modules, or automatic expansion to new canonical/effect/regcall modules.",
+  "source_inputs": {
+    "out/native-cpu-strict-ir-linking/shared_value_abi.cpp": {
+      "bytes": 28405,
+      "sha256": "4cbefca757c267222e0bcde0e6818776ec058ab70fa6913d470785716abab1e6"
+    },
+    "out/native-cpu-strict-ir-linking/shared_value_contract.json": {
+      "bytes": 14669,
+      "sha256": "cff4005bf2d9f4e8a90d8fcbe109a4eaac093ec35c6ef14cb43bb30f86147d45"
+    },
+    "out/native-cpu-strict-ir-linking/scope_contract.json": {
+      "bytes": 9197,
+      "sha256": "adef7709ec5c94c55442840a30023a5db00972ab4d078ea625950bf8b2391cf9"
+    },
+    "out/native-cpu-strict-ir-linking/remaining_scope_review.json": {
+      "bytes": 11232,
+      "sha256": "dbced6f6b516ef0e3e1fcbd672dab66d9c76581a2e624d73f07ba51d7f205055"
+    },
+    "bin/linux-gcc/native-cpu-strict-ir-linking/shared-math.O2.bc": {
+      "bytes": 297664,
+      "sha256": "c4b9d7a91cdb1c49165bfb43991b243523d0e27687fc099db3f53283f1262d1d"
+    },
+    "bin/linux-gcc/native-cpu-inline-private-bank/ispc-source/dopri_phase.ispc": {
+      "bytes": 403852,
+      "sha256": "f9c1197a5c06814705d6bf7f46cf0e8ce217d7f42534627fadbfa208f51dac8b"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-exact-product-zero-residual/retained8.cpp": {
+      "bytes": 39893,
+      "sha256": "9286f36aa1b2e563bbd501894eb642e0628784409a23a7a2e153ead328759e68"
+    },
+    "bin/linux-gcc/native-cpu-local-effects/dp.cleanup.bc": {
+      "bytes": 8644532,
+      "sha256": "a2f52cebde91547a09f0693776f7e017ec1f447893895b1e360e4cd460b5bf6e"
+    },
+    "bin/linux-gcc/native-cpu-local-effects/dp.cleanup.ll": {
+      "bytes": 44976602,
+      "sha256": "8ef36e4c1cb538a07d39e4942a42479713ee510c3d7bddb690d551d9acacb5d6"
+    },
+    "out/native-cpu-local-effects/plan.json": {
+      "bytes": 6418,
+      "sha256": "bef31e628265ad488885b449ba8f0564fab3fd6a065ab830f742566467ef43ce"
+    },
+    "out/native-cpu-local-effects/dp-cleanup-result.json": {
+      "bytes": 1645,
+      "sha256": "8f8e11d4b8965b1cc051328e13f731bd8006ab0c8fc7183748778b0c5e72c6e6"
+    },
+    "out/native-cpu-local-effects/dp-cleanup/owner.json": {
+      "bytes": 2033,
+      "sha256": "151af1b4c817846319e40abe8e9a1187282299984b774d4b5bb9bf0e5740988b"
+    },
+    "out/native-cpu-local-effects/structural-gate.json": {
+      "bytes": 1149,
+      "sha256": "7e44004ef665b6b955cfc0f3bffbb32eb7989bc9e64cef08dd37b11d6a4efdbb"
+    }
+  },
+  "compile_recipe": "Same pinned SDK clang++ plus llvm-config --cxxflags and existing sha256-only.a -Wl,--exclude-libs,ALL used by the reviewed shared/register plugins. Root owns exact argv, plugin compilation and exported API checks. No new compiler/toolchain/link infrastructure.",
+  "new_raw_exports": [
+    "sirius_projected_dp_packet",
+    "sirius_projected_dp_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu"
+  ],
+  "layer_domain": {
+    "count": 41,
+    "numbers": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44
+    ],
+    "source_program_layers": 45,
+    "first4_inlined_in_parent": true,
+    "context_bytes": 120832,
+    "slot_bytes": 32,
+    "maximum_touched_slots": 1153,
+    "maximum_compact_bytes": 36896,
+    "types": "Each bank/tag/status slot is a complete eight-lane32-bit vector, with equal-sized float representation loads permitted. Offset0 is the readonly GlobalParams pointer only; offsets32..120800 are distinct aligned slots."
+  },
+  "interface": {
+    "core_prefix": "sirius_projected_layer_",
+    "linkage": "internal",
+    "calling_convention": "fastcc",
+    "inline_policy": "One exact CFG clone per surviving layer, explicitly noinline. Original-name functions become small alwaysinline adapters; no blanket layer/opcode inlining.",
+    "arguments": "One compact private in/out pointer, optional readonly global-view pointer, and unchanged non-context row/mask values. At most four formals. Void return; no hundreds-vector or large aggregate native ABI.",
+    "adapter": "Snapshot every complete read OR written slot, including all8 physical words of conditionally-written slots. One compact array contains only touched slots, never a full120832-byte context. Invoke the one projected core, then copy back every complete written slot/status and only those slots. Original masked/unmasked stores determine final active/inactive bit patterns; copying identical inactive private bits is not publication to an external output.",
+    "core": "Entry loads the compact slots once into separate fully initialized vector allocas. Every original context bank/tag/status access is rewritten to the matching isolated local alloca. The compact buffer is not the working arithmetic bank and is never passed to math. All original CFG/FP/arithmetic/core calls remain in this one clone. Every normal return stores written locals back to compact slots.",
+    "lifetime": "Adapter compact alloca has explicit lifetime start/end around the call and copyback. Each core local has64-byte alignment and dominates all cloned paths; original memory access alignments are retained and >64 rejected. Actual stack allocation/coloring/reuse is an emitted-code question.",
+    "readonly_view": "Every original offset0 pointer load is bound to the one real readonly global-view value. The walker follows loads/GEPs and the exact ReadOriginal helper to existing read-only AVX512 gathers. Any context/view store, pointer capture, integerization, unknown callee, indirect call, dynamic context offset or partial slot access rejects. Actual external input views cannot alias compiler-private context/compact/local banks.",
+    "no_context_in_core": "The old context formal maps temporarily to poison during CloneFunctionInto only. All reviewed memory operands are replaced, the offset0 load is replaced with the real view argument, every dead context-derived GEP must disappear, and unknown uses reject. No pointer/index/mask freezing and no context-allocation surrogate is introduced."
+  },
+  "local_masked_normalization": {
+    "domain": "Only the proven complete initialized vector allocas created for projected local bank/tag/status slots. Never global inputs/outputs, actual row-data gathers, caller context memory, compact boundary memory or unrelated existing allocas.",
+    "masked_load": "Ordinary local load then select(original definedmask,loaded,original passthrough). Keep the exact passthrough including poison in originally excluded values.",
+    "masked_store": "Ordinary old local load then select(original definedmask,new,old), followed by an ordinary local store. Initialized old physical lanes preserve every inactive word.",
+    "proof": "Exact input module plus original full-context memset/physical-bank initialization and defined ISPC mask source proof. New local initialization is explicit on the sole core entry and dominates the cloned CFG. Mask values are neither frozen nor replaced. This is a source-bound proof, not a generic lane/poison engine."
+  },
+  "invariants": [
+    "All1581 sirius_local_value_* calls retain X86_RegCall92, inaccessibleFP ModRef and complete strict constrained FP inventory; FP fneg representation operations counted too. No FMA/fastmath/rounding/exception/effect refinement is performed by projection.",
+    "Clone each41 old arithmetic CFGs once and delete only its old body after creating the representation adapter. No opcode tuples, layer/control order, mask, scientific parameter, count, field, root validation/publication, refusal or whole-state rollback behavior is changed.",
+    "The existing full-context caller, generic fallback, first4 already-inlined layers, output-staging buffers and ABI/layout/allocation/governor contracts remain. Original public/native objects are not edited; this is a separately named DP module only.",
+    "Current input is already strict/shared: no120/24word private arithmetic banks remain and math declarations accept only value vectors/mask. New per-slot local addresses may have only loads/stores, and are never available to math/global-view callbacks. Readonly global-view data must remain immutable and disjoint from private storage.",
+    "Same genuine positive job and original full FP save/RNE/masked-traps/DAZ-FTZ-off/restore scope remains required. No FP-status observer, new callback, unsupported alias path, FP-control mutation or direct private-fixture qualification is introduced."
+  ],
+  "required_postcompile_gate": [
+    "One root-owned plugin/transform/LLVM verify under unchanged bounds. Any pointer closure/layout/mask/body/FP/call inventory check failure stops; no permissive ISA, pointer, initialization or capture exception.",
+    "Focused always-inline/SROA/local cleanup only, without another full O2 repetition: all41 old adapters and all new project.local allocas must disappear, while41 noinline projected cores remain with no original whole-context pointer or surrogate. Core compact-buffer accesses must be confined to entry snapshots/return copybacks, not interspersed working-bank traffic.",
+    "Inspect actual projected field/read/write inventories, ordinary/vector memory traffic, external shared-core signatures, stack/code growth and native noFMA/ISA/status-control gates. The compact IO boundary still costs copies; mere new function names or different bank addresses do not establish benefit.",
+    "Compare total and actual-path traffic to AU. If compact copying/stack/code growth outweighs eliminated intralayer scratch traffic, stop. No speed/SSA/frame inference from source or slot counts.",
+    "Only this exact current local-effects DP cleanup input is accepted. Canonical-root or other stages/derived inputs require separately reviewed byte hashes/source inventories; never weaken or bypass the module pin.",
+    "No numerical/provider/scientific acceptance transfers. Any adopted new candidate still needs current genuine-job C8/all32, sole original ABBA22+Decimal, all8 controls and original unchanged sole frame, only after materially successful static/compiler evidence."
+  ],
+  "priority": "Source-only fallback after the actual effect-refinement structural stop. Refined DP kept exactly the prior load/store/alloca/masked-store counts; no T/E/runtime trial was justified. Projection is a materially different local-bank boundary and still requires its own bounded compiler/traffic gate.",
+  "qualification": {
+    "plugin_compiled": false,
+    "pass_executed": false,
+    "IR_generated": false,
+    "native_emitted": false,
+    "numerical_run": false,
+    "provider_adopted": false,
+    "performance_claim": false
+  },
+  "current_private_math_ABI": "Input uses sirius_local_value_* declarations/calls with X86_RegCall92, fixed value signatures and inaccessibleFP ModRef only. CloneFunctionInto retains all1581 actual call types/conventions/effects/strict attributes; the new projected layer interface alone uses internal fastcc. No math ABI or effect rewrite is performed."
+}
