@@ -1,0 +1,63 @@
+{
+  "kind": "Independent read-only LLVM IR, native ELF/relocation and adapter byte review",
+  "reviewer": "/root/arithmetic_review",
+  "objects": {
+    "shared-math-native": {
+      "path": "bin/linux-gcc/native-cpu-strict-ir-linking/shared-math.o",
+      "bytes": 256544,
+      "sha256": "3ec298891fbf7e5baf1c31302bb57997820e09e6ceda07d4f2faee66cd8b2d3f"
+    },
+    "shared-dp-native": {
+      "path": "bin/linux-gcc/native-cpu-strict-ir-linking/shared-dp.o",
+      "bytes": 2192272,
+      "sha256": "61e420b2f7b9638b0343041374e27831553e6fb686b42d7fa746d3725e9b000d"
+    },
+    "shared-transport-native": {
+      "path": "bin/linux-gcc/native-cpu-strict-ir-linking/shared-transport.o",
+      "bytes": 3314768,
+      "sha256": "8f09f8e0c78fc2d15d1bf66ac50189fed222026e001d3ae188fcdf8cda128f69"
+    },
+    "shared-endpoint-cleanup-native": {
+      "path": "bin/linux-gcc/native-cpu-strict-ir-linking/shared-endpoint.cleanup.o",
+      "bytes": 4459400,
+      "sha256": "8ed876f64ab809cc69d57fee6133798411e73cc6d1357278d6975792c441c126"
+    }
+  },
+  "total_shared_core_calls": 8241,
+  "per_raw": {
+    "dp": 1581,
+    "transport": 2701,
+    "endpoint": 3959
+  },
+  "fixed_signatures": {
+    "dense": "10v8i32+i32 ->5v8i32 aggregate",
+    "tagged": "12v8i32+i32 ->6v8i32 aggregate",
+    "calling_convention": "fastcc",
+    "visibility": "hidden external"
+  },
+  "no_false_formal_ABI_constraints": true,
+  "formal_constraints_absent": [
+    "noundef",
+    "range",
+    "sret",
+    "byval",
+    "nonnull",
+    "align",
+    "signext",
+    "zeroext",
+    "inreg"
+  ],
+  "effects": "OtherRead plus inaccessibleFP readwrite on raw declarations/calls; no ordinary/errno writes. Math definitions may soundly refine reads away.",
+  "relocations": "All8241 native shared-core calls are PLT32/-4; DP8/T9/E9 undefined names bind uniquely to9 GLOBAL HIDDEN math definitions",
+  "public_wrapper_comparison": {
+    "old_object": "bin/linux-gcc/native-cpu-dispatch-admission-token/rows_adapter.o",
+    "new_object": "bin/linux-gcc/native-cpu-shared-value-component/adapter-only.o",
+    "functions": 3,
+    "bytes_each": 295,
+    "nonrelocation_bytes_identical": true,
+    "relocations_each": 6,
+    "offsets_types_addends_target_names_identical": true
+  },
+  "machine_ABI": "V4/SKX vector register,32B stack argument slots, compiler-generated aggregate return buffer and i32 mask placements agree. Remaining machine marshals/spills exist.",
+  "limitations": "Static interface/source/build evidence only; no final-provider/actual-PC/FP-scope/numerical/performance/scientific/release qualification."
+}
