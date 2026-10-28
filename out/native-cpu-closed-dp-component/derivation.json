@@ -1,0 +1,57 @@
+{
+  "prepared_only": true,
+  "compiler_run": false,
+  "source_inputs": {
+    "out/native-cpu-shared-value-component/rows_adapter.cpp": {
+      "bytes": 9091,
+      "sha256": "8e9b4d4849a4a7f46ffb0daa2b5627071a5e5ff30de3ffac260e1353596e1e83"
+    },
+    "out/native-cpu-shared-value-component/derivation.json": {
+      "bytes": 2476,
+      "sha256": "76dc3b8c13f62f9d7b967d55cc7a495732004af149c73e95de33b5c1970fa5ea"
+    }
+  },
+  "derived": {
+    "path": "out/native-cpu-closed-dp-component/rows_adapter.cpp",
+    "bytes": 9093,
+    "sha256": "dcb841d105eea00200bdadad9d818efffb31eff1980ea3e8c0e8f871388fa2b5"
+  },
+  "compile_argv": [
+    "/usr/bin/x86_64-linux-gnu-g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-fPIC",
+    "-DNDEBUG",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-isystem",
+    "/opt/slang/include",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-static-program/typed-batch",
+    "-isystem",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-slang-bridge/typed-batch",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-active-prefix",
+    "-I",
+    "/home/astra/.project/Sirius/out/native-cpu-slang-bridge",
+    "-march=x86-64",
+    "-mtune=znver4",
+    "-mfpmath=sse",
+    "-fexcess-precision=standard",
+    "-fno-fast-math",
+    "-fno-associative-math",
+    "-fno-unsafe-math-optimizations",
+    "-frounding-math",
+    "-ffp-contract=off",
+    "-c",
+    "/home/astra/.project/Sirius/out/native-cpu-closed-dp-component/rows_adapter.cpp",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-closed-dp-component/adapter-only.o"
+  ],
+  "source_inverse_exact": true,
+  "public_wrapper_prefix_byte_preserved": true,
+  "private_change": "Only the admitted DP v4 declaration/call changes from sirius_scope_dp_packet to sirius_closed_dp_packet. AU Transport/Endpoint and all public/scalar/AVX2/old-v4 branches and guards remain exact.",
+  "scope": "Source only. The closed DP body requires the genuine positive current job, original pure preflight and complete saved/masked/RNE/DAZ-FTZ-off/restored MXCSR scope. No numerical acceptance transfer; original C8/all32 is the next real gate. No ABBA/frame authorization until remaining-stage closure is justified."
+}
