@@ -1,0 +1,29 @@
+{
+  "kind": "Independent static disassembly/IR review; no executable workload",
+  "reviewer": "/root/v4_cohort",
+  "object": {
+    "path": "bin/linux-gcc/native-cpu-strict-ir-linking/dp-value.features.o",
+    "bytes": 2399344,
+    "sha256": "5a4101d34ed415d480eb9a89b90dbc251abb96e71b3de86a547338f15e3e6076"
+  },
+  "representative": {
+    "call": "0x326cd",
+    "core": "0x199bf0",
+    "register_inputs": "First8 payload vectors in YMM0\u20137",
+    "stack_inputs": "Four32-byte vectors at RSP+0/0x20/0x40/0x60",
+    "result": "RDI points to192-byte return buffer; ESI carries original mask; caller reloads six vectors after return",
+    "return_stores": "0x19b36b..0x19b38a",
+    "core_stack_frame": "0x720 bytes"
+  },
+  "whole_object": {
+    "no_MXCSR_or_FP_status_control_instructions": true,
+    "no_indirect_calls": true,
+    "undefined_symbols": [
+      "memset",
+      "sirius_simd_fmaxf"
+    ],
+    "no_FMA": true,
+    "decoded_instructions": 267248
+  },
+  "limitations": "Original480/96-byte banks are absent in IR; actual ABI still uses128-byte stacked inputs,192-byte result buffer and internal stack traffic. No register-only, numerical, runtime scope, timing or release inference."
+}
