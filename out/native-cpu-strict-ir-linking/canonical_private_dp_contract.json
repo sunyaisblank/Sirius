@@ -1,0 +1,215 @@
+{
+  "status": "source_only_uncompiled_DP_closed_private_candidate",
+  "generator": {
+    "bytes": 9467,
+    "sha256": "a9fbfbd69cbb4ebc1aad739fda95c39352a7d3281f1e03ca5e3ef4c96dd12508"
+  },
+  "input": {
+    "path": "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.publication.ispc",
+    "bytes": 756241,
+    "sha256": "c4c1936fa1bb19e82a0f4ff388335ffb985b7ddfa8e576754bc5ad2574c68b75"
+  },
+  "derived_source": {
+    "bytes": 710648,
+    "sha256": "7e3dc7d0c602d7720248b5c8536e0d7b8ac295dc611afc77227b606f85cadef6"
+  },
+  "source_proof": {
+    "source_inverse_exact": true,
+    "unchanged_outside_export_binding_and_EvaluateProgram": true,
+    "old_generic_body": {
+      "bytes": 357384,
+      "sha256": "d762fafe22ababb3bf57b12db682942a9c2b4c5ac49645468f1f17e8bd8da184"
+    },
+    "new_closed_body": {
+      "bytes": 311805,
+      "sha256": "3a67c4d03bbea2b076e13db3b5ad400212f5265cecb82bbe77d1affb5d04cc8c"
+    },
+    "canonical_payload_unwrapped_only": true,
+    "layer_calls": 45,
+    "ordered_layer_numbers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44
+    ],
+    "layer_status_checks": 45,
+    "validated_roots": 200,
+    "published_roots": 200,
+    "publication_words": 1000,
+    "all_validation_before_first_publication": true,
+    "complete_private_context_memset_preserved": true,
+    "original_owned_row_shape_IO_guards_and_callers_unchanged": true,
+    "original_tuple_records": 2088,
+    "canonical_tuple_records_match_exact_admitted_table": true,
+    "canonical_root_validation_and_publication_match_table": true,
+    "sole_supported_caller_required200_lane0": true,
+    "full8_physical_payloads_and_tags_unchanged": true,
+    "generic_program_fallback_removed_from_new_private_body_only": true
+  },
+  "source_inputs": {
+    "bin/linux-gcc/native-cpu-canonical-metadata/ispc-source/dopri_phase.publication.ispc": {
+      "bytes": 756241,
+      "sha256": "c4c1936fa1bb19e82a0f4ff388335ffb985b7ddfa8e576754bc5ad2574c68b75"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_metadata.py": {
+      "bytes": 12405,
+      "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_metadata_contract.json": {
+      "bytes": 14846,
+      "sha256": "05eb2b2bad9417c7bdddc44ed2aae4942ca5d1feed379829f4db6d0ff998b822"
+    },
+    "out/native-cpu-strict-ir-linking/canonical_publication.py": {
+      "bytes": 4806,
+      "sha256": "e12c7282f57349eadbc1d72d6579d05c902ccbb56018878e55a85c2c0e4f9490"
+    },
+    "out/native-cpu-strict-ir-linking/plan.json": {
+      "bytes": 6044,
+      "sha256": "8aac559eee1e5280f8a1a2530ce299882741cd8508484fc4c3c916e24f5cfeff"
+    },
+    "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+      "bytes": 44967,
+      "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+    },
+    "out/native-cpu-dispatch-admission-token/native_packet.hpp": {
+      "bytes": 4155,
+      "sha256": "ad11ddc83d3de03405e89885badc1e4655fdfcca77519a686abe18824b5fba7d"
+    },
+    "out/native-cpu-dispatch-admission-token/admitted_bridge.h": {
+      "bytes": 2144,
+      "sha256": "e57b146aa86c3d6c6ca3de8c53565f1b77106e860f132478cc76a763646e6afe"
+    },
+    "out/native-cpu-shared-value-component/rows_adapter.cpp": {
+      "bytes": 9091,
+      "sha256": "8e9b4d4849a4a7f46ffb0daa2b5627071a5e5ff30de3ffac260e1353596e1e83"
+    },
+    "out/native-cpu-inline-private-bank/packinghelper.isph": {
+      "bytes": 1903,
+      "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+    },
+    "out/native-cpu-local-identities/identity_store.isph": {
+      "bytes": 3052,
+      "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+    },
+    "out/native-cpu-value-fact-stores/value_facts.isph": {
+      "bytes": 707,
+      "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+    },
+    "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+      "bytes": 211552768,
+      "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h": {
+      "bytes": 9452,
+      "sha256": "8ba26cc5ab648e4cea37d5df3219dc002f4ff70f846c2418aba5bdac68fa3587"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/sirius_native_bridge.h": {
+      "bytes": 2523,
+      "sha256": "c6eaf07c31e0b6e74e962b916154568946f79688f75e797391e8f9b066e91702"
+    },
+    "out/lavapipe-acqrel-ordering/upstream/mesa-25.2.8/src/gallium/drivers/llvmpipe/lp_state_cs.c": {
+      "bytes": 109640,
+      "sha256": "34b1f093c09543c7f1c48873081d014849088b3839316dc6b3671d2b6add9cd1"
+    }
+  },
+  "invocation": [
+    "/usr/bin/python3",
+    "-B",
+    "/home/astra/.project/Sirius/out/native-cpu-strict-ir-linking/canonical_private_dp.py",
+    "derive"
+  ],
+  "new_export": "sirius_simd_closed_dp_packet",
+  "raw_ABI": "Same original6pointer/u32 ordinary export and compiler-generated eight-lane masked clone; separately named private implementation only.",
+  "writes_when_invoked": "Only bin/linux-gcc/native-cpu-canonical-closed-dp/ispc-source/dopri_phase.ispc, refusing any existing destination tree; derivation/pins/recipe to stdout. No compiler/action/provider/Mesa/Git invocation.",
+  "supported_call_proof": [
+    "The same genuine positive native_preflight_passed job preflight admits the sole complete DopriPhase table; generic non-Endpoint admission compares all10689 program words, including header[2088,629,200]. Input/header/descriptor bytes stay immutable through the synchronous job wait. DP has no exempt word.",
+    "ComputeOwnedRow remains byte-identical. It derives programBase=1+1810*rows from the same immutable capacity, loads count/registers from that admitted suffix, preserves all original pointer/extent/row/header/output-stride guards and complete4149-word clear, then has exactly one EvaluateProgram call with required200.",
+    "The separately named raw export remains byte-identical apart from its binding macro. It constructs the original params/staged output and full memset-initialized varying KernelContext, and calls ComputeOwnedRow only inside invocation==0. Thus its only supported lane argument is0.",
+    "Every active supported DP lane therefore satisfies base/count2088/registers629/required200/lane0. The early all-active guard is never false on supported admitted calls. Empty or unsupported calls fail closed before arithmetic rather than entering a generic internal interpreter.",
+    "The new raw export may only replace the guarded private admitted v4 callback in a separately reviewed future composition. Positive real-job/pointer/extent/header/shape/range/alias/ISA and original same-thread full FP-scope evidence remains mandatory. Direct raw/private fixture calls outside that closed job are not qualification."
+  ],
+  "transformation": [
+    "Pin complete publication input before parsing. Extract only its already checked canonical payload, remove eight spaces of lexical indentation, prepend the same integer canonical/lane/required guard with earlyfalse, and remove the old generic fallback from this new EvaluateProgram body.",
+    "The exact45 original layer calls/status checks remain in order. All200 original roots are validated before any publication. Keep each original five source-word snapshot before its five OUTPUT_WORD stores; retain all1000 output lvalues/order/bit patterns and representation behavior.",
+    "Changing exactly the export binding and restoring exactly the original EvaluateProgram reproduces every input source byte. All2088 literal tuple records and their layer definitions, original physical8-lane private packing/identity/math helper calls and all surrounding owned-row/scientific code remain unchanged.",
+    "Original generic helper definitions can remain in source but are no longer reachable through the new EvaluateProgram body; later global DCE may remove them. No generic fallback is removed from any public or predecessor object.",
+    "No source helper/layer forced-inlining policy is introduced. Later LLVM-only raw inlining must be limited to this newly pinned closed raw module, preserving actual math9 external/noinline definitions. New strict/shared passes must bind the new complete module hashes/fingerprints and inventory; old exact pins must never be bypassed."
+  ],
+  "invariants": "No science settings, all40fields/7RHS/3RK/4quartics, tolerances, FP arithmetic order/types/contracts, branch/refusal/root publication, full-state rollback, layout/host/shader allocation/counts/cache/governor or public/fallback implementation changes. Existing FP save/all-traps-masked/RNE/DAZ-FTZ-off/full restore and no observers remain prerequisites.",
+  "required_first_structural_gate": [
+    "One original strict ISPC emit using the exact prior tool/flags with only source/output paths changed. Inspect the actual sole closed EvaluateProgram reachable CFG: guard\u219245 ordered static calls\u2192200 validations\u21921000 stores; no generic opcode/root interpreter path, dynamic scratch index or escaping publication record on that graph.",
+    "Independently pin/parse emitted IR before strict conversion; derive and verify actual new vocabulary/call/FP/source initialization inventory. Dead generic fallback definitions may legitimately change whole-module totals; do not transfer old inventory or scientific acceptance.",
+    "Root may then inline RAW helpers/layers only at LLVM level and normalize masked operations only on the exact full memset-initialized owned context with original defined masks/passthroughs/alignment. Do not inline math9 definitions or replace the bank with another escaping compact IO buffer.",
+    "Require actual removal of full-context layer escapes and promotable scratch/tag/status banks with reduced native memory/address traffic under unchanged300s4GiB2GiB bounds. A new guard, fewer helper names, code growth or merely moved memory is insufficient. Do not start T/E or costly acceptance on a failed structural premise.",
+    "Only a materially passed compiler/native gate can justify current genuine-job C8/all32, sole original ABBA22+independentDecimal, all8 controls and original unchanged sole frame. No new numerical/performance/provider/scientific/release acceptance transfers from AU or negative projection/effect gates."
+  ],
+  "qualification": {
+    "source_inverse_checked_in_memory": true,
+    "derivation_producer_invoked": false,
+    "generated_source_written": false,
+    "compiler_run": false,
+    "IR_generated": false,
+    "tests_or_runtime_run": false,
+    "provider_adopted": false,
+    "performance_claim": false
+  },
+  "new_masked_export": "sirius_simd_closed_dp_packet___un_3C_unu_3E_unuun_3C_unu_3E_unuunuunu",
+  "desired_strict_export_prefix": "sirius_closed_dp_packet",
+  "pointer_math_prefix": "sirius_native_v4_ (all10 original source preprocessor bindings unchanged)",
+  "prospective_emit_command": [
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-dp/ispc-source/dopri_phase.ispc",
+    "-O2",
+    "--target=avx512skx-x8",
+    "--cpu=skx",
+    "--arch=x86-64",
+    "--addressing=32",
+    "--PIC",
+    "--opt=disable-fma",
+    "--math-lib=system",
+    "--emit-llvm-text",
+    "-o",
+    "/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-canonical-closed-dp/dopri_phase.ll"
+  ]
+}

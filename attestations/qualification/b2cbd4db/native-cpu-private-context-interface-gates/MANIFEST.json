@@ -1,0 +1,593 @@
+{
+  "status": "STRICT_SOURCE_AND_LOCAL_SSA_PASS_PERFORMANCE_INTERFACE_GATES_FAIL_STOP",
+  "custody_revision": "836c3832f52353f43a4834944cb19b817ccb0593",
+  "owners": {
+    "out/native-cpu-local-effects/math-lower/owner.json": {
+      "identity": {
+        "bytes": 1904,
+        "sha256": "0df8475066c57d65e897e76b496c470ec89c640a3ae033dcd273ad198f23e67a"
+      },
+      "source": {
+        "revision": "6f03f3a47a845bff0462e08417aaf649202d8529",
+        "status": ""
+      },
+      "seconds": 1.0369348129897844
+    },
+    "out/native-cpu-local-effects/plugin/owner.json": {
+      "identity": {
+        "bytes": 2024,
+        "sha256": "41b877ebea3203d59055e5166f37f3b1589e6a48b5ee8087f0ca5a3338f6f3e1"
+      },
+      "source": {
+        "revision": "6f03f3a47a845bff0462e08417aaf649202d8529",
+        "status": ""
+      },
+      "seconds": 3.599930744996527
+    },
+    "out/native-cpu-local-effects/math-native/owner.json": {
+      "identity": {
+        "bytes": 1907,
+        "sha256": "4fc11a78b29d28e6af25ea2921269b23bafd50190b360356a830b86922592815"
+      },
+      "source": {
+        "revision": "6f03f3a47a845bff0462e08417aaf649202d8529",
+        "status": ""
+      },
+      "seconds": 1.0361349970044103
+    },
+    "out/native-cpu-local-effects/dp-native/owner.json": {
+      "identity": {
+        "bytes": 2030,
+        "sha256": "249afa487539ec2cd5b841917d8188bd3a25b089480d2bb17bab31d8d48f8f53"
+      },
+      "source": {
+        "revision": "6f03f3a47a845bff0462e08417aaf649202d8529",
+        "status": ""
+      },
+      "seconds": 4.861277982010506
+    },
+    "out/native-cpu-local-effects/dp-lower/owner.json": {
+      "identity": {
+        "bytes": 2028,
+        "sha256": "e6413ccdeada71eef9b4a4dab4a1131892c762e2484c5fe3e0c5a179a89df0ae"
+      },
+      "source": {
+        "revision": "6f03f3a47a845bff0462e08417aaf649202d8529",
+        "status": ""
+      },
+      "seconds": 7.666427449003095
+    },
+    "out/native-cpu-local-effects/dp-cleanup/owner.json": {
+      "identity": {
+        "bytes": 2033,
+        "sha256": "151af1b4c817846319e40abe8e9a1187282299984b774d4b5bb9bf0e5740988b"
+      },
+      "source": {
+        "revision": "6f03f3a47a845bff0462e08417aaf649202d8529",
+        "status": ""
+      },
+      "seconds": 5.6290995120070875
+    },
+    "out/native-cpu-layer-projection/lower/owner.json": {
+      "identity": {
+        "bytes": 2018,
+        "sha256": "53eda7d8248197110fb35aef5895f053dad07bbf8796d186c0737be19f2ff5fe"
+      },
+      "source": {
+        "revision": "b2cbd4db30188e8ff20fe017d8a709f9f6093316",
+        "status": ""
+      },
+      "seconds": 8.439637137984391
+    },
+    "out/native-cpu-layer-projection/plugin/owner.json": {
+      "identity": {
+        "bytes": 2019,
+        "sha256": "f7f3d7a30daa9207a9a79e32262d2671faf5f8871851e11e41d5f0ff04792ee7"
+      },
+      "source": {
+        "revision": "b2cbd4db30188e8ff20fe017d8a709f9f6093316",
+        "status": ""
+      },
+      "seconds": 3.58685061999131
+    },
+    "out/native-cpu-layer-projection/cleanup/owner.json": {
+      "identity": {
+        "bytes": 2022,
+        "sha256": "247effac9f8a424fac84dd507a1fe0b2f63d4f771111ca3e2015f8b0aaf66fa5"
+      },
+      "source": {
+        "revision": "b2cbd4db30188e8ff20fe017d8a709f9f6093316",
+        "status": ""
+      },
+      "seconds": 7.151920834003249
+    },
+    "out/native-cpu-layer-projection/native/owner.json": {
+      "identity": {
+        "bytes": 2020,
+        "sha256": "9b6352bc5fbf2e7359af4fa29ab6d8c1a87eb923d52b1436ecfe32c2b9fa8f68"
+      },
+      "source": {
+        "revision": "b2cbd4db30188e8ff20fe017d8a709f9f6093316",
+        "status": ""
+      },
+      "seconds": 19.94068954800605
+    }
+  },
+  "gates": {
+    "native-cpu-local-effects": {
+      "status": "SOURCE_EFFECT_REFINEMENT_PROVED_BUT_PERFORMANCE_GATE_NOT_MET",
+      "before": {
+        "memory_instruction_counts": {
+          "load": 24130,
+          "alloca": 81,
+          "store": 382
+        },
+        "masked_store_calls": 21910,
+        "native_instructions": 225612
+      },
+      "after": {
+        "memory_instruction_counts": {
+          "load": 24130,
+          "alloca": 81,
+          "store": 382
+        },
+        "masked_store_calls": 21910,
+        "native_instructions": 225609
+      },
+      "strict_core_calls_preserved": true,
+      "constrained_FP_inventory_unchanged": true,
+      "native_instruction_difference": -3,
+      "continue_T_or_E_or_workloads": false,
+      "source_refinement": "Nine value-core boundaries have only inaccessibleRW, preserving strictfp/dynamic rounding/strict exceptions. Six math definitions were already narrow; remaining three were proved local through nested closure capture. No raw/pointer-adapter effect changed.",
+      "reason": "Ordinary memory scope is now accurate, but the selected focused cleanup did not reduce any load/store/alloca/masked-store counts. Do not infer a speedup; address whole-context/masked local scratch interface before costly acceptance."
+    },
+    "native-cpu-layer-projection": {
+      "status": "LOCAL_SSA_GATE_PASS_INTERFACE_COST_GATE_FAIL_STOP",
+      "local_projection": {
+        "cores": 41,
+        "local_allocas_after_cleanup": 0,
+        "masked_memory_calls_after_cleanup": 0,
+        "poison_or_old_context_pointers": false,
+        "ordinary_core_loads": 26160,
+        "ordinary_core_stores": 11033
+      },
+      "strict_math_calls": 1581,
+      "strict_FP_inventory_unchanged": true,
+      "native_instructions_before": 225609,
+      "native_instructions_after": 428868,
+      "instruction_difference": 203259,
+      "continue_T_or_E_or_runtime": false,
+      "reason": "Per-slot locals becomeSSA, but snapshot/copyback through41 compact buffers costs more native instructions. Do not run a new frame. Remove generic metadata/root escapes in a new admitted-only canonical DP copy, inline raw helpers without embedding shared math bodies, and normalize the single fully initialized owned context instead of copying it between layer boundaries.",
+      "scope": "One bounded compiler prototype; no provider link/loading/numerical/speed/scientific/hardware/release qualification. Source semantic review covers initialized inactive slots, exact masked merges, readonly external views and all return copybacks under the pinned positive private-job contract."
+    }
+  },
+  "bundles": {
+    "source-and-evidence": {
+      "path": "attestations/qualification/b2cbd4db/native-cpu-private-context-interface-gates/source-and-evidence.zip",
+      "bytes": 23964155,
+      "sha256": "b56a1dc4c136856b18d3844387e720370cead262f80a93796527864eb80e953b",
+      "members": {
+        "bin/linux-gcc/native-cpu-layer-projection/dp.cleanup.ll": {
+          "bytes": 44310198,
+          "sha256": "a1c58d03189b404bca553e09ef43437aeb48354655585bdb49c6e762e783315a"
+        },
+        "bin/linux-gcc/native-cpu-layer-projection/dp.ll": {
+          "bytes": 59117674,
+          "sha256": "b61257912128fdbf7ca4a9d3cc5fc8415f90df68174f1c133c74c80e42506a14"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/dp.cleanup.ll": {
+          "bytes": 44976602,
+          "sha256": "8ef36e4c1cb538a07d39e4942a42479713ee510c3d7bddb690d551d9acacb5d6"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/dp.ll": {
+          "bytes": 44977085,
+          "sha256": "3fbaefb172957a7f8e97e010c6dcb84ef6c92c68a7dfaed15e43204f5ad623d0"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/math.ll": {
+          "bytes": 2789102,
+          "sha256": "8c41b14d6e30a9befc48be12c59324840421f51557c245595575ec4105631ed0"
+        },
+        "out/native-cpu-layer-projection/actions.json": {
+          "bytes": 7120,
+          "sha256": "e8ca829dab100e32844291637699ba8aabdf1651c9942c3557e0eb4dfe16f36e"
+        },
+        "out/native-cpu-layer-projection/build.py": {
+          "bytes": 6190,
+          "sha256": "d29b446cc9ccd6cba7d8cb98d85ed68fdb4b5fcb271af7a5f756ddea6da11728"
+        },
+        "out/native-cpu-layer-projection/check.py": {
+          "bytes": 2262,
+          "sha256": "b6bdf685ffab066fdc9629138a77baa72bb3b0dbdf7e2014f233edf232d75102"
+        },
+        "out/native-cpu-layer-projection/cleanup/inputs-after.json": {
+          "bytes": 1154052,
+          "sha256": "ddc12f19b3d583575dc6f923f58367b9f78a33d23fb87ecaf87273153c51c2c0"
+        },
+        "out/native-cpu-layer-projection/cleanup/inputs-before.json": {
+          "bytes": 1154052,
+          "sha256": "ddc12f19b3d583575dc6f923f58367b9f78a33d23fb87ecaf87273153c51c2c0"
+        },
+        "out/native-cpu-layer-projection/cleanup/owner.json": {
+          "bytes": 2022,
+          "sha256": "247effac9f8a424fac84dd507a1fe0b2f63d4f771111ca3e2015f8b0aaf66fa5"
+        },
+        "out/native-cpu-layer-projection/cleanup/samples.jsonl": {
+          "bytes": 8169,
+          "sha256": "e9eaf9fb3b28bd3dc6216fc665d847fd9c5d347aeb994bea267b82ba89bc3988"
+        },
+        "out/native-cpu-layer-projection/cleanup/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-layer-projection/cleanup/stdout.log": {
+          "bytes": 215,
+          "sha256": "49593c16befd42b152d3479eca8ca738d9292b710750807ecdc3b4ad176a2ac3"
+        },
+        "out/native-cpu-layer-projection/cleanup-result.json": {
+          "bytes": 8288,
+          "sha256": "3457511ec1bcaec8306e6c21d8c202357e7e261629efeb8a334aa106558f7492"
+        },
+        "out/native-cpu-layer-projection/lower/inputs-after.json": {
+          "bytes": 1154078,
+          "sha256": "0d2199fd20de7756371de9c05865cffd5c872b24ab4e54fe16320891902f7db8"
+        },
+        "out/native-cpu-layer-projection/lower/inputs-before.json": {
+          "bytes": 1154078,
+          "sha256": "0d2199fd20de7756371de9c05865cffd5c872b24ab4e54fe16320891902f7db8"
+        },
+        "out/native-cpu-layer-projection/lower/owner.json": {
+          "bytes": 2018,
+          "sha256": "53eda7d8248197110fb35aef5895f053dad07bbf8796d186c0737be19f2ff5fe"
+        },
+        "out/native-cpu-layer-projection/lower/samples.jsonl": {
+          "bytes": 9397,
+          "sha256": "831a8e836db7a2a7727be39a92490df65a553f117d24ece4ec7a690810ab50c2"
+        },
+        "out/native-cpu-layer-projection/lower/stderr.log": {
+          "bytes": 5977,
+          "sha256": "f8061a77e3c93c5c613f3cb78760c384b2f3c694d25baeaaf3e0b2f169595343"
+        },
+        "out/native-cpu-layer-projection/lower/stdout.log": {
+          "bytes": 206,
+          "sha256": "db52fea4352abe91ca149a4cad8ced6e9563579204c1c151b309d77ed3aee8dd"
+        },
+        "out/native-cpu-layer-projection/lower-result.json": {
+          "bytes": 8431,
+          "sha256": "4bec36ba18d4513fce165f6b14494606e4b9653a80f6a7bf9876068bafb9f1e7"
+        },
+        "out/native-cpu-layer-projection/native/inputs-after.json": {
+          "bytes": 1154067,
+          "sha256": "5ff200936ab9a3c80d4dbe92fe50fda0cc5700b4dd790abce019ddc39d84a9d2"
+        },
+        "out/native-cpu-layer-projection/native/inputs-before.json": {
+          "bytes": 1154067,
+          "sha256": "5ff200936ab9a3c80d4dbe92fe50fda0cc5700b4dd790abce019ddc39d84a9d2"
+        },
+        "out/native-cpu-layer-projection/native/owner.json": {
+          "bytes": 2020,
+          "sha256": "9b6352bc5fbf2e7359af4fa29ab6d8c1a87eb923d52b1436ecfe32c2b9fa8f68"
+        },
+        "out/native-cpu-layer-projection/native/samples.jsonl": {
+          "bytes": 26558,
+          "sha256": "9259d75f9f05c068cf87559a94c9944c5d280f695dc4605f773918531bd44741"
+        },
+        "out/native-cpu-layer-projection/native/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-layer-projection/native/stdout.log": {
+          "bytes": 210,
+          "sha256": "a67c897272a97299fe49c9ed51f76ef3d3d1565a2b9108174f0449596a94a279"
+        },
+        "out/native-cpu-layer-projection/native-result.json": {
+          "bytes": 1035,
+          "sha256": "8a40d7e72de788a0644f89ef37823a923a98140378afd3a5b454820e91ee452a"
+        },
+        "out/native-cpu-layer-projection/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-layer-projection/plan.json": {
+          "bytes": 5249,
+          "sha256": "10cd51f1a9f349b110fa7ddea7c83130212d7c9edf6ed8dbaf357769ffa4a265"
+        },
+        "out/native-cpu-layer-projection/plugin/inputs-after.json": {
+          "bytes": 1153788,
+          "sha256": "42977db3179b5eb97b75c9d12682949cc9a59881498bc95e132bb03464825b15"
+        },
+        "out/native-cpu-layer-projection/plugin/inputs-before.json": {
+          "bytes": 1153788,
+          "sha256": "42977db3179b5eb97b75c9d12682949cc9a59881498bc95e132bb03464825b15"
+        },
+        "out/native-cpu-layer-projection/plugin/owner.json": {
+          "bytes": 2019,
+          "sha256": "f7f3d7a30daa9207a9a79e32262d2671faf5f8871851e11e41d5f0ff04792ee7"
+        },
+        "out/native-cpu-layer-projection/plugin/samples.jsonl": {
+          "bytes": 6060,
+          "sha256": "5ba7c24212c005e5746c20f715838e213eb5e6af11da369104322c8da8493e8b"
+        },
+        "out/native-cpu-layer-projection/plugin/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-layer-projection/plugin/stdout.log": {
+          "bytes": 200,
+          "sha256": "f6739ee1f89f3c8179bfe40345e840f3340d81a624e7832933697fe93c5ac8a8"
+        },
+        "out/native-cpu-layer-projection/plugin-result.json": {
+          "bytes": 997,
+          "sha256": "5314ea7cf6fd0cec1aa604744bfe88403573899a0cfc64c4417713c2152e3835"
+        },
+        "out/native-cpu-layer-projection/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-layer-projection/structural-gate.json": {
+          "bytes": 1226,
+          "sha256": "6eb976260bf0fd45e6eda98de285c196874bf44de00239b6bea4d462262d40e6"
+        },
+        "out/native-cpu-local-effects/actions.json": {
+          "bytes": 11093,
+          "sha256": "f1b3bdb740a4011eb35602216e46231940a9372332a26e65a00e7f052f380731"
+        },
+        "out/native-cpu-local-effects/build.py": {
+          "bytes": 6682,
+          "sha256": "cbc26b9b1761dc29c9a65dcd42a5a723206c1170f546cc62102608293cdbb28a"
+        },
+        "out/native-cpu-local-effects/dp-cleanup/inputs-after.json": {
+          "bytes": 1152972,
+          "sha256": "15dc7c33c835adaca0e05ab40799cea5db82b87c43feebee62f83c1a3b86baf1"
+        },
+        "out/native-cpu-local-effects/dp-cleanup/inputs-before.json": {
+          "bytes": 1152972,
+          "sha256": "15dc7c33c835adaca0e05ab40799cea5db82b87c43feebee62f83c1a3b86baf1"
+        },
+        "out/native-cpu-local-effects/dp-cleanup/owner.json": {
+          "bytes": 2033,
+          "sha256": "151af1b4c817846319e40abe8e9a1187282299984b774d4b5bb9bf0e5740988b"
+        },
+        "out/native-cpu-local-effects/dp-cleanup/samples.jsonl": {
+          "bytes": 6096,
+          "sha256": "4d325f727a5106023bb9f2252b010363a972090f85e82b05ee48cfa2b254db6d"
+        },
+        "out/native-cpu-local-effects/dp-cleanup/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-local-effects/dp-cleanup/stdout.log": {
+          "bytes": 299,
+          "sha256": "ebf980baf9715c36aa661b1f93220bc5dc3ec4ea0102e5141ec948ec5cdd879e"
+        },
+        "out/native-cpu-local-effects/dp-cleanup-result.json": {
+          "bytes": 1645,
+          "sha256": "8f8e11d4b8965b1cc051328e13f731bd8006ab0c8fc7183748778b0c5e72c6e6"
+        },
+        "out/native-cpu-local-effects/dp-lower/inputs-after.json": {
+          "bytes": 1153004,
+          "sha256": "6532d273daf35836c532eaf3304255182d266531f45c718573d30f365407249e"
+        },
+        "out/native-cpu-local-effects/dp-lower/inputs-before.json": {
+          "bytes": 1153004,
+          "sha256": "6532d273daf35836c532eaf3304255182d266531f45c718573d30f365407249e"
+        },
+        "out/native-cpu-local-effects/dp-lower/owner.json": {
+          "bytes": 2028,
+          "sha256": "e6413ccdeada71eef9b4a4dab4a1131892c762e2484c5fe3e0c5a179a89df0ae"
+        },
+        "out/native-cpu-local-effects/dp-lower/samples.jsonl": {
+          "bytes": 8859,
+          "sha256": "6d9aa9c8d9edcc35e62ec639181283696e6b591bb6b6185203eecd042e75aa12"
+        },
+        "out/native-cpu-local-effects/dp-lower/stderr.log": {
+          "bytes": 133,
+          "sha256": "99365b9a36edc062c53f0f7fd6429a6fa9228a277e6fba202ae56bca96a90d88"
+        },
+        "out/native-cpu-local-effects/dp-lower/stdout.log": {
+          "bytes": 289,
+          "sha256": "2d5b32d6dbfb8f51e5b8d1f4fa5b0f1a006efe8fc9f6eb9d681307a5a09e5eba"
+        },
+        "out/native-cpu-local-effects/dp-lower-result.json": {
+          "bytes": 1634,
+          "sha256": "645ffae7ea0a16c560886d4941a59a421f530888527a17c794538a0b26f18e49"
+        },
+        "out/native-cpu-local-effects/dp-native/inputs-after.json": {
+          "bytes": 1152988,
+          "sha256": "1a79080245b5085145e3ee90d773b8a172756237dba2b93e57b0e246314efd59"
+        },
+        "out/native-cpu-local-effects/dp-native/inputs-before.json": {
+          "bytes": 1152988,
+          "sha256": "1a79080245b5085145e3ee90d773b8a172756237dba2b93e57b0e246314efd59"
+        },
+        "out/native-cpu-local-effects/dp-native/owner.json": {
+          "bytes": 2030,
+          "sha256": "249afa487539ec2cd5b841917d8188bd3a25b089480d2bb17bab31d8d48f8f53"
+        },
+        "out/native-cpu-local-effects/dp-native/samples.jsonl": {
+          "bytes": 6307,
+          "sha256": "4a0e66cb25ebb3c7e87a9725039e24cd5f017dc0c443ed143d83681015ebcdf5"
+        },
+        "out/native-cpu-local-effects/dp-native/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-local-effects/dp-native/stdout.log": {
+          "bytes": 210,
+          "sha256": "36646dc67ee3bc7d07944c6283308ed7570cd0354e71bf574b8ce08a63db5c98"
+        },
+        "out/native-cpu-local-effects/dp-native-result.json": {
+          "bytes": 1029,
+          "sha256": "96359f0fc69b98bc36a947548dc00679cceb538eefc9bb1a39e362025a9fd09a"
+        },
+        "out/native-cpu-local-effects/math-lower/inputs-after.json": {
+          "bytes": 1153004,
+          "sha256": "6532d273daf35836c532eaf3304255182d266531f45c718573d30f365407249e"
+        },
+        "out/native-cpu-local-effects/math-lower/inputs-before.json": {
+          "bytes": 1153004,
+          "sha256": "6532d273daf35836c532eaf3304255182d266531f45c718573d30f365407249e"
+        },
+        "out/native-cpu-local-effects/math-lower/owner.json": {
+          "bytes": 1904,
+          "sha256": "0df8475066c57d65e897e76b496c470ec89c640a3ae033dcd273ad198f23e67a"
+        },
+        "out/native-cpu-local-effects/math-lower/samples.jsonl": {
+          "bytes": 1008,
+          "sha256": "40e4cb4e78838849e9217c98d05fc832797f5f5b9ded987deb907e98e2a3d0d3"
+        },
+        "out/native-cpu-local-effects/math-lower/stderr.log": {
+          "bytes": 132,
+          "sha256": "c129d710bd30cee2c0ad6615ee3d83c76f49cc1cae77e6673ea7304a3c8724cb"
+        },
+        "out/native-cpu-local-effects/math-lower/stdout.log": {
+          "bytes": 287,
+          "sha256": "03cdad66b0b75fedec6459f5993699741e2d428ed954b9e4ec598179fe56dd5f"
+        },
+        "out/native-cpu-local-effects/math-lower-result.json": {
+          "bytes": 1669,
+          "sha256": "8afb4bc1413074282a67d792a98d46bad4f5767ba954b9e5abaf89227551ef69"
+        },
+        "out/native-cpu-local-effects/math-native/inputs-after.json": {
+          "bytes": 1152975,
+          "sha256": "538d9068d9422619db53ccff6d5c7451eadf64d76ec5534c673f2e84a522c99f"
+        },
+        "out/native-cpu-local-effects/math-native/inputs-before.json": {
+          "bytes": 1152975,
+          "sha256": "538d9068d9422619db53ccff6d5c7451eadf64d76ec5534c673f2e84a522c99f"
+        },
+        "out/native-cpu-local-effects/math-native/owner.json": {
+          "bytes": 1907,
+          "sha256": "4fc11a78b29d28e6af25ea2921269b23bafd50190b360356a830b86922592815"
+        },
+        "out/native-cpu-local-effects/math-native/samples.jsonl": {
+          "bytes": 1133,
+          "sha256": "ead4168523f4e6e314623cf3797a0d0b5944c06d659e7a70d54d9e5dda882ad1"
+        },
+        "out/native-cpu-local-effects/math-native/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-local-effects/math-native/stdout.log": {
+          "bytes": 212,
+          "sha256": "c2ff5606a431d891613cbac752579161510c2638a4e5ac4d94d69f64e4d5e2b9"
+        },
+        "out/native-cpu-local-effects/math-native-result.json": {
+          "bytes": 667,
+          "sha256": "0aae162691d87abb27740d8776c87eee882cb4b9e86fb5b7aeee03c7b6c47551"
+        },
+        "out/native-cpu-local-effects/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-local-effects/plan.json": {
+          "bytes": 6418,
+          "sha256": "bef31e628265ad488885b449ba8f0564fab3fd6a065ab830f742566467ef43ce"
+        },
+        "out/native-cpu-local-effects/plugin/inputs-after.json": {
+          "bytes": 1152715,
+          "sha256": "5def6d792d148fb2214501628b8cadd427946f464be3c81fa08f26a4baa05a30"
+        },
+        "out/native-cpu-local-effects/plugin/inputs-before.json": {
+          "bytes": 1152715,
+          "sha256": "5def6d792d148fb2214501628b8cadd427946f464be3c81fa08f26a4baa05a30"
+        },
+        "out/native-cpu-local-effects/plugin/owner.json": {
+          "bytes": 2024,
+          "sha256": "41b877ebea3203d59055e5166f37f3b1589e6a48b5ee8087f0ca5a3338f6f3e1"
+        },
+        "out/native-cpu-local-effects/plugin/samples.jsonl": {
+          "bytes": 6066,
+          "sha256": "e1744b7671b6b2075f6aee8699e5fe27c22511fd66f66fc8bd4a049d3ae99379"
+        },
+        "out/native-cpu-local-effects/plugin/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-local-effects/plugin/stdout.log": {
+          "bytes": 199,
+          "sha256": "90612e78816593d89b8db3fef78bbe33140e1ef628b999ce2f42b92f765f9f45"
+        },
+        "out/native-cpu-local-effects/plugin-result.json": {
+          "bytes": 999,
+          "sha256": "4b19479d317889c548b1e218ef520527bd34547a2d2f41779a83d8b0eb8922e3"
+        },
+        "out/native-cpu-local-effects/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-local-effects/structural-gate.json": {
+          "bytes": 1149,
+          "sha256": "7e44004ef665b6b955cfc0f3bffbb32eb7989bc9e64cef08dd37b11d6a4efdbb"
+        },
+        "out/native-cpu-strict-ir-linking/layer_projection.cpp": {
+          "bytes": 17865,
+          "sha256": "0a5a778e3c71be2e1b0f6f36f31f68186d97acce837dce1f3c3d586511fd2ace"
+        },
+        "out/native-cpu-strict-ir-linking/layer_projection_contract.json": {
+          "bytes": 12033,
+          "sha256": "63e6380863c18b5949bfb148aa9f3fe81a76864c23c2da4e7a51b6b5decea64f"
+        },
+        "out/native-cpu-strict-ir-linking/local_value_effects.cpp": {
+          "bytes": 9098,
+          "sha256": "d7fbd8d79fffb623161836b8b14a387d699044d7d07d169ae77faf577975af65"
+        },
+        "out/native-cpu-strict-ir-linking/private_finite_closure.json": {
+          "bytes": 5541,
+          "sha256": "1e1da4cf26685c5f42007a5a4d574562c48ec74c012a973d94057ddf5c4f860c"
+        },
+        "out/seal-private-context-gates.py": {
+          "bytes": 3321,
+          "sha256": "e01b0dd8f65d63be8ff28992c4f0752b6082c294e92fd2800ebcd820fcab62b3"
+        }
+      }
+    },
+    "products": {
+      "path": "attestations/qualification/b2cbd4db/native-cpu-private-context-interface-gates/products.zip",
+      "bytes": 21034936,
+      "sha256": "3122ee5afb42e13b9b7cd5d6f6810905d2f450e70d845c59f6718fa5c5afbb75",
+      "members": {
+        "bin/linux-gcc/native-cpu-layer-projection/dp.bc": {
+          "bytes": 11578012,
+          "sha256": "92f2ef020d70c287c7f69e5ce581be3a2fce0aba29f68819cac67a27d817e7d3"
+        },
+        "bin/linux-gcc/native-cpu-layer-projection/dp.cleanup.bc": {
+          "bytes": 8757400,
+          "sha256": "e6f944685210dc30726ef4ceb34c3d2feea0b0698765bb9bbfaa76118f173fb3"
+        },
+        "bin/linux-gcc/native-cpu-layer-projection/dp.o": {
+          "bytes": 3687208,
+          "sha256": "bed908ebf24678dc36523ee587d142b83ef195af83883f0072516be4b9cfb33c"
+        },
+        "bin/linux-gcc/native-cpu-layer-projection/layer_projection.so": {
+          "bytes": 123208,
+          "sha256": "3c0789f6d6fb9bc3fe37433c95279ed9c8049c7ff56642016daddebef689d305"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/dp.bc": {
+          "bytes": 8644312,
+          "sha256": "ab0c240b6d340e32a3b517105d7732e52d19f0e86b27d4f45393eb8d055384ec"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/dp.cleanup.bc": {
+          "bytes": 8644532,
+          "sha256": "a2f52cebde91547a09f0693776f7e017ec1f447893895b1e360e4cd460b5bf6e"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/dp.o": {
+          "bytes": 2099320,
+          "sha256": "0029b5fbddbdda12e37f1eebbd4d97825b85db306bf838627d6c1bc4f38767fc"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/local_value_effects.so": {
+          "bytes": 55984,
+          "sha256": "570dd6b8238acbcc86ebdaf7b4e135981e9fc0cb68a3876cb0ec6095f5f7e9f6"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/math.bc": {
+          "bytes": 296980,
+          "sha256": "93e076866edeb28c329a65a81dad1485a2717a8104ec4b7879002c78a9e6a6a1"
+        },
+        "bin/linux-gcc/native-cpu-local-effects/math.o": {
+          "bytes": 259216,
+          "sha256": "69f9d771c5cf2d0de63e32ac70ac534961e9283a02753047784902e3ee54cdbe"
+        }
+      }
+    }
+  },
+  "scope": "Accurate private ordinary memory refinement and one initialized per-layer compact projection,10 compiler actions passed. Original strict arithmetic/FP state/masks retained. Refinement memory traffic unchanged; projection locals fullypromoted but native instruction count increased225609to428868. No T/E emission, provider adoption, numerical trial, benchmark/frame or scientific/hardware/release qualification; next source removes generic DP metadata/root escapes and compactcopy boundaries."
+}
