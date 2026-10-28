@@ -70,7 +70,7 @@ if phase in ('prepare', 'prepare-sha256'):
         tool = json.loads((W / 'toolchain.json').read_text())['tools'][name]
         assert pin(R / tool['resolved']) == {k: tool[k] for k in ('bytes', 'sha256')}
         sources.append((D / name).resolve())
-    inputs = {str(p.relative_to(R)): pin(p) for p in sources}
+    inputs = {str(p.relative_to(R)) if p.is_relative_to(R) else str(p): pin(p) for p in sources}
     write(plan_path, dict(commands=commands, inputs=inputs,
         plugin_linkage='Resolve LLVM symbols from exact SDK opt executable; matching libstdc++ C++11 ABI, RTTI/EH off. No duplicate static LLVM.',
         outputs=({'plugin-sha256': 'constrain_scope.sha256.so',
