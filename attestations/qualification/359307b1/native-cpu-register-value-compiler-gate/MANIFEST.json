@@ -1,0 +1,779 @@
+{
+  "status": "COMPILER_STATIC_INTERFACE_GATE_ONLY",
+  "custody_revision": "c2ba25457f9968ad7fc08438141960c0183e661e",
+  "execution_revisions": [
+    "359307b1bae8b6ee2512621cfcad67caebe687fb",
+    "ee0b010b25232ea7877b8b3ec10c66804658b0b2"
+  ],
+  "gate": {
+    "compiler_static_gate_passed": true,
+    "owners": {
+      "plugin": {
+        "owner": {
+          "bytes": 1991,
+          "sha256": "a9cefa26df0fc326cbff3a698986454ddc2afa877e376d2c0f48aa4ed7081a29"
+        },
+        "passed": true,
+        "seconds": 3.3402029749995563
+      },
+      "math-lower": {
+        "owner": {
+          "bytes": 1870,
+          "sha256": "1a2d328aec834a05e5e395a53179189bf6032fd2d0a8ff1e7aca0038f2e01cd7"
+        },
+        "passed": true,
+        "seconds": 1.0383445560000837
+      },
+      "math-native": {
+        "owner": {
+          "bytes": 2001,
+          "sha256": "04534e2ae51781ac235fef6d3311aa4ace8aebcd950d556c35c7a2b44d543c4b"
+        },
+        "passed": true,
+        "seconds": 2.5663820820045657
+      },
+      "dp-lower": {
+        "owner": {
+          "bytes": 1995,
+          "sha256": "fbad43519bb12c8a0dd1502f40fe1a1fbcddfbf368a5410ea231ceb31a6825e4"
+        },
+        "passed": true,
+        "seconds": 8.175128888979089
+      },
+      "dp-native": {
+        "owner": {
+          "bytes": 1998,
+          "sha256": "b009be76c790d365ae10464540b2c8c271f36f0a6750a0e847e8dccd5841b0a5"
+        },
+        "passed": true,
+        "seconds": 5.3748950909939595
+      },
+      "transport-lower": {
+        "owner": {
+          "bytes": 2010,
+          "sha256": "36f07460def3b8cce524982388456104af39a34f345a488ac2675fd6a2b87e2d"
+        },
+        "passed": true,
+        "seconds": 12.524381380993873
+      },
+      "transport-native": {
+        "owner": {
+          "bytes": 1757,
+          "sha256": "24cd449a4578b262305f0d75715dbe1c48a80a02b4bc30a4a5093bce3b0e83cf"
+        },
+        "passed": false,
+        "seconds": 5.630580939003266
+      },
+      "audit-transport-existing": {
+        "owner": {
+          "bytes": 1836,
+          "sha256": "b972fb6334295324dbce02d6241fb22cd07a7e7a846940e3bad94859dd1b5d33"
+        },
+        "passed": true,
+        "seconds": 1.2920707009907346
+      },
+      "endpoint-lower-resume": {
+        "owner": {
+          "bytes": 2086,
+          "sha256": "4b709b6aaa99a322885f8fad66a40b03fb97982bd46185dabe40c0686181fa76"
+        },
+        "passed": true,
+        "seconds": 17.09804218899808
+      },
+      "endpoint-native-resume": {
+        "owner": {
+          "bytes": 1960,
+          "sha256": "79121877e4a1e6ea1329e5b0b745c1b601e4a7c7c0e8cf5b29748b3084560b55"
+        },
+        "passed": true,
+        "seconds": 7.936058897990733
+      }
+    },
+    "products": {
+      "math-lower": {
+        "path": "bin/linux-gcc/native-cpu-register-value/math.bc",
+        "bytes": 297520,
+        "sha256": "6e98d3a0e81e092fbc6adb9404a378ae8ea8ddc1d9ee355ee8e959e6813628e0"
+      },
+      "math-native": {
+        "path": "bin/linux-gcc/native-cpu-register-value/math.o",
+        "bytes": 259240,
+        "sha256": "a9fb90157e190c125dbc22eb3f5995717d5f15e19fa7bb395214a379cc8a6994"
+      },
+      "dp-lower": {
+        "path": "bin/linux-gcc/native-cpu-register-value/dp.bc",
+        "bytes": 8644344,
+        "sha256": "53df413939ca1fc894726e34f39daa30c804ecba2b5fbf933d2700bce91e5567"
+      },
+      "dp-native": {
+        "path": "bin/linux-gcc/native-cpu-register-value/dp.o",
+        "bytes": 2099448,
+        "sha256": "7d6270d28d6d4a99d97df345674ec7154a698a22189cdd0cc4c8b9409e33b860"
+      },
+      "transport-lower": {
+        "path": "bin/linux-gcc/native-cpu-register-value/transport.bc",
+        "bytes": 13019408,
+        "sha256": "76baefdefa21317c002eef960bb756e7a8c471f02e1f96e19649b7a8da8a03fb"
+      },
+      "transport-native": {
+        "path": "bin/linux-gcc/native-cpu-register-value/transport.o",
+        "bytes": 3158032,
+        "sha256": "00bd80cb8d795a78e8ed91087fe4b61dfd4cf94b3558c6c426cb605433ffbed8"
+      },
+      "endpoint-lower": {
+        "path": "bin/linux-gcc/native-cpu-register-value/endpoint.bc",
+        "bytes": 17593448,
+        "sha256": "1bf9f678fdf60b93eb555cbe0873bf454f0b0b0e3795b804069f77e720b6aa5d"
+      },
+      "endpoint-native": {
+        "path": "bin/linux-gcc/native-cpu-register-value/endpoint.o",
+        "bytes": 4213288,
+        "sha256": "9af821b10ede4e3fe01aae06d1165d4892b1eb9f2f66b150c66fc9cef9fabbaf"
+      }
+    },
+    "callee_machine_interfaces": [
+      {
+        "function": "sirius_register_value_dense_add8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4"
+        ]
+      },
+      {
+        "function": "sirius_register_value_dense_multiply8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4"
+        ]
+      },
+      {
+        "function": "sirius_register_value_dense_divide8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4"
+        ]
+      },
+      {
+        "function": "sirius_register_value_dense_sqrt8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4"
+        ]
+      },
+      {
+        "function": "sirius_register_value_tagged_add8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "ymm10",
+          "ymm11",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5"
+        ]
+      },
+      {
+        "function": "sirius_register_value_tagged_subtract8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "ymm10",
+          "ymm11",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5"
+        ]
+      },
+      {
+        "function": "sirius_register_value_tagged_multiply8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "ymm10",
+          "ymm11",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5"
+        ]
+      },
+      {
+        "function": "sirius_register_value_tagged_divide8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5",
+          "ymm6",
+          "ymm7",
+          "ymm8",
+          "ymm9",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5"
+        ]
+      },
+      {
+        "function": "sirius_register_value_tagged_sqrt8",
+        "live_in_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "eax"
+        ],
+        "return_registers": [
+          "ymm0",
+          "ymm1",
+          "ymm2",
+          "ymm3",
+          "ymm4",
+          "ymm5"
+        ]
+      }
+    ],
+    "exact_IR_core_calls": 8241,
+    "native_core_relocations": 8240,
+    "preserved_failed_receipt": "transport-native count check expected2701 vs observed2700, compiler itself exited0; retained object reused without recompilation",
+    "authorized_count_difference": "Only pinned Transport two mutually exclusive coefficient-division IR call sites join one native common tail in the original25-iteration coefficient loop. DP1581 and Endpoint3959 exact; no general count relaxation.",
+    "source_roundtrip": "All4 pass outputs were verified after reversing only private names and CC92 to exactly match the complete canonical input fingerprint; no FP metadata/effects/instructions/CFG/operand changes.",
+    "caller_callee_join": "Every exact type/declaration/call uses cc92 under matching LLVM23/V4-SKX AVX512 register ABI. Callee MIR proves EAXmask/YMM inputs and5/6YMM returns; existing native caller/relocation inspection binds all8240 call fields. Internal helper stack storage is retained.",
+    "source_review": {
+      "bytes": 25431,
+      "sha256": "77e375a9654c229e4feb6db37a9524a3efd14a709e04eeca86baddfb578a5340"
+    },
+    "numerical_qualification_transferred": false,
+    "runtime_or_speed_claim": false,
+    "scope": "Compiler/static interface gate only. No provider/component link, genuine-job C8, benefit/Decimal/control/frame, scientific, hardware-domain or release qualification for this new ABI."
+  },
+  "bundles": {
+    "source-and-evidence": {
+      "path": "attestations/qualification/359307b1/native-cpu-register-value-compiler-gate/source-and-evidence.zip",
+      "bytes": 25714946,
+      "sha256": "2d93d007323bb84a8ce3d952b76dbcd7061475c39daa70eca704c45f71e068a1",
+      "members": {
+        "bin/linux-gcc/native-cpu-register-value/dp.ll": {
+          "bytes": 44982399,
+          "sha256": "b3fee568b25d072682a0ac2446367edeb1734c9ffb7832b5a2d40aaefe02847f"
+        },
+        "bin/linux-gcc/native-cpu-register-value/endpoint.ll": {
+          "bytes": 94939414,
+          "sha256": "780f8f68d4bae648c776c8da7bac70e3fbb574dcd7b56b2abd0bbde78e42aa88"
+        },
+        "bin/linux-gcc/native-cpu-register-value/math.ll": {
+          "bytes": 2789823,
+          "sha256": "17058f97fb8e50a2e0f3516d1a46f24def29220c68da3bbf6ad521c6a952cfe6"
+        },
+        "bin/linux-gcc/native-cpu-register-value/transport.ll": {
+          "bytes": 68973160,
+          "sha256": "08427017331daa4da6c5e4b90f77d26bab1e33e840e2b951e446d528a672e157"
+        },
+        "out/native-cpu-register-value/actions.json": {
+          "bytes": 24569,
+          "sha256": "5afb10277caa07aa3b100af0e6575b6c29f7baf67f4341f4045530a4073e671a"
+        },
+        "out/native-cpu-register-value/audit-transport-existing/inputs-after.json": {
+          "bytes": 1148269,
+          "sha256": "6ab6e1f21191d2a4665903b39129cde46d7aa06033b9f20b50b84ed07ecb0979"
+        },
+        "out/native-cpu-register-value/audit-transport-existing/inputs-before.json": {
+          "bytes": 1148269,
+          "sha256": "6ab6e1f21191d2a4665903b39129cde46d7aa06033b9f20b50b84ed07ecb0979"
+        },
+        "out/native-cpu-register-value/audit-transport-existing/owner.json": {
+          "bytes": 1836,
+          "sha256": "b972fb6334295324dbce02d6241fb22cd07a7e7a846940e3bad94859dd1b5d33"
+        },
+        "out/native-cpu-register-value/audit-transport-existing/samples.jsonl": {
+          "bytes": 1350,
+          "sha256": "4282434f51efd3ec100807719034b6c6ed40c7973664cf2e5e41537a07d39db0"
+        },
+        "out/native-cpu-register-value/audit-transport-existing/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-register-value/audit-transport-existing/stdout.log": {
+          "bytes": 66,
+          "sha256": "c8657af2d40e08c2567bf886df4ae3983748b52c6e9645508955c4539106d034"
+        },
+        "out/native-cpu-register-value/build.py": {
+          "bytes": 7763,
+          "sha256": "a1b36dd2fe2167e07b85abe5737e1e5851613547e02c4cbb6cd6e30e1ef4dfcf"
+        },
+        "out/native-cpu-register-value/check.py": {
+          "bytes": 4813,
+          "sha256": "e721fa3b684f0e7e6fb60fd8fbbf4db361b5e4019a22132179a3796c91e9241e"
+        },
+        "out/native-cpu-register-value/dp-lower/inputs-after.json": {
+          "bytes": 1146916,
+          "sha256": "5fb8ca7ffc2a11b8f8bbc1f32a0d3f016a31f8a6c2e233cac98ee0929faa006b"
+        },
+        "out/native-cpu-register-value/dp-lower/inputs-before.json": {
+          "bytes": 1146916,
+          "sha256": "5fb8ca7ffc2a11b8f8bbc1f32a0d3f016a31f8a6c2e233cac98ee0929faa006b"
+        },
+        "out/native-cpu-register-value/dp-lower/owner.json": {
+          "bytes": 1995,
+          "sha256": "fbad43519bb12c8a0dd1502f40fe1a1fbcddfbf368a5410ea231ceb31a6825e4"
+        },
+        "out/native-cpu-register-value/dp-lower/samples.jsonl": {
+          "bytes": 9549,
+          "sha256": "e4dbaf554201bb5f4d061509133f546ef85f83e32d3f69b31033cea5b8bf1c9f"
+        },
+        "out/native-cpu-register-value/dp-lower/stderr.log": {
+          "bytes": 220,
+          "sha256": "f8b1d85968979ce90f116e1df3e646252332b61c5583c6943d65a65fa31fb546"
+        },
+        "out/native-cpu-register-value/dp-lower/stdout.log": {
+          "bytes": 567,
+          "sha256": "80eed3f7bb0fb620c3d3c35ee78c1eb0f9cef198e715d87b22e01fe20b2bfe62"
+        },
+        "out/native-cpu-register-value/dp-lower-result.json": {
+          "bytes": 3664,
+          "sha256": "3688446d5edc51789fb8b37f1432baf873dc3d06ad56452f300e13d6045bc088"
+        },
+        "out/native-cpu-register-value/dp-native/inputs-after.json": {
+          "bytes": 1147175,
+          "sha256": "d9e57310b71436330c8aede1f2e4b6cb7f40634395661bc5fdedf043e7797c50"
+        },
+        "out/native-cpu-register-value/dp-native/inputs-before.json": {
+          "bytes": 1147175,
+          "sha256": "d9e57310b71436330c8aede1f2e4b6cb7f40634395661bc5fdedf043e7797c50"
+        },
+        "out/native-cpu-register-value/dp-native/owner.json": {
+          "bytes": 1998,
+          "sha256": "b009be76c790d365ae10464540b2c8c271f36f0a6750a0e847e8dccd5841b0a5"
+        },
+        "out/native-cpu-register-value/dp-native/samples.jsonl": {
+          "bytes": 6999,
+          "sha256": "3bca08c7591829f39e54b0ecc7e281032266bf7ad1562621e77cf23192f48809"
+        },
+        "out/native-cpu-register-value/dp-native/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-register-value/dp-native/stdout.log": {
+          "bytes": 578,
+          "sha256": "80c0999e8b59ba50601897f60363f47baefc020c5983938e87642ee321bfa09a"
+        },
+        "out/native-cpu-register-value/dp-native-result.json": {
+          "bytes": 32689,
+          "sha256": "9ed86668b84216de87d4594f4e29ba4bf085034adb408c79ba1217a925147080"
+        },
+        "out/native-cpu-register-value/endpoint-lower-result.json": {
+          "bytes": 3890,
+          "sha256": "af5675043b22e43e5f477d1de2d006efedcf9ab0dfc6fc758ad85e99e7767799"
+        },
+        "out/native-cpu-register-value/endpoint-lower-resume/inputs-after.json": {
+          "bytes": 1148558,
+          "sha256": "2f70cf81ad8e9bb5cdc8393d1b1b70cca76d85a71a8d55c3ade16bf917c0e080"
+        },
+        "out/native-cpu-register-value/endpoint-lower-resume/inputs-before.json": {
+          "bytes": 1148558,
+          "sha256": "2f70cf81ad8e9bb5cdc8393d1b1b70cca76d85a71a8d55c3ade16bf917c0e080"
+        },
+        "out/native-cpu-register-value/endpoint-lower-resume/owner.json": {
+          "bytes": 2086,
+          "sha256": "4b709b6aaa99a322885f8fad66a40b03fb97982bd46185dabe40c0686181fa76"
+        },
+        "out/native-cpu-register-value/endpoint-lower-resume/samples.jsonl": {
+          "bytes": 28055,
+          "sha256": "8cadc5360487db0555da668de755dbceb2f70609669b4981c4b39ceced08effe"
+        },
+        "out/native-cpu-register-value/endpoint-lower-resume/stderr.log": {
+          "bytes": 226,
+          "sha256": "ef53932e296f56398f68f3a85c2f4f74cc8160a48051b046cbfd273b2c4da099"
+        },
+        "out/native-cpu-register-value/endpoint-lower-resume/stdout.log": {
+          "bytes": 690,
+          "sha256": "cf9fa8bf7d79ad80a3065531c3bf8d2259318696c3de89e327585669568b14bb"
+        },
+        "out/native-cpu-register-value/endpoint-native-result.json": {
+          "bytes": 77402,
+          "sha256": "b12f39a81158bb07be0150ece085d4a73a0c4331593056b0ffdbb4ff6ef829c9"
+        },
+        "out/native-cpu-register-value/endpoint-native-resume/inputs-after.json": {
+          "bytes": 1149109,
+          "sha256": "700e837f73526e89aaee37627dc4ffc25f214a2d429d501f68ca7b6d55444be3"
+        },
+        "out/native-cpu-register-value/endpoint-native-resume/inputs-before.json": {
+          "bytes": 1149109,
+          "sha256": "700e837f73526e89aaee37627dc4ffc25f214a2d429d501f68ca7b6d55444be3"
+        },
+        "out/native-cpu-register-value/endpoint-native-resume/owner.json": {
+          "bytes": 1960,
+          "sha256": "79121877e4a1e6ea1329e5b0b745c1b601e4a7c7c0e8cf5b29748b3084560b55"
+        },
+        "out/native-cpu-register-value/endpoint-native-resume/samples.jsonl": {
+          "bytes": 10207,
+          "sha256": "6de7b73d019e8ad213fbca244cc0a8a2194abbe9abb2f518f2748ba4f745246c"
+        },
+        "out/native-cpu-register-value/endpoint-native-resume/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-register-value/endpoint-native-resume/stdout.log": {
+          "bytes": 64,
+          "sha256": "12df086221182e9d1a51929aa43cee4b9294666bc7269bb6986e68e53f358985"
+        },
+        "out/native-cpu-register-value/math-lower/inputs-after.json": {
+          "bytes": 1146916,
+          "sha256": "5fb8ca7ffc2a11b8f8bbc1f32a0d3f016a31f8a6c2e233cac98ee0929faa006b"
+        },
+        "out/native-cpu-register-value/math-lower/inputs-before.json": {
+          "bytes": 1146916,
+          "sha256": "5fb8ca7ffc2a11b8f8bbc1f32a0d3f016a31f8a6c2e233cac98ee0929faa006b"
+        },
+        "out/native-cpu-register-value/math-lower/owner.json": {
+          "bytes": 1870,
+          "sha256": "1a2d328aec834a05e5e395a53179189bf6032fd2d0a8ff1e7aca0038f2e01cd7"
+        },
+        "out/native-cpu-register-value/math-lower/samples.jsonl": {
+          "bytes": 1009,
+          "sha256": "3152fd3f1aac4dbef705b3f0302048e6b450ff627066a7b6ed847d76aaa9d0fb"
+        },
+        "out/native-cpu-register-value/math-lower/stderr.log": {
+          "bytes": 219,
+          "sha256": "e470610fa287c64c213d76a50ffec03a1ab3ebeeebe05ebf0491b20402b2a9a3"
+        },
+        "out/native-cpu-register-value/math-lower/stdout.log": {
+          "bytes": 227,
+          "sha256": "4e0aa47413c2cbc619c2e2742f1d0759d79a935879c4898623ebad7b53c43da2"
+        },
+        "out/native-cpu-register-value/math-lower-result.json": {
+          "bytes": 4287,
+          "sha256": "03f4b5794ba295f7fcfd9d44b32791228a4eeb87b60790b434a36ac8bea176ff"
+        },
+        "out/native-cpu-register-value/math-native/inputs-after.json": {
+          "bytes": 1147178,
+          "sha256": "0b6a9b52a6d16f5a971015835ffb22a2aa2c2c46c1baa2c5d457543239d80267"
+        },
+        "out/native-cpu-register-value/math-native/inputs-before.json": {
+          "bytes": 1147178,
+          "sha256": "0b6a9b52a6d16f5a971015835ffb22a2aa2c2c46c1baa2c5d457543239d80267"
+        },
+        "out/native-cpu-register-value/math-native/owner.json": {
+          "bytes": 2001,
+          "sha256": "04534e2ae51781ac235fef6d3311aa4ace8aebcd950d556c35c7a2b44d543c4b"
+        },
+        "out/native-cpu-register-value/math-native/samples.jsonl": {
+          "bytes": 3200,
+          "sha256": "310bc6643dfad58203ae8a37114f2cee4b3d054a25abb684cfbaf8edac21dc44"
+        },
+        "out/native-cpu-register-value/math-native/stderr.log": {
+          "bytes": 2303741,
+          "sha256": "bb6a8596d896f56617c7b525884f4f97b9eb59ef1c83fae19935513ad200b105"
+        },
+        "out/native-cpu-register-value/math-native/stdout.log": {
+          "bytes": 237,
+          "sha256": "e62131ab3d4ac626238d3b276c6b0882a7094655499c686b74e9ba116cc57780"
+        },
+        "out/native-cpu-register-value/math-native-result.json": {
+          "bytes": 14705,
+          "sha256": "7ff4642c4802397e6102121e72241627d0c804bcd86210741fad93143927dd05"
+        },
+        "out/native-cpu-register-value/owned_guard.py": {
+          "bytes": 295,
+          "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+        },
+        "out/native-cpu-register-value/plan.json": {
+          "bytes": 8431,
+          "sha256": "3bcdaff696dcb7daf3f72f0ffe66d944ca1f6753f03d31e7b3e05c4eaba6ce59"
+        },
+        "out/native-cpu-register-value/plugin/inputs-after.json": {
+          "bytes": 1146627,
+          "sha256": "beac35abfeec5240b08cb8c15600c4fd2ab1eb2c60bd47213a724b928acac775"
+        },
+        "out/native-cpu-register-value/plugin/inputs-before.json": {
+          "bytes": 1146627,
+          "sha256": "beac35abfeec5240b08cb8c15600c4fd2ab1eb2c60bd47213a724b928acac775"
+        },
+        "out/native-cpu-register-value/plugin/owner.json": {
+          "bytes": 1991,
+          "sha256": "a9cefa26df0fc326cbff3a698986454ddc2afa877e376d2c0f48aa4ed7081a29"
+        },
+        "out/native-cpu-register-value/plugin/samples.jsonl": {
+          "bytes": 5595,
+          "sha256": "d4999db3672d7e62f04c932e5f453535d9f8d980aa0f88d88c54c78f2db001b8"
+        },
+        "out/native-cpu-register-value/plugin/stderr.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-register-value/plugin/stdout.log": {
+          "bytes": 199,
+          "sha256": "d400b982cc6b36c47477d262f91d996bb37c5b30267559b10b0a7e4fc383725e"
+        },
+        "out/native-cpu-register-value/plugin-result.json": {
+          "bytes": 998,
+          "sha256": "074b904d09e94c6b5318cd9b12428d7ccaa43cf0f0c0681022e653487ba56e42"
+        },
+        "out/native-cpu-register-value/resume-plan.json": {
+          "bytes": 4058,
+          "sha256": "9be33120f702964f194a9e2dc9258805a115f58b352e8136cea15deb2108dd3c"
+        },
+        "out/native-cpu-register-value/resume.py": {
+          "bytes": 5700,
+          "sha256": "2b06521c7449e0515b214ebdcbb4b9bcf02de1b51cd332337f92957007c0c3e9"
+        },
+        "out/native-cpu-register-value/run_owned.py": {
+          "bytes": 293,
+          "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+        },
+        "out/native-cpu-register-value/seal.py": {
+          "bytes": 3338,
+          "sha256": "06342c5b75bb2df39bd0bb3fcb05607404cff481e8fc47f776da5508f49db49a"
+        },
+        "out/native-cpu-register-value/static-gate.json": {
+          "bytes": 8956,
+          "sha256": "b19d13567bea4ae0641d106048de88d365f5cd72e5bf9dbb355de0992ebea731"
+        },
+        "out/native-cpu-register-value/transport-lower/inputs-after.json": {
+          "bytes": 1146916,
+          "sha256": "5fb8ca7ffc2a11b8f8bbc1f32a0d3f016a31f8a6c2e233cac98ee0929faa006b"
+        },
+        "out/native-cpu-register-value/transport-lower/inputs-before.json": {
+          "bytes": 1146916,
+          "sha256": "5fb8ca7ffc2a11b8f8bbc1f32a0d3f016a31f8a6c2e233cac98ee0929faa006b"
+        },
+        "out/native-cpu-register-value/transport-lower/owner.json": {
+          "bytes": 2010,
+          "sha256": "36f07460def3b8cce524982388456104af39a34f345a488ac2675fd6a2b87e2d"
+        },
+        "out/native-cpu-register-value/transport-lower/samples.jsonl": {
+          "bytes": 14689,
+          "sha256": "7c0f98ec90e6c1a02b37b31645a9a72c0c6ef5b3a9d34e090c338ac8454286f7"
+        },
+        "out/native-cpu-register-value/transport-lower/stderr.log": {
+          "bytes": 227,
+          "sha256": "363f690ef32344fd83120215582874eb9be75f5ddddab893106b9ea0c266a94a"
+        },
+        "out/native-cpu-register-value/transport-lower/stdout.log": {
+          "bytes": 625,
+          "sha256": "43d6e124b4c52da0f1e8b9d2d3e5c27b1063f217f5c021f7c9b0ef03e7722507"
+        },
+        "out/native-cpu-register-value/transport-lower-result.json": {
+          "bytes": 4055,
+          "sha256": "157d1259246e52e13d95e769414888a41e3e7d01c5e824c8eee9358b08695343"
+        },
+        "out/native-cpu-register-value/transport-native/inputs-after.json": {
+          "bytes": 1147190,
+          "sha256": "47d9e577e878262ced79b99eb3106b0550541d5b53bd09c28b0490ca394b3218"
+        },
+        "out/native-cpu-register-value/transport-native/inputs-before.json": {
+          "bytes": 1147190,
+          "sha256": "47d9e577e878262ced79b99eb3106b0550541d5b53bd09c28b0490ca394b3218"
+        },
+        "out/native-cpu-register-value/transport-native/owner.json": {
+          "bytes": 1757,
+          "sha256": "24cd449a4578b262305f0d75715dbe1c48a80a02b4bc30a4a5093bce3b0e83cf"
+        },
+        "out/native-cpu-register-value/transport-native/samples.jsonl": {
+          "bytes": 7096,
+          "sha256": "46e8564079f35f1e825be0236b3d2cd70f266c3fcb7b0e30ff521221f1f9b55b"
+        },
+        "out/native-cpu-register-value/transport-native/stderr.log": {
+          "bytes": 311,
+          "sha256": "2c8bd1d143756d8a7e8c160b65648a710d303f1e4d134e02c6135286dfd93024"
+        },
+        "out/native-cpu-register-value/transport-native/stdout.log": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "out/native-cpu-register-value/transport-native-result.json": {
+          "bytes": 64240,
+          "sha256": "fa9343f295490b6d76a5a9b7ee8e361fdbfd26d038d09c1d75bd6f5c27b274a3"
+        },
+        "out/native-cpu-strict-ir-linking/canonical_metadata.py": {
+          "bytes": 12405,
+          "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+        },
+        "out/native-cpu-strict-ir-linking/canonical_metadata_contract.json": {
+          "bytes": 14846,
+          "sha256": "05eb2b2bad9417c7bdddc44ed2aae4942ca5d1feed379829f4db6d0ff998b822"
+        },
+        "out/native-cpu-strict-ir-linking/private_value_fp_review.json": {
+          "bytes": 25431,
+          "sha256": "77e375a9654c229e4feb6db37a9524a3efd14a709e04eeca86baddfb578a5340"
+        },
+        "out/native-cpu-strict-ir-linking/register_value_abi.cpp": {
+          "bytes": 7575,
+          "sha256": "a30172cbedba58af683370096d9a8a7280d8c4b0db583d53807bd7e355742cf6"
+        }
+      }
+    },
+    "products": {
+      "path": "attestations/qualification/359307b1/native-cpu-register-value-compiler-gate/products.zip",
+      "bytes": 23807792,
+      "sha256": "74f264c7b2db6608a5ea3e6f35ca3ab11eb2ed10fda876c02f6ab169178918c4",
+      "members": {
+        "bin/linux-gcc/native-cpu-register-value/dp.bc": {
+          "bytes": 8644344,
+          "sha256": "53df413939ca1fc894726e34f39daa30c804ecba2b5fbf933d2700bce91e5567"
+        },
+        "bin/linux-gcc/native-cpu-register-value/dp.o": {
+          "bytes": 2099448,
+          "sha256": "7d6270d28d6d4a99d97df345674ec7154a698a22189cdd0cc4c8b9409e33b860"
+        },
+        "bin/linux-gcc/native-cpu-register-value/endpoint.bc": {
+          "bytes": 17593448,
+          "sha256": "1bf9f678fdf60b93eb555cbe0873bf454f0b0b0e3795b804069f77e720b6aa5d"
+        },
+        "bin/linux-gcc/native-cpu-register-value/endpoint.o": {
+          "bytes": 4213288,
+          "sha256": "9af821b10ede4e3fe01aae06d1165d4892b1eb9f2f66b150c66fc9cef9fabbaf"
+        },
+        "bin/linux-gcc/native-cpu-register-value/math.bc": {
+          "bytes": 297520,
+          "sha256": "6e98d3a0e81e092fbc6adb9404a378ae8ea8ddc1d9ee355ee8e959e6813628e0"
+        },
+        "bin/linux-gcc/native-cpu-register-value/math.o": {
+          "bytes": 259240,
+          "sha256": "a9fb90157e190c125dbc22eb3f5995717d5f15e19fa7bb395214a379cc8a6994"
+        },
+        "bin/linux-gcc/native-cpu-register-value/register_value_abi.so": {
+          "bytes": 55416,
+          "sha256": "467978bba56acdd37c9d56356ee2afe7431a1ba396f5d678e840e210870088bf"
+        },
+        "bin/linux-gcc/native-cpu-register-value/transport.bc": {
+          "bytes": 13019408,
+          "sha256": "76baefdefa21317c002eef960bb756e7a8c471f02e1f96e19649b7a8da8a03fb"
+        },
+        "bin/linux-gcc/native-cpu-register-value/transport.o": {
+          "bytes": 3158032,
+          "sha256": "00bd80cb8d795a78e8ed91087fe4b61dfd4cf94b3558c6c426cb605433ffbed8"
+        }
+      }
+    }
+  },
+  "owner_results": {
+    "passed": 9,
+    "failed": 1
+  },
+  "failed_original_frame_capsule": {
+    "path": "attestations/qualification/844dbeda/native-cpu-shared-value-original-frame-attempt/MANIFEST.json",
+    "bytes": 476754,
+    "sha256": "66a42dea2016ac80f3c03fabad72a36299f969a76cfd7a8eab7fb680e4a607ec"
+  },
+  "prospective_metadata_source_only": {
+    "generator": {
+      "bytes": 12405,
+      "sha256": "4136ab9b4a666c86d1a7ff7837c7f6d89c7036ba185163dfeb4f262f9410ef23"
+    },
+    "contract": {
+      "bytes": 14846,
+      "sha256": "05eb2b2bad9417c7bdddc44ed2aae4942ca5d1feed379829f4db6d0ff998b822"
+    },
+    "generated_or_compiled": false
+  },
+  "scope": "Exact private CC/name change only. All4 native objects produced once; failed Transport receipt preserved and object reused after exact common-tail review. No provider/component/runtime/finite/scientific/hardware-domain/release acceptance transferred; no new performance study or frame."
+}
