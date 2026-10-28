@@ -1,0 +1,287 @@
+{
+  "prepared_only": true,
+  "executed": false,
+  "fixture_manifest": {
+    "path": "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/MANIFEST.json",
+    "bytes": 34105,
+    "sha256": "b41bc17d44c4757c51415a1282da22692c85cbd589e92c11724e47da01cdc19b"
+  },
+  "fixture_archive": {
+    "path": "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/component.zip",
+    "bytes": 7379009,
+    "sha256": "f82c009e3363d8b3a6cdb5c01dcb7790b4b6a5e3e056b54328f565754a337bef"
+  },
+  "archive_objects": {
+    "transport-original-driver.o": {
+      "member": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/transport-driver.o",
+      "pin": {
+        "bytes": 482160,
+        "sha256": "9e35acc8fc7f1587c9fb8692532eeacbdc899a4ef1393ae6bcc5181433719b3c"
+      }
+    },
+    "endpoint-original-driver.o": {
+      "member": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/endpoint-driver.o",
+      "pin": {
+        "bytes": 363616,
+        "sha256": "9f30f40b5cf0f99fd654f8b799fa37fb5c8667e508e52016577974a21e9546fe"
+      }
+    },
+    "cpu_gate.o": {
+      "member": "bin/linux-gcc/native-cpu-v4-raw-packets/objects/cpu_gate.o",
+      "pin": {
+        "bytes": 2096,
+        "sha256": "04ec5e99f1dda456c8c232185c3c31a5f7a689cadd03d7bf2cd7e45b961e86c5"
+      }
+    }
+  },
+  "baseline_object": {
+    "path": "bin/linux-gcc/native-cpu-accumulate-compatibility/baseline.o",
+    "bytes": 3083152,
+    "sha256": "06430dac3b5aad59533fc165a2277fc4eba1cfb7d862dfd7a3bc2bd325e37a4f"
+  },
+  "source_inputs": {
+    "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/MANIFEST.json": {
+      "bytes": 34105,
+      "sha256": "b41bc17d44c4757c51415a1282da22692c85cbd589e92c11724e47da01cdc19b"
+    },
+    "attestations/qualification/984ba457/native-cpu-v4-raw-packets-finite-compatibility/component.zip": {
+      "bytes": 7379009,
+      "sha256": "f82c009e3363d8b3a6cdb5c01dcb7790b4b6a5e3e056b54328f565754a337bef"
+    },
+    "bin/linux-gcc/native-cpu-accumulate-compatibility/baseline.o": {
+      "bytes": 3083152,
+      "sha256": "06430dac3b5aad59533fc165a2277fc4eba1cfb7d862dfd7a3bc2bd325e37a4f"
+    },
+    "out/native-cpu-accumulate-compatibility/driver.cpp": {
+      "bytes": 8010,
+      "sha256": "cd9fe3dcc8cc97d8415ab33a93c8a7df614c7abd2b7e8014a65460330fa2affe"
+    },
+    "out/native-cpu-accumulate-compatibility/elf_proof.py": {
+      "bytes": 7242,
+      "sha256": "278766535b0ddcb9ad2ab97b68805cd851dda31036567a35f8bf5a07afedb0f7"
+    },
+    "out/native-cpu-dispatch-admission-token/admitted_bridge.h": {
+      "bytes": 2144,
+      "sha256": "e57b146aa86c3d6c6ca3de8c53565f1b77106e860f132478cc76a763646e6afe"
+    },
+    "out/native-cpu-dispatch-admission-token/check_code.py": {
+      "bytes": 5382,
+      "sha256": "19661f050590800bc04628a6d17956a87286e4d9c5ec9f1ce508a9499812122d"
+    },
+    "out/native-cpu-dispatch-admission-token/component.py": {
+      "bytes": 24265,
+      "sha256": "1ab24b07a1ed853cfc2777e2eae9c9f07d41fd3772fd01992ae6b453d459bdd0"
+    },
+    "out/native-cpu-dispatch-admission-token/derivation.json": {
+      "bytes": 19860,
+      "sha256": "ede88f20bc09bd782816c4829c1bea581aa59e9082d46f7babe1b6f7bae65ebf"
+    },
+    "out/native-cpu-dispatch-admission-token/dopri_phase.cpp": {
+      "bytes": 4192,
+      "sha256": "1d1ade3b817600dfb238ce8a43831c077fa329c769b04955cbd3140582432a81"
+    },
+    "out/native-cpu-dispatch-admission-token/endpoint.cpp": {
+      "bytes": 4224,
+      "sha256": "086662380b15d4979fe92e3a1181319f84328124788be51480b2994a3503c93d"
+    },
+    "out/native-cpu-dispatch-admission-token/fixture_routes.cpp": {
+      "bytes": 6018,
+      "sha256": "895a8d51d92968bdef7dcb3bd94e019a2a76ea2901623bf0b977737cd4243228"
+    },
+    "out/native-cpu-dispatch-admission-token/mesa.patch": {
+      "bytes": 2574,
+      "sha256": "80c7ddcf2c158e6cf9c23cc938585a9ff3a11d58d2f9a8f1c6b3beabbe753c0c"
+    },
+    "out/native-cpu-dispatch-admission-token/native_packet.hpp": {
+      "bytes": 4155,
+      "sha256": "ad11ddc83d3de03405e89885badc1e4655fdfcca77519a686abe18824b5fba7d"
+    },
+    "out/native-cpu-dispatch-admission-token/owned_guard.py": {
+      "bytes": 295,
+      "sha256": "246c8953a8c029c982cbcf6e8baab61487f2dd49c97d68188dee4a748465afc2"
+    },
+    "out/native-cpu-dispatch-admission-token/qualify.py": {
+      "bytes": 16335,
+      "sha256": "09017b6677a72800dd282e1f2484c33fd1b3b01d9b1e3705c4621bfa1a474486"
+    },
+    "out/native-cpu-dispatch-admission-token/rows_adapter.cpp": {
+      "bytes": 8436,
+      "sha256": "012c7f0fbc03300cf3642b1aa282a05d2979c9cee2440ab204e136c1d206e96e"
+    },
+    "out/native-cpu-dispatch-admission-token/run_owned.py": {
+      "bytes": 293,
+      "sha256": "085bfd55e59022b1a3aae40c6f6aadcc60ebddd5a7045dd3c6e35fa04e491895"
+    },
+    "out/native-cpu-dispatch-admission-token/transport.cpp": {
+      "bytes": 4240,
+      "sha256": "5638b23835df30fa2fbd92e3c00d651b539f25c097b549029222b3186eeb85a3"
+    },
+    "out/native-cpu-endpoint-header-domain/driver.cpp": {
+      "bytes": 17396,
+      "sha256": "9a647f71e79f62be9cc4a1f5102d899f703093ac7855053d1d8392c721242ca3"
+    },
+    "out/native-cpu-field-compatibility/elf_proof.py": {
+      "bytes": 1443,
+      "sha256": "faf7dd9d657941df283a36cf9f3b553a066ef18e4e46626689804c35e0ec6cd7"
+    },
+    "out/native-cpu-inline-private-bank/check_code.py": {
+      "bytes": 8861,
+      "sha256": "c18a2f86ab4154ab2d5c17e6595b3938c59d106099bd37f736fb5963118f133d"
+    },
+    "out/native-cpu-row-ownership/cold-frame/owned_guard.py": {
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    "out/native-cpu-row-ownership/cold-frame/run_owned.py": {
+      "bytes": 12531,
+      "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab"
+    },
+    "out/native-cpu-v4-raw-packets/fixture_elf.py": {
+      "bytes": 3621,
+      "sha256": "1c565b6aa79cdcecd93037a99f73d741eb2bb6c7238bcac3d9adc441af76213a"
+    }
+  },
+  "fixture_symbol_rewrites": {
+    "transport": {
+      "sirius_simd_v4_transport_packet": "sirius_token_transport_raw",
+      "sirius_native_simd_supported": "fixture_original_sirius_native_simd_supported"
+    },
+    "endpoint": {
+      "sirius_simd_v4_endpoint_packet": "sirius_token_endpoint_raw",
+      "sirius_native_endpoint_try_packet": "sirius_token_endpoint_scalar",
+      "sirius_simd_fmaxf": "fixture_original_sirius_simd_fmaxf"
+    }
+  },
+  "fixture_expected": {
+    "transport": {
+      "passed": true,
+      "case_count": 38,
+      "active_rows": 38,
+      "capacity_rows": 40,
+      "packets_per_implementation": 5,
+      "raw_calls": 10,
+      "compared_output_words": 187960,
+      "input_unchanged": true,
+      "inactive_sentinels_preserved": true,
+      "full_word_match": true,
+      "mismatch_count": 0,
+      "first_mismatch": null
+    },
+    "endpoint": {
+      "passed": true,
+      "selection_rows": 23,
+      "capacity": 32,
+      "header_values": 6,
+      "layouts": 2,
+      "reference_rows": 138,
+      "scalar_packets": 360,
+      "raw_packets": 24,
+      "pure_calls": 21199,
+      "other_program_word_refusals": 21142,
+      "boundary_refusals": 21,
+      "compared_output_words": 5189312960,
+      "compared_input_words": 601713080,
+      "whole3829_words_and_inactive_capacity_and_canaries": true,
+      "input_immutable": true,
+      "MXCSR_controls_unchanged": true,
+      "caller_MXCSR_state_restored": true
+    }
+  },
+  "route_expected": {
+    "transport": {
+      "public": {
+        "public_scalar": 0,
+        "public_rows": 5,
+        "preflight_pass": 0,
+        "preflight_fail": 0,
+        "private_scalar": 0,
+        "private_rows": 0,
+        "private_refusals": 0,
+        "admitted_small_row_packets": 0
+      },
+      "admitted": {
+        "public_scalar": 0,
+        "public_rows": 0,
+        "preflight_pass": 5,
+        "preflight_fail": 0,
+        "private_scalar": 0,
+        "private_rows": 5,
+        "private_refusals": 0,
+        "admitted_small_row_packets": 1
+      }
+    },
+    "endpoint": {
+      "public": {
+        "public_scalar": 21523,
+        "public_rows": 24,
+        "preflight_pass": 0,
+        "preflight_fail": 0,
+        "private_scalar": 0,
+        "private_rows": 0,
+        "private_refusals": 0,
+        "admitted_small_row_packets": 0
+      },
+      "admitted": {
+        "public_scalar": 21158,
+        "public_rows": 0,
+        "preflight_pass": 389,
+        "preflight_fail": 21158,
+        "private_scalar": 365,
+        "private_rows": 24,
+        "private_refusals": 5,
+        "admitted_small_row_packets": 0
+      }
+    }
+  },
+  "fixed_invocations": [
+    {
+      "mode": "public",
+      "stage": "transport"
+    },
+    {
+      "mode": "public",
+      "stage": "endpoint"
+    },
+    {
+      "mode": "admitted",
+      "stage": "transport"
+    },
+    {
+      "mode": "admitted",
+      "stage": "endpoint"
+    }
+  ],
+  "new_production_compilations": 4,
+  "new_diagnostic_wrapper_compilations": 1,
+  "original_fixture_raw_math_or_pure_admission_rebuilds": 0,
+  "owner_limits": {
+    "seconds": 300,
+    "rss_kib": 4194304,
+    "reserve_kib": 2097152
+  },
+  "inspected_archived_object_hooks": {
+    "transport": {
+      "defined": [
+        "sirius_native_simd_supported"
+      ],
+      "undefined": [
+        "baseline_sirius_simd_transport_packet",
+        "sirius_simd_v4_transport_packet",
+        "sirius_native_transport_admit_packet"
+      ],
+      "candidate_raw_GOTPCREL_relocations": 1
+    },
+    "endpoint": {
+      "defined": [
+        "sirius_simd_fmaxf"
+      ],
+      "undefined": [
+        "sirius_native_endpoint_admit_packet",
+        "sirius_native_endpoint_try_packet",
+        "sirius_simd_v4_endpoint_packet"
+      ]
+    }
+  },
+  "count_meaning": "Original fixture counters/assertions and literal scope strings are retained verbatim. raw_calls/raw_packets count original fixture raw slots, not independently observed ISPC entry PCs after rebinding. Transport candidate groups6 follows the real scalar adapter branch; admitted_small_row_packets records this. Direct original pure_calls21199 are separate from diagnostic preflight counters. Expected private Endpoint failures are21158 actual failed-preflight slots and5 private per-packet refusals; require runtime counters before claiming execution.",
+  "limits": "Sealed original fixture objects only; no new cases/random studies/benchmark or copied arithmetic oracle. Diagnostic wrapper runs actual public entries or actual pure-preflight then hidden admitted entries. Pure failure invokes guarded public refusal and cannot reach private entry. Original fixture assertions cover full banks/inactive/canaries, six header values/two layouts, all21142 other Endpoint program-word refusals,21 boundaries/alias cases and original FP/control restoration. This is not actual Mesa job capability/packet selection, old-host fallback, DopriPhase execution, speed or provider/full qualification."
+}
