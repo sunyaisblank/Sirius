@@ -58,14 +58,49 @@ def local_abi(math_text, raw_text):
 def component():
     # AU authorizes only byte-reused constituents, not this new DP path.
     au = _au.component()
-    terminal(C / 'build/owner.json')
+    terminal(C / 'build-audit/owner.json')
     plan, result, derivation = (doc(C / name) for name in ('build-plan.json', 'build-result.json', 'derivation.json'))
+    audit = doc(C / 'build-audit-plan.json')
+    failed_owner = dict(bytes=1840, sha256='33450b323f08bdea73d0ef3348f28798c19e690f674488728713adba26d1463b')
+    original_plan = dict(bytes=21530, sha256='dc19ffb3ab77ea20cea39a8dfabb806e7b69355b5a025f07db823a62714cbaa8')
+    retained = {
+        'bin/linux-gcc/native-cpu-closed-dp-component/adapter-only.o': dict(bytes=7680,
+            sha256='884c89b1bc837009efa855cf4eb198c0f17caf622e3021ee4097cfeb9ed3bdf6'),
+        'bin/linux-gcc/native-cpu-closed-dp-component/rows_adapter.o': dict(bytes=22724920,
+            sha256='9ffdb4519cb8065b49b0b25b8ae539bef24d300fe14becfd86b55368c27bdbb7')}
+    checked(C / 'build/owner.json', failed_owner)
+    checked(C / 'build-plan.json', original_plan)
+    failed = doc(C / 'build/owner.json')
+    assert failed['status'] == 'terminal' and failed['passed'] is False and failed['child_exit'] == 1
+    assert failed['source_unchanged'] and failed['whole_inputs_unchanged']
+    assert not failed['remaining_owned_processes'] and not failed['cleanup_errors']
+    assert failed['observed_births'] and all(row['absent'] for row in failed['observed_births'])
+    assert (C / 'build/inputs-before.json').read_bytes() == (C / 'build/inputs-after.json').read_bytes()
+    checked(C / 'build/stderr.log', dict(bytes=400,
+        sha256='ebbd36822d58b1a055b2c5ddd1189f30222f0265d9d06267aa66f07163f03c08'))
+    assert audit['original_failed_owner'] == result['original_failed_owner'] == failed_owner
+    assert audit['original_build_plan'] == result['original_build_plan'] == original_plan
+    assert audit['original_compile_argv'] == plan['compile_argv'] and audit['original_merge_argv'] == plan['merge_argv']
+    assert audit['retained_products'] == retained
+    assert audit['accepted_artifact_owner'] == result['accepted_artifact_owner'] == 'out/native-cpu-closed-dp-component/build-audit/owner.json'
+    assert not audit['compilation_repeated'] and not result['compilation_repeated']
+    assert not audit['relocation_link_repeated'] and not result['relocation_link_repeated']
+    checked(C / 'build-audit-plan.json', result['audit_plan'])
+    reader = 'out/native-cpu-closed-dp-component/build.py'
+    assert audit['source_hash_override'] == dict(path=reader, before=plan['inputs'][reader], after=pin(R / reader))
+    for name, expected in plan['inputs'].items():
+        assert audit['inputs'][name] == (pin(R / reader) if name == reader else expected), name
+    for name, expected in audit['inputs'].items():
+        checked(R / name, expected)
+    for name, expected in retained.items():
+        checked(R / name, expected)
+    original_actions = doc(C / 'build/inputs-before.json')['out/native-cpu-closed-dp-component/actions.json']
+    checked(C / 'build-audit-prior-actions.json', original_actions)
+    assert doc(C / 'actions.json')['build'] == doc(C / 'build-audit-prior-actions.json')['build']
     assert result['passed'] and result['compiled_interface_passed'] and not result['numerical_qualification_transferred']
     assert result['all_raw_scope_and_core_references_bound']
     assert set(result['core_definitions']) == CORES | LOCAL_CORES and len(result['core_definitions']) == 18
     assert result['closed_raw_exports'] == ['sirius_closed_dp_packet']
-    for name, expected in plan['inputs'].items():
-        checked(R / name, expected)
     contract_inputs(derivation)
     checked(R / derivation['derived']['path'], derivation['derived'])
     assert derivation['source_inverse_exact'] and derivation['public_wrapper_prefix_byte_preserved']
@@ -75,6 +110,7 @@ def component():
     assert candidate.replace('sirius_closed_dp_packet(', 'sirius_scope_dp_packet(') == old_source
     adapter = dict(path='bin/linux-gcc/native-cpu-closed-dp-component/adapter-only.o', **result['adapter'])
     checked(R / adapter['path'], adapter)
+    assert result['adapter'] == retained[adapter['path']]
     assert plan['compile_argv'] == derivation['compile_argv']
     reused, au_values = au['parts'][1:7], [*au['raw_v4_objects'][:2], au['shared_value_math_object']]
     assert result['reused'] == plan['reused'] == reused and len(reused) == 6
@@ -129,13 +165,15 @@ def component():
     assert result['new_closed_objects'] == plan['new_closed_objects'] == added
     merged = result['output']
     assert merged['path'] == 'bin/linux-gcc/native-cpu-closed-dp-component/rows_adapter.o'
+    assert {key: merged[key] for key in ('bytes', 'sha256')} == retained[merged['path']]
     parts = [adapter] + reused + au_values + added
     assert len(parts) == 12
     assert plan['merge_argv'] == ['/usr/bin/ld', '-r', '-o', str(R / merged['path'])] + [str(R / row['path']) for row in parts]
     for row in parts + [merged]:
         checked(R / row['path'], row)
-    inputs = dict(au['source_inputs']) | dict(plan['inputs']) | dict(context_contract['source_inputs'])
-    paths += [C / name for name in ('build-plan.json', 'build-result.json', 'derivation.json', 'build/owner.json', 'build/inputs-before.json', 'build/inputs-after.json')]
+    inputs = dict(au['source_inputs']) | dict(audit['inputs']) | dict(context_contract['source_inputs'])
+    paths += [C / name for name in ('build-plan.json', 'build-result.json', 'derivation.json', 'build/owner.json', 'build/inputs-before.json', 'build/inputs-after.json',
+        'build-audit-plan.json', 'build-audit-prior-actions.json', 'build-audit/owner.json', 'build-audit/inputs-before.json', 'build-audit/inputs-after.json')]
     paths += [Path(__file__).resolve(), _path, V / 'closed_dp_context_contract.json', V / 'canonical_private_dp_contract.json',
         R / context_contract['output']['path'], memory_proof_path, AU / 'provider/source-contract.json', AU / 'provider/linked-native-proof.json']
     inputs.update({str(path.relative_to(R)): pin(path) for path in paths})
