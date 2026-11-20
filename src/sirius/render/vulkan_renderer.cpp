@@ -559,7 +559,8 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Certified;
 #endif
     backend::RetainedTraceExecutor executor(
-        *compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity, spherical_escape);
+        *compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity,
+        spherical_escape);
     // Host work items are screen blocks or pixels, independent of device residency.
     // Independent detector probes also feed this capacity. Each trace worker
     // has at most one pending interval; device residency stays bounded here.
@@ -714,7 +715,8 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.certified_spherical_turns = execution.certified_spherical_turns;
     stats.certified_spherical_panels = execution.certified_spherical_panels;
     if (execution.certified_spherical_escapes > 0) {
-        std::clog << "[Vulkan] Certified spherical escapes: " << execution.certified_spherical_escapes
+        std::clog << "[Vulkan] Certified spherical escapes: "
+                  << execution.certified_spherical_escapes
                   << ", exterior turns: " << execution.certified_spherical_turns
                   << ", quadrature panels: " << execution.certified_spherical_panels << std::endl;
     }
