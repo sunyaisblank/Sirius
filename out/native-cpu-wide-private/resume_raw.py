@@ -117,7 +117,7 @@ def ir_inventory(path):
             'comparison_predicates': dict(Counter(re.findall(r'= fcmp (\w+) ', ir)))}
 
 
-def emit(scratch, revision, baseline, contract, results):
+def emit(scratch, revision, baseline, contract, results, stages=STAGES):
     # The runner resolves its own location. Its wrapper stays in the task directory.
     wrapper = scratch / 'run_owned.py'
     shutil.copyfile(GUARD / wrapper.name, wrapper)
@@ -125,13 +125,13 @@ def emit(scratch, revision, baseline, contract, results):
     active_inputs = sorted(contract['source_inputs'] | contract['outputs'])
     active_inputs.extend(str(p) for p in (Path(__file__).resolve(), BASELINE))
     actions = {}
-    for stage in STAGES:
+    for stage in stages:
         actions[stage] = dict(revision=revision, kind='diagnostic', expected_exit=0,
                               software_provider=False, limits=baseline['replay']['limits'][stage],
                               argv=contract['prospective_emit_commands'][stage.removeprefix('emit-')],
                               frozen_inputs=active_inputs, scope='Pinned ordinary SIMD16 IR replay')
     write_json(scratch / 'actions.json', actions)
-    for stage in STAGES:
+    for stage in stages:
         check_space()
         print(f'Running {stage}', flush=True)
         result = subprocess.run([sys.executable, '-B', str(wrapper), stage])
@@ -144,7 +144,12 @@ def emit(scratch, revision, baseline, contract, results):
         result.check_returncode()
         product = ir_inventory(Path(actions[stage]['argv'][-1]))
         results[stage]['product'] = product
-        if product != baseline['results'][stage]['product']:
+        if stage == 'emit-transport':
+            expected = baseline['historical_transport']
+            same = all(product[key] == value for key, value in expected.items())
+        else:
+            same = product == baseline['results'][stage]['product']
+        if not same:
             raise RuntimeError(f'Replayed product differed from the pinned {stage} result')
 
 

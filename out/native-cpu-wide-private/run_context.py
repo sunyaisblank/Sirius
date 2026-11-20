@@ -81,8 +81,10 @@ def summarize(path, stage, cleaned):
 
 def main():
     scratch, receipt = (Path(arg).resolve() for arg in sys.argv[1:])
-    if not scratch.is_relative_to(R / 'out') or not receipt.is_relative_to(R / 'attestations') or receipt.exists():
-        raise RuntimeError('Use a task workspace under out/ and a new manifest path under attestations/')
+    if not scratch.is_relative_to(R / 'out') or receipt.exists() or not (
+        receipt.is_relative_to(scratch) or receipt.is_relative_to(R / 'attestations')
+    ):
+        raise RuntimeError('Use a task workspace under out/ and a new manifest within the task or attestations/')
     if Path.cwd() != R or subprocess.check_output(['git', 'status', '--porcelain']).strip():
         raise RuntimeError('Run from the clean Sirius checkout')
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))

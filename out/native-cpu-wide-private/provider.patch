@@ -1,0 +1,188 @@
+--- a/src/gallium/drivers/llvmpipe/lp_state_cs.c
++++ b/src/gallium/drivers/llvmpipe/lp_state_cs.c
+@@ -74,7 +74,7 @@
+    bool use_iters;
+    bool intergroup_row_owner;
+    bool native_preflight_passed;
+-   bool native_simd_packets;
++   uint8_t native_packet_width;
+    uint8_t native_cpu_stage;
+    struct lp_cs_exec *current;
+    struct vertex_header *io;
+@@ -1871,12 +1871,22 @@
+ 
+    unsigned grid_z, grid_y, grid_x;
+ 
+-   if (job_info->native_simd_packets) {
+-      /* Full packets cover eight rows; each remainder row owns one task. */
+-      unsigned full_packets = job_info->grid_size[0] / 8;
++   if (job_info->native_packet_width) {
++      const unsigned rows = job_info->grid_size[0];
++      const unsigned width = job_info->native_packet_width;
++      const unsigned full_packets = rows / width;
++      const unsigned packet_end = full_packets * width;
++      const unsigned task = (unsigned)iter_idx;
+       grid_z = grid_y = 0;
+-      grid_x = (unsigned)iter_idx < full_packets ? (unsigned)iter_idx * 8 :
+-         full_packets * 8 + ((unsigned)iter_idx - full_packets);
++      if (task < full_packets) {
++         grid_x = task * width;
++      } else {
++         const unsigned tail_task = task - full_packets;
++         /* Keep an eight-row tail packet before the individual tail rows. */
++         grid_x = packet_end + tail_task;
++         if (rows - packet_end >= 8 && tail_task)
++            grid_x += 7;
++      }
+    } else if (job_info->use_iters) {
+       grid_z = iter_idx / (job_info->iter_size[0] * job_info->iter_size[1]);
+       grid_y = (iter_idx - (grid_z * (job_info->iter_size[0] * job_info->iter_size[1]))) / job_info->iter_size[0];
+@@ -2032,9 +2042,13 @@
+       if (native_zero_active || lp_native_cpu_preflight(&job_info)) {
+          /* A zero-header no-op is not positive native packet admission. */
+          job_info.native_preflight_passed = !native_zero_active;
+-         job_info.native_simd_packets = !native_zero_active && sirius_native_simd_supported() &&
+-            (job_info.native_cpu_stage != 1 ||
+-             sirius_native_transport_simd_policy(job_info.grid_size[0], screen->cs_tpool->num_threads));
++         if (job_info.native_preflight_passed && sirius_native_simd_supported() &&
++             (job_info.native_cpu_stage != 1 ||
++              sirius_native_transport_simd_policy(job_info.grid_size[0], screen->cs_tpool->num_threads))) {
++            job_info.native_packet_width = 8;
++            if (job_info.grid_size[0] >= 16 && lp_native_cpu_wide_supported())
++               job_info.native_packet_width = 16;
++         }
+          job_info.current->variant = NULL;
+          /* No variant is bound. A later refusal must select one even when
+           * resource bindings and the original fallback key are unchanged.
+@@ -2055,8 +2069,10 @@
+    if (native_zero_active) {
+       /* num_tasks remains the original logical workgroup count for queries. */
+       scheduled_tasks = 0;
+-   } else if (job_info.native_simd_packets) {
+-      scheduled_tasks = job_info.grid_size[0] / 8 + job_info.grid_size[0] % 8;
++   } else if (job_info.native_packet_width) {
++      const unsigned rows = job_info.grid_size[0];
++      const unsigned width = job_info.native_packet_width;
++      scheduled_tasks = rows / width + (rows % width) / 8 + rows % 8;
+    } else if (intergroup) {
+       job_info.intergroup_row_owner = true;
+       job_info.use_iters = true;
+--- a/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
++++ b/src/gallium/drivers/llvmpipe/lp_native_cpu_bridge.h
+@@ -7,6 +7,8 @@
+ _Static_assert(sizeof(float) == 4, "AT descriptor table element width");
+ _Static_assert(offsetof(struct lp_cs_job_info, native_preflight_passed) == 63, "AT positive job byte");
+ _Static_assert(sizeof(((struct lp_cs_job_info *)0)->native_preflight_passed) == 1, "AT positive job byte width");
++_Static_assert(offsetof(struct lp_cs_job_info, native_packet_width) == 64, "packet width");
++_Static_assert(sizeof(((struct lp_cs_job_info *)0)->native_packet_width) == 1, "packet width size");
+ _Static_assert(offsetof(struct lp_cs_job_info, native_cpu_stage) == 65, "AT job stage");
+ _Static_assert(sizeof(((struct lp_cs_job_info *)0)->native_cpu_stage) == 1, "AT job stage width");
+ _Static_assert(offsetof(struct lp_cs_job_info, current) == 72, "AT current views pointer");
+@@ -34,6 +36,16 @@
+    return util_get_cpu_caps()->has_avx2 && __builtin_cpu_supports("x86-64-v3");
+ }
+ 
++/* The wide worker is emitted for skylake-avx512. Require OS-enabled
++ * AVX-512, the v4 instruction set and AVX512CD even on a different CPU.
++ */
++static bool
++lp_native_cpu_wide_supported(void)
++{
++   const struct util_cpu_caps *caps = util_get_cpu_caps();
++   return caps->has_avx512f && caps->has_avx512cd && sirius_native_v4_supported();
++}
++
+ struct lp_native_cpu_views {
+    struct lp_jit_buffer input;
+    struct lp_jit_buffer output;
+@@ -93,8 +105,14 @@
+     * means that an earlier row was executed; the ordinary JIT remains safe.
+     */
+    uint32_t groups = job->intergroup_row_owner ? MIN2(8, job->grid_size[0] - x) : 1;
+-   if (job->native_simd_packets)
+-      groups = x < (job->grid_size[0] / 8) * 8 ? 8 : 1;
++   if (job->native_packet_width) {
++      const uint32_t rows = job->grid_size[0];
++      const uint32_t width = job->native_packet_width;
++      if (x < (rows / width) * width)
++         groups = width;
++      else if (x < (rows / 8) * 8)
++         groups = 8;
++   }
+    if (preflight) {
+    switch (job->native_cpu_stage) {
+    case 1:
+@@ -117,6 +135,22 @@
+     * Existing ordinary/refusal/JIT paths remain fully guarded.
+     */
+    if (!preflight && job->native_preflight_passed) {
++      if (groups == 16) {
++         switch (job->native_cpu_stage) {
++         case 1:
++            return sirius_native_transport_rows_wide_admitted_packet(input->u, input->num_elements,
++               (void *)output->u, output->num_elements, x, y, z,
++               job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
++         case 2:
++            return sirius_native_endpoint_rows_wide_admitted_packet(input->u, input->num_elements,
++               (void *)output->u, output->num_elements, x, y, z,
++               job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
++         case 3:
++            return sirius_native_dopri_phase_rows_wide_admitted_packet(input->u, input->num_elements,
++               (void *)output->u, output->num_elements, x, y, z,
++               job->grid_size[0], job->grid_size[1], job->grid_size[2], groups);
++         }
++      }
+       switch (job->native_cpu_stage) {
+       case 1:
+          return sirius_native_transport_rows_admitted_packet(input->u, input->num_elements,
+--- a/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
++++ b/src/gallium/drivers/llvmpipe/sirius_native_bridge.h
+@@ -38,8 +38,14 @@
+ __attribute__((visibility("hidden"))) bool sirius_native_endpoint_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
+ __attribute__((visibility("hidden"))) bool sirius_native_dopri_phase_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
+ 
++// Private pairs of eight-row subgroups. Requires a positive width-16 job.
++__attribute__((visibility("hidden"))) bool sirius_native_transport_rows_wide_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++__attribute__((visibility("hidden"))) bool sirius_native_endpoint_rows_wide_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++__attribute__((visibility("hidden"))) bool sirius_native_dopri_phase_rows_wide_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
++
+ // Pure runtime ISA/OS-state query; scalar baseline remains supported.
+ bool sirius_native_simd_supported(void) SIRIUS_NATIVE_NOEXCEPT;
++bool sirius_native_v4_supported(void) SIRIUS_NATIVE_NOEXCEPT;
+ 
+ #undef SIRIUS_NATIVE_PACKET_ARGUMENTS
+ #undef SIRIUS_NATIVE_NOEXCEPT
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -847,7 +847,7 @@
+    _mesa_sha1_update(&ctx, &gallivm_perf, sizeof(gallivm_perf));
+ #if LP_VULKAN_IEEE32_ENABLED
+    /* Version the private NIR info/variant ABI and ID/mask lowering. */
+-   static const char intergroup_cache_version[] = "Sirius-native-cpu-closed-all-v48";
++   static const char intergroup_cache_version[] = "Sirius-native-cpu-simd16-v49";
+    _mesa_sha1_update(&ctx, intergroup_cache_version, sizeof(intergroup_cache_version));
+ #endif
+    update_cache_sha1_cpu(&ctx);
+--- a/src/gallium/frontends/lavapipe/lvp_device.c
++++ b/src/gallium/frontends/lavapipe/lvp_device.c
+@@ -1556,7 +1556,7 @@
+    /* shader_info has a private serialized marker; reject older shader/NIR
+     * binaries before deserialization, independently of release build IDs.
+     */
+-   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AX";
++   static const char intergroup_uuid[VK_UUID_SIZE] = "SIR-CPU-25.2.8AY";
+    memcpy(uuid, intergroup_uuid, VK_UUID_SIZE);
+    return;
+ #endif
+--- a/src/gallium/targets/lavapipe/meson.build
++++ b/src/gallium/targets/lavapipe/meson.build
+@@ -11,7 +11,8 @@
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-local-identities/objects/transport.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-local-identities/objects/endpoint.o',
+     '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-local-identities/objects/dopri_phase.o',
+-    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-closed-all-component/rows_adapter.o'
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-closed-all-component/rows_adapter.o',
++    '/home/astra/.project/Sirius/bin/linux-gcc/native-cpu-wide-private/wide-provider.o'
+   ),
+   vs_module_defs : vulkan_api_def,
+   include_directories : [ inc_src, inc_util, inc_include, inc_gallium, inc_gallium_aux, inc_gallium_winsys, inc_gallium_drivers ],
