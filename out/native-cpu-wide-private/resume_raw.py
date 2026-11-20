@@ -12,7 +12,7 @@ import tempfile
 import zipfile
 
 sys.dont_write_bytecode = True
-from raw_source import B, ISPC, PROFILES, R, W, pin, planned
+from raw_source import ISPC, PROFILES, R, pin, planned
 
 
 ARCHIVES = (
@@ -22,6 +22,7 @@ ARCHIVES = (
 )
 STAGES = ('emit-endpoint', 'emit-dopri_phase')
 GUARD = R / 'out/native-cpu-row-ownership/cold-frame'
+BASELINE = R / 'attestations/qualification/a3b8c9f0/native-cpu-simd16-raw/MANIFEST.json'
 MIN_FREE_BYTES = 100_000_000_000
 
 
@@ -85,15 +86,15 @@ def acquire_ispc(scratch, inputs):
     archive_path.unlink()
 
 
-def generated_sources(plan):
+def generated_sources(inputs, expected_outputs):
     outputs, contract = planned()
-    if contract['outputs'] != plan['expected_source_outputs']:
+    if contract['source_inputs'] != inputs or contract['outputs'] != expected_outputs:
         raise RuntimeError('Regenerated SIMD16 sources differ from the original derivation')
     for path, data in outputs.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open('xb') as stream:
             stream.write(data)
-    return contract['outputs']
+    return contract
 
 
 def ir_inventory(path):
@@ -116,26 +117,20 @@ def ir_inventory(path):
             'comparison_predicates': dict(Counter(re.findall(r'= fcmp (\w+) ', ir)))}
 
 
-def emit(scratch, revision, plan, sources, results):
+def emit(scratch, revision, baseline, contract, results):
     # The runner resolves its own location. Its wrapper stays in the task directory.
     wrapper = scratch / 'run_owned.py'
     shutil.copyfile(GUARD / wrapper.name, wrapper)
     (scratch / 'owned_guard.py').symlink_to(GUARD / 'owned_guard.py')
-    actions = read_json(W / 'raw-bool/actions.json')
-    active_inputs = {**plan['inputs'], **sources}
-    active_inputs.pop(str(B.relative_to(R) / 'wide-math.o'))
-    for name, expected in active_inputs.items():
-        if pin(R / name) != expected:
-            raise RuntimeError(f'Pinned input changed: {name}')
+    active_inputs = sorted(contract['source_inputs'] | contract['outputs'])
+    active_inputs.extend(str(p) for p in (Path(__file__).resolve(), BASELINE))
+    actions = {}
     for stage in STAGES:
-        previous = W / 'emit-transport-result.json'
-        action = dict(actions[stage], revision=revision, argv=plan['commands'][stage],
-                      frozen_inputs=sorted(active_inputs) + [str(p) for p in (
-                          Path(__file__).resolve(), W / 'raw-bool-plan.json', previous,
-                          W / 'raw-bool/emit-transport/owner.json')],
-                      scope='Pinned ordinary SIMD16 IR emission. No strict conversion or workload.')
-        actions[stage] = action
-    write_json(scratch / 'actions.json', {stage: actions[stage] for stage in STAGES})
+        actions[stage] = dict(revision=revision, kind='diagnostic', expected_exit=0,
+                              software_provider=False, limits=baseline['replay']['limits'][stage],
+                              argv=contract['prospective_emit_commands'][stage.removeprefix('emit-')],
+                              frozen_inputs=active_inputs, scope='Pinned ordinary SIMD16 IR replay')
+    write_json(scratch / 'actions.json', actions)
     for stage in STAGES:
         check_space()
         print(f'Running {stage}', flush=True)
@@ -147,7 +142,10 @@ def emit(scratch, revision, plan, sources, results):
                 'passed', 'source', 'wall_seconds', 'child_exit', 'stop_reason',
                 'peak_sampled_rss_kib', 'whole_inputs_unchanged') if key in owner}
         result.check_returncode()
-        results[stage]['product'] = ir_inventory(Path(actions[stage]['argv'][-1]))
+        product = ir_inventory(Path(actions[stage]['argv'][-1]))
+        results[stage]['product'] = product
+        if product != baseline['results'][stage]['product']:
+            raise RuntimeError(f'Replayed product differed from the pinned {stage} result')
 
 
 def main():
@@ -157,10 +155,8 @@ def main():
     if Path.cwd() != R or subprocess.check_output(['git', 'status', '--porcelain']).strip():
         raise RuntimeError('Run from the clean Sirius checkout')
     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
-    previous = read_json(W / 'raw-bool/emit-transport/owner.json')
-    if not previous['passed'] or not previous['whole_inputs_unchanged']:
-        raise RuntimeError('The previous Transport emission did not pass')
-    plan = read_json(W / 'raw-bool-plan.json')
+    baseline = read_json(BASELINE)
+    inputs = baseline['replay']['source_inputs']
     preset = R / 'bin/linux-gcc'
     bin_created = not preset.parent.exists()
     free = check_space()
@@ -169,20 +165,19 @@ def main():
     try:
         with tempfile.TemporaryDirectory(prefix='simd16-raw-', dir=R / 'out') as directory:
             scratch = Path(directory)
-            recover_sources(plan['inputs'])
-            acquire_ispc(scratch, plan['inputs'])
-            sources = generated_sources(plan)
-            emit(scratch, revision, plan, sources, results)
+            recover_sources(inputs)
+            acquire_ispc(scratch, inputs)
+            contract = generated_sources(inputs, baseline['restored_generated_sources'])
+            emit(scratch, revision, baseline, contract, results)
     finally:
         shutil.rmtree(preset)
         if bin_created and not any(preset.parent.iterdir()):
             preset.parent.rmdir()
         if results:
             receipt.parent.mkdir(parents=True, exist_ok=True)
-            write_json(receipt, {'scope': 'Ordinary compiler IR only', 'source': revision,
+            write_json(receipt, {'scope': 'Ordinary compiler IR replay', 'source': revision,
                                  'driver': pin(Path(__file__)), 'root_free_before_bytes': free,
-                                 'restored_generated_sources': sources,
-                                 'historical_transport': read_json(W / 'emit-transport-result.json')['output'],
+                                 'baseline': {'path': str(BASELINE.relative_to(R)), **pin(BASELINE)},
                                  'results': results})
 
 

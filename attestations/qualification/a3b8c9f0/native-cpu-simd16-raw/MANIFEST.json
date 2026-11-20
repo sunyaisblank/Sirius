@@ -1,12 +1,99 @@
 {
   "driver": {
     "bytes": 8717,
+    "path": "out/native-cpu-wide-private/resume_raw.py",
+    "recorded_in": "0dd5e30a",
     "sha256": "813ad18dc9e41e326a31d9e272be0621ba1bb7de1d86048c15f6c166bc7aedb2"
   },
   "historical_transport": {
     "bytes": 121732773,
     "path": "bin/linux-gcc/native-cpu-wide-private/transport.ll",
     "sha256": "b1cd845390f15b4dd8acdcfa930fc5f647bd1f8c7c97b149dc011693f8c06773"
+  },
+  "replay": {
+    "limits": {
+      "emit-dopri_phase": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "emit-endpoint": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      },
+      "emit-transport": {
+        "reserve_kib": 2097152,
+        "rss_kib": 4194304,
+        "seconds": 300
+      }
+    },
+    "source_inputs": {
+      "bin/linux-gcc/native-cpu-canonical-closed-dp/ispc-source/dopri_phase.ispc": {
+        "bytes": 710648,
+        "sha256": "7e3dc7d0c602d7720248b5c8536e0d7b8ac295dc611afc77227b606f85cadef6"
+      },
+      "bin/linux-gcc/native-cpu-canonical-closed-endpoint/ispc-source/endpoint.ispc": {
+        "bytes": 1186962,
+        "sha256": "afafadf5a989ae1da57d2409e1855ef6852978596cdf3d8872e11e96e90e4956"
+      },
+      "bin/linux-gcc/native-cpu-canonical-closed-transport/ispc-source/transport.ispc": {
+        "bytes": 780343,
+        "sha256": "e3e55ac5f9a9cf8d32f3414ae29c4681702e07099cffd574a761980543c8e8b7"
+      },
+      "bin/linux-gcc/native-cpu-simd-rows/compiler/bin/ispc": {
+        "bytes": 211552768,
+        "sha256": "1813a6b83442dfcc23a1a82a641f22452fedbff7b429877e2f31957957e0168e"
+      },
+      "bin/linux-gcc/native-cpu-simd-rows/compiler/ispc.html": {
+        "bytes": 446723,
+        "sha256": "11ca3d2a0584083270fb77cb2dd95ca6d048ec0f5b3ac25a9638935a2c9652fc"
+      },
+      "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/dopri_phase.program.hpp": {
+        "bytes": 44967,
+        "sha256": "3df9a067a4e65fd58959fd84076bb6c743e33fb15f26aa898d699029c6cd64fe"
+      },
+      "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/endpoint.program.hpp": {
+        "bytes": 85168,
+        "sha256": "b6f8ba278b7e9df65860143d9711972603b4f8a1850b2ade138bf17f625150d5"
+      },
+      "bin/linux-gcc/native-cpu-slang-bridge/typed-batch/transport.program.hpp": {
+        "bytes": 64160,
+        "sha256": "9c581d3a98843f9cd831a7814e8b7ad77a0f40ab2c8cb29301df67cc6bad1ffc"
+      },
+      "out/native-cpu-inline-private-bank/packinghelper.isph": {
+        "bytes": 1903,
+        "sha256": "afce0e14e3f2732509c835e94d6178545dbd861d4f7cbd8dea59d462f5de173f"
+      },
+      "out/native-cpu-local-identities/identity_store.isph": {
+        "bytes": 3052,
+        "sha256": "0d464b6ce820abc38301d8f305ba6802ae04e5c13eff80c953bad118b786be2c"
+      },
+      "out/native-cpu-normalization-tags/normalization_tag.isph": {
+        "bytes": 821,
+        "sha256": "a33dc7083ccc5e1e7a721c32c84fea7f858d57775aa85ab3bff3812dd60f3dfa"
+      },
+      "out/native-cpu-strict-ir-linking/canonical_private_dp_contract.json": {
+        "bytes": 11905,
+        "sha256": "242e1e101927473daea1c0cb8a9238d438e5f569a27d6218e01b56c6b46a674e"
+      },
+      "out/native-cpu-strict-ir-linking/canonical_private_remaining_contract.json": {
+        "bytes": 58311,
+        "sha256": "f2f9b0ec0fb0930485eaf0016d219327044f65602d22a9696b47e9450f98e1cc"
+      },
+      "out/native-cpu-value-fact-stores/value_facts.isph": {
+        "bytes": 707,
+        "sha256": "7a245fb084f620a394f7920723b55d66b6c5986a21af78c78ea92cfb149c9f23"
+      },
+      "out/native-cpu-wide-private/raw_source.py": {
+        "bytes": 12679,
+        "sha256": "abd1665ef8e1f0b92f0cc0add5963b83cf1095b5f1c77d7f3faaa4828a59acac"
+      },
+      "out/native-cpu-wide-private/subgroup8.isph": {
+        "bytes": 983,
+        "sha256": "efdcb7036109470d790610b8d72349f01a60a96f964cf7d3e91386a0ed887051"
+      }
+    }
   },
   "restored_generated_sources": {
     "bin/linux-gcc/native-cpu-wide-private/ispc-source/dopri_phase.ispc": {
