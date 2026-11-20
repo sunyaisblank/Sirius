@@ -1,0 +1,18 @@
+--- a/src/sirius/kernels/gr_integrator.slang
++++ b/src/sirius/kernels/gr_integrator.slang
+@@ -587,4 +587,11 @@
+-    return AttemptAdaptiveGeodesicStepWithResolution(
+-        state, step, isWarp, isWormhole, M, a, Q, Lambda,
+-        warpVs, warpSigma, warpR, throatB0, wormShape,
+-        integrationTolerance, nullTolerance, coarseSubsteps);
++    AdaptiveGeodesicStep trial;
++    [loop] for (;;) {
++        trial = AttemptAdaptiveGeodesicStepWithResolution(
++            state, step, isWarp, isWormhole, M, a, Q, Lambda,
++            warpVs, warpSigma, warpR, throatB0, wormShape,
++            integrationTolerance, nullTolerance, coarseSubsteps);
++        if (trial.accepted || step != minimumStep || isWarp || isWormhole || coarseSubsteps == 32)
++            break;
++        coarseSubsteps *= 2;
++    }
++    return trial;

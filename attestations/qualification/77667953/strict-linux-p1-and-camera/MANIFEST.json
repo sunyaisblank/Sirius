@@ -1,0 +1,3284 @@
+{
+  "action_receipts": {
+    "device": {
+      "bytes": 67114,
+      "path": "out/strict-p1-camera/device/runs/actions.json",
+      "sha256": "8addccb30441b822ce90103435c2806b192f3bfd47e7ec9e7f455f3efc05cf0b"
+    },
+    "host": {
+      "bytes": 35666,
+      "path": "out/strict-p1-camera/host/runs/actions.json",
+      "sha256": "8ed65d45d966cdfa18e7d797b8498c4433fbca0d624b97c06446170b967d6ef8"
+    }
+  },
+  "case_registrations": {
+    "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/oracle"
+    },
+    "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/oracle"
+    },
+    "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.FixedPupilAndObserverArePreserved": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.IndependentGeometryAndActualRayStencils": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.ActualAffineAndJacobiClocksMatchFp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.ActualAffineAndJacobiClocksMatchFp64": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.ActualAffineAndJacobiClocksMatchFp64",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.ActualAffineAndJacobiClocksMatchFp64",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.PointStarAngularWeightMatchesIndependentOracle": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.PointStarAngularWeightMatchesIndependentOracle",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.PointStarAngularWeightMatchesIndependentOracle",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.RejectedNeighbourRetriesExactMinimumFp64": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/app"
+    },
+    "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/app"
+    },
+    "RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/app"
+    },
+    "RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeAdmission.StageSevenFailureCannotPublishPartialOrOldIssuance": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeAdmission.StageSevenFailureCannotPublishPartialOrOldIssuance",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeAdmission.StageSevenFailureCannotPublishPartialOrOldIssuance",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeAdmission.StageSevenGrantsPreservePayloadAndConsumeTokens": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeAdmission.StageSevenGrantsPreservePayloadAndConsumeTokens",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeAdmission.StageSevenGrantsPreservePayloadAndConsumeTokens",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeAdmission.StageSevenRequestKeepsStockUnsupportedArithmetic": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeAdmission.StageSevenRequestKeepsStockUnsupportedArithmetic",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeAdmission.StageSevenRequestKeepsStockUnsupportedArithmetic",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    },
+    "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/core/sirius_core_tests",
+        "--gtest_filter=ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/core"
+    },
+    "VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+        "--gtest_filter=VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+    },
+    "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p": {
+      "command": [
+        "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+      "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+    }
+  },
+  "cohorts": {
+    "device-allocation-and-preparation": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(RetainedComputeTest\\.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback|VulkanBackend\\.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/device/runs/device-allocation-and-preparation/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "VulkanBackend.BufferAllocationLimitCountsActualResidencyAndPreservesExistingBuffers",
+          "seconds": 0.0514894
+        },
+        {
+          "name": "RetainedComputeTest.SoftwareRendererPreparationPreservesBuffersAndPhysicalFeedback",
+          "seconds": 20.2
+        }
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/device/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/device/device-allocation-and-preparation"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "input_snapshot": {
+        "bytes": 1259809,
+        "path": "out/strict-p1-camera/device/runs/device-allocation-and-preparation/inputs-before.json",
+        "sha256": "0478fc0d05a1251917ea7953da0b016ceeb0c3699fba630706b88a1e8b84d0ec"
+      },
+      "junit": {
+        "bytes": 2778,
+        "path": "out/strict-p1-camera/device/runs/device-allocation-and-preparation/junit.xml",
+        "sha256": "35e47f48551042367d3ecd621a69c0e5df0fe28eade2ad1d4ee66f6d4b13cdc6"
+      },
+      "owner": {
+        "bytes": 3082,
+        "path": "out/strict-p1-camera/device/runs/device-allocation-and-preparation/owner.json",
+        "sha256": "e56632f4dddb862227af551e74879ce8a4de3adf7a251048474d1f4f8e80d788"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 1800
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 936008,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 20.316452859027777,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/device/runs/device-allocation-and-preparation/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 6235,
+        "path": "out/strict-p1-camera/device/runs/device-allocation-and-preparation/stdout.log",
+        "sha256": "f62d61ca78e3ae3e9e5537ebbae6685e0f773f2b556851d9eb57fc29479ecc32"
+      }
+    },
+    "device-optics-and-catalogue": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(KernelParity\\.CelestialTangentBasisIsSharedByBeamAndPointFilter|KernelParity\\.PointStarAngularWeightMatchesIndependentOracle|KernelParity\\.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel|RetainedCameraProgram\\.CompensatedCompletePhysicalLaunchAndRefusals|RetainedCameraProgram\\.Fp32CompletePhysicalLaunchAndRefusals)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/device/runs/device-optics-and-catalogue/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "KernelParity.ThinLensPupilProjectionAndFocusMatchIndependentCoreModel",
+          "seconds": 55.607
+        },
+        {
+          "name": "KernelParity.PointStarAngularWeightMatchesIndependentOracle",
+          "seconds": 58.216
+        },
+        {
+          "name": "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
+          "seconds": 55.1691
+        },
+        {
+          "name": "RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
+          "seconds": 1.41874
+        },
+        {
+          "name": "RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
+          "seconds": 1.31916
+        }
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/device/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/device/device-optics-and-catalogue"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "input_snapshot": {
+        "bytes": 1259809,
+        "path": "out/strict-p1-camera/device/runs/device-optics-and-catalogue/inputs-before.json",
+        "sha256": "0478fc0d05a1251917ea7953da0b016ceeb0c3699fba630706b88a1e8b84d0ec"
+      },
+      "junit": {
+        "bytes": 6768,
+        "path": "out/strict-p1-camera/device/runs/device-optics-and-catalogue/junit.xml",
+        "sha256": "9692580b8600384fc58202a91877b5d4ee418fd1030fcc66f2a53d984f8a81bc"
+      },
+      "owner": {
+        "bytes": 3470,
+        "path": "out/strict-p1-camera/device/runs/device-optics-and-catalogue/owner.json",
+        "sha256": "6f3b054bc8fbb64a39939660869697ab43ddc1d083e91caae2586c1ce0893c52"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 3600
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 857228,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 171.8089882429922,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/device/runs/device-optics-and-catalogue/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 22092,
+        "path": "out/strict-p1-camera/device/runs/device-optics-and-catalogue/stdout.log",
+        "sha256": "a0a188eadfb64765509ddc9b6ff428b06d0fce763f6cd2c03b7ac38689ea266f"
+      }
+    },
+    "host-camera-and-catalogue": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(CameraContinuousProjection\\.AngularProjectionPreservesGeometricZerosForDetectorOffsets|CameraContinuousProjection\\.CropTranslationDoesNotRenormalizeOrMaskProjection|CameraContinuousProjection\\.FisheyeCropMaskCentreAndAntipodalRim|CameraContinuousProjection\\.FixedPupilAndObserverArePreserved|CameraContinuousProjection\\.GeometryAndDifferentialAcrossOutputCrop|CameraContinuousProjection\\.InvalidAndUnsupportedProjectionPublishesNoRay|CameraContinuousProjection\\.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff|CameraContinuousProjection\\.RefinementDeclinesLostCoordinatesAndDirections|CameraFilmDifferential\\.CustomCameraDeclinesUnavailableDifferential|CameraFilmDifferential\\.EquidistantCentreLimitAndAntipodalMask|CameraFilmDifferential\\.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns|CameraFilmDifferential\\.FullLaunchDifferentiatesDisplacedMovingKerrObserver|CameraFilmDifferential\\.GovernedFourSampleLaunchAndSingleObserverBoost|CameraFilmDifferential\\.IndependentGeometryAndActualRayStencils|CameraFilmDifferential\\.PerspectiveAndFixedPupilSolidAngleLaws|CameraFilmDifferential\\.PixelUnitsAndIntegratedRectangleSolidAngle|CameraFilmDifferential\\.PreservesNominalRaysAndExistingOrientationSemantics|CameraSampling\\.SequenceDoesNotCollapseFilmAndPupilDimensions|CameraWorldlineTest\\.RestScreenRayAndWorldlineComposeOverLensModels|CpuTraceBoundary\\.FinitePupilOffsetMovesTheLiveCpuLaunchEvent|MemoryGovernor\\.TwoGigabyteBudgetSeatsAWorkableTile|ObserverFrameTests\\.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne|ObserverFrameTests\\.MovingCameraLaunchMatchesIndependentLorentzTransform|PointSourceDetector\\.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility|PointSourceDetector\\.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance|PointSourceDetector\\.FoldKeepsBothImagesOfTheSameCatalogueEntry|PointSourceDetector\\.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement|PointSourceDetector\\.ImageFrequencyAndTransmissionAreAppliedOnce|PointSourceDetector\\.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport|PointSourceDetector\\.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes|PointSourceResponseTest\\.CatalogueAccumulationPreservesFluxColorAndExactSupport|PointSourceResponseTest\\.CatalogueBandTransferComposesDensityAndMovingFrequency|PointSourceResponseTest\\.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure|PointSourceResponseTest\\.CatalogueBandTransferKeepsFluxAndDensityLinear|PointSourceResponseTest\\.CompositionCancellationAndUnrepresentedParityDecline|PointSourceResponseTest\\.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse|PointSourceResponseTest\\.IntegratedDetectorFluxFollowsSignedAffineLensMeasure|PointSourceResponseTest\\.InvalidArithmeticIsDistinctFromEmptyContribution|PointSourceResponseTest\\.MovingThinLensAndSourceMapComposeIntoReceivedFlux|PointSourceResponseTest\\.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry|PointSourceResponseTest\\.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff|PointSourceResponseTest\\.RestrictedCellsPreserveOriginalGaussianAndNormalization|PointSourceResponseTest\\.SingularAndBroadMapsRequestRefinementWithoutFloors|PointSourceResponseTest\\.UnresolvedImageShapeStaysInDetectorCoordinates|PointSourceTransfer\\.InvalidOrOverflowingTransferHasNoPublishedValue|PointSourceTransfer\\.MovingObserverUsesBandGainAndAngularAreaExactlyOnce|PointSourceTransfer\\.ReferenceFrequencyPreservesCatalogueColourAndFlux|PointSourceTransfer\\.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions|PointSourceTransfer\\.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw|PointSourceTransfer\\.ShiftedTemperatureHasNoCatalogueLookupClamp|RenderSessionProbe\\.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame|RenderSessionProbe\\.SceneEvidenceBindsCanonicalTypedConfiguration|StarfieldGeneratorTests\\.EllipticalFilterUsesTheBeamSachsBasis|StarfieldGeneratorTests\\.PointFilterMatchesIndependentAngularOracle|StarfieldGeneratorTests\\.PointFilterRetainsImaxSubpixelOffsets|StarfieldGeneratorTests\\.SpatialIndexIncludesStarsAcrossAngularCellBoundaries|StarfieldPointTest\\.CatalogueMeetsSizeFloorAndIsFinite|StarfieldPointTest\\.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope|StarfieldPointTest\\.SpatialIndexMatchesExhaustiveBeamOracle|ThinLensCameraTest\\.CentreApertureSharesPinholeProjectionAndFieldOfView|ThinLensCameraTest\\.OversizedPupilDeclinesTheLocalTangentPlane|ThinLensCameraTest\\.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/host/runs/host-camera-and-catalogue/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "CameraSampling.SequenceDoesNotCollapseFilmAndPupilDimensions",
+          "seconds": 0.00380429
+        },
+        {
+          "name": "CameraFilmDifferential.IndependentGeometryAndActualRayStencils",
+          "seconds": 0.00335981
+        },
+        {
+          "name": "CameraFilmDifferential.PerspectiveAndFixedPupilSolidAngleLaws",
+          "seconds": 0.0030826
+        },
+        {
+          "name": "CameraFilmDifferential.EquidistantCentreLimitAndAntipodalMask",
+          "seconds": 0.00374165
+        },
+        {
+          "name": "CameraFilmDifferential.PixelUnitsAndIntegratedRectangleSolidAngle",
+          "seconds": 0.00991949
+        },
+        {
+          "name": "CameraFilmDifferential.PreservesNominalRaysAndExistingOrientationSemantics",
+          "seconds": 0.00462352
+        },
+        {
+          "name": "CameraFilmDifferential.GovernedFourSampleLaunchAndSingleObserverBoost",
+          "seconds": 0.00389241
+        },
+        {
+          "name": "CameraFilmDifferential.CustomCameraDeclinesUnavailableDifferential",
+          "seconds": 0.00322695
+        },
+        {
+          "name": "CameraFilmDifferential.FullLaunchDifferentiatesDisplacedMovingKerrObserver",
+          "seconds": 0.00385836
+        },
+        {
+          "name": "CameraFilmDifferential.FilmColumnsRecoverAngularScreenAndPinholeHasNoPupilColumns",
+          "seconds": 0.00380977
+        },
+        {
+          "name": "CameraContinuousProjection.GeometryAndDifferentialAcrossOutputCrop",
+          "seconds": 0.00357143
+        },
+        {
+          "name": "CameraContinuousProjection.FixedPupilAndObserverArePreserved",
+          "seconds": 0.00358348
+        },
+        {
+          "name": "CameraContinuousProjection.FisheyeCropMaskCentreAndAntipodalRim",
+          "seconds": 0.0041493
+        },
+        {
+          "name": "CameraContinuousProjection.RefinementDeclinesLostCoordinatesAndDirections",
+          "seconds": 0.00411869
+        },
+        {
+          "name": "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+          "seconds": 0.00409171
+        },
+        {
+          "name": "CameraContinuousProjection.CropTranslationDoesNotRenormalizeOrMaskProjection",
+          "seconds": 0.00366669
+        },
+        {
+          "name": "CameraContinuousProjection.OriginalPacketsKeepLegacyValuesWithExplicitSmoothRoundoff",
+          "seconds": 0.00414791
+        },
+        {
+          "name": "CameraContinuousProjection.InvalidAndUnsupportedProjectionPublishesNoRay",
+          "seconds": 0.00302013
+        },
+        {
+          "name": "ThinLensCameraTest.CentreApertureSharesPinholeProjectionAndFieldOfView",
+          "seconds": 0.00356307
+        },
+        {
+          "name": "ThinLensCameraTest.PupilSamplesSpanFiniteLaunchAndConvergeAtFocus",
+          "seconds": 0.00384502
+        },
+        {
+          "name": "ThinLensCameraTest.OversizedPupilDeclinesTheLocalTangentPlane",
+          "seconds": 0.011648
+        },
+        {
+          "name": "ObserverFrameTests.MovingCameraLaunchMatchesIndependentLorentzTransform",
+          "seconds": 0.00376339
+        },
+        {
+          "name": "ObserverFrameTests.KerrCameraRayIsPastNullAndLaunchFrequencyIsOne",
+          "seconds": 0.00406745
+        },
+        {
+          "name": "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+          "seconds": 0.00550026
+        },
+        {
+          "name": "StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+          "seconds": 0.00502292
+        },
+        {
+          "name": "StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+          "seconds": 3.40113
+        },
+        {
+          "name": "StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+          "seconds": 0.00548582
+        },
+        {
+          "name": "PointSourceResponseTest.IntegratedDetectorFluxFollowsSignedAffineLensMeasure",
+          "seconds": 0.0263201
+        },
+        {
+          "name": "PointSourceResponseTest.UnresolvedImageShapeStaysInDetectorCoordinates",
+          "seconds": 0.00404583
+        },
+        {
+          "name": "PointSourceResponseTest.EllipticalSupportRejectsInsideMajorCircleOutsideEllipse",
+          "seconds": 0.00389894
+        },
+        {
+          "name": "PointSourceResponseTest.SingularAndBroadMapsRequestRefinementWithoutFloors",
+          "seconds": 0.00373195
+        },
+        {
+          "name": "PointSourceResponseTest.InvalidArithmeticIsDistinctFromEmptyContribution",
+          "seconds": 0.00432111
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueAccumulationPreservesFluxColorAndExactSupport",
+          "seconds": 0.00573495
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+          "seconds": 0.00490105
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+          "seconds": 0.0056644
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure",
+          "seconds": 0.00626951
+        },
+        {
+          "name": "PointSourceResponseTest.CompositionCancellationAndUnrepresentedParityDecline",
+          "seconds": 0.00430096
+        },
+        {
+          "name": "PointSourceResponseTest.MovingThinLensAndSourceMapComposeIntoReceivedFlux",
+          "seconds": 0.00576109
+        },
+        {
+          "name": "PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+          "seconds": 0.00465634
+        },
+        {
+          "name": "PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
+          "seconds": 0.00334223
+        },
+        {
+          "name": "PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
+          "seconds": 0.00356491
+        },
+        {
+          "name": "PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+          "seconds": 0.00425183
+        },
+        {
+          "name": "PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw",
+          "seconds": 0.190736
+        },
+        {
+          "name": "PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions",
+          "seconds": 0.00514505
+        },
+        {
+          "name": "PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+          "seconds": 0.00492339
+        },
+        {
+          "name": "PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp",
+          "seconds": 0.00473926
+        },
+        {
+          "name": "PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue",
+          "seconds": 0.00426391
+        },
+        {
+          "name": "CpuTraceBoundary.FinitePupilOffsetMovesTheLiveCpuLaunchEvent",
+          "seconds": 0.00599144
+        },
+        {
+          "name": "RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+          "seconds": 29.2729
+        },
+        {
+          "name": "RenderSessionProbe.SceneEvidenceBindsCanonicalTypedConfiguration",
+          "seconds": 0.00450573
+        },
+        {
+          "name": "MemoryGovernor.TwoGigabyteBudgetSeatsAWorkableTile",
+          "seconds": 0.00439852
+        },
+        {
+          "name": "StarfieldPointTest.CatalogueMeetsSizeFloorAndIsFinite",
+          "seconds": 0.0208913
+        },
+        {
+          "name": "StarfieldPointTest.SpatialIndexMatchesExhaustiveBeamOracle",
+          "seconds": 0.0358049
+        },
+        {
+          "name": "StarfieldPointTest.ImaxCatalogueIndexFitsTheTwoGigabyteOperatingEnvelope",
+          "seconds": 0.0222348
+        },
+        {
+          "name": "PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+          "seconds": 0.00705789
+        },
+        {
+          "name": "PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+          "seconds": 0.00680291
+        },
+        {
+          "name": "PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+          "seconds": 0.00809675
+        },
+        {
+          "name": "PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+          "seconds": 0.0167896
+        },
+        {
+          "name": "PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+          "seconds": 0.0052911
+        },
+        {
+          "name": "PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+          "seconds": 0.0259547
+        },
+        {
+          "name": "PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+          "seconds": 0.00808618
+        },
+        {
+          "name": "CameraWorldlineTest.RestScreenRayAndWorldlineComposeOverLensModels",
+          "seconds": 0.00457909
+        }
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/host/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/host/host-camera-and-catalogue"
+      },
+      "input_snapshot": {
+        "bytes": 1253454,
+        "path": "out/strict-p1-camera/host/runs/host-camera-and-catalogue/inputs-before.json",
+        "sha256": "542997e255203ccaf8b391cc55bffe601f83ac6302f47d93847a68ff3a81f350"
+      },
+      "junit": {
+        "bytes": 65859,
+        "path": "out/strict-p1-camera/host/runs/host-camera-and-catalogue/junit.xml",
+        "sha256": "b581da76630037a2ef4eb07a958dd380032640998a42b318d489520976be790d"
+      },
+      "owner": {
+        "bytes": 6662,
+        "path": "out/strict-p1-camera/host/runs/host-camera-and-catalogue/owner.json",
+        "sha256": "319ee9be1d4e473e20c155d975c838a4704a5caac9047b52477725f22f8d5dbc"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 1800
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 65180,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 33.60351410799194,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/host/runs/host-camera-and-catalogue/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 91181,
+        "path": "out/strict-p1-camera/host/runs/host-camera-and-catalogue/stdout.log",
+        "sha256": "6f05ad190b0d96cbb61a87a1b4048cae0440bfad024df7a24ef9948f8cc8f74c"
+      }
+    },
+    "host-governors-and-cpu-routing": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(DispatchGovernor\\.CancellationStopsBetweenContinuationsAndBeforePublication|DispatchGovernor\\.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback|DispatchGovernor\\.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample|DispatchGovernor\\.ContinuationReadbackRejectsStaleOrUncommittedState|DispatchGovernor\\.ContinuationsPreserveFourCameraSamplesAndPublishOnce|DispatchGovernor\\.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary|DispatchGovernor\\.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals|DispatchGovernor\\.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory|RenderSessionProbe\\.BackendAutoPreservesStrictDeviceAndPrecisionRequests|RenderSessionProbe\\.BackendAutoPublishesCpuWithNoIcd|RenderSessionProbe\\.BackendAutoResolvesByDeviceRegistryAndCapabilities|RenderSessionProbe\\.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent|RetainedComputeAdmission\\.ArithmeticRefusalPrecedesKernelLoading|RetainedComputeAdmission\\.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation|RetainedComputeAdmission\\.SoftwareRendererPreparationPreservesPhysicalAccounting|RetainedComputeAdmission\\.StageSevenFailureCannotPublishPartialOrOldIssuance|RetainedComputeAdmission\\.StageSevenGrantsPreservePayloadAndConsumeTokens|RetainedComputeAdmission\\.StageSevenRequestKeepsStockUnsupportedArithmetic|VulkanBackend\\.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/host/runs/host-governors-and-cpu-routing/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "VulkanBackend.Fma32DeviceAdmissionRequiresAdvertisedFeatureAndEveryFloatControl",
+          "seconds": 0.00498194
+        },
+        {
+          "name": "RetainedComputeAdmission.ArithmeticRefusalPrecedesKernelLoading",
+          "seconds": 0.00493002
+        },
+        {
+          "name": "RetainedComputeAdmission.StageSevenGrantsPreservePayloadAndConsumeTokens",
+          "seconds": 0.0078184
+        },
+        {
+          "name": "RetainedComputeAdmission.StageSevenFailureCannotPublishPartialOrOldIssuance",
+          "seconds": 0.00796794
+        },
+        {
+          "name": "RetainedComputeAdmission.StageSevenRequestKeepsStockUnsupportedArithmetic",
+          "seconds": 0.00748063
+        },
+        {
+          "name": "RetainedComputeAdmission.FmaSelectsOnlyNativeWideProductsAndPreservesAllocation",
+          "seconds": 0.0668104
+        },
+        {
+          "name": "RetainedComputeAdmission.SoftwareRendererPreparationPreservesPhysicalAccounting",
+          "seconds": 0.051394
+        },
+        {
+          "name": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+          "seconds": 0.395822
+        },
+        {
+          "name": "DispatchGovernor.ContinuationsPreserveFourCameraSamplesAndPublishOnce",
+          "seconds": 0.00412085
+        },
+        {
+          "name": "DispatchGovernor.LateContinuationOvershootReplaysChildrenFromBothZeroOrdinals",
+          "seconds": 0.0032198
+        },
+        {
+          "name": "DispatchGovernor.EveryContinuationTimingEnforcesThePhysicalSafetyBoundary",
+          "seconds": 0.00366945
+        },
+        {
+          "name": "DispatchGovernor.CancellationStopsBetweenContinuationsAndBeforePublication",
+          "seconds": 0.00343013
+        },
+        {
+          "name": "DispatchGovernor.CheapContinuationPhasesCannotHideThePeakSoftSizingFeedback",
+          "seconds": 0.0033582
+        },
+        {
+          "name": "DispatchGovernor.ContinuationExhaustionNeverImplicitlyCompletesOrAdvancesSample",
+          "seconds": 0.00381367
+        },
+        {
+          "name": "DispatchGovernor.ContinuationReadbackRejectsStaleOrUncommittedState",
+          "seconds": 0.00377712
+        },
+        {
+          "name": "DispatchGovernor.OnlyPhysicalTerminalReadbackCanFinalizeWithoutChangingTrajectory",
+          "seconds": 0.00394926
+        },
+        {
+          "name": "RenderSessionProbe.BackendAutoResolvesByDeviceRegistryAndCapabilities",
+          "seconds": 0.20391
+        },
+        {
+          "name": "RenderSessionProbe.BackendAutoPreservesStrictDeviceAndPrecisionRequests",
+          "seconds": 0.067805
+        },
+        {
+          "name": "RenderSessionProbe.BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent",
+          "seconds": 0.00528196
+        }
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/host/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/host/host-governors-and-cpu-routing"
+      },
+      "input_snapshot": {
+        "bytes": 1253454,
+        "path": "out/strict-p1-camera/host/runs/host-governors-and-cpu-routing/inputs-before.json",
+        "sha256": "542997e255203ccaf8b391cc55bffe601f83ac6302f47d93847a68ff3a81f350"
+      },
+      "junit": {
+        "bytes": 21439,
+        "path": "out/strict-p1-camera/host/runs/host-governors-and-cpu-routing/junit.xml",
+        "sha256": "e4a7c588ca7a9295eaff478ad8e33b9831e1ccc74a260469e1592d9024f94a27"
+      },
+      "owner": {
+        "bytes": 3473,
+        "path": "out/strict-p1-camera/host/runs/host-governors-and-cpu-routing/owner.json",
+        "sha256": "4aad1f21b18abe14516b83c98b15d95795222c2d4f43b624c4d489e7dbee4f0c"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 1800
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 152816,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 1.03145556000527,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/host/runs/host-governors-and-cpu-routing/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 29616,
+        "path": "out/strict-p1-camera/host/runs/host-governors-and-cpu-routing/stdout.log",
+        "sha256": "88b3c79732ada5577f5793149e50124b7ff2e9af25cd2b7537548034318eeb34"
+      }
+    },
+    "p1-device-precision-and-rollback": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(KernelParity\\.ActualAffineAndJacobiClocksMatchFp32|KernelParity\\.ActualAffineAndJacobiClocksMatchFp32Comp|KernelParity\\.ActualAffineAndJacobiClocksMatchFp64|KernelParity\\.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32|KernelParity\\.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp|KernelParity\\.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32|KernelParity\\.MetricConnectionAndJetShareRepresentedParametersFp32|KernelParity\\.MetricConnectionAndJetShareRepresentedParametersFp64|KernelParity\\.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter|KernelParity\\.NullProjectionPreservesConeBranchAndFailsClosed|KernelParity\\.RejectedNeighbourRetriesExactMinimumFp32|KernelParity\\.RejectedNeighbourRetriesExactMinimumFp32Comp|KernelParity\\.RejectedNeighbourRetriesExactMinimumFp64|KernelParity\\.RepresentedSubThresholdKerrMetricIsScaleCovariant|KernelParity\\.UnrepresentedKerrStageShrinksBeforeMetricEvaluation)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/device/runs/p1-device-precision-and-rollback/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant",
+          "seconds": 97.0414
+        },
+        {
+          "name": "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+          "seconds": 54.9138
+        },
+        {
+          "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+          "seconds": 55.4107
+        },
+        {
+          "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+          "seconds": 102.11
+        },
+        {
+          "name": "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+          "seconds": 91.2812
+        },
+        {
+          "name": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+          "seconds": 58.4324
+        },
+        {
+          "name": "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+          "seconds": 58.2233
+        },
+        {
+          "name": "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+          "seconds": 59.9609
+        },
+        {
+          "name": "KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+          "seconds": 56.9394
+        },
+        {
+          "name": "KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+          "seconds": 56.3108
+        },
+        {
+          "name": "KernelParity.ActualAffineAndJacobiClocksMatchFp64",
+          "seconds": 54.9057
+        },
+        {
+          "name": "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+          "seconds": 56.3318
+        },
+        {
+          "name": "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+          "seconds": 0.695758
+        },
+        {
+          "name": "KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+          "seconds": 0.143867
+        },
+        {
+          "name": "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
+          "seconds": 1.08561
+        }
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/device/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/device/p1-device-precision-and-rollback"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "input_snapshot": {
+        "bytes": 1259809,
+        "path": "out/strict-p1-camera/device/runs/p1-device-precision-and-rollback/inputs-before.json",
+        "sha256": "0478fc0d05a1251917ea7953da0b016ceeb0c3699fba630706b88a1e8b84d0ec"
+      },
+      "junit": {
+        "bytes": 20411,
+        "path": "out/strict-p1-camera/device/runs/p1-device-precision-and-rollback/junit.xml",
+        "sha256": "621d4bb37f731f73a9a18decb909c142f14149d4617ac1f7ab1aca3ba70a4e4b"
+      },
+      "owner": {
+        "bytes": 5432,
+        "path": "out/strict-p1-camera/device/runs/p1-device-precision-and-rollback/owner.json",
+        "sha256": "e50b3667949dd8fd7c067289404708231835d7c1b56deac1f21169ef6ba2cc82"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 7200
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 2124468,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 803.858751289983,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/device/runs/p1-device-precision-and-rollback/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 28995,
+        "path": "out/strict-p1-camera/device/runs/p1-device-precision-and-rollback/stdout.log",
+        "sha256": "09ae37afdfdc343d8cdea22b6baa7c1188bfdb4be2c536dc80acc5dd5ebca5b3"
+      }
+    },
+    "p1-host-geodesic-accuracy": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(AnalyticValidationTest\\.NearExtremalKerrConservesEnergyAngularMomentumAndCarter|AnalyticValidationTest\\.SymplecticChartExitAndNullProjectionFailureRemainDistinct|CoordinateTransformTests\\.KerrRadiusPreservesExactZeroAndScaleCovariance|CpuTraceBoundary\\.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength|CpuTraceBoundary\\.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent|CpuTraceBoundary\\.RejectedOutwardRayNearHorizonDoesNotInventCapture|KernelParity\\.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability|KerrTests\\.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor|KerrTests\\.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius|LivePathConservationTests\\.NearExtremalKerrEnergyAngularMomentumAndCarter|RK45IntegratorTests\\.AcceptedDenseErrorOnlyLimitsGrowth|RK45IntegratorTests\\.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay|RK45IntegratorTests\\.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection|RK45IntegratorTests\\.NullProjectionPreservesTheIncomingLightConeBranch|RK45IntegratorTests\\.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap|RK45IntegratorTests\\.RejectionMaySelectTheMinimumStepBeforeTerminating|RK45IntegratorTests\\.UnrepresentedStageShrinksBeforeMetricEvaluation|ShadowBoundary\\.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p|VulkanBackend\\.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled|VulkanBackend\\.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/host/runs/p1-host-geodesic-accuracy/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+          "seconds": 0.0286564
+        },
+        {
+          "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+          "seconds": 0.0262573
+        },
+        {
+          "name": "KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor",
+          "seconds": 0.00555769
+        },
+        {
+          "name": "KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
+          "seconds": 0.0226535
+        },
+        {
+          "name": "RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
+          "seconds": 0.00592272
+        },
+        {
+          "name": "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+          "seconds": 0.00571872
+        },
+        {
+          "name": "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+          "seconds": 0.005992
+        },
+        {
+          "name": "RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
+          "seconds": 0.00557218
+        },
+        {
+          "name": "RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap",
+          "seconds": 0.00612267
+        },
+        {
+          "name": "RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+          "seconds": 0.00580941
+        },
+        {
+          "name": "RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+          "seconds": 0.00537736
+        },
+        {
+          "name": "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+          "seconds": 0.00419695
+        },
+        {
+          "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+          "seconds": 0.0115257
+        },
+        {
+          "name": "VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
+          "seconds": 0.00643647
+        },
+        {
+          "name": "VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled",
+          "seconds": 0.00740039
+        },
+        {
+          "name": "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+          "seconds": 0.0180855
+        },
+        {
+          "name": "CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent",
+          "seconds": 0.0114749
+        },
+        {
+          "name": "CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength",
+          "seconds": 0.261605
+        },
+        {
+          "name": "CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture",
+          "seconds": 0.00428877
+        },
+        {
+          "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
+          "seconds": 214.576
+        }
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/host/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/host/p1-host-geodesic-accuracy"
+      },
+      "input_snapshot": {
+        "bytes": 1253454,
+        "path": "out/strict-p1-camera/host/runs/p1-host-geodesic-accuracy/inputs-before.json",
+        "sha256": "542997e255203ccaf8b391cc55bffe601f83ac6302f47d93847a68ff3a81f350"
+      },
+      "junit": {
+        "bytes": 21266,
+        "path": "out/strict-p1-camera/host/runs/p1-host-geodesic-accuracy/junit.xml",
+        "sha256": "dfcea6517189b26c7b96d3cc9b91c0556b2b93cfd4771a74a73952af43d2b4dd"
+      },
+      "owner": {
+        "bytes": 3489,
+        "path": "out/strict-p1-camera/host/runs/p1-host-geodesic-accuracy/owner.json",
+        "sha256": "778e4161dc3f316c59abda409545a9a613721a41fd26ec14051671f750353862"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 1800
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 54444,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 215.17607414300437,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/host/runs/p1-host-geodesic-accuracy/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 28850,
+        "path": "out/strict-p1-camera/host/runs/p1-host-geodesic-accuracy/stdout.log",
+        "sha256": "7d3fc7e74a6c723f519b2ab6eba1b2e6aaf37fba196d6b5828f3c6a83a5bce7f"
+      }
+    },
+    "p1-legacy-bardeen": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(VulkanRenderSession\\.KerrNearExtremalBardeenBoundaryAt1080p)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/device/runs/p1-legacy-bardeen/junit.xml"
+      ],
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/device/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/device/p1-legacy-bardeen"
+      },
+      "individually_passing_cases": [],
+      "individually_unaccepted_cases": [
+        {
+          "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+          "outcomes": [
+            "failure"
+          ],
+          "status": "fail",
+          "stdout": "Running main() from /home/astra/.project/Sirius/bin/linux-ci/_deps/googletest-src/googletest/src/gtest_main.cc\nNote: Google Test filter = VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p\n[==========] Running 1 test from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 1 test from VulkanRenderSession\n[ RUN      ] VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p\n/home/astra/.project/Sirius/tests/render/vulkan_render_test.cpp:1182: Failure\nValue of: inner_result.has_value()\n  Actual: false\nExpected: true\nkernel: validate trace continuation: trace termination 5 cannot publish radiance\n{\"schema\":\"sirius-trace-continuation-failure-v1\",\"scalar_bytes\":4,\"packet_scalar_bytes\":4,\"record_bytes\":272,\"byte_order\":\"little\",\"action\":1,\"row\":0,\"active\":1,\"active_rectangle\":[950,532,1,1],\"expected_identity\":[950,532,0,1],\"physical_submissions\":289,\"maximum_attempts\":30000,\"packet_hex\":\"0000f04400008744000000000000803fee7c7f3f000000000000000080342d4255425d3f0000c8418aa85dbfdf938dbc000000bfd27aa3bcf3f27f3f00000000f3f2ff3ed27a233cd7b35dbff366df3f398ee33f0060ea460ad7a33c0ad7a33c0000803e000048430000803f0000000000000000000000000000000000806d44000005440000803f0000803f000000000000803f0000803f00000000000000000000000000000000000000000000000013f01d3f98d8583f00000000d7cc23bd8df5623612af31ba000000000000803f00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003f0000003f0000803f01000000\",\"previous_record_hex\":\"2089b1c2a52f51bf608dfdbe9a047b3f765b9ac2d07873c14f63cd41959422bf000000000000000000000000000000000000000000000000000000000000000004ba2d35df0bffb9c76a1db75b05653ad83eceb542e41ab8fcf8823afc7a24b704ba2d35df0bffb9c76a1db75b05653ad83eceb542e41ab8fcf8823afc7a24b7000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad7a33cc0a348420ad7a33c6f12833a0000000000000000000000000000803f0000000000000000000000000000000001000000000000001f01000018010000b6030000140200000000000001000000\",\"current_record_hex\":\"2089b1c2a52f51bf608dfdbe9a047b3f765b9ac2d07873c14f63cd41959422bf000000000000000000000000000000000000000000000000000000000000000004ba2d35df0bffb9c76a1db75b05653ad83eceb542e41ab8fcf8823afc7a24b704ba2d35df0bffb9c76a1db75b05653ad83eceb542e41ab8fcf8823afc7a24b7000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ad7a33cc0a348420ad7a33c6f12833a0000000000000000000000000000803f0000000000000000000000000000000002000000050000002001000018010000b6030000140200000000000001000000\",\"device_name_bytes_hex\":\"6c6c766d7069706520284c4c564d2032302e312e322c20323536206269747329\"}\n\n[  FAILED  ] VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p (73837 ms)\n[----------] 1 test from VulkanRenderSession (73837 ms total)\n\n[----------] Global test environment tear-down\n[==========] 1 test from 1 test suite ran. (73837 ms total)\n[  PASSED  ] 0 tests.\n[  FAILED  ] 1 test, listed below:\n[  FAILED  ] VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p\n\n 1 FAILED TEST\n"
+        }
+      ],
+      "input_snapshot": {
+        "bytes": 1259809,
+        "path": "out/strict-p1-camera/device/runs/p1-legacy-bardeen/inputs-before.json",
+        "sha256": "0478fc0d05a1251917ea7953da0b016ceeb0c3699fba630706b88a1e8b84d0ec"
+      },
+      "junit": {
+        "bytes": 3672,
+        "path": "out/strict-p1-camera/device/runs/p1-legacy-bardeen/junit.xml",
+        "sha256": "332ff25692720e0c05527fdaef37caff68717aa6d019b15aad702f7c8a764388"
+      },
+      "owner": {
+        "bytes": 2668,
+        "path": "out/strict-p1-camera/device/runs/p1-legacy-bardeen/owner.json",
+        "sha256": "a8c854701176756162cb60748ce3b3e6e6cdf60475af889acb6b342651d1b742"
+      },
+      "status": {
+        "child_exit": 8,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 3600
+        },
+        "passed": false,
+        "peak_sampled_rss_kib": 1536984,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 74.07327201598673,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 27,
+        "path": "out/strict-p1-camera/device/runs/p1-legacy-bardeen/stderr.log",
+        "sha256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4"
+      },
+      "stderr_tail": [
+        "Errors while running CTest"
+      ],
+      "stdout": {
+        "bytes": 7759,
+        "path": "out/strict-p1-camera/device/runs/p1-legacy-bardeen/stdout.log",
+        "sha256": "9e3f505e363c77c84a2a4f92c152de8533501319ef5d1d0b8cc1ecebf92f1112"
+      },
+      "stdout_tail": [
+        "[==========] 1 test from 1 test suite ran. (73837 ms total)",
+        "[  PASSED  ] 0 tests.",
+        "[  FAILED  ] 1 test, listed below:",
+        "[  FAILED  ] VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+        "",
+        " 1 FAILED TEST",
+        "",
+        "",
+        "0% tests passed, 1 tests failed out of 1",
+        "",
+        "Label Time Summary:",
+        "Correctness    =  74.02 sec*proc (1 test)",
+        "Mandatory      =  74.02 sec*proc (1 test)",
+        "Operational    =  74.02 sec*proc (1 test)",
+        "Rendering      =  74.02 sec*proc (1 test)",
+        "",
+        "Total Test time (real) =  74.05 sec",
+        "",
+        "The following tests FAILED:",
+        "\t998 - VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p (Failed)"
+      ]
+    },
+    "p1-retained-conservation": {
+      "accepted": true,
+      "actual_required_product_execution": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(FullPathAcceptance\\.VulkanRetainedNearExtremalRayConservesIndependentInvariants)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/device/runs/p1-retained-conservation/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+          "seconds": 67.6283
+        }
+      ],
+      "direct_gtest_xml": {
+        "bytes": 3480,
+        "path": "out/strict-p1-camera/device/runs/p1-retained-conservation/gtest.xml",
+        "sha256": "e2ab0779f3664e218126ed3088b25532d0fb6d5f32bd68d2ce1141000195aa7c"
+      },
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/device/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/device/p1-retained-conservation"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "input_snapshot": {
+        "bytes": 1259809,
+        "path": "out/strict-p1-camera/device/runs/p1-retained-conservation/inputs-before.json",
+        "sha256": "0478fc0d05a1251917ea7953da0b016ceeb0c3699fba630706b88a1e8b84d0ec"
+      },
+      "junit": {
+        "bytes": 1282,
+        "path": "out/strict-p1-camera/device/runs/p1-retained-conservation/junit.xml",
+        "sha256": "2a30533a96bfa35ee253ef270a115960d0029e14a7ed3ac3b7c172edb33bfaec"
+      },
+      "measured_properties": {
+        "binary32_products_conservation": "state=expanded_binary32;products=binary32;E_initial=-0.82560919882387818;Lz_initial=8.2314984722104505;Q_initial=26.369807586647333;max_E_relative=1.6259330395444444e-11;max_Lz_relative=7.8247978667605572e-12;max_Q_relative=1.6624626517848814e-11;max_abs_gkk_over_sum_abs_terms=6.6379015020989733e-15;accepted_intervals=70;successful_candidates=70;rolled_back_candidates=0;native_samples=2;outgoing_samples=70;radial_turns=1;min_r_per_mass=10.329210825759393;min_abs_sin_theta=0.87062634383166904;terminal=physical_escape;affine_per_mass=56.205695544722872",
+        "binary64_products_conservation": "state=expanded_binary32;products=binary64;E_initial=-0.82560919882387818;Lz_initial=8.2314984722104505;Q_initial=26.369807586647333;max_E_relative=1.6259330395444444e-11;max_Lz_relative=7.8247978667605572e-12;max_Q_relative=1.6624626517848814e-11;max_abs_gkk_over_sum_abs_terms=6.6379015020989733e-15;accepted_intervals=70;successful_candidates=70;rolled_back_candidates=0;native_samples=2;outgoing_samples=70;radial_turns=1;min_r_per_mass=10.329210825759393;min_abs_sin_theta=0.87062634383166904;terminal=physical_escape;affine_per_mass=56.205695544722872",
+        "device": "llvmpipe (LLVM 20.1.2, 256 bits)",
+        "evidence_scope": "actual retained camera and intervals; committed physical host views and localized terminal; independently contracted E/Lz/Q and normalized null; one off-plane inward-turn-escape ray per supported product mode; no unprojected-stage or uniform-domain claim",
+        "executed_product_modes": "2",
+        "kerr_0998_inner_turn_conservation_binary32_products_r0": "endpoint_per_mass=7.7515943663897247e-10;direction_angle_rad=9.5146898452447754e-12;finite_map_relative=6.3378316561251872e-12;infinity_map_relative=6.066052417714142e-12;beam_covariance_relative=2.3775108344337108e-08;reference_endpoint_gap=1.2806598316539297e-10;reference_map_gap=2.5372719146481228e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+        "kerr_0998_inner_turn_conservation_binary64_products_r0": "endpoint_per_mass=7.7515943663897247e-10;direction_angle_rad=9.5146898452447754e-12;finite_map_relative=6.3378316561251872e-12;infinity_map_relative=6.066052417714142e-12;beam_covariance_relative=2.3775108344337108e-08;reference_endpoint_gap=1.2806598316539297e-10;reference_map_gap=2.5372719146481228e-11;attempts=70;reference_steps=2421;radial_turns=1;polar_turns=0;reference_step_fraction=0.001;reference_angular_spacing=0.0001",
+        "reference_scalar_mantissa_bits": "64"
+      },
+      "owner": {
+        "bytes": 2818,
+        "path": "out/strict-p1-camera/device/runs/p1-retained-conservation/owner.json",
+        "sha256": "69a9a3ff967b8e7262bee184ea302144a98105fe785aa5c3693efd76b4c79d9f"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 3600
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 2476976,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 67.70732549199602,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/device/runs/p1-retained-conservation/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 2195,
+        "path": "out/strict-p1-camera/device/runs/p1-retained-conservation/stdout.log",
+        "sha256": "19a37e21ad5cc16ee72a3141508afe8f55340afa0da4e0425284b80526a78ab1"
+      }
+    },
+    "p1-three-rungs": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-ci",
+        "-C",
+        "Release",
+        "-R",
+        "^(KernelParity\\.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison)$",
+        "-V",
+        "--output-on-failure",
+        "--no-tests=error",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/strict-p1-camera/device/runs/p1-three-rungs/junit.xml"
+      ],
+      "cases": [
+        {
+          "name": "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+          "seconds": 170.229
+        }
+      ],
+      "direct_test_xml": {
+        "bytes": 1034,
+        "path": "out/strict-p1-camera/device/runs/p1-three-rungs/gtest.xml",
+        "sha256": "e6fd0d73849e87abd864ca375ba2c2d14baa6a1d2a332012d373a03bfd8d3082"
+      },
+      "execution_environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/strict-p1-camera/device/mesa-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/strict-p1-camera/device/p1-three-rungs"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "input_snapshot": {
+        "bytes": 1259809,
+        "path": "out/strict-p1-camera/device/runs/p1-three-rungs/inputs-before.json",
+        "sha256": "0478fc0d05a1251917ea7953da0b016ceeb0c3699fba630706b88a1e8b84d0ec"
+      },
+      "junit": {
+        "bytes": 1652,
+        "path": "out/strict-p1-camera/device/runs/p1-three-rungs/junit.xml",
+        "sha256": "a11669b605e3e8e5f3ae6ee52497d80a00f13f485fa20140313094979adcb804"
+      },
+      "owner": {
+        "bytes": 2764,
+        "path": "out/strict-p1-camera/device/runs/p1-three-rungs/owner.json",
+        "sha256": "b7ab5623e68f80381ced0c336cec2063b47e64d94b293408bb6a463f80868b1c"
+      },
+      "precision_properties": {
+        "fp64_evidence": "native_invariants_executed",
+        "parity_opcode_6_actual_submissions": "1",
+        "parity_opcode_6_allocated_bytes": "336",
+        "parity_opcode_6_completed_records": "1",
+        "parity_opcode_6_maximum_submit_ms": "8.619083"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 8388608,
+          "seconds": 3600
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 1149960,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 170.28825721898465,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/strict-p1-camera/device/runs/p1-three-rungs/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 3228,
+        "path": "out/strict-p1-camera/device/runs/p1-three-rungs/stdout.log",
+        "sha256": "18f296a544ec174755b0bceeb918ec48e325e01dbb8ea791fa8eb1e9453ada66"
+      }
+    }
+  },
+  "execution_source": {
+    "bytes": 4480,
+    "path": "out/strict-p1-camera/run_p1_camera.py",
+    "sha256": "ce08ab316130990a5aeffb69dbe4458025d0000ffb023e3c0f9ee03f3174ccd7"
+  },
+  "execution_source_preserved": "out/science-replay/run_p1_camera.py",
+  "floor_diagnostic": {
+    "bytes": 81380,
+    "path": "attestations/qualification/77667953/strict-linux-p1-and-camera/BARDEEN_FLOOR.json",
+    "sha256": "1acc1d8fb5a0064bb9f7c2b0d3115ac94c4747f813f9355ff628bd8264e43742"
+  },
+  "fresh_acceptance_criterion_case_counts": {
+    "E3": {
+      "passed": 22,
+      "total": 28,
+      "unmeasured": [
+        "OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+        "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
+        "ViewCommandOperational.VulkanRefinementPublishesProgressiveFrames",
+        "VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget",
+        "VulkanRenderSession.Kerr160x120CompletesAcrossMultipleGovernedTiles"
+      ]
+    },
+    "P1": {
+      "passed": 37,
+      "total": 41,
+      "unmeasured": [
+        "OperationalP1.NearExtremalBurnIn",
+        "ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p",
+        "ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p",
+        "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"
+      ]
+    },
+    "P2": {
+      "passed": 26,
+      "total": 126,
+      "unmeasured": [
+        "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+        "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+        "CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant",
+        "CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision",
+        "CoupledTransport.CapturedKerrBeamMatchesNeighboursAndStepRefinement",
+        "CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation",
+        "CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError",
+        "CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials",
+        "CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow",
+        "CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit",
+        "CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion",
+        "CoupledTransport.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement",
+        "CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap",
+        "CoupledTransport.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise",
+        "CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines",
+        "CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator",
+        "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+        "CpuJacobiOracle.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
+        "CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent",
+        "CpuTraceBoundary.OrdinaryEscapeBoundaryLaunchUsesCrossingDirection",
+        "CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals",
+        "CpuTraceBoundary.OrdinaryEscapeDeclinesExteriorOutwardLaunchWithoutSourceEvent",
+        "CpuTraceBoundary.OrdinaryEscapeExcludesDiskAndVolumeBeyondBoundary",
+        "CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk",
+        "CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers",
+        "DopriPositionSegment.DegreeEightIsolationCoversEveryRootWithoutGridSampling",
+        "DopriPositionSegment.DiskRootsIncludeTangenciesAndKeepOriginalFractions",
+        "DopriPositionSegment.IncrementBoundarySurvivesLargeOriginsAndInvalidInputsFailClosed",
+        "DopriPositionSegment.SameSideQuarticContactsRespectDirectionAndOriginalRestriction",
+        "DopriPositionSegment.SamplesTheQuarticAndItsAffineDerivative",
+        "DopriPositionSegment.TangenciesAndKerrEllipsoidUseTheSameQuartic",
+        "KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault",
+        "KernelInfinityDevice.CompensatedIndependentDirectionsVariationsAndTerminalStates",
+        "KernelInfinityDevice.FinishDeclinesWithoutPublishingPartialResults",
+        "KernelInfinityDevice.Fp32IndependentDirectionsVariationsAndTerminalStates",
+        "KernelInfinityDevice.Fp64IndependentDirectionsVariationsAndTerminalStates",
+        "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation",
+        "KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm",
+        "KernelParity.DeviceTidalContractionMatchesAnalyticKerrAtMatchedEvents",
+        "KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
+        "KernelParity.FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRungs",
+        "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs",
+        "KerrInfinity.AxisPrincipalRaysHaveAnalyticAngularVariation",
+        "KerrInfinity.FlatOblateRaysAndAxesReachExactCartesianSky",
+        "KerrInfinity.FrequencyScaleAndSignedParityArePreserved",
+        "KerrInfinity.KerrTailMatchesIndependentSeparatedReference",
+        "KerrInfinity.MassSpinAndRadiusScalingPreserveDirectionAndJacobian",
+        "KerrInfinity.NearCriticalSchwarzschildDerivativeMatchesIndependentRadialIntegral",
+        "KerrInfinity.RejectsHiddenRadialTurningPoint",
+        "KerrInfinity.RejectsUnrepresentedInputsAndWorkExhaustion",
+        "KerrInfinity.VaryingHandoffAndTangentMatchExactFlatDerivative",
+        "PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
+        "PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
+        "RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns",
+        "RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain",
+        "RayBundleTest.MagnificationComesOnlyFromJacobiMap",
+        "RenderSessionProbe.ExhaustedNonKerrRayCannotPublishACompletedBlackFrame",
+        "RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure",
+        "RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput",
+        "RetainedArithmetic.CartesianGradientMatchesIndependentRationalValues",
+        "RetainedArithmetic.CompleteCriticalMetricMatchesIndependentPrecisionWitnesses",
+        "RetainedArithmetic.SmallTermsSurviveLargeSumsProductsAndDivision",
+        "RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows",
+        "RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+        "RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives",
+        "RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices",
+        "RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError",
+        "RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual",
+        "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+        "RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded",
+        "RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates",
+        "RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState",
+        "RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives",
+        "RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal",
+        "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+        "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+        "RetainedDopriTest.IndependentQuarticPreservesCompletePhase",
+        "RetainedDopriTest.MalformedRowsRefuseAndRecover",
+        "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+        "RetainedValue.Binary64InputsKeepTheirRepresentationResidual",
+        "SourceSkyDifferential.DeclinesUnrepresentedFrequencyGeometryAndVariation",
+        "SourceSkyDifferential.DirectionIsInvariantUnderFrequencyAndLongitudinalVariation",
+        "SourceSkyDifferential.KerrPositionAndTangentVariationsMatchIndependentDifferences",
+        "SourceSkyDifferential.MovingFlatCameraMatchesAnalyticLorentzDirectionDerivative",
+        "SourceSkyDifferential.NormalizesNonNullSpatialDirectionAndItsDerivative",
+        "SourceSkyDifferential.ReseedsMetricVariationWithoutInheritedDualMetadata",
+        "SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent",
+        "SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours",
+        "SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity",
+        "SourceSkyMap.EndpointVariationPreservesGaugeAndDeclinesGrazingContact",
+        "SourceSkyMap.FlatAngularMapIsIndependentOfSphereRadiusSeedAndFrequency",
+        "SourceSkyMap.KerrCovariantChartVariationsMatchMappedNominalFamily",
+        "SourceSkyMap.LocalizedFlatSphereVariationMatchesAnalyticRayFamily",
+        "SourceSkyMap.RetainsZeroRankDeficiencyAndSignedParity",
+        "SourceSkyMapTrace.KerrMapConvergesToFixedPupilRetracing",
+        "SourceSkyMapTrace.MovingPupilMapMatchesAnalyticAberration",
+        "SourceSkyMapTrace.StationaryTranslatedPupilMapIsRadiusIndependent",
+        "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+        "VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance"
+      ]
+    },
+    "P3": {
+      "passed": 42,
+      "total": 46,
+      "unmeasured": [
+        "OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+        "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
+        "VulkanRenderSession.IndexedPointCatalogueReachesLiveKernel"
+      ]
+    },
+    "P5": {
+      "passed": 31,
+      "total": 35,
+      "unmeasured": [
+        "OperationalAttestation.FalseExternalEvidenceIsRejected",
+        "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+        "VulkanRenderSession.CombinedParitySceneRetainsResolvedImageStructure",
+        "VulkanRenderSession.NonSquareMultisamplingCameraAndLensReachLiveKernel"
+      ]
+    }
+  },
+  "fresh_case_count": 125,
+  "gcc_candidate_products": [
+    {
+      "bytes": 9640208,
+      "path": "bin/linux-ci/src/sirius/app/sirius",
+      "sha256": "0ae590bf4cb8bbe9b2af6d6964a2f19e004ebd0f8dba7ed9bc31954619a60016"
+    },
+    {
+      "bytes": 11188216,
+      "path": "bin/linux-ci/src/sirius/app/sirius_app_tests",
+      "sha256": "22ceb42939d40a49ca45394541f279d3707bcb3fa1afcc4c0d48974ea8459ef8"
+    },
+    {
+      "bytes": 12142824,
+      "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+      "sha256": "32c2ceced1dc382049055a924d22df7b5e08a4ae9eb58f279fc54e480de26f61"
+    },
+    {
+      "bytes": 13441568,
+      "path": "bin/linux-ci/tests/backend/sirius_backend_tests",
+      "sha256": "fa38f4ad504c15dd56e8ccdc5f46bab80ed508d98d6d0a8ca49960a9f14ac2f8"
+    },
+    {
+      "bytes": 5199120,
+      "path": "bin/linux-ci/tests/core/sirius_core_tests",
+      "sha256": "92402f79b0bdf3d57121b0364cbc8c30acdbbffe6f470c2027fba51ed89c4122"
+    },
+    {
+      "bytes": 1678696,
+      "path": "bin/linux-ci/tests/oracle/sirius_oracle_tests",
+      "sha256": "ade44b9160a8e991ca82c3e7e24da19e4b7fe126472c1f8f0a4565afa1b21ba4"
+    },
+    {
+      "bytes": 783520,
+      "path": "bin/linux-ci/tests/sirius_base_tests",
+      "sha256": "3a4e1c4b6e4311e8b7d597a727693e94bb2b224a991a0aba7bfd3f83678f52c4"
+    }
+  ],
+  "mode": "qualification",
+  "model": {
+    "bytes": 130827,
+    "path": "tests/operating_model.json",
+    "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+  },
+  "model_rows": 64,
+  "physical_preflight": {
+    "diagnostic": "attestation preflight: physical Vulkan selection must resolve exactly one device; matched 0\n",
+    "exit": 1,
+    "profile": "wsl2-radeon-viewer",
+    "selected_vulkan_icd": {
+      "bytes": 135,
+      "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    },
+    "stdout": {
+      "bytes": 0,
+      "path": "out/strict-p1-camera/physical-preflight.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "revision": "77667953728d3e0b95975c7c5c2045fa4b33f79b",
+  "scope_limit": "Strict Linux compilation and selected local CTest witnesses. Physical scenes and window input, full Mandatory, external admission, original tape identity and main release remain separate obligations. The stock Bardeen case is a real failure on this source.",
+  "strict_builds": {
+    "clang": {
+      "alignment": {
+        "bytes": 1240,
+        "path": "bin/linux-clang/generated/sirius/alignment_receipt.json",
+        "sha256": "6f8dbaad54206d40b748756cd0a38c28765b1be9ead1e2b3fbb6c626fe5e96d1"
+      },
+      "argv": [
+        "cmake",
+        "--preset",
+        "linux-clang",
+        "-DSIRIUS_ALIGNMENT_MODE=qualification",
+        "-DSIRIUS_REQUIRE_VULKAN_RUNTIME=ON",
+        "-DFETCHCONTENT_SOURCE_DIR_FTXUI=/home/astra/.project/Sirius/bin/linux-ci/_deps/ftxui-src",
+        "-DFETCHCONTENT_SOURCE_DIR_JSON=/home/astra/.project/Sirius/bin/linux-ci/_deps/json-src",
+        "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=/home/astra/.project/Sirius/bin/linux-ci/_deps/googletest-src"
+      ],
+      "build_log": {
+        "bytes": 41192,
+        "path": "out/strict-p1-camera/clang-build.log",
+        "sha256": "3083ce2c24d2ed58f5773754d395f2c2c12755e2fbf3861f6c8bd110f60dcfb1"
+      },
+      "cache": {
+        "bytes": 57617,
+        "path": "bin/linux-clang/CMakeCache.txt",
+        "sha256": "f117e81e92a908f24f3b99e97c213f7a065118d1c64d99b675fe99f88be94f39"
+      },
+      "compiler_database": {
+        "bytes": 214293,
+        "path": "bin/linux-clang/compile_commands.json",
+        "sha256": "c12ff35b6d4bf1a0128357a42fc64479f0bc6e8a2b38b3f16c1dab0afeadaf07"
+      },
+      "configure_log": {
+        "bytes": 2880,
+        "path": "out/strict-p1-camera/clang-configure.log",
+        "sha256": "b4fca43316a66c1599b6c473ec217b6f5f8abfe2fe0765144486f353fe67a7e4"
+      },
+      "controls_junit": {
+        "bytes": 3155,
+        "path": "out/strict-p1-camera/clang-controls/junit.xml",
+        "sha256": "e2131788bdccbce9d7ad899bc16a5895dac5246f017a3f0f68387b57ad5500f8"
+      },
+      "controls_output": {
+        "bytes": 5018,
+        "path": "out/strict-p1-camera/clang-controls/ctest.log",
+        "sha256": "a6c9a2f1721ce8a6ba9c0546566a2cf52106ffd457851d58311688f0267caf03"
+      },
+      "inventory": {
+        "bytes": 1023576,
+        "path": "out/strict-p1-camera/clang-controls/inventory.json",
+        "sha256": "b7bd6a529e2d1312349be25211c70ba56f2414c7ef18d076670a9c2b5ff2fe5a"
+      },
+      "labels_check": {
+        "bytes": 31,
+        "path": "out/strict-p1-camera/clang-controls/labels.log",
+        "sha256": "f67cf96059e8fb229591b04aa96794c93d8aa04cc4f69dc156274376a59c24a3"
+      },
+      "products": [
+        {
+          "bytes": 8907480,
+          "path": "bin/linux-clang/src/sirius/app/sirius",
+          "sha256": "55f706fb8fe00747a3b9196b5c75870b87ed80489f00e2d11de330d80558e8c4"
+        },
+        {
+          "bytes": 10281440,
+          "path": "bin/linux-clang/src/sirius/app/sirius_app_tests",
+          "sha256": "32ed66fe841ac2b4b51bbf4ec1999b257486dbeb95d8511536c590a2b5916c45"
+        },
+        {
+          "bytes": 10788248,
+          "path": "bin/linux-clang/src/sirius/app/sirius_render_tests",
+          "sha256": "e9ae55f9a802836e81c27d601d2534d10de6bcdcab97d6df0999be5649d6b0b8"
+        },
+        {
+          "bytes": 688928,
+          "path": "bin/linux-clang/tests/sirius_base_tests",
+          "sha256": "8a02a764b40fe1f6b01077a5238569a5cd4677c245ee9720a403d1ca62db0d7e"
+        },
+        {
+          "bytes": 12450488,
+          "path": "bin/linux-clang/tests/backend/sirius_backend_tests",
+          "sha256": "504115138fd34aa161bcc63e3669bbd5d4413d0fff06f70a2c680525120e448d"
+        },
+        {
+          "bytes": 3804952,
+          "path": "bin/linux-clang/tests/core/sirius_core_tests",
+          "sha256": "51672e5025ef6326732aa0f687e10be97566c18394c18355d335982c9dd4fe14"
+        },
+        {
+          "bytes": 1335528,
+          "path": "bin/linux-clang/tests/oracle/sirius_oracle_tests",
+          "sha256": "3f63ecfaaa94f98e3a763ce8865032d12f88afe42b51d8314399edd13ab75d33"
+        }
+      ],
+      "renderer_compile_command": "/usr/bin/clang++-21 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/bin/linux-ci/_deps/json-src/include -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o -c /home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp",
+      "resource_inputs": [
+        {
+          "bytes": 29984397,
+          "path": "bin/linux-clang/src/sirius/app/resources/assets/Starfield.png",
+          "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+        },
+        {
+          "bytes": 36660,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/camera_frame_probe.spv",
+          "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+        },
+        {
+          "bytes": 36660,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv",
+          "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+        },
+        {
+          "bytes": 37728,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv",
+          "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+        },
+        {
+          "bytes": 878700,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/coupled_probe_fp64.spv",
+          "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+        },
+        {
+          "bytes": 99692,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/infinity_probe.spv",
+          "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+        },
+        {
+          "bytes": 100040,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv",
+          "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+        },
+        {
+          "bytes": 100568,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/infinity_probe_fp64.spv",
+          "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+        },
+        {
+          "bytes": 65616,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/metric_consistency_probe.spv",
+          "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+        },
+        {
+          "bytes": 65616,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv",
+          "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+        },
+        {
+          "bytes": 66064,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv",
+          "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+        },
+        {
+          "bytes": 3377936,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/parity_probe.spv",
+          "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+        },
+        {
+          "bytes": 3382160,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv",
+          "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+        },
+        {
+          "bytes": 3427652,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/parity_probe_fp64.spv",
+          "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+        },
+        {
+          "bytes": 336030,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/portability/trace.cu",
+          "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+        },
+        {
+          "bytes": 358529,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/portability/trace.metal",
+          "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+        },
+        {
+          "bytes": 1404,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/smoke.spv",
+          "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+        },
+        {
+          "bytes": 2325528,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/trace.spv",
+          "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+        },
+        {
+          "bytes": 2328852,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/trace_fp32comp.spv",
+          "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+        },
+        {
+          "bytes": 2336860,
+          "path": "bin/linux-clang/src/sirius/app/resources/kernels/trace_fp64.spv",
+          "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+        },
+        {
+          "bytes": 1240,
+          "path": "bin/linux-clang/src/sirius/app/resources/model/alignment_receipt.json",
+          "sha256": "6f8dbaad54206d40b748756cd0a38c28765b1be9ead1e2b3fbb6c626fe5e96d1"
+        },
+        {
+          "bytes": 130827,
+          "path": "bin/linux-clang/src/sirius/app/resources/model/operating_model.json",
+          "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+        },
+        {
+          "bytes": 1167,
+          "path": "bin/linux-clang/src/sirius/app/resources/shaders/RDSD003A.frag",
+          "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+        },
+        {
+          "bytes": 198,
+          "path": "bin/linux-clang/src/sirius/app/resources/shaders/RDSD003A.vert",
+          "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+        },
+        {
+          "bytes": 4182444,
+          "path": "bin/linux-clang/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin",
+          "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+        },
+        {
+          "bytes": 35160,
+          "path": "bin/linux-clang/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+          "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+        },
+        {
+          "bytes": 35196,
+          "path": "bin/linux-clang/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+          "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+        },
+        {
+          "bytes": 416303,
+          "path": "bin/linux-clang/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h",
+          "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+        }
+      ],
+      "zero_skip_cases": [
+        {
+          "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+          "seconds": 3.00555
+        },
+        {
+          "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "seconds": 0.0218361
+        },
+        {
+          "name": "OperationalRetainedShaders.OptionalCapabilitiesPreserveFloatControls",
+          "seconds": 0.0512419
+        },
+        {
+          "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "seconds": 2.59578
+        },
+        {
+          "name": "OperationalAttestation.FalseExternalEvidenceIsRejected",
+          "seconds": 17.7467
+        },
+        {
+          "name": "OperationalAttestation.PreflightAndNativeRuntimeRejectFalseHostDevice",
+          "seconds": 0.261483
+        },
+        {
+          "name": "OperationalAlignment.IncompleteOrAmbiguousAttestationSetIsRejected",
+          "seconds": 0.0386166
+        }
+      ]
+    },
+    "exact_mandatory_registration_count": 1152,
+    "gcc": {
+      "alignment": {
+        "bytes": 1240,
+        "path": "bin/linux-ci/generated/sirius/alignment_receipt.json",
+        "sha256": "6f8dbaad54206d40b748756cd0a38c28765b1be9ead1e2b3fbb6c626fe5e96d1"
+      },
+      "argv": [
+        "cmake",
+        "--preset",
+        "linux-ci",
+        "-DSIRIUS_ALIGNMENT_MODE=qualification"
+      ],
+      "build_log": {
+        "bytes": 41528,
+        "path": "out/strict-p1-camera/build.log",
+        "sha256": "5d1b737d4e665f015c53a5702af87e0528365c1f632364cfd8cc72b1c91247e2"
+      },
+      "cache": {
+        "bytes": 57486,
+        "path": "bin/linux-ci/CMakeCache.txt",
+        "sha256": "65c16c08b8c27b0625713909f27b7b4f64d8ebb575c1091cc0aeeb876ca3f1ba"
+      },
+      "compiler_database": {
+        "bytes": 212076,
+        "path": "bin/linux-ci/compile_commands.json",
+        "sha256": "4a445c8535680b156f71daba55b76d49e6f2ba4ea8b638feea634544225e9b8d"
+      },
+      "configure_log": {
+        "bytes": 2900,
+        "path": "out/strict-p1-camera/configure.log",
+        "sha256": "6faa830176492af270e0d3839ff4d787ed056736996b3339e4ebed4d6b60844c"
+      },
+      "inventory": {
+        "bytes": 1016673,
+        "path": "out/strict-p1-camera/host/runs/inventory.json",
+        "sha256": "02ad12e24e1b07ff6ff9251fb2180d47777c39ce2733ba055c135442ce0490ca"
+      },
+      "products": [
+        {
+          "bytes": 9640208,
+          "path": "bin/linux-ci/src/sirius/app/sirius",
+          "sha256": "0ae590bf4cb8bbe9b2af6d6964a2f19e004ebd0f8dba7ed9bc31954619a60016"
+        },
+        {
+          "bytes": 11188216,
+          "path": "bin/linux-ci/src/sirius/app/sirius_app_tests",
+          "sha256": "22ceb42939d40a49ca45394541f279d3707bcb3fa1afcc4c0d48974ea8459ef8"
+        },
+        {
+          "bytes": 12142824,
+          "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+          "sha256": "32c2ceced1dc382049055a924d22df7b5e08a4ae9eb58f279fc54e480de26f61"
+        },
+        {
+          "bytes": 783520,
+          "path": "bin/linux-ci/tests/sirius_base_tests",
+          "sha256": "3a4e1c4b6e4311e8b7d597a727693e94bb2b224a991a0aba7bfd3f83678f52c4"
+        },
+        {
+          "bytes": 13441568,
+          "path": "bin/linux-ci/tests/backend/sirius_backend_tests",
+          "sha256": "fa38f4ad504c15dd56e8ccdc5f46bab80ed508d98d6d0a8ca49960a9f14ac2f8"
+        },
+        {
+          "bytes": 5199120,
+          "path": "bin/linux-ci/tests/core/sirius_core_tests",
+          "sha256": "92402f79b0bdf3d57121b0364cbc8c30acdbbffe6f470c2027fba51ed89c4122"
+        },
+        {
+          "bytes": 1678696,
+          "path": "bin/linux-ci/tests/oracle/sirius_oracle_tests",
+          "sha256": "ade44b9160a8e991ca82c3e7e24da19e4b7fe126472c1f8f0a4565afa1b21ba4"
+        }
+      ],
+      "renderer_compile_command": "/usr/bin/g++-14 -DSIRIUS_CONTRACT_MODE=2 -DSIRIUS_HAS_RETAINED_COMPUTE=1 -DSIRIUS_HAS_VULKAN_BACKEND=1 -DSIRIUS_RELEASE_RESOURCE_LOCKED=1 -I/home/astra/.project/Sirius/lib/stb -I/home/astra/.project/Sirius/lib/tinyexr -I/home/astra/.project/Sirius/src/sirius/.. -I/home/astra/.project/Sirius/bin/linux-ci/_deps/json-src/include -O3 -DNDEBUG -std=c++2c -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -o src/sirius/render/CMakeFiles/sirius_render.dir/vulkan_renderer.cpp.o -c /home/astra/.project/Sirius/src/sirius/render/vulkan_renderer.cpp",
+      "resource_inputs": [
+        {
+          "bytes": 29984397,
+          "path": "bin/linux-ci/src/sirius/app/resources/assets/Starfield.png",
+          "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+        },
+        {
+          "bytes": 36660,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/camera_frame_probe.spv",
+          "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+        },
+        {
+          "bytes": 36660,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv",
+          "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+        },
+        {
+          "bytes": 37728,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv",
+          "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+        },
+        {
+          "bytes": 878700,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/coupled_probe_fp64.spv",
+          "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+        },
+        {
+          "bytes": 99692,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/infinity_probe.spv",
+          "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+        },
+        {
+          "bytes": 100040,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv",
+          "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+        },
+        {
+          "bytes": 100568,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/infinity_probe_fp64.spv",
+          "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+        },
+        {
+          "bytes": 65616,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/metric_consistency_probe.spv",
+          "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+        },
+        {
+          "bytes": 65616,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv",
+          "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+        },
+        {
+          "bytes": 66064,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv",
+          "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+        },
+        {
+          "bytes": 3377936,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/parity_probe.spv",
+          "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+        },
+        {
+          "bytes": 3382160,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv",
+          "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+        },
+        {
+          "bytes": 3427652,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/parity_probe_fp64.spv",
+          "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+        },
+        {
+          "bytes": 336030,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/portability/trace.cu",
+          "sha256": "6de567980ce44007e67934aad76cace74f56cbd9626853a3b579fd9d7387fb10"
+        },
+        {
+          "bytes": 358529,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/portability/trace.metal",
+          "sha256": "b6cd9678885d9eab8ecd9d49777dc7e47edbb5afac8b32c98c70daa2673922dc"
+        },
+        {
+          "bytes": 1404,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/smoke.spv",
+          "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+        },
+        {
+          "bytes": 2325528,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/trace.spv",
+          "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+        },
+        {
+          "bytes": 2328852,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/trace_fp32comp.spv",
+          "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+        },
+        {
+          "bytes": 2336860,
+          "path": "bin/linux-ci/src/sirius/app/resources/kernels/trace_fp64.spv",
+          "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+        },
+        {
+          "bytes": 1240,
+          "path": "bin/linux-ci/src/sirius/app/resources/model/alignment_receipt.json",
+          "sha256": "6f8dbaad54206d40b748756cd0a38c28765b1be9ead1e2b3fbb6c626fe5e96d1"
+        },
+        {
+          "bytes": 130827,
+          "path": "bin/linux-ci/src/sirius/app/resources/model/operating_model.json",
+          "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+        },
+        {
+          "bytes": 1167,
+          "path": "bin/linux-ci/src/sirius/app/resources/shaders/RDSD003A.frag",
+          "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+        },
+        {
+          "bytes": 198,
+          "path": "bin/linux-ci/src/sirius/app/resources/shaders/RDSD003A.vert",
+          "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+        },
+        {
+          "bytes": 4182444,
+          "path": "bin/linux-ci/src/sirius/app/resources/tests/backend/portable_binary32_reference.bin",
+          "sha256": "3fb1433f9cd14fbc9fd2b99a38a4893a4a571150df10f2fbe58172318fc7691e"
+        },
+        {
+          "bytes": 35160,
+          "path": "bin/linux-ci/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32.spv",
+          "sha256": "c8d9ed3a58a54af962af039980762e51355df5328a016a12f28a97cde29220a7"
+        },
+        {
+          "bytes": 35196,
+          "path": "bin/linux-ci/src/sirius/app/resources/tests/backend/retained_camera/program_camera_probe-fp32comp.spv",
+          "sha256": "94072686f5c8387abd7214dc51bfd4cc0dc94e5128c7be5da725cf0224b859f1"
+        },
+        {
+          "bytes": 416303,
+          "path": "bin/linux-ci/src/sirius/app/resources/tests/backend/retained_camera/program_fixture.h",
+          "sha256": "f1ae376e887c00465a033f5ab080779917eefd8c25e0ffa407465739dbb27616"
+        }
+      ]
+    },
+    "identical_spirv_products": {
+      "src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+        "bytes": 37728,
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      },
+      "src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+        "bytes": 878700,
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      },
+      "src/sirius/app/resources/kernels/infinity_probe.spv": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      },
+      "src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      },
+      "src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      },
+      "src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      },
+      "src/sirius/app/resources/kernels/parity_probe.spv": {
+        "bytes": 3377936,
+        "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+      },
+      "src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+        "bytes": 3382160,
+        "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+      },
+      "src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+        "bytes": 3427652,
+        "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+      },
+      "src/sirius/app/resources/kernels/smoke.spv": {
+        "bytes": 1404,
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      },
+      "src/sirius/app/resources/kernels/trace.spv": {
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      },
+      "src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      },
+      "src/sirius/app/resources/kernels/trace_fp64.spv": {
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      },
+      "src/sirius/backend/retained/retained_camera.spv": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      },
+      "src/sirius/backend/retained/retained_camera_fp64.spv": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      },
+      "src/sirius/backend/retained/retained_camera_portable.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      "src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      "src/sirius/backend/retained/retained_dense.spv": {
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+      },
+      "src/sirius/backend/retained/retained_dense_fp64.spv": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      },
+      "src/sirius/backend/retained/retained_dense_portable.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      "src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      "src/sirius/backend/retained/retained_dopri_phase.spv": {
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      },
+      "src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      },
+      "src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      },
+      "src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      },
+      "src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+        "bytes": 96752,
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      },
+      "src/sirius/backend/retained/retained_endpoint.spv": {
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      },
+      "src/sirius/backend/retained/retained_endpoint_fma.spv": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      },
+      "src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      },
+      "src/sirius/backend/retained/retained_endpoint_portable.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      },
+      "src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      },
+      "src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      },
+      "src/sirius/backend/retained/retained_initialize.spv": {
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+      },
+      "src/sirius/backend/retained/retained_initialize_fp64.spv": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      },
+      "src/sirius/backend/retained/retained_initialize_portable.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      "src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      "src/sirius/backend/retained/retained_ray_camera.spv": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      },
+      "src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      },
+      "src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      "src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      "src/sirius/backend/retained/retained_transport.spv": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "src/sirius/backend/retained/retained_transport_fma.spv": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      },
+      "src/sirius/backend/retained/retained_transport_fp64.spv": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      },
+      "src/sirius/backend/retained/retained_transport_portable.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      },
+      "src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      },
+      "src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      },
+      "src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      }
+    },
+    "mandatory_receipts_present": false,
+    "shared_pinned_checkout_commits": {
+      "ftxui": "cdf28903a7781f97ba94d30b79c3a4b0c97ccce7",
+      "googletest": "f8d7d77c06936315286eb55f8de22cd23c188571",
+      "json": "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03"
+    },
+    "tested_products_count": 7,
+    "tool_versions": {
+      "clang++-21": "Ubuntu clang version 21.1.8 (++20251221032922+2078da43e25a-1~exp1~20251221153059.70)",
+      "clang-21": "Ubuntu clang version 21.1.8 (++20251221032922+2078da43e25a-1~exp1~20251221153059.70)",
+      "cmake": "cmake version 3.28.3",
+      "g++-14": "g++-14 (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0",
+      "gcc-14": "gcc-14 (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0",
+      "ninja": "1.11.1"
+    }
+  }
+}
