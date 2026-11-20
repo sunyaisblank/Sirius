@@ -6,6 +6,7 @@ import re
 import struct
 import subprocess
 import sys
+from types import FunctionType
 
 from prepare_provider import AX, R
 from resume_raw import pin, read_json, write_json
@@ -17,6 +18,10 @@ from elf_proof import Elf, associate
 
 
 STAGES = {'transport': 'transport', 'endpoint': 'endpoint', 'dopri_phase': 'dp'}
+ISA_QUERY = 'sirius_native_v4_supported'
+ISA_DISPATCHERS = {ISA_QUERY, *(f'sirius_native_{name}8' for name in (
+    'dense_add', 'dense_subtract', 'dense_multiply', 'dense_divide', 'dense_sqrt',
+    'tagged_add', 'tagged_subtract', 'tagged_multiply', 'tagged_divide', 'tagged_sqrt'))}
 
 
 def named(elf, symbol):
@@ -56,6 +61,57 @@ def fde_rows(table, address, size):
     return rows
 
 
+def associate_objects(provider, objects):
+    final = Elf(provider)
+    ax = Path(objects[7]['path'])
+    omitted = []
+
+    class ProviderElf(Elf):
+        def __init__(self, path):
+            super().__init__(path)
+            if self.kind != 1:
+                return
+            kept = []
+            for row in self.symbols:
+                name = row['name']
+                if name.startswith('_GLOBAL__sub_I_') and row['section'] and row['size']:
+                    assert self.function_bytes(row) == b'\xc3'
+                    assert not any(item['name'] == name and item['section'] for item in final.symbols)
+                    omitted.append(name)
+                elif Path(path) != ax or name not in ISA_DISPATCHERS:
+                    kept.append(row)
+            self.symbols = kept
+
+    # The exact AX verifier already allows no-op constructor removal and the
+    # x86-64 linker relaxation of these eleven CPU-dispatch references.
+    associate_provider = FunctionType(associate.__code__, dict(associate.__globals__, Elf=ProviderElf))
+    result = associate_provider(provider, objects)
+    assert len(omitted) == 3
+    original = Elf(ax)
+    cpu, = (row for row in final.symbols if row['name'] == '__cpu_features2' and row['section'])
+    for name in ISA_DISPATCHERS:
+        before, after = named(original, name), named(final, name)
+        old_code, new_code = bytearray(original.function_bytes(before)), bytearray(final.function_bytes(after))
+        assert old_code[:7] == bytes.fromhex('f30f1efa488b05')
+        assert new_code[:7] == bytes.fromhex('f30f1efa488d05')
+        new_code[5] = old_code[5]
+        expected = {7: (42, '__cpu_features2', cpu['value'])}
+        if name != ISA_QUERY:
+            for offset, isa in ((18, 'v4'), (33, 'v3')):
+                target = name.replace('sirius_native_', f'sirius_native_{isa}_', 1)
+                assert old_code[offset - 1] == new_code[offset - 1] == 0xE9
+                expected[offset] = (4, target, named(final, target)['value'])
+        relocs = {loc - before['value']: (kind, target['name']) for section, loc, kind, addend, target
+                  in original.relocations if section == before['section'] and before['value'] <= loc < before['value'] + before['size']
+                  and addend == -4}
+        assert relocs == {offset: target[:2] for offset, target in expected.items()}
+        for offset, (_, _, address) in expected.items():
+            assert after['value'] + offset + 4 + struct.unpack_from('<i', new_code, offset)[0] == address
+            old_code[offset:offset + 4] = new_code[offset:offset + 4] = b'\0' * 4
+        assert old_code == new_code
+    return result, sorted(omitted)
+
+
 def main():
     scratch, provider = (Path(arg).resolve() for arg in sys.argv[1:])
     component = read_json(scratch / 'provider-component.json')
@@ -67,7 +123,8 @@ def main():
     local_core_names = {name for name in local_core_names if name.startswith('sirius_local_value_')}
 
     # Only declared static relocation operands may differ from the pinned objects.
-    association = associate(provider, [*read_json(AX)['native_objects'], component['output']])
+    association, omitted_initializers = associate_objects(
+        provider, [*read_json(AX)['native_objects'], component['output']])
     elf = Elf(provider)
     elf.path = provider
     wide = Elf(output)
@@ -127,6 +184,7 @@ def main():
     write_json(scratch / 'linked-provider.json', {
         'provider': {'path': str(provider.relative_to(R)), **pin(provider)},
         'native_opcode_associations': len(association['objects']),
+        'omitted_one_byte_initializers': omitted_initializers, 'original_isa_dispatchers': len(ISA_DISPATCHERS),
         'direct_wide_join_relocations': dict(sorted(relocations.items())), 'unwind': unwind,
         'callback': {'mode_return': mode_return, 'job_register': 'rbx', 'saved_mxcsr_offset': 4},
         'packet_entries': packets, 'provider_component': component['output'],
