@@ -1,0 +1,145 @@
+{
+  "driver": {
+    "bytes": 12160,
+    "sha256": "96f55d272c74781b499dabe91bcb7aacccaad77e6021ff77dd0a459f4e66e8e0"
+  },
+  "pass": {
+    "bytes": 19518,
+    "sha256": "7894e5fcb25771984c296ec3f262bb81fb6df7f9a3001b4a6d6c30f67bfe3009"
+  },
+  "results": {
+    "build": {
+      "child_exit": 0,
+      "passed": true,
+      "peak_sampled_rss_kib": 371588,
+      "plugin": {
+        "bytes": 80184,
+        "sha256": "9376aac4aced13520ba18eaeb18b0ac55747508ea491c58ccad4dcbeb04cfddf"
+      },
+      "source": {
+        "revision": "f292c23957a9bd58d3bdcc1ba96aca95e5bcc9d4",
+        "status": ""
+      },
+      "stop_reason": null,
+      "wall_seconds": 4.124468614012585,
+      "whole_inputs_unchanged": true
+    },
+    "dopri_phase": {
+      "child_exit": 0,
+      "passed": true,
+      "peak_sampled_rss_kib": 644608,
+      "raw": {
+        "bytes": 78952924,
+        "path": "bin/linux-gcc/native-cpu-wide-private/dopri_phase.ll",
+        "sha256": "65414cdf7d2343cc88e818457921c26d087ec1325cbfd384ac9f3474f0f4f4dd"
+      },
+      "scope": {
+        "checked_pointer_calls": 1576,
+        "checked_tag_banks": 1575,
+        "constrained_operations": {
+          "llvm.experimental.constrained.fadd.v16f32": 9,
+          "llvm.experimental.constrained.fcmp.v16f32": 656,
+          "llvm.experimental.constrained.fcmps.v16f32": 10,
+          "llvm.experimental.constrained.fsub.v16f32": 16
+        },
+        "definitions": 49,
+        "non_constrained_call_inventory_equal": true,
+        "output": {
+          "bytes": 79407257,
+          "path": "out/simd16-strict-gp8zmx_c/dopri_phase.strict.ll",
+          "sha256": "14540760dba2075f7febed7834d7a7978009a176f5c0ca0ecfb54c25f9f5b935"
+        },
+        "raw_context_layout_equal": true,
+        "retained_fneg": 2
+      },
+      "source": {
+        "revision": "f292c23957a9bd58d3bdcc1ba96aca95e5bcc9d4",
+        "status": ""
+      },
+      "stop_reason": null,
+      "wall_seconds": 9.803019770988612,
+      "whole_inputs_unchanged": true
+    },
+    "endpoint": {
+      "child_exit": 0,
+      "passed": true,
+      "peak_sampled_rss_kib": 1306216,
+      "raw": {
+        "bytes": 177735224,
+        "path": "bin/linux-gcc/native-cpu-wide-private/endpoint.ll",
+        "sha256": "1031d1ec4c86444c78d00419c9d89bad070cd6a6c1afe2c8f0b7f1db53588f37"
+      },
+      "scope": {
+        "checked_pointer_calls": 3954,
+        "checked_tag_banks": 3924,
+        "constrained_operations": {
+          "llvm.experimental.constrained.fadd.v16f32": 96,
+          "llvm.experimental.constrained.fcmp.v16f32": 443,
+          "llvm.experimental.constrained.fcmps.v16f32": 28,
+          "llvm.experimental.constrained.fmul.v16f32": 1,
+          "llvm.experimental.constrained.fsub.v16f32": 13
+        },
+        "definitions": 190,
+        "non_constrained_call_inventory_equal": true,
+        "output": {
+          "bytes": 178541326,
+          "path": "out/simd16-strict-gp8zmx_c/endpoint.strict.ll",
+          "sha256": "9d53adccd9180e28b379e0de463f5afe81310702e5b966d9745c7677ee7f881e"
+        },
+        "raw_context_layout_equal": true,
+        "retained_fneg": 16
+      },
+      "source": {
+        "revision": "f292c23957a9bd58d3bdcc1ba96aca95e5bcc9d4",
+        "status": ""
+      },
+      "stop_reason": null,
+      "wall_seconds": 23.04356246998941,
+      "whole_inputs_unchanged": true
+    },
+    "transport": {
+      "child_exit": 0,
+      "passed": true,
+      "peak_sampled_rss_kib": 924084,
+      "raw": {
+        "bytes": 121732773,
+        "path": "bin/linux-gcc/native-cpu-wide-private/transport.ll",
+        "sha256": "b1cd845390f15b4dd8acdcfa930fc5f647bd1f8c7c97b149dc011693f8c06773"
+      },
+      "scope": {
+        "checked_pointer_calls": 2698,
+        "checked_tag_banks": 2682,
+        "constrained_operations": {
+          "llvm.experimental.constrained.fadd.v16f32": 79,
+          "llvm.experimental.constrained.fcmp.v16f32": 326,
+          "llvm.experimental.constrained.fcmps.v16f32": 36,
+          "llvm.experimental.constrained.fsub.v16f32": 13,
+          "llvm.experimental.constrained.sitofp.v16f32.v16i32": 6
+        },
+        "definitions": 157,
+        "non_constrained_call_inventory_equal": true,
+        "output": {
+          "bytes": 122298881,
+          "path": "out/simd16-strict-gp8zmx_c/transport.strict.ll",
+          "sha256": "7e4f828c8183fcbab9e38d5dce790e217fc3e1b47c37b924d8630cc3d02be4d9"
+        },
+        "raw_context_layout_equal": true,
+        "retained_fneg": 7
+      },
+      "source": {
+        "revision": "f292c23957a9bd58d3bdcc1ba96aca95e5bcc9d4",
+        "status": ""
+      },
+      "stop_reason": null,
+      "wall_seconds": 14.409473409003112,
+      "whole_inputs_unchanged": true
+    }
+  },
+  "scope": "Strict scope compiler check only",
+  "sdk": {
+    "bytes": 2013958032,
+    "path": "bin/linux-gcc/native-cpu-strict-ir-linking/LLVM-23.1.2-Linux-X64.tar.xz",
+    "sha256": "b5ed9675149cc837c282e9b6962c276c9fa62863d5b2f91537b60848552995b7"
+  },
+  "source": "f292c23957a9bd58d3bdcc1ba96aca95e5bcc9d4"
+}
