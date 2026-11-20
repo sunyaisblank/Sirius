@@ -1,0 +1,4263 @@
+{
+  "authority": {
+    "original-53-cpu-cases": [
+      {
+        "bytes": 56130,
+        "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/diagnostic/original-53-cpu-cases/junit.xml",
+        "sha256": "1e191d7fd7c7df461c7b3eac1e6f7b653ba48a2e9744ccdd3272e64104c225d9"
+      },
+      {
+        "bytes": 7775,
+        "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/diagnostic/original-53-cpu-cases/report.json",
+        "sha256": "7dbb23ad807db4621d231a8aa1093ec2f4283f21014d310c4e2456c2479896e3"
+      }
+    ],
+    "original-64x64-writers": [
+      {
+        "bytes": 3117,
+        "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/diagnostic/original-64x64-writers/junit.xml",
+        "sha256": "e902e5c2e8c40c58d15089a4d72f7e26ecd1ca274b84e76da8ae359c1fe095c5"
+      },
+      {
+        "bytes": 4329,
+        "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/diagnostic/original-64x64-writers/report.json",
+        "sha256": "69fca5a8339d0785017ac4af655773b39ebd51fd18c6ee9ff9e2e52871b5c435"
+      }
+    ],
+    "original-connected-render": [
+      {
+        "bytes": 1676,
+        "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/diagnostic/original-connected-render/junit.xml",
+        "sha256": "a5a47f08822ded449e37b3beb9ac3e6528f0a2f507e5126ca609b55dfd5eb882"
+      },
+      {
+        "bytes": 4297,
+        "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/diagnostic/original-connected-render/report.json",
+        "sha256": "2697d0a9586a6a0a37daa00090b7e44278af43916d2af3cffeba280f3d6aa5ed"
+      }
+    ],
+    "original_e2_actions": {
+      "bytes": 572192,
+      "git_object": "34a94cd5:attestations/scientific-core/f22dc025/e2-original-eleven-cpu-witnesses/files/out/e2-original-cpu-witnesses-pending/actions.json",
+      "sha256": "83956aff74304c138abcb7de2a483f622a7658350ef5205115233b5ae3cd62cb"
+    },
+    "original_p4_actions": {
+      "bytes": 10964,
+      "git_object": "e86b5baf:attestations/scientific-core/4bcd987/p4-page-thorne-current-source/files/out/science-p4-page-thorne/actions.json",
+      "sha256": "03ce670822ed260c4842b948cbd3d5d44aca6e70d41c9cc2496125306464c3e9"
+    }
+  },
+  "batch_limit_change": {
+    "original_p4_host_batch_seconds": 300,
+    "reason": "The first whole-cohort guard expired after two long live trace witnesses passed. Both attempts keep the same tests, tolerances, render modes, and memory limits.",
+    "second_p4_host_batch_seconds": 900
+  },
+  "build": {
+    "build_output": {
+      "bytes": 41193,
+      "path": "out/current-integrated-science/build.log",
+      "sha256": "1d4e85a63e0a7cf9fa6ac23c48463d7dcae19a1d8855cbe8d3d278d53046ae59"
+    },
+    "commands": [
+      [
+        "cmake",
+        "--preset",
+        "linux-gcc"
+      ],
+      [
+        "cmake",
+        "--build",
+        "--preset",
+        "linux-gcc",
+        "--target",
+        "sirius_core_tests",
+        "sirius_oracle_tests",
+        "sirius_backend_tests",
+        "sirius_render_tests",
+        "sirius_app_tests",
+        "-j",
+        "4"
+      ]
+    ],
+    "configure_output": {
+      "bytes": 2865,
+      "path": "out/current-integrated-science/configure.log",
+      "sha256": "63bdfd6769cf196b7aeb4c22e2285671654f4bebfd5941d29b05d044686b08c3"
+    },
+    "runtime_config": {
+      "bytes": 57502,
+      "path": "bin/linux-gcc/CMakeCache.txt",
+      "sha256": "6bfe1505027153d17d6e40cf9527b840b0fce819e548db33a5dceb90405578fc"
+    },
+    "starfield": {
+      "bytes": 29984397,
+      "path": "bin/linux-gcc/src/sirius/app/resources/assets/Starfield.png",
+      "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+    }
+  },
+  "case_registrations": {
+    "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/app",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.CapturedKerrBeamMatchesNeighboursAndStepRefinement": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.CapturedKerrBeamMatchesNeighboursAndStepRefinement",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.FixedAffineEndpointsPreserveSmallCovariantColumns": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.FixedAffineEndpointsPreserveSmallCovariantColumns",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CpuJacobiOracle.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CpuJacobiOracle.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "EXRRoundTripTests.NonFiniteRadianceIsRejected": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=EXRRoundTripTests.NonFiniteRadianceIsRejected",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.BlackbodyMatchesIntegratedCoreSpectrum": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.BlackbodyMatchesIntegratedCoreSpectrum",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "LivePathConservationTests.KerrEnergyAndAngularMomentum": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=LivePathConservationTests.KerrEnergyAndAngularMomentum",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "LivePathConservationTests.SchwarzschildEnergyAndAngularMomentum": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=LivePathConservationTests.SchwarzschildEnergyAndAngularMomentum",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "PNGWriterTest.NonFiniteRadianceIsRejected": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PNGWriterTest.NonFiniteRadianceIsRejected",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Rendering"
+      ]
+    },
+    "PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Rendering"
+      ]
+    },
+    "PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Rendering"
+      ]
+    },
+    "PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.DefaultConfigReasonable": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.DefaultConfigReasonable",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.MinkowskiNullConstraint": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.MinkowskiNullConstraint",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.MinkowskiStraightLine": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.MinkowskiStraightLine",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.NoNaNInResults": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.NoNaNInResults",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.OptimalStepDecreasesForLargeError": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.OptimalStepDecreasesForLargeError",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.OptimalStepIncreasesForSmallError": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.OptimalStepIncreasesForSmallError",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.OptimalStepRespectsBounds": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.OptimalStepRespectsBounds",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.RK45MatchesRK4Approximately": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.RK45MatchesRK4Approximately",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.SchwarzschildIntegration": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.SchwarzschildIntegration",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.SchwarzschildNullConstraint": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.SchwarzschildNullConstraint",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.StepAdaptsToCurvature": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.StepAdaptsToCurvature",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.StepRejectionWorks": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.StepRejectionWorks",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.CpuThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.CpuThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/app",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational"
+      ]
+    },
+    "RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Operational",
+        "Rendering"
+      ]
+    },
+    "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Rendering"
+      ]
+    },
+    "SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyInfinityTrace.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyInfinityTrace.PointSourceHandoffPreservesTheFlatObserverMap": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.PointSourceHandoffPreservesTheFlatObserverMap",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyInfinityTrace.PointSourceHandoffRetainsOpaqueAndVolumetricSources": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.PointSourceHandoffRetainsOpaqueAndVolumetricSources",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyInfinityTrace.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyInfinityTrace.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyMapTrace.KerrMapConvergesToFixedPupilRetracing": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyMapTrace.KerrMapConvergesToFixedPupilRetracing",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyMapTrace.MovingPupilMapMatchesAnalyticAberration": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyMapTrace.MovingPupilMapMatchesAnalyticAberration",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SourceSkyMapTrace.StationaryTranslatedPupilMapIsRadiusIndependent": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests",
+        "--gtest_filter=SourceSkyMapTrace.StationaryTranslatedPupilMapIsRadiusIndependent",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests",
+        "--gtest_filter=SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+      "labels": [
+        "Correctness",
+        "Mandatory",
+        "Rendering"
+      ]
+    },
+    "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "ViewerDisplayContract.FilmFinishClosesDisplayLinearRange": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=ViewerDisplayContract.FilmFinishClosesDisplayLinearRange",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/app",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "ViewerDisplayContract.LiveShaderAppliesOnlyExactSrgbTransfer": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_app_tests",
+        "--gtest_filter=ViewerDisplayContract.LiveShaderAppliesOnlyExactSrgbTransfer",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/app",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+        "--gtest_filter=WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/oracle",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=WalkerPenroseLivePath.AgreesWithOracleAcrossCharts",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "WalkerPenroseLivePath.ConservesConstantAndOrthonormality": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=WalkerPenroseLivePath.ConservesConstantAndOrthonormality",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    },
+    "XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs": {
+      "argv": [
+        "/home/astra/.project/Sirius/bin/linux-gcc/tests/core/sirius_core_tests",
+        "--gtest_filter=XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs",
+        "--gtest_also_run_disabled_tests"
+      ],
+      "directory": "/home/astra/.project/Sirius/bin/linux-gcc/tests/core",
+      "labels": [
+        "Correctness",
+        "Mandatory"
+      ]
+    }
+  },
+  "cohorts": {
+    "e2-transport-supplement": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/runs/e2-transport-supplement/junit.xml",
+        "-R",
+        "^(WalkerPenrose\\.PolarisationStaysOrthogonalAndNormalisedUnderTransport)$"
+      ],
+      "cases": [
+        {
+          "name": "WalkerPenrose.PolarisationStaysOrthogonalAndNormalisedUnderTransport",
+          "seconds": 0.00901003
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/e2-transport-supplement"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/e2-transport-supplement/inputs-after.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "before": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/e2-transport-supplement/inputs-before.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "count": 4473
+      },
+      "junit": {
+        "bytes": 1213,
+        "path": "out/current-integrated-science/runs/e2-transport-supplement/junit.xml",
+        "sha256": "1af32b245561017f5a1dc84ab1d9c15e4b6b5182496b3db81f79149248f4ad44"
+      },
+      "owner": {
+        "bytes": 1775,
+        "path": "out/current-integrated-science/runs/e2-transport-supplement/owner.json",
+        "sha256": "ed5812c07fda2964ae8cb734af4fbba3705d9ae91cf49304b16af9d817be64ec"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 300
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 44980,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 0.2789835650182795,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/runs/e2-transport-supplement/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 2107,
+        "path": "out/current-integrated-science/runs/e2-transport-supplement/stdout.log",
+        "sha256": "12b972c29f75fb43abbfc9e735547915b17200d20a4188e3b15f31e3c2b9746f"
+      }
+    },
+    "original-53-cpu-cases": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/runs/original-53-cpu-cases/junit.xml",
+        "-R",
+        "^(LivePathConservationTests\\.SchwarzschildEnergyAndAngularMomentum|LivePathConservationTests\\.KerrEnergyAndAngularMomentum|LivePathConservationTests\\.NearExtremalKerrEnergyAngularMomentumAndCarter|RK45IntegratorTests\\.DefaultConfigReasonable|RK45IntegratorTests\\.OptimalStepIncreasesForSmallError|RK45IntegratorTests\\.OptimalStepDecreasesForLargeError|RK45IntegratorTests\\.OptimalStepRespectsBounds|RK45IntegratorTests\\.MinkowskiStraightLine|RK45IntegratorTests\\.MinkowskiNullConstraint|RK45IntegratorTests\\.SchwarzschildIntegration|RK45IntegratorTests\\.SchwarzschildNullConstraint|RK45IntegratorTests\\.StepAdaptsToCurvature|RK45IntegratorTests\\.RK45MatchesRK4Approximately|RK45IntegratorTests\\.StepRejectionWorks|RK45IntegratorTests\\.UnrepresentedStageShrinksBeforeMetricEvaluation|RK45IntegratorTests\\.RejectionMaySelectTheMinimumStepBeforeTerminating|RK45IntegratorTests\\.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay|RK45IntegratorTests\\.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap|RK45IntegratorTests\\.AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords|RK45IntegratorTests\\.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection|RK45IntegratorTests\\.NullProjectionPreservesTheIncomingLightConeBranch|RK45IntegratorTests\\.NoNaNInResults|CoupledTransport\\.MinimumStepCriticalColumnsMatchIndependentRefinedFlow|CoupledTransport\\.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion|CoupledTransport\\.FlatFourColumnsUseActualProjectedAndInteriorTrials|CoupledTransport\\.CameraColumnUnitsPreserveTheJointErrorDecision|CoupledTransport\\.PhysicalCameraColumnsReachTheLiveCpuSourceMap|CoupledTransport\\.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit|CoupledTransport\\.EndpointAndZeroFractionIncludeEventTimeVariation|CoupledTransport\\.FixedAffineEndpointsPreserveSmallCovariantColumns|CoupledTransport\\.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError|CoupledTransport\\.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant|CoupledTransport\\.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines|CoupledTransport\\.CapturedKerrBeamMatchesNeighboursAndStepRefinement|CoupledTransport\\.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise|CoupledTransport\\.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement|FullPathAcceptance\\.CpuIndependentCarterEventsMapsAndRefinement|SourceSkyMapTrace\\.StationaryTranslatedPupilMapIsRadiusIndependent|SourceSkyMapTrace\\.MovingPupilMapMatchesAnalyticAberration|SourceSkyMapTrace\\.KerrMapConvergesToFixedPupilRetracing|SourceSkyInfinityTrace\\.FlatPupilMapAndFrequencyAreHandoffIndependent|SourceSkyInfinityTrace\\.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours|SourceSkyInfinityTrace\\.PointSourceHandoffPreservesTheFlatObserverMap|SourceSkyInfinityTrace\\.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils|SourceSkyInfinityTrace\\.PointSourceHandoffRetainsOpaqueAndVolumetricSources|SourceSkyInfinityTrace\\.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap|SourceSkyInfinityTrace\\.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity|RenderSessionProbe\\.BackendAutoPublishesCpuWithNoIcd|RenderSessionProbe\\.CpuThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics|RenderSessionProbe\\.EveryRegisteredCpuMetricCompletesAFrame|PointSourceDetector\\.MovingKerrFluxMatchesIndependentSeparatedImageAndBand|PointSourceDetector\\.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness|PointSourceDetector\\.LargeSharedRegionMatchesOriginalMovingKerrPackets)$"
+      ],
+      "cases": [
+        {
+          "name": "LivePathConservationTests.SchwarzschildEnergyAndAngularMomentum",
+          "seconds": 0.0163276
+        },
+        {
+          "name": "LivePathConservationTests.KerrEnergyAndAngularMomentum",
+          "seconds": 0.0223804
+        },
+        {
+          "name": "LivePathConservationTests.NearExtremalKerrEnergyAngularMomentumAndCarter",
+          "seconds": 0.0208491
+        },
+        {
+          "name": "RK45IntegratorTests.DefaultConfigReasonable",
+          "seconds": 0.0121311
+        },
+        {
+          "name": "RK45IntegratorTests.OptimalStepIncreasesForSmallError",
+          "seconds": 0.00463223
+        },
+        {
+          "name": "RK45IntegratorTests.OptimalStepDecreasesForLargeError",
+          "seconds": 0.00444962
+        },
+        {
+          "name": "RK45IntegratorTests.OptimalStepRespectsBounds",
+          "seconds": 0.0050869
+        },
+        {
+          "name": "RK45IntegratorTests.MinkowskiStraightLine",
+          "seconds": 0.00504775
+        },
+        {
+          "name": "RK45IntegratorTests.MinkowskiNullConstraint",
+          "seconds": 0.00497764
+        },
+        {
+          "name": "RK45IntegratorTests.SchwarzschildIntegration",
+          "seconds": 0.00963813
+        },
+        {
+          "name": "RK45IntegratorTests.SchwarzschildNullConstraint",
+          "seconds": 0.00768821
+        },
+        {
+          "name": "RK45IntegratorTests.StepAdaptsToCurvature",
+          "seconds": 0.0106924
+        },
+        {
+          "name": "RK45IntegratorTests.RK45MatchesRK4Approximately",
+          "seconds": 0.00709053
+        },
+        {
+          "name": "RK45IntegratorTests.StepRejectionWorks",
+          "seconds": 0.00685556
+        },
+        {
+          "name": "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+          "seconds": 0.00478224
+        },
+        {
+          "name": "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating",
+          "seconds": 0.00445714
+        },
+        {
+          "name": "RK45IntegratorTests.DoublePrecisionStagesMatchAnAnalyticRindlerNullRay",
+          "seconds": 0.00502039
+        },
+        {
+          "name": "RK45IntegratorTests.OutgoingChartPreservesMetricKillingQuantitiesAndInverseMap",
+          "seconds": 0.00456928
+        },
+        {
+          "name": "RK45IntegratorTests.AcceptedEndpointsReuseOwnedGeometryAndPreserveAccelerationWords",
+          "seconds": 0.0063459
+        },
+        {
+          "name": "RK45IntegratorTests.NullDefectAboveTheDeclaredBoundIsRejectedBeforeProjection",
+          "seconds": 0.00429906
+        },
+        {
+          "name": "RK45IntegratorTests.NullProjectionPreservesTheIncomingLightConeBranch",
+          "seconds": 0.00405918
+        },
+        {
+          "name": "RK45IntegratorTests.NoNaNInResults",
+          "seconds": 0.0071012
+        },
+        {
+          "name": "CoupledTransport.MinimumStepCriticalColumnsMatchIndependentRefinedFlow",
+          "seconds": 0.00867961
+        },
+        {
+          "name": "CoupledTransport.OriginalCriticalLaunchesHavePhysicalFatesOrExplicitWorkExhaustion",
+          "seconds": 58.7296
+        },
+        {
+          "name": "CoupledTransport.FlatFourColumnsUseActualProjectedAndInteriorTrials",
+          "seconds": 0.00562811
+        },
+        {
+          "name": "CoupledTransport.CameraColumnUnitsPreserveTheJointErrorDecision",
+          "seconds": 0.00712398
+        },
+        {
+          "name": "CoupledTransport.PhysicalCameraColumnsReachTheLiveCpuSourceMap",
+          "seconds": 0.0152019
+        },
+        {
+          "name": "CoupledTransport.NonfiniteColumnsAndUnrepresentedInteriorDeclineWithoutCommit",
+          "seconds": 0.00758241
+        },
+        {
+          "name": "CoupledTransport.EndpointAndZeroFractionIncludeEventTimeVariation",
+          "seconds": 0.00531641
+        },
+        {
+          "name": "CoupledTransport.FixedAffineEndpointsPreserveSmallCovariantColumns",
+          "seconds": 0.00572555
+        },
+        {
+          "name": "CoupledTransport.EveryCanonicalColumnCanRejectProjectedAndInteriorCurvedError",
+          "seconds": 0.00788787
+        },
+        {
+          "name": "CoupledTransport.AcceptedIncrementsKeepRefinedEventDerivativesTranslationInvariant",
+          "seconds": 0.00574962
+        },
+        {
+          "name": "CoupledTransport.SkyMapIsIndependentOfPhysicalBundleOutputAndWorkLimitDeclines",
+          "seconds": 0.00596592
+        },
+        {
+          "name": "CoupledTransport.CapturedKerrBeamMatchesNeighboursAndStepRefinement",
+          "seconds": 16.7629
+        },
+        {
+          "name": "CoupledTransport.PhysicalEventVariationRetainsArrivalPositionWithoutDenseAccelerationNoise",
+          "seconds": 0.00588498
+        },
+        {
+          "name": "CoupledTransport.OriginalKerrDiskEventMatchesIndependentNeighboursAndRefinement",
+          "seconds": 2.89175
+        },
+        {
+          "name": "FullPathAcceptance.CpuIndependentCarterEventsMapsAndRefinement",
+          "seconds": 4.31231
+        },
+        {
+          "name": "SourceSkyMapTrace.StationaryTranslatedPupilMapIsRadiusIndependent",
+          "seconds": 0.0157208
+        },
+        {
+          "name": "SourceSkyMapTrace.MovingPupilMapMatchesAnalyticAberration",
+          "seconds": 0.0094019
+        },
+        {
+          "name": "SourceSkyMapTrace.KerrMapConvergesToFixedPupilRetracing",
+          "seconds": 4.29267
+        },
+        {
+          "name": "SourceSkyInfinityTrace.FlatPupilMapAndFrequencyAreHandoffIndependent",
+          "seconds": 0.0148422
+        },
+        {
+          "name": "SourceSkyInfinityTrace.KerrMapConvergesAcrossHandoffRadiiAndFixedPupilNeighbours",
+          "seconds": 5.20182
+        },
+        {
+          "name": "SourceSkyInfinityTrace.PointSourceHandoffPreservesTheFlatObserverMap",
+          "seconds": 0.00467465
+        },
+        {
+          "name": "SourceSkyInfinityTrace.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils",
+          "seconds": 0.318593
+        },
+        {
+          "name": "SourceSkyInfinityTrace.PointSourceHandoffRetainsOpaqueAndVolumetricSources",
+          "seconds": 0.155565
+        },
+        {
+          "name": "SourceSkyInfinityTrace.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap",
+          "seconds": 0.00553762
+        },
+        {
+          "name": "SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity",
+          "seconds": 0.148657
+        },
+        {
+          "name": "RenderSessionProbe.BackendAutoPublishesCpuWithNoIcd",
+          "seconds": 0.469031
+        },
+        {
+          "name": "RenderSessionProbe.CpuThinDiskPublishedLinearChannelsMatchIndependentFirstEventPhysics",
+          "seconds": 2.38988
+        },
+        {
+          "name": "RenderSessionProbe.EveryRegisteredCpuMetricCompletesAFrame",
+          "seconds": 12.5565
+        },
+        {
+          "name": "PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand",
+          "seconds": 1.31018
+        },
+        {
+          "name": "PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
+          "seconds": 0.197887
+        },
+        {
+          "name": "PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets",
+          "seconds": 49.2491
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/original-53-cpu-cases"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/original-53-cpu-cases/inputs-after.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "before": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/original-53-cpu-cases/inputs-before.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "count": 4473
+      },
+      "junit": {
+        "bytes": 56131,
+        "path": "out/current-integrated-science/runs/original-53-cpu-cases/junit.xml",
+        "sha256": "4bc2bafc6cbae80b26a1e3b37549f63223b643668cfd24a173dbcd9850ee85f6"
+      },
+      "owner": {
+        "bytes": 7223,
+        "path": "out/current-integrated-science/runs/original-53-cpu-cases/owner.json",
+        "sha256": "6472667f53d2d8a9e4059bbba9ce6354c088e09614071189d2a57cf8b508e479"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 12582912,
+          "seconds": 900
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 213568,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 159.38007243999164,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/runs/original-53-cpu-cases/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 91492,
+        "path": "out/current-integrated-science/runs/original-53-cpu-cases/stdout.log",
+        "sha256": "b2d209e00b402d36f260ae3158a2b1ec88f77877f556161d52ac5c1a42d25444"
+      }
+    },
+    "original-64x64-writers": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/continued/original-64x64-writers/junit.xml",
+        "-R",
+        "^(RenderSessionProbe\\.CpuKerrRenderProducesValidPngAndExr|RenderSessionProbe\\.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter)$"
+      ],
+      "cases": [
+        {
+          "name": "RenderSessionProbe.CpuKerrRenderProducesValidPngAndExr",
+          "seconds": 536.599
+        },
+        {
+          "name": "RenderSessionProbe.CpuKerrRenderProducesValidPpmThroughTheOwnedWriter",
+          "seconds": 270.252
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/original-64x64-writers"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/original-64x64-writers/inputs-after.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "before": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/original-64x64-writers/inputs-before.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "count": 4475
+      },
+      "junit": {
+        "bytes": 3117,
+        "path": "out/current-integrated-science/continued/original-64x64-writers/junit.xml",
+        "sha256": "61e67e68303a57288aa0301e425bbaf511dcb4b7eced14bf1ea82806b6c26c88"
+      },
+      "owner": {
+        "bytes": 2097,
+        "path": "out/current-integrated-science/continued/original-64x64-writers/owner.json",
+        "sha256": "b35e9024e35b7ff0e3cc84beb7b2e6f71617dff1fa9692230d0e5d600b54d26d"
+      },
+      "selection_from": "original-64x64-writers",
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 12582912,
+          "seconds": 900
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 224568,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 807.0392166590027,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/continued/original-64x64-writers/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 8238,
+        "path": "out/current-integrated-science/continued/original-64x64-writers/stdout.log",
+        "sha256": "a14d779b03c78095985fb37ab86130ef24a8f7216653a5919373aa41fae29f9c"
+      }
+    },
+    "original-connected-render": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/continued/original-connected-render/junit.xml",
+        "-R",
+        "^(RenderSessionProbe\\.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame)$"
+      ],
+      "cases": [
+        {
+          "name": "RenderSessionProbe.PhysicalPointDetectorCompletesAMovingThinLensKerrFrame",
+          "seconds": 30.2877
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/original-connected-render"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/original-connected-render/inputs-after.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "before": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/original-connected-render/inputs-before.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "count": 4475
+      },
+      "junit": {
+        "bytes": 1676,
+        "path": "out/current-integrated-science/continued/original-connected-render/junit.xml",
+        "sha256": "dc2395de229b1d52c1e4354c2d0678980a350eac265240027d0c6b47fe16931d"
+      },
+      "owner": {
+        "bytes": 1930,
+        "path": "out/current-integrated-science/continued/original-connected-render/owner.json",
+        "sha256": "f40a2d34124641f86b8cd90ed6b22aede0908ed4b29bbb7f54ca00862699c62b"
+      },
+      "selection_from": "original-connected-render",
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 12582912,
+          "seconds": 900
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 64580,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 30.586562670010608,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/continued/original-connected-render/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 5528,
+        "path": "out/current-integrated-science/continued/original-connected-render/stdout.log",
+        "sha256": "d76750f7e29ea07a1686c9cf250850aa7dbd3b7531f94aacfc2e7ffb2a050e27"
+      }
+    },
+    "original-e2": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/cmake",
+        "-E",
+        "env",
+        "GTEST_OUTPUT=xml:/home/astra/.project/Sirius/out/current-integrated-science/runs/original-e2/gtest/",
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/runs/original-e2/junit.xml",
+        "-R",
+        "^(WalkerPenrose\\.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution|WalkerPenrose\\.SchwarzschildEquatorialPerpendicularTransportsRigidly|WalkerPenroseLivePath\\.ConservesConstantAndOrthonormality|WalkerPenroseLivePath\\.AgreesWithOracleAcrossCharts|ConfigValidation\\.PolarisationRequiresRepresentedThinBlackHoleDisk|PolarisationAcceptance\\.ActualDiskStokesMatchWalkerPenroseReconstruction|PolarisationAcceptance\\.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive|GeodesicTracerTest\\.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation|GeodesicTracerTest\\.PolarisationGaugeRemainsRegularAtPastHorizonCapture|RenderSessionProbe\\.CpuPolarisationModeConsumesTransportedDiskStokes|RenderSessionProbe\\.PolarisedRequestsDeclineAndTwoSheetIsRepresented)$"
+      ],
+      "cases": [
+        {
+          "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality",
+          "seconds": 0.120187
+        },
+        {
+          "name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts",
+          "seconds": 0.17679
+        },
+        {
+          "name": "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
+          "seconds": 0.00353515
+        },
+        {
+          "name": "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly",
+          "seconds": 0.00815893
+        },
+        {
+          "name": "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction",
+          "seconds": 0.76305
+        },
+        {
+          "name": "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive",
+          "seconds": 0.0889892
+        },
+        {
+          "name": "RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
+          "seconds": 0.0040846
+        },
+        {
+          "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
+          "seconds": 138.771
+        },
+        {
+          "name": "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
+          "seconds": 92.909
+        },
+        {
+          "name": "GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
+          "seconds": 0.464208
+        },
+        {
+          "name": "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
+          "seconds": 0.0045506
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/original-e2"
+      },
+      "individual_witnesses": {
+        "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk": {
+          "properties": {},
+          "xml": {
+            "bytes": 596,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_app_tests.xml",
+            "sha256": "886d141115ddf3409bbca91b6a8aacb9c417be045d567686ac9a4d2eefe94e15"
+          }
+        },
+        "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation": {
+          "properties": {},
+          "xml": {
+            "bytes": 624,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_render_tests_2.xml",
+            "sha256": "aa65d756bb5c37733fdf57618f4e9559b257643553f223a65f1ce703c9377775"
+          }
+        },
+        "GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture": {
+          "properties": {},
+          "xml": {
+            "bytes": 613,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_render_tests_3.xml",
+            "sha256": "9f592d1378af0f55746232707cc08f8000ac990382f17e9a18b0fdf6a51502ff"
+          }
+        },
+        "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction": {
+          "properties": {
+            "spin_0.000_r0_committed_samples": "110",
+            "spin_0.000_r0_disk_radius": "15.969025611877441",
+            "spin_0.000_r0_evpa_error_rad": "8.6886011718689815e-09",
+            "spin_0.000_r0_screen_max_defect": "2.560173207134008e-10",
+            "spin_0.000_r0_terminal_affine": "39.410433620235189",
+            "spin_0.000_r0_wp_max_relative_drift_0": "2.1547213895531755e-10",
+            "spin_0.000_r0_wp_max_relative_drift_1": "2.0612088115496822e-10",
+            "spin_0.000_r1_committed_samples": "202",
+            "spin_0.000_r1_disk_radius": "15.969025611877441",
+            "spin_0.000_r1_evpa_error_rad": "8.6454217118614451e-09",
+            "spin_0.000_r1_screen_max_defect": "1.6735454823256011e-10",
+            "spin_0.000_r1_terminal_affine": "39.410433620236198",
+            "spin_0.000_r1_wp_max_relative_drift_0": "1.3591795630420254e-10",
+            "spin_0.000_r1_wp_max_relative_drift_1": "1.3941120594051517e-10",
+            "spin_0.000_r2_committed_samples": "398",
+            "spin_0.000_r2_disk_radius": "15.969025611877441",
+            "spin_0.000_r2_evpa_error_rad": "8.6044893432557501e-09",
+            "spin_0.000_r2_screen_max_defect": "8.3369948680581552e-11",
+            "spin_0.000_r2_terminal_affine": "39.410433620234684",
+            "spin_0.000_r2_wp_max_relative_drift_0": "6.8161036568490349e-11",
+            "spin_0.000_r2_wp_max_relative_drift_1": "6.898612948958854e-11",
+            "spin_0.000_refinement_behavior": "binary32_angle_plateau",
+            "spin_0.700_r0_committed_samples": "111",
+            "spin_0.700_r0_disk_radius": "15.95499324798584",
+            "spin_0.700_r0_evpa_error_rad": "8.6068707716435711e-11",
+            "spin_0.700_r0_screen_max_defect": "1.7355680773598177e-10",
+            "spin_0.700_r0_terminal_affine": "39.406028287964091",
+            "spin_0.700_r0_wp_max_relative_drift_0": "1.5638236086948061e-10",
+            "spin_0.700_r0_wp_max_relative_drift_1": "1.2780045284192194e-10",
+            "spin_0.700_r1_committed_samples": "202",
+            "spin_0.700_r1_disk_radius": "15.95499324798584",
+            "spin_0.700_r1_evpa_error_rad": "1.4604753406644022e-08",
+            "spin_0.700_r1_screen_max_defect": "7.177838744118151e-10",
+            "spin_0.700_r1_terminal_affine": "39.406028287964567",
+            "spin_0.700_r1_wp_max_relative_drift_0": "5.9962650600405372e-10",
+            "spin_0.700_r1_wp_max_relative_drift_1": "5.712931630803563e-10",
+            "spin_0.700_r2_committed_samples": "398",
+            "spin_0.700_r2_disk_radius": "15.95499324798584",
+            "spin_0.700_r2_evpa_error_rad": "7.7604811465903367e-11",
+            "spin_0.700_r2_screen_max_defect": "1.5171329240204597e-10",
+            "spin_0.700_r2_terminal_affine": "39.406028287964745",
+            "spin_0.700_r2_wp_max_relative_drift_0": "1.2662487627525001e-10",
+            "spin_0.700_r2_wp_max_relative_drift_1": "1.2070631616432724e-10",
+            "spin_0.700_refinement_behavior": "binary32_angle_plateau",
+            "spin_0.998_r0_committed_samples": "109",
+            "spin_0.998_r0_disk_radius": "15.941914558410645",
+            "spin_0.998_r0_evpa_error_rad": "2.1119375137601537e-09",
+            "spin_0.998_r0_screen_max_defect": "4.5885867059826776e-10",
+            "spin_0.998_r0_terminal_affine": "39.403808643051541",
+            "spin_0.998_r0_wp_max_relative_drift_0": "3.7009384360354948e-10",
+            "spin_0.998_r0_wp_max_relative_drift_1": "3.74758236381181e-10",
+            "spin_0.998_r1_committed_samples": "202",
+            "spin_0.998_r1_disk_radius": "15.941914558410645",
+            "spin_0.998_r1_evpa_error_rad": "1.783549530287587e-09",
+            "spin_0.998_r1_screen_max_defect": "4.8756656263220822e-10",
+            "spin_0.998_r1_terminal_affine": "39.403808643051981",
+            "spin_0.998_r1_wp_max_relative_drift_0": "4.1112504126244474e-10",
+            "spin_0.998_r1_wp_max_relative_drift_1": "3.8059445062331078e-10",
+            "spin_0.998_r2_committed_samples": "398",
+            "spin_0.998_r2_disk_radius": "15.941914558410645",
+            "spin_0.998_r2_evpa_error_rad": "1.8905568222038482e-09",
+            "spin_0.998_r2_screen_max_defect": "1.763278540896735e-10",
+            "spin_0.998_r2_terminal_affine": "39.40380864305132",
+            "spin_0.998_r2_wp_max_relative_drift_0": "1.4855228449388495e-10",
+            "spin_0.998_r2_wp_max_relative_drift_1": "1.3760566170276143e-10",
+            "spin_0.998_refinement_behavior": "binary32_angle_plateau"
+          },
+          "xml": {
+            "bytes": 6371,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_backend_tests.xml",
+            "sha256": "554fafac089c282825189fa6a60d08dd28e80dfdf50d52eb08c1586c7783eac5"
+          }
+        },
+        "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive": {
+          "properties": {
+            "outward_committed_samples": "80",
+            "outward_screen_max_defect": "9.9920072216264089e-16",
+            "outward_terminal_affine": "29.843033533082195",
+            "outward_wp_max_relative_drift_0": "3.0797022539760255e-11",
+            "outward_wp_max_relative_drift_1": "1.2265396095763699e-10"
+          },
+          "xml": {
+            "bytes": 1104,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_backend_tests_1.xml",
+            "sha256": "6f6839e2dbd8044b0867f9053044ad7b0b94d9eb6015171b1e2ec53246e40889"
+          }
+        },
+        "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes": {
+          "properties": {},
+          "xml": {
+            "bytes": 618,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_render_tests_1.xml",
+            "sha256": "6d10e323933aadde6def765350a568261cdbbb8fbb664aac0ae9b292e0a6f8d2"
+          }
+        },
+        "RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented": {
+          "properties": {},
+          "xml": {
+            "bytes": 606,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_render_tests.xml",
+            "sha256": "11f99f8eb4571259c0c310a9d7437d14de970b83298d4e8ecd3746b83d461f72"
+          }
+        },
+        "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution": {
+          "properties": {},
+          "xml": {
+            "bytes": 611,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_oracle_tests.xml",
+            "sha256": "9c3a75a2b6384fd94926cc32e631b15c1e738110a28bb6aba1aeb360792fbd69"
+          }
+        },
+        "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly": {
+          "properties": {},
+          "xml": {
+            "bytes": 612,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_oracle_tests_1.xml",
+            "sha256": "8a98b27c79f1ddbd4e1cab03fa4e0488948fa957af1e8373b624c820fd4f176c"
+          }
+        },
+        "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts": {
+          "properties": {},
+          "xml": {
+            "bytes": 593,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_core_tests_1.xml",
+            "sha256": "b68b703309227820c4b5ea1d562efdde183e3bfe12f1e089d71a195f5acc34ba"
+          }
+        },
+        "WalkerPenroseLivePath.ConservesConstantAndOrthonormality": {
+          "properties": {},
+          "xml": {
+            "bytes": 599,
+            "path": "out/current-integrated-science/runs/original-e2/gtest/sirius_core_tests.xml",
+            "sha256": "d22f7f05a20801a1aa35d0fa32544af77bf1313928677b84f8fdd9cbfc19ee94"
+          }
+        }
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/original-e2/inputs-after.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "before": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/original-e2/inputs-before.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "count": 4473
+      },
+      "junit": {
+        "bytes": 12143,
+        "path": "out/current-integrated-science/runs/original-e2/junit.xml",
+        "sha256": "55328b7396f9eb80a5836036213180bc55809523007ef0bb0ff02f3fff42618d"
+      },
+      "owner": {
+        "bytes": 3358,
+        "path": "out/current-integrated-science/runs/original-e2/owner.json",
+        "sha256": "e4db137c3ad65e7bd3d4e79cea551ce683041541b2a6e3411c7e2ae029b44dc2"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 300
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 234264,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 233.56422391399974,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/runs/original-e2/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 19071,
+        "path": "out/current-integrated-science/runs/original-e2/stdout.log",
+        "sha256": "72dfa1131d427b0fb58689c618aeb4b8b3eb7b1a6a0ff92bb0efade41364b355"
+      },
+      "unchanged_original_witness_sources": [
+        {
+          "bytes": 24597,
+          "path": "tests/app/config_validation_test.cpp",
+          "sha256": "23434e53b6559fd930ccb3e363a3868788c628a2af5abc215e9161ce001c4c0b"
+        },
+        {
+          "bytes": 23691,
+          "path": "tests/backend/polarisation_acceptance_test.cpp",
+          "sha256": "6bd84bdc560c8b166487630f4180bc96267c519a12a96cfee3015427aab0b5ec"
+        },
+        {
+          "bytes": 14941,
+          "path": "tests/core/walker_penrose_test.cpp",
+          "sha256": "52a173fd9b7cc93978f9617ff03889a699b9dfad590dc94d4130dab9c43d5859"
+        },
+        {
+          "bytes": 22864,
+          "path": "tests/oracle/polarisation_transport_test.cpp",
+          "sha256": "e697d89ae993ce58d8a041b689c3913096ce826732d53ec94a628a1cf1cd4e5a"
+        },
+        {
+          "bytes": 38427,
+          "path": "tests/render/geodesic_tracer_test.cpp",
+          "sha256": "826262c34e8ec134aff9de70b1c8d120156b69553e98825ade9848a3b4152511"
+        },
+        {
+          "bytes": 62654,
+          "path": "tests/render/render_session_probe_test.cpp",
+          "sha256": "35ab83d1ddb556abd9d7e3fcd38f0925864f2ba47afc32f702a263eb7ea2101e"
+        }
+      ],
+      "worst_reported_disk_reconstruction": {
+        "evpa_error_rad": 1.4604753406644022e-08,
+        "wp_max_relative_drift": 5.996265060040537e-10
+      }
+    },
+    "p1-p2-host-oracles": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/runs/p1-p2-host-oracles/junit.xml",
+        "-R",
+        "^(AnalyticValidationTest\\.NearExtremalKerrConservesEnergyAngularMomentumAndCarter|AnalyticValidationTest\\.SymplecticChartExitAndNullProjectionFailureRemainDistinct|BeamPropagationTest\\.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion|BeamPropagationTest\\.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion|CpuJacobiOracle\\.CurvatureScalarMatchesAnalyticKerrOffEquator|CpuJacobiOracle\\.RadialPointSourceCongruenceMatchesClosedForm|CpuJacobiOracle\\.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents|ShadowBoundary\\.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p)$"
+      ],
+      "cases": [
+        {
+          "name": "AnalyticValidationTest.SymplecticChartExitAndNullProjectionFailureRemainDistinct",
+          "seconds": 0.00403162
+        },
+        {
+          "name": "AnalyticValidationTest.NearExtremalKerrConservesEnergyAngularMomentumAndCarter",
+          "seconds": 0.00550168
+        },
+        {
+          "name": "BeamPropagationTest.SchwarzschildRadialCongruenceMatchesClosedFormToOnePartPerMillion",
+          "seconds": 0.0243031
+        },
+        {
+          "name": "BeamPropagationTest.SchwarzschildCircularPhotonCongruenceMatchesClosedFormToOnePartPerMillion",
+          "seconds": 0.0244957
+        },
+        {
+          "name": "CpuJacobiOracle.TidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
+          "seconds": 0.00518337
+        },
+        {
+          "name": "CpuJacobiOracle.CurvatureScalarMatchesAnalyticKerrOffEquator",
+          "seconds": 0.00566332
+        },
+        {
+          "name": "CpuJacobiOracle.RadialPointSourceCongruenceMatchesClosedForm",
+          "seconds": 0.0221886
+        },
+        {
+          "name": "ShadowBoundary.KerrNearExtremalMatchesBardeenWithinOnePixelAt1080p",
+          "seconds": 222.073
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p1-p2-host-oracles"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/p1-p2-host-oracles/inputs-after.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "before": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/p1-p2-host-oracles/inputs-before.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "count": 4473
+      },
+      "junit": {
+        "bytes": 8827,
+        "path": "out/current-integrated-science/runs/p1-p2-host-oracles/junit.xml",
+        "sha256": "c22c2e1e18fc073160333791451592381aaa30921c47489de93fcf55e12e6dd5"
+      },
+      "owner": {
+        "bytes": 2428,
+        "path": "out/current-integrated-science/runs/p1-p2-host-oracles/owner.json",
+        "sha256": "c487ae8965f41810bc15b3182419a17a6f98a0bd713c818b865543039a952e65"
+      },
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 900
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 54452,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 222.4440327489865,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/runs/p1-p2-host-oracles/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 12384,
+        "path": "out/current-integrated-science/runs/p1-p2-host-oracles/stdout.log",
+        "sha256": "5f4434a3a71b09d5a35584969452e38546e22b54aa00081b14e03297798ca8a0"
+      }
+    },
+    "p4-host": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/runs/p4-host/junit.xml",
+        "-R",
+        "^(AccretionDiskTest\\.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale|AnalyticValidationTest\\.PageThorneFluxApproachesNewtonianCubicFalloff|AnalyticValidationTest\\.PageThorneFluxMatchesIndependentQuadrature|AnalyticValidationTest\\.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge|CoordinateTransformTests\\.KerrDiskRadiusIsSpheroidalNotCylindrical|CoordinateTransformTests\\.KerrRadiusPreservesExactZeroAndScaleCovariance|CpuTraceBoundary\\.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge|DiskCoordinateTest\\.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial|DiskCoordinateTest\\.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain|DopplerToggleTest\\.SuppressionCollapsesDiskAsymmetry|GeodesicTracerRedshift\\.NearExtremalInnerDiskEmissionRemainsFinite|GeodesicTracerTest\\.LiveDiskTemperatureUsesFullPageThorneProfile|GeodesicTracerTest\\.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile|GeodesicTracerVolumetric\\.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary|GeodesicTracerVolumetric\\.ProceduralTurbulenceAltersLiveTransferDeterministically|GeodesicTracerVolumetric\\.RedshiftAndDopplerReachTheLiveVolumeSource|GeodesicTracerVolumetric\\.TransferAccumulatesAcrossEveryTraversedSegment|KerrOrbitAuthority\\.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw|KerrOrbitAuthority\\.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit|KerrZamoTransfer\\.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction|KerrZamoTransfer\\.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo|SpectralEmissionTest\\.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor|SpectralRadianceTest\\.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature|SpectralValidationTests\\.BlackbodyLawsRejectUnrepresentedDomains|SpectralValidationTests\\.KerrDiskTransferMatchesKillingFieldContraction|SpectralValidationTests\\.OpticallyThinGreyLayerPreservesFirstOrderEmission|SpectralValidationTests\\.PlanckSpectralRadianceMatchesIndependentCodataEquation|SpectralValidationTests\\.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral|SpectralValidationTests\\.WienPeakMatchesIndependentNumericalPlanckMaximum|SpectralValidationTests\\.ZamoBranchRemainsTimelikeInsideTheErgosphere|VolumetricDiskClosure\\.TruncatedGaussianColumnEqualsDeclaredOpticalDepth)$"
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p4-host"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/p4-host/inputs-after.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "before": {
+          "bytes": 1259168,
+          "path": "out/current-integrated-science/runs/p4-host/inputs-before.json",
+          "sha256": "b57797704653c907580025cf33d8e765d10d8dec1dac147ad680dc1514b5b2f9"
+        },
+        "count": 4473
+      },
+      "intended_cases": [
+        "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale",
+        "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+        "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+        "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+        "CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical",
+        "CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+        "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+        "DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial",
+        "DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain",
+        "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
+        "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
+        "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+        "GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary",
+        "GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically",
+        "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource",
+        "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
+        "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
+        "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit",
+        "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+        "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo",
+        "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+        "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+        "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+        "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+        "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+        "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+        "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+        "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+        "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
+        "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth"
+      ],
+      "owner": {
+        "bytes": 4343,
+        "path": "out/current-integrated-science/runs/p4-host/owner.json",
+        "sha256": "6f803ac1b1ffad2c249fd2fa97c0e5d6f0d9ff484ba614abcbcff0adb4a43d38"
+      },
+      "status": {
+        "child_exit": -15,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 300
+        },
+        "passed": false,
+        "peak_sampled_rss_kib": 55364,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": "diagnostic_timeout",
+        "wall_seconds": 300.3490993620071,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/runs/p4-host/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr_tail": [],
+      "stdout": {
+        "bytes": 32339,
+        "path": "out/current-integrated-science/runs/p4-host/stdout.log",
+        "sha256": "5eea6cf936a7f25695a38cc3a883c03d7c65995b55ed0c23f29f983dcd51e30a"
+      },
+      "stdout_tail": [
+        "863: Note: Google Test filter = GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+        "863: [==========] Running 1 test from 1 test suite.",
+        "863: [----------] Global test environment set-up.",
+        "863: [----------] 1 test from GeodesicTracerTest",
+        "863: [ RUN      ] GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+        "863: [       OK ] GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile (115982 ms)",
+        "863: [----------] 1 test from GeodesicTracerTest (115983 ms total)",
+        "863: ",
+        "863: [----------] Global test environment tear-down",
+        "863: [==========] 1 test from 1 test suite ran. (115983 ms total)",
+        "863: [  PASSED  ] 1 test.",
+        "23/31 Test  #863: GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile ....................   Passed  115.99 sec",
+        "test 864",
+        "      Start  864: GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "",
+        "864: Test command: /home/astra/.project/Sirius/bin/linux-gcc/src/sirius/app/sirius_render_tests \"--gtest_filter=GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile\" \"--gtest_also_run_disabled_tests\"",
+        "864: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/render",
+        "864: Test timeout computed to be: 10000000",
+        "864: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc",
+        "864: Note: Google Test filter = GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+        "864: [==========] Running 1 test from 1 test suite.",
+        "864: [----------] Global test environment set-up.",
+        "864: [----------] 1 test from GeodesicTracerTest",
+        "864: [ RUN      ] GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile"
+      ]
+    },
+    "p4-host-recovered": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/continued/p4-host-recovered/junit.xml",
+        "-R",
+        "^(AccretionDiskTest\\.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale|AnalyticValidationTest\\.PageThorneFluxApproachesNewtonianCubicFalloff|AnalyticValidationTest\\.PageThorneFluxMatchesIndependentQuadrature|AnalyticValidationTest\\.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge|CoordinateTransformTests\\.KerrDiskRadiusIsSpheroidalNotCylindrical|CoordinateTransformTests\\.KerrRadiusPreservesExactZeroAndScaleCovariance|CpuTraceBoundary\\.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge|DiskCoordinateTest\\.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial|DiskCoordinateTest\\.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain|DopplerToggleTest\\.SuppressionCollapsesDiskAsymmetry|GeodesicTracerRedshift\\.NearExtremalInnerDiskEmissionRemainsFinite|GeodesicTracerTest\\.LiveDiskTemperatureUsesFullPageThorneProfile|GeodesicTracerTest\\.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile|GeodesicTracerVolumetric\\.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary|GeodesicTracerVolumetric\\.ProceduralTurbulenceAltersLiveTransferDeterministically|GeodesicTracerVolumetric\\.RedshiftAndDopplerReachTheLiveVolumeSource|GeodesicTracerVolumetric\\.TransferAccumulatesAcrossEveryTraversedSegment|KerrOrbitAuthority\\.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw|KerrOrbitAuthority\\.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit|KerrZamoTransfer\\.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction|KerrZamoTransfer\\.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo|SpectralEmissionTest\\.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor|SpectralRadianceTest\\.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature|SpectralValidationTests\\.BlackbodyLawsRejectUnrepresentedDomains|SpectralValidationTests\\.KerrDiskTransferMatchesKillingFieldContraction|SpectralValidationTests\\.OpticallyThinGreyLayerPreservesFirstOrderEmission|SpectralValidationTests\\.PlanckSpectralRadianceMatchesIndependentCodataEquation|SpectralValidationTests\\.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral|SpectralValidationTests\\.WienPeakMatchesIndependentNumericalPlanckMaximum|SpectralValidationTests\\.ZamoBranchRemainsTimelikeInsideTheErgosphere|VolumetricDiskClosure\\.TruncatedGaussianColumnEqualsDeclaredOpticalDepth)$"
+      ],
+      "cases": [
+        {
+          "name": "SpectralValidationTests.PlanckSpectralRadianceMatchesIndependentCodataEquation",
+          "seconds": 0.00434976
+        },
+        {
+          "name": "SpectralValidationTests.WienPeakMatchesIndependentNumericalPlanckMaximum",
+          "seconds": 0.00450349
+        },
+        {
+          "name": "SpectralValidationTests.StefanBoltzmannExitanceMatchesIndependentHemisphericPlanckIntegral",
+          "seconds": 0.0069114
+        },
+        {
+          "name": "SpectralValidationTests.BlackbodyLawsRejectUnrepresentedDomains",
+          "seconds": 0.00394974
+        },
+        {
+          "name": "SpectralValidationTests.KerrDiskTransferMatchesKillingFieldContraction",
+          "seconds": 0.00378662
+        },
+        {
+          "name": "SpectralValidationTests.ZamoBranchRemainsTimelikeInsideTheErgosphere",
+          "seconds": 0.00394272
+        },
+        {
+          "name": "SpectralValidationTests.OpticallyThinGreyLayerPreservesFirstOrderEmission",
+          "seconds": 0.00371795
+        },
+        {
+          "name": "CoordinateTransformTests.KerrDiskRadiusIsSpheroidalNotCylindrical",
+          "seconds": 0.00414727
+        },
+        {
+          "name": "CoordinateTransformTests.KerrRadiusPreservesExactZeroAndScaleCovariance",
+          "seconds": 0.0274541
+        },
+        {
+          "name": "KerrOrbitAuthority.EveryCpuConsumerSharesSignedIscoAndCircularEmitterLaw",
+          "seconds": 0.00423375
+        },
+        {
+          "name": "KerrOrbitAuthority.UnrepresentedInputsDeclineInsteadOfChangingTheOrbit",
+          "seconds": 0.0207014
+        },
+        {
+          "name": "AccretionDiskTest.ShakuraSunyaevProfileHasZeroTorqueEdgeAndDeclaredScale",
+          "seconds": 0.00425564
+        },
+        {
+          "name": "DiskCoordinateTest.CylindricalHeightAndPolarAngleRoundTripOnTheirOwnedDomain",
+          "seconds": 0.00413659
+        },
+        {
+          "name": "DiskCoordinateTest.AxisAndNonFiniteCoordinatesDeclineInsteadOfBecomingEquatorial",
+          "seconds": 0.00429805
+        },
+        {
+          "name": "VolumetricDiskClosure.TruncatedGaussianColumnEqualsDeclaredOpticalDepth",
+          "seconds": 0.00386846
+        },
+        {
+          "name": "SpectralRadianceTest.BlackbodyBinsDelegateToPlanckAuthorityAndRejectInvalidTemperature",
+          "seconds": 0.00428612
+        },
+        {
+          "name": "AnalyticValidationTest.PageThorneFluxMatchesIndependentQuadrature",
+          "seconds": 0.0262422
+        },
+        {
+          "name": "AnalyticValidationTest.TruncatedPageThorneDiskUsesDeclaredZeroTorqueEdge",
+          "seconds": 0.0116346
+        },
+        {
+          "name": "AnalyticValidationTest.PageThorneFluxApproachesNewtonianCubicFalloff",
+          "seconds": 0.00481118
+        },
+        {
+          "name": "KerrZamoTransfer.ArbitraryLatitudeMatchesIndependentBoyerLindquistContraction",
+          "seconds": 0.00383027
+        },
+        {
+          "name": "KerrZamoTransfer.KerrSchildSlicingNormalIsNotTheOffEquatorialZamo",
+          "seconds": 0.00322867
+        },
+        {
+          "name": "CpuTraceBoundary.TruncatedPageThorneLiveProfileUsesDeclaredZeroTorqueEdge",
+          "seconds": 132.068
+        },
+        {
+          "name": "GeodesicTracerTest.LiveDiskTemperatureUsesZeroTorqueShakuraSunyaevProfile",
+          "seconds": 108.797
+        },
+        {
+          "name": "GeodesicTracerTest.LiveDiskTemperatureUsesFullPageThorneProfile",
+          "seconds": 107.79
+        },
+        {
+          "name": "GeodesicTracerVolumetric.TransferAccumulatesAcrossEveryTraversedSegment",
+          "seconds": 0.024284
+        },
+        {
+          "name": "GeodesicTracerVolumetric.OpticallyThinTransferIsNotDiscardedAtCompositionBoundary",
+          "seconds": 0.0139839
+        },
+        {
+          "name": "GeodesicTracerVolumetric.RedshiftAndDopplerReachTheLiveVolumeSource",
+          "seconds": 0.152535
+        },
+        {
+          "name": "GeodesicTracerVolumetric.ProceduralTurbulenceAltersLiveTransferDeterministically",
+          "seconds": 0.033285
+        },
+        {
+          "name": "GeodesicTracerRedshift.NearExtremalInnerDiskEmissionRemainsFinite",
+          "seconds": 44.8469
+        },
+        {
+          "name": "SpectralEmissionTest.BolometricDiskAuthorityAppliesExactlyOneGFourthFactor",
+          "seconds": 0.0037124
+        },
+        {
+          "name": "DopplerToggleTest.SuppressionCollapsesDiskAsymmetry",
+          "seconds": 185.96
+        }
+      ],
+      "doppler_asymmetry": {
+        "factor_off": 0.0,
+        "factor_on": 0.630296,
+        "hits": 2566.0,
+        "observed_off": 0.0930556,
+        "observed_on": 0.775236
+      },
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p4-host-recovered"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/p4-host-recovered/inputs-after.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "before": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/p4-host-recovered/inputs-before.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "count": 4475
+      },
+      "junit": {
+        "bytes": 33333,
+        "path": "out/current-integrated-science/continued/p4-host-recovered/junit.xml",
+        "sha256": "7a19bda3b863a4fc3cbcfc4e8e958eadc161ae974cc6c8ccc948bbe346533b4a"
+      },
+      "owner": {
+        "bytes": 4623,
+        "path": "out/current-integrated-science/continued/p4-host-recovered/owner.json",
+        "sha256": "4ba0da02045dd70f354de6c945eb010d8d1cec4a36c2a99cea20e273361967f4"
+      },
+      "selection_from": "p4-host",
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 900
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 58616,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 580.0947365419997,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/continued/p4-host-recovered/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 44936,
+        "path": "out/current-integrated-science/continued/p4-host-recovered/stdout.log",
+        "sha256": "95e49062169bdd071c3edd49b2507325438722d18f0f4ec5cb5d5d000fd6e537"
+      }
+    },
+    "p4-kernel": {
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/continued/p4-kernel/junit.xml",
+        "-R",
+        "^(KernelParity\\.ArbitraryLatitudeKerrZamoMatchesHostAuthority|KernelParity\\.BlackbodyMatchesIntegratedCoreSpectrum|KernelParity\\.DiskEmissionAppliesExactlyOneGFourthFactor|KernelParity\\.EquatorialKerrDiskTransferMatchesHostAuthority|KernelParity\\.FullPageThorneDiskTemperatureMatchesIndependentCoreModel|KernelParity\\.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority|KernelParity\\.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco|KernelParity\\.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel|KernelParity\\.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure)$"
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p4-kernel"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1266059,
+          "path": "out/current-integrated-science/continued/p4-kernel/inputs-after.json",
+          "sha256": "5bc33fe7ef1c0ebe41930e96ac57f5f7e99c0f7db96cdbc0dea0d60bd50d799f"
+        },
+        "before": {
+          "bytes": 1266059,
+          "path": "out/current-integrated-science/continued/p4-kernel/inputs-before.json",
+          "sha256": "5bc33fe7ef1c0ebe41930e96ac57f5f7e99c0f7db96cdbc0dea0d60bd50d799f"
+        },
+        "count": 4503
+      },
+      "intended_cases": [
+        "KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority",
+        "KernelParity.BlackbodyMatchesIntegratedCoreSpectrum",
+        "KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
+        "KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority",
+        "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel",
+        "KernelParity.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority",
+        "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
+        "KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
+        "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure"
+      ],
+      "owner": {
+        "bytes": 3400,
+        "path": "out/current-integrated-science/continued/p4-kernel/owner.json",
+        "sha256": "73b04ef8df74f5ea332b6dcc018c1bca9d7284650e22eb7c612ae75feee01675"
+      },
+      "selection_from": "p4-kernel",
+      "status": {
+        "child_exit": -15,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 300
+        },
+        "passed": false,
+        "peak_sampled_rss_kib": 2105640,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": "diagnostic_timeout",
+        "wall_seconds": 300.34550370500074,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/continued/p4-kernel/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr_tail": [],
+      "stdout": {
+        "bytes": 4735,
+        "path": "out/current-integrated-science/continued/p4-kernel/stdout.log",
+        "sha256": "415decbb59fe21bf7729118046fa1be9d070aa43a4f4b53d4d4856c19c5da3d3"
+      },
+      "stdout_tail": [
+        "748: [----------] 1 test from KernelParity",
+        "748: [ RUN      ] KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
+        "748: [ParityProbe] phase=initialization opcode=2 offset=0 count=0 submit_wait_ms=42365.7 pipeline_setup_ms=57880.3 total_ms=100246 success=1",
+        "748: [ParityProbe] phase=actual opcode=2 offset=0 count=1 submit_wait_ms=0.580424 pipeline_setup_ms=0.001101 total_ms=0.638054 success=1",
+        "748: [ParityProbe] completed opcode=2 records=1 submissions=1 allocated_bytes=336",
+        "748: [       OK ] KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco (100399 ms)",
+        "748: [----------] 1 test from KernelParity (100399 ms total)",
+        "748: ",
+        "748: [----------] Global test environment tear-down",
+        "748: [==========] 1 test from 1 test suite ran. (100399 ms total)",
+        "748: [  PASSED  ] 1 test.",
+        "2/9 Test #748: KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco ....   Passed  100.54 sec",
+        "test 749",
+        "    Start 749: KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
+        "",
+        "749: Test command: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend/sirius_backend_tests \"--gtest_filter=KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel\" \"--gtest_also_run_disabled_tests\"",
+        "749: Working Directory: /home/astra/.project/Sirius/bin/linux-gcc/tests/backend",
+        "749: Test timeout computed to be: 10000000",
+        "749: Running main() from /home/astra/.project/Sirius/bin/linux-gcc/_deps/googletest-src/googletest/src/gtest_main.cc",
+        "749: Note: Google Test filter = KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
+        "749: [==========] Running 1 test from 1 test suite.",
+        "749: [----------] Global test environment set-up.",
+        "749: [----------] 1 test from KernelParity",
+        "749: [ RUN      ] KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel"
+      ]
+    },
+    "p4-kernel-cached": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/junit.xml",
+        "-R",
+        "^(KernelParity\\.ArbitraryLatitudeKerrZamoMatchesHostAuthority|KernelParity\\.BlackbodyMatchesIntegratedCoreSpectrum|KernelParity\\.DiskEmissionAppliesExactlyOneGFourthFactor|KernelParity\\.EquatorialKerrDiskTransferMatchesHostAuthority|KernelParity\\.FullPageThorneDiskTemperatureMatchesIndependentCoreModel|KernelParity\\.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority|KernelParity\\.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco|KernelParity\\.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel|KernelParity\\.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure)$"
+      ],
+      "cases": [
+        {
+          "name": "KernelParity.FullPageThorneDiskTemperatureMatchesIndependentCoreModel",
+          "seconds": 155.521
+        },
+        {
+          "name": "KernelParity.RepresentedSmallKerrSpinDoesNotAliasToSchwarzschildIsco",
+          "seconds": 87.6902
+        },
+        {
+          "name": "KernelParity.ShakuraSunyaevZeroTorqueTemperatureMatchesCoreModel",
+          "seconds": 80.908
+        },
+        {
+          "name": "KernelParity.TruncatedGaussianOpacityMatchesFiniteColumnCoreClosure",
+          "seconds": 91.6224
+        },
+        {
+          "name": "KernelParity.OpticallyThinGreyLayerAbsorptionMatchesHostAuthority",
+          "seconds": 88.9875
+        },
+        {
+          "name": "KernelParity.ArbitraryLatitudeKerrZamoMatchesHostAuthority",
+          "seconds": 76.8695
+        },
+        {
+          "name": "KernelParity.EquatorialKerrDiskTransferMatchesHostAuthority",
+          "seconds": 93.1322
+        },
+        {
+          "name": "KernelParity.BlackbodyMatchesIntegratedCoreSpectrum",
+          "seconds": 91.0049
+        },
+        {
+          "name": "KernelParity.DiskEmissionAppliesExactlyOneGFourthFactor",
+          "seconds": 73.4079
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/current-integrated-science/p4-kernel-recovery/shader-cache",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p4-kernel"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1266372,
+          "path": "out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/inputs-after.json",
+          "sha256": "c8904f3a5f661c3ce243eaf9fedfd8369f08aec6ecd96338442b5d20a5e9f286"
+        },
+        "before": {
+          "bytes": 1266372,
+          "path": "out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/inputs-before.json",
+          "sha256": "c8904f3a5f661c3ce243eaf9fedfd8369f08aec6ecd96338442b5d20a5e9f286"
+        },
+        "count": 4504
+      },
+      "junit": {
+        "bytes": 12695,
+        "path": "out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/junit.xml",
+        "sha256": "0f68f5f4ca93a29129e6d238f2a5157ff49ec343665ca327dd29b85e6a6f5465"
+      },
+      "owner": {
+        "bytes": 4236,
+        "path": "out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/owner.json",
+        "sha256": "8d478733a1afc863a93190dc8a6540f52b573e109743bde0e8a247c46d51eb0d"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "selection_from": "p4-kernel",
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 1200
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 2105548,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 839.2335917269811,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 16001,
+        "path": "out/current-integrated-science/p4-kernel-recovery/p4-kernel-cached/stdout.log",
+        "sha256": "d52c550f293caa4d8da6420f7833c7a1ec5608b99da6a67219612e3b9d7c7594"
+      }
+    },
+    "p6-host": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/continued/p6-host/junit.xml",
+        "-R",
+        "^(Cie1931ObserverAuthority\\.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand|Cie1931ObserverAuthority\\.HostSpectralFacadesEvaluateTheirActualWavelengths|Cie1931ObserverAuthority\\.UnrepresentedWavelengthsFailClosed|DisplayBuffer\\.NonFiniteRadianceIsIdentifiedBeforeEncoding|EXRRoundTripTests\\.HDRGradientSurvivesWriteAndRead|EXRRoundTripTests\\.NonFiniteRadianceIsRejected|EXRRoundTripTests\\.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode|PNGWriterTest\\.DecodeRoundTripMatchesSRGBEncoding|PNGWriterTest\\.NonFiniteRadianceIsRejected|PointSourceResponseTest\\.CatalogueBandTransferComposesDensityAndMovingFrequency|PointSourceResponseTest\\.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure|PointSourceResponseTest\\.CatalogueBandTransferKeepsFluxAndDensityLinear|PointSourceResponseTest\\.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry|PointSourceResponseTest\\.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff|PointSourceResponseTest\\.RestrictedCellsPreserveOriginalGaussianAndNormalization|PointSourceTransfer\\.InvalidOrOverflowingTransferHasNoPublishedValue|PointSourceTransfer\\.MovingObserverUsesBandGainAndAngularAreaExactlyOnce|PointSourceTransfer\\.ReferenceFrequencyPreservesCatalogueColourAndFlux|PointSourceTransfer\\.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions|PointSourceTransfer\\.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw|PointSourceTransfer\\.ShiftedTemperatureHasNoCatalogueLookupClamp|RenderSessionProbe\\.FilmAffectsDisplayOutputButNeverLinearExr|RenderSessionProbe\\.GeometricMetadataNeverInventsPhysicalLengthUnits|SrgbTransferAuthority\\.CurveMatchesIndependentIecOracleAcrossBothBranches|SrgbTransferAuthority\\.EightBitQuantisationClipsAndDeclinesNonfiniteInputs|SrgbTransferAuthority\\.SpectralFacadeDelegatesWithoutChangingClippingSemantics|ViewerDisplayContract\\.FilmFinishClosesDisplayLinearRange|ViewerDisplayContract\\.LiveShaderAppliesOnlyExactSrgbTransfer|XyzSrgbAuthority\\.BlackbodyColourFacadeDelegatesToTheExactTransform|XyzSrgbAuthority\\.MatchesIndependentPrimaryWhiteDerivation|XyzSrgbAuthority\\.PreservesExtendedGamutAndPropagatesNonfiniteInputs)$"
+      ],
+      "cases": [
+        {
+          "name": "Cie1931ObserverAuthority.FitIsBoundedAgainstOfficialCieDatasetAcrossRepresentedBand",
+          "seconds": 0.00426056
+        },
+        {
+          "name": "Cie1931ObserverAuthority.HostSpectralFacadesEvaluateTheirActualWavelengths",
+          "seconds": 0.00386837
+        },
+        {
+          "name": "Cie1931ObserverAuthority.UnrepresentedWavelengthsFailClosed",
+          "seconds": 0.00367113
+        },
+        {
+          "name": "SrgbTransferAuthority.CurveMatchesIndependentIecOracleAcrossBothBranches",
+          "seconds": 0.00448932
+        },
+        {
+          "name": "SrgbTransferAuthority.EightBitQuantisationClipsAndDeclinesNonfiniteInputs",
+          "seconds": 0.00505126
+        },
+        {
+          "name": "SrgbTransferAuthority.SpectralFacadeDelegatesWithoutChangingClippingSemantics",
+          "seconds": 0.00440029
+        },
+        {
+          "name": "XyzSrgbAuthority.MatchesIndependentPrimaryWhiteDerivation",
+          "seconds": 0.00437621
+        },
+        {
+          "name": "XyzSrgbAuthority.PreservesExtendedGamutAndPropagatesNonfiniteInputs",
+          "seconds": 0.00429018
+        },
+        {
+          "name": "XyzSrgbAuthority.BlackbodyColourFacadeDelegatesToTheExactTransform",
+          "seconds": 0.00394516
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueBandTransferComposesDensityAndMovingFrequency",
+          "seconds": 0.00491548
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueBandTransferKeepsFluxAndDensityLinear",
+          "seconds": 0.00632989
+        },
+        {
+          "name": "PointSourceResponseTest.CatalogueBandTransferDeclinesInvalidFrequencyAndPartialFailure",
+          "seconds": 0.00686903
+        },
+        {
+          "name": "PointSourceResponseTest.RestrictedCellsPreserveOriginalGaussianAndNormalization",
+          "seconds": 0.00524776
+        },
+        {
+          "name": "PointSourceResponseTest.RestrictedCellsOwnSharedEdgesAndKeepParentCutoff",
+          "seconds": 0.00410914
+        },
+        {
+          "name": "PointSourceResponseTest.RestrictedCellsDeclineInvalidOrUnrepresentedGeometry",
+          "seconds": 0.00375389
+        },
+        {
+          "name": "PointSourceTransfer.ReferenceFrequencyPreservesCatalogueColourAndFlux",
+          "seconds": 0.00433889
+        },
+        {
+          "name": "PointSourceTransfer.ShiftedSpectrumMatchesIndependentFixedBandPlanckLaw",
+          "seconds": 0.182257
+        },
+        {
+          "name": "PointSourceTransfer.RejectsReciprocalExtraGainAndShiftedNormalizerSubstitutions",
+          "seconds": 0.00503249
+        },
+        {
+          "name": "PointSourceTransfer.MovingObserverUsesBandGainAndAngularAreaExactlyOnce",
+          "seconds": 0.0052443
+        },
+        {
+          "name": "PointSourceTransfer.ShiftedTemperatureHasNoCatalogueLookupClamp",
+          "seconds": 0.00466511
+        },
+        {
+          "name": "PointSourceTransfer.InvalidOrOverflowingTransferHasNoPublishedValue",
+          "seconds": 0.00417965
+        },
+        {
+          "name": "RenderSessionProbe.FilmAffectsDisplayOutputButNeverLinearExr",
+          "seconds": 7.72332
+        },
+        {
+          "name": "EXRRoundTripTests.HDRGradientSurvivesWriteAndRead",
+          "seconds": 0.00414062
+        },
+        {
+          "name": "EXRRoundTripTests.NonFiniteRadianceIsRejected",
+          "seconds": 0.00343097
+        },
+        {
+          "name": "EXRRoundTripTests.PpmRgbaBoundaryAppliesExactlyOneSrgbEncode",
+          "seconds": 0.0039013
+        },
+        {
+          "name": "PNGWriterTest.NonFiniteRadianceIsRejected",
+          "seconds": 0.00346852
+        },
+        {
+          "name": "PNGWriterTest.DecodeRoundTripMatchesSRGBEncoding",
+          "seconds": 0.00392739
+        },
+        {
+          "name": "DisplayBuffer.NonFiniteRadianceIsIdentifiedBeforeEncoding",
+          "seconds": 0.00283344
+        },
+        {
+          "name": "RenderSessionProbe.GeometricMetadataNeverInventsPhysicalLengthUnits",
+          "seconds": 0.00394267
+        },
+        {
+          "name": "ViewerDisplayContract.LiveShaderAppliesOnlyExactSrgbTransfer",
+          "seconds": 0.00343865
+        },
+        {
+          "name": "ViewerDisplayContract.FilmFinishClosesDisplayLinearRange",
+          "seconds": 0.00362339
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p6-host"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/p6-host/inputs-after.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "before": {
+          "bytes": 1259722,
+          "path": "out/current-integrated-science/continued/p6-host/inputs-before.json",
+          "sha256": "cab37879beead8a66e96870887fba8b96b35d11b0151de805dd8fe301286226d"
+        },
+        "count": 4475
+      },
+      "junit": {
+        "bytes": 32666,
+        "path": "out/current-integrated-science/continued/p6-host/junit.xml",
+        "sha256": "1b5d265af7811f7d63957e213f863dba75c51a8170b2be2be285e871eeb2be43"
+      },
+      "owner": {
+        "bytes": 4037,
+        "path": "out/current-integrated-science/continued/p6-host/owner.json",
+        "sha256": "cbdeb945cd26ccef09046054b1f221354379166da9bdc9da083008c59f81fd35"
+      },
+      "selection_from": "p6-host",
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 300
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 205812,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 8.165600322012324,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/continued/p6-host/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 49589,
+        "path": "out/current-integrated-science/continued/p6-host/stdout.log",
+        "sha256": "cc0ae03444984a4a37aa5f2ce0f956b81a0a3d74615f07365ff0f04eef192b53"
+      }
+    },
+    "p6-kernel": {
+      "accepted": true,
+      "argv": [
+        "/usr/bin/ctest",
+        "--test-dir",
+        "/home/astra/.project/Sirius/bin/linux-gcc",
+        "-C",
+        "Release",
+        "-V",
+        "--no-tests=error",
+        "--output-on-failure",
+        "--output-junit",
+        "/home/astra/.project/Sirius/out/current-integrated-science/continued/p6-kernel/junit.xml",
+        "-R",
+        "^(KernelParity\\.Cie1931TwoDegreeFitMatchesHostAuthority|KernelParity\\.XyzD65ToLinearSrgbMatchesHostAuthority)$"
+      ],
+      "cases": [
+        {
+          "name": "KernelParity.XyzD65ToLinearSrgbMatchesHostAuthority",
+          "seconds": 95.0563
+        },
+        {
+          "name": "KernelParity.Cie1931TwoDegreeFitMatchesHostAuthority",
+          "seconds": 99.8555
+        }
+      ],
+      "environment": {
+        "MESA_SHADER_CACHE_DISABLE": "true",
+        "TMPDIR": "/home/astra/.project/Sirius/renders/current-integrated-science/p6-kernel"
+      },
+      "icd": {
+        "bytes": 135,
+        "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+        "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+      },
+      "inputs": {
+        "after": {
+          "bytes": 1266059,
+          "path": "out/current-integrated-science/continued/p6-kernel/inputs-after.json",
+          "sha256": "5bc33fe7ef1c0ebe41930e96ac57f5f7e99c0f7db96cdbc0dea0d60bd50d799f"
+        },
+        "before": {
+          "bytes": 1266059,
+          "path": "out/current-integrated-science/continued/p6-kernel/inputs-before.json",
+          "sha256": "5bc33fe7ef1c0ebe41930e96ac57f5f7e99c0f7db96cdbc0dea0d60bd50d799f"
+        },
+        "count": 4503
+      },
+      "junit": {
+        "bytes": 2788,
+        "path": "out/current-integrated-science/continued/p6-kernel/junit.xml",
+        "sha256": "034a219bdbd775278a7b5e9b89c353531d42616cf9c7bc734cef3a98fa0de0fb"
+      },
+      "owner": {
+        "bytes": 2781,
+        "path": "out/current-integrated-science/continued/p6-kernel/owner.json",
+        "sha256": "014e0b37d332cf6691ad2a2bc2683389ce3091edbf0e6e4726bad906453c92dc"
+      },
+      "provider": {
+        "bytes": 11929384,
+        "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+        "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+      },
+      "selection_from": "p6-kernel",
+      "status": {
+        "child_exit": 0,
+        "cleanup_errors": [],
+        "limits": {
+          "reserve_kib": 2097152,
+          "rss_kib": 4194304,
+          "seconds": 300
+        },
+        "passed": true,
+        "peak_sampled_rss_kib": 2105772,
+        "remaining_owned_processes": [],
+        "source_unchanged": true,
+        "status": "terminal",
+        "stop_reason": null,
+        "wall_seconds": 194.99293413799023,
+        "whole_inputs_unchanged": true
+      },
+      "stderr": {
+        "bytes": 0,
+        "path": "out/current-integrated-science/continued/p6-kernel/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 3991,
+        "path": "out/current-integrated-science/continued/p6-kernel/stdout.log",
+        "sha256": "d5d8f533e4236aa7e1e2f11c30c19e27227142cfc359a9368ea70d24af4882db"
+      }
+    }
+  },
+  "continuation_runner": {
+    "executed": {
+      "bytes": 4324,
+      "path": "out/current-integrated-science/continue_science.py",
+      "sha256": "572ff1f01b78162ff7c149a50da4bff8449975b51221847af297dd84bd17c220"
+    },
+    "preserved_path": "out/science-replay/continue_science.py"
+  },
+  "executable_inputs": [
+    {
+      "bytes": 9640208,
+      "path": "bin/linux-gcc/src/sirius/app/sirius",
+      "sha256": "6f3d927ff8daa7bea45fa6ce8bb4c06ba596badf4da2f09be120da8510f9c265"
+    },
+    {
+      "bytes": 11179888,
+      "path": "bin/linux-gcc/src/sirius/app/sirius_app_tests",
+      "sha256": "6f7874864173d644870e13849e217c7a33fae945b7622ccc6edb80f7a6ba2d22"
+    },
+    {
+      "bytes": 12142824,
+      "path": "bin/linux-gcc/src/sirius/app/sirius_render_tests",
+      "sha256": "3c896914a95e99547da56fab0c0e64cd234745fcc2f4bbc9594d768665a1efff"
+    },
+    {
+      "bytes": 13445664,
+      "path": "bin/linux-gcc/tests/backend/sirius_backend_tests",
+      "sha256": "995095e0c8d145e882a966dfa5d2406562bc5be56b49468ad32433389e249fee"
+    },
+    {
+      "bytes": 5199120,
+      "path": "bin/linux-gcc/tests/core/sirius_core_tests",
+      "sha256": "c0c5aa5282d7ff8f98333fd3d7edbfe9dafb249d86cdfe53e464e252033f5586"
+    },
+    {
+      "bytes": 1678696,
+      "path": "bin/linux-gcc/tests/oracle/sirius_oracle_tests",
+      "sha256": "a0c82a309ae6f3005a60fd820c86bdb0e03924869cb5f330e54ed978fb171f4d"
+    }
+  ],
+  "execution_runner": {
+    "executed": {
+      "bytes": 14555,
+      "path": "out/current-integrated-science/run_science.py",
+      "sha256": "fcb72a979478e3e87e1e7313c17af108c3f4cc161d0b90b851f8d5127ee7ac95"
+    },
+    "preserved_path": "out/science-replay/run_science.py"
+  },
+  "model": {
+    "bytes": 130827,
+    "path": "tests/operating_model.json",
+    "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+  },
+  "model_rows": 64,
+  "operating_model_case_coverage": {
+    "E2": {
+      "passing": 11,
+      "required": 11,
+      "unmeasured_cases": []
+    },
+    "P1": {
+      "passing": 11,
+      "required": 41,
+      "unmeasured_cases": [
+        "CpuTraceBoundary.LateMinimumStepsPreserveAnalyticAffineAndJacobiLength",
+        "CpuTraceBoundary.PastRadialHorizonIsAnAcceptedFiniteOutgoingEvent",
+        "CpuTraceBoundary.RejectedOutwardRayNearHorizonDoesNotInventCapture",
+        "FullPathAcceptance.VulkanRetainedNearExtremalRayConservesIndependentInvariants",
+        "KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+        "KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+        "KernelParity.ActualAffineAndJacobiClocksMatchFp64",
+        "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32",
+        "KernelParity.CapturedKerrFloorCompositeMatchesCanonicalEndpointFp32Comp",
+        "KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+        "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+        "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
+        "KernelParity.NearExtremalKerrLiveRenderIntegratorConservesEnergyAngularMomentumAndCarter",
+        "KernelParity.NullProjectionPreservesConeBranchAndFailsClosed",
+        "KernelParity.PrecisionProbeArtifactsCarryOnlyTheirDeclaredFloat64Capability",
+        "KernelParity.PrecisionRungsConserveNearExtremalKerrWithoutImageComparison",
+        "KernelParity.RejectedNeighbourRetriesExactMinimumFp32",
+        "KernelParity.RejectedNeighbourRetriesExactMinimumFp32Comp",
+        "KernelParity.RejectedNeighbourRetriesExactMinimumFp64",
+        "KernelParity.RepresentedSubThresholdKerrMetricIsScaleCovariant",
+        "KernelParity.UnrepresentedKerrStageShrinksBeforeMetricEvaluation",
+        "KerrTests.CartesianMetricIsScaleCovariantBelowTheFormerSpinFloor",
+        "KerrTests.SingularKerrDiskDeclinesInsteadOfReceivingAnEpsilonRadius",
+        "OperationalP1.NearExtremalBurnIn",
+        "RK45IntegratorTests.AcceptedDenseErrorOnlyLimitsGrowth",
+        "ShadowBoundary.RetainedFp32ProductsKerrNearExtremalBardeenBoundaryAt1080p",
+        "ShadowBoundary.RetainedFp64ProductsKerrNearExtremalBardeenBoundaryAt1080p",
+        "VulkanBackend.KernelPrecisionDeclinesFmaBeforeDriverWorkUnlessBinary32WasEnabled",
+        "VulkanBackend.KernelPrecisionDeclinesUnsupportedFloat64AndMalformedInstructions",
+        "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p"
+      ]
+    },
+    "P2": {
+      "passing": 29,
+      "required": 126,
+      "unmeasured_cases": [
+        "CameraContinuousProjection.AngularProjectionPreservesGeometricZerosForDetectorOffsets",
+        "CpuTraceBoundary.JacobiBundleTerminatesAtTheSameCausalEvent",
+        "CpuTraceBoundary.OrdinaryEscapeBoundaryLaunchUsesCrossingDirection",
+        "CpuTraceBoundary.OrdinaryEscapeClipsCentralAndJacobiAffineIntervals",
+        "CpuTraceBoundary.OrdinaryEscapeDeclinesExteriorOutwardLaunchWithoutSourceEvent",
+        "CpuTraceBoundary.OrdinaryEscapeExcludesDiskAndVolumeBeyondBoundary",
+        "CpuTraceBoundary.RetainedQuarticEventsKeepOriginalFractionsAndExcludeLaterDisk",
+        "CpuTraceBoundary.RetainedQuarticVolumeFailurePublishesNothingAndRecovers",
+        "DopriPositionSegment.DegreeEightIsolationCoversEveryRootWithoutGridSampling",
+        "DopriPositionSegment.DiskRootsIncludeTangenciesAndKeepOriginalFractions",
+        "DopriPositionSegment.IncrementBoundarySurvivesLargeOriginsAndInvalidInputsFailClosed",
+        "DopriPositionSegment.SameSideQuarticContactsRespectDirectionAndOriginalRestriction",
+        "DopriPositionSegment.SamplesTheQuarticAndItsAffineDerivative",
+        "DopriPositionSegment.TangenciesAndKerrEllipsoidUseTheSameQuartic",
+        "KernelBeam.BeamFlagWiresDeviationWithoutMovingDefault",
+        "KernelInfinityDevice.CompensatedIndependentDirectionsVariationsAndTerminalStates",
+        "KernelInfinityDevice.FinishDeclinesWithoutPublishingPartialResults",
+        "KernelInfinityDevice.Fp32IndependentDirectionsVariationsAndTerminalStates",
+        "KernelInfinityDevice.Fp64IndependentDirectionsVariationsAndTerminalStates",
+        "KernelParity.ActualAffineAndJacobiClocksMatchFp32",
+        "KernelParity.ActualAffineAndJacobiClocksMatchFp32Comp",
+        "KernelParity.ActualAffineAndJacobiClocksMatchFp64",
+        "KernelParity.BeamEllipseRetainsBothAxesAndOutputOrientation",
+        "KernelParity.CelestialTangentBasisIsSharedByBeamAndPointFilter",
+        "KernelParity.DeviceRadialPointSourceCongruenceMatchesClosedForm",
+        "KernelParity.DeviceTidalContractionMatchesAnalyticKerrAtMatchedEvents",
+        "KernelParity.DeviceTidalContractionMatchesAnalyticSchwarzschildAtMatchedEvents",
+        "KernelParity.FiniteEscapeUsesFirstOutwardEventAndClippedIntervalAcrossRungs",
+        "KernelParity.MetricConnectionAndJetShareRepresentedParametersCompensatedFp32",
+        "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp32",
+        "KernelParity.MetricConnectionAndJetShareRepresentedParametersFp64",
+        "KernelParity.PointStarAngularWeightMatchesIndependentOracle",
+        "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+        "KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs",
+        "KerrInfinity.AxisPrincipalRaysHaveAnalyticAngularVariation",
+        "KerrInfinity.FlatOblateRaysAndAxesReachExactCartesianSky",
+        "KerrInfinity.FrequencyScaleAndSignedParityArePreserved",
+        "KerrInfinity.KerrTailMatchesIndependentSeparatedReference",
+        "KerrInfinity.MassSpinAndRadiusScalingPreserveDirectionAndJacobian",
+        "KerrInfinity.NearCriticalSchwarzschildDerivativeMatchesIndependentRadialIntegral",
+        "KerrInfinity.RejectsHiddenRadialTurningPoint",
+        "KerrInfinity.RejectsUnrepresentedInputsAndWorkExhaustion",
+        "KerrInfinity.VaryingHandoffAndTangentMatchExactFlatDerivative",
+        "PointSourceDetector.DisconnectedVisibilityIslandAndStripeUseActualImageVisibility",
+        "PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance",
+        "PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry",
+        "PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement",
+        "PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce",
+        "PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+        "PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes",
+        "PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness",
+        "RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns",
+        "RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain",
+        "RayBundleTest.MagnificationComesOnlyFromJacobiMap",
+        "RenderSessionProbe.ExhaustedNonKerrRayCannotPublishACompletedBlackFrame",
+        "RenderSessionProbe.LaterGoodCameraSampleCannotEraseCpuNumericalFailure",
+        "RenderSessionProbe.NumericalRayFailureKeepsCpuTilesPrivateAndPreventsOutput",
+        "RetainedArithmetic.CartesianGradientMatchesIndependentRationalValues",
+        "RetainedArithmetic.CompleteCriticalMetricMatchesIndependentPrecisionWitnesses",
+        "RetainedArithmetic.SmallTermsSurviveLargeSumsProductsAndDivision",
+        "RetainedCameraProgram.CompensatedCompletePhysicalLaunchAndRefusals",
+        "RetainedCameraProgram.Fp32CompletePhysicalLaunchAndRefusals",
+        "RetainedComputeTest.BatchedCameraPreservesPhysicalColumnsAndRejectsInvalidRows",
+        "RetainedComputeTest.CoupledIntervalsRequireEmbeddedAndIndependentDenseAgreement",
+        "RetainedComputeTest.DenseSegmentsPreserveSmallCovariantArrivalDerivatives",
+        "RetainedComputeTest.Fp64ProductsPreserveIndependentScienceOrDeclineUnsupportedDevices",
+        "RetainedComputeTest.JointRkStagesRetainCriticalIncrementsAndEmbeddedError",
+        "RetainedComputeTest.PhysicalInitializationRetainsTheHamiltonianResidual",
+        "RetainedComputeTest.ProjectedEndpointsKeepPhysicalColumnsAndRetainedContinuation",
+        "RetainedComputeTest.ProjectionReserveKeepsLogicalCohortsBounded",
+        "RetainedComputeTest.RejectedStepRowsCannotExposeOldOrPartialCandidates",
+        "RetainedComputeTest.SharedTracerCompletesDeviceIntervalsAndRetainsRollbackState",
+        "RetainedComputeTest.SmoothRayCameraPreservesPhysicalLensDerivatives",
+        "RetainedComputeTest.ZeroFractionArrivalsPreserveProgramAuthorityAndCompleteRefusal",
+        "RetainedDopriTest.ConnectedIntervalsPreserveTrialsAndIndependentBudgets",
+        "RetainedDopriTest.CurvedTransportConnectsSamplerAndProjection",
+        "RetainedDopriTest.IndependentQuarticPreservesCompletePhase",
+        "RetainedDopriTest.MalformedRowsRefuseAndRecover",
+        "RetainedDopriTest.SamplerPreservesPhysicalArrivalAndRejectsInconsistentRates",
+        "RetainedValue.Binary64InputsKeepTheirRepresentationResidual",
+        "SourceSkyDifferential.DeclinesUnrepresentedFrequencyGeometryAndVariation",
+        "SourceSkyDifferential.DirectionIsInvariantUnderFrequencyAndLongitudinalVariation",
+        "SourceSkyDifferential.KerrPositionAndTangentVariationsMatchIndependentDifferences",
+        "SourceSkyDifferential.MovingFlatCameraMatchesAnalyticLorentzDirectionDerivative",
+        "SourceSkyDifferential.NormalizesNonNullSpatialDirectionAndItsDerivative",
+        "SourceSkyDifferential.ReseedsMetricVariationWithoutInheritedDualMetadata",
+        "SourceSkyMap.EndpointVariationPreservesGaugeAndDeclinesGrazingContact",
+        "SourceSkyMap.FlatAngularMapIsIndependentOfSphereRadiusSeedAndFrequency",
+        "SourceSkyMap.KerrCovariantChartVariationsMatchMappedNominalFamily",
+        "SourceSkyMap.LocalizedFlatSphereVariationMatchesAnalyticRayFamily",
+        "SourceSkyMap.RetainsZeroRankDeficiencyAndSignedParity",
+        "StarfieldGeneratorTests.EllipticalFilterUsesTheBeamSachsBasis",
+        "StarfieldGeneratorTests.PointFilterMatchesIndependentAngularOracle",
+        "StarfieldGeneratorTests.PointFilterRetainsImaxSubpixelOffsets",
+        "StarfieldGeneratorTests.SpatialIndexIncludesStarsAcrossAngularCellBoundaries",
+        "StarfieldPointTest.BeamFootprintSuppressesStarFlicker",
+        "VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance"
+      ]
+    },
+    "P4": {
+      "passing": 35,
+      "required": 38,
+      "unmeasured_cases": [
+        "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+        "VulkanRenderSession.ProceduralVolumetricTurbulenceReachesLiveKernel",
+        "VulkanRenderSession.ThinAndVolumetricDopplerSuppressionAffectLiveEmission"
+      ]
+    },
+    "P6": {
+      "passing": 16,
+      "required": 16,
+      "unmeasured_cases": []
+    },
+    "output_encoding": {
+      "passing": 33,
+      "required": 33,
+      "unmeasured_cases": []
+    },
+    "polarised_transport_to_film": {
+      "passing": 10,
+      "required": 10,
+      "unmeasured_cases": []
+    }
+  },
+  "original_integration_manifest": {
+    "bytes": 35562,
+    "path": "attestations/software-vulkan/b34d8c2/cpu-dense-growth-only-integration/sha256-manifest.json",
+    "sha256": "d716f45e3b46c048428c70927d522fa9baaaebdfc81e3d4502aac5c2259a1806"
+  },
+  "p4_kernel_recovery": {
+    "executed": {
+      "bytes": 2759,
+      "path": "out/current-integrated-science/recover_p4_kernel.py",
+      "sha256": "5d5975e6181a502ba32debed06ab93847637c1b8a86aa535348b603dd19ec069"
+    },
+    "preserved_path": "out/science-replay/recover_p4_kernel.py",
+    "reason": "Cold shader compilation was repeated in separate test processes and exhausted the whole-cohort guard. The supplemental batch uses ordinary Mesa caching in a fresh task-local directory, with the exact same tests and memory limits."
+  },
+  "passed_cohort_total": 10,
+  "planned_cohort_total": 10,
+  "reconstruction_revalidation": {
+    "intentional_rk45_transition": {
+      "current_regressions": [
+        "RK45IntegratorTests.StepRejectionWorks",
+        "RK45IntegratorTests.UnrepresentedStageShrinksBeforeMetricEvaluation",
+        "RK45IntegratorTests.RejectionMaySelectTheMinimumStepBeforeTerminating"
+      ],
+      "parent": "c24c0623f870106e4b1c5718e4b5b884fabae8db",
+      "patch": {
+        "bytes": 2925,
+        "sha256": "5893cd4f0bb89fc854e32be6f276e902d328e329f95ba985e18a0b7265e7a169"
+      },
+      "pending": "The reported 512\u00d7512 pixel delta, regenerated-reference provenance, and original tape identity still require recovered evidence.",
+      "review": [
+        "The unchanged RK45 integrator computes a smaller proposed step on a rejected error estimate. That branch returns before updating the represented position or velocity.",
+        "The parent tracer treats this recoverable rejection as MaxSteps immediately. The revised tracer checks invalid or terminated state first and then retries the smaller step before any bundle advancement.",
+        "The attempted step continues to increment the existing work counter. The session factory change applies to the Morris\u2013Thorne case."
+      ],
+      "revision": "e736ffe0c318dcd637f1453beb3523ad14a15047",
+      "scope": "Source-level justification of the intentional RK45 rejection handling transition in #100",
+      "source": {
+        "integrator": {
+          "after": {
+            "bytes": 18681,
+            "sha256": "fd98ac60b4abb65ed9c099872dccc0ef07821cbceea64b9046daa4326d0170aa"
+          },
+          "before": {
+            "bytes": 18681,
+            "sha256": "fd98ac60b4abb65ed9c099872dccc0ef07821cbceea64b9046daa4326d0170aa"
+          },
+          "path": "src/sirius/core/geodesic_integrator.cpp"
+        },
+        "render_session": {
+          "after": {
+            "bytes": 49930,
+            "sha256": "87f7bc552a497033cfe6145670df40d7b2fcf95ee92ef790b789f37a27833718"
+          },
+          "before": {
+            "bytes": 49794,
+            "sha256": "639ce5bca436ce05adb479999b9f65b92f71b8a7f93fb7c77cba475dad1fa947"
+          },
+          "path": "src/sirius/render/session/render_session.cpp"
+        },
+        "tracer": {
+          "after": {
+            "bytes": 41749,
+            "sha256": "9741d3d2fdc9b47705af2a99189a74d93d763d1e1ceab6315c4f124ceb28e857"
+          },
+          "before": {
+            "bytes": 41189,
+            "sha256": "831e62addb67ed02adb52f4026df65715eba0c4368835956270bac4dd474e82d"
+          },
+          "path": "src/sirius/backend/cpu/geodesic_tracer.cpp"
+        }
+      }
+    },
+    "pairs": {
+      "alcubierre-png": {
+        "argv": [
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/alcubierre-png-reconstruction-pair/files/out/forensic-alcubierre-completion/image_compare",
+          "compare",
+          "png",
+          "1920",
+          "1080",
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/alcubierre-png-reconstruction-pair/files/renders/forensic-reconstruction-b739f92/legacy/alcubierre-png.png",
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/alcubierre-png-reconstruction-pair/files/renders/forensic-reconstruction-b739f92/ported/alcubierre-png.png"
+        ],
+        "comparison": {
+          "channels": 4,
+          "compared_pixels": 2073600,
+          "compared_samples": 8294400,
+          "encoded_files_equal": true,
+          "equal": true,
+          "format": "png",
+          "height": 1080,
+          "mismatched_pixels": 0,
+          "mismatched_samples": 0,
+          "sample_domain": "RGBA8",
+          "width": 1920
+        },
+        "effective_spp": 64,
+        "evidence_kind": "NEW_RECONSTRUCTION",
+        "inputs": {
+          "files/out/forensic-alcubierre-completion/image_compare": {
+            "bytes": 397736,
+            "mode": 493,
+            "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6",
+            "type": "file"
+          },
+          "files/renders/forensic-reconstruction-b739f92/legacy/alcubierre-png.png": {
+            "bytes": 5805724,
+            "mode": 420,
+            "sha256": "015134ea4181688189d890b35a635f6bde95cda69aa12624420334d488cd99b9",
+            "type": "file"
+          },
+          "files/renders/forensic-reconstruction-b739f92/ported/alcubierre-png.png": {
+            "bytes": 5805724,
+            "mode": 420,
+            "sha256": "015134ea4181688189d890b35a635f6bde95cda69aa12624420334d488cd99b9",
+            "type": "file"
+          }
+        },
+        "legacy_runtime_revision": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+        "manifest_and_result": {
+          "manifest.json": {
+            "bytes": 434337,
+            "sha256": "8db2057666375dbd22cdbda1a620854605956ee786d8ca48e47c15a5140e7591"
+          },
+          "result.json": {
+            "bytes": 2316,
+            "sha256": "b7b9b402af54314023b075c43704ed161dcce52c1140134bfc6563a92e7f9b3c"
+          }
+        },
+        "revision": "9fde062e2d95f1fd679d57c2762d11859c9f1358",
+        "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+        "tag": "evidence/issue-100-alcubierre-png-reconstruction-pair"
+      },
+      "kerr-exr": {
+        "argv": [
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/kerr-exr-reconstruction-pair/files/out/forensic-kerr-exr/image_compare",
+          "compare",
+          "exr",
+          "512",
+          "512",
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/kerr-exr-reconstruction-pair/files/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr",
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/kerr-exr-reconstruction-pair/files/renders/forensic-reconstruction-b739f92/ported/kerr-exr.exr"
+        ],
+        "comparison": {
+          "channels": 4,
+          "compared_pixels": 262144,
+          "compared_samples": 1048576,
+          "encoded_files_equal": true,
+          "equal": true,
+          "format": "exr",
+          "height": 512,
+          "mismatched_pixels": 0,
+          "mismatched_samples": 0,
+          "sample_domain": "decoded-RGBA-IEEE754-binary32-words-from-HALF",
+          "width": 512
+        },
+        "effective_spp": 25,
+        "evidence_kind": "NEW_RECONSTRUCTION",
+        "inputs": {
+          "files/out/forensic-kerr-exr/image_compare": {
+            "bytes": 397736,
+            "mode": 493,
+            "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6",
+            "type": "file"
+          },
+          "files/renders/forensic-reconstruction-b739f92/legacy/kerr-exr.exr": {
+            "bytes": 760396,
+            "mode": 420,
+            "sha256": "335d6ba7d0720e27daf63213aaa0408f4cd51a9ef8832e59da272fb6492df28b",
+            "type": "file"
+          },
+          "files/renders/forensic-reconstruction-b739f92/ported/kerr-exr.exr": {
+            "bytes": 760396,
+            "mode": 420,
+            "sha256": "335d6ba7d0720e27daf63213aaa0408f4cd51a9ef8832e59da272fb6492df28b",
+            "type": "file"
+          }
+        },
+        "legacy_runtime_revision": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+        "manifest_and_result": {
+          "manifest.json": {
+            "bytes": 415774,
+            "sha256": "abcc447217698cbee03d02ff91bb8bb05475604249932ca4a9b9bccd11cc71b0"
+          },
+          "result.json": {
+            "bytes": 2293,
+            "sha256": "c95e3e4250c5f79059675851ff1e1d2d0f4a676b7a58506e80120b8f76963778"
+          }
+        },
+        "revision": "38c6a264f7ac18d9b75f798337eaa2027e4264ac",
+        "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+        "tag": "evidence/issue-100-kerr-exr-reconstruction-pair"
+      },
+      "kerr-png": {
+        "argv": [
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/kerr-png-reconstruction-pair/files/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare",
+          "compare",
+          "png",
+          "512",
+          "512",
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/kerr-png-reconstruction-pair/files/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png",
+          "/home/astra/.project/Sirius/attestations/forensic-images/b739f92/kerr-png-reconstruction-pair/files/renders/forensic-reconstruction-b739f92/ported/kerr-png.png"
+        ],
+        "comparison": {
+          "channels": 4,
+          "compared_pixels": 262144,
+          "compared_samples": 1048576,
+          "encoded_files_equal": true,
+          "equal": true,
+          "format": "png",
+          "height": 512,
+          "mismatched_pixels": 0,
+          "mismatched_samples": 0,
+          "sample_domain": "RGBA8",
+          "width": 512
+        },
+        "effective_spp": 25,
+        "evidence_kind": "NEW_RECONSTRUCTION",
+        "inputs": {
+          "files/bin/linux-gcc/forensic-reconstruction-b739f92/comparator/image_compare": {
+            "bytes": 397736,
+            "mode": 493,
+            "sha256": "3a224d55f8f74fb4fec0e2f377e0cea003983f2a53f01f15ce0579b2424373d6",
+            "type": "file"
+          },
+          "files/renders/forensic-reconstruction-b739f92/legacy/kerr-png.png": {
+            "bytes": 457156,
+            "mode": 420,
+            "sha256": "1913cc94dd20f89dd807a2181afc3eec7e0ae116365504e47f9a60ec4bbfd8c0",
+            "type": "file"
+          },
+          "files/renders/forensic-reconstruction-b739f92/ported/kerr-png.png": {
+            "bytes": 457156,
+            "mode": 420,
+            "sha256": "1913cc94dd20f89dd807a2181afc3eec7e0ae116365504e47f9a60ec4bbfd8c0",
+            "type": "file"
+          }
+        },
+        "legacy_runtime_revision": "ec2d8e506dfd0477e3c9eb4b2b4aa1bee9831fe2",
+        "manifest_and_result": {
+          "manifest.json": {
+            "bytes": 407995,
+            "sha256": "6c98d36d86944808ec57ac82b0808b292177c14bf6294e255ba90932a407127d"
+          },
+          "result.json": {
+            "bytes": 2496,
+            "sha256": "537ccddcb71df7c1a50726266434cb60bbd78930cb3750edce87bca98a7bf990"
+          }
+        },
+        "revision": "5bf74646ce0aada68b67fbc315b50ed6e60ba283",
+        "source_export_revision": "b739f920c2ae67847ed7961e011d2350a839e410",
+        "tag": "evidence/issue-100-kerr-png-reconstruction-pair"
+      }
+    },
+    "scope": "Read-only revalidation of the three tagged reconstructions"
+  },
+  "registrations": {
+    "bytes": 68420,
+    "path": "out/current-integrated-science/runs/registrations.json",
+    "sha256": "2ee9c975ba0d7d3dd413aee4b65022a1d3a8cf806032098e41da21f2415daff8"
+  },
+  "revision": "56f79941b90d62e9ab42549115dad0ea9293b0c5",
+  "scope": "Fresh original and operating-model science cohorts using development GCC products",
+  "scope_limit": "Development protocol; Vulkan cases use the detected stock Lavapipe provider. Full Mandatory, all-science, physical hardware, original tapes and release remain unqualified.",
+  "test_actions": [
+    {
+      "bytes": 135227,
+      "path": "out/current-integrated-science/runs/actions.json",
+      "sha256": "5696abfb7a54554b345d4773faf9364809fb95c6484b2718f2a36ac418fb8abc"
+    },
+    {
+      "bytes": 82403,
+      "path": "out/current-integrated-science/continued/actions.json",
+      "sha256": "5ed861aca3c95938e04694025c70be7a8ee11cf87735f063a0e66ed8cbd32a7a"
+    },
+    {
+      "bytes": 14625,
+      "path": "out/current-integrated-science/p4-kernel-recovery/actions.json",
+      "sha256": "62ad975e34c6dd405c2e7ff1cf0f62d04c0625ed311673156bb0718bb4b39fee"
+    }
+  ],
+  "unique_passing_cases": 149,
+  "writer_output_identities": {
+    "files": {
+      "exr": {
+        "bytes": 50125,
+        "path": "renders/current-integrated-science/original-64x64-writers/sirius-render-probe-11032479760799343024/probe_kerr.exr",
+        "sha256": "4c6be2086a53fadee66c21e2f2f8d483d40d68954b8e7fdd478a14af5f9e0158"
+      },
+      "png": {
+        "bytes": 13592,
+        "path": "renders/current-integrated-science/original-64x64-writers/sirius-render-probe-11032479760799343024/probe_kerr.png",
+        "sha256": "1a03dc19c27439524457f3637aa16c79ddc9edaa08212a01f109b54c3ba1d3ba"
+      },
+      "ppm": {
+        "bytes": 12301,
+        "path": "renders/current-integrated-science/original-64x64-writers/sirius-ppm-probe-5551828146406670014/probe_kerr.ppm",
+        "sha256": "5745a98d465be217c1a3b34bac2e79adf6eadfc736d6e5e55dc13dd924eea69f"
+      }
+    },
+    "method": "Read-only filesystem close/retirement observation of the scoped test outputs"
+  }
+}
