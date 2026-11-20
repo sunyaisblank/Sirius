@@ -360,9 +360,37 @@ public bool FindKerrCaptureEvent(
         alongStart + intervalThird * dot(axis, Real3(v0.x, v0.y, v0.z)) > bound &&
         alongFinish - intervalThird * dot(axis, Real3(v1.x, v1.y, v1.z)) > bound) return false;
 
-    Vec4Cart scaledPosition, scaledTangent;
-    if (!FindSphericalCaptureEvent(p0, v0, p1, v1, affineLength, Real(1),
-                                   fraction, scaledPosition, scaledTangent)) return false;
+    Real polynomial[7];
+    SphericalSegmentPolynomial(p0, v0, p1, v1, affineLength, Real(1), polynomial);
+    Real derivative[7];
+    derivative[6] = Real(0);
+    [unroll] for (int i = 1; i <= 6; ++i) derivative[i - 1] = Real(i) * polynomial[i];
+    Real critical[6];
+    int count = FindQuinticRoots(derivative, critical);
+    if (!(polynomial[0] > Real(0))) return false;
+
+    // Search the monotone pieces in affine order. A positive endpoint
+    // remains exterior even when the generic polynomial residual lies
+    // within its roundoff tolerance. Only a represented interior endpoint
+    // or an exact surface value brackets the first capture.
+    Real lower = Real(0);
+    bool bracketed = false;
+    for (int i = 0; i <= count; ++i) {
+        Real upper = i < count ? critical[i] : Real(1);
+        if (upper <= lower) continue;
+        if (EvaluatePolynomial(polynomial, 6, upper) <= Real(0)) {
+            for (int iteration = 0; iteration < 48; ++iteration) {
+                Real midpoint = (lower + upper) / Real(2);
+                if (EvaluatePolynomial(polynomial, 6, midpoint) > Real(0)) lower = midpoint;
+                else upper = midpoint;
+            }
+            fraction = upper;
+            bracketed = true;
+            break;
+        }
+        lower = upper;
+    }
+    if (!bracketed || !(fraction > Real(0))) return false;
     eventPosition = AcceptedSegmentPosition(
         start, startVelocity, finish, finishVelocity, affineLength, fraction);
     eventTangent = AcceptedSegmentTangent(
