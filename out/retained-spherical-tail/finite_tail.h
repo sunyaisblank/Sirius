@@ -87,11 +87,12 @@ struct Momentum {
     Jet coordinate_time;
 };
 
-inline std::expected<Momentum, FiniteTailFailure> Extract(const std::array<Jet, 4>& position,
-                                                          const std::array<Jet, 4>& tangent,
-                                                          double mass, double orientation,
-                                                          double sources, double boundary,
-                                                          double tolerance) {
+enum class RadialBranch { Outward, Inward };
+
+inline std::expected<Momentum, FiniteTailFailure> Extract(
+    const std::array<Jet, 4>& position, const std::array<Jet, 4>& tangent, double mass,
+    double orientation, double sources, double boundary, double tolerance,
+    RadialBranch branch = RadialBranch::Outward) {
     const Vector x{position[1], position[2], position[3]};
     const Vector k{tangent[1], tangent[2], tangent[3]};
     const Jet radius = sqrt(NormSquared(x));
@@ -107,8 +108,9 @@ inline std::expected<Momentum, FiniteTailFailure> Extract(const std::array<Jet, 
     for (unsigned i = 0; i < 3; ++i) n[i] = x[i] / radius;
     const Jet radial = Dot(n, k);
     const Jet frequency = h * radial * Jet(orientation) - f * tangent[0];
-    if (!Finite(frequency) || !Finite(radial) || !(frequency.real.lo > 0.0) ||
-        !(radial.real.lo > 0.0))
+    const bool directed =
+        branch == RadialBranch::Outward ? radial.real.lo > 0.0 : radial.real.hi < 0.0;
+    if (!Finite(frequency) || !Finite(radial) || !(frequency.real.lo > 0.0) || !directed)
         return std::unexpected(FiniteTailFailure::Domain);
     Vector transverse;
     for (unsigned i = 0; i < 3; ++i) transverse[i] = k[i] - radial * n[i];
