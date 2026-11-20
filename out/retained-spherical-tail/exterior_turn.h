@@ -1,6 +1,6 @@
 #pragma once
 
-#include "coupled_handoff.h"
+#include "finite_tail.h"
 
 #include <optional>
 
@@ -17,37 +17,18 @@ namespace sirius::core::relativity {
         !std::isfinite(control.constraint_tolerance) || control.constraint_tolerance < 0.0 ||
         !std::isfinite(source_support_radius))
         return {};
-    const Range two_mass = Range(2.0) * Range(mass);
-    double lower = source_support_radius;
-    if (!(lower > (Range(3.0) * Range(mass)).hi)) return {};
     std::array<Jet, 4> x, k;
     for (unsigned i = 0; i < x.size(); ++i) {
         x[i] = Jet(position(i));
         k[i] = Jet(tangent(i));
     }
     const double orientation = chart == SphericalKerrSchildChart::Outgoing ? -1.0 : 1.0;
-    const auto ray = Extract(x, k, mass, orientation, lower, boundary, control.constraint_tolerance,
-                             RadialBranch::Inward);
+    const auto ray = Extract(x, k, mass, orientation, source_support_radius, boundary,
+                             control.constraint_tolerance, SphericalTailPath::ExteriorTurn);
     if (!ray) return {};
-    const auto potential = [&](double radius) {
-        const Range r(radius);
-        return Range(1.0) - (Range(1.0) - two_mass / r) * ray->impact_squared.real / Square(r);
-    };
-    double upper = ray->radius.real.lo;
-    if (!(potential(lower).hi < 0.0 && potential(upper).lo > 0.0)) return {};
-    // Keep only endpoints with certified, opposite signs. Stop as soon as
-    // rounding in the launch invariants makes the sign at a midpoint unclear.
-    for (unsigned i = 0; i < std::numeric_limits<double>::digits; ++i) {
-        const double middle = std::midpoint(lower, upper);
-        if (!(lower < middle && middle < upper)) break;
-        const Range value = potential(middle);
-        if (value.hi < 0.0)
-            lower = middle;
-        else if (value.lo > 0.0)
-            upper = middle;
-        else
-            break;
-    }
-    return SphericalTailBound{lower, upper};
+    const auto turn =
+        VacuumTurnRange(ray->radius.real, ray->impact_squared.real, mass, source_support_radius);
+    if (!turn) return {};
+    return Bound(*turn);
 }
 }  // namespace sirius::core::relativity

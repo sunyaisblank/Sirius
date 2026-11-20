@@ -2,7 +2,7 @@
 
 #include "sirius/core/tensor.h"
 
-#include "radial_quadrature.h"
+#include "turn_quadrature.h"
 
 #include <algorithm>
 #include <array>
@@ -13,6 +13,7 @@
 namespace sirius::core::relativity {
 
 enum class SphericalKerrSchildChart { Ingoing, Outgoing };
+enum class SphericalTailPath { Outward, ExteriorTurn };
 
 // Derivatives of Cartesian coordinates and coordinate tangent, with respect
 // to one launch parameter at the input event.
@@ -37,31 +38,11 @@ struct SphericalTailResult {
     std::array<SphericalTailBound, 6> radial_integral_bounds;
     SphericalTailEventBounds event_bounds;
     std::array<SphericalTailEventBounds, 4> variation_bounds;
+    std::optional<SphericalTailBound> periapsis;
 };
 
 namespace finite_tail_detail {
-struct Jet {
-    Range real;
-    Range dual;
-
-    Jet() = default;
-    explicit Jet(double value) : real(value) {}
-    explicit Jet(Range value, Range derivative = {}) : real(value), dual(derivative) {}
-};
-
-inline Jet operator+(Jet a, Jet b) { return Jet(a.real + b.real, a.dual + b.dual); }
-inline Jet operator-(Jet a, Jet b) { return Jet(a.real - b.real, a.dual - b.dual); }
-inline Jet operator*(Jet a, Jet b) {
-    return Jet(a.real * b.real, a.dual * b.real + a.real * b.dual);
-}
-inline Jet operator/(Jet a, Jet b) {
-    const Range quotient = a.real / b.real;
-    return Jet(quotient, (a.dual - quotient * b.dual) / b.real);
-}
-inline Jet sqrt(Jet a) {
-    const Range root = sqrt(a.real);
-    return Jet(root, a.dual / (Range(2.0) * root));
-}
+using Jet = RadialJet<Range>;
 inline bool Finite(Jet a) { return a.real.Finite() && a.dual.Finite(); }
 
 using Vector = std::array<Jet, 3>;
@@ -87,12 +68,10 @@ struct Momentum {
     Jet coordinate_time;
 };
 
-enum class RadialBranch { Outward, Inward };
-
 inline std::expected<Momentum, FiniteTailFailure> Extract(
     const std::array<Jet, 4>& position, const std::array<Jet, 4>& tangent, double mass,
     double orientation, double sources, double boundary, double tolerance,
-    RadialBranch branch = RadialBranch::Outward) {
+    SphericalTailPath path = SphericalTailPath::Outward) {
     const Vector x{position[1], position[2], position[3]};
     const Vector k{tangent[1], tangent[2], tangent[3]};
     const Jet radius = sqrt(NormSquared(x));
@@ -109,7 +88,7 @@ inline std::expected<Momentum, FiniteTailFailure> Extract(
     const Jet radial = Dot(n, k);
     const Jet frequency = h * radial * Jet(orientation) - f * tangent[0];
     const bool directed =
-        branch == RadialBranch::Outward ? radial.real.lo > 0.0 : radial.real.hi < 0.0;
+        path == SphericalTailPath::Outward ? radial.real.lo > 0.0 : radial.real.hi < 0.0;
     if (!Finite(frequency) || !Finite(radial) || !(frequency.real.lo > 0.0) || !directed)
         return std::unexpected(FiniteTailFailure::Domain);
     Vector transverse;
@@ -140,10 +119,10 @@ struct Rotation {
 };
 
 inline Range RotationSeries(Range z, unsigned factorial_offset, bool derivative = false) {
-    // On [0, 4] the tail starting at term 12 is alternating with decreasing
+    // On [0, 16] the tail starting at term 18 is alternating with decreasing
     // magnitudes, including for the differentiated sinc series. Horner's
     // leading interval includes both zero and the first omitted coefficient.
-    constexpr unsigned terms = 12;
+    constexpr unsigned terms = 18;
     std::array<Range, terms + 1> coefficients;
     Range denominator(1.0);
     unsigned factorial = 1;
@@ -164,7 +143,7 @@ inline std::expected<Rotation, FiniteTailFailure> AngularRotation(Jet impact_squ
                                                                   Jet angular_integral) {
     Jet square = impact_squared * angular_integral * angular_integral;
     square.real.lo = std::max(0.0, square.real.lo);
-    if (!Finite(square) || square.real.hi > 4.0) return std::unexpected(FiniteTailFailure::Domain);
+    if (!Finite(square) || square.real.hi > 16.0) return std::unexpected(FiniteTailFailure::Domain);
     const Range cosine = RotationSeries(square.real, 0);
     const Range sinc = RotationSeries(square.real, 1);
     const Range sinc_derivative = RotationSeries(square.real, 3, true);
@@ -183,7 +162,8 @@ inline bool Within(Range value, double absolute, double relative) {
 
 inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
     const Columns& position, const Columns& tangent, double mass, SphericalKerrSchildChart chart,
-    double source_support_radius, double boundary, const SphericalTailControl& control) {
+    double source_support_radius, double boundary, const SphericalTailControl& control,
+    SphericalTailPath path) {
     if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
     if (!RoundingEnvironment() || !std::isfinite(mass) || mass < 0.0 ||
         !std::isfinite(source_support_radius) || source_support_radius < 0.0 ||
@@ -203,19 +183,30 @@ inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
     for (unsigned column = 0; column < momenta.size(); ++column) {
         const auto extracted =
             Extract(position[column], tangent[column], mass, orientation, source_support_radius,
-                    boundary, control.constraint_tolerance);
+                    boundary, control.constraint_tolerance, path);
         if (!extracted) return std::unexpected(extracted.error());
         momenta[column] = *extracted;
     }
     const Range start = momenta[0].radius.real;
     const Range b2 = momenta[0].impact_squared.real;
-    const auto a = RadialAtLaunch(start, mass, orientation, b2);
-    Quadrature quadrature{mass, orientation, b2, start, boundary, control};
-    const auto integrated = quadrature.Run();
-    if (!integrated) return std::unexpected(integrated.error());
-
+    const bool has_turn = path == SphericalTailPath::ExteriorTurn;
+    const double direction = has_turn ? -1.0 : 1.0;
+    const auto a = RadialAtLaunch(start, mass, direction * orientation, b2);
     SphericalTailResult result{};
-    result.panels = quadrature.panels;
+    Quadrature::Result integrated;
+    if (has_turn) {
+        const auto turn = VacuumTurnRange(start, b2, mass, source_support_radius);
+        if (!turn) return std::unexpected(FiniteTailFailure::Domain);
+        TurnQuadrature quadrature{mass, orientation, b2, start, boundary, *turn, control};
+        integrated = quadrature.Run();
+        result.panels = quadrature.panels;
+        result.periapsis = Bound(*turn);
+    } else {
+        Quadrature quadrature{mass, orientation, b2, start, boundary, control};
+        integrated = quadrature.Run();
+        result.panels = quadrature.panels;
+    }
+    if (!integrated) return std::unexpected(integrated.error());
     for (unsigned i = 0; i < integrated->size(); ++i) {
         const auto enclosure = (*integrated)[i];
         if (!Within(enclosure, control.absolute_tolerance, control.relative_tolerance))
@@ -235,9 +226,10 @@ inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
     for (unsigned index = 0; index < momenta.size(); ++index) {
         const auto& input = momenta[index];
         const auto integral = [&](unsigned i) {
-            // Leibniz rule for a moving launch radius and fixed target radius.
-            return Jet((*integrated)[i],
-                       (*integrated)[i + 3] * input.impact_squared.dual - a[i] * input.radius.dual);
+            // The launch is a lower limit for the outward leg and an upper
+            // limit of the radius integral on the inward leg.
+            return Jet((*integrated)[i], (*integrated)[i + 3] * input.impact_squared.dual -
+                                             Range(direction) * a[i] * input.radius.dual);
         };
         const Jet affine = integral(0) / input.frequency;
         const Jet time = input.coordinate_time + integral(2);
@@ -286,14 +278,14 @@ inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
 }
 }  // namespace finite_tail_detail
 
-// Encloses the finite-radius event and launch derivatives of the outward null
-// ray defined by the input direction, Killing frequency, and angular momentum.
+// Encloses the final outward event and launch derivatives of the null ray
+// defined by the input direction, Killing frequency, and angular momentum.
 // The null residual guard limits the difference from the input radial speed.
 // The caller supplies the complete radius of all source support.
 [[nodiscard]] inline std::expected<SphericalTailResult, FiniteTailFailure> ContinueSphericalTail(
     const Vec4& position, const Vec4& tangent, const std::array<SphericalTailVariation, 4>& columns,
     double mass, SphericalKerrSchildChart chart, double source_support_radius, double boundary,
-    const SphericalTailControl& control = {}) {
+    const SphericalTailControl& control = {}, SphericalTailPath path = SphericalTailPath::Outward) {
     using namespace finite_tail_detail;
     Columns x, k;
     for (unsigned column = 0; column < columns.size(); ++column)
@@ -301,6 +293,6 @@ inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
             x[column][i] = Jet(Range(position(i)), Range(columns[column].position(i)));
             k[column][i] = Jet(Range(tangent(i)), Range(columns[column].tangent(i)));
         }
-    return Continue(x, k, mass, chart, source_support_radius, boundary, control);
+    return Continue(x, k, mass, chart, source_support_radius, boundary, control, path);
 }
 }  // namespace sirius::core::relativity

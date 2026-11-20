@@ -60,6 +60,7 @@ struct Range {
     constexpr Range(double lower, double upper) : lo(lower), hi(upper) {}
 
     bool Finite() const { return std::isfinite(lo) && std::isfinite(hi) && lo <= hi; }
+    bool IsPoint(double value) const { return lo == value && hi == value; }
 };
 
 inline constexpr double kInfinity = std::numeric_limits<double>::infinity();
@@ -69,20 +70,28 @@ inline Range Widen(double low, double high) {
 inline Range InvalidRange() { return {-kInfinity, kInfinity}; }
 inline Range operator+(Range a, Range b) {
     if (!a.Finite() || !b.Finite()) return InvalidRange();
+    if (a.IsPoint(0.0)) return b;
+    if (b.IsPoint(0.0)) return a;
     return Widen(a.lo + b.lo, a.hi + b.hi);
 }
 inline Range operator-(Range a, Range b) {
     if (!a.Finite() || !b.Finite()) return InvalidRange();
+    if (a.IsPoint(0.0)) return {-b.hi, -b.lo};
+    if (b.IsPoint(0.0)) return a;
     return Widen(a.lo - b.hi, a.hi - b.lo);
 }
 inline Range operator*(Range a, Range b) {
     if (!a.Finite() || !b.Finite()) return InvalidRange();
+    if (a.IsPoint(0.0) || b.IsPoint(0.0)) return Range(0.0);
+    if (a.IsPoint(1.0)) return b;
+    if (b.IsPoint(1.0)) return a;
     const auto values = {a.lo * b.lo, a.lo * b.hi, a.hi * b.lo, a.hi * b.hi};
     const auto [lo, hi] = std::minmax(values);
     return Widen(lo, hi);
 }
 inline Range operator/(Range a, Range b) {
-    if (!b.Finite() || b.lo <= 0.0) return InvalidRange();
+    if (!a.Finite() || !b.Finite() || b.lo <= 0.0) return InvalidRange();
+    if (a.IsPoint(0.0) || b.IsPoint(1.0)) return a;
     return a * Widen(1.0 / b.hi, 1.0 / b.lo);
 }
 inline Range sqrt(Range a) {
@@ -111,44 +120,48 @@ inline double MidpointError(Range enclosure) {
                     (Range(enclosure.hi) - Range(estimate)).hi);
 }
 
-// Coefficients enclose f^(i)(r)/i! for every r in the panel. Only fourth
-// derivatives are needed by the single-panel Simpson remainder.
-struct Taylor {
-    std::array<Range, 5> coefficient{};
+// Coefficients enclose f^(i)(r)/i! for every r in the panel.
+template <unsigned Order>
+struct TaylorSeries {
+    std::array<Range, Order + 1> coefficient{};
 
-    Taylor() = default;
-    explicit Taylor(double value) { coefficient[0] = Range(value); }
-    explicit Taylor(Range value) { coefficient[0] = value; }
-    static Taylor Variable(double start, double end) {
-        Taylor result;
+    TaylorSeries() = default;
+    explicit TaylorSeries(double value) { coefficient[0] = Range(value); }
+    explicit TaylorSeries(Range value) { coefficient[0] = value; }
+    static TaylorSeries Variable(double start, double end) {
+        TaylorSeries result;
         result.coefficient[0] = {start, end};
         result.coefficient[1] = Range(1.0);
         return result;
     }
 };
 
-inline Taylor operator+(const Taylor& a, const Taylor& b) {
-    Taylor result;
+template <unsigned Order>
+TaylorSeries<Order> operator+(const TaylorSeries<Order>& a, const TaylorSeries<Order>& b) {
+    TaylorSeries<Order> result;
     for (unsigned n = 0; n < a.coefficient.size(); ++n)
         result.coefficient[n] = a.coefficient[n] + b.coefficient[n];
     return result;
 }
 
-inline Taylor operator-(const Taylor& a, const Taylor& b) {
-    Taylor result;
+template <unsigned Order>
+TaylorSeries<Order> operator-(const TaylorSeries<Order>& a, const TaylorSeries<Order>& b) {
+    TaylorSeries<Order> result;
     for (unsigned n = 0; n < a.coefficient.size(); ++n)
         result.coefficient[n] = a.coefficient[n] - b.coefficient[n];
     return result;
 }
-inline Taylor operator*(const Taylor& a, const Taylor& b) {
-    Taylor result;
+template <unsigned Order>
+TaylorSeries<Order> operator*(const TaylorSeries<Order>& a, const TaylorSeries<Order>& b) {
+    TaylorSeries<Order> result;
     for (unsigned n = 0; n < a.coefficient.size(); ++n)
         for (unsigned j = 0; j <= n; ++j)
             result.coefficient[n] = result.coefficient[n] + a.coefficient[j] * b.coefficient[n - j];
     return result;
 }
-inline Taylor operator/(const Taylor& a, const Taylor& b) {
-    Taylor result;
+template <unsigned Order>
+TaylorSeries<Order> operator/(const TaylorSeries<Order>& a, const TaylorSeries<Order>& b) {
+    TaylorSeries<Order> result;
     for (unsigned n = 0; n < a.coefficient.size(); ++n) {
         Range rest = a.coefficient[n];
         for (unsigned j = 1; j <= n; ++j)
@@ -157,8 +170,9 @@ inline Taylor operator/(const Taylor& a, const Taylor& b) {
     }
     return result;
 }
-inline Taylor sqrt(const Taylor& a) {
-    Taylor result;
+template <unsigned Order>
+TaylorSeries<Order> sqrt(const TaylorSeries<Order>& a) {
+    TaylorSeries<Order> result;
     result.coefficient[0] = sqrt(a.coefficient[0]);
     const Range denominator = Range(2.0) * result.coefficient[0];
     for (unsigned n = 1; n < a.coefficient.size(); ++n) {
@@ -169,6 +183,36 @@ inline Taylor sqrt(const Taylor& a) {
     }
     return result;
 }
+
+using Taylor = TaylorSeries<4>;
+
+template <typename Number>
+struct RadialJet {
+    Number real;
+    Number dual;
+
+    RadialJet() = default;
+    explicit RadialJet(double value) : real(value) {}
+    explicit RadialJet(Number value, Number derivative = {}) : real(value), dual(derivative) {}
+
+    friend RadialJet operator+(const RadialJet& a, const RadialJet& b) {
+        return RadialJet(a.real + b.real, a.dual + b.dual);
+    }
+    friend RadialJet operator-(const RadialJet& a, const RadialJet& b) {
+        return RadialJet(a.real - b.real, a.dual - b.dual);
+    }
+    friend RadialJet operator*(const RadialJet& a, const RadialJet& b) {
+        return RadialJet(a.real * b.real, a.dual * b.real + a.real * b.dual);
+    }
+    friend RadialJet operator/(const RadialJet& a, const RadialJet& b) {
+        const Number quotient = a.real / b.real;
+        return RadialJet(quotient, (a.dual - quotient * b.dual) / b.real);
+    }
+    friend RadialJet sqrt(const RadialJet& a) {
+        const Number root = sqrt(a.real);
+        return RadialJet(root, a.dual / (Number(2.0) * root));
+    }
+};
 
 inline std::array<Range, 3> RadialAtLaunch(Range r, double mass, double orientation,
                                            Range impact_squared) {

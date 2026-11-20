@@ -20,6 +20,7 @@ struct SphericalCoupledTail {
     unsigned panels;
     SphericalTailEventBounds event_bounds;
     std::array<SphericalCoupledVariationBounds, 4> variation_bounds;
+    std::optional<SphericalTailBound> periapsis;
 };
 
 namespace finite_tail_detail {
@@ -80,7 +81,8 @@ inline Four SphericalConnection(const Four& position, const Four& a, const Four&
 [[nodiscard]] inline std::expected<SphericalCoupledTail, FiniteTailFailure>
 PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& tangent,
                             const GeodesicVariations& variations, double source_support_radius,
-                            double boundary, const SphericalTailControl& control = {}) {
+                            double boundary, const SphericalTailControl& control = {},
+                            SphericalTailPath path = SphericalTailPath::Outward) {
     using namespace finite_tail_detail;
     if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
     const auto* outgoing = dynamic_cast<const OutgoingKerrSchild*>(&metric);
@@ -111,14 +113,14 @@ PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& t
     const auto tail =
         Continue(x, k, parameters.M,
                  outgoing ? SphericalKerrSchildChart::Outgoing : SphericalKerrSchildChart::Ingoing,
-                 source_support_radius, boundary, control);
+                 source_support_radius, boundary, control, path);
     if (!tail) return std::unexpected(tail.error());
     if (!metric.IsValidEvent(tail->position)) return std::unexpected(FiniteTailFailure::Domain);
 
     const auto end_x = Components(tail->event_bounds.position);
     const auto end_k = Components(tail->event_bounds.tangent);
     SphericalCoupledTail result{tail->position, tail->tangent,      {}, tail->affine_length,
-                                tail->panels,   tail->event_bounds, {}};
+                                tail->panels,   tail->event_bounds, {}, tail->periapsis};
     for (unsigned i = 0; i < variations.size(); ++i) {
         const auto& event = tail->variation_bounds[i];
         const Four event_x = Components(event.position), event_k = Components(event.tangent);

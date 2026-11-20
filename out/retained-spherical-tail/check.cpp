@@ -52,7 +52,16 @@ struct Case {
     Scalar transverse;
     Scalar radial;
     Scalar boundary;
+    Scalar source_support = 0;
 };
+
+double SourceSupport(const Case& test) {
+    return static_cast<double>(test.source_support > 0 ? test.source_support : test.radius * .9L);
+}
+
+SphericalTailPath Path(const Case& test) {
+    return test.radial < 0 ? SphericalTailPath::ExteriorTurn : SphericalTailPath::Outward;
+}
 
 double max_event_error = 0;
 double max_variation_error = 0;
@@ -159,7 +168,7 @@ struct ComplexEvent {
 };
 
 ComplexEvent ExactInputReference(const Four& x0, const Four& k0, const Four& dx, const Four& dk,
-                                 Scalar mass, Scalar target, bool outgoing) {
+                                 Scalar mass, Scalar target, bool outgoing, bool through_turn) {
     ComplexFour x, k;
     for (unsigned i = 0; i < x.size(); ++i) {
         x[i] = Complex(x0[i], kComplexStep * dx[i]);
@@ -178,22 +187,55 @@ ComplexEvent ExactInputReference(const Four& x0, const Four& k0, const Four& dx,
     const auto speed = [&](Complex r) {
         return std::sqrt(1.L - (1.L - 2 * mass / r) * impact * impact / (r * r));
     };
-    const auto integral = [&](const auto& kernel) -> Complex {
-        const Complex span = target - r0;
-        const auto transformed = [&](Scalar u) { return span * kernel(r0 + span * u); };
-        return {OracleQuadrature::integrate([&](Scalar u) { return transformed(u).real(); }, 0, 1,
-                                            12, 1e-16L),
+    const auto integrate_complex = [&](const auto& integrand) -> Complex {
+        return {OracleQuadrature::integrate([&](Scalar u) { return integrand(u).real(); }, 0, 1, 12,
+                                            1e-16L),
                 kComplexStep * OracleQuadrature::integrate(
-                                   [&](Scalar u) { return transformed(u).imag() / kComplexStep; },
-                                   0, 1, 12, 1e-16L)};
+                                   [&](Scalar u) { return integrand(u).imag() / kComplexStep; }, 0,
+                                   1, 12, 1e-16L)};
     };
+    const auto radial_integral = [&](const auto& kernel) {
+        return integrate_complex(
+            [&](Scalar u) { return (target - r0) * kernel(r0 + (target - r0) * u); });
+    };
+    std::array<Complex, 3> integrals;
+    if (through_turn) {
+        // The reference finds the root by high-precision complex Newton and
+        // regularizes it in inverse radius. The candidate uses an interval
+        // bracket and the Cartesian radius difference instead.
+        Complex turn = impact;
+        const Complex b2 = impact * impact;
+        for (unsigned i = 0; i < 20; ++i)
+            turn -= (turn * turn * turn / b2 - turn + 2 * mass) / (3.L * turn * turn / b2 - 1.L);
+        const Complex q = 2 * mass / turn;
+        for (unsigned i = 0; i < integrals.size(); ++i) {
+            const auto leg = [&](Complex end, Scalar sign) {
+                const Complex scale = std::sqrt(1.L - turn / end);
+                return integrate_complex([&](Scalar t) {
+                    const Complex z = t * scale;
+                    const Complex u = 1.L - z * z;
+                    const Complex p = ((1.L + u) - q * (1.L + u + u * u)) / (1.L - q);
+                    const Complex jacobian = 2.L * turn * scale / (u * u);
+                    const Complex measure = jacobian / std::sqrt(p);
+                    if (i == 0) return measure;
+                    if (i == 1) return measure * u * u / (turn * turn);
+                    return (sign * q * u * jacobian * z - measure) / (1.L - q * u);
+                });
+            };
+            integrals[i] = leg(r0, -orientation) + leg(target, orientation);
+        }
+    } else {
+        integrals[0] = radial_integral([&](Complex r) { return 1.L / speed(r); });
+        integrals[1] = radial_integral([&](Complex r) { return 1.L / (r * r * speed(r)); });
+        integrals[2] = radial_integral([&](Complex r) {
+            const Complex h = 2 * mass / r;
+            return (orientation * h - 1.L / speed(r)) / (1.L - h);
+        });
+    }
     ComplexEvent result;
-    result.affine = integral([&](Complex r) { return 1.L / (energy * speed(r)); });
-    result.position[0] = x[0] + integral([&](Complex r) {
-                             const Complex h = 2 * mass / r;
-                             return (orientation * h - 1.L / speed(r)) / (1.L - h);
-                         });
-    const Complex angle = impact * integral([&](Complex r) { return 1.L / (r * r * speed(r)); });
+    result.affine = integrals[0] / energy;
+    result.position[0] = x[0] + integrals[2];
+    const Complex angle = impact * integrals[1];
     const ComplexThree initial{x[1] / r0, x[2] / r0, x[3] / r0};
     const auto angular = Cross(angular_momentum, initial);
     ComplexThree normal;
@@ -276,8 +318,14 @@ Event Oracle(const Case& c, bool outgoing, Scalar refinement) {
     packet.position = Convert(x);
     packet.tangent = Convert(k);
     const auto result = reference::Trace(packet, c.mass, 0, c.boundary, refinement);
-    Check(result.fate == reference::Fate::Escape && result.radial_turns == 0,
-          "independent first outward event");
+    const unsigned expected_turns = c.mass > 0 && c.radial < 0 ? 1U : 0U;
+    if (result.fate != reference::Fate::Escape || result.radial_turns != expected_turns) {
+        std::fprintf(stderr,
+                     "Carter event mismatch at M=%Lg r=%Lg kr=%Lg outgoing=%d fate=%d turns=%u\n",
+                     c.mass, c.radius, c.radial, outgoing, static_cast<int>(result.fate),
+                     result.radial_turns);
+        std::abort();
+    }
     Event event{result.x, result.k, result.affine};
     if (outgoing && c.mass > 0) {
         event.position[0] += to_outgoing(c.boundary);
@@ -290,7 +338,8 @@ void CheckEventBounds(const SphericalTailResult& candidate, const Case& test, bo
                       const Vec4& position, const Vec4& tangent,
                       const std::array<SphericalTailVariation, 4>& columns) {
     const auto x = Promote(position), k = Promote(tangent);
-    const auto center = ExactInputReference(x, k, {}, {}, test.mass, test.boundary, outgoing);
+    const auto center =
+        ExactInputReference(x, k, {}, {}, test.mass, test.boundary, outgoing, test.radial < 0);
     Contains(candidate.event_bounds.affine_length, center.affine.real(), "affine enclosure");
     for (unsigned j = 0; j < x.size(); ++j) {
         Contains(candidate.event_bounds.position[j], center.position[j].real(),
@@ -300,7 +349,7 @@ void CheckEventBounds(const SphericalTailResult& candidate, const Case& test, bo
     for (unsigned i = 0; i < columns.size(); ++i) {
         const auto varied =
             ExactInputReference(x, k, Promote(columns[i].position), Promote(columns[i].tangent),
-                                test.mass, test.boundary, outgoing);
+                                test.mass, test.boundary, outgoing, test.radial < 0);
         const auto& bound = candidate.variation_bounds[i];
         Contains(bound.affine_length, varied.affine.imag() / kComplexStep,
                  "affine sensitivity enclosure");
@@ -317,7 +366,8 @@ void CheckCoupledBounds(const SphericalCoupledTail& candidate, const Case& test,
                         const Vec4& position, const Vec4& tangent,
                         const GeodesicVariations& covariant) {
     const auto x = Promote(position), k = Promote(tangent);
-    const auto center = ExactInputReference(x, k, {}, {}, test.mass, test.boundary, outgoing);
+    const auto center =
+        ExactInputReference(x, k, {}, {}, test.mass, test.boundary, outgoing, test.radial < 0);
     Four end_x, end_k;
     for (unsigned j = 0; j < x.size(); ++j) {
         end_x[j] = center.position[j].real();
@@ -328,7 +378,8 @@ void CheckCoupledBounds(const SphericalCoupledTail& candidate, const Case& test,
         Four dk = Promote(covariant[i].derivative);
         const auto start_connection = ReferenceConnection(x, k, dx, test.mass, outgoing);
         for (unsigned j = 0; j < x.size(); ++j) dk[j] -= start_connection[j];
-        const auto varied = ExactInputReference(x, k, dx, dk, test.mass, test.boundary, outgoing);
+        const auto varied =
+            ExactInputReference(x, k, dx, dk, test.mass, test.boundary, outgoing, test.radial < 0);
         Four event_dx;
         for (unsigned j = 0; j < x.size(); ++j)
             event_dx[j] = varied.position[j].imag() / kComplexStep;
@@ -364,8 +415,8 @@ void CheckCovariantResult(const Case& test, bool outgoing, const Vec4& position,
             seed.position,
             seed.tangent - NegConnectionContraction(start_connection, tangent, seed.position)};
     }
-    const auto trial = PrepareSphericalCoupledTail(metric, position, tangent, covariant,
-                                                   test.radius * .9L, test.boundary);
+    const auto trial = PrepareSphericalCoupledTail(
+        metric, position, tangent, covariant, SourceSupport(test), test.boundary, {}, Path(test));
     if (!trial) {
         std::fprintf(stderr, "coupled tail failure %u at radius %.9Lg, boundary %.9Lg, chart %s\n",
                      static_cast<unsigned>(trial.error()), test.radius, test.boundary,
@@ -443,7 +494,7 @@ void Exercise(const Case& test, bool outgoing) {
         variations[column] = {Convert(varied.position), Convert(varied.tangent)};
     }
     const auto result = ContinueSphericalTail(position, tangent, variations, test.mass, chart,
-                                              test.radius * .9L, test.boundary);
+                                              SourceSupport(test), test.boundary, {}, Path(test));
     if (!result) {
         std::fprintf(stderr, "tail failure %u at radius %.9Lg, boundary %.9Lg\n",
                      static_cast<unsigned>(result.error()), test.radius, test.boundary);
@@ -451,6 +502,9 @@ void Exercise(const Case& test, bool outgoing) {
     }
     panels += result->panels;
     most_panels = std::max(most_panels, result->panels);
+    Check(result->periapsis.has_value() == (test.radial < 0), "expected radial branch");
+    if (result->periapsis)
+        Check(result->periapsis->lower > SourceSupport(test), "turn excludes source support");
     CheckEventBounds(*result, test, outgoing, position, tangent, variations);
 
     const auto observed = Oracle(test, outgoing, .001L);
@@ -573,24 +627,34 @@ void CheckIntegralEnclosures() {
 
 void CheckCoupledCancellationAndWorkLimit() {
     KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1));
-    const auto launch = Launch({1, 25, .35L, .55L, .8L, 200}, false);
-    const auto x = Convert(launch.position), k = Convert(launch.tangent);
-    unsigned checks = 0;
-    const std::function<bool()> cancel = [&] { return ++checks >= 8; };
-    const auto interrupted =
-        PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200, {.should_cancel = &cancel});
-    Check(!interrupted && interrupted.error() == FiniteTailFailure::Cancelled && checks == 8,
-          "cancellation exits in-progress continuation");
-    const auto retry = PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200);
-    Check(retry.has_value() && retry->panels > 8, "fresh continuation after cancellation");
-    const auto limited = PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200,
-                                                     {.maximum_panels = retry->panels - 1});
-    Check(!limited && limited.error() == FiniteTailFailure::WorkLimit,
-          "work budget includes rejected quadrature panels");
-    const auto complete =
-        PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200, {.maximum_panels = retry->panels});
-    Check(complete.has_value() && complete->panels == retry->panels,
-          "continuation accepts the exact budget");
+    for (const auto& fixture :
+         {Case{1, 25, .35L, .55L, .8L, 200, 20}, Case{1, 50, .35L, .55L, -.8L, 200, 20}}) {
+        const auto launch = Launch(fixture, false);
+        const auto x = Convert(launch.position), k = Convert(launch.tangent);
+        const auto solve = [&](const SphericalTailControl& control) {
+            return PrepareSphericalCoupledTail(metric, x, k, {}, SourceSupport(fixture),
+                                               fixture.boundary, control, Path(fixture));
+        };
+        unsigned checks = 0;
+        const std::function<bool()> cancel = [&] { return ++checks >= 8; };
+        const auto interrupted = solve({.should_cancel = &cancel});
+        Check(!interrupted && interrupted.error() == FiniteTailFailure::Cancelled && checks == 8,
+              "cancellation exits in-progress continuation");
+        const auto retry = solve({});
+        Check(retry.has_value() && retry->panels > 8, "fresh continuation after cancellation");
+        const auto limited = solve({.maximum_panels = retry->panels - 1});
+        Check(!limited && limited.error() == FiniteTailFailure::WorkLimit,
+              "work budget includes rejected quadrature panels");
+        const auto complete = solve({.maximum_panels = retry->panels});
+        Check(complete.has_value() && complete->panels == retry->panels,
+              "continuation accepts the exact budget");
+    }
+    const auto launch = Launch({1, 50, .35L, .55L, -.8L, 200, 20}, false);
+    const auto would_enter_sources =
+        PrepareSphericalCoupledTail(metric, Convert(launch.position), Convert(launch.tangent), {},
+                                    40, 200, {}, SphericalTailPath::ExteriorTurn);
+    Check(!would_enter_sources && would_enter_sources.error() == FiniteTailFailure::Domain,
+          "nearer periapsis cannot pass through source support");
 }
 
 void MeasureProvisionalCost() {
@@ -618,10 +682,12 @@ int main() {
     CheckIntegralEnclosures();
     CheckCoupledCancellationAndWorkLimit();
     constexpr std::array cases{
-        Case{0, 22, .35L, .2L, .8L, 200},    Case{1, 21, .35L, 0, .8L, 200},
-        Case{1, 22, .35L, .2L, .8L, 200},    Case{1, 50, 1.6L, -.54L, .7L, 500},
-        Case{1, 60, -2.1L, .8L, .21L, 140},  Case{1, 7, -.8L, .54L, .16L, 120},
-        Case{8, 168, -.8L, .33L, .6L, 1600},
+        Case{0, 22, .35L, .2L, .8L, 200},        Case{1, 21, .35L, 0, .8L, 200},
+        Case{1, 22, .35L, .2L, .8L, 200},        Case{1, 50, 1.6L, -.54L, .7L, 500},
+        Case{1, 60, -2.1L, .8L, .21L, 140},      Case{1, 7, -.8L, .54L, .16L, 120},
+        Case{8, 168, -.8L, .33L, .6L, 1600},     Case{0, 50, .65L, .65L, -.8L, 200, 20},
+        Case{1, 50, -.35L, .75L, -.6L, 200, 20}, Case{1, 30, -.8L, .46L, -.9L, 160, 8},
+        Case{8, 168, .49L, .6L, -.7L, 1200, 75},
     };
     for (const auto& test : cases)
         for (const bool outgoing : {false, true}) Exercise(test, outgoing);
