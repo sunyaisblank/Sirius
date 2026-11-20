@@ -1,0 +1,1547 @@
+{
+  "alignment_receipt": {
+    "bytes": 1240,
+    "path": "bin/linux-ci/generated/sirius/alignment_receipt.json",
+    "sha256": "ae66bb43cdf3ae67d77232d70fcdffd808d70d53761656e6a85b0a1caf1664f7"
+  },
+  "build": {
+    "bytes": 12368,
+    "path": "out/kerr-outgoing-trace/refined-build.log",
+    "sha256": "b3674b6937d24da3ab18045d1dd4c7887afb79656c0d8ca623ced979646e7bbe"
+  },
+  "chart_source_unchanged_from_probe": true,
+  "chart_validation": {
+    "binary32_shader": {
+      "bytes": 390736,
+      "path": "out/kerr-outgoing-trace/chart-32.spv",
+      "sha256": "107ee8eb54fa90241f5e813dbe31e6ae64826a31bb83b332c56538a76f6dc830"
+    },
+    "binary64_before_constant_fix": {
+      "exact_capture_fraction": "0.150702894474995376339752560045302959036912411768224096150941160556290752287",
+      "input": {
+        "bytes": 3680,
+        "path": "out/kerr-outgoing-trace/chart-64.bin",
+        "sha256": "73437149ff2d8152e16787daeb837f66b67c3bf296384b7cf6211ac6ca9fc34d"
+      },
+      "maximum_normalized_errors": {
+        "capture": "6.34448458689905668722343530148584630346150941160556290752287E-16",
+        "forward": [
+          "9.86114984444289703620406620774225410970571393398522794393290254464496604108E-9",
+          "0.00000231005362490935669288843207397060918201695814424351596854617839344872481181",
+          "0.00001521014152243221369084753527355845833198375672041448540267479759280149",
+          "0",
+          "1.54086965267139709936570511104140539612972004507960645671408233649526624514E-14",
+          "0.000019071103942774038876943474153210947354391145831190337994315580416344741",
+          "7.53811866889541011399198643420973075596614269251911004393279118582962338596E-7",
+          "0"
+        ],
+        "round_trip": [
+          "2.27373675443232059478759765625E-13",
+          "2.87886055793820583033645808274711842730118166838156304259339890209512004417E-13",
+          "1.62477924578260826215257403961505833118323355163214745305645666216953942039E-13",
+          "0",
+          "7.97457338259326692736460076573568352638380126948143378181023515467943081304E-13",
+          "8.75244321463242158642970025539398193359375E-13",
+          "6.58750831661336633260361850261688232421875E-13",
+          "0"
+        ]
+      },
+      "readback": {
+        "bytes": 7360,
+        "path": "out/kerr-outgoing-trace/chart-64.readback",
+        "sha256": "173a7c06e18a9e8be285ca9a20ec53690ecd6988df313d11f790165c2542c245"
+      },
+      "rows": 46
+    },
+    "binary64_before_fix_source": "f914eab72b9e55efefb932a204841a2febab34ae",
+    "binary64_shader": {
+      "bytes": 398384,
+      "path": "out/kerr-outgoing-trace/chart-final-64.spv",
+      "sha256": "e55b72a8398f3cddf2f65f2e5ae4b82822e1e12d716c6d9738df464f02cc57bf"
+    },
+    "chart_provider_icd": {
+      "bytes": 135,
+      "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    },
+    "native_binary64_output": "device=llvmpipe (LLVM 20.1.2, 256 bits)\nactual_submit_ms=0.590531 samples=46\n",
+    "rungs": {
+      "32": {
+        "exact_capture_fraction": "0.150702894474995376339752560045302959036912411768224096150941160556290752287",
+        "input": {
+          "bytes": 1840,
+          "path": "out/kerr-outgoing-trace/chart-32.bin",
+          "sha256": "24c4dcec863091ae546b9a8fefd34d57f8fb10b0d2acf0594d629830dcf8b07c"
+        },
+        "maximum_normalized_errors": {
+          "capture": "3.0543339492550690060045302959036912411768224096150941160556290752287E-8",
+          "forward": [
+            "0.00000383138435059088215039965719389125004553809064407229747947123757373216676953",
+            "0.0000460408995154212773670210532743676488441714597330014008110266968152270325985",
+            "0.00011392511464715944063252583571080915053747454046518476892957924021031921",
+            "0",
+            "0.0000111735367605453027128656744159426177248846967281377746977038926323860397646",
+            "0.000573072134291733106287720505598992795249599641107434625446209451036913854",
+            "0.000118226766782871520665000750391521197744717727764813425629786145250609207140",
+            "0"
+          ],
+          "round_trip": [
+            "0.000057220458984375",
+            "0.000061511993408203125000",
+            "0.0000414022326394661487001303688906833422449766895801813610358132521806780594485",
+            "0",
+            "0.000846726592233139775282531705698817375674355628347652451090696929327507442634",
+            "0.000874102115631103515625",
+            "0.000716507434844970703125",
+            "0"
+          ]
+        },
+        "readback": {
+          "bytes": 3680,
+          "path": "out/kerr-outgoing-trace/chart-32.readback",
+          "sha256": "1a69066e2464c8674d647bd44b5278ceb0f03bcdd202f9fdead2aebff82e2893"
+        },
+        "rows": 46
+      },
+      "64": {
+        "exact_capture_fraction": "0.150702894474995376339752560045302959036912411768224096150941160556290752287",
+        "input": {
+          "bytes": 3680,
+          "path": "out/kerr-outgoing-trace/chart-64.bin",
+          "sha256": "73437149ff2d8152e16787daeb837f66b67c3bf296384b7cf6211ac6ca9fc34d"
+        },
+        "maximum_normalized_errors": {
+          "capture": "6.34448458689905668722343530148584630346150941160556290752287E-16",
+          "forward": [
+            "5.88025908843007826470011486438158647726381653295102530354565874229851172344E-15",
+            "4.46348122759353714806265449789347834130195178399030846446409270302573120971E-14",
+            "1.54616803220611214206504170035942249327958551459732520240719851E-12",
+            "0",
+            "1.54086965267139709936570511104140539612972004507960645671408233649526624514E-14",
+            "1.938827913825593800744299466747688937428952329054095134232080822E-12",
+            "9.17464662976218761950050955738175230138178697585159179070898860908009339576E-14",
+            "0"
+          ],
+          "round_trip": [
+            "2.27373675443232059478759765625E-13",
+            "2.369215934550084057264029979705810546875E-13",
+            "1.60014930136802928574697614045742466141477467662119042691312271376487186187E-13",
+            "0",
+            "1.02119371160283442037241201532054138819696039062121038802337909206966246078E-12",
+            "1.114275338665038361796177923679351806640625E-12",
+            "8.36941627113674257998354732990264892578125E-13",
+            "0"
+          ]
+        },
+        "readback": {
+          "bytes": 7360,
+          "path": "out/kerr-outgoing-trace/chart-64.readback",
+          "sha256": "dab9f6b5f5fca3af0ac4d9f6ea8215fc621c5bd50a5451e561dac573206b38b1"
+        },
+        "rows": 46
+      }
+    },
+    "scope": "A selected independent comparator for forward/round-trip coordinate maps and the first contact with an oblate surface. These measurements are not global error bounds for rendering.",
+    "sources": "Re-run the retained chart-probe Slang and Vulkan harness with chart-reference inputs and validate. The reports contain the exact input and output digests."
+  },
+  "compiled_products": [
+    {
+      "bytes": 9640208,
+      "path": "bin/linux-ci/src/sirius/app/sirius",
+      "sha256": "343c5ae57fa50cdd9549fe26be76bc67cac215fcadb78c1720bcd8f129f67e15"
+    },
+    {
+      "bytes": 11188216,
+      "path": "bin/linux-ci/src/sirius/app/sirius_app_tests",
+      "sha256": "29d375b7ea02072f45df1a13fb974412b8d1d256f6487e0404ecea03e464a468"
+    },
+    {
+      "bytes": 12142824,
+      "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+      "sha256": "32c2ceced1dc382049055a924d22df7b5e08a4ae9eb58f279fc54e480de26f61"
+    },
+    {
+      "bytes": 783520,
+      "path": "bin/linux-ci/tests/sirius_base_tests",
+      "sha256": "3a4e1c4b6e4311e8b7d597a727693e94bb2b224a991a0aba7bfd3f83678f52c4"
+    },
+    {
+      "bytes": 13441568,
+      "path": "bin/linux-ci/tests/backend/sirius_backend_tests",
+      "sha256": "fa38f4ad504c15dd56e8ccdc5f46bab80ed508d98d6d0a8ca49960a9f14ac2f8"
+    },
+    {
+      "bytes": 5199120,
+      "path": "bin/linux-ci/tests/core/sirius_core_tests",
+      "sha256": "92402f79b0bdf3d57121b0364cbc8c30acdbbffe6f470c2027fba51ed89c4122"
+    },
+    {
+      "bytes": 1678696,
+      "path": "bin/linux-ci/tests/oracle/sirius_oracle_tests",
+      "sha256": "ade44b9160a8e991ca82c3e7e24da19e4b7fe126472c1f8f0a4565afa1b21ba4"
+    }
+  ],
+  "configure": {
+    "bytes": 1312,
+    "path": "out/kerr-outgoing-trace/refined-configure.log",
+    "sha256": "04614c5009f481d59104a6a778a7a4fabbb446eeab53dad2e50f477c76715955"
+  },
+  "exterior_near_surface_contact": {
+    "adopted_in_source_revision": false,
+    "binary32_inputs_hex": "6117883fee7c7f3f0100803f6666663f0000000000000000000000000000000000000000000000006117883fee7c7f3f1000803f6666663f0000000000000000000000000000000000000000000000006117883fee7c7f3f8000803f6666663f0000000000000000000000000000000000000000000000006117883fee7c7f3f0100803f2000803f000000000000000000000000000000000000000000000000",
+    "binary32_stock_shader": {
+      "bytes": 374804,
+      "path": "out/kerr-outgoing-trace/late-contact32.spv",
+      "sha256": "0cefcc2f0e6a1b74d4e902b72e8ff204be828373c9cfcab6143bf87a7f31bc41"
+    },
+    "binary32_strict_scratch_shader": {
+      "bytes": 184520,
+      "path": "out/kerr-outgoing-trace/late-contact32-strict.spv",
+      "sha256": "07787a4b32961d9208609cd9275122c5aadbda81c82f4f1402b84e0ec9563fd3"
+    },
+    "compared_cases": [
+      {
+        "analytic_positive_fraction": "8.17493711429624827611013602277864477527506619655328301387041580182644445008E-7",
+        "equatorial_radius": 1.458227276802063,
+        "finish_x": 1.3124045133590698,
+        "kernel_event_x": 1.4582273960113525,
+        "kernel_fraction": 0.0,
+        "kernel_hit": true,
+        "start_x": 1.4582273960113525,
+        "strict_event_x": 1.458227276802063,
+        "strict_fraction": 1.1920915312657598e-06,
+        "strict_hit": true
+      },
+      {
+        "analytic_positive_fraction": "0.0000188020172112030593334439654925760643781069311592751577121378465804444306381",
+        "equatorial_radius": 1.458227276802063,
+        "finish_x": 1.3124045133590698,
+        "kernel_event_x": 1.4582300186157227,
+        "kernel_fraction": 0.0,
+        "kernel_hit": true,
+        "start_x": 1.4582300186157227,
+        "strict_event_x": 1.458227276802063,
+        "strict_fraction": 1.907310615933966e-05,
+        "strict_hit": true
+      },
+      {
+        "analytic_positive_fraction": "0.000152848082900876792184640484144259164959045704846265071270527211454288206095",
+        "equatorial_radius": 1.458227276802063,
+        "finish_x": 1.3124045133590698,
+        "kernel_event_x": 1.458227276802063,
+        "kernel_fraction": 0.00015256335609592497,
+        "kernel_hit": true,
+        "start_x": 1.458249568939209,
+        "strict_event_x": 1.458227276802063,
+        "strict_fraction": 0.00015256335609592497,
+        "strict_hit": true
+      },
+      {
+        "analytic_positive_fraction": null,
+        "equatorial_radius": 1.458227276802063,
+        "finish_x": 1.4582328796386719,
+        "kernel_event_x": 1.4582273960113525,
+        "kernel_fraction": 0.0,
+        "kernel_hit": false,
+        "start_x": 1.4582273960113525,
+        "strict_event_x": 1.4582273960113525,
+        "strict_fraction": 0.0,
+        "strict_hit": false
+      }
+    ],
+    "original_bardeen_with_scratch_shader": {
+      "concurrent_with": "Prior exact 96x96 shader comparison, exploratory scratch process at lower CPU priority",
+      "duration_seconds": 150.32,
+      "junit": {
+        "bytes": 604,
+        "path": "out/kerr-outgoing-trace/contact-render/bardeen.xml",
+        "sha256": "f4a0d0152f88f1c4d54e4a3279c59bd0cbc4c50ada8bfed45ff1c86c0fd7b8d8"
+      },
+      "product_shader": {
+        "bytes": 2552860,
+        "path": "out/kerr-outgoing-trace/contact-render/resources/kernels/trace.spv",
+        "sha256": "59b436c02e48138599e250b3f0af165ddc0073848c121b7255a14b347eb3d38e"
+      },
+      "test_executable_hardlinked_to_exact_build": true
+    },
+    "same_hidden_contact_baseline_and_scratch": {
+      "32": {
+        "maximum_difference_from_baseline": 1.4901161193847656e-08,
+        "number_of_established_contacts": 45,
+        "rows": 46
+      },
+      "64": {
+        "maximum_difference_from_baseline": 8.881784197001252e-16,
+        "number_of_established_contacts": 45,
+        "rows": 46
+      }
+    },
+    "scope": "Dedicated direct Vulkan probe and independent analytic line crossing. The strict candidate only ran through the scratch probe."
+  },
+  "floor_refinement": {
+    "maximum_coarse_and_fine_substeps": [
+      32,
+      64
+    ],
+    "maximum_counted_attempts_per_advance": 1,
+    "same_committed_input_for_all_trials": true,
+    "same_full_affine_interval": true,
+    "scope": "Outgoing Kerr/Schwarzschild trace only. Fixed-composition probes keep the original resolution policy.",
+    "unchanged_rung_acceptance_predicates": true
+  },
+  "forensic_object_search": {
+    "bytes": 1353,
+    "path": "attestations/qualification/7b0506f8/direct-vulkan-kerr-horizon/unreachable-image-objects.json",
+    "sha256": "a839c9a3788efdcfe31b5a53ac34f6e0a48fe753e715d0e8895e477a20788309"
+  },
+  "full_mandatory_receipt_issued": false,
+  "model": {
+    "bytes": 130827,
+    "path": "tests/operating_model.json",
+    "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+  },
+  "operating_model_rows": 64,
+  "original_prior_failure": {
+    "bytes": 81380,
+    "path": "attestations/qualification/77667953/strict-linux-p1-and-camera/BARDEEN_FLOOR.json",
+    "sha256": "1acc1d8fb5a0064bb9f7c2b0d3115ac94c4747f813f9355ff628bd8264e43742"
+  },
+  "outgoing_chart_before_refinement": {
+    "bytes": 70855,
+    "path": "attestations/qualification/3dc21897/direct-vulkan-kerr-horizon/MANIFEST.json",
+    "sha256": "7943e0f2ac45a8de0222d1e6887bf2f1310ab713b667c977e30a51e30949977f"
+  },
+  "retained_artifacts": [
+    {
+      "bytes": 1765,
+      "path": "attestations/qualification/7b0506f8/direct-vulkan-kerr-horizon/run_refined_qualification.py",
+      "sha256": "182966323e7cafc461667d246f3e1c973672841d71ea5fab160953893919cb4a"
+    },
+    {
+      "bytes": 2719,
+      "path": "attestations/qualification/7b0506f8/direct-vulkan-kerr-horizon/scan_unreachable_image_objects.py",
+      "sha256": "74cf77fde18755eaeeaf98266a6ad965e05432b5009fe891df2eaa1e1b07a2ac"
+    },
+    {
+      "bytes": 1353,
+      "path": "attestations/qualification/7b0506f8/direct-vulkan-kerr-horizon/unreachable-image-objects.json",
+      "sha256": "a839c9a3788efdcfe31b5a53ac34f6e0a48fe753e715d0e8895e477a20788309"
+    },
+    {
+      "bytes": 1224,
+      "path": "attestations/qualification/7b0506f8/direct-vulkan-kerr-horizon/late-contact.slang",
+      "sha256": "aa71f7bf27227e0c5c587e04e28af6b3bb14d85185684b4375de48435c7f2103"
+    },
+    {
+      "bytes": 1713,
+      "path": "attestations/qualification/7b0506f8/direct-vulkan-kerr-horizon/contact.patch",
+      "sha256": "bd07603913f355d452b5756fb93d742f035bb6d7e9fa792df9afcab4eafb7472"
+    }
+  ],
+  "retained_kernel_byte_identity": {
+    "compared_revision": "77667953728d3e0b95975c7c5c2045fa4b33f79b",
+    "names": [
+      "src/sirius/backend/retained/retained_camera.spv",
+      "src/sirius/backend/retained/retained_camera_fp64.spv",
+      "src/sirius/backend/retained/retained_camera_portable.spv",
+      "src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_dense.spv",
+      "src/sirius/backend/retained/retained_dense_fp64.spv",
+      "src/sirius/backend/retained/retained_dense_portable.spv",
+      "src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_dopri_phase.spv",
+      "src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+      "src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+      "src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+      "src/sirius/backend/retained/retained_endpoint.spv",
+      "src/sirius/backend/retained/retained_endpoint_fma.spv",
+      "src/sirius/backend/retained/retained_endpoint_fp64.spv",
+      "src/sirius/backend/retained/retained_endpoint_portable.spv",
+      "src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+      "src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv",
+      "src/sirius/backend/retained/retained_initialize.spv",
+      "src/sirius/backend/retained/retained_initialize_fp64.spv",
+      "src/sirius/backend/retained/retained_initialize_portable.spv",
+      "src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_ray_camera.spv",
+      "src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+      "src/sirius/backend/retained/retained_ray_camera_portable.spv",
+      "src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_transport.spv",
+      "src/sirius/backend/retained/retained_transport_fma.spv",
+      "src/sirius/backend/retained/retained_transport_fp64.spv",
+      "src/sirius/backend/retained/retained_transport_portable.spv",
+      "src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+      "src/sirius/backend/retained/retained_transport_portable_normal_sum.spv",
+      "src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv"
+    ]
+  },
+  "schema": "sirius-direct-vulkan-kerr-horizon-evidence-v1",
+  "selected_qualification": {
+    "bardeen": {
+      "completed_ctest_cases_before_intentional_retirement": [],
+      "guarded_execution": {
+        "accepted": true,
+        "argv": [
+          "/usr/bin/ctest",
+          "--test-dir",
+          "/home/astra/.project/Sirius/bin/linux-ci",
+          "-C",
+          "Release",
+          "-R",
+          "^(VulkanRenderSession\\.KerrNearExtremalBardeenBoundaryAt1080p)$",
+          "-V",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--output-junit",
+          "/home/astra/.project/Sirius/out/kerr-outgoing-trace/bardeen-refined/runs/bardeen/junit.xml"
+        ],
+        "cases": [
+          {
+            "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+            "seconds": 166.072
+          }
+        ],
+        "execution_environment": {
+          "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/kerr-outgoing-trace/bardeen-refined/mesa-cache",
+          "TMPDIR": "/home/astra/.project/Sirius/renders/kerr-outgoing-trace/bardeen-refined/bardeen"
+        },
+        "icd": {
+          "bytes": 135,
+          "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+          "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+        },
+        "input_snapshot": {
+          "bytes": 1264668,
+          "path": "out/kerr-outgoing-trace/bardeen-refined/runs/bardeen/inputs-before.json",
+          "sha256": "f1f1ffe893301bfb75d74860d2febafe0ce28c9e0a4f98047ef6b5d8ff2eee03"
+        },
+        "junit": {
+          "bytes": 1210,
+          "path": "out/kerr-outgoing-trace/bardeen-refined/runs/bardeen/junit.xml",
+          "sha256": "01e9e5936b0779f70b16213d8ce74408559370070c0ade8abe364227ffec9e55"
+        },
+        "owner": {
+          "bytes": 2738,
+          "path": "out/kerr-outgoing-trace/bardeen-refined/runs/bardeen/owner.json",
+          "sha256": "58b1a7c14be21048c7edce9a8c1a9942dc580d162e7fc6ccaf92950b9437328a"
+        },
+        "provider": {
+          "bytes": 11929384,
+          "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+          "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+        },
+        "status": {
+          "child_exit": 0,
+          "cleanup_errors": [],
+          "limits": {
+            "reserve_kib": 2097152,
+            "rss_kib": 8388608,
+            "seconds": 3600
+          },
+          "passed": true,
+          "peak_sampled_rss_kib": 1862344,
+          "remaining_owned_processes": [],
+          "source_unchanged": true,
+          "status": "terminal",
+          "stop_reason": null,
+          "wall_seconds": 166.14386629400542,
+          "whole_inputs_unchanged": true
+        },
+        "stderr": {
+          "bytes": 0,
+          "path": "out/kerr-outgoing-trace/bardeen-refined/runs/bardeen/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 2143,
+          "path": "out/kerr-outgoing-trace/bardeen-refined/runs/bardeen/stdout.log",
+          "sha256": "10a0af5038107ce7a1bf3e5996d9441c30dd881bc498ba9b1674d20e23067f35"
+        }
+      },
+      "junit_cases": [
+        {
+          "duration": 166.072,
+          "failure_capture": null,
+          "failure_output_tail": "",
+          "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+          "outcomes": []
+        }
+      ],
+      "products": [
+        {
+          "bytes": 9640208,
+          "path": "bin/linux-ci/src/sirius/app/sirius",
+          "sha256": "343c5ae57fa50cdd9549fe26be76bc67cac215fcadb78c1720bcd8f129f67e15"
+        },
+        {
+          "bytes": 11188216,
+          "path": "bin/linux-ci/src/sirius/app/sirius_app_tests",
+          "sha256": "29d375b7ea02072f45df1a13fb974412b8d1d256f6487e0404ecea03e464a468"
+        },
+        {
+          "bytes": 12142824,
+          "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+          "sha256": "32c2ceced1dc382049055a924d22df7b5e08a4ae9eb58f279fc54e480de26f61"
+        },
+        {
+          "bytes": 13441568,
+          "path": "bin/linux-ci/tests/backend/sirius_backend_tests",
+          "sha256": "fa38f4ad504c15dd56e8ccdc5f46bab80ed508d98d6d0a8ca49960a9f14ac2f8"
+        },
+        {
+          "bytes": 5199120,
+          "path": "bin/linux-ci/tests/core/sirius_core_tests",
+          "sha256": "92402f79b0bdf3d57121b0364cbc8c30acdbbffe6f470c2027fba51ed89c4122"
+        },
+        {
+          "bytes": 1678696,
+          "path": "bin/linux-ci/tests/oracle/sirius_oracle_tests",
+          "sha256": "ade44b9160a8e991ca82c3e7e24da19e4b7fe126472c1f8f0a4565afa1b21ba4"
+        },
+        {
+          "bytes": 783520,
+          "path": "bin/linux-ci/tests/sirius_base_tests",
+          "sha256": "3a4e1c4b6e4311e8b7d597a727693e94bb2b224a991a0aba7bfd3f83678f52c4"
+        }
+      ],
+      "registration": {
+        "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+            "--gtest_filter=VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "VulkanRenderSession.KerrNearExtremalBardeenBoundaryAt1080p",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+        }
+      },
+      "unmeasured_cases_before_retirement": []
+    },
+    "policy": {
+      "completed_ctest_cases_before_intentional_retirement": [],
+      "guarded_execution": {
+        "accepted": true,
+        "argv": [
+          "/usr/bin/ctest",
+          "--test-dir",
+          "/home/astra/.project/Sirius/bin/linux-ci",
+          "-C",
+          "Release",
+          "-R",
+          "^(OperationalBuildGate\\.ReleaseInstallRequiresExactPassedEstate|OperationalBuildPolicy\\.ReleaseCannotWeakenGates|OperationalEvidence\\.SourceAndIdealGovernanceRejectUncoveredClaims)$",
+          "-V",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--output-junit",
+          "/home/astra/.project/Sirius/out/kerr-outgoing-trace/policy-concurrent-policy/runs/policy/junit.xml"
+        ],
+        "cases": [
+          {
+            "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+            "seconds": 3.18613
+          },
+          {
+            "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+            "seconds": 0.0252986
+          },
+          {
+            "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+            "seconds": 2.97398
+          }
+        ],
+        "execution_environment": {
+          "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/kerr-outgoing-trace/policy-concurrent-policy/mesa-cache",
+          "TMPDIR": "/home/astra/.project/Sirius/renders/kerr-outgoing-trace/policy-concurrent-policy/policy"
+        },
+        "input_snapshot": {
+          "bytes": 1258412,
+          "path": "out/kerr-outgoing-trace/policy-concurrent-policy/runs/policy/inputs-before.json",
+          "sha256": "1295bc60031f101b743ed54deecea845c820e894ad1040d2dbd5459dce5e552f"
+        },
+        "junit": {
+          "bytes": 1419,
+          "path": "out/kerr-outgoing-trace/policy-concurrent-policy/runs/policy/junit.xml",
+          "sha256": "6e6cd51cf961e0fd291eb87db71b07113f48bbe3e724a669162981e405c644ec"
+        },
+        "owner": {
+          "bytes": 2903,
+          "path": "out/kerr-outgoing-trace/policy-concurrent-policy/runs/policy/owner.json",
+          "sha256": "00159c930d706952acdf10feb9618522531be849a27521729b6e1eed3361899e"
+        },
+        "status": {
+          "child_exit": 0,
+          "cleanup_errors": [],
+          "limits": {
+            "reserve_kib": 2097152,
+            "rss_kib": 8388608,
+            "seconds": 300
+          },
+          "passed": true,
+          "peak_sampled_rss_kib": 90008,
+          "remaining_owned_processes": [],
+          "source_unchanged": true,
+          "status": "terminal",
+          "stop_reason": null,
+          "wall_seconds": 6.386162220995175,
+          "whole_inputs_unchanged": true
+        },
+        "stderr": {
+          "bytes": 0,
+          "path": "out/kerr-outgoing-trace/policy-concurrent-policy/runs/policy/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 2472,
+          "path": "out/kerr-outgoing-trace/policy-concurrent-policy/runs/policy/stdout.log",
+          "sha256": "5424a9ea2e7ca16a8d39b6672afd15a9d99e1effb64b969111de6b812879452c"
+        }
+      },
+      "junit_cases": [
+        {
+          "duration": 3.18613,
+          "failure_capture": null,
+          "failure_output_tail": "",
+          "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+          "outcomes": []
+        },
+        {
+          "duration": 0.0252986,
+          "failure_capture": null,
+          "failure_output_tail": "",
+          "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "outcomes": []
+        },
+        {
+          "duration": 2.97398,
+          "failure_capture": null,
+          "failure_output_tail": "",
+          "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "outcomes": []
+        }
+      ],
+      "products": [
+        {
+          "bytes": 9640208,
+          "path": "bin/linux-ci/src/sirius/app/sirius",
+          "sha256": "343c5ae57fa50cdd9549fe26be76bc67cac215fcadb78c1720bcd8f129f67e15"
+        },
+        {
+          "bytes": 11188216,
+          "path": "bin/linux-ci/src/sirius/app/sirius_app_tests",
+          "sha256": "29d375b7ea02072f45df1a13fb974412b8d1d256f6487e0404ecea03e464a468"
+        },
+        {
+          "bytes": 12142824,
+          "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+          "sha256": "32c2ceced1dc382049055a924d22df7b5e08a4ae9eb58f279fc54e480de26f61"
+        },
+        {
+          "bytes": 13441568,
+          "path": "bin/linux-ci/tests/backend/sirius_backend_tests",
+          "sha256": "fa38f4ad504c15dd56e8ccdc5f46bab80ed508d98d6d0a8ca49960a9f14ac2f8"
+        },
+        {
+          "bytes": 5199120,
+          "path": "bin/linux-ci/tests/core/sirius_core_tests",
+          "sha256": "92402f79b0bdf3d57121b0364cbc8c30acdbbffe6f470c2027fba51ed89c4122"
+        },
+        {
+          "bytes": 1678696,
+          "path": "bin/linux-ci/tests/oracle/sirius_oracle_tests",
+          "sha256": "ade44b9160a8e991ca82c3e7e24da19e4b7fe126472c1f8f0a4565afa1b21ba4"
+        },
+        {
+          "bytes": 783520,
+          "path": "bin/linux-ci/tests/sirius_base_tests",
+          "sha256": "3a4e1c4b6e4311e8b7d597a727693e94bb2b224a991a0aba7bfd3f83678f52c4"
+        }
+      ],
+      "registration": {
+        "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate": {
+          "command": [
+            "/usr/bin/python3",
+            "/home/astra/.project/Sirius/scripts/verify-build-gate.py",
+            "--self-test"
+          ],
+          "name": "OperationalBuildGate.ReleaseInstallRequiresExactPassedEstate",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests"
+        },
+        "OperationalBuildPolicy.ReleaseCannotWeakenGates": {
+          "command": [
+            "/usr/bin/python3",
+            "/home/astra/.project/Sirius/scripts/verify-build-policy.py",
+            "--self-test"
+          ],
+          "name": "OperationalBuildPolicy.ReleaseCannotWeakenGates",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests"
+        },
+        "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims": {
+          "command": [
+            "/usr/bin/cmake",
+            "-DSIRIUS_TEST_CONFIG=Release",
+            "-P",
+            "/home/astra/.project/Sirius/bin/linux-ci/tests/evidence_governance.cmake"
+          ],
+          "name": "OperationalEvidence.SourceAndIdealGovernanceRejectUncoveredClaims",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests"
+        }
+      },
+      "unmeasured_cases_before_retirement": []
+    },
+    "trace": {
+      "completed_ctest_cases_before_intentional_retirement": [
+        {
+          "duration": 106.08,
+          "name": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow"
+        },
+        {
+          "duration": 171.37,
+          "name": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene"
+        },
+        {
+          "duration": 230.24,
+          "name": "KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32"
+        },
+        {
+          "duration": 150.75,
+          "name": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs"
+        },
+        {
+          "duration": 156.68,
+          "name": "KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs"
+        },
+        {
+          "duration": 161.16,
+          "name": "VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs"
+        }
+      ],
+      "guarded_execution": {
+        "argv": [
+          "/usr/bin/ctest",
+          "--test-dir",
+          "/home/astra/.project/Sirius/bin/linux-ci",
+          "-C",
+          "Release",
+          "-R",
+          "^(KernelTrace\\.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs|KernelTrace\\.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs|KernelTrace\\.CompensatedRungTracksFp64AtLeastAsWellAsFp32|KernelTrace\\.Fp64RungAgreesWithFp32OnKerrScene|KernelTrace\\.KerrRenderIsFiniteNonConstantWithBoundedShadow|VulkanRenderSession\\.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds|VulkanRenderSession\\.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds|VulkanRenderSession\\.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs)$",
+          "-V",
+          "--output-on-failure",
+          "--no-tests=error",
+          "--output-junit",
+          "/home/astra/.project/Sirius/out/kerr-outgoing-trace/trace-refined/runs/trace/junit.xml"
+        ],
+        "execution_environment": {
+          "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/kerr-outgoing-trace/trace-refined/mesa-cache",
+          "TMPDIR": "/home/astra/.project/Sirius/renders/kerr-outgoing-trace/trace-refined/trace"
+        },
+        "input_snapshot": {
+          "bytes": 1264651,
+          "path": "out/kerr-outgoing-trace/trace-refined/runs/trace/inputs-before.json",
+          "sha256": "63aecb792ef320101176bd923cd8b6f1aa98d6f2b51da9c9496bdb9e6aeed425"
+        },
+        "owner": {
+          "bytes": 3979,
+          "path": "out/kerr-outgoing-trace/trace-refined/runs/trace/owner.json",
+          "sha256": "73d50a6d152facf5b39aee9760c992a37942fbfd8cde563df6825ad52077f051"
+        },
+        "status": {
+          "child_exit": -15,
+          "cleanup_errors": [],
+          "limits": {
+            "reserve_kib": 2097152,
+            "rss_kib": 8388608,
+            "seconds": 3600
+          },
+          "passed": false,
+          "peak_sampled_rss_kib": 2103744,
+          "remaining_owned_processes": [],
+          "source_unchanged": true,
+          "status": "terminal",
+          "stop_reason": "supervisor_signal_15",
+          "wall_seconds": 2524.408360539004,
+          "whole_inputs_unchanged": true
+        },
+        "stderr": {
+          "bytes": 0,
+          "path": "out/kerr-outgoing-trace/trace-refined/runs/trace/stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr_tail": [],
+        "stdout": {
+          "bytes": 9914,
+          "path": "out/kerr-outgoing-trace/trace-refined/runs/trace/stdout.log",
+          "sha256": "133552609382d881591ef38229ffe01f57c24066eceae6619716e0d3b92eaf1a"
+        },
+        "stdout_tail": [
+          "996: [ RUN      ] VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs",
+          "996: [       OK ] VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs (161044 ms)",
+          "996: [----------] 1 test from VulkanRenderSession (161044 ms total)",
+          "996: ",
+          "996: [----------] Global test environment tear-down",
+          "996: [==========] 1 test from 1 test suite ran. (161044 ms total)",
+          "996: [  PASSED  ] 1 test.",
+          "6/8 Test #996: VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs ..........   Passed  161.16 sec",
+          "test 997",
+          "    Start 997: VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds",
+          "",
+          "997: Test command: /home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests \"--gtest_filter=VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds\" \"--gtest_also_run_disabled_tests\"",
+          "997: Working Directory: /home/astra/.project/Sirius/bin/linux-ci/tests/render",
+          "997: Test timeout computed to be: 10000000",
+          "997: Running main() from /home/astra/.project/Sirius/bin/linux-ci/_deps/googletest-src/googletest/src/gtest_main.cc",
+          "997: Note: Google Test filter = VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds",
+          "997: [==========] Running 1 test from 1 test suite.",
+          "997: [----------] Global test environment set-up.",
+          "997: [----------] 1 test from VulkanRenderSession",
+          "997: [ RUN      ] VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds"
+        ]
+      },
+      "junit_cases": [],
+      "products": [
+        {
+          "bytes": 9640208,
+          "path": "bin/linux-ci/src/sirius/app/sirius",
+          "sha256": "343c5ae57fa50cdd9549fe26be76bc67cac215fcadb78c1720bcd8f129f67e15"
+        },
+        {
+          "bytes": 11188216,
+          "path": "bin/linux-ci/src/sirius/app/sirius_app_tests",
+          "sha256": "29d375b7ea02072f45df1a13fb974412b8d1d256f6487e0404ecea03e464a468"
+        },
+        {
+          "bytes": 12142824,
+          "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+          "sha256": "32c2ceced1dc382049055a924d22df7b5e08a4ae9eb58f279fc54e480de26f61"
+        },
+        {
+          "bytes": 13441568,
+          "path": "bin/linux-ci/tests/backend/sirius_backend_tests",
+          "sha256": "fa38f4ad504c15dd56e8ccdc5f46bab80ed508d98d6d0a8ca49960a9f14ac2f8"
+        },
+        {
+          "bytes": 5199120,
+          "path": "bin/linux-ci/tests/core/sirius_core_tests",
+          "sha256": "92402f79b0bdf3d57121b0364cbc8c30acdbbffe6f470c2027fba51ed89c4122"
+        },
+        {
+          "bytes": 1678696,
+          "path": "bin/linux-ci/tests/oracle/sirius_oracle_tests",
+          "sha256": "ade44b9160a8e991ca82c3e7e24da19e4b7fe126472c1f8f0a4565afa1b21ba4"
+        },
+        {
+          "bytes": 783520,
+          "path": "bin/linux-ci/tests/sirius_base_tests",
+          "sha256": "3a4e1c4b6e4311e8b7d597a727693e94bb2b224a991a0aba7bfd3f83678f52c4"
+        }
+      ],
+      "registration": {
+        "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+            "--gtest_filter=KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "KernelTrace.ActualTraceClipsJacobiAndRetainsInvalidSamplesAcrossRungs",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+        },
+        "KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+            "--gtest_filter=KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "KernelTrace.ActualTraceFiniteSphereExcludesLaterDiskAndVolumeAcrossRungs",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+        },
+        "KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+            "--gtest_filter=KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "KernelTrace.CompensatedRungTracksFp64AtLeastAsWellAsFp32",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+        },
+        "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+            "--gtest_filter=KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "KernelTrace.Fp64RungAgreesWithFp32OnKerrScene",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+        },
+        "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/tests/backend/sirius_backend_tests",
+            "--gtest_filter=KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "KernelTrace.KerrRenderIsFiniteNonConstantWithBoundedShadow",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/backend"
+        },
+        "VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+            "--gtest_filter=VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+        },
+        "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+            "--gtest_filter=VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+        },
+        "VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs": {
+          "command": [
+            "/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+            "--gtest_filter=VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs",
+            "--gtest_also_run_disabled_tests"
+          ],
+          "name": "VulkanRenderSession.ZeroActiveTracePreservesRadianceAcrossPrecisionRungs",
+          "working_directory": "/home/astra/.project/Sirius/bin/linux-ci/tests/render"
+        }
+      },
+      "unmeasured_cases_before_retirement": [
+        "VulkanRenderSession.CpuVulkanAgreeOnKerrGeometryWithinStatisticalBounds",
+        "VulkanRenderSession.CpuVulkanAgreeOnMorrisThorneGeometryWithinStatisticalBounds"
+      ]
+    }
+  },
+  "source_revision": "7b0506f8970586c0651f09555a44f5949fb37457",
+  "test_sources_unchanged": true,
+  "vulkan_modules": {
+    "src/sirius/app/resources/kernels/camera_frame_probe.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 36660,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/camera_frame_probe.spv",
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "prior": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      }
+    },
+    "src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 36660,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/camera_frame_probe_fp32comp.spv",
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      },
+      "prior": {
+        "bytes": 36660,
+        "sha256": "ee9ce80c39ca53bc709ef6b02780276c24e199e08fe89734d6c921f5c8dfd2a2"
+      }
+    },
+    "src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 37728,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/camera_frame_probe_fp64.spv",
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      },
+      "prior": {
+        "bytes": 37728,
+        "sha256": "f831e1bf90e0bf35ae70b55052e02f3c895a61ef6fe22c3de5c4e6c71335dc39"
+      }
+    },
+    "src/sirius/app/resources/kernels/coupled_probe_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 878700,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/coupled_probe_fp64.spv",
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      },
+      "prior": {
+        "bytes": 878700,
+        "sha256": "fbdd17e7fb3cd1e541bc7e51ce9ca407462f54482e570cb2adf2c2dd8fd71767"
+      }
+    },
+    "src/sirius/app/resources/kernels/infinity_probe.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 99692,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/infinity_probe.spv",
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      },
+      "prior": {
+        "bytes": 99692,
+        "sha256": "8a6741489166e7317d5acd466ee5c28e2aaf2beea9ef5a22c3b65c194e37c15e"
+      }
+    },
+    "src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 100040,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/infinity_probe_fp32comp.spv",
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      },
+      "prior": {
+        "bytes": 100040,
+        "sha256": "00fc12fb3e35f6da17bdefd3ec3e6fb39e2b9ed0b394e50db7c5c97c62ab00c8"
+      }
+    },
+    "src/sirius/app/resources/kernels/infinity_probe_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 100568,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/infinity_probe_fp64.spv",
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      },
+      "prior": {
+        "bytes": 100568,
+        "sha256": "057f69082c62945e6d6d0b2a7392f3e0a515cafd73e757ebb73266c939312551"
+      }
+    },
+    "src/sirius/app/resources/kernels/metric_consistency_probe.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 65616,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/metric_consistency_probe.spv",
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "prior": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      }
+    },
+    "src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 65616,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/metric_consistency_probe_fp32comp.spv",
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      },
+      "prior": {
+        "bytes": 65616,
+        "sha256": "10cc29ca9638868351328e00b23af70645210185ae5f2d22a11bef549a4d480b"
+      }
+    },
+    "src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 66064,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/metric_consistency_probe_fp64.spv",
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      },
+      "prior": {
+        "bytes": 66064,
+        "sha256": "eaa9c125f461288dcbfa6e47589e5181814a88b5cfcd1637aee9950423fff8b0"
+      }
+    },
+    "src/sirius/app/resources/kernels/parity_probe.spv": {
+      "byte_identical_to_77667953": false,
+      "current": {
+        "bytes": 3382092,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/parity_probe.spv",
+        "sha256": "a92ddd35908f6a1ee69d521940b02c442f552af1245b7f9ed26d136a8e8694c3"
+      },
+      "prior": {
+        "bytes": 3377936,
+        "sha256": "32983c0204928057b208d89e724807a03ee990279bd810211060691eb04eaaff"
+      }
+    },
+    "src/sirius/app/resources/kernels/parity_probe_fp32comp.spv": {
+      "byte_identical_to_77667953": false,
+      "current": {
+        "bytes": 3386316,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/parity_probe_fp32comp.spv",
+        "sha256": "3900733fc8be4f2d33675840cdc01864348d6324d4ca63f32e97b9f858ba93a6"
+      },
+      "prior": {
+        "bytes": 3382160,
+        "sha256": "5bd43599c86426c4ed8f13a0a2e922ece95ee9378f894958826b7585ca1dca90"
+      }
+    },
+    "src/sirius/app/resources/kernels/parity_probe_fp64.spv": {
+      "byte_identical_to_77667953": false,
+      "current": {
+        "bytes": 3431808,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/parity_probe_fp64.spv",
+        "sha256": "af1b050b7155a85e9f84e9026221208368742b86855dd045f82f1c9c4746d86f"
+      },
+      "prior": {
+        "bytes": 3427652,
+        "sha256": "d73ed39f45e6109bf18302f9c82c4a51a2799b70793a9e1ee837e91d46bbf71b"
+      }
+    },
+    "src/sirius/app/resources/kernels/smoke.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 1404,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/smoke.spv",
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      },
+      "prior": {
+        "bytes": 1404,
+        "sha256": "fe9f2c68c9a433c7a78aa598386d26aca47ef10c61b69ab3c7d00e653bd41ed2"
+      }
+    },
+    "src/sirius/app/resources/kernels/trace.spv": {
+      "byte_identical_to_77667953": false,
+      "current": {
+        "bytes": 2743220,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/trace.spv",
+        "sha256": "98102beaaca86f7528c7d735f63d3be726a7d84c636f8b7e25cfb4a5f2202905"
+      },
+      "prior": {
+        "bytes": 2325528,
+        "sha256": "9d4b40e7fe80835854371c699b6c906e59fb7987033e17ba8878b9906ae02346"
+      }
+    },
+    "src/sirius/app/resources/kernels/trace_fp32comp.spv": {
+      "byte_identical_to_77667953": false,
+      "current": {
+        "bytes": 2746544,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/trace_fp32comp.spv",
+        "sha256": "bdff70cedc8d152eef690f89036099d3bbf2044fe2150809a49f9c5b819f2873"
+      },
+      "prior": {
+        "bytes": 2328852,
+        "sha256": "65a83cce051f97b958e6e66fa0f0b761457008fb3ea71a3454d550f036def051"
+      }
+    },
+    "src/sirius/app/resources/kernels/trace_fp64.spv": {
+      "byte_identical_to_77667953": false,
+      "current": {
+        "bytes": 2769716,
+        "path": "bin/linux-ci/src/sirius/app/resources/kernels/trace_fp64.spv",
+        "sha256": "921c0a520480f8e6df09ea8b0466f2a6d1c73e54c71c8809aa0acb0fe0dc41f2"
+      },
+      "prior": {
+        "bytes": 2336860,
+        "sha256": "de92823fa0a88c617ae702d01129c6611a371dd53af35b5a9546f075cfba4c2f"
+      }
+    },
+    "src/sirius/backend/retained/retained_camera.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 47720,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_camera.spv",
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      },
+      "prior": {
+        "bytes": 47720,
+        "sha256": "96ae8695f6061c372456a98ba185b70280fef2eb15d824f1f4fe6d509027b2e5"
+      }
+    },
+    "src/sirius/backend/retained/retained_camera_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 61048,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_camera_fp64.spv",
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      },
+      "prior": {
+        "bytes": 61048,
+        "sha256": "ca8fa3b444a688ccba48108540c50f913087ad6cfca46297fadf80930237be37"
+      }
+    },
+    "src/sirius/backend/retained/retained_camera_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 512324,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_camera_portable.spv",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      "prior": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      }
+    },
+    "src/sirius/backend/retained/retained_camera_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 512324,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_camera_portable_fp64.spv",
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      },
+      "prior": {
+        "bytes": 512324,
+        "sha256": "ff2925c3e95f6c2c926cb36b34d2fe98bf58b4fbabe1dd9bea8ca95797315d3c"
+      }
+    },
+    "src/sirius/backend/retained/retained_dense.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 78380,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dense.spv",
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+      },
+      "prior": {
+        "bytes": 78380,
+        "sha256": "4825b6c9557727a7345bce3eaccba4f606861fbbe8c9f4494d697597108825f2"
+      }
+    },
+    "src/sirius/backend/retained/retained_dense_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 90628,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dense_fp64.spv",
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      },
+      "prior": {
+        "bytes": 90628,
+        "sha256": "54d7c651bf1a23d03c0001632559cbef96750fd98085af64e6da9e95666e8279"
+      }
+    },
+    "src/sirius/backend/retained/retained_dense_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 116204,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dense_portable.spv",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      "prior": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      }
+    },
+    "src/sirius/backend/retained/retained_dense_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 116204,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dense_portable_fp64.spv",
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      },
+      "prior": {
+        "bytes": 116204,
+        "sha256": "b8de73ec46af3c456842ffbaec3e0f22c0ef208f3c8296f043aacd8cad545ddc"
+      }
+    },
+    "src/sirius/backend/retained/retained_dopri_phase.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 59228,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dopri_phase.spv",
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      },
+      "prior": {
+        "bytes": 59228,
+        "sha256": "10d94ce407e6ad156920e9cde616f74c84ab88606377e5151e4115c8ce08e4a3"
+      }
+    },
+    "src/sirius/backend/retained/retained_dopri_phase_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 72100,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dopri_phase_fp64.spv",
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      },
+      "prior": {
+        "bytes": 72100,
+        "sha256": "0f3fdd9cd95ff3d8e8b526dae15cfe92b7947cc07a662b2d8f8884f8198c4e4c"
+      }
+    },
+    "src/sirius/backend/retained/retained_dopri_phase_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 92844,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dopri_phase_portable.spv",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      },
+      "prior": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      }
+    },
+    "src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 92844,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dopri_phase_portable_fp64.spv",
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      },
+      "prior": {
+        "bytes": 92844,
+        "sha256": "785388597379d42f0a64ccc815e6f62e44b6dcac8fa3adec06361c07b838de88"
+      }
+    },
+    "src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 96752,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_dopri_phase_portable_normal_sum.spv",
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      },
+      "prior": {
+        "bytes": 96752,
+        "sha256": "bab7bf5773d1078ac2ac6945c9c5879107dd74507d5ea4b871e73dc4ae129ee0"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 99728,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint.spv",
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      },
+      "prior": {
+        "bytes": 99728,
+        "sha256": "d7c01a3d67f7c4617643aa36c2369ffc190f2e36e2ec9fd1d1aeb0a346a45e7c"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint_fma.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 111960,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint_fma.spv",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      },
+      "prior": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 111960,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint_fp64.spv",
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      },
+      "prior": {
+        "bytes": 111960,
+        "sha256": "600d288abc53f0a2b705cda7f7b1aef425cbf8dbd713e02c9e2a1c280251faf7"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 145344,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint_portable.spv",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      },
+      "prior": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 145344,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint_portable_fp64.spv",
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      },
+      "prior": {
+        "bytes": 145344,
+        "sha256": "683a1e2f671981582aa5fb2fba389f853ebef86e1426e3ec014eb61d4eb576a2"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 151400,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint_portable_normal_sum.spv",
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      },
+      "prior": {
+        "bytes": 151400,
+        "sha256": "981bc85d13e168c6adf72c99adfe169157593dda1bee46e78ff867fc6b199ede"
+      }
+    },
+    "src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 161620,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_endpoint_portable_stage7_owner.spv",
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      },
+      "prior": {
+        "bytes": 161620,
+        "sha256": "47bdc7c67a280b496c0d580420eb1daddbaa14cccd2d8c1675e8e50ff2d0f3f6"
+      }
+    },
+    "src/sirius/backend/retained/retained_initialize.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 57596,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_initialize.spv",
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+      },
+      "prior": {
+        "bytes": 57596,
+        "sha256": "931e542d8c22387834f8b230ab2928874f06ade158e60a950d8effe3b6ab5ff3"
+      }
+    },
+    "src/sirius/backend/retained/retained_initialize_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 70468,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_initialize_fp64.spv",
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      },
+      "prior": {
+        "bytes": 70468,
+        "sha256": "0918c6124d0adcd1ede437d4365e387193ef2ef696fec7529195b6af6bc881a8"
+      }
+    },
+    "src/sirius/backend/retained/retained_initialize_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 77444,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_initialize_portable.spv",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      "prior": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      }
+    },
+    "src/sirius/backend/retained/retained_initialize_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 77444,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_initialize_portable_fp64.spv",
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      },
+      "prior": {
+        "bytes": 77444,
+        "sha256": "d22a8770b3f52a49d6075cdc9d1884115eb0c69b76f72b6cba8b1b793ad9861c"
+      }
+    },
+    "src/sirius/backend/retained/retained_ray_camera.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 45368,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_ray_camera.spv",
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      },
+      "prior": {
+        "bytes": 45368,
+        "sha256": "d137bf54d8436db77aa05c6069caa6aebc943a55d970342b10e8d9fa3121e120"
+      }
+    },
+    "src/sirius/backend/retained/retained_ray_camera_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 58728,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_ray_camera_fp64.spv",
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      },
+      "prior": {
+        "bytes": 58728,
+        "sha256": "b3bc8463bf896107982bb52599bb98847309e2253300a871a80d12c043a7b6ce"
+      }
+    },
+    "src/sirius/backend/retained/retained_ray_camera_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 475256,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_ray_camera_portable.spv",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      "prior": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      }
+    },
+    "src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 475256,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_ray_camera_portable_fp64.spv",
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      },
+      "prior": {
+        "bytes": 475256,
+        "sha256": "0c0c2648027f316e8cd5e9a0536518aa48872adc6c68884b218a93347918e539"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 85832,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport.spv",
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      },
+      "prior": {
+        "bytes": 85832,
+        "sha256": "2caabcd76c28c5340c21ce5777a58b62b31bb2ed61c1218d15bb10edf0304752"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport_fma.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 98008,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport_fma.spv",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      },
+      "prior": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 98008,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport_fp64.spv",
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      },
+      "prior": {
+        "bytes": 98008,
+        "sha256": "2a32799b06f54d24f9cf19379f155eb3d59e5195194c827410b0d5a265aec6cb"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport_portable.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 99740,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport_portable.spv",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      },
+      "prior": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport_portable_fp64.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 99740,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport_portable_fp64.spv",
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      },
+      "prior": {
+        "bytes": 99740,
+        "sha256": "4c60926f30654a1f969b92c68bffd1676527f24d1cb3631a65ebf76357a650a8"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport_portable_normal_sum.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 104040,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport_portable_normal_sum.spv",
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      },
+      "prior": {
+        "bytes": 104040,
+        "sha256": "81c690595a7321dce302d5340e48fc3295d9d9211e6a6d7ac7bee5710e6a8fa8"
+      }
+    },
+    "src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv": {
+      "byte_identical_to_77667953": true,
+      "current": {
+        "bytes": 113452,
+        "path": "bin/linux-ci/src/sirius/backend/retained/retained_transport_portable_stage7_owner.spv",
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      },
+      "prior": {
+        "bytes": 113452,
+        "sha256": "87b65915cb4649a84a4b23e1878a554e3957ef1cca6eb12dfde426f0fc0cd026"
+      }
+    }
+  }
+}
