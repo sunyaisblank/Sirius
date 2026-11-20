@@ -780,10 +780,21 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     // Both disk consumers restrict the oblate Kerr radius to disk_outer.
     // The volume consumer rounds it to float before its membership test, so
     // enclose that rounding too. Vertical extent cannot extend radial support.
-    double next_handoff_radius = config_.enable_disk
-                                     ? std::nextafter(static_cast<float>(config_.disk_outer),
-                                                      std::numeric_limits<float>::infinity())
-                                     : 0.0;
+    const double disk_support_radius = config_.enable_disk
+                                           ? std::nextafter(static_cast<float>(config_.disk_outer),
+                                                            std::numeric_limits<float>::infinity())
+                                           : 0.0;
+    double next_handoff_radius = disk_support_radius;
+    const bool can_try_spherical_escape =
+        step_executor_ && step_executor_->SupportsSphericalEscape() && family &&
+        family->GetParams().a == 0.0 && family->GetParams().Q == 0.0 &&
+        family->GetParams().Lambda == 0.0 && !allow_infinity_handoff &&
+        !config_.finite_causal_boundary && !config_.enable_polarisation;
+    const double spherical_inner_limit = std::max(
+        disk_support_radius,
+        config_.strong_field_max_step > 0 ? static_cast<double>(config_.strong_field_radius) : 0.0);
+    double next_spherical_radius = spherical_inner_limit;
+    bool first_spherical_interval = true;
     Rk45CoupledState coupled;
     std::optional<TraceResult::Beam> admitted_source_maps;
     if (use_coupled) {
@@ -836,6 +847,26 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     if (config_.enable_ray_bundles) {
         InitBundle(*launch_screen, bundle);
     }
+    const auto read_coupled_bundle = [&](const GeodesicVariations& variations, RayBundle& output) {
+        const int first = config_.bundle_point_source ? 0 : 2;
+        const double scale =
+            static_cast<double>(config_.bundle_angular_size) /
+            (config_.bundle_point_source ? coupled.frequency_scale : coupled.length_scale);
+        if (camera_ray.phase_space && config_.bundle_point_source) {
+            const auto angular = CameraAngularVariations(variations, camera_ray.phase_space);
+            if (!angular) return false;
+            for (int column = 0; column < 2; ++column) {
+                output.xi[column] = (*angular)[column].displacement * config_.bundle_angular_size;
+                output.V[column] = (*angular)[column].derivative * config_.bundle_angular_size;
+            }
+        } else {
+            for (int column = 0; column < 2; ++column) {
+                output.xi[column] = variations[first + column].displacement * scale;
+                output.V[column] = variations[first + column].derivative * scale;
+            }
+        }
+        return true;
+    };
     PolarisationFrame polarisation_frame;
     PolarisationFrame previous_polarisation_frame;
     if (config_.enable_polarisation) {
@@ -1491,27 +1522,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
         // connection and curvature at the bundle integrator's own stages.
         if (config_.enable_ray_bundles) {
             if (use_coupled) {
-                const int first = config_.bundle_point_source ? 0 : 2;
-                const double scale =
-                    static_cast<double>(config_.bundle_angular_size) /
-                    (config_.bundle_point_source ? coupled.frequency_scale : coupled.length_scale);
-                for (int column = 0; column < 2; ++column) {
-                    bundle.xi[column] = coupled.variations[first + column].displacement * scale;
-                    bundle.V[column] = coupled.variations[first + column].derivative * scale;
-                }
-                if (camera_ray.phase_space && config_.bundle_point_source) {
-                    const auto angular =
-                        CameraAngularVariations(coupled.variations, camera_ray.phase_space);
-                    if (!angular) {
-                        result.numerical_failure = true;
-                        break;
-                    }
-                    for (int column = 0; column < 2; ++column) {
-                        bundle.xi[column] =
-                            (*angular)[column].displacement * config_.bundle_angular_size;
-                        bundle.V[column] =
-                            (*angular)[column].derivative * config_.bundle_angular_size;
-                    }
+                if (!read_coupled_bundle(coupled.variations, bundle)) {
+                    result.numerical_failure = true;
+                    break;
                 }
             } else if (d_lambda > 0.0 && !StepBundle(prev_pos, prev_vel, ray.position, ray.velocity,
                                                      d_lambda, bundle)) {
@@ -1750,6 +1763,69 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             break;
         }
 
+        if (can_try_spherical_escape && d_lambda > 0.0 && result.steps_taken < config_.max_steps) {
+            const double radial_motion =
+                x * ray.velocity(1) + y * ray.velocity(2) + z * ray.velocity(3);
+            const double speed = std::hypot(ray.velocity(1), ray.velocity(2), ray.velocity(3));
+            const bool try_turn =
+                first_spherical_interval && radial_motion < 0.0 && r > spherical_inner_limit;
+            first_spherical_interval = false;
+            if (try_turn || (r > next_spherical_radius && radial_motion > .25 * r * speed)) {
+                if (!try_turn) next_spherical_radius = r * 1.25;
+                const auto remaining =
+                    static_cast<unsigned>(config_.max_steps - result.steps_taken);
+                const auto tail = step_executor_->TrySphericalEscape(
+                    *metric_, ray, step_config, coupled,
+                    {spherical_inner_limit, config_.escape_radius, remaining, try_turn},
+                    should_cancel_);
+                if (should_cancel_ && should_cancel_()) return cancelled_result();
+                if (tail && tail->panels > 0 && tail->panels <= remaining) {
+                    const double terminal_affine = affine_length + tail->affine_length;
+                    const auto angular =
+                        CameraAngularVariations(tail->variations, camera_ray.phase_space);
+                    TraceResult::Beam source;
+                    const bool has_maps =
+                        angular &&
+                        SampleSourceSkyMaps(
+                            *metric_, tail->position, tail->tangent,
+                            {(*angular)[0].displacement, (*angular)[1].displacement},
+                            {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
+                            outgoing_chart_, source) &&
+                        source.infinity_source_map;
+                    const auto sky = has_maps ? SampleSourceSky(*metric_, tail->position,
+                                                                tail->tangent, outgoing_chart_)
+                                              : std::nullopt;
+                    RayBundle terminal_bundle;
+                    const bool bundle_valid =
+                        !config_.enable_ray_bundles ||
+                        (read_coupled_bundle(tail->variations, terminal_bundle) &&
+                         FinaliseBundle(terminal_bundle, tail->position, tail->tangent, source));
+                    if (should_cancel_ && should_cancel_()) return cancelled_result();
+                    if (sky && bundle_valid && std::isfinite(terminal_affine) &&
+                        terminal_affine > affine_length) {
+                        // The admitted segment above already contributed all
+                        // intervening sources. The certified remainder is vacuum.
+                        ray.position = tail->position;
+                        ray.velocity = tail->tangent;
+                        ray.coordinate_time = static_cast<float>(ray.position(0));
+                        ray.proper_time = static_cast<float>(terminal_affine);
+                        coupled.variations = tail->variations;
+                        affine_length = terminal_affine;
+                        result.beam = std::move(source);
+                        result.outcome = TraceResult::Outcome::Escaped;
+                        result.asymptotic_sheet = TraceResult::AsymptoticSheet::Observer;
+                        result.final_direction = sky->world_direction;
+                        if (tail->periapsis)
+                            min_r = std::min(min_r, static_cast<float>(*tail->periapsis));
+                        result.min_radius = min_r;
+                        result.spherical_terminal_panels = tail->panels;
+                        result.spherical_terminal_turn = tail->periapsis.has_value();
+                        break;
+                    }
+                }
+            }
+        }
+
         if (can_handoff_to_infinity) {
             const coordinates::Vec4Cart cart{ray.position(0), x, y, z};
             const double radius = coordinates::KerrSchildRadius(cart, family->GetParams().a);
@@ -1820,11 +1896,13 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     }
     result.min_radius = std::min(result.min_radius, min_r);
 
-    if (config_.enable_ray_bundles && !result.numerical_failure &&
+    if (result.spherical_terminal_panels == 0 && config_.enable_ray_bundles &&
+        !result.numerical_failure &&
         !FinaliseBundle(bundle, ray.position, ray.velocity, result.beam)) {
         result.numerical_failure = true;
     }
-    if (!result.numerical_failure && result.outcome == TraceResult::Outcome::Escaped &&
+    if (result.spherical_terminal_panels == 0 && !result.numerical_failure &&
+        result.outcome == TraceResult::Outcome::Escaped &&
         result.asymptotic_sheet == TraceResult::AsymptoticSheet::Observer) {
         if (use_coupled) {
             if (!admitted_source_maps)

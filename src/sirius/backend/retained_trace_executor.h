@@ -13,6 +13,10 @@
 #include <thread>
 #include <vector>
 
+namespace sirius::core {
+struct KerrSchildParams;
+}
+
 namespace sirius::backend {
 
 // Coalesces synchronous trace workers into bounded device batches. A worker's
@@ -20,10 +24,12 @@ namespace sirius::backend {
 // Public binary64 trace fields are views, not the next device phase record.
 class RetainedTraceExecutor final : public TraceStepExecutor {
   public:
+    enum class SphericalEscape { Disabled, Certified };
     explicit RetainedTraceExecutor(RetainedCompute& compute,
                                    std::function<bool()> should_cancel = {},
                                    double maximum_submission_ms = 0,
-                                   std::size_t maximum_batch_rows = 0);
+                                   std::size_t maximum_batch_rows = 0,
+                                   SphericalEscape spherical_escape = SphericalEscape::Disabled);
     ~RetainedTraceExecutor() override;
     void BeginTrace() override;
     void EndTrace() override;
@@ -34,6 +40,13 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
               core::Rk45CoupledState& coupled, core::Rk45CoupledComparison& comparison) override;
     std::optional<core::CoupledSegmentSample> Sample(core::CoupledTrial trial, double fraction,
                                                      const core::Vec4* normal = nullptr) override;
+    bool SupportsSphericalEscape() const override {
+        return spherical_escape_ == SphericalEscape::Certified;
+    }
+    std::optional<SphericalEscapeTrial> TrySphericalEscape(
+        core::IMetric& metric, const core::Lightray& ray, const core::IntegratorConfig& config,
+        const core::Rk45CoupledState& coupled, const SphericalEscapeRequest& request,
+        const std::function<bool()>& should_cancel) override;
     // A submission safety error includes its observed one-row stage and host
     // submit/wait duration; it does not attribute the driver's compilation work.
     // Sticky errors complete queued calls without further device work.
@@ -124,6 +137,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         double chart = 0;
         bool operator==(const Snapshot&) const = default;
     };
+    static Snapshot PhysicalSnapshot(const core::Lightray&, const core::GeodesicVariations&,
+                                     const core::KerrSchildParams&, double chart);
     struct Continuation {
         Snapshot before, after;
         RetainedEndpointOutput start, finish;
@@ -154,6 +169,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     std::size_t maximum_batch_rows_;
     double maximum_submission_ms_;
     std::function<bool()> should_cancel_;
+    SphericalEscape spherical_escape_;
     mutable std::mutex mutex_;
     std::condition_variable available_, completed_;
     std::deque<Request*> requests_;

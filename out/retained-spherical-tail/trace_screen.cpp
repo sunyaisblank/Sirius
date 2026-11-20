@@ -1,8 +1,8 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera_sampling.h"
+#include "sirius/core/spherical_continuation/coupled_admission.h"
 #include "sirius/render/trace_domain.h"
 
-#include "coupled_admission.h"
 #include "exterior_turn.h"
 
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
@@ -153,7 +153,7 @@ class TraceScreen final : public TraceStepExecutor {
 
     bool Step(Lightray& ray, IMetric& metric, const IntegratorConfig& config,
               Rk45CoupledState& coupled, Rk45CoupledComparison& comparison) override {
-        if (pending_step_) {
+        if (pending_step_ && cancel_after_checks == 0) {
             affine_prefix_ += *pending_step_;
             if (pending_device_curve_) ++committed_device_intervals;
             Check(!executor_ || pending_device_curve_,
@@ -197,6 +197,21 @@ class TraceScreen final : public TraceStepExecutor {
         if (executor_) executor_->RejectLastInterval();
     }
 
+    bool SupportsSphericalEscape() const override {
+        return executor_ && executor_->SupportsSphericalEscape();
+    }
+
+    std::optional<sirius::backend::SphericalEscapeTrial> TrySphericalEscape(
+        IMetric& metric, const Lightray& ray, const IntegratorConfig& step,
+        const Rk45CoupledState& coupled, const sirius::backend::SphericalEscapeRequest& request,
+        const std::function<bool()>& should_cancel) override {
+        const std::function<bool()> cancel = [&] {
+            if (cancel_after_checks > 0 && ++tail_checks >= cancel_after_checks) cancelled = true;
+            return cancelled || (should_cancel && should_cancel());
+        };
+        return executor_->TrySphericalEscape(metric, ray, step, coupled, request, cancel);
+    }
+
     std::optional<Proposal> proposal;
     std::optional<SphericalTailBound> exterior_turn;
     unsigned trials = 0;
@@ -205,6 +220,9 @@ class TraceScreen final : public TraceStepExecutor {
     unsigned other_refusals = 0;
     unsigned committed_device_intervals = 0;
     unsigned expansion_seeded_trials = 0;
+    unsigned cancel_after_checks = 0;
+    unsigned tail_checks = 0;
+    bool cancelled = false;
     double outward_ms = 0;
     double turn_ms = 0;
 
@@ -404,13 +422,15 @@ struct FilmPixel {
     int x, y;
 };
 
-void ScreenOriginalGeometry(std::span<const FilmPixel> pixels,
-                            TraceStepExecutor* executor = nullptr, bool print_each = false) {
-    CameraConfig camera_config;
-    camera_config.r = 50;
-    camera_config.width = camera_config.height = 128;
-    camera_config.fov = 60;
-    PinholeCamera camera(camera_config);
+CameraConfig ScreenCameraConfig() {
+    CameraConfig config;
+    config.r = 50;
+    config.width = config.height = 128;
+    config.fov = 60;
+    return config;
+}
+
+TracerConfig ScreenTracerConfig(const CameraConfig& camera_config) {
     const auto domain = BuildTraceDomainParameters(
         {MetricId::Kerr, 1., 0., camera_config.r, kDefaultMorrisThorneThroatRadius,
          kDefaultAlcubierreBubbleRadius, kDefaultAlcubierreBubbleSigma});
@@ -421,6 +441,13 @@ void ScreenOriginalGeometry(std::span<const FilmPixel> pixels,
     config.integrator.min_step = domain.cpu_min_step;
     config.integrator.max_step = domain.max_step;
     config.integrator.abs_tolerance = config.integrator.rel_tolerance = 5.0e-6f;
+    return config;
+}
+
+void ScreenOriginalGeometry(std::span<const FilmPixel> pixels,
+                            TraceStepExecutor* executor = nullptr, bool print_each = false) {
+    PinholeCamera camera(ScreenCameraConfig());
+    const auto config = ScreenTracerConfig(camera.GetConfig());
     KerrSchildFamily metric(KerrSchildParams::Kerr(1., 0.));
     TraceScreen screen(config, executor);
     GeodesicTracer tracer(&metric, config);
@@ -541,7 +568,118 @@ T Require(sirius::base::Expected<T> result) {
     std::exit(EXIT_FAILURE);
 }
 
-void ScreenVulkan() {
+constexpr std::array kVulkanPixels{FilmPixel{4, 4}, FilmPixel{25, 49}, FilmPixel{64, 64},
+                                   FilmPixel{49, 64}};
+
+void CheckPublishedVulkan(sirius::backend::RetainedCompute& compute) {
+    using namespace sirius::backend;
+    RetainedTraceExecutor ordinary(compute, {}, 1000.0, 4);
+    RetainedTraceExecutor candidate(compute, {}, 1000.0, 4,
+                                    RetainedTraceExecutor::SphericalEscape::Certified);
+    const PinholeCamera camera(ScreenCameraConfig());
+    auto config = ScreenTracerConfig(camera.GetConfig());
+    config.enable_ray_bundles = true;
+    config.bundle_point_source = true;
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1., 0.));
+    GeodesicTracer tracer(&metric, config);
+    CameraSample sample;
+    Check(ForEachCameraSample(1, [&](CameraSample next) { sample = next; }) == 1,
+          "exact camera sample count");
+    const auto project = [&](FilmPixel pixel) {
+        const auto camera_ray = camera.ProjectFilmForObserver(
+            pixel.x + sample.image_u, pixel.y + sample.image_v, sample.pupil_u, sample.pupil_v);
+        Check(camera_ray.has_value(), "publication camera projection");
+        return camera_ray->ray;
+    };
+    double event_error = 0, sky_error = 0, beam_error = 0;
+    unsigned ordinary_attempts = 0, attempts = 0, panels = 0;
+    for (const auto pixel : kVulkanPixels) {
+        const auto input = project(pixel);
+        tracer.SetStepExecutor(&ordinary);
+        const auto baseline = tracer.Trace(input);
+        tracer.SetStepExecutor(&candidate);
+        const auto trial = tracer.Trace(input);
+        Check(!baseline.numerical_failure && !trial.numerical_failure && !trial.cancelled &&
+                  baseline.final_tangent && trial.final_tangent &&
+                  baseline.outcome == trial.outcome &&
+                  baseline.terminal_chart == trial.terminal_chart &&
+                  baseline.beam.valid == trial.beam.valid,
+              "same published terminal contracts");
+        const bool escaped = trial.outcome == TraceResult::Outcome::Escaped;
+        Check((trial.spherical_terminal_panels > 0) == escaped &&
+                  trial.spherical_terminal_turn == (pixel.x == 4),
+              "expected live terminal route");
+        Check(trial.num_disk_crossings == baseline.num_disk_crossings &&
+                  trial.disk_radius == baseline.disk_radius &&
+                  trial.redshift == baseline.redshift &&
+                  trial.optical_depth == baseline.optical_depth &&
+                  trial.volumetric_emission == baseline.volumetric_emission,
+              "same accumulated transfer");
+        Check(escaped ? trial.steps_taken < baseline.steps_taken
+                      : trial.steps_taken == baseline.steps_taken,
+              "actual omitted retained attempts");
+        ordinary_attempts += baseline.steps_taken;
+        attempts += trial.steps_taken;
+        panels += trial.spherical_terminal_panels;
+        event_error =
+            std::max(event_error, ScaledError(trial.affine_length, baseline.affine_length));
+        for (int i = 0; i < 4; ++i) {
+            event_error = std::max(
+                {event_error, ScaledError(trial.final_position(i), baseline.final_position(i)),
+                 ScaledError((*trial.final_tangent)(i), (*baseline.final_tangent)(i))});
+        }
+        if (escaped) {
+            Check(trial.beam.finite_source_map && baseline.beam.finite_source_map &&
+                      trial.beam.infinity_source_map && baseline.beam.infinity_source_map &&
+                      !trial.beam.infinity_source_failure,
+                  "both published source maps");
+            sky_error =
+                std::max({sky_error,
+                          SkyError(*trial.beam.finite_source_map, *baseline.beam.finite_source_map),
+                          SkyError(trial.beam.infinity_source_map->map,
+                                   baseline.beam.infinity_source_map->map)});
+            beam_error =
+                std::max({beam_error, ScaledError(trial.beam.semi_major, baseline.beam.semi_major),
+                          ScaledError(trial.beam.semi_minor, baseline.beam.semi_minor),
+                          ScaledError(trial.beam.area_ratio, baseline.beam.area_ratio)});
+        }
+        std::printf(
+            "pixel=%d,%d outcome=%d ordinary_attempts=%d certified_attempts=%d panels=%u turn=%d\n",
+            pixel.x, pixel.y, static_cast<int>(trial.outcome), baseline.steps_taken,
+            trial.steps_taken, trial.spherical_terminal_panels, trial.spherical_terminal_turn);
+        std::fflush(stdout);
+    }
+    Check(event_error <= 1e-7 && sky_error <= 1e-7 && beam_error <= 1e-6,
+          "published terminal numerical comparison");
+
+    TraceScreen interrupted(config, &candidate);
+    interrupted.cancel_after_checks = 8;
+    tracer.SetStepExecutor(&interrupted);
+    tracer.SetCancellationCallback([&] { return interrupted.cancelled; });
+    const auto input = project(kVulkanPixels.front());
+    const auto cancelled = tracer.Trace(input);
+    Check(cancelled.cancelled && interrupted.tail_checks == 8 && !cancelled.numerical_failure &&
+              !cancelled.final_tangent && !cancelled.beam.valid &&
+              !cancelled.beam.finite_source_map && !cancelled.beam.infinity_source_map &&
+              cancelled.spherical_terminal_panels == 0 && cancelled.affine_length == 0 &&
+              cancelled.num_disk_crossings == 0,
+          "cancelled continuation publishes no physical state");
+    tracer.SetStepExecutor(&candidate);
+    tracer.SetCancellationCallback({});
+    const auto retry = tracer.Trace(input);
+    Check(retry.outcome == TraceResult::Outcome::Escaped && !retry.cancelled &&
+              !retry.numerical_failure && retry.spherical_terminal_turn &&
+              retry.beam.finite_source_map,
+          "retained executor resumes after cancellation");
+    Check(!ordinary.Error() && !candidate.Error(), "no sticky device errors");
+    std::printf(
+        "published_ordinary_attempts=%u published_certified_attempts=%u panels=%u "
+        "event_error=%.9g sky_error=%.9g beam_error=%.9g cancelled_panels_check=%u recovered=%d\n",
+        ordinary_attempts, attempts, panels, event_error, sky_error, beam_error,
+        interrupted.tail_checks, retry.spherical_terminal_turn);
+}
+
+void ScreenVulkan(bool publish) {
     using namespace sirius::backend;
     const auto inventory = Require(EnumerateVulkanDevices());
     const auto index = Require(ResolveVulkanDeviceIndex(inventory));
@@ -561,10 +699,12 @@ void ScreenVulkan() {
     std::printf("prepared_ms=%.3f allocated_bytes=%llu\n", preparation.wall_ms,
                 static_cast<unsigned long long>(device->BufferAllocationBytes()));
     std::fflush(stdout);
+    if (publish) {
+        CheckPublishedVulkan(*compute);
+        return;
+    }
     RetainedTraceExecutor executor(*compute, {}, 1000.0, 4);
-    constexpr std::array pixels{FilmPixel{4, 4}, FilmPixel{25, 49}, FilmPixel{64, 64},
-                                FilmPixel{49, 64}};
-    ScreenOriginalGeometry(pixels, &executor, true);
+    ScreenOriginalGeometry(kVulkanPixels, &executor, true);
     const auto stats = executor.Statistics();
     std::printf("live_initialized=%llu live_reused=%llu accepted=%llu tracer_rollbacks=%llu\n",
                 static_cast<unsigned long long>(stats.initialized_phases),
@@ -582,8 +722,8 @@ int main(int argc, char** argv) {
     CheckVacuumTurn();
     const std::string_view mode = argc > 1 ? argv[1] : "--cpu";
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
-    if (argc == 2 && mode == "--vulkan") {
-        ScreenVulkan();
+    if (argc == 2 && (mode == "--vulkan" || mode == "--vulkan-publish")) {
+        ScreenVulkan(mode == "--vulkan-publish");
         return 0;
     }
 #endif

@@ -143,7 +143,14 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
         COMMENT "Building bounded retained camera and joint transport stages"
         VERBATIM)
     target_sources(sirius_backend PRIVATE retained_compute.cpp retained_integrator.cpp
-        retained_trace_executor.cpp "${retained_header}")
+        retained_trace_executor.cpp retained_spherical_escape.cpp "${retained_header}")
+    # Interval endpoints require ordered binary64 operations and gradual rounding.
+    if(MSVC)
+        set_source_files_properties(retained_spherical_escape.cpp PROPERTIES COMPILE_OPTIONS /fp:strict)
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        set_source_files_properties(retained_spherical_escape.cpp PROPERTIES
+            COMPILE_OPTIONS "-fno-fast-math;-ffp-contract=off;-frounding-math")
+    endif()
     target_link_libraries(sirius_backend PUBLIC sirius_core)
     target_include_directories(sirius_backend PRIVATE "${retained_build}")
     target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)

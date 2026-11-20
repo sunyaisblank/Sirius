@@ -1,7 +1,7 @@
 #include "sirius/core/polarisation/walker_penrose.h"
 #include "sirius/core/source_sky_map.h"
+#include "sirius/core/spherical_continuation/coupled_handoff.h"
 
-#include "coupled_handoff.h"
 #include "support/separated_geodesic_reference.h"
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 

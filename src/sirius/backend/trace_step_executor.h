@@ -3,7 +3,25 @@
 #include "sirius/core/camera_launch.h"
 #include "sirius/core/geodesic_integrator.h"
 
+#include <functional>
+
 namespace sirius::backend {
+
+struct SphericalEscapeRequest {
+    double source_support_radius;
+    double boundary;
+    unsigned maximum_panels;
+    bool through_turn;
+};
+
+struct SphericalEscapeTrial {
+    core::Vec4 position;
+    core::Vec4 tangent;
+    core::GeodesicVariations variations;
+    double affine_length;
+    std::optional<double> periapsis;
+    unsigned panels;
+};
 
 // Optional execution seam for the shared trace/event/source coordinator.
 // Its default remains the CPU integrator. An installed executor owns every
@@ -26,6 +44,17 @@ class TraceStepExecutor {
     // sample never authorizes a host reconstruction of the retained state.
     virtual std::optional<core::CoupledSegmentSample> Sample(core::CoupledTrial, double,
                                                              const core::Vec4* = nullptr) {
+        return std::nullopt;
+    }
+    // An executor can offer a certified terminal event from its committed
+    // state. A declined proposal leaves that state available for the next Step.
+    virtual bool SupportsSphericalEscape() const { return false; }
+    virtual std::optional<SphericalEscapeTrial> TrySphericalEscape(core::IMetric&,
+                                                                   const core::Lightray&,
+                                                                   const core::IntegratorConfig&,
+                                                                   const core::Rk45CoupledState&,
+                                                                   const SphericalEscapeRequest&,
+                                                                   const std::function<bool()>&) {
         return std::nullopt;
     }
 };

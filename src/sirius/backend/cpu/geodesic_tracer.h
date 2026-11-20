@@ -89,6 +89,8 @@ struct TraceResult {
 
     // Diagnostics.
     int steps_taken = 0;
+    unsigned spherical_terminal_panels = 0;
+    bool spherical_terminal_turn = false;
     std::uint64_t central_stages = 0;
     std::uint64_t variation_stages = 0;
     std::uint64_t variation_metric_evaluations = 0;

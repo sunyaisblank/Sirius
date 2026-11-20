@@ -1,6 +1,6 @@
 #pragma once
 
-#include "finite_tail.h"
+#include "sirius/core/spherical_continuation/finite_tail.h"
 
 #include <optional>
 

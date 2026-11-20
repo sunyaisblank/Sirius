@@ -8,10 +8,16 @@ namespace sirius::core::relativity::finite_tail_detail {
 
 inline std::optional<Range> VacuumTurnRange(Range start, Range impact_squared, double mass,
                                             double source_support) {
+    if (mass == 0.0) {
+        const auto turn = sqrt(impact_squared);
+        if (turn.Finite() && turn.lo > source_support && turn.hi < start.lo) return turn;
+        return {};
+    }
     const Range two_mass = Range(2.0) * Range(mass);
-    double lower = source_support;
+    const double photon_sphere = (Range(3.0) * Range(mass)).hi;
+    double lower = std::max(source_support, std::nextafter(photon_sphere, kInfinity));
     double upper = start.lo;
-    if (!(lower > (Range(3.0) * Range(mass)).hi && upper > lower)) return {};
+    if (!(lower > photon_sphere && upper > lower)) return {};
     const auto potential = [&](double radius) {
         const Range r(radius);
         return Range(1.0) - (Range(1.0) - two_mass / r) * impact_squared / Square(r);

@@ -43,13 +43,15 @@ core::CoupledSegmentIncrement Increment(const std::array<RetainedValue, 20>& inp
 RetainedTraceExecutor::RetainedTraceExecutor(RetainedCompute& compute,
                                              std::function<bool()> should_cancel,
                                              double maximum_submission_ms,
-                                             std::size_t maximum_batch_rows)
+                                             std::size_t maximum_batch_rows,
+                                             SphericalEscape spherical_escape)
     : compute_(compute),
       maximum_batch_rows_(maximum_batch_rows == 0
                               ? compute.Capacity()
                               : std::min(maximum_batch_rows, compute.Capacity())),
       maximum_submission_ms_(maximum_submission_ms),
       should_cancel_(std::move(should_cancel)),
+      spherical_escape_(spherical_escape),
       stats_{.batch_row_counts = std::vector<std::uint64_t>(compute.Capacity() + 1)},
       dispatcher_(&RetainedTraceExecutor::Run, this) {}
 
@@ -537,6 +539,23 @@ std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& m
     return launch;
 }
 
+RetainedTraceExecutor::Snapshot RetainedTraceExecutor::PhysicalSnapshot(
+    const core::Lightray& ray, const core::GeodesicVariations& variations,
+    const core::KerrSchildParams& parameters, double chart) {
+    Snapshot snapshot;
+    snapshot.metric = {parameters.M, parameters.a, parameters.Q, parameters.Lambda};
+    snapshot.chart = chart;
+    for (int i = 0; i < 4; ++i) {
+        snapshot.physical[i] = ray.position(i);
+        snapshot.physical[4 + i] = ray.velocity(i);
+        for (unsigned c = 0; c < variations.size(); ++c) {
+            snapshot.physical[8 + 8 * c + i] = variations[c].displacement(i);
+            snapshot.physical[12 + 8 * c + i] = variations[c].derivative(i);
+        }
+    }
+    return snapshot;
+}
+
 bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
                                  const core::IntegratorConfig& config,
                                  core::Rk45CoupledState& coupled,
@@ -560,24 +579,9 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         return false;
     }
     const auto parameters = family->GetParams();
-    Snapshot snapshot;
-    snapshot.metric = {parameters.M, parameters.a, parameters.Q, parameters.Lambda};
-    snapshot.chart = outgoing ? -1 : 1;
     // The coordinator owns its rounded affine-time ledger. It is not part of
     // the autonomous Hamiltonian phase and must not invalidate retained limbs.
-    const auto snapshot_physical = [&](Snapshot& target) {
-        for (std::size_t i = 0; i < 4; ++i) {
-            target.physical[i] = ray.position(static_cast<int>(i));
-            target.physical[4 + i] = ray.velocity(static_cast<int>(i));
-            for (std::size_t c = 0; c < 4; ++c) {
-                target.physical[8 + 8 * c + i] =
-                    coupled.variations[c].displacement(static_cast<int>(i));
-                target.physical[12 + 8 * c + i] =
-                    coupled.variations[c].derivative(static_cast<int>(i));
-            }
-        }
-    };
-    snapshot_physical(snapshot);
+    const auto snapshot = PhysicalSnapshot(ray, coupled.variations, parameters, outgoing ? -1 : 1);
     Request request;
     for (std::size_t i = 0; i < 4; ++i)
         request.interval.metric[i] = request.initialization.values[i] =
@@ -677,8 +681,7 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         interval, static_cast<float>(result.embedded_projected_error_ratio), 1, config);
     ray.step_size = core::Geodesic::LimitAcceptedStepGrowth(
         interval, candidate_step, static_cast<float>(result.error_ratio), config);
-    continuation.after = snapshot;
-    snapshot_physical(continuation.after);
+    continuation.after = PhysicalSnapshot(ray, coupled.variations, parameters, snapshot.chart);
     continuation.finish = result.full;
     continuation.dopri = result.dopri;
     {
