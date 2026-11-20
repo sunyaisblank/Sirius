@@ -783,7 +783,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                 AdaptiveGeodesicStep attempted = AttemptAdaptiveGeodesicStepAtFloor(
                     state, dt, Real(minStep), isWarp, isWormhole, M, a, Q, Lambda,
                     warpVs, warpSigma, warpR, throatB0, wormShape,
-                    AdaptiveIntegrationTolerance(), AdaptiveNullTolerance());
+                    AdaptiveIntegrationTolerance(), AdaptiveNullTolerance(), pastHorizonChart);
                 if (!attempted.accepted) {
                     if (AdaptiveAttemptAlreadyAtMinimumStep(dt, Real(minStep))) { reason = kTraceMinimumStep; break; }
                     adaptiveStep = max(Real(minStep), dt * attempted.stepFactor);

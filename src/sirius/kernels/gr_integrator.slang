@@ -575,17 +575,24 @@ public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStep(
         integrationTolerance, nullTolerance, 1);
 }
 
-// Trace, P1 and the minimum-retry witness select the same resolution before
-// their single counted attempt. Both fixed compositions cover exactly step;
-// the policy interval is never lowered and a rejected state is never committed.
+// Both compositions always cover exactly step. The outgoing Kerr trace can
+// re-evaluate a rejected floor interval at a finer internal resolution.
+// Each evaluation starts from the same committed state and is judged by the
+// original error and null predicates within the single counted attempt.
 public AdaptiveGeodesicStep AttemptAdaptiveGeodesicStepAtFloor(
     GeodesicStateCart state, Real step, Real minimumStep, bool isWarp, bool isWormhole,
     float M, float a, float Q, float Lambda,
     float warpVs, float warpSigma, float warpR, float throatB0, int wormShape,
-    Real integrationTolerance, Real nullTolerance) {
+    Real integrationTolerance, Real nullTolerance, bool refineFloor = false) {
     int coarseSubsteps = AdaptiveCoarseSubstepsForAttempt(step, minimumStep);
-    return AttemptAdaptiveGeodesicStepWithResolution(
-        state, step, isWarp, isWormhole, M, a, Q, Lambda,
-        warpVs, warpSigma, warpR, throatB0, wormShape,
-        integrationTolerance, nullTolerance, coarseSubsteps);
+    AdaptiveGeodesicStep attempted;
+    [loop] for (;;) {
+        attempted = AttemptAdaptiveGeodesicStepWithResolution(
+            state, step, isWarp, isWormhole, M, a, Q, Lambda,
+            warpVs, warpSigma, warpR, throatB0, wormShape,
+            integrationTolerance, nullTolerance, coarseSubsteps);
+        if (attempted.accepted || !refineFloor || step != minimumStep || coarseSubsteps == 32)
+            return attempted;
+        coarseSubsteps *= 2;
+    }
 }
