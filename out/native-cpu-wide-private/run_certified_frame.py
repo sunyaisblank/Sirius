@@ -1,5 +1,6 @@
 """Run the original cold frame with the sealed native-owned renderer and certified continuation."""
 
+import argparse
 from pathlib import Path
 import json
 import re
@@ -32,7 +33,6 @@ def run(scratch):
     expect_pin(provider, all8['provider'])
     icd = scratch / 'lvp_icd.json'
     historical = read_json(AX_FRAME)
-    reference_scene = read_json(SEALED_SCENE)['original_cold_frame']['scene']
     candidate_path = scratch / 'certified-frame-binary.json'
     candidate = read_json(candidate_path)
     executable = scratch / 'frame-assets/sirius_render_tests'
@@ -62,8 +62,38 @@ def run(scratch):
         'scope': 'Original 128x128 cold Kerr frame and unchanged limits with certified spherical continuation'}})
     subprocess.run([sys.executable, '-B', str(work / 'run_owned.py'), 'frame'], check=False)
 
+    try:
+        return read_capture(scratch, 'cold-frame-result.json')
+    finally:
+        shutil.rmtree(temporary_render)
+
+
+def read_capture(scratch, receipt):
+    work = scratch / 'cold-frame'
+    action = read_json(work / 'actions.json')['frame']
+    revision = action['revision']
+    all8 = read_json(scratch / 'all8-acceptance.json')
+    candidate_path = scratch / 'certified-frame-binary.json'
+    candidate = read_json(candidate_path)
+    executable = R / candidate['execution_image']['path']
+    expect_pin(executable, candidate['execution_image'])
+    if all8['source'] != revision or candidate['revision'] != revision:
+        raise RuntimeError('The frame and prior controls must share the captured revision')
+    if action['limits'] != LIMITS or not action['disable_software_shader_cache']:
+        raise RuntimeError('The captured action must use the original limits and cold-cache policy')
+    reference_scene = read_json(SEALED_SCENE)['original_cold_frame']['scene']
     folder = work / 'frame'
     owner = read_json(folder / 'owner.json')
+    if owner['source'] != {'revision': revision, 'status': ''} or owner['argv'] != action['argv']:
+        raise RuntimeError('The owner must bind the captured revision and action')
+    frozen_inputs = read_json(folder / 'inputs-before.json')
+    resources = (executable.parent / 'resources').relative_to(R)
+    files = {
+        str(Path(name).relative_to(resources)): {key: record[key] for key in ('bytes', 'sha256')}
+        for name, record in frozen_inputs.items() if Path(name).is_relative_to(resources)
+    }
+    if not files or action['build_environment']['SIRIUS_CERTIFIED_SPHERICAL_ESCAPE'] != '1':
+        raise RuntimeError('The capture must bind original resources and the continuation selector')
     stdout = folder / 'stdout.log'
     stderr = folder / 'stderr.log'
     xml = folder / 'gtest.xml'
@@ -71,6 +101,7 @@ def run(scratch):
     error_text = stderr.read_text()
     diagnostics = error_text.splitlines()
     publication = [line for line in diagnostics if line.startswith('[Vulkan] Certified spherical escapes:')]
+    publication_counts = None
     problems = []
     render_evidence, scenes = [], []
     try:
@@ -89,10 +120,17 @@ def run(scratch):
             if (frame['metric'], frame['width'], frame['height'], frame['precision'], frame['route'],
                     frame['work_items']) != ('Kerr', 128, 128, 'fp32', 'retained', 16384):
                 raise RuntimeError('The original retained route or tile count was not verified')
-            if frame['accepted_intervals'] <= 0 or not any(
-                    re.fullmatch(r'\[Vulkan\] Certified spherical escapes: [1-9]\d*', line)
-                    for line in publication):
+            diagnostic, = publication
+            counters = re.fullmatch(
+                r'\[Vulkan\] Certified spherical escapes: ([1-9]\d*), '
+                r'exterior turns: (\d+), quadrature panels: ([1-9]\d*)',
+                diagnostic)
+            if frame['accepted_intervals'] <= 0 or not counters:
                 raise RuntimeError('The adaptive and certified continuation routes were not both observed')
+            escapes, turns, panels = map(int, counters.groups())
+            if turns > escapes:
+                raise RuntimeError('The captured exterior turns exceed the certified escapes')
+            publication_counts = {'escapes': escapes, 'exterior_turns': turns, 'quadrature_panels': panels}
             sys.path.insert(0, str(ORIGINAL_READER.parent))
             import native_evidence as reader
             reader.CASES['frame'] = 'RenderCommandParse.ExplicitGpuRequestRunsVulkanWhenDevicePresent'
@@ -115,15 +153,19 @@ def run(scratch):
               'total_tiles': 16384, 'scene': scenes[0] if scenes else None,
               'render_evidence': render_evidence,
               'candidate_preflight': pin(candidate_path),
-              'certified_publication': publication,
+              'certified_publication': publication, 'publication_counts': publication_counts,
               'last_stage_snapshot': [line for line in last_snapshot if line.startswith(snapshot_prefixes)]}
-    write_json(scratch / 'cold-frame-result.json', result)
-    shutil.rmtree(temporary_render)
+    write_json(scratch / receipt, result)
     return result
 
 
 if __name__ == '__main__':
-    location, = (Path(arg).resolve() for arg in sys.argv[1:])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('scratch', type=Path)
+    parser.add_argument('--read-only', action='store_true', help='Verify a terminal capture without rerunning it')
+    options = parser.parse_args()
+    location = options.scratch.resolve()
     if location == R / 'out' or not location.is_relative_to(R / 'out'):
         raise RuntimeError('Use the working directory for this provider build under out/')
-    sys.exit(0 if run(location)['accepted'] else 1)
+    result = (read_capture(location, 'cold-frame-offline-result.json') if options.read_only else run(location))
+    sys.exit(0 if result['accepted'] else 1)
