@@ -104,11 +104,11 @@ Real KerrChartLog(Real value) {
     // [sqrt(1/2), sqrt(2)] before the atanh series.
     int exponent;
     Real mantissa = frexp(value, exponent);
-    if (mantissa < Real(0.7071067811865475244)) {
+    if (mantissa < Real(0.7071067811865475244L)) {
         mantissa *= Real(2);
         --exponent;
     }
-    return Real(exponent) * Real(0.6931471805599453094) +
+    return Real(exponent) * Real(0.6931471805599453094L) +
         KerrChartLogSeries((mantissa - Real(1)) / (mantissa + Real(1)));
 #else
     return log(value);
@@ -123,9 +123,9 @@ Real KerrChartLogOnePlus(Real value) {
 
 void KerrChartSinCos(Real angle, out Real sine, out Real cosine) {
 #ifdef SIRIUS_FP64
-    Real turns = round(angle * Real(0.1591549430918953358));
-    Real reduced = (angle - turns * Real(6.2831853071795862320)) -
-        turns * Real(2.4492935982947064143e-16);
+    Real turns = round(angle * Real(0.1591549430918953358L));
+    Real reduced = (angle - turns * Real(6.2831853071795862320L)) -
+        turns * Real(2.4492935982947064143e-16L);
     Real negativeSquare = -reduced * reduced;
     Real sineTerm = reduced;
     Real cosineTerm = Real(1);
