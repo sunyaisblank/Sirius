@@ -47,6 +47,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         core::IMetric& metric, const core::Lightray& ray, const core::IntegratorConfig& config,
         const core::Rk45CoupledState& coupled, const SphericalEscapeRequest& request,
         const std::function<bool()>& should_cancel) override;
+    void RecordSphericalEscape(const SphericalEscapeTrial&) override;
     // A submission safety error includes its observed one-row stage and host
     // submit/wait duration; it does not attribute the driver's compilation work.
     // Sticky errors complete queued calls without further device work.
@@ -64,6 +65,9 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         std::uint64_t reused_phases = 0;
         std::uint64_t initialized_phases = 0;
         std::uint64_t accepted_intervals = 0;
+        std::uint64_t certified_spherical_escapes = 0;
+        std::uint64_t certified_spherical_turns = 0;
+        std::uint64_t certified_spherical_panels = 0;
         std::uint64_t rejected_intervals = 0;
         // Observations of final returned attempt rows only. Discarded private
         // projection retries, cancellations and sticky-error defaults can have

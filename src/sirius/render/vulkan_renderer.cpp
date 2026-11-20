@@ -552,8 +552,14 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     // Poll the owner on this thread; device workers consume only the atomic
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
+    auto spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Disabled;
+#if !SIRIUS_RELEASE_RESOURCE_LOCKED
+    if (const char* cert = std::getenv("SIRIUS_CERTIFIED_SPHERICAL_ESCAPE");
+        cert && std::strcmp(cert, "1") == 0)
+        spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Certified;
+#endif
     backend::RetainedTraceExecutor executor(
-        *compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity);
+        *compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity, spherical_escape);
     // Host work items are screen blocks or pixels, independent of device residency.
     // Independent detector probes also feed this capacity. Each trace worker
     // has at most one pending interval; device residency stays bounded here.
@@ -704,6 +710,14 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     stats.retained_intervals = true;
     stats.camera_batches = execution.camera_batches;
     stats.accepted_intervals = execution.accepted_intervals;
+    stats.certified_spherical_escapes = execution.certified_spherical_escapes;
+    stats.certified_spherical_turns = execution.certified_spherical_turns;
+    stats.certified_spherical_panels = execution.certified_spherical_panels;
+    if (execution.certified_spherical_escapes > 0) {
+        std::clog << "[Vulkan] Certified spherical escapes: " << execution.certified_spherical_escapes
+                  << ", exterior turns: " << execution.certified_spherical_turns
+                  << ", quadrature panels: " << execution.certified_spherical_panels << std::endl;
+    }
     stats.retained_preparation = preparation;
     stats.initialization_seconds = preparation.wall_ms / 1000;
     for (const auto& stage : preparation.stages) {

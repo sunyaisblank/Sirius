@@ -75,6 +75,9 @@ struct VulkanRenderStats {
     bool retained_intervals = false;
     std::uint64_t camera_batches = 0;
     std::uint64_t accepted_intervals = 0;
+    std::uint64_t certified_spherical_escapes = 0;
+    std::uint64_t certified_spherical_turns = 0;
+    std::uint64_t certified_spherical_panels = 0;
     // Film camera, joint RK, projection, dense sampling, initialization, smooth ray camera.
     // Counts kernel commands, including both commands in a shared submission.
     // Original six stages followed by the separate DP phase sampler.

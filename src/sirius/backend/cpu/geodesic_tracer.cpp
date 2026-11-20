@@ -1820,6 +1820,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                         result.min_radius = min_r;
                         result.spherical_terminal_panels = tail->panels;
                         result.spherical_terminal_turn = tail->periapsis.has_value();
+                        step_executor_->RecordSphericalEscape(*tail);
                         break;
                     }
                 }

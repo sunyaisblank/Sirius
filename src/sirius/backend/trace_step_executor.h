@@ -57,6 +57,7 @@ class TraceStepExecutor {
                                                                    const std::function<bool()>&) {
         return std::nullopt;
     }
+    virtual void RecordSphericalEscape(const SphericalEscapeTrial&) {}
 };
 
 }  // namespace sirius::backend

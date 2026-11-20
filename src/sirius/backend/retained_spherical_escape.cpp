@@ -3,6 +3,13 @@
 
 namespace sirius::backend {
 
+void RetainedTraceExecutor::RecordSphericalEscape(const SphericalEscapeTrial& trial) {
+    std::lock_guard lock(mutex_);
+    ++stats_.certified_spherical_escapes;
+    stats_.certified_spherical_turns += trial.periapsis.has_value();
+    stats_.certified_spherical_panels += trial.panels;
+}
+
 std::optional<SphericalEscapeTrial> RetainedTraceExecutor::TrySphericalEscape(
     core::IMetric& metric, const core::Lightray& ray, const core::IntegratorConfig& config,
     const core::Rk45CoupledState& coupled, const SphericalEscapeRequest& request,
