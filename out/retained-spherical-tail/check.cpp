@@ -424,6 +424,27 @@ void CheckCovariantResult(const Case& test, bool outgoing, const Vec4& position,
         std::abort();
     }
     CheckCoupledBounds(*trial, test, outgoing, position, tangent, covariant);
+    if (test.radial < 0) {
+        // Exercise the input enclosure used when the exact launch may lie
+        // between two binary64 words. The complete event and four covariant
+        // columns must still contain the independent result at this launch.
+        using namespace finite_tail_detail;
+        const auto surround = [](const Vec4& value) {
+            return finite_tail_detail::Four{Widen(value(0), value(0)), Widen(value(1), value(1)),
+                                            Widen(value(2), value(2)), Widen(value(3), value(3))};
+        };
+        CoupledLaunch enclosed;
+        enclosed.position = surround(position);
+        enclosed.tangent = surround(tangent);
+        for (unsigned i = 0; i < covariant.size(); ++i) {
+            enclosed.displacement[i] = surround(covariant[i].displacement);
+            enclosed.derivative[i] = surround(covariant[i].derivative);
+        }
+        const auto bounded =
+            ContinueCoupled(metric, enclosed, SourceSupport(test), test.boundary, {}, Path(test));
+        Check(bounded.has_value(), "enclosed launch state is accepted");
+        CheckCoupledBounds(*bounded, test, outgoing, position, tangent, covariant);
+    }
     metric.Evaluate(trial->position, g, dg);
     const auto end_connection = TensorOps::Christoffel(g, dg);
     std::array<Vec4, 2> displacements, derivatives;

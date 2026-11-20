@@ -35,6 +35,11 @@ inline Four Components(const std::array<SphericalTailBound, 4>& bounds) {
     return {Enclosure(bounds[0]), Enclosure(bounds[1]), Enclosure(bounds[2]), Enclosure(bounds[3])};
 }
 
+struct CoupledLaunch {
+    Four position, tangent;
+    std::array<Four, 4> displacement, derivative;
+};
+
 inline Range Dot(const Four& a, const Four& b) {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 }
@@ -72,18 +77,10 @@ inline Four SphericalConnection(const Four& position, const Four& a, const Four&
     }
     return result;
 }
-}  // namespace finite_tail_detail
 
-// The receiver can still run the original spherical event variation and
-// source-sky code on the result. The fixed-affine state is supplied in the
-// input metric's active chart and all four covariant derivatives travel with
-// the central ray. No part of the trial is written to caller-owned state.
-[[nodiscard]] inline std::expected<SphericalCoupledTail, FiniteTailFailure>
-PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& tangent,
-                            const GeodesicVariations& variations, double source_support_radius,
-                            double boundary, const SphericalTailControl& control = {},
-                            SphericalTailPath path = SphericalTailPath::Outward) {
-    using namespace finite_tail_detail;
+inline std::expected<SphericalCoupledTail, FiniteTailFailure> ContinueCoupled(
+    IMetric& metric, const CoupledLaunch& launch, double source_support_radius, double boundary,
+    const SphericalTailControl& control, SphericalTailPath path) {
     if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
     const auto* outgoing = dynamic_cast<const OutgoingKerrSchild*>(&metric);
     const auto* family =
@@ -92,17 +89,23 @@ PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& t
     const auto parameters = family->GetParams();
     if (parameters.a != 0 || parameters.Q != 0 || parameters.Lambda != 0)
         return std::unexpected(FiniteTailFailure::Domain);
-    if (!RoundingEnvironment() || !IsFinite(position) || !IsFinite(tangent) ||
-        !metric.IsValidEvent(position))
+    Vec4 nominal_position;
+    for (unsigned i = 0; i < launch.position.size(); ++i) {
+        if (!launch.position[i].Finite() || !launch.tangent[i].Finite())
+            return std::unexpected(FiniteTailFailure::Input);
+        nominal_position(i) = std::midpoint(launch.position[i].lo, launch.position[i].hi);
+    }
+    if (!RoundingEnvironment() || !metric.IsValidEvent(nominal_position))
         return std::unexpected(FiniteTailFailure::Input);
 
     const double orientation = outgoing ? -1.0 : 1.0;
-    const auto start_x = Components(position), start_k = Components(tangent);
+    const auto& start_x = launch.position;
+    const auto& start_k = launch.tangent;
     const Range start_radius = sqrt(Square(start_x[1]) + Square(start_x[2]) + Square(start_x[3]));
     Columns x, k;
-    for (unsigned i = 0; i < variations.size(); ++i) {
-        const Four seed_x = Components(variations[i].displacement);
-        const Four seed_k = Components(variations[i].derivative);
+    for (unsigned i = 0; i < launch.displacement.size(); ++i) {
+        const auto& seed_x = launch.displacement[i];
+        const auto& seed_k = launch.derivative[i];
         const auto connection =
             SphericalConnection(start_x, start_k, seed_x, parameters.M, orientation, start_radius);
         for (unsigned j = 0; j < seed_x.size(); ++j) {
@@ -121,7 +124,7 @@ PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& t
     const auto end_k = Components(tail->event_bounds.tangent);
     SphericalCoupledTail result{tail->position, tail->tangent,      {}, tail->affine_length,
                                 tail->panels,   tail->event_bounds, {}, tail->periapsis};
-    for (unsigned i = 0; i < variations.size(); ++i) {
+    for (unsigned i = 0; i < result.variations.size(); ++i) {
         const auto& event = tail->variation_bounds[i];
         const Four event_x = Components(event.position), event_k = Components(event.tangent);
         const auto connection =
@@ -147,5 +150,24 @@ PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& t
     }
     if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
     return result;
+}
+}  // namespace finite_tail_detail
+
+// The receiver can still run the original spherical event variation and
+// source-sky code on the result. The fixed-affine state is supplied in the
+// input metric's active chart and all four covariant derivatives travel with
+// the central ray. No part of the trial is written to caller-owned state.
+[[nodiscard]] inline std::expected<SphericalCoupledTail, FiniteTailFailure>
+PrepareSphericalCoupledTail(IMetric& metric, const Vec4& position, const Vec4& tangent,
+                            const GeodesicVariations& variations, double source_support_radius,
+                            double boundary, const SphericalTailControl& control = {},
+                            SphericalTailPath path = SphericalTailPath::Outward) {
+    using namespace finite_tail_detail;
+    CoupledLaunch launch{Components(position), Components(tangent), {}, {}};
+    for (unsigned i = 0; i < variations.size(); ++i) {
+        launch.displacement[i] = Components(variations[i].displacement);
+        launch.derivative[i] = Components(variations[i].derivative);
+    }
+    return ContinueCoupled(metric, launch, source_support_radius, boundary, control, path);
 }
 }  // namespace sirius::core::relativity

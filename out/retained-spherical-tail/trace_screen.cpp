@@ -5,6 +5,11 @@
 #include "coupled_admission.h"
 #include "exterior_turn.h"
 
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+#include "sirius/backend/device.h"
+#include "sirius/backend/retained_trace_executor.h"
+#endif
+
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -13,6 +18,37 @@
 #include <cstdlib>
 #include <limits>
 #include <optional>
+#include <span>
+#include <string_view>
+
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+namespace sirius::backend {
+struct RetainedTraceExecutorTestPeer {
+    static std::optional<std::array<RetainedValue, 40>> CommittedState(
+        const RetainedTraceExecutor& executor, const core::Lightray& ray,
+        const core::GeodesicVariations& variations, const core::KerrSchildParams& params) {
+        const auto thread = std::this_thread::get_id();
+        RetainedTraceExecutor::Snapshot observed;
+        observed.chart = -1;
+        observed.metric = {params.M, params.a, params.Q, params.Lambda};
+        for (unsigned i = 0; i < 4; ++i) {
+            observed.physical[i] = ray.position(i);
+            observed.physical[4 + i] = ray.velocity(i);
+            for (unsigned column = 0; column < variations.size(); ++column) {
+                observed.physical[8 + 8 * column + i] = variations[column].displacement(i);
+                observed.physical[12 + 8 * column + i] = variations[column].derivative(i);
+            }
+        }
+        std::lock_guard lock(executor.mutex_);
+        const auto state = executor.continuations_.find(thread);
+        if (state == executor.continuations_.end() || !executor.active_traces_.contains(thread) ||
+            !state->second.finish.valid || !state->second.dopri || state->second.after != observed)
+            return {};
+        return state->second.finish.physical;
+    }
+};
+}  // namespace sirius::backend
+#endif
 
 namespace {
 using namespace sirius::core;
@@ -87,30 +123,41 @@ std::optional<Proposal> ProjectToPublicChart(const OutgoingKerrSchild& metric,
 // Run the ordinary coordinator to its usual terminal event. The next Step
 // supplies the previous interval's committed endpoint and four columns. A
 // rejected interval cannot seed a proposal and no proposal changes the trace.
-class CpuTraceScreen final : public TraceStepExecutor {
+class TraceScreen final : public TraceStepExecutor {
   public:
-    explicit CpuTraceScreen(const TracerConfig& config) : config_(config) {}
+    explicit TraceScreen(const TracerConfig& config, TraceStepExecutor* executor = nullptr)
+        : config_(config), executor_(executor) {}
 
     void BeginTrace() override {
+        if (executor_) executor_->BeginTrace();
         attempts_ = 0;
         next_radius_ = source_support_;
         affine_prefix_ = 0;
         sampled_first_ = false;
         exterior_turn.reset();
         pending_step_.reset();
+        pending_device_curve_ = false;
         proposal.reset();
+    }
+
+    void EndTrace() override {
+        if (executor_) executor_->EndTrace();
     }
 
     std::optional<CameraLaunch> Launch(IMetric& metric, double spin,
                                        const CameraRay& camera) override {
         camera_ = camera;
-        return LaunchCameraRay(metric, spin, camera);
+        return executor_ ? executor_->Launch(metric, spin, camera)
+                         : LaunchCameraRay(metric, spin, camera);
     }
 
     bool Step(Lightray& ray, IMetric& metric, const IntegratorConfig& config,
               Rk45CoupledState& coupled, Rk45CoupledComparison& comparison) override {
         if (pending_step_) {
             affine_prefix_ += *pending_step_;
+            if (pending_device_curve_) ++committed_device_intervals;
+            Check(!executor_ || pending_device_curve_,
+                  "a device prefix uses retained dense curves");
             if (!sampled_first_) {
                 sampled_first_ = true;
                 const auto* chart = dynamic_cast<const OutgoingKerrSchild*>(&metric);
@@ -129,12 +176,26 @@ class CpuTraceScreen final : public TraceStepExecutor {
         ++attempts_;
         const double attempted_step = ray.step_size;
         const bool success =
-            Geodesic::IntegrateStepRk45(ray, &metric, config, &coupled, &comparison);
+            executor_ ? executor_->Step(ray, metric, config, coupled, comparison)
+                      : Geodesic::IntegrateStepRk45(ray, &metric, config, &coupled, &comparison);
         pending_step_ = success ? std::optional(attempted_step) : std::nullopt;
+        pending_device_curve_ =
+            executor_ && success &&
+            std::all_of(comparison.dopri_positions.begin(), comparison.dopri_positions.end(),
+                        [](const auto& curve) { return curve.has_value(); });
         return success;
     }
 
-    void RejectLastInterval() override { pending_step_.reset(); }
+    std::optional<CoupledSegmentSample> Sample(CoupledTrial trial, double fraction,
+                                               const Vec4* normal) override {
+        return executor_ ? executor_->Sample(trial, fraction, normal) : std::nullopt;
+    }
+
+    void RejectLastInterval() override {
+        pending_step_.reset();
+        pending_device_curve_ = false;
+        if (executor_) executor_->RejectLastInterval();
+    }
 
     std::optional<Proposal> proposal;
     std::optional<SphericalTailBound> exterior_turn;
@@ -142,14 +203,62 @@ class CpuTraceScreen final : public TraceStepExecutor {
     unsigned budget_refusals = 0;
     unsigned accuracy_refusals = 0;
     unsigned other_refusals = 0;
+    unsigned committed_device_intervals = 0;
+    unsigned expansion_seeded_trials = 0;
     double outward_ms = 0;
     double turn_ms = 0;
 
   private:
+    std::expected<SphericalCoupledTail, FiniteTailFailure> Solve(
+        const Lightray& ray, OutgoingKerrSchild& metric, const Rk45CoupledState& coupled,
+        const SphericalTailControl& tail_control, SphericalTailPath path) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+        if (executor_) {
+            using namespace finite_tail_detail;
+            using namespace sirius::backend;
+            const auto* retained = dynamic_cast<const RetainedTraceExecutor*>(executor_);
+            Check(retained != nullptr, "retained test executor");
+            const auto params = metric.Source().GetParams();
+            auto altered = ray;
+            altered.position(0) = std::nextafter(ray.position(0), kInfinity);
+            Check(!RetainedTraceExecutorTestPeer::CommittedState(*retained, altered,
+                                                                 coupled.variations, params),
+                  "different physical view cannot claim retained state");
+            const auto packet = RetainedTraceExecutorTestPeer::CommittedState(
+                *retained, ray, coupled.variations, params);
+            if (!packet) return std::unexpected(FiniteTailFailure::Input);
+            const auto expansion = [&](unsigned i) {
+                const auto& value = (*packet)[i];
+                // An accepted expansion defines the initial point of the next
+                // local problem. Bound the full three-word sum using outward
+                // binary64 interval operations, as opposed to a rounded view.
+                return value.IsRepresented()
+                           ? Range(value.high) + Range(value.low) + Range(value.tail)
+                           : InvalidRange();
+            };
+            CoupledLaunch launch;
+            for (unsigned i = 0; i < 4; ++i) {
+                launch.position[i] = expansion(i);
+                launch.tangent[i] = expansion(4 + i);
+                for (unsigned column = 0; column < coupled.variations.size(); ++column) {
+                    launch.displacement[column][i] = expansion(8 + 8 * column + i);
+                    launch.derivative[column][i] = expansion(12 + 8 * column + i);
+                }
+            }
+            ++expansion_seeded_trials;
+            return ContinueCoupled(metric, launch, source_support_, config_.escape_radius,
+                                   tail_control, path);
+        }
+#endif
+        return PrepareSphericalCoupledTail(metric, ray.position, ray.velocity, coupled.variations,
+                                           source_support_, config_.escape_radius, tail_control,
+                                           path);
+    }
+
     void TryProposal(const Lightray& ray, IMetric& metric, const IntegratorConfig& config,
                      const Rk45CoupledState& coupled,
                      SphericalTailPath path = SphericalTailPath::Outward) {
-        const auto* outgoing = dynamic_cast<const OutgoingKerrSchild*>(&metric);
+        auto* outgoing = dynamic_cast<OutgoingKerrSchild*>(&metric);
         if (!outgoing) return;
         const double r = std::hypot(ray.position(1), ray.position(2), ray.position(3));
         const double dot = ray.position(1) * ray.velocity(1) + ray.position(2) * ray.velocity(2) +
@@ -164,9 +273,7 @@ class CpuTraceScreen final : public TraceStepExecutor {
         tail_control.maximum_panels = std::min(
             tail_control.maximum_panels, static_cast<unsigned>(config_.max_steps - attempts_));
         const auto start = std::chrono::steady_clock::now();
-        const auto tail =
-            PrepareSphericalCoupledTail(metric, ray.position, ray.velocity, coupled.variations,
-                                        source_support_, config_.escape_radius, tail_control, path);
+        const auto tail = Solve(ray, *outgoing, coupled, tail_control, path);
         const double elapsed =
             std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start)
                 .count();
@@ -189,6 +296,7 @@ class CpuTraceScreen final : public TraceStepExecutor {
     }
 
     const TracerConfig& config_;
+    TraceStepExecutor* executor_;
     const double source_support_ = std::nextafter(static_cast<float>(config_.disk_outer),
                                                   std::numeric_limits<float>::infinity());
     CameraRay camera_;
@@ -197,6 +305,7 @@ class CpuTraceScreen final : public TraceStepExecutor {
     double next_radius_ = 0;
     double affine_prefix_ = 0;
     std::optional<double> pending_step_;
+    bool pending_device_curve_ = false;
 };
 
 double ScaledError(double a, double b) {
@@ -291,7 +400,12 @@ void CheckBudgetEnclosesOriginalComparison() {
           "invalid launch variation fails closed");
 }
 
-void ScreenOriginalGeometry() {
+struct FilmPixel {
+    int x, y;
+};
+
+void ScreenOriginalGeometry(std::span<const FilmPixel> pixels,
+                            TraceStepExecutor* executor = nullptr, bool print_each = false) {
     CameraConfig camera_config;
     camera_config.r = 50;
     camera_config.width = camera_config.height = 128;
@@ -308,84 +422,92 @@ void ScreenOriginalGeometry() {
     config.integrator.max_step = domain.max_step;
     config.integrator.abs_tolerance = config.integrator.rel_tolerance = 5.0e-6f;
     KerrSchildFamily metric(KerrSchildParams::Kerr(1., 0.));
-    CpuTraceScreen screen(config);
+    TraceScreen screen(config, executor);
     GeodesicTracer tracer(&metric, config);
     tracer.SetStepExecutor(&screen);
     CameraSample sample;
     Check(ForEachCameraSample(1, [&](CameraSample next) { sample = next; }) == 1,
           "exact camera sample count");
-    constexpr std::array coordinates{4, 25, 49, 64, 79, 103, 123};
     unsigned escapes = 0, disk = 0, horizon = 0, proposals = 0, panels = 0;
     unsigned steps = 0, proposed_steps = 0, exterior_turns = 0, turn_proposals = 0, turn_panels = 0;
     double event_error = 0, map_error = 0, infinity_error = 0, worst_bound = 0, widest_turn = 0;
-    for (const int x : coordinates)
-        for (const int y : coordinates) {
-            const auto camera_ray = camera.ProjectFilmForObserver(
-                x + sample.image_u, y + sample.image_v, sample.pupil_u, sample.pupil_v);
-            Check(camera_ray.has_value(), "camera projection");
-            const auto traced = tracer.Trace(camera_ray->ray);
-            Check(!traced.cancelled && !traced.numerical_failure, "ordinary trace admission");
-            steps += traced.steps_taken;
-            if (traced.outcome != TraceResult::Outcome::Escaped) {
-                Check(!screen.proposal && !screen.exterior_turn,
-                      "no continuation bypasses an opaque event");
-                Check(traced.outcome == TraceResult::Outcome::DiskHit ||
-                          traced.outcome == TraceResult::Outcome::Horizon,
-                      "opaque terminal event");
-                if (traced.outcome == TraceResult::Outcome::DiskHit)
-                    ++disk;
-                else
-                    ++horizon;
-                proposed_steps += traced.steps_taken;
-                continue;
-            }
-            ++escapes;
-            if (screen.exterior_turn) {
-                const auto periapsis = *screen.exterior_turn;
-                Check(periapsis.lower > config.disk_outer &&
-                          traced.min_radius + 1e-5 >= periapsis.lower,
-                      "bounded exterior periapsis agrees with full trace clearance");
-                ++exterior_turns;
-                widest_turn = std::max(widest_turn, periapsis.upper - periapsis.lower);
-            }
-            if (!screen.proposal) {
-                proposed_steps += traced.steps_taken;
-                continue;
-            }
-            const auto& tail = *screen.proposal;
-            ++proposals;
-            proposed_steps += tail.prefix_attempts;
-            panels += tail.panels;
-            if (tail.through_turn) {
-                ++turn_proposals;
-                turn_panels += tail.panels;
-            }
-            worst_bound = std::max(worst_bound, tail.normalized_bound);
-            Check(traced.final_tangent && traced.beam.finite_source_map &&
-                      traced.beam.infinity_source_map,
-                  "ordinary finite-boundary publication");
-            event_error =
-                std::max(event_error, ScaledError(tail.full_affine, traced.affine_length));
-            for (unsigned i = 0; i < 4; ++i) {
-                event_error =
-                    std::max({event_error, ScaledError(tail.position(i), traced.final_position(i)),
-                              ScaledError(tail.tangent(i), (*traced.final_tangent)(i))});
-            }
-            map_error =
-                std::max(map_error, SkyError(tail.finite_sky, *traced.beam.finite_source_map));
-            infinity_error = std::max(
-                infinity_error, SkyError(tail.infinity_sky, traced.beam.infinity_source_map->map));
+    for (const auto [x, y] : pixels) {
+        const auto camera_ray = camera.ProjectFilmForObserver(
+            x + sample.image_u, y + sample.image_v, sample.pupil_u, sample.pupil_v);
+        Check(camera_ray.has_value(), "camera projection");
+        const auto traced = tracer.Trace(camera_ray->ray);
+        if (print_each) {
+            std::printf(
+                "pixel=%d,%d outcome=%d attempts=%d failure=%d termination=%d proposal=%d "
+                "turn=%d\n",
+                x, y, static_cast<int>(traced.outcome), traced.steps_taken,
+                static_cast<int>(traced.coupled_failure), traced.integrator_termination,
+                static_cast<bool>(screen.proposal),
+                screen.proposal && screen.proposal->through_turn);
+            std::fflush(stdout);
         }
+        Check(!traced.cancelled && !traced.numerical_failure, "ordinary trace admission");
+        steps += traced.steps_taken;
+        if (traced.outcome != TraceResult::Outcome::Escaped) {
+            Check(!screen.proposal && !screen.exterior_turn,
+                  "no continuation bypasses an opaque event");
+            Check(traced.outcome == TraceResult::Outcome::DiskHit ||
+                      traced.outcome == TraceResult::Outcome::Horizon,
+                  "opaque terminal event");
+            if (traced.outcome == TraceResult::Outcome::DiskHit)
+                ++disk;
+            else
+                ++horizon;
+            proposed_steps += traced.steps_taken;
+            continue;
+        }
+        ++escapes;
+        if (screen.exterior_turn) {
+            const auto periapsis = *screen.exterior_turn;
+            Check(
+                periapsis.lower > config.disk_outer && traced.min_radius + 1e-5 >= periapsis.lower,
+                "bounded exterior periapsis agrees with full trace clearance");
+            ++exterior_turns;
+            widest_turn = std::max(widest_turn, periapsis.upper - periapsis.lower);
+        }
+        if (!screen.proposal) {
+            proposed_steps += traced.steps_taken;
+            continue;
+        }
+        const auto& tail = *screen.proposal;
+        ++proposals;
+        proposed_steps += tail.prefix_attempts;
+        panels += tail.panels;
+        if (tail.through_turn) {
+            ++turn_proposals;
+            turn_panels += tail.panels;
+        }
+        worst_bound = std::max(worst_bound, tail.normalized_bound);
+        Check(traced.final_tangent && traced.beam.finite_source_map &&
+                  traced.beam.infinity_source_map,
+              "ordinary finite-boundary publication");
+        event_error = std::max(event_error, ScaledError(tail.full_affine, traced.affine_length));
+        for (unsigned i = 0; i < 4; ++i) {
+            event_error =
+                std::max({event_error, ScaledError(tail.position(i), traced.final_position(i)),
+                          ScaledError(tail.tangent(i), (*traced.final_tangent)(i))});
+        }
+        map_error = std::max(map_error, SkyError(tail.finite_sky, *traced.beam.finite_source_map));
+        infinity_error = std::max(
+            infinity_error, SkyError(tail.infinity_sky, traced.beam.infinity_source_map->map));
+    }
     std::printf(
         "rays=%zu escape=%u disk=%u capture=%u proposals=%u trials=%u budget_refusals=%u "
         "accuracy_refusals=%u other_refusals=%u\n",
-        coordinates.size() * coordinates.size(), escapes, disk, horizon, proposals, screen.trials,
-        screen.budget_refusals, screen.accuracy_refusals, screen.other_refusals);
+        pixels.size(), escapes, disk, horizon, proposals, screen.trials, screen.budget_refusals,
+        screen.accuracy_refusals, screen.other_refusals);
     std::printf(
         "baseline_steps=%u projected_retained_attempts=%u quadrature_panels=%u "
         "max_coupled_bound=%.9g max_scaled_event_error=%.9g max_scaled_finite_sky_error=%.9g "
-        "max_scaled_infinity_sky_error=%.9g\n",
-        steps, proposed_steps, panels, worst_bound, event_error, map_error, infinity_error);
+        "max_scaled_infinity_sky_error=%.9g committed_device_intervals=%u "
+        "expansion_seeded_trials=%u\n",
+        steps, proposed_steps, panels, worst_bound, event_error, map_error, infinity_error,
+        screen.committed_device_intervals, screen.expansion_seeded_trials);
     std::printf(
         "certified_exterior_turns=%u turn_proposals=%u widest_turn_bracket=%.9g turn_panels=%u "
         "turn_ms=%.6f outward_ms=%.6f\n",
@@ -395,13 +517,76 @@ void ScreenOriginalGeometry() {
     Check(proposals > 0 && disk > 0 && horizon > 0, "joint escape, disk, and capture coverage");
     Check(exterior_turns > 0 && exterior_turns < escapes, "mixed inward vacuum turn eligibility");
     Check(turn_proposals > 0, "at least one full turn meets the live budget");
+    Check(!executor || (screen.committed_device_intervals > 0 &&
+                        screen.expansion_seeded_trials == screen.trials),
+          "device-owned inputs seed every Vulkan proposal");
     Check(event_error <= 1e-4 && map_error <= 1e-4 && infinity_error <= 1e-4,
           "diagnostic agreement with the complete trace");
 }
+
+void ScreenCpu(bool print_each) {
+    constexpr std::array coordinates{4, 25, 49, 64, 79, 103, 123};
+    std::array<FilmPixel, coordinates.size() * coordinates.size()> pixels;
+    auto next = pixels.begin();
+    for (const int x : coordinates)
+        for (const int y : coordinates) *next++ = {x, y};
+    ScreenOriginalGeometry(pixels, nullptr, print_each);
+}
+
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+template <typename T>
+T Require(sirius::base::Expected<T> result) {
+    if (result) return std::move(*result);
+    std::fprintf(stderr, "%s\n", result.error().Description().c_str());
+    std::exit(EXIT_FAILURE);
+}
+
+void ScreenVulkan() {
+    using namespace sirius::backend;
+    const auto inventory = Require(EnumerateVulkanDevices());
+    const auto index = Require(ResolveVulkanDeviceIndex(inventory));
+    const auto device = Require(CreateVulkanDevice(index));
+    const auto& info = device->Info();
+    std::printf("device=%s driver=%s fp32_portable=%d\n", info.name.c_str(),
+                info.driver_info.c_str(), RetainedUsesPortableArithmetic(info));
+    std::fflush(stdout);
+    auto compute = Require(RetainedCompute::Create(*device, 8));
+    RetainedCompute::PreparationStats preparation;
+    const auto ready = compute->PrepareSoftwareRendererStages(preparation);
+    if (!ready) {
+        std::fprintf(stderr, "Vulkan preparation failed after %.3f ms: %s\n", preparation.wall_ms,
+                     ready.error().Description().c_str());
+        std::exit(EXIT_FAILURE);
+    }
+    std::printf("prepared_ms=%.3f allocated_bytes=%llu\n", preparation.wall_ms,
+                static_cast<unsigned long long>(device->BufferAllocationBytes()));
+    std::fflush(stdout);
+    RetainedTraceExecutor executor(*compute, {}, 1000.0, 4);
+    constexpr std::array pixels{FilmPixel{4, 4}, FilmPixel{25, 49}, FilmPixel{64, 64},
+                                FilmPixel{49, 64}};
+    ScreenOriginalGeometry(pixels, &executor, true);
+    const auto stats = executor.Statistics();
+    std::printf("live_initialized=%llu live_reused=%llu accepted=%llu tracer_rollbacks=%llu\n",
+                static_cast<unsigned long long>(stats.initialized_phases),
+                static_cast<unsigned long long>(stats.reused_phases),
+                static_cast<unsigned long long>(stats.accepted_intervals),
+                static_cast<unsigned long long>(stats.tracer_rollbacks));
+    Check(!executor.Error() && stats.accepted_intervals > 0 && stats.reused_phases > 0,
+          "actual retained execution and reuse");
+}
+#endif
 }  // namespace
 
-int main() {
+int main(int argc, char** argv) {
     CheckBudgetEnclosesOriginalComparison();
     CheckVacuumTurn();
-    ScreenOriginalGeometry();
+    const std::string_view mode = argc > 1 ? argv[1] : "--cpu";
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+    if (argc == 2 && mode == "--vulkan") {
+        ScreenVulkan();
+        return 0;
+    }
+#endif
+    Check(argc <= 2 && (mode == "--cpu" || mode == "--cpu-details"), "trace screen mode");
+    ScreenCpu(mode == "--cpu-details");
 }
