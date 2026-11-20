@@ -1,5 +1,6 @@
 """Audit promoted storage and produce the private SIMD16 relocatable object."""
 
+from collections import Counter
 from pathlib import Path
 import os
 import re
@@ -67,6 +68,27 @@ def linked_symbols(path):
     if definitions != expected:
         raise RuntimeError(f'Private linked symbol set differs: {sorted(definitions ^ expected)}')
     return {'defined_symbols': sorted(definitions), 'external_symbols': external}
+
+
+def linked_relocations(path, results):
+    expected = Counter()
+    for stage in PROFILES:
+        expected.update(results['emit-' + stage]['native']['core_relocations'])
+    for adapter in results['adapter-object']['adapters'].values():
+        expected.update(adapter['core_relocations'])
+    relocs = subprocess.check_output(['/usr/bin/readelf', '-Wr', str(path)], text=True)
+    actual = Counter(re.findall(
+        r'R_X86_64_PLT32\s+[0-9a-f]+\s+(sirius_(?:wide_value|local_value)_\w+)\s+- 4(?:\s|$)',
+        relocs))
+    symbols = subprocess.check_output(['/usr/bin/readelf', '-Ws', str(path)], text=True)
+    hidden = set(re.findall(
+        r'^\s*\d+:\s+[0-9a-f]+\s+(?:\d+|0x[0-9a-f]+)\s+FUNC\s+GLOBAL\s+HIDDEN\s+\d+\s+(\w+)$',
+        symbols, re.M))
+    if actual != expected or hidden != set(results['link']['symbol_audit']['defined_symbols']):
+        raise RuntimeError('Partial-link relocations or hidden function bindings differ from the verified objects')
+    return {'tool': '/usr/bin/readelf', 'read_flags': ['-Wr', '-Ws'],
+            'hidden_global_function_symbols': len(hidden), 'math_plt32_minus4_relocations': dict(sorted(actual.items())),
+            'matches_standalone_worker_and_adapter_relocations': True}
 
 
 def main():
@@ -175,6 +197,7 @@ def main():
                 result['native'] = checked
             elif name == 'link':
                 result['symbol_audit'] = linked_symbols(output)
+                result['relocation_audit'] = linked_relocations(output, results)
     finally:
         if results:
             receipt.parent.mkdir(parents=True, exist_ok=True)
