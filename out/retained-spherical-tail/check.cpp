@@ -1,3 +1,4 @@
+#include "sirius/core/polarisation/walker_penrose.h"
 #include "sirius/core/source_sky_map.h"
 
 #include "coupled_handoff.h"
@@ -31,6 +32,12 @@ namespace reference = sirius::test::separated_reference;
 using reference::Four;
 using reference::Scalar;
 using reference::Three;
+using Complex = std::complex<Scalar>;
+using ComplexFour = std::array<Complex, 4>;
+using ComplexThree = std::array<Complex, 3>;
+using ComplexMetric = std::array<ComplexFour, 4>;
+using OracleQuadrature = boost::math::quadrature::gauss_kronrod<Scalar, 31>;
+constexpr Scalar kComplexStep = 1e-28L;
 
 struct Event {
     Four position;
@@ -54,6 +61,8 @@ double max_source_sky_error = 0;
 unsigned panels = 0;
 unsigned most_panels = 0;
 unsigned enclosed_integrals = 0;
+unsigned enclosed_events = 0;
+double max_scaled_half_width = 0;
 
 void Check(bool condition, const char* name) {
     if (!condition) {
@@ -76,6 +85,130 @@ void Agree(double actual, Scalar expected, double tolerance, double& maximum, co
 Vec4 Convert(const Four& values) {
     Vec4 result;
     for (int i = 0; i < 4; ++i) result(i) = static_cast<double>(values[i]);
+    return result;
+}
+
+Four Promote(const Vec4& values) { return {values(0), values(1), values(2), values(3)}; }
+
+void Contains(SphericalTailBound bound, Scalar expected, const char* name) {
+    if (!(bound.lower <= expected && expected <= bound.upper)) {
+        std::fprintf(stderr, "%s: %.21Lg outside [%.17g, %.17g]\n", name, expected, bound.lower,
+                     bound.upper);
+        std::abort();
+    }
+    const double width = (bound.upper - bound.lower) * 0.5;
+    max_scaled_half_width = std::max(
+        max_scaled_half_width, width / std::max(1.0, std::abs(static_cast<double>(expected))));
+    ++enclosed_events;
+}
+
+Complex Radius(const ComplexFour& x) { return std::sqrt(x[1] * x[1] + x[2] * x[2] + x[3] * x[3]); }
+
+ComplexMetric ReferenceMetric(const ComplexFour& x, Scalar mass, bool outgoing) {
+    const Complex r = Radius(x);
+    const ComplexFour ell{outgoing ? -1.L : 1.L, x[1] / r, x[2] / r, x[3] / r};
+    ComplexMetric metric;
+    for (unsigned i = 0; i < ell.size(); ++i)
+        for (unsigned j = 0; j < ell.size(); ++j) {
+            metric[i][j] = 2 * mass / r * ell[i] * ell[j];
+            if (i == j) metric[i][j] += i == 0 ? -1.L : 1.L;
+        }
+    return metric;
+}
+
+Four ReferenceConnection(const Four& x, const Four& a, const Four& b, Scalar mass, bool outgoing) {
+    const ComplexFour event{x[0], x[1], x[2], x[3]};
+    const auto metric = ReferenceMetric(event, mass, outgoing);
+    std::array<ComplexMetric, 4> differentiated;
+    for (unsigned i = 0; i < event.size(); ++i) {
+        auto varied = event;
+        varied[i] += Complex(0, kComplexStep);
+        differentiated[i] = ReferenceMetric(varied, mass, outgoing);
+    }
+    // Solve g C = Γ_first-kind(a,b), using the complex-step metric derivatives.
+    std::array<std::array<Scalar, 5>, 4> system{};
+    for (unsigned i = 0; i < event.size(); ++i)
+        for (unsigned j = 0; j < event.size(); ++j) {
+            system[i][j] = metric[i][j].real();
+            for (unsigned k = 0; k < event.size(); ++k) {
+                const auto derivatives =
+                    differentiated[j][i][k] + differentiated[k][i][j] - differentiated[i][j][k];
+                system[i][4] += derivatives.imag() * a[j] * b[k] / (2 * kComplexStep);
+            }
+        }
+    for (unsigned i = 0; i < event.size(); ++i) {
+        const Scalar pivot = system[i][i];
+        for (auto& entry : system[i]) entry /= pivot;
+        for (unsigned j = 0; j < event.size(); ++j) {
+            if (i == j) continue;
+            const Scalar factor = system[j][i];
+            for (unsigned k = 0; k < system[j].size(); ++k) system[j][k] -= factor * system[i][k];
+        }
+    }
+    return {system[0][4], system[1][4], system[2][4], system[3][4]};
+}
+
+ComplexThree Cross(const ComplexThree& a, const ComplexThree& b) {
+    return {a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]};
+}
+
+struct ComplexEvent {
+    ComplexFour position;
+    ComplexFour tangent;
+    Complex affine;
+};
+
+ComplexEvent ExactInputReference(const Four& x0, const Four& k0, const Four& dx, const Four& dk,
+                                 Scalar mass, Scalar target, bool outgoing) {
+    ComplexFour x, k;
+    for (unsigned i = 0; i < x.size(); ++i) {
+        x[i] = Complex(x0[i], kComplexStep * dx[i]);
+        k[i] = Complex(k0[i], kComplexStep * dk[i]);
+    }
+    const Complex r0 = Radius(x);
+    const auto metric = ReferenceMetric(x, mass, outgoing);
+    Complex energy = 0;
+    for (unsigned i = 0; i < x.size(); ++i) energy += metric[0][i] * k[i];
+    const auto angular_momentum = Cross({x[1], x[2], x[3]}, {k[1], k[2], k[3]});
+    const Complex length = std::sqrt(angular_momentum[0] * angular_momentum[0] +
+                                     angular_momentum[1] * angular_momentum[1] +
+                                     angular_momentum[2] * angular_momentum[2]);
+    const Complex impact = length / energy;
+    const Scalar orientation = outgoing ? -1.L : 1.L;
+    const auto speed = [&](Complex r) {
+        return std::sqrt(1.L - (1.L - 2 * mass / r) * impact * impact / (r * r));
+    };
+    const auto integral = [&](const auto& kernel) -> Complex {
+        const Complex span = target - r0;
+        const auto transformed = [&](Scalar u) { return span * kernel(r0 + span * u); };
+        return {OracleQuadrature::integrate([&](Scalar u) { return transformed(u).real(); }, 0, 1,
+                                            12, 1e-16L),
+                kComplexStep * OracleQuadrature::integrate(
+                                   [&](Scalar u) { return transformed(u).imag() / kComplexStep; },
+                                   0, 1, 12, 1e-16L)};
+    };
+    ComplexEvent result;
+    result.affine = integral([&](Complex r) { return 1.L / (energy * speed(r)); });
+    result.position[0] = x[0] + integral([&](Complex r) {
+                             const Complex h = 2 * mass / r;
+                             return (orientation * h - 1.L / speed(r)) / (1.L - h);
+                         });
+    const Complex angle = impact * integral([&](Complex r) { return 1.L / (r * r * speed(r)); });
+    const ComplexThree initial{x[1] / r0, x[2] / r0, x[3] / r0};
+    const auto angular = Cross(angular_momentum, initial);
+    ComplexThree normal;
+    const Complex rate = energy * speed(target);
+    const Scalar h = 2 * mass / target;
+    result.tangent[0] = (orientation * h * rate - energy) / (1 - h);
+    for (unsigned i = 0; i < normal.size(); ++i) {
+        // sin(angle)/length has a finite limit at a radial launch.
+        normal[i] = initial[i] * std::cos(angle);
+        if (length != Complex{}) normal[i] += angular[i] * std::sin(angle) / length;
+        result.position[i + 1] = target * normal[i];
+    }
+    const auto terminal_angular = Cross(angular_momentum, normal);
+    for (unsigned i = 0; i < normal.size(); ++i)
+        result.tangent[i + 1] = rate * normal[i] + terminal_angular[i] / target;
     return result;
 }
 
@@ -153,6 +286,66 @@ Event Oracle(const Case& c, bool outgoing, Scalar refinement) {
     return event;
 }
 
+void CheckEventBounds(const SphericalTailResult& candidate, const Case& test, bool outgoing,
+                      const Vec4& position, const Vec4& tangent,
+                      const std::array<SphericalTailVariation, 4>& columns) {
+    const auto x = Promote(position), k = Promote(tangent);
+    const auto center = ExactInputReference(x, k, {}, {}, test.mass, test.boundary, outgoing);
+    Contains(candidate.event_bounds.affine_length, center.affine.real(), "affine enclosure");
+    for (unsigned j = 0; j < x.size(); ++j) {
+        Contains(candidate.event_bounds.position[j], center.position[j].real(),
+                 "position enclosure");
+        Contains(candidate.event_bounds.tangent[j], center.tangent[j].real(), "tangent enclosure");
+    }
+    for (unsigned i = 0; i < columns.size(); ++i) {
+        const auto varied =
+            ExactInputReference(x, k, Promote(columns[i].position), Promote(columns[i].tangent),
+                                test.mass, test.boundary, outgoing);
+        const auto& bound = candidate.variation_bounds[i];
+        Contains(bound.affine_length, varied.affine.imag() / kComplexStep,
+                 "affine sensitivity enclosure");
+        for (unsigned j = 0; j < x.size(); ++j) {
+            Contains(bound.position[j], varied.position[j].imag() / kComplexStep,
+                     "position sensitivity enclosure");
+            Contains(bound.tangent[j], varied.tangent[j].imag() / kComplexStep,
+                     "tangent sensitivity enclosure");
+        }
+    }
+}
+
+void CheckCoupledBounds(const SphericalCoupledTail& candidate, const Case& test, bool outgoing,
+                        const Vec4& position, const Vec4& tangent,
+                        const GeodesicVariations& covariant) {
+    const auto x = Promote(position), k = Promote(tangent);
+    const auto center = ExactInputReference(x, k, {}, {}, test.mass, test.boundary, outgoing);
+    Four end_x, end_k;
+    for (unsigned j = 0; j < x.size(); ++j) {
+        end_x[j] = center.position[j].real();
+        end_k[j] = center.tangent[j].real();
+    }
+    for (unsigned i = 0; i < covariant.size(); ++i) {
+        const Four dx = Promote(covariant[i].displacement);
+        Four dk = Promote(covariant[i].derivative);
+        const auto start_connection = ReferenceConnection(x, k, dx, test.mass, outgoing);
+        for (unsigned j = 0; j < x.size(); ++j) dk[j] -= start_connection[j];
+        const auto varied = ExactInputReference(x, k, dx, dk, test.mass, test.boundary, outgoing);
+        Four event_dx;
+        for (unsigned j = 0; j < x.size(); ++j)
+            event_dx[j] = varied.position[j].imag() / kComplexStep;
+        const auto end_connection =
+            ReferenceConnection(end_x, end_k, event_dx, test.mass, outgoing);
+        for (unsigned j = 0; j < x.size(); ++j) {
+            const Scalar fixed_affine =
+                event_dx[j] - end_k[j] * varied.affine.imag() / kComplexStep;
+            const Scalar derivative = varied.tangent[j].imag() / kComplexStep + end_connection[j];
+            Contains(candidate.variation_bounds[i].displacement[j], fixed_affine,
+                     "fixed-affine displacement enclosure");
+            Contains(candidate.variation_bounds[i].derivative[j], derivative,
+                     "covariant derivative enclosure");
+        }
+    }
+}
+
 void CheckCovariantResult(const Case& test, bool outgoing, const Vec4& position,
                           const Vec4& tangent, const std::array<SphericalTailVariation, 4>& columns,
                           const SphericalTailResult& direct, const Event& oracle_terminal,
@@ -173,7 +366,13 @@ void CheckCovariantResult(const Case& test, bool outgoing, const Vec4& position,
     }
     const auto trial = PrepareSphericalCoupledTail(metric, position, tangent, covariant,
                                                    test.radius * .9L, test.boundary);
-    Check(trial.has_value(), "coupled terminal handoff");
+    if (!trial) {
+        std::fprintf(stderr, "coupled tail failure %u at radius %.9Lg, boundary %.9Lg, chart %s\n",
+                     static_cast<unsigned>(trial.error()), test.radius, test.boundary,
+                     outgoing ? "outgoing" : "ingoing");
+        std::abort();
+    }
+    CheckCoupledBounds(*trial, test, outgoing, position, tangent, covariant);
     metric.Evaluate(trial->position, g, dg);
     const auto end_connection = TensorOps::Christoffel(g, dg);
     std::array<Vec4, 2> displacements, derivatives;
@@ -252,6 +451,7 @@ void Exercise(const Case& test, bool outgoing) {
     }
     panels += result->panels;
     most_panels = std::max(most_panels, result->panels);
+    CheckEventBounds(*result, test, outgoing, position, tangent, variations);
 
     const auto observed = Oracle(test, outgoing, .001L);
     const auto refined = Oracle(test, outgoing, .0005L);
@@ -316,6 +516,11 @@ void DeclinesAndRadial() {
     Check(!guarded && guarded.error() == FiniteTailFailure::WorkLimit,
           "zero quadrature work allowance");
     guarded =
+        ContinueSphericalTail(x, k, columns, 0, chart, 0, 80,
+                              {.event_absolute_tolerance = 1e-18, .event_relative_tolerance = 0});
+    Check(!guarded && guarded.error() == FiniteTailFailure::EventAccuracy,
+          "event enclosure must satisfy its budget");
+    guarded =
         ContinueSphericalTail(x, k, columns, 0, chart, 0, std::numeric_limits<double>::infinity());
     Check(!guarded && guarded.error() == FiniteTailFailure::Input, "finite target required");
 
@@ -330,8 +535,6 @@ void DeclinesAndRadial() {
 }
 
 void CheckIntegralEnclosures() {
-    using Complex = std::complex<Scalar>;
-    using OracleQuadrature = boost::math::quadrature::gauss_kronrod<Scalar, 31>;
     using namespace finite_tail_detail;
     const SphericalTailControl control;
     // Exact input words for the interval calculation. Complex-step
@@ -340,7 +543,7 @@ void CheckIntegralEnclosures() {
          {std::array{22., 200., 1., 144., 1.}, std::array{7., 120., 1., 60., -1.},
           std::array{21., 200., 1., 0., -1.}, std::array{40., 200., 0., 670., 1.}}) {
         const auto [start, end, mass, impact, orientation] = fixture;
-        Quadrature trial{mass, orientation, impact, start, end, control};
+        Quadrature trial{mass, orientation, Range(impact), Range(start), end, control};
         const auto bounds = trial.Run();
         Check(bounds.has_value(), "radial enclosure quadrature");
         constexpr Scalar perturbation = 1e-30L;
@@ -368,6 +571,28 @@ void CheckIntegralEnclosures() {
     }
 }
 
+void CheckCoupledCancellationAndWorkLimit() {
+    KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1));
+    const auto launch = Launch({1, 25, .35L, .55L, .8L, 200}, false);
+    const auto x = Convert(launch.position), k = Convert(launch.tangent);
+    unsigned checks = 0;
+    const std::function<bool()> cancel = [&] { return ++checks >= 8; };
+    const auto interrupted =
+        PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200, {.should_cancel = &cancel});
+    Check(!interrupted && interrupted.error() == FiniteTailFailure::Cancelled && checks == 8,
+          "cancellation exits in-progress continuation");
+    const auto retry = PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200);
+    Check(retry.has_value() && retry->panels > 8, "fresh continuation after cancellation");
+    const auto limited = PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200,
+                                                     {.maximum_panels = retry->panels - 1});
+    Check(!limited && limited.error() == FiniteTailFailure::WorkLimit,
+          "work budget includes rejected quadrature panels");
+    const auto complete =
+        PrepareSphericalCoupledTail(metric, x, k, {}, 20, 200, {.maximum_panels = retry->panels});
+    Check(complete.has_value() && complete->panels == retry->panels,
+          "continuation accepts the exact budget");
+}
+
 void MeasureProvisionalCost() {
     constexpr unsigned repetitions = 32;
     using Clock = std::chrono::steady_clock;
@@ -391,6 +616,7 @@ void MeasureProvisionalCost() {
 int main() {
     DeclinesAndRadial();
     CheckIntegralEnclosures();
+    CheckCoupledCancellationAndWorkLimit();
     constexpr std::array cases{
         Case{0, 22, .35L, .2L, .8L, 200},    Case{1, 21, .35L, 0, .8L, 200},
         Case{1, 22, .35L, .2L, .8L, 200},    Case{1, 50, 1.6L, -.54L, .7L, 500},
@@ -402,9 +628,10 @@ int main() {
     std::printf(
         "fixture cases=%zu charts=2 max_scaled_event_error=%.9g max_scaled_variation_error=%.9g "
         "covariant_roundtrip_error=%.9g source_sky_error=%.9g enclosed_integrals=%u "
-        "total_panels=%u "
+        "enclosed_event_components=%u max_scaled_half_width=%.9g total_panels=%u "
         "max_panels=%u\n",
         cases.size(), max_event_error, max_variation_error, max_covariant_roundtrip_error,
-        max_source_sky_error, enclosed_integrals, panels, most_panels);
+        max_source_sky_error, enclosed_integrals, enclosed_events, max_scaled_half_width, panels,
+        most_panels);
     MeasureProvisionalCost();
 }

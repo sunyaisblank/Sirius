@@ -5,26 +5,42 @@
 #include <cfenv>
 #include <cmath>
 #include <expected>
+#include <functional>
 #include <limits>
 #include <numeric>
 
 namespace sirius::core::relativity {
 
-enum class FiniteTailFailure { Input, Domain, Constraint, WorkLimit, Arithmetic };
+enum class FiniteTailFailure {
+    Input,
+    Domain,
+    Constraint,
+    WorkLimit,
+    Arithmetic,
+    EventAccuracy,
+    Cancelled
+};
 
 struct SphericalTailControl {
     double absolute_tolerance = 1e-13;
     double relative_tolerance = 1e-11;
     double constraint_tolerance = 1e-8;
     unsigned maximum_panels = 4096;
+    double event_absolute_tolerance = 1e-9;
+    double event_relative_tolerance = 1e-9;
+    const std::function<bool()>* should_cancel = nullptr;
 };
 
-struct RadialIntegralBound {
+struct SphericalTailBound {
     double lower = 0;
     double upper = 0;
 };
 
 namespace finite_tail_detail {
+
+inline bool Cancelled(const SphericalTailControl& control) {
+    return control.should_cancel && *control.should_cancel && (*control.should_cancel)();
+}
 
 inline bool RoundingEnvironment() {
     if (!std::numeric_limits<double>::is_iec559 || std::fegetround() != FE_TONEAREST) return false;
@@ -74,6 +90,21 @@ inline Range sqrt(Range a) {
     return Widen(std::sqrt(a.lo), std::sqrt(a.hi));
 }
 
+inline double Magnitude(Range a) { return std::max(std::abs(a.lo), std::abs(a.hi)); }
+
+inline Range Abs(Range value) {
+    if (!value.Finite()) return InvalidRange();
+    return {std::max({0.0, value.lo, -value.hi}), Magnitude(value)};
+}
+
+inline Range Square(Range a) {
+    const Range positive = Abs(a);
+    if (!positive.Finite()) return InvalidRange();
+    auto enclosure = Widen(positive.lo * positive.lo, positive.hi * positive.hi);
+    enclosure.lo = std::max(0.0, enclosure.lo);
+    return enclosure;
+}
+
 inline double MidpointError(Range enclosure) {
     const double estimate = std::midpoint(enclosure.lo, enclosure.hi);
     return std::max((Range(estimate) - Range(enclosure.lo)).hi,
@@ -87,6 +118,7 @@ struct Taylor {
 
     Taylor() = default;
     explicit Taylor(double value) { coefficient[0] = Range(value); }
+    explicit Taylor(Range value) { coefficient[0] = value; }
     static Taylor Variable(double start, double end) {
         Taylor result;
         result.coefficient[0] = {start, end};
@@ -138,12 +170,12 @@ inline Taylor sqrt(const Taylor& a) {
     return result;
 }
 
-inline std::array<double, 3> RadialAtLaunch(double r, double mass, double orientation,
-                                            double impact_squared) {
-    const double h = 2.0 * mass / r;
-    const double f = 1.0 - h;
-    const double inverse_speed = 1.0 / std::sqrt(1.0 - f * (impact_squared / r / r));
-    return {inverse_speed, inverse_speed / r / r, (orientation * h - inverse_speed) / f};
+inline std::array<Range, 3> RadialAtLaunch(Range r, double mass, double orientation,
+                                           Range impact_squared) {
+    const Range h = Range(2.0) * Range(mass) / r;
+    const Range f = Range(1.0) - h;
+    const Range inverse_speed = Range(1.0) / sqrt(Range(1.0) - f * (impact_squared / r / r));
+    return {inverse_speed, inverse_speed / r / r, (Range(orientation) * h - inverse_speed) / f};
 }
 
 struct Quadrature {
@@ -152,8 +184,8 @@ struct Quadrature {
 
     double mass;
     double orientation;
-    double impact_squared;
-    double start_radius;
+    Range impact_squared;
+    Range start_radius;
     double end_radius;
     const SphericalTailControl& control;
     unsigned panels = 0;
@@ -191,7 +223,7 @@ struct Quadrature {
         auto result =
             Integrate(0, 1, Evaluate(Range(0.0)), Evaluate(Range(1.0)), control.absolute_tolerance);
         if (!result) return result;
-        const Range radial_span = Range(end_radius) - Range(start_radius);
+        const Range radial_span = Range(end_radius) - start_radius;
         (*result)[0] = (*result)[0] + radial_span;
         (*result)[2] = (*result)[2] - radial_span;
         for (const auto enclosure : *result)
@@ -202,6 +234,7 @@ struct Quadrature {
   private:
     Result Integrate(double start, double end, const Bounds& start_values, const Bounds& end_values,
                      double abs_budget) {
+        if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
         if (panels >= control.maximum_panels) return std::unexpected(FiniteTailFailure::WorkLimit);
         ++panels;
         const Range width = Range(end) - Range(start);
@@ -223,7 +256,7 @@ struct Quadrature {
                 accepted = false;
                 break;
             }
-            const double magnitude = std::max(std::abs(fourth.lo), std::abs(fourth.hi));
+            const double magnitude = Magnitude(fourth);
             const double remainder = (width_factor * Range(magnitude)).hi;
             const Range estimate = (start_values[i] + Range(4.0) * mid_values[i] + end_values[i]) *
                                    (width / Range(6.0));
