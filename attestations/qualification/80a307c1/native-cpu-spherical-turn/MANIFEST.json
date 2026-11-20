@@ -1,0 +1,248 @@
+{
+  "compiler": {
+    "bytes": 1186944,
+    "path": "/usr/bin/x86_64-linux-gnu-g++-14",
+    "sha256": "916ef3c03c2d024857af2e084d3648204033b9c79e0e62575974f567f99adc84",
+    "version": "14.2.0"
+  },
+  "execution_revision": "80a307c1104a1e092f34b1828848b78e7d745f7b",
+  "inputs": [
+    {
+      "bytes": 3607,
+      "path": "out/retained-spherical-tail/coupled_admission.h",
+      "sha256": "25492e78142506ffcd2b307096f1ad550cf1ba6311c76d38c243788970bd8082"
+    },
+    {
+      "bytes": 7497,
+      "path": "out/retained-spherical-tail/coupled_handoff.h",
+      "sha256": "060594d77f749009c669d6eb1ccda96f8842484f30913bcc144be1c824e18219"
+    },
+    {
+      "bytes": 1539,
+      "path": "out/retained-spherical-tail/exterior_turn.h",
+      "sha256": "159559c835885e69223ea04154a202570e113280f14abf107112ce19ff84b3e8"
+    },
+    {
+      "bytes": 14708,
+      "path": "out/retained-spherical-tail/finite_tail.h",
+      "sha256": "de7a5182c4df5877a2bcd4d8fbde70ad20ebb9593eaec7c454408a9f5a0092f2"
+    },
+    {
+      "bytes": 13413,
+      "path": "out/retained-spherical-tail/radial_quadrature.h",
+      "sha256": "97fa3a43f8ad14acc832295c0439f1fb5d917395d362d26fe7b2c52742767970"
+    },
+    {
+      "bytes": 7585,
+      "path": "out/retained-spherical-tail/turn_quadrature.h",
+      "sha256": "20755e1b97666cf514c6c5fea74b5c3ee18c43665b7d0b6f7fef05474028f92f"
+    },
+    {
+      "bytes": 34457,
+      "path": "out/retained-spherical-tail/check.cpp",
+      "sha256": "a5ac40f2be4e7bd0f0fade981fb233d67409512f22fecdda6db316b57ec6fa2d"
+    },
+    {
+      "bytes": 18647,
+      "path": "out/retained-spherical-tail/trace_screen.cpp",
+      "sha256": "48396432edcfccde69e01e527acaaa799cb35fbf055c1e84accc5da074ecdb8c"
+    },
+    {
+      "bytes": 129889,
+      "path": "src/sirius/backend/cpu/geodesic_tracer.cpp",
+      "sha256": "3c8527e32f72e191acf86fb62d842c34383002761faf7650c3cff7eece2c43d2"
+    },
+    {
+      "bytes": 68001,
+      "path": "src/sirius/core/geodesic_integrator.cpp",
+      "sha256": "d0c9efe9e335456ba890fb44e4fd1a1df6671973206dfc75da3494a54487f941"
+    },
+    {
+      "bytes": 10879,
+      "path": "src/sirius/core/tensor.cpp",
+      "sha256": "fa58c95cdc708d2358a1a940f2b8b6a703b7987766ad2431d694774f3a132150"
+    },
+    {
+      "bytes": 909,
+      "path": "src/sirius/base/contracts.cpp",
+      "sha256": "250b1138eac4c4bc6c9c7ba5a70c78fa4cfd4fca44041743094edbfbdbf97d29"
+    },
+    {
+      "bytes": 18350,
+      "path": "tests/support/separated_geodesic_reference.h",
+      "sha256": "eebea29855b10e946c5f040cb7465219a103312ffd930e544ebe36aac600043b"
+    },
+    {
+      "bytes": 94373,
+      "path": "/usr/include/boost/math/quadrature/gauss_kronrod.hpp",
+      "sha256": "cf97324fd7a4638756d5209e47ff7137925b962cbc2e1b52bddbc5043d6e6221"
+    }
+  ],
+  "method": {
+    "enclosures": "Four-node Gauss–Legendre with an interval bound on each normalized integrand's eighth derivative, including the impact-squared partials. Propagate through the affine interval, event, and four coupled variations.",
+    "oracle": "Long-double Carter evolution through the first radial turn, or exact straight-line flight in flat vacuum. Independent Gauss–Kronrod in inverse radius with complex Newton for the turn and complex-step state and connection derivatives.",
+    "radial_branch": "A simple outer root of the radial potential is bracketed above the complete source support and above 3M.",
+    "regularization": "Use r = r_t + y² on each leg. Cancel y against the radial-speed factor and differentiate the simple turning root."
+  },
+  "remaining": "The read-only CPU screen does not exercise retained device ownership, publication of the optimized result, or frame performance. The original Vulkan gate sequence remains pending.",
+  "runs": {
+    "check-sanitized": {
+      "build_argv": [
+        "g++-14",
+        "-std=c++2c",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-sanitize-recover=all",
+        "-fno-omit-frame-pointer",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-frounding-math",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Isrc",
+        "-Itests",
+        "out/retained-spherical-tail/check.cpp",
+        "src/sirius/base/contracts.cpp",
+        "src/sirius/core/tensor.cpp",
+        "-o",
+        "out/spherical-turn-qualification/check-sanitized"
+      ],
+      "build_environment": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/spherical-turn-qualification"
+      },
+      "executable": {
+        "bytes": 7478728,
+        "path": "out/spherical-turn-qualification/check-sanitized",
+        "sha256": "1bade745149aa0de0eaa1a877ef1587e076c979975b0b5dfd75cdf0178d4d18d"
+      },
+      "exit_code": 0,
+      "run_argv": [
+        "out/spherical-turn-qualification/check-sanitized"
+      ],
+      "runtime_environment": {
+        "ASAN_OPTIONS": "detect_leaks=1"
+      },
+      "stdout": {
+        "bytes": 373,
+        "output": "fixture cases=11 charts=2 max_scaled_event_error=1.57378187e-10 max_scaled_variation_error=2.67069485e-08 covariant_roundtrip_error=5.68434189e-14 source_sky_error=1.07179325e-10 enclosed_integrals=24 enclosed_event_components=1694 max_scaled_half_width=2.60939714e-10 total_panels=14426 max_panels=2257\ndiagnostic_tails=32 diagnostic_panels=12980 diagnostic_ms=339.809099",
+        "path": "out/spherical-turn-qualification/check-sanitized.txt",
+        "sha256": "0e618e32a7976241dd3db127d6fd9abfe28228d4aba361bb06020a279ada5fe8"
+      }
+    },
+    "check-turn": {
+      "build_argv": [
+        "g++-14",
+        "-std=c++2c",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-frounding-math",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Isrc",
+        "-Itests",
+        "out/retained-spherical-tail/check.cpp",
+        "src/sirius/base/contracts.cpp",
+        "src/sirius/core/tensor.cpp",
+        "-o",
+        "out/spherical-turn-qualification/check-turn"
+      ],
+      "build_environment": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/spherical-turn-qualification"
+      },
+      "executable": {
+        "bytes": 363976,
+        "path": "out/spherical-turn-qualification/check-turn",
+        "sha256": "d3f89e4a8b4933d0d92eaa72a74cee5ee186589da40bb80fb4b3189258ac174f"
+      },
+      "exit_code": 0,
+      "run_argv": [
+        "out/spherical-turn-qualification/check-turn"
+      ],
+      "runtime_environment": {},
+      "stdout": {
+        "bytes": 372,
+        "output": "fixture cases=11 charts=2 max_scaled_event_error=1.57378187e-10 max_scaled_variation_error=2.67069485e-08 covariant_roundtrip_error=5.68434189e-14 source_sky_error=1.07179325e-10 enclosed_integrals=24 enclosed_event_components=1694 max_scaled_half_width=2.60939714e-10 total_panels=14426 max_panels=2257\ndiagnostic_tails=32 diagnostic_panels=12980 diagnostic_ms=60.161522",
+        "path": "out/spherical-turn-qualification/check-turn.txt",
+        "sha256": "7f07384ed070c45e2a33c9fa7f4628401ea0d23f0f87d5ff8f648c88d81e34da"
+      }
+    },
+    "trace-screen": {
+      "build_argv": [
+        "g++-14",
+        "-std=c++2c",
+        "-O2",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-frounding-math",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Isrc",
+        "out/retained-spherical-tail/trace_screen.cpp",
+        "src/sirius/backend/cpu/geodesic_tracer.cpp",
+        "src/sirius/core/geodesic_integrator.cpp",
+        "src/sirius/core/tensor.cpp",
+        "src/sirius/base/contracts.cpp",
+        "-o",
+        "out/spherical-turn-qualification/trace-screen"
+      ],
+      "build_environment": {
+        "TMPDIR": "/home/astra/.project/Sirius/out/spherical-turn-qualification"
+      },
+      "executable": {
+        "bytes": 664368,
+        "path": "out/spherical-turn-qualification/trace-screen",
+        "sha256": "4e941d16468a2a16c2624d7dc88a3ffdc203e5b06c811665268b1d87f3a04166"
+      },
+      "exit_code": 0,
+      "run_argv": [
+        "out/spherical-turn-qualification/trace-screen"
+      ],
+      "runtime_environment": {},
+      "stdout": {
+        "bytes": 486,
+        "output": "rays=49 escape=44 disk=4 capture=1 proposals=44 trials=44 budget_refusals=0 accuracy_refusals=0 other_refusals=0\nbaseline_steps=20008 projected_retained_attempts=6898 quadrature_panels=29466 max_coupled_bound=0.123791222 max_scaled_event_error=7.71020137e-10 max_scaled_finite_sky_error=1.96950234e-11 max_scaled_infinity_sky_error=2.14377072e-10\ncertified_exterior_turns=28 turn_proposals=28 widest_turn_bracket=2.13162821e-13 turn_panels=6140 turn_ms=433.109116 outward_ms=152.970879",
+        "path": "out/spherical-turn-qualification/trace-screen.txt",
+        "sha256": "efcddaf2a12ef3a9fd5e57c5e3c28bacc2115dfa00d3102f5af47478b8fd2afa"
+      }
+    }
+  },
+  "scope": "Private source-free spherical continuation through an exterior radial turn",
+  "standalone": {
+    "cases_per_chart": 11,
+    "charts": 2,
+    "controls": "Both paths stop during integration on cancellation, recover on retry, and honor the exact panel limit. A turn inside source support is refused.",
+    "enclosed_event_or_variation_components": 1694,
+    "enclosed_integrals": 24,
+    "largest_scaled_bound_half_width": 2.60939714e-10,
+    "turn_cases_per_chart": 4
+  },
+  "trace_screen": {
+    "captured": 1,
+    "disk": 4,
+    "escaped": 44,
+    "exterior_turn_proposals_admitted": 28,
+    "largest_error_budget_fraction": 0.123791222,
+    "map_comparison": "Sky and angular derivatives are compared in Cartesian components, preserving comparisons across changes in tangent basis.",
+    "maximum_scaled_finite_sky_error": 1.96950234e-11,
+    "maximum_scaled_infinity_sky_error": 2.14377072e-10,
+    "maximum_scaled_terminal_event_error": 7.71020137e-10,
+    "modeled_cpu_prefix_attempts": 6898,
+    "ordinary_cpu_attempts": 20008,
+    "outward_proposals_admitted": 16,
+    "prior_screen": {
+      "bytes": 12983,
+      "path": "attestations/qualification/66e0a785/native-cpu-spherical-tail-trace-screen/MANIFEST.json",
+      "sha256": "cd3646798b59208d359d844a6d386d720841f7cbf2a3be49b1ff4f885f7676af"
+    },
+    "through_turn_panels": 6140
+  }
+}
