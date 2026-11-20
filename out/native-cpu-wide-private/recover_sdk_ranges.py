@@ -136,6 +136,17 @@ def descriptor():
     return sdk, catalog, entries
 
 
+def pinned_tools(directory, sdk, names):
+    tools = {}
+    for name in names:
+        item = sdk['tools'][name]
+        tool = directory / Path(item['resolved']).relative_to(SDK_ROOT)
+        if pin(tool) != {key: item[key] for key in ('bytes', 'sha256')}:
+            raise RuntimeError(f'Recovered compiler fingerprint differs: {name}')
+        tools[name] = tool
+    return tools
+
+
 def recover(scratch):
     check_space()
     if scratch == R / 'out' or not scratch.is_relative_to(R / 'out'):

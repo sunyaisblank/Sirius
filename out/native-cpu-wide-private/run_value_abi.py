@@ -10,6 +10,7 @@ import sys
 import zipfile
 
 import math_source
+from recover_sdk_ranges import CATALOG, pinned_tools, recover
 import run_strict_scope as strict
 from resume_raw import BASELINE, GUARD, R, check_space, pin, read_json, restore, write_json
 
@@ -92,8 +93,10 @@ def audit_stage(stage, path, strict_path, adapter_headers, audited):
 
 def main():
     scratch, receipt = (Path(arg).resolve() for arg in sys.argv[1:])
-    if not scratch.is_relative_to(R / 'out') or not receipt.is_relative_to(R / 'attestations') or receipt.exists():
-        raise RuntimeError('Use a task workspace under out/ and a new manifest path under attestations/')
+    if not scratch.is_relative_to(R / 'out') or receipt.exists() or not (
+        receipt.is_relative_to(scratch) or receipt.is_relative_to(R / 'attestations')
+    ):
+        raise RuntimeError('Use a task workspace under out/ and a new manifest within the task or attestations/')
     if Path.cwd() != R or subprocess.check_output(['git', 'status', '--porcelain']).strip():
         raise RuntimeError('Run from the clean Sirius checkout')
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
@@ -106,7 +109,10 @@ def main():
         expect_pin(path, sealed[stage]['raw'])
 
     descriptor = read_json(strict.HISTORICAL_SDK)['setup']['official_sdk']
-    tools = strict.extract_sdk(scratch / 'LLVM-23.1.2-Linux-X64.tar.xz', scratch / 'sdk', descriptor)
+    sdk_directory = scratch / 'sdk'
+    if not sdk_directory.exists():
+        recover(scratch)
+    tools = pinned_tools(sdk_directory, descriptor, strict.TOOLS)
     adapter = recover_adapter(scratch)
     verified_adapter = scratch / 'split-math.checked.ll'
     strict_build = strict.build_action(scratch, tools)
@@ -118,7 +124,7 @@ def main():
     (owned / 'owned_guard.py').symlink_to(GUARD / 'owned_guard.py')
     header_paths = sorted(str(path) for directory in ('sdk/include', 'sdk/lib/clang/23/include')
                           for path in (scratch / directory).rglob('*') if path.is_file())
-    common = [str(path) for path in (SCOPE, strict.HISTORICAL_SDK, BASELINE, VALUE_SOURCE,
+    common = [str(path) for path in (SCOPE, strict.HISTORICAL_SDK, BASELINE, CATALOG, VALUE_SOURCE,
                                      strict.SOURCE, Path(__file__).resolve(), *tools.values())]
     build_inputs = [*header_paths, strict_build[-4]]
     commands = {
