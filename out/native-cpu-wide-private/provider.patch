@@ -10,9 +10,9 @@
     struct lp_cs_exec *current;
     struct vertex_header *io;
 @@ -1871,12 +1871,22 @@
- 
+
     unsigned grid_z, grid_y, grid_x;
- 
+
 -   if (job_info->native_simd_packets) {
 -      /* Full packets cover eight rows; each remainder row owns one task. */
 -      unsigned full_packets = job_info->grid_size[0] / 8;
@@ -81,14 +81,14 @@
 @@ -34,6 +36,16 @@
     return util_get_cpu_caps()->has_avx2 && __builtin_cpu_supports("x86-64-v3");
  }
- 
+
 +/* The wide worker is emitted for skylake-avx512. Require OS-enabled
 + * AVX-512, the v4 instruction set and AVX512CD even on a different CPU.
 + */
 +static bool
 +lp_native_cpu_wide_supported(void)
 +{
-+   const struct util_cpu_caps *caps = util_get_cpu_caps();
++   const struct util_cpu_caps_t *caps = util_get_cpu_caps();
 +   return caps->has_avx512f && caps->has_avx512cd && sirius_native_v4_supported();
 +}
 +
@@ -140,7 +140,7 @@
 @@ -38,8 +38,14 @@
  __attribute__((visibility("hidden"))) bool sirius_native_endpoint_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
  __attribute__((visibility("hidden"))) bool sirius_native_dopri_phase_rows_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
- 
+
 +// Private pairs of eight-row subgroups. Requires a positive width-16 job.
 +__attribute__((visibility("hidden"))) bool sirius_native_transport_rows_wide_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
 +__attribute__((visibility("hidden"))) bool sirius_native_endpoint_rows_wide_admitted_packet(SIRIUS_NATIVE_PACKET_ARGUMENTS) SIRIUS_NATIVE_NOEXCEPT;
@@ -149,7 +149,7 @@
  // Pure runtime ISA/OS-state query; scalar baseline remains supported.
  bool sirius_native_simd_supported(void) SIRIUS_NATIVE_NOEXCEPT;
 +bool sirius_native_v4_supported(void) SIRIUS_NATIVE_NOEXCEPT;
- 
+
  #undef SIRIUS_NATIVE_PACKET_ARGUMENTS
  #undef SIRIUS_NATIVE_NOEXCEPT
 --- a/src/gallium/drivers/llvmpipe/lp_screen.c
