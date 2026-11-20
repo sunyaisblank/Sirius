@@ -1,5 +1,7 @@
 // Persistent per-active-pixel trace state. Physical integration fields retain
 // the selected Real rung; source radiance retains the existing float arithmetic.
+// Kerr and Schwarzschild keep the regular reflected outgoing chart for these
+// fields. Its selection is fixed by the unchanged scene packet from Init.
 module gr_trace_continuation;
 import gr_types;
 

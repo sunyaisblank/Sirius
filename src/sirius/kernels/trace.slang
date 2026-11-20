@@ -316,7 +316,7 @@ Real EvaluateCubic(Real coefficientA, Real coefficientB, Real coefficientC,
 
 // Integrate one geodesic segment using the same midpoint transfer recurrence as
 // GeodesicTracer::AccumulateVolumetricEmission.
-void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
+bool AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                              Vec4Cart startVelocity, Vec4Cart finishVelocity,
                              Real affineLength, int sampleCount,
                              bool volumeEnabled, bool turbulenceEnabled,
@@ -324,9 +324,10 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
                              float outerRadius, float innerTemperature,
                              int temperatureModel, float M, float a,
                              float aStar, float hOverR, float hPower,
-                             float tauMidplane, float observerFrequency, inout float opticalDepth,
+                             float tauMidplane, float observerFrequency, bool pastHorizonChart,
+                             inout float opticalDepth,
                              inout float3 emission) {
-    if (affineLength <= 0.0f || opticalDepth >= 10.0f) return;
+    if (affineLength <= 0.0f || opticalDepth >= 10.0f) return true;
     float deltaLambda = float(affineLength) / float(sampleCount);
     for (int sample = 0; sample < sampleCount; ++sample) {
         Real fraction = Real((float(sample) + 0.5f) / float(sampleCount));
@@ -344,6 +345,15 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
         if (volumeEnabled &&
             IsInsideVolumeDisk(diskR, point.z, innerRadius, outerRadius,
                                hOverR, hPower)) {
+            // Matter and its azimuth-dependent turbulence are defined in the
+            // public ingoing chart, at this same accepted midpoint.
+            if (pastHorizonChart) {
+                KerrPastHorizonMap map;
+                if (!BuildKerrPastHorizonMap(position, Real(M), Real(a), map)) return false;
+                photonVelocity = MapKerrPastHorizonVector(map, photonVelocity);
+                position = map.position;
+                point = float3(float(position.x), float(position.y), float(position.z));
+            }
             float H = VolumeScaleHeight(diskR, innerRadius, hOverR, hPower);
             float diskOpacity = TruncatedGaussianOpacityDensity(
                 tauMidplane, diskR, innerRadius, H, point.z);
@@ -413,6 +423,7 @@ void AccumulateVolumeSegment(Vec4Cart start, Vec4Cart finish,
         opticalDepth += deltaTau;
         if (opticalDepth >= 10.0f) break;
     }
+    return true;
 }
 
 [shader("compute")]
@@ -539,10 +550,17 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     // sqrt(M^2 - a^2 - Q^2) for the black-hole family. OneSheetCapture owns a
     // separate dark Ellis throat boundary. TwoSheet traverses that regular
     // sphere and terminates at the inversion-matched opposite infinity.
+    bool pastHorizonChart = metricId == kDispatchKerrSchild &&
+        M > 0.0f && abs(a) <= M && Q == 0.0f && Lambda == 0.0f;
     float disc = M * M - a * a - Q * Q;
-    float horizonRadius = (disc > 0.0f) ? (M + sqrt(disc)) : M;
-    if (isWormhole) horizonRadius = 0.5f * throatB0;
-    horizonRadius *= captureFactor;
+    float legacyHorizonRadius = (disc > 0.0f) ? (M + sqrt(disc)) : M;
+    if (isWormhole) legacyHorizonRadius = 0.5f * throatB0;
+    Real horizonRadius = Real(legacyHorizonRadius * captureFactor);
+    if (pastHorizonChart) {
+        Real ratio = abs(Real(a) / Real(M));
+        horizonRadius = Real(captureFactor) * Real(M) *
+            (Real(1) + sqrt((Real(1) - ratio) * (Real(1) + ratio)));
+    }
 
     GeodesicStateCart state;
     float observerFrequency = 1.0f;
@@ -642,7 +660,21 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
         adaptiveStep = Real(maxStep);
 
 
-        if (maxSteps <= 0) reason = kTraceWorkLimit;
+        if (maxSteps <= 0) {
+            reason = kTraceWorkLimit;
+        } else if (pastHorizonChart) {
+            KerrPastHorizonMap launchMap;
+            if (BuildKerrPastHorizonMap(state.x, Real(M), Real(a), launchMap)) {
+                state.x = launchMap.position;
+                state.u = MapKerrPastHorizonVector(launchMap, state.u);
+                [unroll] for (int column = 0; column < 4; ++column) {
+                    X[column] = TracePack(MapKerrPastHorizonVector(launchMap, TraceUnpack(X[column])));
+                    V[column] = TracePack(MapKerrPastHorizonVector(launchMap, TraceUnpack(V[column])));
+                }
+            } else {
+                reason = kTraceInvalidInput;
+            }
+        }
         if (isWormhole && twoSheetWormhole) {
             EllisTopologyContinuation ellis = InitEllisTwoSheet(
                 state, maxSteps, Real(stepScale), Real(minStep), Real(maxStep),
@@ -820,18 +852,39 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                         terminalCaptureSurface = true;
                         terminalEscapeSurface = false;
                     }
+                } else if (pastHorizonChart) {
+                    Real captureFraction;
+                    Vec4Cart capturePosition;
+                    Vec4Cart captureTangent;
+                    if (FindKerrCaptureEvent(state.x, state.u, next.x, next.u, dt,
+                            horizonRadius, Real(a), captureFraction, capturePosition, captureTangent)) {
+                        next.x = capturePosition;
+                        next.u = captureTangent;
+                        dt *= captureFraction;
+                        terminalCaptureSurface = true;
+                        terminalEscapeSurface = false;
+                    } else if (ComputeKerrRadiusCart(next.x.x, next.x.y, next.x.z, Real(a)) <=
+                               horizonRadius) {
+                        record.control = uint4(kTraceTerminal, kTraceEventFailure, attempts, accepted);
+                        continuation[slot] = record;
+                        return;
+                    }
                 }
 
                 // Optional volumetric disk (Kerr-Schild black holes only).
                 if (volumeEnabled && !isWarp && !isWormhole) {
                     float aStar = (M > 1e-6f) ? (a / M) : a;
-                    AccumulateVolumeSegment(
+                    if (!AccumulateVolumeSegment(
                         state.x, next.x, state.u, next.u, dt, volumeSamples,
                         volumeEnabled, turbulenceEnabled, dopplerBeaming,
                         innerRadius, outerRadius, innerTemperature, temperatureModel,
                         M, a, aStar, volumeHOverR, volumeHPower,
-                        volumeTauMidplane, observerFrequency,
-                        volumeOpticalDepth, volumeEmission);
+                        volumeTauMidplane, observerFrequency, pastHorizonChart,
+                        volumeOpticalDepth, volumeEmission)) {
+                        record.control = uint4(kTraceTerminal, kTraceEventFailure, attempts, accepted);
+                        continuation[slot] = record;
+                        return;
+                    }
                 }
 
                 // Optional thin disk (Kerr-Schild black holes only): emission when the
@@ -1026,8 +1079,20 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                     if (foundDiskCrossing) {
                             // Shading is float (gr_disk carries trig/pow, 32-bit-only in
                             // SPIR-V); the crossing point itself was found at Real.
-                            float cx = float(crossingPosition.x);
-                            float cy = float(crossingPosition.y);
+                            Vec4Cart matterPosition = crossingPosition;
+                            Vec4Cart matterVelocity = photonVelocity;
+                            if (pastHorizonChart) {
+                                KerrPastHorizonMap map;
+                                if (!BuildKerrPastHorizonMap(matterPosition, Real(M), Real(a), map)) {
+                                    record.control = uint4(kTraceTerminal, kTraceEventFailure, attempts, accepted);
+                                    continuation[slot] = record;
+                                    return;
+                                }
+                                matterPosition = map.position;
+                                matterVelocity = MapKerrPastHorizonVector(map, matterVelocity);
+                            }
+                            float cx = float(matterPosition.x);
+                            float cy = float(matterPosition.y);
                             float aStar = (M > 1e-6f) ? (a / M) : a;
                             float T;
                             if (temperatureModel == 1) {
@@ -1038,7 +1103,7 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
                             }
                             float cphi = atan2(cy, cx);
                             float2 transfer = ComputeKerrDiskTransferCart(
-                                cr, cphi, photonVelocity, observerFrequency, M, a);
+                                cr, cphi, matterVelocity, observerFrequency, M, a);
                             float gFactor = dopplerBeaming ? transfer.x : transfer.y;
                             float emittedSource = pow(T / innerTemperature, 4.0f);
                             float observedScale =
@@ -1132,6 +1197,19 @@ void ComputeMain(uint3 tid: SV_DispatchThreadID) {
     // Escaped rays require the sky direction; other non-captured endpoints need
     // terminal geometry only when beam diagnostics were requested.
     if (escaped || (beamsEnabled && !captured)) {
+        if (pastHorizonChart) {
+            KerrPastHorizonMap terminalMap;
+            if (!BuildKerrPastHorizonMap(state.x, Real(M), Real(a), terminalMap)) {
+                record.control.x = kTraceTerminal; record.control.y = kTraceEventFailure;
+                continuation[slot] = record;
+                return;
+            }
+            state.x = terminalMap.position;
+            state.u = MapKerrPastHorizonVector(terminalMap, state.u);
+            [unroll] for (int column = 0; column < 4; ++column) {
+                X[column] = TracePack(MapKerrPastHorizonVector(terminalMap, TraceUnpack(X[column])));
+            }
+        }
         Real terminalMetric[4][4];
         Real terminalInverse[4][4];
         if (isWarp) {

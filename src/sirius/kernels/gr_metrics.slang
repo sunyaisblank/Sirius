@@ -74,6 +74,129 @@ public Real ComputeKerrRadiusCart(Real x, Real y, Real z, Real a) {
     return scale * scaledRadius;
 }
 
+// From the native ingoing chart to the reflected outgoing chart, or back.
+// Reflection of t and phi pulls the outgoing metric back onto the existing
+// analytic ingoing metric, with the same spin. The complete map is an
+// involution because the reflection reverses the angular rotation.
+public struct KerrPastHorizonMap {
+    public Vec4Cart position;
+    public Real3 radiusGradient;
+    public Real timeDerivative;
+    public Real angleDerivative;
+    public Real cosine;
+    public Real sine;
+}
+
+Real KerrChartLogSeries(Real ratio) {
+    Real square = ratio * ratio;
+    Real term = ratio;
+    Real sum = term;
+    [loop] for (int i = 3; i <= 33; i += 2) {
+        term *= square;
+        sum += term / Real(i);
+    }
+    return Real(2) * sum;
+}
+
+Real KerrChartLog(Real value) {
+#ifdef SIRIUS_FP64
+    // GLSL.std.450 Log does not admit binary64. Normalize to
+    // [sqrt(1/2), sqrt(2)] before the atanh series.
+    int exponent;
+    Real mantissa = frexp(value, exponent);
+    if (mantissa < Real(0.7071067811865475244)) {
+        mantissa *= Real(2);
+        --exponent;
+    }
+    return Real(exponent) * Real(0.6931471805599453094) +
+        KerrChartLogSeries((mantissa - Real(1)) / (mantissa + Real(1)));
+#else
+    return log(value);
+#endif
+}
+
+Real KerrChartLogOnePlus(Real value) {
+    // Keep the horizon separation when 1 + value rounds toward 1.
+    if (value < Real(0.5f)) return KerrChartLogSeries(value / (Real(2) + value));
+    return KerrChartLog(Real(1) + value);
+}
+
+void KerrChartSinCos(Real angle, out Real sine, out Real cosine) {
+#ifdef SIRIUS_FP64
+    Real turns = round(angle * Real(0.1591549430918953358));
+    Real reduced = (angle - turns * Real(6.2831853071795862320)) -
+        turns * Real(2.4492935982947064143e-16);
+    Real negativeSquare = -reduced * reduced;
+    Real sineTerm = reduced;
+    Real cosineTerm = Real(1);
+    sine = sineTerm;
+    cosine = cosineTerm;
+    [loop] for (int i = 2; i <= 32; i += 2) {
+        sineTerm *= negativeSquare / Real(i * (i + 1));
+        cosineTerm *= negativeSquare / Real(i * (i - 1));
+        sine += sineTerm;
+        cosine += cosineTerm;
+    }
+#else
+    sincos(angle, sine, cosine);
+#endif
+}
+
+public bool BuildKerrPastHorizonMap(Vec4Cart position, Real mass, Real spin,
+                                    out KerrPastHorizonMap map) {
+    map = (KerrPastHorizonMap)0;
+    if (!(mass > Real(0) && abs(spin) <= mass)) return false;
+    Real a = spin / mass;
+    Real r = ComputeKerrRadiusCart(position.x, position.y, position.z, spin) / mass;
+    Real gap = Real(2) * sqrt((Real(1) - abs(a)) * (Real(1) + abs(a)));
+    Real outer = Real(1) + gap / Real(2);
+    Real outside = r - outer;
+    if (!(isfinite(r) && outside > Real(0))) return false;
+
+    Real innerDistance = outside + gap;
+    Real inverseDeltaIntegral = gap == Real(0)
+        ? -Real(1) / outside : -KerrChartLogOnePlus(gap / outside) / gap;
+    Real diagonal = r * r + a * a;
+    Real timeIntegral = KerrChartLog(outside) + KerrChartLog(innerDistance) +
+        Real(2) * inverseDeltaIntegral;
+    Real timeShift = -Real(2) * mass * timeIntegral;
+    // The azimuth shift vanishes at infinity. Compute the rotation by
+    // -2 atan(a/r) algebraically, and compose it with the logarithmic term.
+    if (a == Real(0)) {
+        map.cosine = Real(1);
+    } else {
+        Real sine, cosine;
+        KerrChartSinCos(-Real(2) * a * inverseDeltaIntegral, sine, cosine);
+        Real algebraicCosine = (r * r - a * a) / diagonal;
+        Real algebraicSine = -Real(2) * a * r / diagonal;
+        map.cosine = cosine * algebraicCosine - sine * algebraicSine;
+        map.sine = sine * algebraicCosine + cosine * algebraicSine;
+    }
+    Real d = Real(2) * r / (outside * innerDistance);
+    map.timeDerivative = -Real(2) * d;
+    map.angleDerivative = -Real(2) * a * d / (diagonal * mass);
+    Real3 scaled = Real3(position.x, position.y, position.z) / mass;
+    Real polar = scaled.z / r;
+    Real sigma = r * r + a * a * polar * polar;
+    map.radiusGradient = Real3(r * scaled.x, r * scaled.y, diagonal * polar) / sigma;
+    map.position = MakeVec4Cart(-position.t - timeShift,
+        map.cosine * position.x - map.sine * position.y,
+        -map.sine * position.x - map.cosine * position.y, position.z);
+    return isfinite(map.position.t) && isfinite(map.position.x) &&
+        isfinite(map.position.y) && isfinite(map.position.z) &&
+        all(isfinite(map.radiusGradient)) && isfinite(map.timeDerivative) &&
+        isfinite(map.angleDerivative);
+}
+
+public Vec4Cart MapKerrPastHorizonVector(KerrPastHorizonMap map, Vec4Cart vector) {
+    Real radial = dot(map.radiusGradient, Real3(vector.x, vector.y, vector.z));
+    Real angular = map.angleDerivative * radial;
+    return MakeVec4Cart(-vector.t - map.timeDerivative * radial,
+        map.cosine * vector.x - map.sine * vector.y + map.position.y * angular,
+        -map.sine * vector.x - map.cosine * vector.y - map.position.x * angular,
+        vector.z);
+}
+
 // Numerical event domain shared by the live device integrator and the
 // Kerr-Schild metric. Flat space is defined at every finite event; the pure
 // de-Sitter Cartesian origin has an exact analytic limit. Every other r=0

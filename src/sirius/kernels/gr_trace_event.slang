@@ -326,3 +326,46 @@ public bool FindSphericalCaptureEvent(
         start, startVelocity, finish, finishVelocity, affineLength, captureRadius,
         kSphericalBoundaryAnyContact, fraction, eventPosition, eventTangent);
 }
+
+// A constant Kerr radius is an oblate ellipsoid in either Cartesian
+// Kerr-Schild chart. Scale the spatial Hermite controls to a unit sphere
+// and locate the physical event on the original accepted segment.
+public bool FindKerrCaptureEvent(
+    Vec4Cart start, Vec4Cart startVelocity, Vec4Cart finish, Vec4Cart finishVelocity,
+    Real affineLength, Real captureRadius, Real spin, out Real fraction,
+    out Vec4Cart eventPosition, out Vec4Cart eventTangent) {
+    fraction = Real(0);
+    eventPosition = start;
+    eventTangent = startVelocity;
+    if (!(captureRadius > Real(0) && affineLength > Real(0))) return false;
+    Real spinRatio = spin / captureRadius;
+    Real equatorial = captureRadius * sqrt(Real(1) + spinRatio * spinRatio);
+    Vec4Cart p0 = MakeVec4Cart(Real(0), start.x / equatorial, start.y / equatorial,
+                             start.z / captureRadius);
+    Vec4Cart p1 = MakeVec4Cart(Real(0), finish.x / equatorial, finish.y / equatorial,
+                             finish.z / captureRadius);
+    Vec4Cart v0 = MakeVec4Cart(Real(0), startVelocity.x / equatorial,
+                             startVelocity.y / equatorial, startVelocity.z / captureRadius);
+    Vec4Cart v1 = MakeVec4Cart(Real(0), finishVelocity.x / equatorial,
+                             finishVelocity.y / equatorial, finishVelocity.z / captureRadius);
+
+    // The four Bezier controls can share a separating plane wholly outside
+    // the ellipsoid. Invoke sextic isolation only for an uncertain hull.
+    Real3 axis = Real3(p0.x, p0.y, p0.z);
+    Real bound = sqrt(dot(axis, axis)) * (Real(1) + Real(64) * PolynomialEpsilon());
+    Real alongStart = dot(axis, axis);
+    Real alongFinish = dot(axis, Real3(p1.x, p1.y, p1.z));
+    Real intervalThird = affineLength / Real(3);
+    if (alongStart > bound && alongFinish > bound &&
+        alongStart + intervalThird * dot(axis, Real3(v0.x, v0.y, v0.z)) > bound &&
+        alongFinish - intervalThird * dot(axis, Real3(v1.x, v1.y, v1.z)) > bound) return false;
+
+    Vec4Cart scaledPosition, scaledTangent;
+    if (!FindSphericalCaptureEvent(p0, v0, p1, v1, affineLength, Real(1),
+                                   fraction, scaledPosition, scaledTangent)) return false;
+    eventPosition = AcceptedSegmentPosition(
+        start, startVelocity, finish, finishVelocity, affineLength, fraction);
+    eventTangent = AcceptedSegmentTangent(
+        start, startVelocity, finish, finishVelocity, affineLength, fraction);
+    return true;
+}

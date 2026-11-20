@@ -226,7 +226,9 @@ validation role. Legacy device metric shaders and direct legacy parity probes
 continue to use Cartesian RK4 step doubling.
 
 CPU and retained-device black-hole rays use an outgoing Kerr-Schild chart so past-directed capture
-crosses the past horizon on an accepted finite segment. The public metric's
+crosses the past horizon on an accepted finite segment. The direct Vulkan trace uses the
+same chart for its supported Kerr and Schwarzschild scenes, represented through
+a time and azimuth reflection so it can reuse the analytic metric and RK4 evaluator. The public metric's
 ingoing chart remains the observer and exterior-output convention. The exact
 exterior coordinate Jacobian transforms the original camera tetrad, tangent,
 and screen before transport; the analytic metric and its derivatives transform
@@ -235,8 +237,10 @@ back to the original convention. Horizon endpoints explicitly identify their
 outgoing chart: their ingoing time and azimuth need not be finite, so a failed
 step is never replaced by an extrapolation or radial snap. All coupled consumers
 use the accepted step's actual affine interval, with double accumulation and
-publication. Legacy direct device probes retain their ingoing chart and exact declared horizon
-capture factor of 1.0. The outgoing production chart follows the backward-ray analysis in
+publication. Direct metric and integrator probes still exercise the native ingoing
+chart. The direct render probes keep the declared capture factor of 1.0. Their
+continuation stores the reflected outgoing state through advance and maps
+exterior sky and matter observations to the public convention. The outgoing chart follows the backward-ray analysis in
 [Bozzola, Chan and Paschalidis (2023)](https://doi.org/10.1103/PhysRevD.108.084004).
 
 The legacy host/device trace-parameter ABI has 68 occupied slots, numbered 0

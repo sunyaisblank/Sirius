@@ -33,6 +33,7 @@ template <typename Real>
 struct alignas(4 * sizeof(Real)) TraceContinuationRecord {
     // x, k, four X columns, four covariant V columns, compensated x/k, and
     // (adaptive step, accepted affine length, last interval, beam seed).
+    // These values use the device integration chart fixed at initialization.
     std::array<std::array<Real, 4>, 13> physical;
     static constexpr std::size_t kPositionColumns = 2;
     static constexpr std::size_t kCovariantColumns = 6;
