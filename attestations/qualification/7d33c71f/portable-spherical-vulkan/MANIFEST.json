@@ -1,0 +1,144 @@
+{
+  "schema": "sirius-portable-spherical-vulkan-v1",
+  "source_revision": "7d33c71fe019c5ecceeba5a1aad0569855e9f9d6",
+  "before_admission_change": "35298c49",
+  "recorded_utc": "2026-11-21T08:10:27.725134+00:00",
+  "change": "The renderer makes the existing certified spherical continuation available on integrated and discrete Vulkan devices that use portable retained arithmetic. Device precision, spherical scene eligibility, matching committed 40-word state, vacuum support and coupled-state admission remain responsible for each continuation.",
+  "production_source": {
+    "path": "src/sirius/render/vulkan_renderer.cpp",
+    "bytes": 77088,
+    "sha256": "4d48ad7d1eeec8df0737fd5c05864e17c278102a6ccf55872e4203528478c870"
+  },
+  "scope": "Strict production renderer translation unit compiled with the linux-ci preset's arguments. The existing four-ray witness directly exercises the unchanged trace certificate and real ordinary Vulkan publication on portable Lavapipe. It is an execution check of the portable input needed by the admission change. The Apple MoltenVK renderer, original full native frame and exact-main qualification remain pending.",
+  "replayed_witness": {
+    "path": "out/retained-spherical-tail/trace_screen.cpp",
+    "bytes": 34996,
+    "sha256": "8158fe3912eae077d54a4253e2381f24072406ab98269346a742359dfe7c78e3"
+  },
+  "previous_witness": {
+    "path": "attestations/qualification/25f165dd/native-cpu-spherical-terminal-admission/MANIFEST.json",
+    "bytes": 15367,
+    "sha256": "489efcdff3829fdf335eaa38406d45b5d3d36976d559c68b903e2c7765973ca1"
+  },
+  "compile_command": [
+    "g++-14",
+    "-std=c++2c",
+    "-O2",
+    "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+    "-DSIRIUS_CONTRACT_MODE=2",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-frounding-math",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-Isrc",
+    "-c",
+    "out/retained-spherical-tail/trace_screen.cpp",
+    "-o",
+    "out/portable-spherical-current/trace-screen.o"
+  ],
+  "link_command": [
+    "g++-14",
+    "out/portable-spherical-current/trace-screen.o",
+    "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+    "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+    "bin/linux-ci/src/sirius/core/libsirius_core.a",
+    "bin/linux-ci/src/sirius/libsirius_base.a",
+    "-lvulkan",
+    "-ldl",
+    "-pthread",
+    "-o",
+    "out/portable-spherical-current/trace-screen"
+  ],
+  "linked_archives": [
+    {
+      "path": "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+      "bytes": 826594,
+      "sha256": "19838541b7a27139d42d89b7225b427f3b828d0a31c478b101a26c663b01539d"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+      "bytes": 7379864,
+      "sha256": "c386cc09cecfd1f360d7a5509c1c37d96ebd2b9cdf8585550325a80297e61bc8"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  ],
+  "provider": [
+    {
+      "path": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "bytes": 135,
+      "sha256": "70d49f7fd41a7593a4e283543ed4855c139c700e5c1b31792f56e9576ede2398"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libvulkan_lvp.so",
+      "bytes": 11929384,
+      "sha256": "9d69cae2004b16572acca424741109be37c4ffc759c2461af69d75f7d1c6c139"
+    }
+  ],
+  "execution": {
+    "unset": [
+      "VK_ICD_FILENAMES",
+      "VK_ADD_DRIVER_FILES",
+      "VK_LOADER_DRIVERS_SELECT",
+      "VK_LOADER_DRIVERS_DISABLE",
+      "SIRIUS_PACKAGED_SOFTWARE_VULKAN"
+    ],
+    "environment": {
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/lvp_icd.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "MESA_SHADER_CACHE_DISABLE": "true",
+      "XDG_CACHE_HOME": "out/portable-spherical-current/xdg-cache",
+      "TMPDIR": "out/portable-spherical-current"
+    },
+    "command": [
+      "/usr/bin/time",
+      "-v",
+      "timeout",
+      "--kill-after=8s",
+      "300s",
+      "prlimit",
+      "--as=10737418240",
+      "--",
+      "out/portable-spherical-current/trace-screen",
+      "--vulkan-publish"
+    ],
+    "exit": 0,
+    "wall_seconds": 101.67,
+    "max_rss_kib": 2450248
+  },
+  "result": {
+    "real_portable_binary32": true,
+    "ordinary_attempts": 545,
+    "certified_attempts": 306,
+    "terminal_quadrature_panels": 1750,
+    "maximum_event_error": 5.8842782e-11,
+    "maximum_finite_or_infinite_sky_map_error": 4.37675341e-11,
+    "maximum_beam_error": 0,
+    "cancelled_at_panel_check": 8,
+    "recovered": true,
+    "disk_and_capture_preserved": true
+  },
+  "files": [
+    {
+      "path": "attestations/qualification/7d33c71f/portable-spherical-vulkan/publication.log.gz",
+      "bytes": 777,
+      "sha256": "02b55486ab0d0b52f607107d42ba78b5bdd30a258872143337da04e3f98f4f4e"
+    },
+    {
+      "path": "attestations/qualification/7d33c71f/portable-spherical-vulkan/renderer-build.json.gz",
+      "bytes": 461,
+      "sha256": "4660af90679b8ec3ca450bc535c125b63a4bcaba6909bcb1d06dda5d8e963ead"
+    }
+  ]
+}
