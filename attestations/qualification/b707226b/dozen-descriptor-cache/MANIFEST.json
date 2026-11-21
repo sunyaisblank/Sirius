@@ -1,0 +1,352 @@
+{
+  "schema": "sirius-wsl2-dozen-required-cold-render-v1",
+  "source_revision": "b707226b1dce8e3a3bcc81ba268e799a842944e9",
+  "recorded_utc": "2026-11-21T13:40:33.472461+00:00",
+  "scope": "Original cold 128x128 one-SPP Kerr runtime case on WSL2 Dozen Radeon 780M, with separate pre-run sealed software controls.",
+  "implementation": "Reuse pipeline and immutable descriptor set for exact ordered storage-buffer bindings in a bounded per-device pool. The original shader, workload, launch registration and governors are unchanged.",
+  "sealed_controls": {
+    "cases": [
+      {
+        "test": "VulkanBackend.IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffers",
+        "seconds": 0.844,
+        "result": "completed",
+        "failure": false,
+        "skip": false
+      },
+      {
+        "test": "RetainedComputeTest.DeviceTimestampsPreserveOriginalIntervalResults",
+        "seconds": 19.946,
+        "result": "completed",
+        "failure": false,
+        "skip": false
+      },
+      {
+        "test": "RetainedComputeTest.SharedEndpointDensePreservesPrivateIntervalsAndSerialRetry",
+        "seconds": 21.177,
+        "result": "completed",
+        "failure": false,
+        "skip": false
+      }
+    ],
+    "descriptor_reuses_reported_by_smoke_case": 23,
+    "peak_sampled_rss_kib": 820000,
+    "owner_wait_seconds": 42.13075218201266,
+    "verifier_self_test_passed": true
+  },
+  "test": "OperationalVulkan.RequiredRuntimeDispatch",
+  "passed": false,
+  "child_exit": -15,
+  "stop_reason": "diagnostic_timeout",
+  "wall_seconds": 300.3783057779947,
+  "peak_sampled_rss_kib": 1265036,
+  "minimum_sampled_available_kib": 9764716,
+  "limits": {
+    "seconds": 300,
+    "rss_kib": 2097152,
+    "reserve_kib": 2097152
+  },
+  "environment": {
+    "SIRIUS_MEMORY_BUDGET_MB": "2048",
+    "TMPDIR": "/home/astra/.project/Sirius/out/dozen-descriptor-cache/render-output",
+    "XDG_CACHE_HOME": "/home/astra/.project/Sirius/out/dozen-descriptor-cache/cache",
+    "GTEST_OUTPUT": "xml:/home/astra/.project/Sirius/out/dozen-descriptor-cache/dozen-cold/gtest.xml",
+    "MESA_SHADER_CACHE_DISABLE": "true",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "VK_DRIVER_FILES": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json"
+  },
+  "device": {
+    "api_version": 4202814,
+    "device_id": 6400,
+    "device_local_bytes": 49162461184,
+    "driver_id": 23,
+    "driver_info": "Mesa 25.2.8",
+    "driver_name": "Dozen",
+    "index": 0,
+    "kind": "integrated",
+    "name": "Microsoft Direct3D12 (AMD Radeon 780M Graphics)",
+    "preserves_fp32_denormals": true,
+    "render_memory_bytes": 49162461184,
+    "rounds_fp32_to_nearest": true,
+    "rounds_fp64_to_nearest": true,
+    "supports_fp64": true,
+    "vendor_id": 4098
+  },
+  "scene": {
+    "schema": "sirius-render-scene-v1",
+    "backend": "Vulkan",
+    "metric": "Kerr",
+    "spin": 0,
+    "width": 128,
+    "height": 128,
+    "samples_per_pixel": 1,
+    "field_of_view": 60,
+    "disk_enabled": true,
+    "ray_bundles": false,
+    "point_starfield": false,
+    "point_star_count": 0,
+    "point_brightness_scale": 100,
+    "point_seed": 42,
+    "point_min_distance_pc": 1,
+    "point_max_distance_pc": 10000,
+    "camera_beta": [
+      0,
+      0,
+      0
+    ],
+    "lens": "Pinhole",
+    "focal_length": 50,
+    "aperture": 2.799999952316284,
+    "focus_distance": 50
+  },
+  "largest_published_tile_count": 1257,
+  "registered_tile_count": 16384,
+  "case_status": null,
+  "render_completion": null,
+  "host_load": {
+    "utc": "2026-11-21T13:37:34.412307+00:00",
+    "interval_seconds": 0.8,
+    "active_processes_outside_the_qualified_render": [
+      {
+        "pid": 1397096,
+        "start_ticks": 21330969,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 1
+      },
+      {
+        "pid": 1397098,
+        "start_ticks": 21330970,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 65
+      },
+      {
+        "pid": 1409645,
+        "start_ticks": 21477400,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 1
+      },
+      {
+        "pid": 1409646,
+        "start_ticks": 21477400,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 42
+      },
+      {
+        "pid": 1411020,
+        "start_ticks": 21482121,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 1
+      },
+      {
+        "pid": 1411022,
+        "start_ticks": 21482122,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 74
+      },
+      {
+        "pid": 1412783,
+        "start_ticks": 21493611,
+        "name": "aletheia_qualif",
+        "cpu_ticks": 44
+      },
+      {
+        "pid": 1416601,
+        "start_ticks": 21535206,
+        "name": "VBCSCompiler",
+        "cpu_ticks": 683
+      }
+    ]
+  },
+  "timing_comparison_scope": "Other active host workloads were observed during this execution. Tile progress is a governed outcome; the two executions do not isolate the performance effect of descriptor reuse.",
+  "last_completed_stage_snapshot": {
+    "camera": "kernel_commands_including_shared=0, individual_submit_wait_ms=0.000000, individual_pipeline_setup_ms=0.000000, individual_command_setup_ms=0.000000, individual_cleanup_ms=0.000000, individual_dispatch_total_ms_inclusive=0.000000, write_buffer_ms=0.000000, read_buffer_ms=0.000000",
+    "transport": "kernel_commands_including_shared=10005, individual_submit_wait_ms=46360.751003, individual_pipeline_setup_ms=9364.934669, individual_command_setup_ms=1163.689750, individual_cleanup_ms=4.961116, individual_dispatch_total_ms_inclusive=56894.336538, write_buffer_ms=118.644015, read_buffer_ms=1204.261116",
+    "endpoint": "kernel_commands_including_shared=16207, individual_submit_wait_ms=73057.017859, individual_pipeline_setup_ms=24323.177978, individual_command_setup_ms=1485.931327, individual_cleanup_ms=6.320648, individual_dispatch_total_ms_inclusive=98872.447812, write_buffer_ms=229.117493, read_buffer_ms=927.801265",
+    "dense": "kernel_commands_including_shared=3068, individual_submit_wait_ms=9175.706508, individual_pipeline_setup_ms=24097.708134, individual_command_setup_ms=352.106294, individual_cleanup_ms=1.399459, individual_dispatch_total_ms_inclusive=33626.920395, write_buffer_ms=15.183244, read_buffer_ms=36.525486",
+    "initialize": "kernel_commands_including_shared=809, individual_submit_wait_ms=1527.006724, individual_pipeline_setup_ms=1926.638596, individual_command_setup_ms=82.392661, individual_cleanup_ms=0.279818, individual_dispatch_total_ms_inclusive=3536.317799, write_buffer_ms=4.636861, read_buffer_ms=7.810002",
+    "ray_camera": "kernel_commands_including_shared=806, individual_submit_wait_ms=2872.874116, individual_pipeline_setup_ms=1805.393299, individual_command_setup_ms=95.263227, individual_cleanup_ms=0.369421, individual_dispatch_total_ms_inclusive=4773.900063, write_buffer_ms=13.952197, read_buffer_ms=10.588158",
+    "dopri_phase": "kernel_commands_including_shared=8676, individual_submit_wait_ms=15745.576791, individual_pipeline_setup_ms=1349.985428, individual_command_setup_ms=676.549734, individual_cleanup_ms=2.317788, individual_dispatch_total_ms_inclusive=17774.429741, write_buffer_ms=482.346195, read_buffer_ms=788.010442"
+  },
+  "last_completed_pair_snapshot": {
+    "Endpoint/Dense": "queue_submissions=0, submit_wait_ms=0.000000, pipeline_setup_ms=0.000000, command_setup_ms=0.000000, cleanup_ms=0.000000, dispatch_total_ms_inclusive=0.000000",
+    "DopriPhase/Endpoint": "queue_submissions=3283, submit_wait_ms=20131.934307, pipeline_setup_ms=3.184006, command_setup_ms=417.369130, cleanup_ms=2.083427, dispatch_total_ms_inclusive=20554.570870"
+  },
+  "last_progress_snapshot": "1039 work tiles of 1px, 806 camera batches, 184438 accepted intervals, 5173 rejected intervals, 1102 phase initializations, 188568 phase reuses, 0 batch subdivisions, 0 safety reductions, 4.38807s coalescing, 262.033s batch execution, 4.01557s summed worker acceleration",
+  "observed_driver_mappings": [
+    {
+      "maps": [
+        "71b897a00000-71b897a4b000 r--p 00000000 08:50 2120024                    /home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+        "71b897a4b000-71b897e09000 r-xp 0004b000 08:50 2120024                    /home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+        "71b897e09000-71b8983cc000 r--p 00409000 08:50 2120024                    /home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+        "71b8983cc000-71b89845f000 r--p 009cc000 08:50 2120024                    /home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+        "71b89845f000-71b898462000 rw-p 00a5f000 08:50 2120024                    /home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so"
+      ],
+      "owned_session": 1415969,
+      "pid": 1415971,
+      "start_ticks": "21530451"
+    }
+  ],
+  "source_and_inputs_unchanged": true,
+  "remaining_owned_processes": [],
+  "baseline": {
+    "path": "attestations/qualification/e0941aed/dozen-dopri-pair/MANIFEST.json",
+    "bytes": 12683,
+    "sha256": "0ae4ae1cc9a8d426684b99fcfc5958de17a04bc289518943daa2c13811e17cfe",
+    "source_revision": "e0941aed27bec7aa640ec0857f7c4d0a778ca790",
+    "published_tiles_at_deadline": 16318,
+    "same_scene_limits_and_reported_device": true
+  },
+  "archive": {
+    "path": "attestations/qualification/b707226b/dozen-descriptor-cache/verification.tar.gz",
+    "bytes": 670492,
+    "sha256": "a01caa79b34a0da7cc98a23412650d85bfe6448f2b13af92b48f324ebb0e52a3"
+  },
+  "files_in_archive": [
+    {
+      "path": "revision",
+      "bytes": 41,
+      "sha256": "b24b1d0f0907683a87cce97834a0200ccde67608cf27eb4985ead5ff5030987a"
+    },
+    {
+      "path": "build.py",
+      "bytes": 1635,
+      "sha256": "d9172296c010da2da79d0f825c2e6b5b15d7d8eea6f92ed2ad1ae67a1e7cced7"
+    },
+    {
+      "path": "build.log",
+      "bytes": 37089,
+      "sha256": "78146dcad0ee9fd1208ed1eaa98f14ca64028d444a267c1ce966cf8b09282054"
+    },
+    {
+      "path": "controls.py",
+      "bytes": 3326,
+      "sha256": "8f0cf165171b60495b63f0e66893cc909ee0a83bf5c3743ffb2740fa1d1dfaa1"
+    },
+    {
+      "path": "controls.log",
+      "bytes": 493,
+      "sha256": "99460aba9d3a6e6a769df28eef8acd7c8fa54932c8e1a4c43409f1d65e193a14"
+    },
+    {
+      "path": "controls-icd.json",
+      "bytes": 192,
+      "sha256": "ccb9e9a1df056086bedbff1e914520b5db85f2820447a9b2ee007272ebc6d898"
+    },
+    {
+      "path": "controls-actions.json",
+      "bytes": 1718,
+      "sha256": "8e55cb9d33031429544f17df7607653abe869e9ec58215f9651dadb663f90b7d"
+    },
+    {
+      "path": "launch.py",
+      "bytes": 4916,
+      "sha256": "f448d1a02c98f1f97a439c1f445159794bf5c706d39de74a8a554c9f9d0b400e"
+    },
+    {
+      "path": "launch.log",
+      "bytes": 2820,
+      "sha256": "9384996051d86070e224bea4819e3ea46c0b4372eb2ba0f5a8b80fbd7ee0658d"
+    },
+    {
+      "path": "run_owned.py",
+      "bytes": 12531,
+      "sha256": "34f021ffe2064fe489181e2a370f33caf8c3a75ee60dd5088629fee9a68a8aab"
+    },
+    {
+      "path": "owned_guard.py",
+      "bytes": 20791,
+      "sha256": "747fe1e0bcaa0cad8fb867f22a30935b1c367dc0e2c0ad8204a87f6593899056"
+    },
+    {
+      "path": "actions.json",
+      "bytes": 5394,
+      "sha256": "5bd60c08f1370f67fec02a7e2987a97deb330fba02d134b04bcddd29a0268199"
+    },
+    {
+      "path": "registration.json",
+      "bytes": 1296,
+      "sha256": "7f91c53fd322296cdc1acb6710024477c79a9a2608dcba46e70ccfbeeaefcd51"
+    },
+    {
+      "path": "runtime-identity.json",
+      "bytes": 8489,
+      "sha256": "efa8b53e35725c4fa34a0e859e578e25f1d7b321fe42e0d6774239c869d38729"
+    },
+    {
+      "path": "host-load.json",
+      "bytes": 1095,
+      "sha256": "129234f8c34a8601ec9b01115e61e315b1d77a948a696cab6bba3335d41e4090"
+    },
+    {
+      "path": "sealed-controls/owner.json",
+      "bytes": 2849,
+      "sha256": "f486f89773e048814cfbf670617bf23aa05e314fddcddf3316e2a2c623604523"
+    },
+    {
+      "path": "sealed-controls/inputs-before.json",
+      "bytes": 1329184,
+      "sha256": "7707bb0ba6dd45c082fa4b65a86b5eed7d6e9f824fc7976e0b98cd3c224e0117"
+    },
+    {
+      "path": "sealed-controls/stdout.log",
+      "bytes": 2404,
+      "sha256": "09a453807fa19cc26ce1878ed274d6dc12f593008d71ae3bea383ff3658fdbcb"
+    },
+    {
+      "path": "sealed-controls/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "sealed-controls/samples.jsonl",
+      "bytes": 336097,
+      "sha256": "88e84c56e9fde832fb5806a4057a37d4a36583615d90ea1c30966127a4b48da8"
+    },
+    {
+      "path": "sealed-controls/gtest.xml",
+      "bytes": 31609,
+      "sha256": "2778bdb90864bb8bde9cb64f89596dca726c47a5bf47a354eb59fc2ba1053cb0"
+    },
+    {
+      "path": "dozen-cold/owner.json",
+      "bytes": 2733,
+      "sha256": "e95b3954db9e49741c41c804f73833377b49b37b986dcf3971b296993a74534d"
+    },
+    {
+      "path": "dozen-cold/inputs-before.json",
+      "bytes": 1341560,
+      "sha256": "aa8675d64b2ef362ee49ba0853a5f0e9e260106b8393a348197f7c6d5f4e53e8"
+    },
+    {
+      "path": "dozen-cold/stdout.log",
+      "bytes": 227965,
+      "sha256": "b6105a7b24fe4d8e4e3ffc376f7d1adde9c543289d6b164d4e00ab386d9e479a"
+    },
+    {
+      "path": "dozen-cold/stderr.log",
+      "bytes": 66005,
+      "sha256": "285c8efffd821e6260cf9da639c17d01d8bd2959bbe6cd467104a300a2c38ae4"
+    },
+    {
+      "path": "dozen-cold/samples.jsonl",
+      "bytes": 3833747,
+      "sha256": "0312249258e1c863cd7d43b674602230af4a50133b39e90334d09c090adaf306"
+    },
+    {
+      "path": "alignment_receipt.json",
+      "bytes": 1240,
+      "sha256": "3ece7d9b0781161a378194e7d2940b6740523bad017f175ab06f865a1e805542"
+    }
+  ],
+  "observed_pair_cleanup": {
+    "prior": {
+      "paired_submissions": 4039,
+      "mean_cleanup_microseconds": 3.0307439960386233
+    },
+    "current": {
+      "paired_submissions": 3283,
+      "mean_cleanup_microseconds": 0.6346107219007007
+    },
+    "scope": "Cumulative telemetry through the last completed periodic snapshot. This phase includes descriptor release after completion."
+  },
+  "next_decision": "Target actual queue completion overhead with a submission-scoped fence or remove work before retained stepping under the exact committed-state authority. Keep the original 300-second deadline, 2048 MiB memory cap, fixture, and cold policy for the next changed candidate."
+}
