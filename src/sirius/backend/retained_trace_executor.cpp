@@ -527,19 +527,50 @@ std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
 
 std::optional<DetectorLaunchFrame> RetainedTraceExecutor::EncloseDetectorLaunchFrame(
     core::IMetric& metric, double absolute_spin, const core::CameraRay& camera) {
-    const auto result = ReadCameraLaunch(metric, absolute_spin, camera);
-    if (!result) return std::nullopt;
+    const auto* family = dynamic_cast<const core::KerrSchildFamily*>(&metric);
+    if (!family || !camera.phase_space) return std::nullopt;
+    const auto parameters = family->GetParams();
     using Range = DetectorLaunchFrame::Range;
     const auto enclosure = [](const RetainedValue& value) {
         return Range(value.high) + Range(value.low) + Range(value.tail) +
                Range(-value.radius, value.radius);
     };
+    // At a fixed pupil, with direction seed derivatives zero, V is affine
+    // in the normalized local direction. Four retained rows recover all
+    // coefficients while preserving the device's arithmetic bounds.
+    auto basis = camera;
+    basis.phase_space->direction = {};
+    constexpr std::array<std::array<double, 3>, 4> directions{
+        {{1.0, 0.0, 0.0}, {-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}}};
+    std::array<DetectorLaunchFrame::Variations, 4> measured;
     DetectorLaunchFrame frame;
-    for (int i = 0; i < 4; ++i) {
-        frame.position[i] = enclosure(result->values[i]);
-        for (int axis = 0; axis < 4; ++axis)
-            frame.tetrad[axis][i] = enclosure(result->values[8 + 4 * axis + i]);
+    frame.metric = {parameters.M, parameters.a, parameters.Q, parameters.Lambda};
+    frame.pupil = camera;
+    for (std::size_t row = 0; row < directions.size(); ++row) {
+        for (int axis = 0; axis < 3; ++axis) basis.direction(axis + 1) = directions[row][axis];
+        const auto result = ReadCameraLaunch(metric, absolute_spin, basis);
+        if (!result) return std::nullopt;
+        for (int i = 0; i < 4; ++i) {
+            if (row == 0) {
+                frame.position[i] = enclosure(result->values[i]);
+                for (int axis = 0; axis < 4; ++axis) {
+                    frame.tetrad[axis][i] = enclosure(result->values[8 + 4 * axis + i]);
+                    frame.displacement[axis][i] = enclosure(result->values[24 + 4 * axis + i]);
+                }
+            }
+            for (int col = 0; col < 4; ++col)
+                measured[row][col][i] = enclosure(result->values[56 + 4 * col + i]);
+        }
     }
+    for (int col = 0; col < 4; ++col)
+        for (int i = 0; i < 4; ++i) {
+            const auto forward = measured[0][col][i], reverse = measured[1][col][i];
+            auto& constant = frame.covariant[0][col][i];
+            constant = (forward + reverse) * Range(0.5);
+            frame.covariant[1][col][i] = (forward - reverse) * Range(0.5);
+            frame.covariant[2][col][i] = measured[2][col][i] - constant;
+            frame.covariant[3][col][i] = measured[3][col][i] - constant;
+        }
     return frame;
 }
 

@@ -409,11 +409,14 @@ class GeodesicTracer {
 
     // An empty result certifies a dark vacuum detector sample. Other results
     // carry the usual traced state or error, including cancellation.
-    std::optional<TraceResult> TraceDetectorRay(const sirius::core::CameraRay& camera_ray);
+    std::optional<TraceResult> TraceDetectorRay(const sirius::core::CameraRay& camera_ray,
+                                                const DetectorLaunchFrame* pupil = nullptr);
 
+    [[nodiscard]] std::optional<DetectorLaunchFrame> PrepareDetectorPupil(
+        const sirius::core::CameraRay& pupil);
     // Certify every ray in a continuous film rectangle at one ThinLens pupil.
     [[nodiscard]] bool CertifyThinLensDetectorRegion(
-        const sirius::core::CameraConfig&, const sirius::core::CameraRay& pupil,
+        const sirius::core::CameraConfig&, const DetectorLaunchFrame&,
         const std::array<DetectorLaunchFrame::Range, 2>& film_bounds);
 
     // Non-owning; the executor must outlive this tracer and any active trace.
@@ -470,9 +473,11 @@ class GeodesicTracer {
     PolarisationObserver polarisation_observer_;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
     TraceResult TraceTo(const sirius::core::CameraRay& camera_ray, bool allow_infinity_handoff,
-                        bool* detector_capture = nullptr);
+                        bool* detector_capture = nullptr,
+                        const DetectorCameraLaunch* detector_launch = nullptr);
     TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray,
-                                    bool allow_infinity_handoff, bool* detector_capture);
+                                    bool allow_infinity_handoff, bool* detector_capture,
+                                    const DetectorCameraLaunch* detector_launch);
 
     // Metric parameters cached once per trace.
     double cached_m_ = 1.0;
@@ -489,7 +494,8 @@ class GeodesicTracer {
     sirius::core::Lightray InitializeLightray(const sirius::core::CameraRay& camera_ray,
                                               sirius::core::relativity::ObserverFrame* launch_frame,
                                               sirius::core::GeodesicVariations* launch_variations,
-                                              bool* detector_capture);
+                                              bool* detector_capture,
+                                              const DetectorCameraLaunch* detector_launch);
 
     // Whether an accepted central-ray segment crosses the equatorial disk.
     // Solves z(lambda)=0 on the cubic Hermite segment and returns the crossing

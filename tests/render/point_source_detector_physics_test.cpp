@@ -285,6 +285,99 @@ TEST(PointSourceDetector, MovingKerrFluxMatchesIndependentSeparatedImageAndBand)
     ASSERT_NO_FATAL_FAILURE(CheckIndependentMovingKerrFlux());
 }
 
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
+TEST(PointSourceDetector, RetainedFixedPupilPreservesFourLaunchColumns) {
+    const auto inventory = backend::EnumerateVulkanDevices();
+    ASSERT_TRUE(inventory) << inventory.error().Description();
+    if (inventory->empty()) GTEST_SKIP() << "no Vulkan device; numerical backend unqualified";
+    const auto index = backend::ResolveVulkanDeviceIndex(*inventory);
+    ASSERT_TRUE(index);
+    auto device = backend::CreateVulkanDevice(*index);
+    ASSERT_TRUE(device);
+    auto compute = backend::RetainedCompute::Create(**device, 1);
+    ASSERT_TRUE(compute);
+    backend::RetainedTraceExecutor executor(**compute);
+    core::KerrSchildFamily metric(core::KerrSchildParams::Kerr(1, .7));
+    backend::TracerConfig trace_config;
+    trace_config.enable_disk = false;
+    trace_config.enable_ray_bundles = true;
+    trace_config.bundle_point_source = true;
+    trace_config.escape_radius = 100;
+    backend::GeodesicTracer tracer(&metric, trace_config);
+    tracer.SetStepExecutor(&executor);
+    core::CameraConfig config;
+    config.width = 4;
+    config.height = 2;
+    config.r = 50;
+    config.theta = std::numbers::pi / 3.0;
+    config.fov = 2;
+    config.focus_distance = 50;
+    config.beta_x = .1;
+    config.beta_y = .8;
+    core::ThinLensCamera camera(config);
+    const auto original = camera.ProjectFilmForObserver(.5, .5, .2f, .3f);
+    ASSERT_TRUE(original);
+    const auto frame = tracer.PrepareDetectorPupil(original->ray);
+    ASSERT_TRUE(frame);
+    EXPECT_EQ(executor.Statistics().camera_batches, 4u);
+    double largest_launch_error = 0.0;
+    double largest_map_error = 0.0;
+    const auto near_launch = [&](double a, double b) {
+        largest_launch_error = std::max(largest_launch_error, std::abs(a - b));
+        EXPECT_NEAR(a, b, 2e-10 * std::max(1.0, std::abs(b)));
+    };
+    for (const auto q : {std::array{.5, .5}, std::array{3.25, 1.25}}) {
+        const auto sample = camera.ProjectFilmForObserver(q[0], q[1], .2f, .3f);
+        ASSERT_TRUE(sample);
+        const auto cached = backend::ProjectDetectorLaunch(*frame, sample->ray);
+        ASSERT_TRUE(cached);
+        const auto separate = executor.Launch(metric, .7, sample->ray);
+        ASSERT_TRUE(separate);
+        for (int mu = 0; mu < 4; ++mu) {
+            near_launch(cached->central.position(mu), separate->position(mu));
+            near_launch(cached->central.tangent(mu), separate->tangent(mu));
+            ASSERT_LE(cached->position[mu].lo, separate->position(mu));
+            ASSERT_GE(cached->position[mu].hi, separate->position(mu));
+            for (int col = 0; col < 4; ++col) {
+                near_launch(cached->central.variations[col].displacement(mu),
+                            separate->variations[col].displacement(mu));
+                near_launch(cached->central.variations[col].derivative(mu),
+                            separate->variations[col].derivative(mu));
+            }
+        }
+        const auto before = executor.Statistics().camera_batches;
+        const auto trace = tracer.TraceDetectorRay(sample->ray, &*frame);
+        ASSERT_TRUE(trace);
+        ASSERT_TRUE(trace->beam.infinity_source_map);
+        EXPECT_EQ(trace->steps_taken, 0);
+        EXPECT_EQ(executor.Statistics().camera_batches, before);
+        const auto reference = tracer.TraceDetectorRay(sample->ray);
+        ASSERT_TRUE(reference);
+        ASSERT_TRUE(reference->beam.infinity_source_map);
+        const auto& a = *trace->beam.infinity_source_map;
+        const auto& b = *reference->beam.infinity_source_map;
+        EXPECT_NEAR(a.frequency, b.frequency, 2e-10);
+        for (int axis = 0; axis < 3; ++axis) {
+            largest_map_error = std::max(largest_map_error,
+                                         std::abs(a.map.direction[axis] - b.map.direction[axis]));
+            EXPECT_NEAR(a.map.direction[axis], b.map.direction[axis], 2e-9);
+        }
+        for (int col = 0; col < 2; ++col) {
+            EXPECT_NEAR(a.frequency_derivative[col], b.frequency_derivative[col], 2e-9);
+            for (int row = 0; row < 2; ++row)
+                EXPECT_NEAR(a.map.jacobian[row][col], b.map.jacobian[row][col],
+                            2e-9 * std::max(1.0, std::abs(b.map.jacobian[row][col])));
+        }
+    }
+    const auto other = camera.ProjectFilmForObserver(.5, .5, .25f, .3f);
+    ASSERT_TRUE(other);
+    EXPECT_FALSE(backend::ProjectDetectorLaunch(*frame, other->ray));
+    EXPECT_FALSE(executor.Error());
+    RecordProperty("largest_launch_error", std::format("{:.17g}", largest_launch_error));
+    RecordProperty("largest_map_direction_error", std::format("{:.17g}", largest_map_error));
+}
+#endif
+
 TEST(PointSourceDetector, RetainedMovingKerrFluxMatchesIndependentSeparatedImageAndBand) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
     const auto inventory = backend::EnumerateVulkanDevices();

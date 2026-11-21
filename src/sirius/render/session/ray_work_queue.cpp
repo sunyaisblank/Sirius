@@ -7,17 +7,27 @@
 namespace sirius::render {
 
 struct RayWorkQueue::Batch {
-    explicit Batch(std::span<const core::CameraRay> input)
-        : rays(input.begin(), input.end()), results(input.size()) {}
+    Batch(std::span<const core::CameraRay> input,
+          const std::shared_ptr<const backend::DetectorLaunchFrame>& prepared)
+        : rays(input.begin(), input.end()), results(input.size()), pupil(prepared) {}
     std::vector<core::CameraRay> rays;
     std::vector<std::optional<backend::TraceResult>> results;
+    std::shared_ptr<const backend::DetectorLaunchFrame> pupil;
     std::mutex mutex;
     std::condition_variable completed;
     std::size_t remaining = 0;
     bool failed = false;
 };
 
-RayWorkQueue::RayWorkQueue(std::size_t workers, TraceFunction trace) : trace_(std::move(trace)) {
+RayWorkQueue::RayWorkQueue(std::size_t workers, TraceFunction trace)
+    : RayWorkQueue(workers, trace ? PupilTraceFunction(
+          [trace = std::move(trace)](std::size_t worker, const core::CameraRay& ray,
+                                     const backend::DetectorLaunchFrame*) {
+              return trace(worker, ray);
+          }) : PupilTraceFunction{}, std::in_place) {}
+
+RayWorkQueue::RayWorkQueue(std::size_t workers, PupilTraceFunction trace, std::in_place_t)
+    : trace_(std::move(trace)) {
     if (workers == 0 || workers > 1024 || !trace_)
         throw std::invalid_argument("ray queue requires 1..1024 workers and a trace callback");
     queue_.resize(2 * workers);
@@ -45,12 +55,18 @@ void RayWorkQueue::Stop() {
 
 base::Expected<std::vector<std::optional<backend::TraceResult>>> RayWorkQueue::Execute(
     std::span<const core::CameraRay> rays) {
+    return Execute(rays, {});
+}
+
+base::Expected<std::vector<std::optional<backend::TraceResult>>> RayWorkQueue::Execute(
+    std::span<const core::CameraRay> rays,
+    const std::shared_ptr<const backend::DetectorLaunchFrame>& pupil) {
     if (rays.size() > kMaximumBatch)
         return base::Fail(base::ErrorDomain::kConfiguration, "trace probe batch",
                           "batch exceeds the bounded ray capacity");
     if (rays.empty()) return std::vector<std::optional<backend::TraceResult>>{};
     try {
-        const auto batch = std::make_shared<Batch>(rays);
+        const auto batch = std::make_shared<Batch>(rays, pupil);
         batch->remaining = rays.size();
         for (std::size_t i = 0; i < rays.size(); ++i) {
             std::unique_lock lock(mutex_);
@@ -88,7 +104,8 @@ void RayWorkQueue::Run(std::size_t worker) {
         space_.notify_one();
         bool failed = false;
         try {
-            job.batch->results[job.index] = trace_(worker, job.batch->rays[job.index]);
+            job.batch->results[job.index] =
+                trace_(worker, job.batch->rays[job.index], job.batch->pupil.get());
         } catch (...) {
             failed = true;
         }

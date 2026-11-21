@@ -183,7 +183,11 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     PointDetectorBatchResult result;
     result.samples.resize(count);
     if (footprints.empty()) return result;
-    if (workers && typeid(camera) == typeid(core::ThinLensCamera)) {
+    std::shared_ptr<const backend::DetectorLaunchFrame> prepared;
+    if (workers && typeid(camera) == typeid(core::ThinLensCamera))
+        if (auto frame = tracer.PrepareDetectorPupil(*pupil))
+            prepared = std::make_shared<backend::DetectorLaunchFrame>(std::move(*frame));
+    if (prepared) {
         using backend::DetectorLaunchFrame;
         using Range = DetectorLaunchFrame::Range;
         const std::array origin{Range(x + double(sample.image_u)), Range(y + double(sample.image_v))};
@@ -206,7 +210,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
                                      std::max(bounds[axis].hi, support.hi)};
             }
         }
-        if (tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *pupil, bounds)) return result;
+        if (tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *prepared, bounds)) return result;
     }
     const PointDetectorSampler probe = [&](const DetectorCoordinate& q)
         -> std::expected<PointDetectorProbe, PointDetectorFailure> {
@@ -218,7 +222,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         // Derivative per common film coordinate. The batch engine composes
         // the discovery chart and each original Gaussian separately.
         if (workers) {
-            const auto traced = workers->Execute(std::span(&film->ray, 1));
+            const auto traced = workers->Execute(std::span(&film->ray, 1), prepared);
             if (!traced) return std::unexpected(PointDetectorFailure::TraceFailed);
             return MeasurePointDetector(*film, traced->front());
         }
@@ -247,7 +251,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
                     active.push_back(i);
                 }
             }
-            const auto traced = workers->Execute(rays);
+            const auto traced = workers->Execute(rays, prepared);
             for (std::size_t i = 0; i < active.size(); ++i)
                 values[active[i]] = traced ? MeasurePointDetector(films[i], (*traced)[i])
                                            : std::unexpected(PointDetectorFailure::TraceFailed);

@@ -801,9 +801,11 @@ base::Expected<void> RenderSession::Initialise() {
         }
         probe_workers_ =
             std::make_unique<RayWorkQueue>(static_cast<std::size_t>(probe_threads),
-                                           [this](std::size_t worker, const core::CameraRay& ray) {
-                                               return probe_tracers_[worker]->TraceDetectorRay(ray);
-                                           });
+                                           [this](std::size_t worker, const core::CameraRay& ray,
+                                                  const backend::DetectorLaunchFrame* pupil) {
+                                               return probe_tracers_[worker]->TraceDetectorRay(
+                                                   ray, pupil);
+                                           }, std::in_place);
     }
 
     if (progress_.GetCancellationToken().IsCancelled()) {

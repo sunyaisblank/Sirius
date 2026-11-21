@@ -545,16 +545,23 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
 // A dark vacuum detector sample needs only capture classification. Enclose
 // the past null launch and prove the radial potential is strictly positive all
 // the way to the outer horizon. No terminal state is computed here.
-[[nodiscard]] inline bool CertifyKerrDetectorCapture(
+namespace kerr_infinity_detail {
+struct DetectorRadialBounds {
+    std::array<finite_tail_detail::Range, 5> coefficients;
+    finite_tail_detail::Range start;
+    finite_tail_detail::Range horizon;
+    bool inward;
+};
+
+[[nodiscard]] inline std::optional<DetectorRadialBounds> EncloseDetectorRadialState(
     const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
-    const std::array<finite_tail_detail::Range, 4>& tangent, unsigned maximum_panels) {
+    const std::array<finite_tail_detail::Range, 4>& tangent) {
     using finite_tail_detail::Range;
-    using kerr_infinity_detail::RadialCoefficients;
     const auto [mass, spin, charge, cosmological_constant] = parameters;
     if (charge != 0.0 || cosmological_constant != 0.0 || !(mass > std::abs(spin)) ||
         !std::isfinite(mass) || !finite_tail_detail::RoundingEnvironment() ||
         !std::ranges::all_of(position, &Range::Finite) || !std::ranges::all_of(tangent, &Range::Finite))
-        return false;
+        return std::nullopt;
 
     using finite_tail_detail::Square;
     const Range M(mass), a(spin);
@@ -562,14 +569,14 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     const Range reduced = Square(x) + Square(y) + Square(z) - Square(a);
     const Range discriminant = sqrt(Square(reduced) + Range(4.0) * Square(a) * Square(z));
     const Range r = sqrt((reduced + discriminant) * Range(0.5));
-    if (!(r.lo > (Range(2.0) * M).hi)) return false;
+    if (!(r.lo > (Range(2.0) * M).hi)) return std::nullopt;
 
     const Range kx = tangent[1], ky = tangent[2], kz = tangent[3];
     // The denominator of the oblate radius gradient is positive. Its
     // numerator fixes the radial branch before looking for any roots.
     const Range r2_plus_a2 = r * r + a * a;
     const Range radial = r * (x * kx + y * ky) + r2_plus_a2 * z * kz / r;
-    if (!(radial.hi < 0.0)) return false;
+    if (!(radial.hi < 0.0 || radial.lo > 0.0)) return std::nullopt;
 
     const auto ell = metric_detail::KerrSchildNullCovector(x, y, z, r, spin);
     const auto H = metric_detail::KerrSchildFactor(r, z, parameters);
@@ -579,18 +586,18 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     const Range minus_gtt = Range(1.0) - H;
     const Range null_time = (B - sqrt(Square(B) + minus_gtt * C)) / minus_gtt;
     const Range time = tangent[0];
-    if (!null_time.Finite() || !(null_time.hi < 0.0) || !(time.hi < 0.0)) return false;
+    if (!null_time.Finite() || !(null_time.hi < 0.0) || !(time.hi < 0.0)) return std::nullopt;
     // Point inputs must be close to null. The regional caller constructs
     // correlated null tangents from a certified observer frame and unit rays.
     const bool point = std::ranges::all_of(position, [](Range v) { return v.lo == v.hi; }) &&
                        std::ranges::all_of(tangent, [](Range v) { return v.lo == v.hi; });
     if (point && finite_tail_detail::Magnitude(null_time - time) >
                      -time.hi * KerrInfinityConfig{}.input_constraint_tolerance)
-        return false;
+        return std::nullopt;
     const Range kt(std::min(time.lo, null_time.lo), std::max(time.hi, null_time.hi));
     const Range correction = H * (kt + spatial);
     const Range energy = kt - correction;
-    if (!(energy.hi < 0.0)) return false;
+    if (!(energy.hi < 0.0)) return std::nullopt;
     const Range px = kx + correction * ell[1];
     const Range py = ky + correction * ell[2];
     const Range pz = kz + correction * ell[3];
@@ -608,11 +615,53 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     const auto start = Range(1.0) / r;
     const auto horizon = Range(1.0) / (M + sqrt(M * M - a * a));
     if (!start.Finite() || !horizon.Finite() || !(start.lo > 0.0 && start.hi < horizon.lo))
-        return false;
+        return std::nullopt;
 
+    return DetectorRadialBounds{coefficients, start, horizon, radial.hi < 0.0};
+}
+}  // namespace kerr_infinity_detail
+
+[[nodiscard]] inline bool CertifyKerrDetectorCapture(
+    const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
+    const std::array<finite_tail_detail::Range, 4>& tangent, unsigned maximum_panels) {
+    const auto bounds = kerr_infinity_detail::EncloseDetectorRadialState(parameters, position, tangent);
+    if (!bounds || !bounds->inward) return false;
     unsigned budget = std::min(maximum_panels, 64U);
-    return kerr_infinity_detail::ProvePositiveRadialPotential(coefficients, {start.lo, horizon.hi},
-                                                              budget);
+    return kerr_infinity_detail::ProvePositiveRadialPotential(
+        bounds->coefficients, {bounds->start.lo, bounds->horizon.hi}, budget);
+}
+
+// The shared launch can publish an escape only if the whole launch enclosure
+// is on the escape branch. The subsequent continuation certifies the
+// represented turn and transports both angular columns.
+[[nodiscard]] inline bool CertifyKerrDetectorEscape(
+    const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
+    const std::array<finite_tail_detail::Range, 4>& tangent, double minimum_radius,
+    unsigned maximum_panels) {
+    using finite_tail_detail::Range;
+    using namespace kerr_infinity_detail;
+    const auto bounds = EncloseDetectorRadialState(parameters, position, tangent);
+    if (!bounds) return false;
+    if (!bounds->inward) {
+        unsigned budget = std::min(maximum_panels, 64U);
+        return ProvePositiveRadialPotential(bounds->coefficients, {0.0, bounds->start.hi}, budget);
+    }
+
+    const auto& c = bounds->coefficients;
+    const double limit = minimum_radius > 0.0
+                             ? std::min(bounds->horizon.lo, (Range(1.0) / Range(minimum_radius)).lo)
+                             : bounds->horizon.lo;
+    if (!(limit > bounds->start.hi) || !(EvaluateRadial(c, bounds->start).lo > 0.0)) return false;
+    const auto centre = [](Range r) { return std::midpoint(r.lo, r.hi); };
+    const std::array derivative{2.0 * centre(c[2]), 3.0 * centre(c[3]) * limit,
+                                4.0 * centre(c[4]) * limit * limit};
+    if (!std::ranges::all_of(derivative, [](double v) { return std::isfinite(v); })) return false;
+    const auto extrema = sirius::core::detail::FindPolynomialRootsOnUnitInterval(derivative, 2);
+    for (int i = 0; i < extrema.count; ++i) {
+        const double probe = extrema.values[static_cast<std::size_t>(i)] * limit;
+        if (probe > bounds->start.hi && EvaluateRadial(c, Range(probe)).hi < 0.0) return true;
+    }
+    return EvaluateRadial(c, Range(limit)).hi < 0.0;
 }
 
 [[nodiscard]] inline bool CertifyKerrDetectorCapture(const KerrSchildParams& parameters,

@@ -10,9 +10,25 @@ namespace sirius::backend {
 
 struct DetectorLaunchFrame {
     using Range = core::relativity::finite_tail_detail::Range;
-    std::array<Range, 4> position;
-    std::array<std::array<Range, 4>, 4> tetrad;
+    using Column = std::array<Range, 4>;
+    using Variations = std::array<Column, 4>;
+    Column position;
+    std::array<Column, 4> tetrad;
+    Variations displacement;
+    // Covariant derivative of -e_0 and each e_i, indexed by basis, seed, component.
+    std::array<Variations, 4> covariant;
+    std::array<double, 4> metric;
+    core::CameraRay pupil;
 };
+
+struct DetectorCameraLaunch {
+    core::CameraLaunch central;
+    DetectorLaunchFrame::Column position;
+    DetectorLaunchFrame::Column tangent;
+};
+
+[[nodiscard]] std::optional<DetectorCameraLaunch> ProjectDetectorLaunch(
+    const DetectorLaunchFrame&, const core::CameraRay&);
 
 struct SphericalEscapeRequest {
     double source_support_radius;

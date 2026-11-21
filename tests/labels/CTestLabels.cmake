@@ -1453,6 +1453,7 @@ set_tests_properties(
     PointSourceDetector.NewlyDetectedHiddenRegionRetainsOriginalSamplingDepth
     PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport
     PointSourceDetector.PolynomialFoldResolvesCloseImagesBetweenTheCoarseNodes
+    PointSourceDetector.RetainedFixedPupilPreservesFourLaunchColumns
     PointSourceDetector.RetainedMovingKerrFluxMatchesIndependentSeparatedImageAndBand
     PointSourceDetector.RetainedRotatingIsolatedStarMatchesIndependentSharedRegionBrightness
     PointSourceDetector.RotatingIsolatedStarMatchesIndependentSharedRegionBrightness

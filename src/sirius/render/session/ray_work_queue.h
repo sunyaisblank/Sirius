@@ -10,6 +10,7 @@
 #include <optional>
 #include <span>
 #include <thread>
+#include <utility>
 #include <vector>
 
 namespace sirius::render {
@@ -23,15 +24,21 @@ class RayWorkQueue {
   public:
     using TraceFunction =
         std::function<std::optional<backend::TraceResult>(std::size_t, const core::CameraRay&)>;
+    using PupilTraceFunction = std::function<std::optional<backend::TraceResult>(
+        std::size_t, const core::CameraRay&, const backend::DetectorLaunchFrame*)>;
     static constexpr std::size_t kMaximumBatch = 64;
 
     RayWorkQueue(std::size_t workers, TraceFunction trace);
+    RayWorkQueue(std::size_t workers, PupilTraceFunction trace, std::in_place_t);
     ~RayWorkQueue();
     RayWorkQueue(const RayWorkQueue&) = delete;
     RayWorkQueue& operator=(const RayWorkQueue&) = delete;
 
     [[nodiscard]] base::Expected<std::vector<std::optional<backend::TraceResult>>> Execute(
         std::span<const core::CameraRay> rays);
+    [[nodiscard]] base::Expected<std::vector<std::optional<backend::TraceResult>>> Execute(
+        std::span<const core::CameraRay> rays,
+        const std::shared_ptr<const backend::DetectorLaunchFrame>& pupil);
 
   private:
     struct Batch;
@@ -42,7 +49,7 @@ class RayWorkQueue {
     void Run(std::size_t worker);
     void Stop();
 
-    TraceFunction trace_;
+    PupilTraceFunction trace_;
     std::mutex mutex_;
     std::condition_variable available_, space_;
     std::vector<Job> queue_;
