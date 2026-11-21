@@ -1,0 +1,222 @@
+{
+  "source_revision": "e68dffe364d23f3fd67afb28a76ebe7a425b5b62",
+  "sibling_source_revision": "bdd088791c5ea815b5feb3d55e7b771183d18469",
+  "diagnostic_base": "36e5733a",
+  "prior_evidence": "attestations/qualification/ac3c5574/grouped-windings-and-latitude-edge/MANIFEST.json",
+  "input_scope": "Original physical Radeon 780M via pinned WSL2 Dozen, point-star scene seed 42, 100000 stars, 1920x1080, four SPP, moving ThinLens, Kerr spin 0.9, beams on and disk off. Application overlays select footprint 704 at block 928,608. Failure was at sample 0. Direct probes use the same represented launch and original standard-film boxes.",
+  "governors": {
+    "candidate_visits": 131072,
+    "absolute_rgb_error": 1e-07,
+    "memory_mib": 2048
+  },
+  "exact_source_verification": {
+    "focused_tests_passed": 25,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "scope": "Detector suites plus scoped physical photometry. Two longer retained tests remained outside this selection.",
+    "exact_render_library_groups": [
+      {
+        "offset": 0,
+        "cells": 2,
+        "accepted": true,
+        "visits": 4438,
+        "wall_seconds": 4.623816757,
+        "rgb_upper": 1.7587094804553949e-10
+      },
+      {
+        "offset": 16,
+        "cells": 4,
+        "accepted": true,
+        "visits": 1669,
+        "wall_seconds": 1.337936725,
+        "rgb_upper": 6.803014730422182e-10
+      }
+    ],
+    "point_colour_checks": 440,
+    "point_colour_failures": 0
+  },
+  "baseline_library_groups": [
+    {
+      "offset": 0,
+      "cells": 2,
+      "accepted": true,
+      "visits": 4438,
+      "wall_seconds": 10.754001142,
+      "rgb_upper": 8.424831274816277e-10
+    },
+    {
+      "offset": 1,
+      "cells": 2,
+      "accepted": true,
+      "visits": 4937,
+      "wall_seconds": 12.419641465,
+      "rgb_upper": 1.224542864540912e-09
+    },
+    {
+      "offset": 2,
+      "cells": 4,
+      "accepted": true,
+      "visits": 5904,
+      "wall_seconds": 21.721682809,
+      "rgb_upper": 8.259260798277603e-09
+    },
+    {
+      "offset": 0,
+      "cells": 8,
+      "accepted": true,
+      "visits": 6579,
+      "wall_seconds": 21.847902235,
+      "rgb_upper": 1.1360260686220677e-08
+    },
+    {
+      "offset": 9,
+      "cells": 2,
+      "accepted": true,
+      "visits": 1123,
+      "wall_seconds": 0.583028971,
+      "rgb_upper": 7.202840720457691e-10
+    },
+    {
+      "offset": 16,
+      "cells": 4,
+      "accepted": true,
+      "visits": 1669,
+      "wall_seconds": 1.528456327,
+      "rgb_upper": 4.970285971080583e-09
+    },
+    {
+      "offset": 45,
+      "cells": 4,
+      "accepted": true,
+      "visits": 926,
+      "wall_seconds": 0.200126705,
+      "rgb_upper": 3.85828103306096e-09
+    },
+    {
+      "offset": 56,
+      "cells": 5,
+      "accepted": false,
+      "visits": 5656,
+      "wall_seconds": 5.152506057,
+      "rgb_upper": null
+    }
+  ],
+  "sibling_replay": {
+    "probes": 5929,
+    "cells": 1203,
+    "visits": 94978,
+    "wall": "1:53.75",
+    "peak_rss_kib": 340116,
+    "groups_certified": 27,
+    "groups_declined": 2,
+    "centre_anchored_exclusions": {}
+  },
+  "phase_experiments": {
+    "anchored_siblings_and_planck": {
+      "probes": 5929,
+      "cells": 1203,
+      "visits": 91502,
+      "wall": "1:09.26",
+      "peak_rss_kib": 341244,
+      "groups_certified": 27,
+      "groups_declined": 2,
+      "centre_anchored_exclusions": {
+        "69": 179,
+        "125": 25
+      }
+    },
+    "with_higher_order_refinement": {
+      "probes": 5929,
+      "cells": 1203,
+      "visits": 91502,
+      "wall": "1:19.21",
+      "peak_rss_kib": 341236,
+      "groups_certified": 27,
+      "groups_declined": 2,
+      "centre_anchored_exclusions": {
+        "69": 178,
+        "125": 25
+      }
+    },
+    "prior_recorded_box": {
+      "offset": 60,
+      "cells": 1,
+      "accepted": true,
+      "visits": 4729,
+      "wall_seconds": 5.281344001,
+      "rgb_upper": 2.1005446831120316e-10
+    },
+    "three_adjacent_boxes": [
+      {
+        "offset": 61,
+        "cells": 1,
+        "accepted": false,
+        "visits": 4267,
+        "wall_seconds": 4.975477945,
+        "rgb_upper": null
+      },
+      {
+        "offset": 62,
+        "cells": 1,
+        "accepted": true,
+        "visits": 1134,
+        "wall_seconds": 0.582836459,
+        "rgb_upper": 7.161959745409309e-11
+      },
+      {
+        "offset": 63,
+        "cells": 1,
+        "accepted": true,
+        "visits": 1751,
+        "wall_seconds": 1.516172308,
+        "rgb_upper": 2.917415158206641e-10
+      }
+    ],
+    "scope": "Diagnostic overlays. Both application trials reached the same recorded counts and still refused within the candidate budget. Neither phase variation was adopted."
+  },
+  "remaining_adjacent_box": {
+    "coordinates": [
+      [
+        "-0x1.9e44p+1",
+        "0x1.2cb8p+1"
+      ],
+      [
+        "-0x1.9e4p+1",
+        "0x1.2cbcp+1"
+      ]
+    ],
+    "winding": 69,
+    "approaching": true,
+    "source_latitude": [
+      "0x1.f4ed100889174p-1",
+      "0x1.f4ed10088917ep-1"
+    ],
+    "source_azimuth": [
+      "0x1.58cd1de0eb804p+1",
+      "0x1.58cd1de0eb816p+1"
+    ],
+    "inverse_radius": [
+      "0x1.c01bf13a8b6fbp-2",
+      "0x1.c01c02e6d537ap-2"
+    ],
+    "stationary_minimum": [
+      "-0x1.f1b2434800001p-20",
+      "0x1.ad43870400001p-20"
+    ],
+    "ledger_remaining_in_direct_probe": 126805,
+    "independent_critical_longitude_residuals": [
+      3.091813413902411e-07,
+      -3.633779745298993e-06,
+      -7.560785386800939e-06,
+      -1.1471809764518337e-05,
+      -1.5366826993296057e-05
+    ],
+    "numerical_scope": "Long-double fixed-point independent quadrature at s=0 from the separated orbit, with represented pupil, catalogue and radius interval. These sampled values do not establish branch admission at nonzero radial separation or root ownership inside the physical film box."
+  },
+  "verification": {
+    "path": "attestations/qualification/e68dffe3/kerr-neighbor-bounds/verification.tar.gz",
+    "bytes": 37629,
+    "sha256": "753ef6cc3d826b2e3ea5b0353434b7b25559a8a0c935960d1a71d24ace77557e"
+  }
+}
