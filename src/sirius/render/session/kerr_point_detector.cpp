@@ -16,28 +16,40 @@ struct SourceBand {
     double clearance = kInfinity;
 };
 
+struct ReachableCatalogue {
+    std::array<SourceBand, 3> bands;
+    ReachableCatalogueRows rows;
+};
+
 template <typename ExcludeTurn>
-std::optional<std::array<SourceBand, 3>> CollectReachableSources(
-    const AngularCatalogue& catalogue, Range amplitude, std::size_t& remaining,
-    const std::function<bool()>& cancelled, const ExcludeTurn& exclude_turn) {
-    std::array<SourceBand, 3> result{};
+std::optional<ReachableCatalogue> CollectReachableSources(const AngularCatalogue& catalogue,
+                                                          Range amplitude, std::size_t& remaining,
+                                                          const std::function<bool()>& cancelled,
+                                                          const ExcludeTurn& exclude_turn) {
+    ReachableCatalogue result{};
     const auto add = [&](unsigned group, Range weight, double clearance) {
-        auto& band = result[group];
+        auto& band = result.bands[group];
         band.weighted_temperature = band.weighted_temperature + weight;
         band.clearance = std::min(band.clearance, clearance);
     };
     for (bool north : {false, true}) {
+        auto& output = result.rows[north ? 1 : 0];
         for (const auto& row : catalogue.Rows(north)) {
             if (cancelled && cancelled()) return {};
             if (row.entries.empty() || row.latitude.lo > amplitude.hi) continue;
             const Range gap = amplitude - row.latitude;
             if (gap.lo > 0.0 && LatitudeBand(gap.lo) == LatitudeBand(gap.hi)) {
-                add(LatitudeBand(gap.lo), row.weighted_temperature, gap.lo);
+                const unsigned band = LatitudeBand(gap.lo);
+                add(band, row.weighted_temperature, gap.lo);
+                output.push_back({&row, row.latitude, band, {}});
                 continue;
             }
-            // Only rows touching a band edge or a polar turn require individual visits.
+            // Resolve the boundary rows once and keep their longitude order
+            // for every later winding query.
+            std::array<std::vector<const AngularCatalogue::Entry*>, 3> by_band;
+            std::array<Range, 3> latitude;
             for (const auto& entry : row.entries) {
-                if (remaining == 0) return {};
+                if (remaining == 0 || (cancelled && cancelled())) return {};
                 --remaining;
                 if (entry.latitude.lo > amplitude.hi) continue;
                 const Range star_gap = amplitude - entry.latitude;
@@ -45,8 +57,18 @@ std::optional<std::array<SourceBand, 3>> CollectReachableSources(
                     if (!exclude_turn(entry, north)) return {};
                     continue;
                 }
-                add(LatitudeBand(star_gap.lo), entry.weighted_temperature, star_gap.lo);
+                const unsigned band = LatitudeBand(star_gap.lo);
+                add(band, entry.weighted_temperature, star_gap.lo);
+                auto& limits = latitude[band];
+                auto& entries = by_band[band];
+                limits = entries.empty() ? entry.latitude
+                                         : Range(std::min(limits.lo, entry.latitude.lo),
+                                                 std::max(limits.hi, entry.latitude.hi));
+                entries.push_back(&entry);
             }
+            for (unsigned band = 0; band < by_band.size(); ++band)
+                if (!by_band[band].empty())
+                    output.push_back({&row, latitude[band], band, std::move(by_band[band])});
         }
     }
     return result;
@@ -502,7 +524,6 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const auto* angular = catalogue.Get(cancelled);
     if (!angular) return {};
     std::optional<FiniteTurnScreen> turn_screen;
-    std::vector<const AngularCatalogue::Entry*> excluded_turns;
     const auto exclude_turn = [&](const AngularCatalogue::Entry& source, bool north) {
         if (!finite_cutoff) return false;
         if (!turn_screen)
@@ -511,14 +532,13 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
         if (!turn_screen || !ExcludeFinitePolarTurn(*turn_screen, *shape, amplitude, source, north,
                                                     *finite_cutoff, remaining, cancelled))
             return false;
-        excluded_turns.push_back(&source);
         return true;
     };
-    const auto bands =
+    const auto reachable =
         CollectReachableSources(*angular, amplitude, remaining, cancelled, exclude_turn);
-    if (!bands) return {};
+    if (!reachable) return {};
     double clearance = kInfinity;
-    for (const auto& band : *bands) clearance = std::min(clearance, band.clearance);
+    for (const auto& band : reachable->bands) clearance = std::min(clearance, band.clearance);
     if (clearance == kInfinity) return std::array<double, 3>{};
     const auto latitude = EncloseLatitudeRootMonotonicity(mass, spin, radius, scale,
                                                           whole->initial_mu, clearance, *phase);
@@ -530,8 +550,8 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
 
     Range upper_bound;
     std::array<unsigned, 3> cutoffs{};
-    for (std::size_t i = 0; i < bands->size(); ++i) {
-        const auto& band = (*bands)[i];
+    for (std::size_t i = 0; i < reachable->bands.size(); ++i) {
+        const auto& band = reachable->bands[i];
         if (band.clearance == kInfinity) continue;
         if (finite_cutoff) {
             cutoffs[i] = *finite_cutoff;
@@ -553,8 +573,8 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     if (!polar) return {};
     const auto phases = PrepareNearCriticalPhases(mass, spin, radius, scale, *whole);
     const auto screen = ScreenFiniteWindings(
-        mass, spin, radius, scale, *whole, *polar, *phase, *angular, cutoffs, amplitude, clearance,
-        remaining, cancelled, phases ? &*phases : nullptr, excluded_turns,
+        mass, spin, radius, scale, *whole, *polar, *phase, reachable->rows, cutoffs, remaining,
+        cancelled, phases ? &*phases : nullptr,
         finite_cutoff ? std::optional(finite_scale) : std::nullopt, full_colour / determinant,
         PointDetectorPolicy{}.absolute_rgb_error * .01);
     if (!screen) return {};

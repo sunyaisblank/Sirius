@@ -403,6 +403,15 @@ class PolarDerivativeStrip {
     std::array<PolarJet, kPanels + 1> prefix_{};
 };
 
+struct ReachableCatalogueRow {
+    const AngularCatalogue::Row* row;
+    Range latitude;
+    unsigned band;
+    std::vector<const AngularCatalogue::Entry*> subset;
+};
+
+using ReachableCatalogueRows = std::array<std::vector<ReachableCatalogueRow>, 2>;
+
 struct CatalogueScreen {
     std::vector<FiniteCandidate> candidates;
     Range grouped_rgb;
@@ -413,11 +422,10 @@ struct CatalogueScreen {
 inline std::optional<CatalogueScreen> ScreenFiniteWindings(
     double mass, double spin, Range centre, Range scale, const StationaryChart& chart,
     const PolarIntegralTable& polar, const RegularizedRadialPhase& prior,
-    const AngularCatalogue& catalogue, const std::array<unsigned, 3>& cutoffs, Range turn_amplitude,
-    double clearance, std::size_t& remaining, const std::function<bool()>& cancelled,
-    const NearCriticalPhases* shared_phases,
-    std::span<const AngularCatalogue::Entry* const> excluded_turns,
-    std::optional<Range> finite_scale, Range density_to_rgb, double grouped_allowance) {
+    const ReachableCatalogueRows& reachable, const std::array<unsigned, 3>& cutoffs,
+    std::size_t& remaining, const std::function<bool()>& cancelled,
+    const NearCriticalPhases* shared_phases, std::optional<Range> finite_scale,
+    Range density_to_rgb, double grouped_allowance) {
     const Range fixed_phi = FixedPupilAzimuth(mass, spin, chart);
     const Range amplitude = sqrt(polar.shape.amplitude2);
     if (!fixed_phi.Finite() ||
@@ -492,69 +500,27 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                            ? std::nullopt
                            : PolarDerivativeStrip::Prepare(mass, spin, centre, scale, chart);
     struct ScreenRow {
-        const AngularCatalogue::Row* row;
-        Range latitude;
+        const ReachableCatalogueRow* sources;
         std::optional<PolarDerivativeStrip::PolarJet> endpoint;
-        std::vector<const AngularCatalogue::Entry*> subset;
         PhasePair equator, critical_equator;
-        unsigned cutoff;
     };
     std::array<std::vector<ScreenRow>, 2> screen_rows;
-    const double reach = (Range(turn_amplitude.lo) - Range(clearance)).hi;
-    for (const bool north : {false, true}) {
-        auto& output = screen_rows[north ? 1 : 0];
-        for (const auto& row : catalogue.Rows(north)) {
-            if (row.entries.empty() || row.latitude.lo > reach) continue;
-            const auto prepare = [&](std::vector<const AngularCatalogue::Entry*> entries,
-                                     Range latitude, unsigned group) {
-                const Range clipped(latitude.lo, std::min(latitude.hi, reach));
-                const auto equator = polar.Partial(AsinBounds(clipped / amplitude));
-                if (!equator[0].Finite() || !equator[1].Finite()) return false;
-                PhasePair critical_equator = equator;
-                if (shared_phases) {
-                    const auto partial = shared_phases->polar.Partial(
-                        AsinBounds(clipped / shared_phases->absolute_amplitude));
-                    if (partial[0].Finite() && partial[1].Finite()) critical_equator = partial;
-                }
-                const auto endpoint =
-                    strip && entries.empty() ? strip->ToLatitude(latitude) : std::nullopt;
-                output.push_back({&row, latitude, endpoint, std::move(entries), equator,
-                                  critical_equator, cutoffs[group]});
-                return true;
-            };
-            const Range gap = turn_amplitude - row.latitude;
-            const unsigned group = LatitudeBand(gap.lo);
-            if (gap.lo > 0.0 && row.latitude.hi <= reach && group == LatitudeBand(gap.hi)) {
-                if (!prepare({}, row.latitude, group)) return {};
-                continue;
+    for (unsigned hemisphere = 0; hemisphere < reachable.size(); ++hemisphere) {
+        auto& output = screen_rows[hemisphere];
+        output.reserve(reachable[hemisphere].size());
+        for (const auto& row : reachable[hemisphere]) {
+            if (cancelled && cancelled()) return {};
+            const auto equator = polar.Partial(AsinBounds(row.latitude / amplitude));
+            if (!equator[0].Finite() || !equator[1].Finite()) return {};
+            PhasePair critical_equator = equator;
+            if (shared_phases) {
+                const auto partial = shared_phases->polar.Partial(
+                    AsinBounds(row.latitude / shared_phases->absolute_amplitude));
+                if (partial[0].Finite() && partial[1].Finite()) critical_equator = partial;
             }
-            // Split the few rows crossing a turning or winding-band boundary
-            // once. Iteration preserves longitude order within each subset.
-            // Every preparation visit is charged to the original footprint.
-            std::array<std::vector<const AngularCatalogue::Entry*>, 3> by_band;
-            std::array<Range, 3> latitude;
-            for (const auto& entry : row.entries) {
-                if (remaining == 0 || (cancelled && cancelled())) return {};
-                --remaining;
-                if (entry.latitude.lo > reach) continue;
-                const Range star_gap = turn_amplitude - entry.latitude;
-                if (!(star_gap.lo > 0.0)) {
-                    if (std::ranges::find(excluded_turns, &entry) == excluded_turns.end())
-                        return {};
-                    continue;
-                }
-                const unsigned index = LatitudeBand(star_gap.lo);
-                auto& subset = by_band[index];
-                auto& bounds = latitude[index];
-                bounds = subset.empty() ? entry.latitude
-                                        : Range(std::min(bounds.lo, entry.latitude.lo),
-                                                std::max(bounds.hi, entry.latitude.hi));
-                subset.push_back(&entry);
-            }
-            for (unsigned i = 0; i < by_band.size(); ++i) {
-                if (!by_band[i].empty() && !prepare(std::move(by_band[i]), latitude[i], i))
-                    return {};
-            }
+            const auto endpoint =
+                strip && row.subset.empty() ? strip->ToLatitude(row.latitude) : std::nullopt;
+            output.push_back({&row, endpoint, equator, critical_equator});
         }
     }
     CatalogueScreen result{{}, {}, edge_time, period, initial};
@@ -622,7 +588,8 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
         // The represented polar motion begins north of the equator and
         // toward it. Each complete half-libration switches hemispheres.
         for (const auto& prepared : screen_rows[m % 2]) {
-            if (m >= prepared.cutoff) continue;
+            const auto& sources = *prepared.sources;
+            if (m >= cutoffs[sources.band]) continue;
             for (const bool approach : {false, true}) {
                 const auto part = EquatorToEnd(
                     near_critical ? prepared.critical_equator : prepared.equator, approach);
@@ -640,11 +607,11 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                         // The immutable row total already includes every longitude.
                         // No individual source is examined while applying this bound.
                         const auto density =
-                            strip->Density(prepared.latitude, *prepared.endpoint, m, approach,
+                            strip->Density(sources.latitude, *prepared.endpoint, m, approach,
                                            log_branch, grouped_separation, sky);
                         if (density) {
                             const Range contribution =
-                                density_to_rgb * prepared.row->weighted_temperature * *density;
+                                density_to_rgb * sources.row->weighted_temperature * *density;
                             const Range total = result.grouped_rgb + Range(0.0, contribution.hi);
                             if (contribution.Finite() && contribution.hi >= 0.0 &&
                                 total.hi <= grouped_allowance) {
@@ -663,11 +630,11 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                     [](const AngularCatalogue::Entry* entry) -> const AngularCatalogue::Entry& {
                     return *entry;
                 };
-                const bool completed = prepared.subset.empty()
-                                           ? prepared.row->Query(sky, visit)
+                const bool completed = sources.subset.empty()
+                                           ? sources.row->Query(sky, visit)
                                            : AngularCatalogue::Row::QueryEntries(
-                                                 prepared.subset, prepared.row->longitude_error,
-                                                 sky, dereference, visit);
+                                                 sources.subset, sources.row->longitude_error, sky,
+                                                 dereference, visit);
                 if (!completed) return {};
             }
         }
