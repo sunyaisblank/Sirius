@@ -1,0 +1,100 @@
+{
+  "source_revision": "c87d3f3b745922cf8f895bde2977e2dbad8deb50",
+  "diagnostic_base": "0e7dfa4b7ca25249df27e5ca61d72f54f4ee8884",
+  "paired_source": "Three strict direct builds use the same represented Radeon launch, catalogue and original ledger. Baseline adds counters only. Candidate adds a regularized radial time interval. Physical also intersects both radial azimuth enclosures. The production source uses the physical path, confirmed independently using the staged render library and the public detector entry.",
+  "paired_inputs": {
+    "case": "Original 1920x1080, 4 SPP, Kerr spin 0.9, disk off, beams on, 100000 stars, seed 42, moving ThinLens. Pupil sample 0, tile origin (928,608), footprint 704.",
+    "terminal": "Gaussian-clipped cell [-0x1.9e84p+1,0x1.2c8cp+1] through [-0x1.9e8p+1,0x1.2c9p+1].",
+    "group": "Same 28 contact cells and original per-footprint 1e-7 allowance from the preceding finite-turn evidence.",
+    "runtime": "Physical AMD Radeon 780M through pinned WSL2 Dozen, recorded ICD and loader hashes, cache disabled, memory budget 2048 MiB."
+  },
+  "visit_and_rgb_bounds": {
+    "terminal-cell": {
+      "baseline": {
+        "visits": 1822,
+        "catalogue_collect": 400,
+        "catalogue_screen": 1422,
+        "possible_source_images": 37,
+        "rgb_upper": 1.016502628973757e-09
+      },
+      "candidate": {
+        "visits": 1250,
+        "catalogue_collect": 400,
+        "catalogue_screen": 850,
+        "possible_source_images": 19,
+        "rgb_upper": 1.0108336493510555e-09
+      },
+      "physical": {
+        "visits": 1212,
+        "catalogue_collect": 400,
+        "catalogue_screen": 812,
+        "possible_source_images": 19,
+        "rgb_upper": 1.0108336493510555e-09
+      }
+    },
+    "group": {
+      "baseline": {
+        "visits": 5731,
+        "catalogue_collect": 403,
+        "catalogue_screen": 5328,
+        "possible_source_images": 233,
+        "rgb_upper": 7.691877300318863e-08
+      },
+      "candidate": {
+        "visits": 4802,
+        "catalogue_collect": 403,
+        "catalogue_screen": 4399,
+        "possible_source_images": 182,
+        "rgb_upper": 7.526155935264579e-08
+      },
+      "physical": {
+        "visits": 4792,
+        "catalogue_collect": 403,
+        "catalogue_screen": 4389,
+        "possible_source_images": 180,
+        "rgb_upper": 7.523331792459171e-08
+      }
+    }
+  },
+  "focused_exact_source": {
+    "direct_library_terminal": {
+      "candidate_visits": 1212,
+      "rgb_upper": 1.0108336493510555e-09
+    },
+    "unit_tests": {
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0
+    },
+    "independent_cpu_scene_tests": {
+      "passed": 3
+    },
+    "retained_fixed_pupil_four_columns": {
+      "passed": 1
+    },
+    "retained_moving_kerr_flux": {
+      "result": "110-second diagnostic timeout in the standalone retained photometry test",
+      "screen_scope": "This test calls the generic detector without a continuous-cell callback."
+    },
+    "retained_rotating_isolated_star": "Unreached by the sequential diagnostic."
+  },
+  "focused_app_replay": {
+    "scope": "Instrumented physical detector implementation on the baseline application with the original launch and film origin, selecting only footprint 704 from its normal 32x32 block.",
+    "result": "Unresolved, preceding the isolated escaping witness",
+    "matching_baseline_counts": {
+      "probes": 5070,
+      "cells": 1086,
+      "candidate_visits": 131072
+    },
+    "cutoff_unavailable_calls": 6,
+    "cutoff_unavailable_screen_and_collection_visits": 130675,
+    "maximum_rss_kib": 340120,
+    "validation_limit": "The counter records finite cutoff admission. It does not record whether each broad cell intersects H=0 or is escaping with eight or more windings."
+  },
+  "redesign_basis": "The visit ledger is dominated by cutoff-unavailable calls. The existing derivative proof accepts interval source latitude. For a row with certified monotonicity and polar clearance, coarea can bound each represented source uniformly and the longitude-range aggregate of source temperatures can replace independent source visits. Retain direct subdivision or fold bounds wherever derivative or physical chart prerequisites are unwitnessed.",
+  "verification": {
+    "path": "attestations/qualification/c87d3f3b/kerr-finite-catalogue-screen/verification.tar.gz",
+    "bytes": 33186,
+    "sha256": "2ddf4ee7434b5def0138af245c21db6bf15bb517f734c5f3b032d6048ce1130b"
+  }
+}
