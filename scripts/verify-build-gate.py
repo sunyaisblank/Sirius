@@ -78,9 +78,11 @@ RELEASE_PRODUCTS = BASE_PRODUCTS | {
     "viewer_rdsd003a_fragment",
     "viewer_rdsd003a_vertex",
 }
+PACKAGED_VULKAN_DRIVER = "packaged_vulkan_driver"
 INSTALLED_PRODUCTS = {
     "alignment_receipt": "share/sirius/model/alignment_receipt.json",
     "operating_model": "share/sirius/model/operating_model.json",
+    PACKAGED_VULKAN_DRIVER: "share/sirius/providers/linux-x86_64/libvulkan_lvp.so",
     "starfield": "share/sirius/assets/Starfield.png",
     "trace_fp32comp_spv": "share/sirius/kernels/trace_fp32comp.spv",
     "trace_fp64_spv": "share/sirius/kernels/trace_fp64.spv",
@@ -302,6 +304,30 @@ def validate_test_input_records(test_inputs: object, mode: str, products: dict) 
                 f"build gate test input {name} does not bind its generated kernel path and bytes")
 
 
+def validate_product_set(products: object, mode: str) -> None:
+    require(isinstance(products, dict), "Mandatory gate product artifacts are not an object")
+    ordinary = set(products) - {PACKAGED_VULKAN_DRIVER}
+    require(BASE_PRODUCTS <= ordinary <= RELEASE_PRODUCTS,
+            "Mandatory gate has an invalid product artifact set")
+    if mode in {"qualification", "release"}:
+        require(ordinary == RELEASE_PRODUCTS,
+                f"{mode} Mandatory gate does not bind the complete product")
+
+
+def validate_packaged_driver_record(tested: dict, products: dict) -> None:
+    if PACKAGED_VULKAN_DRIVER not in products:
+        return
+    executable = tested["sirius"]
+    driver = products[PACKAGED_VULKAN_DRIVER]
+    require(isinstance(executable, dict) and executable.get("root") == "build" and
+            isinstance(executable.get("path"), str) and isinstance(driver, dict),
+            "Mandatory gate has an invalid packaged software Vulkan driver record")
+    relative = INSTALLED_PRODUCTS[PACKAGED_VULKAN_DRIVER].removeprefix("share/sirius/")
+    expected = (Path(executable["path"]).parent / "resources" / relative).as_posix()
+    require(driver.get("root") == "build" and driver.get("path") == expected,
+            "Mandatory gate does not bind the executable-adjacent packaged Vulkan driver")
+
+
 def validate_document(document: object) -> dict:
     require(isinstance(document, dict) and set(document) == {
         "schema_version", "status", "alignment_mode", "source", "ctest",
@@ -347,11 +373,8 @@ def validate_document(document: object) -> dict:
     products = document["product_artifacts"]
     require(isinstance(tested, dict) and set(tested) == TESTED_ARTIFACTS,
             "Mandatory gate receipt does not bind every test executable")
-    require(isinstance(products, dict) and BASE_PRODUCTS <= set(products) <= RELEASE_PRODUCTS,
-            "Mandatory gate receipt has an invalid product artifact set")
-    if mode in {"qualification", "release"}:
-        require(set(products) == RELEASE_PRODUCTS,
-                f"{mode} Mandatory gate receipt does not bind the complete product")
+    validate_product_set(products, mode)
+    validate_packaged_driver_record(tested, products)
     validate_test_input_records(document["test_input_artifacts"], mode, products)
     return document
 
@@ -454,7 +477,7 @@ def verify_test_input_copies(tested_paths: dict[str, Path], product_records: dic
     """Bind executable-adjacent consumed copies to the unchanged schema-v2 records."""
     expected = [(name, TEST_INPUT_PATHS[name], record)
                 for name, record in test_input_records.items()]
-    for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv"):
+    for name in ("trace_spv", "trace_fp32comp_spv", "trace_fp64_spv", PACKAGED_VULKAN_DRIVER):
         if name in product_records:
             expected.append((name, INSTALLED_PRODUCTS[name].removeprefix("share/sirius/"),
                              product_records[name]))
@@ -581,14 +604,11 @@ def run_gate(args: argparse.Namespace) -> None:
     require_test_input_set(test_inputs, args.alignment_mode, products)
     require(set(tested) == TESTED_ARTIFACTS,
             "Mandatory gate invocation omitted a test executable")
-    require(BASE_PRODUCTS <= set(products) <= RELEASE_PRODUCTS,
-            "Mandatory gate invocation has an invalid product set")
-    if args.alignment_mode in {"qualification", "release"}:
-        require(set(products) == RELEASE_PRODUCTS,
-                f"{args.alignment_mode} Mandatory gate invocation omitted a product artifact")
+    validate_product_set(products, args.alignment_mode)
 
     tested_records = _record_resolved_artifacts(tested, source_root, build_dir)
     product_records = _record_resolved_artifacts(products, source_root, build_dir)
+    validate_packaged_driver_record(tested_records, product_records)
     test_input_records = _record_resolved_artifacts(test_inputs, source_root, build_dir)
     validate_test_input_records(test_input_records, args.alignment_mode, products)
     verify_test_input_copies(tested, product_records, test_input_records)
@@ -734,6 +754,10 @@ def check_gate(args: argparse.Namespace) -> None:
         raise ValueError(f"Mandatory gate receipt is invalid JSON: {error}") from error
     require(document["alignment_mode"] == args.alignment_mode,
             "Mandatory gate receipt belongs to a different alignment mode")
+    if args.installed_root is not None:
+        require((PACKAGED_VULKAN_DRIVER in document["product_artifacts"]) ==
+                args.packaged_vulkan_driver,
+                "Mandatory gate receipt differs from the installed Vulkan driver configuration")
     revision, clean = git_identity(source_root)
     require(document["source"] == {"revision": revision, "clean": clean},
             "Mandatory gate receipt is stale for the current source identity")
@@ -1478,6 +1502,38 @@ def self_test() -> None:
         installed_stamp.parent.mkdir(parents=True, exist_ok=True)
         installed_stamp.write_bytes(stamp.read_bytes())
         verify_installed(document, installed, stamp, "")
+
+        packaged = copy.deepcopy(document)
+        relative = INSTALLED_PRODUCTS[PACKAGED_VULKAN_DRIVER].removeprefix("share/sirius/")
+        driver = tested_paths["sirius"].parent / "resources" / relative
+        destinations = [
+            tested_paths[consumer].parent / "resources" / relative
+            for consumer in ("sirius_backend_tests", "sirius_render_tests")
+        ]
+        installed_driver = installed_product_path(installed, PACKAGED_VULKAN_DRIVER, "")
+        for path in (driver, *destinations, installed_driver):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b"staged driver")
+        packaged["product_artifacts"].update(
+            artifact_records({PACKAGED_VULKAN_DRIVER: driver}, source, build))
+        validate_document(packaged)
+        verify_recorded_files(packaged, source, build)
+        atomic_write_json(stamp, packaged)
+        installed_stamp.write_bytes(stamp.read_bytes())
+        verify_installed(packaged, installed, stamp, "")
+        installed_driver.write_bytes(b"stale driver")
+        expect_rejection(lambda: verify_installed(packaged, installed, stamp, ""),
+                         "stale installed software Vulkan driver")
+        destinations[0].unlink()
+        expect_rejection(lambda: verify_recorded_files(packaged, source, build),
+                         "missing test-consumed software Vulkan driver")
+        packaged["product_artifacts"][PACKAGED_VULKAN_DRIVER]["path"] = (
+            destinations[1].relative_to(build).as_posix())
+        expect_rejection(lambda: validate_document(packaged),
+                         "substituted software Vulkan driver selector")
+        atomic_write_json(stamp, document)
+        installed_stamp.write_bytes(stamp.read_bytes())
+
         (installed / "share/sirius/kernels/trace.spv").write_bytes(b"stale\n")
         expect_rejection(lambda: verify_installed(document, installed, stamp, ""),
                          "stale installed product")
@@ -1507,6 +1563,7 @@ def main() -> int:
     parser.add_argument("--product-artifact", action="append", default=[])
     parser.add_argument("--test-input-artifact", action="append", default=[])
     parser.add_argument("--installed-root", type=Path)
+    parser.add_argument("--packaged-vulkan-driver", action="store_true")
     parser.add_argument("--executable-suffix", default="")
     args = parser.parse_args()
     try:

@@ -100,7 +100,7 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
 
     sirius::test::ScopedTemporaryDirectory temporary("sirius-build-gate-runtime");
     const auto root = temporary.path();
-    const std::array<std::pair<std::string_view, std::string_view>, 8> products = {{
+    const std::pair<std::string_view, std::string_view> products[] = {
         {"alignment_receipt", "model/alignment_receipt.json"},
         {"operating_model", "model/operating_model.json"},
         {"starfield", "assets/Starfield.png"},
@@ -109,7 +109,10 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
         {"trace_spv", "kernels/trace.spv"},
         {"viewer_rdsd003a_fragment", "shaders/RDSD003A.frag"},
         {"viewer_rdsd003a_vertex", "shaders/RDSD003A.vert"},
-    }};
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+        {"packaged_vulkan_driver", "providers/linux-x86_64/libvulkan_lvp.so"},
+#endif
+    };
     for (const auto& [logical_name, relative_path] : products) {
         WriteFile(root / relative_path,
                   logical_name == "operating_model" ? model_payload : std::string(logical_name));
@@ -203,7 +206,24 @@ TEST(BuildGateAuthority, ReleaseReceiptBindsEveryInstalledProductAtInitialisatio
     EXPECT_EQ(authority->source_revision, alignment.source_revision);
     EXPECT_EQ(authority->registered_tests, 700U);
     EXPECT_EQ(authority->executed_tests, 700U);
-    EXPECT_EQ(authority->verified_product_artifacts, 9U);
+    EXPECT_EQ(authority->verified_product_artifacts, std::size(products) + 1U);
+
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+    auto missing_driver_record = receipt;
+    missing_driver_record["product_artifacts"].erase("packaged_vulkan_driver");
+    WriteFile(gate_path, missing_driver_record.dump(2));
+    auto rejected = ValidateBuildGateAuthorityForVolume(alignment, base::ExecutablePath(), root);
+    ASSERT_FALSE(rejected.has_value());
+    EXPECT_NE(rejected.error().find("test/product topology"), std::string::npos);
+
+    WriteFile(gate_path, receipt.dump(2));
+    const auto driver = root / "providers/linux-x86_64/libvulkan_lvp.so";
+    WriteFile(driver, "packaged_vulkan_driveR");
+    rejected = ValidateBuildGateAuthorityForVolume(alignment, base::ExecutablePath(), root);
+    ASSERT_FALSE(rejected.has_value());
+    EXPECT_NE(rejected.error().find("hash changed: packaged_vulkan_driver"), std::string::npos);
+    WriteFile(driver, "packaged_vulkan_driver");
+#endif
 
     const auto reject_test_input_receipt = [&](const nlohmann::json& mutated) {
         WriteFile(gate_path, mutated.dump(2));

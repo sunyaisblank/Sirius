@@ -22,6 +22,7 @@ if("@SIRIUS_INSTALL_HAS_VULKAN@" STREQUAL "TRUE")
 endif()
 
 if("@SIRIUS_INSTALL_HAS_PACKAGED_SOFTWARE@" STREQUAL "TRUE")
+    set(_sirius_packaged_gate_option --packaged-vulkan-driver)
     set(_sirius_provider
         "${_sirius_install_root}/share/sirius/@SIRIUS_PACKAGED_SOFTWARE_SUBDIR@/libvulkan_lvp.so")
     if(NOT EXISTS "${_sirius_provider}" OR IS_SYMLINK "${_sirius_provider}")
@@ -67,6 +68,7 @@ if(NOT "@SIRIUS_ALIGNMENT_MODE@" STREQUAL "development")
             --config "${_sirius_gate_config}"
             --installed-root "${_sirius_install_root}"
             --executable-suffix "@CMAKE_EXECUTABLE_SUFFIX@"
+            ${_sirius_packaged_gate_option}
         RESULT_VARIABLE _sirius_gate_result
         OUTPUT_VARIABLE _sirius_gate_stdout
         ERROR_VARIABLE _sirius_gate_stderr)

@@ -152,6 +152,11 @@ if(BUILD_TESTS AND SIRIUS_MANDATORY_TESTS)
         ${sirius_gate_test_artifacts}
         ${sirius_gate_product_artifacts}
         ${sirius_gate_test_input_artifacts})
+    if(SIRIUS_PACKAGED_SOFTWARE_DRIVER)
+        list(APPEND sirius_mandatory_gate_command
+            --product-artifact
+                "packaged_vulkan_driver=$<TARGET_FILE_DIR:sirius>/resources/${SIRIUS_PACKAGED_SOFTWARE_SUBDIR}/libvulkan_lvp.so")
+    endif()
     if(SIRIUS_REQUIRE_VULKAN_RUNTIME)
         set(sirius_identity_require_vulkan true)
     else()

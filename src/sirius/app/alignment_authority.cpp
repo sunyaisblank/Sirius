@@ -50,7 +50,7 @@ constexpr std::array<std::string_view, 7> kTestedArtifactNames = {
     "sirius_render_tests",
 };
 
-constexpr std::array<std::pair<std::string_view, std::string_view>, 8> kResourceProducts = {{
+constexpr std::pair<std::string_view, std::string_view> kResourceProducts[] = {
     {"alignment_receipt", "model/alignment_receipt.json"},
     {"operating_model", "model/operating_model.json"},
     {"starfield", "assets/Starfield.png"},
@@ -59,12 +59,9 @@ constexpr std::array<std::pair<std::string_view, std::string_view>, 8> kResource
     {"trace_spv", "kernels/trace.spv"},
     {"viewer_rdsd003a_fragment", "shaders/RDSD003A.frag"},
     {"viewer_rdsd003a_vertex", "shaders/RDSD003A.vert"},
-}};
-
-constexpr std::array<std::string_view, 9> kProductArtifactNames = {
-    "alignment_receipt", "operating_model",          "sirius",
-    "starfield",         "trace_fp32comp_spv",       "trace_fp64_spv",
-    "trace_spv",         "viewer_rdsd003a_fragment", "viewer_rdsd003a_vertex",
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+    {"packaged_vulkan_driver", "providers/linux-x86_64/libvulkan_lvp.so"},
+#endif
 };
 
 constexpr std::array<std::pair<std::string_view, std::string_view>, 20> kTestInputArtifacts = {{
@@ -346,7 +343,12 @@ std::expected<BuildGateAuthority, std::string> ValidateBuildGateReceipt(
     const auto& tested = receipt["tested_artifacts"];
     const auto& products = receipt["product_artifacts"];
     if (!HasExactArtifactNames(tested, kTestedArtifactNames) ||
-        !HasExactArtifactNames(products, kProductArtifactNames)) {
+        !products.is_object() || products.size() != std::size(kResourceProducts) + 1U ||
+        !products.contains("sirius") || !IsArtifactRecord(products["sirius"]) ||
+        !std::ranges::all_of(kResourceProducts, [&products](const auto& product) {
+            const auto record = products.find(product.first);
+            return record != products.end() && IsArtifactRecord(*record);
+        })) {
         return std::unexpected(
             "Mandatory build-gate receipt does not bind the complete test/product topology");
     }
