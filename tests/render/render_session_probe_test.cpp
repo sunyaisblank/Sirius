@@ -698,10 +698,12 @@ TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPriv
     auto entered = executor.entered.get_future();
     SessionConfig config;
     sirius::test::ConfigureMovingKerrDetector(config);
+    // Exercise the disk-free detector queue in a horizonless metric. Kerr
+    // can resolve vacuum probes at launch without taking any RK intervals.
+    config.metric_id = sirius::core::MetricId::Minkowski;
+    config.black_hole_mass = 0;
+    config.black_hole_spin = 0;
     config.width = config.height = 4;
-    // Include escaping rays that need detector probes. The narrow science
-    // fixture can now complete from the fixed-pupil bounds alone.
-    config.camera_fov = 16;
     config.samples_per_pixel = 1;
     config.write_output = false;
     config.backend = sirius::render::RenderBackend::Vulkan;
@@ -719,6 +721,7 @@ TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPriv
     EXPECT_EQ(session.GetState(), SessionState::Cancelled);
     EXPECT_EQ(executor.steps.load(), 2);
     EXPECT_EQ(executor.rejected.load(), 2);
+    EXPECT_EQ(session.GetTileScheduler().GetTileCount(), 1);
     EXPECT_EQ(session.GetTileScheduler().GetCompletedCount(), 0);
     const auto output = capture.output.str();
     EXPECT_EQ(output.find(sirius::render::kSceneEvidencePrefix), std::string::npos);
