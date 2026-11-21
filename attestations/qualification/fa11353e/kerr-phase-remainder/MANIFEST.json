@@ -1,0 +1,246 @@
+{
+  "recorded_at": "2026-11-21T05:56:51.314289+00:00",
+  "render_source": "fa11353e2d2ad471af48f1b2ecefc5052eb35cab",
+  "parent_chart_evidence_revision": "7e9949d08edd215fedc70e3401f57bdb35120a42",
+  "scope": "Continuous CPU fixed-pupil replay of the certified stationary-coordinate rectangle in footprint 544 of the failed Radeon 1080p render.",
+  "reused_preset_build": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+  "build": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-phase-remainder/src",
+      "-Isrc",
+      "out/kerr-phase-remainder/chart.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-phase-remainder/chart"
+    ],
+    "compiler": "14.2.0",
+    "executable_removed_after_check": {
+      "path": "out/kerr-phase-remainder/chart",
+      "bytes": 297672,
+      "sha256": "2b04801b14889f6c6bf07252578676411fff62bdff732733271002ecee200758"
+    },
+    "overlay": "Use headers changed between the reused preset and fa11353e, then apply the parent chart patch. Unpack the newer scratch files next to the overlay."
+  },
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/MANIFEST.json",
+      "bytes": 9113,
+      "sha256": "b51ff7d4e91f9030f474d698597716f0b2f1cf1ec98b69d6bf614c53b40c2714"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/kerr-exact-null-launch.patch.gz",
+      "bytes": 759,
+      "sha256": "c02925aa91e6e2ae02bf99ad814c21127fea37bf690eca67ec8f1ab0a457dbeb"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/MANIFEST.json",
+      "bytes": 7042,
+      "sha256": "0f8d913a90b8d5ef761244a3fbadd185aafde99c54fd325090edabe92a3366db"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  ],
+  "domain": {
+    "stationary_inverse_radius": [
+      0.5473495114065964,
+      0.5473495426004061
+    ],
+    "s_where_H_over_E_squared_equals_minus_s_squared": [
+      0.0,
+      0.0004672971053962386
+    ],
+    "inverse_launch_radius": [
+      0.03333333682772474,
+      0.0333333368277248
+    ],
+    "normalized_mino_time": "Absolute Killing energy times Mino time; the separated spin rate uses the future-directed convention."
+  },
+  "radial": {
+    "identity": "tau=-2*leading_factor*log(s)+time; phi_drag=limiting_drag*tau+spin. Time and spin are bounded by exact radial factorizations and derivative enclosures over all 128 adjacent panels on each leg.",
+    "bounds": {
+      "leading_factor": [
+        0.3518853986264472,
+        0.3519991314848409
+      ],
+      "limiting_drag": [
+        3.070339118375128,
+        3.0791734382199234
+      ],
+      "leading_radial": [
+        0.49514367923801256,
+        0.4968120680498691
+      ],
+      "drag_radial": [
+        8.714241975358727,
+        8.83021557379659
+      ],
+      "drag_scale": [
+        -7.840160983751354,
+        -7.790900139344223
+      ],
+      "time_log_derivative": [
+        -0.7044221115633941,
+        -0.7033628900533659
+      ],
+      "time": [
+        0.9782005427060768,
+        0.985830910117138
+      ],
+      "time_radial": [
+        2.1370193548448744,
+        2.233237341341941
+      ],
+      "time_log_scale": [
+        -0.0004238485937119558,
+        0.0001217888718903293
+      ],
+      "spin": [
+        -4.415326629128709,
+        -4.149296133396911
+      ],
+      "spin_radial": [
+        -26.554560479984413,
+        -23.364292259455024
+      ],
+      "spin_log_scale": [
+        -2.564e-321,
+        0.025406840027317558
+      ],
+      "time_at_outer_scale": [
+        6.375098784081754,
+        6.384473482646848
+      ]
+    },
+    "spin_derivative_decay": {
+      "form": "abs(s*d(spin)/ds) <= s*(constant+coefficient*log(1/s))",
+      "constant": 16.335365016544703,
+      "coefficient": 5.518252744859994
+    }
+  },
+  "catalogue": {
+    "seed": 42,
+    "count": 100000,
+    "reachable_latitudes": 80026,
+    "uncertain_latitudes": 0,
+    "polar_turn_amplitude": [
+      0.8005595211254067,
+      0.8005596525293348
+    ],
+    "latitude_clearance": 5.707512142127945e-06
+  },
+  "latitude": {
+    "half_period": [
+      0.8715990928911733,
+      0.8895538809191864
+    ],
+    "slope_upper_at_any_root": -0.7033346167227859,
+    "period_derivative_with_respect_to_stationary_value_upper": 0.36278300402302627,
+    "partial_polar_time_derivative_with_respect_to_stationary_value_upper": 31.040418089984097,
+    "full_winding_count_times_s_squared_upper_at_roots": 1.5995377702419197e-06,
+    "inference": "For each fixed inverse radius, catalogue latitude, polar leg, and integer number m of completed half oscillations, every zero of the continuous latitude timing residual has strictly negative derivative in log(s). Therefore at most one radial root exists for that branch. This argument uses positive travel times before and after the m half oscillations to bound m*s^2."
+  },
+  "independent_decimal_quartic_quadrature": [
+    {
+      "s": "1E-30",
+      "refinement_gap": "1.493819800052595764796703858236678193747385839773754436877818483975741590017405726E-9",
+      "time": "0.982136333257412653593638111630544091784062481946396060347829976670552992429443176461943254",
+      "spin": "-4.29195634271804019209535349370856873393691020278063397507718611458155801157639539790947901",
+      "mino": "49.603493597362845913130675583758277159195212493391802044795241801812673421834331323790476529",
+      "leading_factor": "0.35193311937412631464020836488622757069364837624432857253524552861593860533149480264123573022",
+      "limiting_drag": "3.0765781930684585157217416880990767439444323063463649000048928607274206908926469674449515880",
+      "time_radial": "2.184978945546877574345332793650309207518091642083491516414197071734782573830874163",
+      "spin_radial": "-25.012541587745464932937051160989865947478630850345702006594716681841186341583537565",
+      "leading_radial": "0.495931900890423970178400962412548257412204142608943835970567172901166210340785535575",
+      "drag_radial": "8.78509673643755910784996805290813222703997226914267741816422621494205642338634775095",
+      "time_log_derivative": "-0.70386623874805845550204032365141247425226404539368472272973874042395154302236175358392309712"
+    },
+    {
+      "s": "1E-7",
+      "refinement_gap": "2.8554805327157254566215844364071390300698819112149863442519888707881949023469E-14",
+      "time": "0.982136206945543512539558484798400503604952418460984078257718099415727787136955825662917274",
+      "spin": "-4.291946700980130138140452437846184047036767109390784818231992740568377605911344926981299777",
+      "mino": "12.327119694883711744787334011096051550672656004222093284885897563685485659250311317661138048",
+      "leading_factor": "0.35193312329250382876191177771692991638394438673197841766891631688096593248209803243223634436",
+      "limiting_drag": "3.0765774109114153293870507273972997555840909717262449316188226466201917763253783064964430026",
+      "time_radial": "2.184978316316573072648051406269466259812422374216756750424082977384550364610963258",
+      "spin_radial": "-25.012458860659512541648260508660111766578404212682351155606670167194883082505180353",
+      "leading_radial": "0.49593192040982548620764200890251266324508566347634361471287810451215535493468372476",
+      "drag_radial": "8.7850911784647874770212163016139240193644410200489279887015688855444918747444429432",
+      "time_log_derivative": "-0.70386623874835811767342679624196344564430027088373289860691787554616705310067391850423287938",
+      "time_log_scale": "-1.1847686806965313604635300498375123144755049431803768319434035805445528377223113592214296445E-7",
+      "spin_log_scale": "0.0000090912088682238714192837439002504308463498398625005701227327865476164295864565527036949273949",
+      "drag_scale": "-7.8215691266477015556904929672181384851063174712653867262150441479308636433726792"
+    },
+    {
+      "s": "0.000233648552698119295",
+      "refinement_gap": "2.420104760702896373296845105094453177411852741320182870496164271540906347512E-16",
+      "time": "0.9819832102432831223692417078958748631637595748016406667331404511143863209716896190462128936",
+      "spin": "-4.279409223964691894318472236714472688535383407519962387658692777593151530733041707233814729",
+      "mino": "6.8676492142088884510773329135256142073662538305035097687568151344593280115157333182229785730",
+      "leading_factor": "0.35194226622326102372454139816787219057432354093345268683523011638459310690090138597013644266",
+      "limiting_drag": "3.0747514064411816531658616719176050254466483927221725415090119071672422987072183139377476413",
+      "time_radial": "2.1842163247018632083224643477400480381339846673173857835834868823727875057123700741",
+      "spin_radial": "-24.9042651025477460544827879372237658384955922399882646919472673250559443199840412505",
+      "leading_radial": "0.495977443399936958784639816464298793608979315798555669863614123314675976905436141245",
+      "drag_radial": "8.77211992060680332055373530741868851321098955667230685846223111007448778850664783795",
+      "time_log_derivative": "-0.70386653413595339933601998714583693235979062331951169043617325414233885572048276070548072977",
+      "time_log_scale": "-0.00013482771639864135905391999018012025406638013469859830709475592025836872845503052110677663454",
+      "spin_log_scale": "0.011257648343181094037015286012274088158609075687692207758149345218638495696051944522059214277",
+      "drag_scale": "-7.8154757099476467321705652287998964850296792643609315573897369591105120858103856069267405364"
+    }
+  ],
+  "remaining": "Enclose azimuth derivatives along the latitude roots, count image roots along the tangential coordinate and bound the cumulative RGB tail. The bounded rectangle is a subset of the original mixed detector cell, and the production render gate remains open.",
+  "references": [
+    "https://arxiv.org/html/1910.12873",
+    "https://arxiv.org/html/1910.12881"
+  ],
+  "artifacts": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/stationary-chart.h.gz",
+      "bytes": 2986,
+      "sha256": "1372fab6654a16ec94ba273ff5dffd73908095bd10c294ef1c0c1ce521740ff0"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/radial-remainder.h.gz",
+      "bytes": 3899,
+      "sha256": "eb611c281f7bbb2c859f8cdd448bb0961e4c1e49516f948d3cb29c53554e9c4f"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/chart.cpp.gz",
+      "bytes": 3546,
+      "sha256": "7401eb4b413cf4be13c48bbe7cd43fcdf3f9e1f23c8e0c98a9c215439dc3bf98"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/chart.log.gz",
+      "bytes": 1606,
+      "sha256": "1790956fca9009bf6b741c81a113e1ba4be5485d0a42be7be502029f3a42fd77"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/reference.py.gz",
+      "bytes": 2688,
+      "sha256": "0c989db55315a67739b677c9a35449023abe6852964a28c10a8b9a432dab6548"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/reference.log.gz",
+      "bytes": 2073,
+      "sha256": "3155af2c8924bcd8edcb401afdce8a1438b06dbae7476b9dd55f2bde1e787871"
+    }
+  ]
+}
