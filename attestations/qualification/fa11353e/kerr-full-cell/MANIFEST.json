@@ -1,0 +1,1332 @@
+{
+  "recorded_at": "2026-11-21T06:30:33.376846+00:00",
+  "render_source": "fa11353e2d2ad471af48f1b2ecefc5052eb35cab",
+  "parent_finite_winding_evidence": "91a4e85898247adb73df5834f0611de5f114615f",
+  "scope": "The entire original mixed depth-16 detector cell of footprint 544, for the first pupil of the governed Radeon 1080p case. CPU and physical Radeon fixed-pupil launch-enclosure replays. Frame and release qualification remain open.",
+  "reused_preset_build": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+  "build": {
+    "cpu_argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-full-cell/src",
+      "-Isrc",
+      "out/kerr-full-cell/chart.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-full-cell/chart"
+    ],
+    "cpu_bounded_argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-full-cell/src",
+      "-Isrc",
+      "out/kerr-full-cell/bounded-chart.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-full-cell/bounded-chart"
+    ],
+    "compiler": "14.2.0",
+    "executables_removed_after_check": [
+      {
+        "path": "out/kerr-full-cell/chart",
+        "bytes": 403880,
+        "sha256": "4ba7437a8e74806a66fd7426318b06fe345def916fda7b9fc56eccbf1e3b86d2"
+      },
+      {
+        "path": "out/kerr-full-cell/bounded-chart",
+        "bytes": 407736,
+        "sha256": "2253b348f26f29325131959c6c894495bd35d4ae0999eab4a42d18c28804ccd0"
+      },
+      {
+        "path": "out/kerr-full-cell/radeon-chart",
+        "bytes": 7060936,
+        "sha256": "5cd8b79b748b1bbc7cd37b82b880e8c9d366993c92d2be1f8f6e2f34cabd54e5"
+      },
+      {
+        "path": "out/kerr-full-cell/radeon-bounded",
+        "bytes": 7056704,
+        "sha256": "3f3ef43b1c614605a78cea041cc49cd3295b4d512dfe2744ca58b06430e50bbb"
+      }
+    ],
+    "overlay": "Use headers changed between the reused preset and fa11353e and apply the archived exact-null-launch patch. Unpack the pinned prior sources and these new files. The Radeon build uses recorded candidate backend translation units and the reused preset archives."
+  },
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/kerr-exact-null-launch.patch.gz",
+      "bytes": 759,
+      "sha256": "c02925aa91e6e2ae02bf99ad814c21127fea37bf690eca67ec8f1ab0a457dbeb"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-finite-windings/MANIFEST.json",
+      "bytes": 9822,
+      "sha256": "a4f2ba90d97039ab980b38ceebb33367a6d6f25ebd5254f1faff21838510c7e1"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-finite-windings/finite-phase.h.gz",
+      "bytes": 1892,
+      "sha256": "fb323021c24ceb1f3084d6d67f0b029ce42966a7c213245f0ff5947183222e0e"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-finite-windings/finite-screen.h.gz",
+      "bytes": 5792,
+      "sha256": "6abaae0e90f61b2d22beeecb328aa9affaf0978ded77e7629852758aca699b1d"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-finite-windings/reference.py.gz",
+      "bytes": 3439,
+      "sha256": "d992c3440a461fab1d8eb184f87413ffd836a1990e982efa15f9fa9ec249cd05"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/winding-tail.h.gz",
+      "bytes": 2804,
+      "sha256": "b59b7f6f866cc35561207cc267c622cef6a70a11190c41f028e80d863a81e5f9"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/radial-remainder.h.gz",
+      "bytes": 3899,
+      "sha256": "eb611c281f7bbb2c859f8cdd448bb0961e4c1e49516f948d3cb29c53554e9c4f"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+      "bytes": 671780,
+      "sha256": "a39fc86230c129411d8c1c135cd976dc8e04691c15ceee7e0b1cc76f4189dd89"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+      "bytes": 6808680,
+      "sha256": "ebc09019e928d1b51a9dc039d57eb51ed757cd0facca2073bfeaa5b95194d579"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    },
+    {
+      "path": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+      "bytes": 198,
+      "sha256": "fde51461538211ae38c973644f99f6c6adb4e9d8fcfe16ed172533c9aa9ef392"
+    },
+    {
+      "path": "/home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+      "bytes": 11328704,
+      "sha256": "72de4021c66f994f59a733e643f775c3dd416b566c88b8aedec7efa38c26e071"
+    }
+  ],
+  "radeon_environment": {
+    "VK_DRIVER_FILES": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "SIRIUS_MEMORY_BUDGET_MB": "2048",
+    "provider_resource_root": "bin/linux-ci/tests/backend/resources"
+  },
+  "coverage": "Sign-stable film Jacobians give extrema on the two edges crossed by the critical curve and the upper-right corner. The invariant rectangle encloses every escaping ray. Every surviving root has an interval preimage contained in the original film cell, and support ownership uses the original circular Gaussian.",
+  "radiometry": "For finite images, bound the original shifted 32-bin Planck/CIE transfer with the original represented catalogue normalizer, exact source Jacobian and compact Gaussian. For the infinite tail apply the analytic Planck upper bound to the weighted sum of actual catalogue normalizers. The faster omission variant overcounts all monotone candidate branches and needs no image positions.",
+  "sample_absolute_rgb_allowance": 1e-07,
+  "cpu": {
+    "stationary_rectangle": [
+      [
+        0.547349485404759,
+        0.5473496683799569
+      ],
+      [
+        -6.99877247711811e-07,
+        0.0
+      ]
+    ],
+    "top_edge_critical_z0": [
+      0.5847583255781104,
+      0.5847583263612777
+    ],
+    "right_edge_critical_z1": [
+      3.956988763183029,
+      3.9569887635921783
+    ],
+    "minimum_normalized_potential": [
+      -6.99877247711811e-07,
+      -6.998703603322553e-07
+    ],
+    "screen_counts": {
+      "catalogue": 80026,
+      "windings": 259,
+      "examined": 1435737,
+      "surviving": 168
+    },
+    "tail_rgb_upper_each_channel": 7.712689934781901e-21,
+    "tail_rgb_upper_with_global_normalizer_floor": 5.182938200278259e-10,
+    "cost": {
+      "wall_seconds": 12.28,
+      "peak_rss_kib": 12416.0
+    },
+    "cell_result": {
+      "refined_surviving": 129.0,
+      "excluded_by_endpoints": 120.0,
+      "sign_brackets": 9.0,
+      "inside": 5.0,
+      "outside": 4.0,
+      "finite_rgb_upper": 2.1343467196481284e-21,
+      "sum_rgb_upper": 9.847036654430031e-21
+    },
+    "camera_over_source_frequency": [
+      1.2210905700051264,
+      1.221090721493804
+    ],
+    "roots": [
+      {
+        "u": [
+          0.5473496502711748,
+          0.5473496502739668
+        ],
+        "log_s": [
+          -10.272833719941017,
+          -10.27283371757995
+        ],
+        "film_radius2": [
+          16.000015008487214,
+          16.000015450073914
+        ],
+        "z0": [
+          0.5847662701672149,
+          0.5847663256620039
+        ],
+        "z1": [
+          3.957027093382347,
+          3.957027140979155
+        ],
+        "conditioned_azimuth_slope": [
+          -121.62896958589003,
+          -114.4369331723868
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 63467,
+        "winding": 9,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -8,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473496425038866,
+          0.5473496425066786
+        ],
+        "log_s": [
+          -11.629247181496202,
+          -11.629247178962707
+        ],
+        "film_radius2": [
+          16.000004223851686,
+          16.000004665438578
+        ],
+        "z0": [
+          0.5847696805192348,
+          0.5847697360140238
+        ],
+        "z1": [
+          3.957025226681923,
+          3.9570252742787306
+        ],
+        "conditioned_azimuth_slope": [
+          -143.7629765033677,
+          -135.96103994535827
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 74496,
+        "winding": 10,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -9,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.547349566575992,
+          0.547349566578784
+        ],
+        "log_s": [
+          -16.202297813671663,
+          -16.202297810176983
+        ],
+        "film_radius2": [
+          15.999903733794282,
+          15.999904175383204
+        ],
+        "z0": [
+          0.5848031067236951,
+          0.5848031622184842
+        ],
+        "z1": [
+          3.957007589095654,
+          3.957007636692462
+        ],
+        "conditioned_azimuth_slope": [
+          -181.69500758561733,
+          -172.1104940108625
+        ],
+        "red": [
+          1.6472298822415997e-21,
+          1.7399764851843497e-21
+        ],
+        "green": [
+          1.687541635724583e-21,
+          1.7825558421787638e-21
+        ],
+        "blue": [
+          2.0201362337370355e-21,
+          2.1338753671858396e-21
+        ],
+        "catalogue": 94963,
+        "winding": 13,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -13,
+        "rgb_upper": 2.1338753671858396e-21,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473496540068441,
+          0.5473496540096361
+        ],
+        "log_s": [
+          -18.579450180662892,
+          -18.57945017710621
+        ],
+        "film_radius2": [
+          16.000019406600977,
+          16.000019848187566
+        ],
+        "z0": [
+          0.5847646157522615,
+          0.5847646712470504
+        ],
+        "z1": [
+          3.95702789360463,
+          3.9570279412014377
+        ],
+        "conditioned_azimuth_slope": [
+          -206.5698935036667,
+          -196.00086638300834
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 46499,
+        "winding": 15,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -14,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473495375589446,
+          0.5473495375617365
+        ],
+        "log_s": [
+          -19.560160016532677,
+          -19.560160012849764
+        ],
+        "film_radius2": [
+          15.999865344478692,
+          15.99986578606839
+        ],
+        "z0": [
+          0.5848158813256659,
+          0.584815936820455
+        ],
+        "z1": [
+          3.95700085031934,
+          3.957000897916148
+        ],
+        "conditioned_azimuth_slope": [
+          -207.98348135740386,
+          -196.79508434051172
+        ],
+        "red": [
+          4.570296151127148e-25,
+          4.8330655364383205e-25
+        ],
+        "green": [
+          4.294792021644048e-25,
+          4.5417162291489225e-25
+        ],
+        "blue": [
+          4.457262425244796e-25,
+          4.713524622873994e-25
+        ],
+        "catalogue": 28960,
+        "winding": 16,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -15,
+        "rgb_upper": 4.8330655364383205e-25,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473496560757012,
+          0.5473496560784932
+        ],
+        "log_s": [
+          -18.735285713071185,
+          -18.735285709499735
+        ],
+        "film_radius2": [
+          16.0000221437872,
+          16.000022585373728
+        ],
+        "z0": [
+          0.5847637049488444,
+          0.5847637604436334
+        ],
+        "z1": [
+          3.9570283740657843,
+          3.957028421662592
+        ],
+        "conditioned_azimuth_slope": [
+          -211.6402792232286,
+          -201.0738872668609
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 89077,
+        "winding": 16,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -14,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473494969412203,
+          0.5473494969468042
+        ],
+        "log_s": [
+          -43.150661194691224,
+          -43.15066118057006
+        ],
+        "film_radius2": [
+          15.999811606831233,
+          15.99981205499113
+        ],
+        "z0": [
+          0.5848337618353324,
+          0.5848338185592798
+        ],
+        "z1": [
+          3.9569914174595793,
+          3.9569914657047844
+        ],
+        "conditioned_azimuth_slope": [
+          -427.2403554938379,
+          -405.2942012819523
+        ],
+        "red": [
+          3.509629187840713e-46,
+          3.704264222719804e-46
+        ],
+        "green": [
+          2.9474680203425332e-46,
+          3.1109240834678633e-46
+        ],
+        "blue": [
+          2.5424937551147193e-46,
+          2.6834894553578767e-46
+        ],
+        "catalogue": 71425,
+        "winding": 35,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -33,
+        "rgb_upper": 3.704264222719804e-46,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473495094744183,
+          0.5473495094772103
+        ],
+        "log_s": [
+          -53.07517502222444,
+          -53.0751750137385
+        ],
+        "film_radius2": [
+          15.999828189281983,
+          15.999828630872432
+        ],
+        "z0": [
+          0.5848282453901801,
+          0.5848283008849692
+        ],
+        "z1": [
+          3.9569943281076143,
+          3.956994375704422
+        ],
+        "conditioned_azimuth_slope": [
+          -701.3576548799375,
+          -675.2479063074031
+        ],
+        "red": [
+          2.4939769361248742e-54,
+          2.5950969051224457e-54
+        ],
+        "green": [
+          2.2354230994635988e-54,
+          2.3260573846518183e-54
+        ],
+        "blue": [
+          2.1464835002021947e-54,
+          2.2335102461456583e-54
+        ],
+        "catalogue": 69214,
+        "winding": 43,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -40,
+        "rgb_upper": 2.5950969051224457e-54,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473495220829996,
+          0.5473495220857916
+        ],
+        "log_s": [
+          -81.87679791125481,
+          -81.87679789844441
+        ],
+        "film_radius2": [
+          15.999844870103159,
+          15.999845311693269
+        ],
+        "z0": [
+          0.584822694528789,
+          0.584822750023578
+        ],
+        "z1": [
+          3.9569972562622846,
+          3.9569973038590924
+        ],
+        "conditioned_azimuth_slope": [
+          -1538.101789009468,
+          -1459.7346379295775
+        ],
+        "red": [
+          1.1204953602094594e-79,
+          1.2392596235284337e-79
+        ],
+        "green": [
+          8.547148574908118e-80,
+          9.453076147001627e-80
+        ],
+        "blue": [
+          6.283513459727718e-80,
+          6.949508931646668e-80
+        ],
+        "catalogue": 87984,
+        "winding": 66,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -62,
+        "rgb_upper": 1.2392596235284337e-79,
+        "in_support": true
+      }
+    ]
+  },
+  "radeon": {
+    "stationary_rectangle": [
+      [
+        0.5473494851024893,
+        0.5473496693037033
+      ],
+      [
+        -7.000202266738144e-07,
+        0.0
+      ]
+    ],
+    "top_edge_critical_z0": [
+      0.5847583091080496,
+      0.5847583428243589
+    ],
+    "right_edge_critical_z1": [
+      3.9569887544985267,
+      3.956988772279297
+    ],
+    "minimum_normalized_potential": [
+      -7.000202266738144e-07,
+      -6.997273860331886e-07
+    ],
+    "screen_counts": {
+      "catalogue": 80026,
+      "windings": 259,
+      "examined": 1435744,
+      "surviving": 168
+    },
+    "tail_rgb_upper_each_channel": 7.712742517151755e-21,
+    "tail_rgb_upper_with_global_normalizer_floor": 5.18297353570098e-10,
+    "cost": {
+      "wall_seconds": 15.57,
+      "peak_rss_kib": 275776.0
+    },
+    "physical_provider": "retained_device=Microsoft Direct3D12 (AMD Radeon 780M Graphics) driver=Dozen driver_info=Mesa 25.2.8 launch_interval_max_width=4.5585757391108928e-13",
+    "cell_result": {
+      "refined_surviving": 129.0,
+      "excluded_by_endpoints": 120.0,
+      "sign_brackets": 9.0,
+      "inside": 5.0,
+      "outside": 4.0,
+      "finite_rgb_upper": 2.134349939273891e-21,
+      "sum_rgb_upper": 9.847092456425646e-21
+    },
+    "camera_over_source_frequency": [
+      1.2210905700047088,
+      1.2210907214942384
+    ],
+    "roots": [
+      {
+        "u": [
+          0.5473496502725386,
+          0.5473496502753492
+        ],
+        "log_s": [
+          -10.27283371996187,
+          -10.272833717585039
+        ],
+        "film_radius2": [
+          16.000014918642197,
+          16.000015543549292
+        ],
+        "z0": [
+          0.5847662634435422,
+          0.5847663311763883
+        ],
+        "z1": [
+          3.957027083023375,
+          3.9570271519755575
+        ],
+        "conditioned_azimuth_slope": [
+          -121.62912892310506,
+          -114.43677164382616
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 63467,
+        "winding": 9,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -8,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473496425037985,
+          0.5473496425066091
+        ],
+        "log_s": [
+          -11.629247181503754,
+          -11.62924717895335
+        ],
+        "film_radius2": [
+          16.000004132085675,
+          16.000004756992976
+        ],
+        "z0": [
+          0.5847696744347751,
+          0.5847697421676213
+        ],
+        "z1": [
+          3.957025215985757,
+          3.9570252849379397
+        ],
+        "conditioned_azimuth_slope": [
+          -143.7631584578272,
+          -135.96085589037042
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 74496,
+        "winding": 10,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -9,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473495665758872,
+          0.5473495665786978
+        ],
+        "log_s": [
+          -16.202297813682083,
+          -16.202297810164133
+        ],
+        "film_radius2": [
+          15.99990364200621,
+          15.999904266915602
+        ],
+        "z0": [
+          0.584803100646567,
+          0.5848031683794132
+        ],
+        "z1": [
+          3.9570075783956207,
+          3.9570076473478033
+        ],
+        "conditioned_azimuth_slope": [
+          -181.6952423686292,
+          -172.11025601982064
+        ],
+        "red": [
+          1.6472275510263045e-21,
+          1.7399791098386713e-21
+        ],
+        "green": [
+          1.6875392474644182e-21,
+          1.782558531055598e-21
+        ],
+        "blue": [
+          2.020133374782246e-21,
+          2.133878586003247e-21
+        ],
+        "catalogue": 94963,
+        "winding": 13,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -13,
+        "rgb_upper": 2.133878586003247e-21,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473496540023208,
+          0.5473496540135635
+        ],
+        "log_s": [
+          -18.579450185977826,
+          -18.57945017178288
+        ],
+        "film_radius2": [
+          16.000019304625646,
+          16.000019949371517
+        ],
+        "z0": [
+          0.5847646079081815,
+          0.5847646793531857
+        ],
+        "z1": [
+          3.957027881878474,
+          3.95702795278887
+        ],
+        "conditioned_azimuth_slope": [
+          -206.57016208837857,
+          -196.00059420897168
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 46499,
+        "winding": 15,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -14,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473495375583495,
+          0.5473495375611601
+        ],
+        "log_s": [
+          -19.560160016537193,
+          -19.56016001282969
+        ],
+        "film_radius2": [
+          15.999865252041985,
+          15.999865876952175
+        ],
+        "z0": [
+          0.5848158754643786,
+          0.5848159431972247
+        ],
+        "z1": [
+          3.957000839505448,
+          3.9570009084576303
+        ],
+        "conditioned_azimuth_slope": [
+          -207.98377397377192,
+          -196.79478768929548
+        ],
+        "red": [
+          4.570288809565938e-25,
+          4.8330738250250515e-25
+        ],
+        "green": [
+          4.294785122656334e-25,
+          4.54172401806467e-25
+        ],
+        "blue": [
+          4.457255265279083e-25,
+          4.713532706427727e-25
+        ],
+        "catalogue": 28960,
+        "winding": 16,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -15,
+        "rgb_upper": 4.8330738250250515e-25,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473496560766081,
+          0.5473496560794189
+        ],
+        "log_s": [
+          -18.73528571309667,
+          -18.73528570950121
+        ],
+        "film_radius2": [
+          16.000022053337688,
+          16.000022678244875
+        ],
+        "z0": [
+          0.5847636984262515,
+          0.5847637661591466
+        ],
+        "z1": [
+          3.9570283636007137,
+          3.9570284325529226
+        ],
+        "conditioned_azimuth_slope": [
+          -211.6405466339867,
+          -201.07361631029025
+        ],
+        "red": [
+          0.0,
+          0.0
+        ],
+        "green": [
+          0.0,
+          0.0
+        ],
+        "blue": [
+          0.0,
+          0.0
+        ],
+        "catalogue": 89077,
+        "winding": 16,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -14,
+        "rgb_upper": 0.0,
+        "in_support": false
+      },
+      {
+        "u": [
+          0.5473494969411048,
+          0.5473494969467262
+        ],
+        "log_s": [
+          -43.15066119473635,
+          -43.1506611805205
+        ],
+        "film_radius2": [
+          15.999811515019374,
+          15.999812146543947
+        ],
+        "z0": [
+          0.5848337557546364,
+          0.5848338247249011
+        ],
+        "z1": [
+          3.956991406757071,
+          3.9569914763620084
+        ],
+        "conditioned_azimuth_slope": [
+          -427.24115738924326,
+          -405.293376921612
+        ],
+        "red": [
+          3.509614685373106e-46,
+          3.704280630528945e-46
+        ],
+        "green": [
+          2.947455840841639e-46,
+          3.110937863105275e-46
+        ],
+        "blue": [
+          2.5424832490500228e-46,
+          2.6835013416957792e-46
+        ],
+        "catalogue": 71425,
+        "winding": 35,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -33,
+        "rgb_upper": 3.704280630528945e-46,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473495094739602,
+          0.5473495094767709
+        ],
+        "log_s": [
+          -53.07517502222809,
+          -53.07517501368529
+        ],
+        "film_radius2": [
+          15.999828097026523,
+          15.999828721937492
+        ],
+        "z0": [
+          0.5848282394685786,
+          0.5848283072014248
+        ],
+        "z1": [
+          3.956994317325539,
+          3.9569943862777217
+        ],
+        "conditioned_azimuth_slope": [
+          -701.358866060453,
+          -675.2467243896083
+        ],
+        "red": [
+          2.4939624253873252e-54,
+          2.595112750264931e-54
+        ],
+        "green": [
+          2.2354100930797296e-54,
+          2.3260715870859604e-54
+        ],
+        "blue": [
+          2.1464710113005807e-54,
+          2.2335238835014973e-54
+        ],
+        "catalogue": 69214,
+        "winding": 43,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -40,
+        "rgb_upper": 2.595112750264931e-54,
+        "in_support": true
+      },
+      {
+        "u": [
+          0.5473495220827043,
+          0.547349522085515
+        ],
+        "log_s": [
+          -81.87679791125443,
+          -81.87679789835776
+        ],
+        "film_radius2": [
+          15.999844778062968,
+          15.999845402973847
+        ],
+        "z0": [
+          0.5848226885354849,
+          0.58482275626838
+        ],
+        "z1": [
+          3.9569972455180076,
+          3.9569973144702155
+        ],
+        "conditioned_azimuth_slope": [
+          -1538.2101191818997,
+          -1459.6478149256889
+        ],
+        "red": [
+          1.1202502524814291e-79,
+          1.2395484912530537e-79
+        ],
+        "green": [
+          8.54527889099694e-80,
+          9.455279630856074e-80
+        ],
+        "blue": [
+          6.282138944729967e-80,
+          6.951128841435509e-80
+        ],
+        "catalogue": 87984,
+        "winding": 66,
+        "left": 1,
+        "right": -1,
+        "azimuth_wrap": -62,
+        "rgb_upper": 1.2395484912530537e-79,
+        "in_support": true
+      }
+    ]
+  },
+  "cpu_bound_only": {
+    "stationary_rectangle": [
+      [
+        0.547349485404759,
+        0.5473496683799569
+      ],
+      [
+        -6.99877247711811e-07,
+        0.0
+      ]
+    ],
+    "top_edge_critical_z0": [
+      0.5847583255781104,
+      0.5847583263612777
+    ],
+    "right_edge_critical_z1": [
+      3.956988763183029,
+      3.9569887635921783
+    ],
+    "minimum_normalized_potential": [
+      -6.99877247711811e-07,
+      -6.998703603322553e-07
+    ],
+    "screen_counts": {
+      "catalogue": 80026,
+      "windings": 259,
+      "examined": 1435737,
+      "surviving": 168
+    },
+    "tail_rgb_upper_each_channel": 7.712689934781901e-21,
+    "tail_rgb_upper_with_global_normalizer_floor": 5.182938200278259e-10,
+    "cost": {
+      "wall_seconds": 10.5,
+      "peak_rss_kib": 12416.0
+    },
+    "omission_without_positions": {
+      "survivors": 129.0,
+      "proven": 129.0,
+      "unresolved": 0.0,
+      "finite_rgb_upper": 7.800122641680348e-14,
+      "sum_rgb_upper": 7.800123412949344e-14
+    }
+  },
+  "radeon_bound_only": {
+    "stationary_rectangle": [
+      [
+        0.5473494851024893,
+        0.5473496693037033
+      ],
+      [
+        -7.000202266738144e-07,
+        0.0
+      ]
+    ],
+    "top_edge_critical_z0": [
+      0.5847583091080496,
+      0.5847583428243589
+    ],
+    "right_edge_critical_z1": [
+      3.9569887544985267,
+      3.956988772279297
+    ],
+    "minimum_normalized_potential": [
+      -7.000202266738144e-07,
+      -6.997273860331886e-07
+    ],
+    "screen_counts": {
+      "catalogue": 80026,
+      "windings": 259,
+      "examined": 1435744,
+      "surviving": 168
+    },
+    "tail_rgb_upper_each_channel": 7.712742517151755e-21,
+    "tail_rgb_upper_with_global_normalizer_floor": 5.18297353570098e-10,
+    "cost": {
+      "wall_seconds": 13.93,
+      "peak_rss_kib": 284100.0
+    },
+    "physical_provider": "retained_device=Microsoft Direct3D12 (AMD Radeon 780M Graphics) driver=Dozen driver_info=Mesa 25.2.8 launch_interval_max_width=4.5585757391108928e-13",
+    "omission_without_positions": {
+      "survivors": 129.0,
+      "proven": 129.0,
+      "unresolved": 0.0,
+      "finite_rgb_upper": 7.800145058221388e-14,
+      "sum_rgb_upper": 7.800145829495642e-14
+    }
+  },
+  "independent_cpu_reference": {
+    "finite_quadrature": [
+      {
+        "finite_scale": "0",
+        "time": "0.982136333259157593901928348227901543145400684295820529494314344633254833022577443459161235",
+        "spin": "-4.29195634272407111519385939575069760859501684927547967530813264616579872719629396113349018"
+      },
+      {
+        "finite_scale": "1.000000000000000083336420607585985350931336026868654502364509783548862515410206308619223136702203191816806793212890625E-30",
+        "time": "0.982136333259157593901928348227530678591730435688303703899515987533274038620669462144170219",
+        "spin": "-4.29195634272407111519385939575094138722534050988450369766035079392550208811937432995999852"
+      },
+      {
+        "finite_scale": "9.99999999999999954748111825886258685613938723690807819366455078125E-8",
+        "time": "0.982136206945543532659929650667408964587735143913935894801311630292816088795452464586083760",
+        "spin": "-4.291946700980130158598422785544928691396997572352082673810090528612583279052051288922068310"
+      },
+      {
+        "finite_scale": "0.0004182933323971980109357016175408716662786900997161865234375",
+        "time": "0.9818812715659619455558300293388973518283147340111005086055824640448695498681902902990523851",
+        "spin": "-4.270839052111270683815265752367619325184779889951060574658576209836407659359425342344992187"
+      }
+    ],
+    "azimuth_sign_changes": [
+      {
+        "catalogue_index": 63467,
+        "winding": 9,
+        "azimuth_endpoint_residuals": [
+          "0.000019465896521698459720431234034651336608913550800660329109868075812630099680657135341452",
+          "-0.000002137899006902060286987155045547411076124810485779341318306990768821347301127777477657"
+        ]
+      },
+      {
+        "catalogue_index": 74496,
+        "winding": 10,
+        "azimuth_endpoint_residuals": [
+          "0.000021977880579736799813773951876681541560835230461279877108104252206384442088325597544663",
+          "-0.000003619976557226286632300197381911089532422313794993316130976201303612915627514882835237"
+        ]
+      },
+      {
+        "catalogue_index": 94963,
+        "winding": 13,
+        "azimuth_endpoint_residuals": [
+          "0.000014362431803914342621380819616259845893876230765595639684718046946729544855686354120158",
+          "-0.000018012889218929873828365020072289332846049023081009524194573317347599412312202594748864"
+        ]
+      },
+      {
+        "catalogue_index": 46499,
+        "winding": 15,
+        "azimuth_endpoint_residuals": [
+          "0.000033943284207928861380973387024271170899533371102726295141409097084079760412001400454035",
+          "-0.000002893402449511513138520724724533749054006135547467807599984350714610977341602583757615"
+        ]
+      },
+      {
+        "catalogue_index": 28960,
+        "winding": 16,
+        "azimuth_endpoint_residuals": [
+          "0.000010557425058154425358791000815581208367182278034292577344779006170540844924926258653697",
+          "-0.000026481231157289112115730560557357731540530126774220481423056365271809586082295267955058"
+        ]
+      },
+      {
+        "catalogue_index": 89077,
+        "winding": 16,
+        "azimuth_endpoint_residuals": [
+          "0.000035225481285135633728094261888258372528572017805327139900283556983697586467002726002569",
+          "-0.000002539230421968608065693001402796478124792902505076520892895436170770406487000330930372"
+        ]
+      },
+      {
+        "catalogue_index": 71425,
+        "winding": 35,
+        "azimuth_endpoint_residuals": [
+          "0.00000480387078927853826933208501873012030449638273839028198371124872177791502955477042575",
+          "-0.00007136992654908704761788103834412577893678576410337235630661956407286666814175732306169"
+        ]
+      },
+      {
+        "catalogue_index": 69214,
+        "winding": 43,
+        "azimuth_endpoint_residuals": [
+          "0.00001656859482798312850506048168713260085197040069383675808128456233104845512184522534644",
+          "-0.00010937829253964899925040733519300545147531376295006864974178818801054948345548426124505"
+        ]
+      },
+      {
+        "catalogue_index": 87984,
+        "winding": 66,
+        "azimuth_endpoint_residuals": [
+          "0.00005492810510456298814959949406908121668889557551745315008774487111741988743600185862610",
+          "-0.00021920950535886677178656249774075877531844128787508645740889154235594518293152073174779"
+        ]
+      }
+    ]
+  },
+  "remaining": "Integrate the proof under the unchanged detector work, memory and RGB limits. The exhaustive proof is a replay and scans more branches than the existing candidate-visit ceiling. Use bounded sky queries and shared pupil work, then rerun the original full Radeon scenes and platform gates.",
+  "references": [
+    "https://arxiv.org/html/1910.12881"
+  ],
+  "artifacts": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/stationary-chart.h.gz",
+      "bytes": 3077,
+      "sha256": "57ce15b1bc4a6c4a13e2a80e76d1735b1d23a55587e07feaf51b732a66334d60"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/finite-radiometry.h.gz",
+      "bytes": 1106,
+      "sha256": "e8c004b949e97de86c7c4b775a64acd80cd159d5c81283907631fbe0093d16ab"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/chart.cpp.gz",
+      "bytes": 8230,
+      "sha256": "bfc8632d63a296f3e4f0cefc51c96e87be4d545caf9458d803af2e8172ce9008"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/bounded-chart.cpp.gz",
+      "bytes": 7483,
+      "sha256": "2a175258aaf8de4fbc1a15669a4abea226c7c7216a4978277d48ace9feeb8ed7"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/cpu-final.log.gz",
+      "bytes": 14955,
+      "sha256": "bf29b60db77fb396f1a946be21cf9a07fb223066e2c4cfbec9e40decaa768691"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon.log.gz",
+      "bytes": 15077,
+      "sha256": "3e58b697217796d0fa4edfba9d3ee3fb8c68bf18a3e9804c9e9cb264fca9ca12"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/bounded.log.gz",
+      "bytes": 2822,
+      "sha256": "6121d5b861e74d257d4a29af90e81912fed44c717cf9b5a9f46c311697bc4e8a"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-bounded.log.gz",
+      "bytes": 2955,
+      "sha256": "7ac02fcb761560bc954097399b48eddaf16560e0097f2c21644ecef5877d7be6"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/reference.log.gz",
+      "bytes": 1581,
+      "sha256": "13f845693fcf8538cf0dd1c1011fcbb9b319c9aca0cf8453ba154257fae4a4f8"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/runtime.log.gz",
+      "bytes": 57,
+      "sha256": "002a6db79d73ca8f20a2ee6225218c084299e416879b7b6684995e8571a0c5ae"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-runtime.log.gz",
+      "bytes": 59,
+      "sha256": "c125dd784cda3c427cb65fda7b61c55d44b058683015830e2b08b89b2dd7c905"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/bounded-runtime.log.gz",
+      "bytes": 58,
+      "sha256": "2939e68949998fb9b072d5496494cf4c217a43703edb55c08f90087bddf67873"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-bounded-runtime.log.gz",
+      "bytes": 59,
+      "sha256": "13caccae8e25e93e6b3ec4f67cb56d59154060df3066db69e44e06159c0a7e01"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-build.json.gz",
+      "bytes": 536,
+      "sha256": "bf8719fb8982dc3fcecf8f4c07be03c62f69db69c39cbbc18e89217cc9e3fd3a"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-bounded-build.json.gz",
+      "bytes": 382,
+      "sha256": "464857da0373832c2f38863669c6aaba033b863f7edeae7b97926221115b8001"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-stderr.log.gz",
+      "bytes": 139,
+      "sha256": "1f2f59421103394a39282e2d2df887c699965da44778a0ec4f4cf549705429cd"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-full-cell/radeon-bounded-stderr.log.gz",
+      "bytes": 139,
+      "sha256": "1f2f59421103394a39282e2d2df887c699965da44778a0ec4f4cf549705429cd"
+    }
+  ]
+}
