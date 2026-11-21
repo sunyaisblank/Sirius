@@ -1,0 +1,220 @@
+{
+  "recorded_at": "2026-11-21T05:48:16.734918+00:00",
+  "render_source": "fa11353e2d2ad471af48f1b2ecefc5052eb35cab",
+  "prior_scattering_evidence": "6a2d9e3de1d87ceef67dd46a25d39d7be449174a",
+  "reused_preset_build": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+  "scope": "CPU fixed-pupil replay of the original mixed Radeon depth-16 detector cell, using the continuous null-projected film family.",
+  "build": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-stationary-chart/src",
+      "-Isrc",
+      "out/kerr-stationary-chart/chart.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-stationary-chart/chart"
+    ],
+    "target": "chart",
+    "candidate_removed_after_use": {
+      "path": "out/kerr-stationary-chart/chart",
+      "bytes": 252576,
+      "sha256": "6ed2182558469d9836a4976efaa0acf418493e07f97a05d580217fd274ff8f19"
+    },
+    "overlay": "Use headers changed between the preset revision and fa11353e, and apply the enclosed patch to kerr_infinity.h."
+  },
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/MANIFEST.json",
+      "bytes": 7042,
+      "sha256": "0f8d913a90b8d5ef761244a3fbadd185aafde99c54fd325090edabe92a3366db"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  ],
+  "stationary_coordinates": {
+    "coordinate_order": [
+      "inverse radius at stationary radial potential",
+      "stationary potential divided by E squared"
+    ],
+    "whole_cell_jacobian_determinant": [
+      3.74071591024772e-05,
+      3.742763844157086e-05
+    ],
+    "whole_cell_preconditioned_contraction": 0.0002715758313803497,
+    "included_target_rectangle": [
+      [
+        0.5473495114065964,
+        0.5473495426004061
+      ],
+      [
+        -2.183665847117034e-07,
+        2.183665847117034e-07
+      ]
+    ],
+    "film_enclosure_for_targets": [
+      [
+        0.5848118701669405,
+        0.5848292431647824
+      ],
+      [
+        3.956982466430699,
+        3.957014378468312
+      ]
+    ],
+    "coverage": "The interval derivative covers the entire film rectangle. The interval fixed-point map takes the film rectangle into itself for every target, certifying a unique film position including the critical contour."
+  },
+  "scaled_turning_pair": {
+    "s_domain": [
+      0.0,
+      0.0004672971053962386
+    ],
+    "turn_offset_over_s": [
+      0.3519317206563061,
+      0.35195278974770317
+    ],
+    "inner_offset_over_s": [
+      0.351913411606478,
+      0.3519344764563012
+    ],
+    "gap_over_s": [
+      0.703845132262784,
+      0.7038872662040044
+    ],
+    "preconditioned_contraction": 5.208895789648737e-05,
+    "interpretation": "Offsets are measured from the stationary inverse radius. For s=0 the bounds describe the continuous limiting offsets after rescaling by sqrt(-H/E squared)."
+  },
+  "independent_92_digit_decimal": {
+    "physical_launch_controls": [
+      {
+        "u": "0.54734975595956452340636580607481922025145984680563702232705631410644604085408478404349146555",
+        "H": "3.6087217847388445805441791080957587450721389633671903080372452410097644536451571864746E-7",
+        "lambda": "2.1839942383326163531107764305748820900975984295770101395956323397979399480581267080968262739",
+        "eta": "7.9935917377550583538663664862127003184028848816470525947444461512430075442439072628533878396"
+      },
+      {
+        "u": "0.54734949846440586567553984374407372935434430055317539836848839924842903671139067024295203105",
+        "H": "-6.998738039971949590209650184838713841919791133241246487576381277537639052252742603215E-7",
+        "lambda": "2.1839942114049933647334694288240521365361965968633536274824192221270422390509611909473103097",
+        "eta": "7.9936159491639852525689742798899769436879664646231207122307574174733438055207665419451764482"
+      },
+      {
+        "u": "0.54734952700350111879673952100776478432128702748516011055221275706339194694979833628037389655",
+        "H": "3.07453152685526456961598348107601920699428361095508210749775361891303700030710155E-12",
+        "lambda": "2.1839930707831918930440255101834699735294207933519128580323828609478471358540312157700977072",
+        "eta": "7.9936121621288328085524824176542209533391603547262075029361285480907964610704162435954124313"
+      }
+    ],
+    "whole_quartic_scaled_root_controls": [
+      {
+        "s": "1E-30",
+        "gap_over_s": "0.70386622327824612097692203136356420109517197381310499185027039176250308961542294766226396934"
+      },
+      {
+        "s": "1E-14",
+        "gap_over_s": "0.70386623874825262928041672973641684424464036102965530451137363441732625093388483907591764539"
+      },
+      {
+        "s": "0.000233648552698119295",
+        "gap_over_s": "0.70386623458323286739598755412405845780154789981937991525615097300425762287966289672868104990"
+      }
+    ]
+  },
+  "hosted": {
+    "run_id": 44838644662,
+    "exact_revision": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+    "conclusion": "cancelled",
+    "providers": {
+      "linux": {
+        "job_id": 136641262281,
+        "artifact_id": 14693718757,
+        "archive_member": "bin/linux-ci/generated/sirius/mandatory_gate_ctest.log",
+        "original_job_archive_member_bytes": 312306,
+        "original_job_archive_member_sha256": "b181fac5b98a0d67814f10cb101b8e19e53e24e1fc4c3350b08dc752c21525c1",
+        "first_failure": "25/1152 Test   #25: OperationalVulkan.RequiredRuntimeDispatch .......................................................***Timeout 300.01 sec",
+        "github_runner_limit_seconds": 21600,
+        "verified_receipt": false
+      },
+      "macos": {
+        "job_id": 136641262050,
+        "artifact_id": 14693803612,
+        "archive_member": "Sirius/Sirius/bin/macos/generated/sirius/mandatory_gate_ctest.log",
+        "original_job_archive_member_bytes": 116003,
+        "original_job_archive_member_sha256": "9191eecdc9f73cbdf0c616c5922718d5767930d594cc1b11af31a44dfe0705c8",
+        "first_failure": "25/1152 Test   #25: OperationalVulkan.RequiredRuntimeDispatch .......................................................***Timeout 300.12 sec",
+        "github_runner_limit_seconds": 21600,
+        "verified_receipt": false
+      }
+    },
+    "linux_p1_result": "Test 26 passed after 17327.77 seconds",
+    "macos_p1_result": "Test 26 started and was still active at cancellation",
+    "change": {
+      "revision": "fc4eff90793ac43d82b192322c54476e8f748a32",
+      "path": "scripts/verify-build-gate.py",
+      "checks": [
+        "self-test.log",
+        "rejection.log",
+        "pass.log"
+      ],
+      "scope": "Stop after a failed Mandatory CTest. A pass still requires the complete registered suite and exact execution inputs."
+    }
+  },
+  "remaining": "A uniform image multiplicity and determinant bound and residual RGB estimate for the winding tail, then recovery of both required hosted Vulkan witnesses and exact-platform qualification.",
+  "artifacts": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/kerr-exact-null-launch.patch.gz",
+      "bytes": 759,
+      "sha256": "c02925aa91e6e2ae02bf99ad814c21127fea37bf690eca67ec8f1ab0a457dbeb"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/stationary-chart.h.gz",
+      "bytes": 2878,
+      "sha256": "d0fee9fcd0de9b295644f50f99aae01d87894631ded908da3e90d7be4dc2a607"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/chart.cpp.gz",
+      "bytes": 2505,
+      "sha256": "a788e1cb14c26c110e4438212d7d52e46ac457ade5e469b30c9cbf5f41b2489d"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/chart.log.gz",
+      "bytes": 913,
+      "sha256": "20a842880da6222d8b1121e84e86508e3d1464f1c2738d7398282d346a55a4f1"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/reference.py.gz",
+      "bytes": 1791,
+      "sha256": "da50eb6dd377a46b31ae9dc5a46dcb4cc9d5646a32d5f97cad59e1d402f59062"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/reference.log.gz",
+      "bytes": 818,
+      "sha256": "4fb2f5373d8bd28c393df8db45182e05ccb21047e2aed692525a3e81e8604a37"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/hosted-mandatory-excerpts.gz",
+      "bytes": 23886,
+      "sha256": "461fc0da11c0ef25b4ecf50674ac18bf3c576be807a53aecfbd753cf6df903d7"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/fail-fast-controls.gz",
+      "bytes": 461,
+      "sha256": "b83d848c8c3b5a105723452de0c471057af9d537e8006e12c70f7d0915c8c906"
+    }
+  ]
+}
