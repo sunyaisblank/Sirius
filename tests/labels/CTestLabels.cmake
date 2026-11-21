@@ -580,6 +580,8 @@ set_tests_properties(
     KerrInfinity.FrequencyScaleAndSignedParityArePreserved
     KerrInfinity.AxisPrincipalRaysHaveAnalyticAngularVariation
     KerrInfinity.KerrTailMatchesIndependentSeparatedReference
+    KerrInfinity.RadialTurnMatchesIndependentMinoTimeScatteringAndColumns
+    KerrInfinity.RadialTurnDeclinesCaptureAndUnresolvedTurns
     KerrInfinity.RejectsHiddenRadialTurningPoint
     KerrInfinity.MassSpinAndRadiusScalingPreserveDirectionAndJacobian
     KerrInfinity.NearCriticalSchwarzschildDerivativeMatchesIndependentRadialIntegral
@@ -1093,6 +1095,7 @@ set_tests_properties(
     SourceSkyInfinityTrace.PointSourceHandoffPreservesTheFlatObserverMap
     SourceSkyInfinityTrace.PointSourceHandoffAvoidsVacuumTravelForMovingPhysicalPupils
     SourceSkyInfinityTrace.PointSourceHandoffRetainsOpaqueAndVolumetricSources
+    SourceSkyInfinityTrace.InwardDiskFreeProbeCrossesAnExteriorKerrTurn
     SourceSkyInfinityTrace.PointSourceWorkExhaustionAndCancellationHaveNoSourceMap
     SourceSkyInfinityTrace.NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity
     PROPERTIES LABELS "Mandatory;Correctness"

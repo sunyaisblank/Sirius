@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sirius/core/source_sky_map.h"
+#include "sirius/core/spherical_continuation/radial_quadrature.h"
 #include "sirius/core/trace_boundary.h"
 
 #include <algorithm>
@@ -8,7 +9,7 @@
 
 namespace sirius::core::relativity {
 
-// Vacuum Kerr continuation from an outward exterior event to radial infinity.
+// Vacuum Kerr continuation from an exterior event to radial infinity.
 // These tolerances concern the tail only; the inner trace and the detector
 // integration have separate errors. Callers must budget all three.
 struct KerrInfinityConfig {
@@ -16,6 +17,7 @@ struct KerrInfinityConfig {
     double relative_tolerance = 1e-9;
     double input_constraint_tolerance = 1e-8;
     unsigned maximum_attempts = 4096;
+    bool allow_radial_turn = false;
 };
 
 enum class KerrInfinityFailure { InvalidInput, RadialUnresolved, WorkLimit, Arithmetic };
@@ -47,6 +49,7 @@ struct Constants {
     Jet energy;
     Jet angular_momentum;
     Jet carter_combination;
+    bool inward = false;
 };
 
 // n is the oblate angular unit vector in the public ingoing KS orientation.
@@ -117,11 +120,12 @@ inline bool InitialState(double mass, double spin, const Metric4d& metric,
     const Jet projection = Dot(n, w);
     Vector v;
     for (unsigned i = 0; i < 3; ++i) v[i] = w[i] - n[i] * projection;
-    // Outgoing oblate radial branch; checking a Euclidean radius is insufficient.
+    // Use the oblate radial branch; the Euclidean radial sign can disagree.
     const Jet radial_derivative =
         (radius * (x[0] * k[0] + x[1] * k[1]) + denominator * x[2] * k[2] / radius) /
         (discriminant * (scale * scale));
-    if (!Finite(radial_derivative) || !(radial_derivative.real > 0.0)) return false;
+    if (!Finite(radial_derivative) || radial_derivative.real == 0.0) return false;
+    constants.inward = radial_derivative.real < 0.0;
     constants.inverse_radius = Jet(1.0) / radius;
     constants.energy = -momentum[0];
     constants.angular_momentum = n[0] * v[1] - n[1] * v[0];
@@ -168,6 +172,130 @@ inline bool OutwardInterval(double mass, double spin, const Constants& c) {
     return true;
 }
 
+template <typename Scalar>
+std::array<Scalar, 5> RadialCoefficients(double mass, double spin, Scalar energy,
+                                         Scalar angular_momentum, Scalar carter) {
+    const Scalar a(spin);
+    const auto a2 = a * a;
+    const auto z = a2 * energy - a * angular_momentum;
+    return {energy * energy, Scalar{}, Scalar(2) * energy * z - carter,
+            Scalar(2) * Scalar(mass) * carter, z * z - a2 * carter};
+}
+
+template <typename Scalar, std::size_t N>
+Scalar EvaluateRadial(const std::array<Scalar, N>& coefficients, Scalar u) {
+    auto value = coefficients.back();
+    for (std::size_t i = N - 1; i > 0; --i) value = value * u + coefficients[i - 1];
+    return value;
+}
+
+template <typename Scalar>
+std::array<Scalar, 4> DeflateRadialTurn(const std::array<Scalar, 5>& coefficients, Scalar root) {
+    // H(u) = (root - u) G(u). Horner deflation avoids dividing a near-zero
+    // numerator by root-u when evaluating G at the turn.
+    std::array<Scalar, 4> result;
+    result[3] = Scalar{} - coefficients[4];
+    for (std::size_t i = 3; i > 0; --i) result[i - 1] = result[i] * root - coefficients[i];
+    return result;
+}
+
+struct RadialTurn {
+    Jet root, start, travel;
+    std::array<Jet, 4> factor;
+};
+
+inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const Constants& c) {
+    using finite_tail_detail::Range;
+    if (!(mass > 0.0) || !finite_tail_detail::RoundingEnvironment()) return {};
+
+    const auto interval_coefficients =
+        RadialCoefficients(mass, spin, Range(c.energy.real), Range(c.angular_momentum.real),
+                           Range(c.carter_combination.real));
+    double lower = c.inverse_radius.real;
+    // Restrict the accelerated branch to turns outside 4M. The full tracer
+    // handles closer or poorly separated turning and capture trajectories.
+    double upper = 0.25 / mass;
+    const auto limit = Range(0.25) / Range(mass);
+    upper = std::min(upper, limit.lo);
+    if (!(0.0 < lower && lower < upper) ||
+        !(EvaluateRadial(interval_coefficients, Range(lower)).lo > 0.0) ||
+        !(EvaluateRadial(interval_coefficients, Range(upper)).hi < 0.0))
+        return {};
+
+    for (unsigned split = 0; split < 60; ++split) {
+        const double mid = std::midpoint(lower, upper);
+        if (!(lower < mid && mid < upper)) break;
+        const auto value = EvaluateRadial(interval_coefficients, Range(mid));
+        if (value.lo > 0.0)
+            lower = mid;
+        else if (value.hi < 0.0)
+            upper = mid;
+        else
+            break;
+    }
+    if (!(lower > c.inverse_radius.real) ||
+        !(upper - lower <= 128 * std::numeric_limits<double>::epsilon() * upper))
+        return {};
+
+    // A sign bracket alone can hide several roots. Certify G > 0 from
+    // infinity through the entire root bracket, so this is the first simple
+    // root and lies on the only reachable exterior scattering branch.
+    const auto factor = DeflateRadialTurn(interval_coefficients, Range(lower, upper));
+    constexpr unsigned panels = 16;
+    for (unsigned i = 0; i < panels; ++i) {
+        const Range a = Range(upper) * Range(static_cast<double>(i) / panels);
+        const Range b = Range(upper) * Range(static_cast<double>(i + 1) / panels);
+        const auto bound = EvaluateRadial(factor, Range(a.lo, b.hi));
+        if (!bound.Finite() || !(bound.lo > 0.0)) return {};
+    }
+
+    const auto coefficients =
+        RadialCoefficients(mass, spin, c.energy, c.angular_momentum, c.carter_combination);
+    const double root = std::midpoint(lower, upper);
+    const Jet fixed_root(root);
+    const auto slope = EvaluateRadial(DeflateRadialTurn(coefficients, fixed_root), fixed_root);
+    // H'(root) = -G(root). Implicit differentiation carries the moving
+    // turning point into both columns instead of holding it fixed.
+    const Jet varied_root(root, EvaluateRadial(coefficients, fixed_root).dual / slope.real);
+    const Jet start = -sqrt(varied_root - c.inverse_radius);
+    const Jet travel = sqrt(varied_root) - start;
+    if (!Finite(varied_root) || !Finite(start) || !Finite(travel)) return {};
+    return RadialTurn{varied_root, start, travel, DeflateRadialTurn(coefficients, varied_root)};
+}
+
+inline bool TurnDerivative(double mass, double spin, const std::array<Constants, 2>& constants,
+                           const std::array<RadialTurn, 2>& turns, double fraction,
+                           const State& state, State& result) {
+    for (unsigned column = 0; column < 2; ++column) {
+        const auto& c = constants[column];
+        const auto& turn = turns[column];
+        // q increases through zero. du/dq = -2q, H = q^2 G, so the
+        // Mino-time rate dτ/dq = 2/sqrt(G) on both radial branches.
+        const Jet q = turn.start + turn.travel * fraction;
+        const Jet u = fraction == 1.0 ? Jet{} : turn.root - q * q;
+        const Jet u2 = u * u;
+        const Jet d = Jet(1.0) - u * (2.0 * mass) + u2 * (spin * spin);
+        const Jet factor = EvaluateRadial(turn.factor, u);
+        if (!(factor.real > 0.0) || !(d.real > 0.0)) return false;
+        const Jet advance = turn.travel * 2.0 / sqrt(factor);
+        const Jet drag =
+            (c.energy * u * (2.0 * mass * spin) - c.angular_momentum * u2 * (spin * spin)) / d;
+        const Jet twist = advance * drag + turn.travel * q * (2.0 * spin) / d;
+        const Vector n{state[column][0], state[column][1], state[column][2]};
+        const Vector v{state[column][3], state[column][4], state[column][5]};
+        const Vector cross_n = SpinCross(n), cross_v = SpinCross(v);
+        const Jet v2 = Dot(v, v);
+        for (unsigned i = 0; i < 3; ++i) {
+            const Jet force = c.energy * c.energy * n[2] * (Jet(i == 2 ? 1.0 : 0.0) - n[2] * n[i]) *
+                              (spin * spin);
+            result[column][i] = advance * v[i] + twist * cross_n[i];
+            result[column][i + 3] = advance * (force - v2 * n[i]) + twist * cross_v[i];
+            if (!Finite(result[column][i]) || !Finite(result[column][i + 3])) return false;
+        }
+    }
+    return true;
+}
+
 inline bool Derivative(double mass, double spin, const std::array<Constants, 2>& constants,
                        double fraction, const State& state, State& result) {
     for (unsigned column = 0; column < 2; ++column) {
@@ -204,12 +332,13 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
 // actual handoff event; coordinate variations are K=V-Gamma(k,X). Both contain
 // the original launch seed. Spin is dimensional a (angular momentum / mass),
 // not the dimensionless a/M. The metric/dg must be those of vacuum Kerr at x.
+// The optional turn radius is written only with a complete map.
 [[nodiscard]] inline std::expected<KerrInfinityResult, KerrInfinityFailure> TraceKerrInfinity(
     double mass, double spin, const Metric4d& metric,
     const Tensor<Dual<double>, 4, 4, 4>& metric_derivatives, const Vec4& position,
     const Vec4& tangent, const std::array<Vec4, 2>& endpoint_displacements,
     const std::array<Vec4, 2>& coordinate_variations, double angular_seed,
-    const KerrInfinityConfig& config = {}) {
+    const KerrInfinityConfig& config = {}, double* turn_radius = nullptr) {
     using namespace kerr_infinity_detail;
     if (!std::isfinite(mass) || mass < 0.0 || !std::isfinite(spin) ||
         (mass > 0.0 && std::abs(spin) > mass) || !IsFinite(position) || !IsFinite(tangent) ||
@@ -230,8 +359,18 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
                           config.input_constraint_tolerance))
             return std::unexpected(KerrInfinityFailure::InvalidInput);
     }
-    if (!OutwardInterval(mass, spin, constants[0]))
+    std::array<RadialTurn, 2> turns;
+    const bool through_turn = constants[0].inward;
+    if (through_turn) {
+        if (!config.allow_radial_turn) return std::unexpected(KerrInfinityFailure::InvalidInput);
+        for (unsigned column = 0; column < constants.size(); ++column) {
+            const auto turn = AdmitRadialTurn(mass, spin, constants[column]);
+            if (!turn) return std::unexpected(KerrInfinityFailure::RadialUnresolved);
+            turns[column] = *turn;
+        }
+    } else if (!OutwardInterval(mass, spin, constants[0])) {
         return std::unexpected(KerrInfinityFailure::RadialUnresolved);
+    }
     // Dormand-Prince 5(4), with a single accepted step shared by both columns.
     constexpr std::array<double, 7> nodes{0, 1.0 / 5, 3.0 / 10, 4.0 / 5, 8.0 / 9, 1, 1};
     constexpr double tableau[7][6] = {
@@ -260,9 +399,12 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
                     for (unsigned i = 0; i < 6; ++i)
                         trial[column][i] +=
                             stages[previous][column][i] * (step * tableau[stage][previous]);
-            if (!Derivative(mass, spin, constants, fraction + nodes[stage] * step, trial,
-                            stages[stage]))
-                return std::unexpected(KerrInfinityFailure::Arithmetic);
+            const double stage_fraction = fraction + nodes[stage] * step;
+            const bool derived = through_turn ? TurnDerivative(mass, spin, constants, turns,
+                                                               stage_fraction, trial, stages[stage])
+                                              : Derivative(mass, spin, constants, stage_fraction,
+                                                           trial, stages[stage]);
+            if (!derived) return std::unexpected(KerrInfinityFailure::Arithmetic);
             if (stage == 6) fifth = trial;
         }
         double error = 0.0;
@@ -320,6 +462,7 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
                              result.map.jacobian[0][1] * result.map.jacobian[1][0];
     if (!std::isfinite(result.map.determinant))
         return std::unexpected(KerrInfinityFailure::Arithmetic);
+    if (turn_radius) *turn_radius = through_turn ? 1.0 / turns[0].root.real : 0.0;
     return result;
 }
 

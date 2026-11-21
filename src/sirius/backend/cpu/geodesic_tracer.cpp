@@ -135,7 +135,9 @@ std::optional<ObserverSkySample> SampleSourceSky(IMetric& metric, const Vec4& po
 bool SampleSourceSkyMaps(IMetric& metric, const Vec4& position, const Vec4& tangent,
                          const std::array<Vec4, 2>& deviations,
                          const std::array<Vec4, 2>& covariant_variations, double angular_seed,
-                         const OutgoingKerrSchild* chart, TraceResult::Beam& beam) {
+                         const OutgoingKerrSchild* chart, TraceResult::Beam& beam,
+                         const relativity::KerrInfinityConfig& infinity_config = {},
+                         double* turn_radius = nullptr) {
     std::array<Vec4, 2> endpoint_displacements;
     for (std::size_t column = 0; column < deviations.size(); ++column) {
         const auto endpoint =
@@ -187,7 +189,7 @@ bool SampleSourceSkyMaps(IMetric& metric, const Vec4& position, const Vec4& tang
     }
     const auto infinity = relativity::TraceKerrInfinity(
         parameters.M, parameters.a, values, derivatives, source_position, source_tangent,
-        endpoint_displacements, coordinate_variations, angular_seed);
+        endpoint_displacements, coordinate_variations, angular_seed, infinity_config, turn_radius);
     if (infinity)
         beam.infinity_source_map = *infinity;
     else
@@ -785,6 +787,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                                                             std::numeric_limits<float>::infinity())
                                            : 0.0;
     double next_handoff_radius = disk_support_radius;
+    const bool can_try_inward_handoff = can_handoff_to_infinity && !config_.enable_disk &&
+                                        !config_.enable_polarisation && family->GetParams().a != 0;
+    bool tried_inward_handoff = false;
     const bool can_try_spherical_escape =
         step_executor_ && step_executor_->SupportsSphericalEscape() && family &&
         family->GetParams().a == 0.0 && family->GetParams().Q == 0.0 &&
@@ -1834,25 +1839,40 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 x * ray.velocity(1) + y * ray.velocity(2) + z * ray.velocity(3);
             const double spatial_speed =
                 std::hypot(ray.velocity(1), ray.velocity(2), ray.velocity(3));
+            const bool try_turn = can_try_inward_handoff && !tried_inward_handoff && d_lambda > 0 &&
+                                  result.steps_taken < config_.max_steps &&
+                                  radial_motion < -.25 * r * spatial_speed;
             // This is only a scheduling filter to avoid repeatedly trying an
             // ill-conditioned near-tangent radial chart. The infinity solver
             // still checks the oblate outward branch and every extremum of
             // the radial potential on the entire remaining interval.
-            if (radius > next_handoff_radius && radial_motion > .25 * r * spatial_speed) {
-                next_handoff_radius = radius * 1.25;
+            if (try_turn ||
+                (radius > next_handoff_radius && radial_motion > .25 * r * spatial_speed)) {
+                relativity::KerrInfinityConfig infinity_config;
+                if (try_turn) {
+                    tried_inward_handoff = true;
+                    infinity_config.allow_radial_turn = true;
+                    infinity_config.maximum_attempts =
+                        std::min(infinity_config.maximum_attempts,
+                                 static_cast<unsigned>(config_.max_steps - result.steps_taken));
+                } else {
+                    next_handoff_radius = radius * 1.25;
+                }
                 const auto angular =
                     CameraAngularVariations(coupled.variations, camera_ray.phase_space);
                 TraceResult::Beam source;
+                double turn_radius = 0.0;
                 if (angular &&
                     SampleSourceSkyMaps(*metric_, ray.position, ray.velocity,
                                         {(*angular)[0].displacement, (*angular)[1].displacement},
                                         {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
-                                        outgoing_chart_, source) &&
-                    source.infinity_source_map) {
+                                        outgoing_chart_, source, infinity_config, &turn_radius) &&
+                    source.infinity_source_map && (!try_turn || turn_radius > 0.0)) {
                     if (should_cancel_ && should_cancel_()) return cancelled_result();
                     const auto sky =
                         SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
                     if (sky) {
+                        if (try_turn) min_r = std::min(min_r, static_cast<float>(turn_radius));
                         admitted_source_maps = std::move(source);
                         result.outcome = TraceResult::Outcome::Escaped;
                         result.final_direction = sky->world_direction;

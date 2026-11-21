@@ -173,7 +173,7 @@ CarterInput Vary(CarterInput c, const std::array<double, 6>& d, double amount) {
     c.polar_momentum += amount * d[5];
     return c;
 }
-Event CarterEvent(const CarterInput& c) {
+Event CarterEvent(const CarterInput& c, double radial_sign = 1.0) {
     const double r = c.radius, a = c.spin, E = c.energy, L = c.angular_momentum;
     const double st = std::sin(c.theta), ct = std::cos(c.theta);
     const Vector n{st * std::cos(c.phi), st * std::sin(c.phi), ct};
@@ -186,7 +186,7 @@ Event CarterEvent(const CarterInput& c) {
     const double Q =
         c.polar_momentum * c.polar_momentum + ct * ct * (L * L / (st * st) - a * a * E * E);
     const double P = E * (r * r + a * a) - a * L;
-    const double radial = std::sqrt(P * P - delta * (Q + (L - a * E) * (L - a * E)));
+    const double radial = radial_sign * std::sqrt(P * P - delta * (Q + (L - a * E) * (L - a * E)));
     const double phi_rate = L / (st * st) - a * E + a * P / delta + a * radial / delta;
     Vector angular;
     for (unsigned i = 0; i < 3; ++i) angular[i] = et[i] * c.polar_momentum + ep[i] * st * phi_rate;
@@ -278,6 +278,138 @@ TEST(KerrInfinity, KerrTailMatchesIndependentSeparatedReference) {
                             2e-9);
             EXPECT_NEAR(result->frequency_derivative[column], -variation[column][3], 2e-10);
         }
+    }
+}
+
+// Continue the scalar Carter system in Mino time with an independent radial
+// velocity variable. It crosses the turning point without the product's root
+// isolation, factorization, sphere-vector representation, or RK45 controller.
+std::optional<Vector> ScatteringReference(const CarterInput& c, long double step) {
+    using State = std::array<long double, 5>;
+    const long double a = c.spin, E = c.energy, L = c.angular_momentum, M = c.mass;
+    const long double ct = std::cos(static_cast<long double>(c.theta));
+    const long double st = std::sin(static_cast<long double>(c.theta));
+    const long double Q =
+        c.polar_momentum * c.polar_momentum + ct * ct * (L * L / (st * st) - a * a * E * E);
+    const long double C = Q + (L - a * E) * (L - a * E);
+    const long double Z = a * a * E - a * L;
+    const long double A = 2 * E * Z - C, B = 2 * M * C, D = Z * Z - a * a * C;
+    const auto field = [&](const State& y) {
+        const auto [theta, polar, phi, u, velocity] = y;
+        const long double sine = std::sin(theta), cosine = std::cos(theta);
+        const long double delta = 1 - 2 * M * u + a * a * u * u;
+        const long double phi_rate =
+            L / (sine * sine) - a * E + a * (E + Z * u * u - velocity) / delta;
+        return State{polar, (L * L / (sine * sine * sine) - a * a * E * E * sine) * cosine,
+                     phi_rate, velocity, u * (A + u * (1.5L * B + 2 * D * u))};
+    };
+    const auto add = [](State y, const State& d, long double dt) {
+        for (unsigned i = 0; i < y.size(); ++i) y[i] += dt * d[i];
+        return y;
+    };
+    const auto advance = [&](const State& y, long double dt) {
+        const auto k1 = field(y), k2 = field(add(y, k1, dt / 2));
+        const auto k3 = field(add(y, k2, dt / 2)), k4 = field(add(y, k3, dt));
+        auto next = y;
+        for (unsigned i = 0; i < y.size(); ++i)
+            next[i] += dt * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]) / 6;
+        return next;
+    };
+    const long double u = 1 / static_cast<long double>(c.radius);
+    State y{c.theta, c.polar_momentum, c.phi, u, std::sqrt(E * E + u * u * (A + u * (B + u * D)))};
+    for (unsigned i = 0; i < 50000; ++i) {
+        const auto next = advance(y, step);
+        if (next[3] <= 0) {
+            long double lo = 0, hi = step;
+            for (unsigned refinement = 0; refinement < 48; ++refinement) {
+                const auto mid = std::midpoint(lo, hi);
+                if (advance(y, mid)[3] > 0)
+                    lo = mid;
+                else
+                    hi = mid;
+            }
+            y = advance(y, std::midpoint(lo, hi));
+            return Vector{static_cast<double>(std::sin(y[0]) * std::cos(y[2])),
+                          static_cast<double>(std::sin(y[0]) * std::sin(y[2])),
+                          static_cast<double>(std::cos(y[0]))};
+        }
+        y = next;
+    }
+    return {};
+}
+
+TEST(KerrInfinity, RadialTurnMatchesIndependentMinoTimeScatteringAndColumns) {
+    const std::array<std::array<double, 6>, 2> variations{
+        std::array<double, 6>{0.3, 0.02, -0.01, 0.03, 0.08, -0.05},
+        std::array<double, 6>{-0.4, -0.02, 0.03, -0.02, -0.07, 0.09}};
+    constexpr double seed = 1e-3, delta = 1e-4;
+    for (double spin : {-0.9, 0.0, 0.9}) {
+        const CarterInput input{1, spin, 20, 1.2, 1.1, -1, 8, 0.8};
+        const auto event = CarterEvent(input, -1);
+        KerrSchildFamily authority(KerrSchildParams::Kerr(1, spin));
+        Metric4d metric;
+        Tensor<Dual<double>, 4, 4, 4> dg;
+        authority.Evaluate(event.x, metric, dg);
+        std::array<Vec4, 2> X, K;
+        for (unsigned column = 0; column < 2; ++column) {
+            const auto mm = CarterEvent(Vary(input, variations[column], -2 * delta), -1);
+            const auto m = CarterEvent(Vary(input, variations[column], -delta), -1);
+            const auto p = CarterEvent(Vary(input, variations[column], delta), -1);
+            const auto pp = CarterEvent(Vary(input, variations[column], 2 * delta), -1);
+            X[column] = (mm.x - m.x * 8 + p.x * 8 - pp.x) * (seed / (12 * delta));
+            K[column] = (mm.k - m.k * 8 + p.k * 8 - pp.k) * (seed / (12 * delta));
+        }
+        const auto ordinary = TraceKerrInfinity(1, spin, metric, dg, event.x, event.k, X, K, seed);
+        ASSERT_FALSE(ordinary);
+        EXPECT_EQ(ordinary.error(), KerrInfinityFailure::InvalidInput);
+        auto config = Accurate();
+        config.allow_radial_turn = true;
+        double turn_radius = 0.0;
+        const auto result = TraceKerrInfinity(1, spin, metric, dg, event.x, event.k, X, K, seed,
+                                              config, &turn_radius);
+        ASSERT_TRUE(result) << spin << ": " << static_cast<int>(result.error());
+        EXPECT_GT(turn_radius, 4.0);
+        EXPECT_LT(turn_radius, input.radius);
+        const auto reference = ScatteringReference(input, 1e-4L);
+        const auto finer = ScatteringReference(input, 5e-5L);
+        ASSERT_TRUE(reference && finer);
+        for (unsigned i = 0; i < 3; ++i) {
+            EXPECT_NEAR((*reference)[i], (*finer)[i], 2e-12);
+            EXPECT_NEAR(result->map.direction[i], (*finer)[i], 2e-10);
+        }
+        const auto screen = Basis(*finer);
+        for (unsigned column = 0; column < 2; ++column) {
+            const auto mm = ScatteringReference(Vary(input, variations[column], -2 * delta), 5e-5L);
+            const auto m = ScatteringReference(Vary(input, variations[column], -delta), 5e-5L);
+            const auto p = ScatteringReference(Vary(input, variations[column], delta), 5e-5L);
+            const auto pp = ScatteringReference(Vary(input, variations[column], 2 * delta), 5e-5L);
+            ASSERT_TRUE(mm && m && p && pp);
+            Vector derivative;
+            for (unsigned i = 0; i < 3; ++i)
+                derivative[i] = ((*mm)[i] - 8 * (*m)[i] + 8 * (*p)[i] - (*pp)[i]) / (12 * delta);
+            for (unsigned row = 0; row < 2; ++row)
+                EXPECT_NEAR(result->map.jacobian[row][column], Dot(screen[row], derivative), 2e-9);
+            EXPECT_NEAR(result->frequency_derivative[column], -variations[column][3], 2e-10);
+        }
+    }
+}
+
+TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
+    for (const double momentum : {2.0, std::sqrt(27.0), 5.3}) {
+        const CarterInput input{1, 0, 20, std::numbers::pi / 2, 0, -1, momentum, 0};
+        const auto event = CarterEvent(input, -1);
+        KerrSchildFamily authority(KerrSchildParams::Schwarzschild(1));
+        Metric4d metric;
+        Tensor<Dual<double>, 4, 4, 4> dg;
+        authority.Evaluate(event.x, metric, dg);
+        auto config = Accurate();
+        config.allow_radial_turn = true;
+        double turn_radius = -1.0;
+        const auto result = TraceKerrInfinity(1, 0, metric, dg, event.x, event.k, {}, {}, 1e-3,
+                                              config, &turn_radius);
+        ASSERT_FALSE(result) << momentum;
+        EXPECT_EQ(result.error(), KerrInfinityFailure::RadialUnresolved);
+        EXPECT_EQ(turn_radius, -1.0);
     }
 }
 

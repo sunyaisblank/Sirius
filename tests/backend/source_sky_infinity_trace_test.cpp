@@ -382,6 +382,26 @@ TEST(SourceSkyInfinityTrace, PointSourceHandoffRetainsOpaqueAndVolumetricSources
     }
 }
 
+TEST(SourceSkyInfinityTrace, InwardDiskFreeProbeCrossesAnExteriorKerrTurn) {
+    KerrSchildFamily metric(KerrSchildParams::Kerr(1.0, .9));
+    auto config = MapConfig(75.0f, 1.5f, 1.0e-8f);
+    config.integrator.initial_step = .1f;
+    auto ray = PupilRay(30, 1.4, .1, {-.90, .34, .26});
+    ray.beta_forward = .1;
+    ray.beta_up = .02;
+    ray.beta_right = -.01;
+    GeodesicTracer tracer(&metric, config);
+    const auto full = tracer.Trace(ray);
+    const auto probe = tracer.TracePointSource(ray);
+    ExpectSameInfinity(probe, full);
+    EXPECT_LT(probe.steps_taken * 8, full.steps_taken);
+    EXPECT_GT(probe.min_radius, 4.0);
+    EXPECT_LT(probe.min_radius, 0.75 * ray.origin(1));
+    EXPECT_FALSE(probe.volumetric_hit);
+    RecordProperty("full_trace_attempts", full.steps_taken);
+    RecordProperty("point_probe_attempts", probe.steps_taken);
+}
+
 TEST(SourceSkyInfinityTrace, PointSourceWorkExhaustionAndCancellationHaveNoSourceMap) {
     KerrSchildFamily metric(KerrSchildParams::Schwarzschild(1.0));
     auto config = MapConfig(60.0f, .125f, 1.0e-9f);
@@ -420,22 +440,27 @@ TEST(SourceSkyInfinityTrace, NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity) {
         EXPECT_EQ(probe.steps_taken, result.steps_taken);
         EXPECT_FALSE(probe.beam.infinity_source_map);
     }
-    KerrSchildFamily schwarzschild(KerrSchildParams::Schwarzschild(1.0));
     CameraRay captured;
     captured.origin(1) = 8.0;
     captured.origin(2) = 1.1;
     captured.direction(1) = -1.0;
-    const auto result = Trace(schwarzschild, captured, MapConfig(20.0f, 0.125f, 1.0e-10f));
-    ASSERT_FALSE(result.numerical_failure);
-    ASSERT_EQ(result.outcome, TraceResult::Outcome::Horizon);
-    EXPECT_FALSE(result.beam.infinity_source_map);
-    EXPECT_FALSE(result.beam.infinity_source_failure);
-    GeodesicTracer tracer(&schwarzschild, MapConfig(20.0f, 0.125f, 1.0e-10f));
-    const auto probe = tracer.TracePointSource(captured);
-    ASSERT_FALSE(probe.numerical_failure);
-    EXPECT_EQ(probe.outcome, TraceResult::Outcome::Horizon);
-    EXPECT_EQ(probe.steps_taken, result.steps_taken);
-    EXPECT_FALSE(probe.beam.infinity_source_map);
+    for (double spin : {0.0, .9}) {
+        SCOPED_TRACE(spin);
+        KerrSchildFamily family(KerrSchildParams::Kerr(1.0, spin));
+        const auto config = MapConfig(20.0f, 0.125f, 1.0e-10f);
+        const auto result = Trace(family, captured, config);
+        ASSERT_FALSE(result.numerical_failure);
+        ASSERT_EQ(result.outcome, TraceResult::Outcome::Horizon);
+        EXPECT_FALSE(result.beam.infinity_source_map);
+        EXPECT_FALSE(result.beam.infinity_source_failure);
+        GeodesicTracer tracer(&family, config);
+        const auto probe = tracer.TracePointSource(captured);
+        ASSERT_FALSE(probe.numerical_failure);
+        EXPECT_EQ(probe.outcome, TraceResult::Outcome::Horizon);
+        EXPECT_EQ(probe.steps_taken, result.steps_taken);
+        EXPECT_FALSE(probe.beam.infinity_source_map);
+        EXPECT_FALSE(probe.beam.infinity_source_failure);
+    }
 }
 
 }  // namespace
