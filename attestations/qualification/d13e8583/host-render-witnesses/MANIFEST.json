@@ -1,0 +1,109 @@
+{
+  "scope": "Existing low-cost Mandatory render, governor and publication witnesses previously unobserved in the selected c096156f receipts",
+  "source_revision": "d13e858375999c303c8c84ae0a3e131b66d1f967",
+  "ctest_results": {
+    "executed": 14,
+    "passed": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "operating_model": {
+    "path": "tests/operating_model.json",
+    "bytes": 130827,
+    "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+  },
+  "selection_scorecard": {
+    "path": "attestations/qualification/c096156f/qualification-scorecard/MANIFEST.json",
+    "bytes": 343025,
+    "sha256": "64aecb48fd1083742e851743e2478af3f65dcd3dec07c037feaf717f069f6f2a"
+  },
+  "tested_product": {
+    "path": "bin/linux-ci/src/sirius/app/sirius_render_tests",
+    "bytes": 12814360,
+    "sha256": "42f1a8e6b0724f5892fd25aa3c5df213589d78c3e40ea675a1ee77aed881c851"
+  },
+  "archive": {
+    "path": "attestations/qualification/d13e8583/host-render-witnesses/raw.tar.gz",
+    "bytes": 3231,
+    "sha256": "ba0e1f97ce97b2bece5b58b2c83e003f613b79bd6413219f0bbd9e5d02c0eb5a"
+  },
+  "members": [
+    {
+      "path": "out/spherical-disk-clearance/science-selection.json",
+      "bytes": 13846,
+      "sha256": "86e24d00f59a4fe8c13b56232f1df2dc5d511db439010cb4f75b54223dbfe19e",
+      "archive_member": "science-selection.json"
+    },
+    {
+      "path": "out/spherical-disk-clearance/science-junit.xml",
+      "bytes": 16041,
+      "sha256": "fbacb266f9ce5d968bfb8346218c68c77d6a8a8dba4bea1b9d4c234f6fc8b6e1",
+      "archive_member": "science-junit.xml"
+    },
+    {
+      "path": "out/spherical-disk-clearance/science.log",
+      "bytes": 3352,
+      "sha256": "5d3a551ca77a66707ceb8745c8500a99be8f25418b7c729080ee553730434c00",
+      "archive_member": "science.log"
+    }
+  ],
+  "cases": [
+    {
+      "name": "RenderSessionProbe.StartIsAsynchronousAndCancellationIsTerminalWithoutOutput",
+      "seconds": 0.491446
+    },
+    {
+      "name": "RenderSessionProbe.CancellationInterruptsAnActivePrivateRayBeforePublication",
+      "seconds": 0.467369
+    },
+    {
+      "name": "RenderSessionProbe.CompletionCallbackCanReenterLifecycleWithoutDeadlock",
+      "seconds": 1.21694
+    },
+    {
+      "name": "RenderSessionProbe.TypedNumericBoundariesMatchTheExternalConfigurationBoundary",
+      "seconds": 0.0046296
+    },
+    {
+      "name": "TileScheduler.ReinitialiseResetsCompletionLedger",
+      "seconds": 0.00399812
+    },
+    {
+      "name": "MemoryGovernor.MalformedOverrideDeclinesInsteadOfBorrowingTheDeviceBudget",
+      "seconds": 0.0045478
+    },
+    {
+      "name": "DispatchGovernor.ExpensivePrecisionAndBundleWorkloadsUseTheStrictPhysicalFootprint",
+      "seconds": 0.00431709
+    },
+    {
+      "name": "DispatchGovernor.OrdinaryPrecisionBoundsSurviveGrowthAndDisabledAdaptation",
+      "seconds": 0.00429555
+    },
+    {
+      "name": "DispatchGovernor.StrictCapsApplyToEveryTailEvenWithoutAdaptation",
+      "seconds": 0.00634747
+    },
+    {
+      "name": "DispatchGovernor.NearTargetLatencyStillGrowsWholeBands",
+      "seconds": 0.0041166
+    },
+    {
+      "name": "DispatchGovernor.InvalidTimingAndIrreducibleOvershootDecline",
+      "seconds": 0.00447098
+    },
+    {
+      "name": "DispatchGovernor.TargetFailsLoudOnGarbageNegativesAndNonFinite",
+      "seconds": 0.00441761
+    },
+    {
+      "name": "StarfieldPointTest.EllipticalFootprintUsesBothAxesAndOrientation",
+      "seconds": 0.0262695
+    },
+    {
+      "name": "PixelSampling.EmitsExactlyEveryRequestedNonSquareCount",
+      "seconds": 0.00426158
+    }
+  ]
+}
