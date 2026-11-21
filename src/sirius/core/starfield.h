@@ -14,6 +14,7 @@
 #include "sirius/core/spectral/point_source_transfer.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -135,6 +136,13 @@ class StarfieldSpatialIndex {
   public:
     static constexpr int kThetaBins = 256;
     static constexpr int kPhiBins = 512;
+    static constexpr int kBoundsStride = 4;
+
+    struct DirectionBounds {
+        std::array<float, 3> lower;
+        std::array<float, 3> upper;
+    };
+
 
     explicit StarfieldSpatialIndex(std::vector<StarEntry> stars) : stars_(std::move(stars)) {
         SIRIUS_PRE(stars_.size() <= std::numeric_limits<std::uint32_t>::max());
@@ -159,6 +167,16 @@ class StarfieldSpatialIndex {
     template <typename Callback>
     void ForEachCandidateWhile(float dir_x, float dir_y, float dir_z, float sigma,
                                Callback&& callback) const {
+        ForEachCandidateWhile(dir_x, dir_y, dir_z, sigma,
+                              [](const DirectionBounds&) { return true; },
+                              std::forward<Callback>(callback));
+    }
+
+    // The cell predicate may skip a whole bin before visiting individual
+    // stars. Bounds are exact extrema of the catalogue's stored directions.
+    template <typename CellPredicate, typename Callback>
+    void ForEachCandidateWhile(float dir_x, float dir_y, float dir_z, float sigma,
+                               CellPredicate&& cell_may_match, Callback&& callback) const {
         SIRIUS_PRE(std::isfinite(dir_x) && std::isfinite(dir_y) && std::isfinite(dir_z));
         SIRIUS_PRE(std::isfinite(sigma) && sigma > 0.0f);
         if (indices_.empty()) return;
@@ -200,23 +218,42 @@ class StarfieldSpatialIndex {
             std::min(static_cast<int>(std::ceil(phi_half_width / phi_bin_width)) + 1, kPhiBins);
         const bool all_phi = 2 * phi_radius + 1 >= kPhiBins;
 
+        constexpr int kBoundsColumns = kPhiBins / kBoundsStride;
+        std::array<std::optional<bool>, kBoundsColumns> tested{};
+        int active_row = -1;
+        const auto visit = [&](int theta_bin, int phi_bin) {
+            const auto cell = Cell(theta_bin, phi_bin);
+            if (offsets_[cell] == offsets_[cell + 1]) return true;
+            const int row = theta_bin / kBoundsStride;
+            const int column = phi_bin / kBoundsStride;
+            if (row != active_row) {
+                tested.fill(std::nullopt);
+                active_row = row;
+            }
+            auto& accepted = tested[column];
+            if (!accepted.has_value())
+                accepted = cell_may_match(direction_bounds_[row * kBoundsColumns + column]);
+            return !*accepted || VisitCell(theta_bin, phi_bin, callback);
+        };
+
         for (int theta_bin = first_theta; theta_bin <= last_theta; ++theta_bin) {
             if (all_phi) {
                 for (int phi_bin = 0; phi_bin < kPhiBins; ++phi_bin) {
-                    if (!VisitCell(theta_bin, phi_bin, callback)) return;
+                    if (!visit(theta_bin, phi_bin)) return;
                 }
                 continue;
             }
             for (int delta = -phi_radius; delta <= phi_radius; ++delta) {
                 int phi_bin = (centre_phi + delta) % kPhiBins;
                 if (phi_bin < 0) phi_bin += kPhiBins;
-                if (!VisitCell(theta_bin, phi_bin, callback)) return;
+                if (!visit(theta_bin, phi_bin)) return;
             }
         }
     }
 
     [[nodiscard]] std::size_t MemoryBytes() const {
-        return offsets_.size() * sizeof(std::uint32_t) + indices_.size() * sizeof(std::uint32_t);
+        return offsets_.size() * sizeof(std::uint32_t) + indices_.size() * sizeof(std::uint32_t) +
+               direction_bounds_.size() * sizeof(DirectionBounds);
     }
     [[nodiscard]] std::span<const std::uint32_t> Offsets() const noexcept { return offsets_; }
     [[nodiscard]] std::span<const std::uint32_t> Indices() const noexcept { return indices_; }
@@ -225,6 +262,7 @@ class StarfieldSpatialIndex {
     std::vector<StarEntry> stars_;
     std::vector<std::uint32_t> offsets_;
     std::vector<std::uint32_t> indices_;
+    std::vector<DirectionBounds> direction_bounds_;
 
     static std::size_t Cell(int theta_bin, int phi_bin) {
         return static_cast<std::size_t>(theta_bin) * kPhiBins + phi_bin;
@@ -235,6 +273,9 @@ class StarfieldSpatialIndex {
         constexpr float kStarfieldTwoPi = 2.0f * kStarfieldPi;
         constexpr std::size_t kCells = static_cast<std::size_t>(kThetaBins) * kPhiBins;
         offsets_.assign(kCells + 1, 0);
+        const float infinity = std::numeric_limits<float>::infinity();
+        direction_bounds_.assign(kCells / (kBoundsStride * kBoundsStride),
+                                 {{infinity, infinity, infinity}, {-infinity, -infinity, -infinity}});
         std::vector<std::size_t> cells(stars_.size());
         for (std::size_t i = 0; i < stars_.size(); ++i) {
             const auto& star = stars_[i];
@@ -248,6 +289,13 @@ class StarfieldSpatialIndex {
                 static_cast<int>(std::floor(phi / kStarfieldTwoPi * kPhiBins)), 0, kPhiBins - 1);
             cells[i] = Cell(theta_bin, phi_bin);
             ++offsets_[cells[i] + 1];
+            auto& bounds = direction_bounds_[
+                (theta_bin / kBoundsStride) * (kPhiBins / kBoundsStride) + phi_bin / kBoundsStride];
+            const std::array direction{star.direction_x, star.direction_y, star.direction_z};
+            for (std::size_t axis = 0; axis < direction.size(); ++axis) {
+                bounds.lower[axis] = std::min(bounds.lower[axis], direction[axis]);
+                bounds.upper[axis] = std::max(bounds.upper[axis], direction[axis]);
+            }
         }
         for (std::size_t cell = 1; cell < offsets_.size(); ++cell) {
             offsets_[cell] += offsets_[cell - 1];

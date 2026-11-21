@@ -2,6 +2,7 @@
 
 #include "sirius/core/observer_frame.h"
 #include "sirius/core/spectral/point_source_transfer.h"
+#include "sirius/core/spherical_continuation/radial_quadrature.h"
 
 #include <algorithm>
 #include <bit>
@@ -21,6 +22,7 @@ using Coordinate = DetectorCoordinate;
 using Matrix = core::AngularMatrix2;
 using Rgb = std::array<double, 3>;
 using Direction = std::array<double, 3>;
+namespace finite_tail = core::relativity::finite_tail_detail;
 
 bool Positive(double value) { return std::isfinite(value) && value > 0; }
 
@@ -95,6 +97,100 @@ std::optional<Coordinate> SkyOffset(const Direction& from, const Direction& to) 
     }
     return result;
 }
+
+// Bound the existing spherical-log and inverse-affine rejection tests over
+// a catalogue bin. An ambiguous bound leaves the bin in the exact traversal.
+class CandidateCellFilter {
+  public:
+    CandidateCellFilter(const Direction& direction, const Matrix& derivative, Coordinate anchor,
+                        Coordinate margin, const Cell& cell, double radius, bool mixed,
+                        Coordinate source_reach)
+        : direction_(direction),
+          basis_(core::relativity::MakeCelestialTangentBasis(direction)),
+          anchor_(anchor), cell_(cell), margin_(margin), radius_(radius),
+          mixed_(mixed), source_reach_(source_reach) {
+        scale_ = std::max({std::abs(derivative[0][0]), std::abs(derivative[0][1]),
+                           std::abs(derivative[1][0]), std::abs(derivative[1][1])});
+        if (!(scale_ > 0.0)) return;
+        for (int i = 0; i < 2; ++i)
+            for (int j = 0; j < 2; ++j) matrix_[i][j] = derivative[i][j] / scale_;
+        determinant_ = std::fma(matrix_[0][0], matrix_[1][1],
+                                -matrix_[0][1] * matrix_[1][0]);
+        enabled_ = basis_.has_value() && finite_tail::RoundingEnvironment() &&
+                   Solve(derivative, {1, 0}).has_value();
+    }
+
+    bool operator()(const core::StarfieldSpatialIndex::DirectionBounds& bounds) const {
+        using finite_tail::Range;
+        if (!enabled_) return true;
+        std::array<Range, 3> direction, delta;
+        Range cosine;
+        for (int i = 0; i < 3; ++i) {
+            direction[i] = Range(direction_[i]);
+            const Range star(bounds.lower[i], bounds.upper[i]);
+            delta[i] = star - direction[i];
+            cosine = cosine + direction[i] * star;
+        }
+        const auto cross = [](const std::array<Range, 3>& a, const std::array<Range, 3>& b) {
+            return std::array{a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2],
+                              a[0] * b[1] - a[1] * b[0]};
+        };
+        const auto normal = cross(direction, delta);
+        const Range sine = sqrt(finite_tail::Square(normal[0]) + finite_tail::Square(normal[1]) +
+                                finite_tail::Square(normal[2]));
+        // The scalar path intentionally leaves the predictor unresolved at
+        // a parallel/antipodal degeneracy. Keep any bin that could contain it.
+        if (!sine.Finite() || !cosine.Finite()) return true;
+
+        // atan2 is monotone in each coordinate with the other one fixed,
+        // with the vertical sense switching when the cosine changes sign.
+        // Widen the endpoints to cover binary64 libm and its input interval.
+        const double low = std::atan2(cosine.hi >= 0.0 ? sine.lo : sine.hi, cosine.hi);
+        const double high = std::atan2(cosine.lo >= 0.0 ? sine.hi : sine.lo, cosine.lo);
+        const double slack = 8 * std::numeric_limits<double>::epsilon();
+        const Range angle = finite_tail::Widen(std::max(0.0, low - slack), high + slack);
+        if (!angle.Finite()) return true;
+        if (angle.lo > radius_) return false;
+
+        const auto numerators = cross(normal, direction);
+        std::array<Range, 2> offset{};
+        for (int axis = 0; axis < 3; ++axis) {
+            const Range tangent = numerators[axis] / sine;
+            offset[0] = offset[0] + angle * tangent * Range(basis_->first[axis]);
+            offset[1] = offset[1] + angle * tangent * Range(basis_->second[axis]);
+        }
+        if (!offset[0].Finite() || !offset[1].Finite()) return true;
+        if (!mixed_)
+            for (int i = 0; i < 2; ++i)
+                if (offset[i].lo > source_reach_[i] || offset[i].hi < -source_reach_[i])
+                    return false;
+
+        const auto b0 = offset[0] / Range(scale_), b1 = offset[1] / Range(scale_);
+        const Range determinant(std::abs(determinant_));
+        const Range orientation(std::copysign(1.0, determinant_));
+        const std::array displacement{
+            (Range(matrix_[1][1]) * b0 - Range(matrix_[0][1]) * b1) / determinant * orientation,
+            (Range(matrix_[0][0]) * b1 - Range(matrix_[1][0]) * b0) / determinant * orientation};
+        const auto x = Range(anchor_[0]) + displacement[0];
+        const auto y = Range(anchor_[1]) + displacement[1];
+        if (!x.Finite() || !y.Finite()) return true;
+        return !(x.hi < cell_.lower[0] - margin_[0] || x.lo > cell_.upper[0] + margin_[0] ||
+                 y.hi < cell_.lower[1] - margin_[1] || y.lo > cell_.upper[1] + margin_[1]);
+    }
+
+  private:
+    Direction direction_;
+    std::optional<core::relativity::CelestialTangentBasis<double>> basis_;
+    Coordinate anchor_;
+    Cell cell_;
+    Coordinate margin_;
+    double radius_;
+    bool mixed_;
+    Coordinate source_reach_;
+    Matrix matrix_{};
+    double scale_ = 0, determinant_ = 0;
+    bool enabled_ = false;
+};
 
 struct CachedProbe {
     Coordinate z;
@@ -800,7 +896,12 @@ class Detector {
         };
         catalogue_.ForEachCandidateWhile(
             static_cast<float>(n[0]), static_cast<float>(n[1]), static_cast<float>(n[2]),
-            query_sigma, [&](std::uint32_t star) {
+            query_sigma,
+            CandidateCellFilter(n, matrix, anchor.z,
+                                {2 * residual_by_axis[0] + policy_.root_error,
+                                 2 * residual_by_axis[1] + policy_.root_error},
+                                cell, query_radius, mixed, source_reach),
+            [&](std::uint32_t star) {
                 if (++statistics_.candidate_visits > policy_.maximum_candidate_visits) {
                     flush();
                     Fail(PointDetectorFailure::WorkLimit);
