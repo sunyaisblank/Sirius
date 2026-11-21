@@ -21,6 +21,7 @@
 #include <cmath>
 #include <filesystem>
 #include <future>
+#include <memory>
 #include <thread>
 #include <vector>
 
@@ -142,6 +143,7 @@ TEST(RenderCommandParse, ReusedCommandDoesNotRetainAnEarlierGpuRequest) {
     sirius::test::ScopedEnvironmentVariable drivers(
         "VK_DRIVER_FILES", "/sirius/intentional/missing-vulkan-driver.json");
     sirius::test::ScopedEnvironmentVariable additional_drivers("VK_ADD_DRIVER_FILES", "");
+    sirius::test::ScopedEnvironmentVariable selector("SIRIUS_VULKAN_DEVICE", nullptr);
     const auto output = std::filesystem::temp_directory_path() / "sirius_reused_render_command.ppm";
     std::filesystem::remove(output);
     EXPECT_EQ(cmd.Execute({"--metric", "Minkowski", "--no-disk", "--no-bloom", "--width", "128",
