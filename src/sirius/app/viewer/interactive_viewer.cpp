@@ -422,11 +422,9 @@ void InteractiveViewer::RenderThread() {
             break;
         }
 
-        if (restart_requested_) {
-            continue;
-        }
         {
             std::lock_guard<std::mutex> lock(state_mutex_);
+            if (restart_requested_) continue;
             refinement_.current_sample++;
             if (refinement_.current_sample >= config_.samples_per_level) {
                 refinement_.current_sample = 0;
@@ -452,6 +450,7 @@ bool InteractiveViewer::RenderStep() {
     int samples_per_pixel = 1;
     {
         std::lock_guard<std::mutex> lock(state_mutex_);
+        if (stop_requested_ || restart_requested_) return !stop_requested_;
         level = refinement_.current_level;
         samples_per_pixel = refinement_.current_sample + 1;
     }
@@ -576,7 +575,7 @@ bool InteractiveViewer::RenderStep() {
     }
 
     if (!current_generation()) return !stop_requested_;
-    const std::vector<float> snapshot = session->GetDisplayBuffer().SnapshotFloatData();
+    auto snapshot = session->GetDisplayBuffer().SnapshotFloatData();
     const std::size_t size = static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4;
     if (snapshot.size() != size) {
         std::lock_guard<std::mutex> lock(frame_mutex_);
@@ -584,9 +583,10 @@ bool InteractiveViewer::RenderStep() {
         return false;
     }
     {
-        std::lock_guard<std::mutex> lock(frame_mutex_);
+        // A restart and a completed-frame commit share the generation lock.
+        std::scoped_lock lock(state_mutex_, frame_mutex_);
         if (!current_generation()) return !stop_requested_;
-        frame_.pixels = snapshot;
+        frame_.pixels = std::move(snapshot);
         frame_.width = width;
         frame_.height = height;
     }
