@@ -125,6 +125,70 @@ TEST(PointSourceDetector, VisibleTerminalCellsUseTheOriginalFootprintAllowance) 
     }
 }
 
+TEST(PointSourceDetector, SiblingBoundsChargeOneOriginalGaussianAndKeepRefusedVisits) {
+    const core::StarfieldSpatialIndex catalogue(std::vector<core::StarEntry>{});
+    const std::array footprints{PointDetectorFootprint{{0, 0}, {{{1, 0}, {0, 1}}}}};
+    const PointDetectorSampler sample = [](DetectorCoordinate coordinate) {
+        return Gnomonic(kScale * coordinate[0], kScale * coordinate[1], kScale, kScale);
+    };
+    PointDetectorPolicy policy;
+    policy.minimum_depth = policy.maximum_depth = 1;
+    policy.maximum_candidate_visits = 5;
+    for (unsigned mode : {0U, 1U, 2U}) {
+        SCOPED_TRACE(mode);
+        std::size_t grouped_calls = 0, scalar_calls = 0;
+        bool cancelled = false;
+        const PointDetectorGroupedCellBound grouped =
+            [&](const PointDetectorFootprint&, std::span<const PointDetectorCell> cells,
+                std::size_t& remaining) -> std::optional<std::array<double, 3>> {
+            ++grouped_calls;
+            EXPECT_EQ(remaining, 5U);
+            --remaining;
+            EXPECT_EQ(cells.size(), 4U);
+            if (cells.size() == 4) {
+                EXPECT_EQ(cells[0].lower, (DetectorCoordinate{-4, -4}));
+                EXPECT_EQ(cells[0].upper, (DetectorCoordinate{0, 0}));
+                EXPECT_EQ(cells[1].lower, (DetectorCoordinate{0, -4}));
+                EXPECT_EQ(cells[2].lower, (DetectorCoordinate{-4, 0}));
+                EXPECT_EQ(cells[3].lower, (DetectorCoordinate{0, 0}));
+                EXPECT_EQ(cells[3].upper, (DetectorCoordinate{4, 4}));
+            }
+            cancelled = mode == 2;
+            if (mode == 1) return std::nullopt;
+            return std::array{1e-9, 2e-9, 3e-9};
+        };
+        const PointDetectorCellBound scalar =
+            [&](const PointDetectorFootprint&, const DetectorCoordinate&, const DetectorCoordinate&,
+                std::size_t& remaining) -> std::optional<std::array<double, 3>> {
+            ++scalar_calls;
+            if (remaining == 0) return std::nullopt;
+            --remaining;
+            return std::array{1e-9, 2e-9, 3e-9};
+        };
+        const auto result = EvaluatePointDetectorGroup(
+            catalogue, 1, footprints, sample, [&] { return cancelled; }, policy, {}, {}, scalar,
+            grouped);
+        EXPECT_EQ(grouped_calls, 1U);
+        EXPECT_EQ(scalar_calls, mode == 1 ? 4U : 0U);
+        if (mode == 2) {
+            ASSERT_FALSE(result);
+            EXPECT_EQ(result.error().reason, PointDetectorFailure::Cancelled);
+            EXPECT_EQ(result.error().statistics.candidate_visits, 1U);
+            continue;
+        }
+        ASSERT_TRUE(result);
+        EXPECT_EQ(result->statistics.candidate_visits, 1 + scalar_calls);
+        EXPECT_EQ(result->samples.front().rgb, (std::array<double, 3>{}));
+        for (unsigned channel = 0; channel != 3; ++channel) {
+            constexpr std::array rgb_upper{1e-9, 2e-9, 3e-9};
+            const auto wanted = rgb_upper[channel] * (mode == 1 ? 4 : 1);
+            const auto measured = result->samples.front().estimated_error[channel];
+            EXPECT_GE(measured, wanted);
+            EXPECT_NEAR(measured, wanted, 1e-22);
+        }
+    }
+}
+
 TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
     for (int mode = 0; mode < 4; ++mode) {
         SCOPED_TRACE(mode);

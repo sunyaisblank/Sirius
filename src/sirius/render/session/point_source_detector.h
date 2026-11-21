@@ -107,12 +107,21 @@ struct PointDetectorFootprint {
     core::AngularMatrix2 chart_from_standard{{{1, 0}, {0, 1}}};
 };
 
+struct PointDetectorCell {
+    DetectorCoordinate lower, upper;
+};
+
 // A terminal cell of an original footprint may be enclosed by an absolute
 // RGB bound. The callback debits every catalogue visit from the remaining
 // budget, including when it cannot certify the cell.
 using PointDetectorCellBound = std::function<std::optional<std::array<double, 3>>(
     const PointDetectorFootprint&, const DetectorCoordinate&, const DetectorCoordinate&,
     std::size_t& remaining_candidate_visits)>;
+
+// The cells are interior-disjoint within a single original Gaussian. The
+// bound is charged once for the union, using the same candidate ledger.
+using PointDetectorGroupedCellBound = std::function<std::optional<std::array<double, 3>>(
+    const PointDetectorFootprint&, std::span<const PointDetectorCell>, std::size_t&)>;
 
 struct PointDetectorBatchResult {
     struct Sample {
@@ -161,6 +170,7 @@ EvaluatePointDetectorGroup(const core::StarfieldSpatialIndex& catalogue, double 
                            const PointDetectorPolicy& policy = {},
                            const PointDetectorProbeBatchSampler& sample_batch = {},
                            const PointDetectorDarkCell& dark_cell = {},
-                           const PointDetectorCellBound& cell_bound = {});
+                           const PointDetectorCellBound& cell_bound = {},
+                           const PointDetectorGroupedCellBound& grouped_cell_bound = {});
 
 }  // namespace sirius::render

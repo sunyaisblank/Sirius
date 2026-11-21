@@ -235,6 +235,9 @@ struct TracedImage {
 using ScalarCellBound =
     std::function<std::optional<Rgb>(const Coordinate&, const Coordinate&, std::size_t&)>;
 
+using GroupedCellBound =
+    std::function<std::optional<Rgb>(std::span<const PointDetectorCell>, std::size_t&)>;
+
 struct Estimate {
     Rgb rgb{};
     Rgb error{};
@@ -252,7 +255,8 @@ class Detector {
              const PointDetectorSampler& sampler, const std::function<bool()>& cancelled,
              const PointDetectorPolicy& policy, const PointDetectorProbeBatchSampler& sample_batch,
              const PointDetectorDarkCell& dark_cell, unsigned minimum_invisible_depth = 0,
-             const ScalarCellBound* cell_bound = nullptr)
+             const ScalarCellBound* cell_bound = nullptr,
+             const GroupedCellBound* grouped_cell_bound = nullptr)
         : catalogue_(catalogue),
           brightness_(brightness),
           sampler_(sampler),
@@ -261,7 +265,8 @@ class Detector {
           sample_batch_(sample_batch),
           dark_cell_(dark_cell),
           minimum_invisible_depth_(minimum_invisible_depth),
-          cell_bound_(cell_bound) {}
+          cell_bound_(cell_bound),
+          grouped_cell_bound_(grouped_cell_bound) {}
 
     std::expected<PointDetectorResult, PointDetectorError> Run(
         std::vector<std::size_t>* images = nullptr) {
@@ -1029,6 +1034,50 @@ class Detector {
         }
         return accepted;
     }
+    template <class Bound>
+    std::optional<Estimate> BoundOmission(const Bound& bound_cell) {
+        const auto available = policy_.maximum_candidate_visits - statistics_.candidate_visits;
+        auto remaining = available;
+        const auto bound = bound_cell(remaining);
+        if (remaining > available) Fail(PointDetectorFailure::Arithmetic);
+        statistics_.candidate_visits += available - remaining;
+        CheckCancellation();
+        if (!bound || !std::ranges::all_of(*bound, [&](double error) {
+                return std::isfinite(error) && error >= 0.0 && error <= policy_.absolute_rgb_error;
+            }))
+            return {};
+        Estimate result;
+        result.error = *bound;
+        result.bounded_omission = true;
+        return result;
+    }
+
+    unsigned BoundSiblingCells(const std::array<Cell, 4>& children,
+                               std::array<Estimate, 4>& estimates) {
+        if (!grouped_cell_bound_ || children.front().depth + 1 < policy_.maximum_depth) return 0;
+        const bool terminal = children.front().depth == policy_.maximum_depth;
+        std::array<PointDetectorCell, 4> group;
+        unsigned mask = 0;
+        std::size_t count = 0;
+        for (unsigned i = 0; i < children.size(); ++i) {
+            if (estimates[i].certified_dark || !children[i].IntersectsSupport() ||
+                (!terminal && !estimates[i].whole_sky_query))
+                continue;
+            group[count++] = {children[i].lower, children[i].upper};
+            mask |= 1U << i;
+        }
+        if (count < 2) return 0;
+
+        auto bound = BoundOmission([&](std::size_t& remaining) {
+            return (*grouped_cell_bound_)(std::span(group).first(count), remaining);
+        });
+        if (!bound) return 0;
+        for (unsigned i = 0; i < children.size(); ++i)
+            if (mask & (1U << i)) estimates[i] = {};
+        estimates[std::countr_zero(mask)] = std::move(*bound);
+        return mask;
+    }
+
     Estimate Refine(const Cell& cell, const Estimate& coarse) {
         if (coarse.certified_dark || !cell.IntersectsSupport()) return coarse;
         const bool terminal = cell.depth >= policy_.maximum_depth;
@@ -1051,21 +1100,10 @@ class Detector {
         // Visible probes can agree on visibility while the terminal cell's
         // flux is still unresolved. The continuous bound can cover either case.
         if (cell_bound_ && (terminal || last_whole_sky_split)) {
-            const auto available = policy_.maximum_candidate_visits - statistics_.candidate_visits;
-            auto remaining = available;
-            const auto bound = (*cell_bound_)(cell.lower, cell.upper, remaining);
-            if (remaining > available) Fail(PointDetectorFailure::Arithmetic);
-            statistics_.candidate_visits += available - remaining;
-            CheckCancellation();
-            if (bound && std::ranges::all_of(*bound, [&](double error) {
-                    return std::isfinite(error) && error >= 0.0 &&
-                           error <= policy_.absolute_rgb_error;
-                })) {
-                Estimate result;
-                result.error = *bound;
-                result.bounded_omission = true;
-                return result;
-            }
+            if (auto bound = BoundOmission([&](std::size_t& remaining) {
+                    return (*cell_bound_)(cell.lower, cell.upper, remaining);
+                }))
+                return std::move(*bound);
         }
         if (terminal) Fail(PointDetectorFailure::Unresolved);
         const auto children = cell.Children();
@@ -1089,7 +1127,9 @@ class Detector {
                 Agrees(cell, fine, checked))
                 return checked;
         }
-        for (int i = 0; i < 4; ++i) estimates[i] = Refine(children[i], estimates[i]);
+        const auto grouped = BoundSiblingCells(children, estimates);
+        for (unsigned i = 0; i < children.size(); ++i)
+            if (!(grouped & (1U << i))) estimates[i] = Refine(children[i], estimates[i]);
         return Sum(estimates);
     }
 
@@ -1102,6 +1142,7 @@ class Detector {
     const PointDetectorDarkCell& dark_cell_;
     unsigned minimum_invisible_depth_;
     const ScalarCellBound* cell_bound_;
+    const GroupedCellBound* grouped_cell_bound_;
     PointDetectorStatistics statistics_;
     std::vector<CachedProbe> probes_;
     std::vector<std::size_t> probe_slots_;
@@ -1317,7 +1358,8 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
     std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
     const std::function<bool()>& cancelled, const PointDetectorPolicy& policy,
     const PointDetectorProbeBatchSampler& sample_batch, const PointDetectorDarkCell& dark_cell,
-    const PointDetectorCellBound& cell_bound) {
+    const PointDetectorCellBound& cell_bound,
+    const PointDetectorGroupedCellBound& grouped_cell_bound) {
     PointDetectorStatistics statistics;
     const auto failure = [&](PointDetectorFailure reason) {
         return std::unexpected(PointDetectorError{reason, statistics});
@@ -1449,10 +1491,18 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                                              std::size_t& remaining) {
                             return cell_bound(footprint, lower, upper, remaining);
                         };
-                    const auto leaf = Detector(catalogue, brightness_scale, original, cancelled,
-                                               policy, original_batch, original_dark, 0,
-                                               original_bound ? &original_bound : nullptr)
-                                          .Run();
+                    GroupedCellBound original_grouped_bound;
+                    if (grouped_cell_bound)
+                        original_grouped_bound = [&](std::span<const PointDetectorCell> cells,
+                                                     std::size_t& remaining) {
+                            return grouped_cell_bound(footprint, cells, remaining);
+                        };
+                    const auto leaf =
+                        Detector(catalogue, brightness_scale, original, cancelled, policy,
+                                 original_batch, original_dark, 0,
+                                 original_bound ? &original_bound : nullptr,
+                                 original_grouped_bound ? &original_grouped_bound : nullptr)
+                            .Run();
                     account(leaf ? leaf->statistics : leaf.error().statistics);
                     if (!leaf) return leaf.error().reason;
                     result.samples[index] = {leaf->rgb, leaf->estimated_error};

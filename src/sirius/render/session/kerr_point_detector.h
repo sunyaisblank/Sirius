@@ -16,10 +16,6 @@ namespace sirius::render {
 
 class KerrDetectorCatalogue;
 
-struct PointDetectorCell {
-    DetectorCoordinate lower, upper;
-};
-
 // Prepare the immutable sky data once for the fixed render catalogue.
 [[nodiscard]] std::shared_ptr<const KerrDetectorCatalogue> PrepareKerrDetectorCatalogue(
     const core::StarfieldSpatialIndex& stars);

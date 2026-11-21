@@ -276,20 +276,25 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         };
     }
     PointDetectorCellBound cell_bound;
+    PointDetectorGroupedCellBound grouped_cell_bound;
     if (prepared && kerr_catalogue) {
         const DetectorCoordinate origin{x + double(sample.image_u), y + double(sample.image_v)};
-        cell_bound = [&, origin](const PointDetectorFootprint& footprint,
-                                 const DetectorCoordinate& lower, const DetectorCoordinate& upper,
-                                 std::size_t& remaining) {
-            const std::array cells{PointDetectorCell{lower, upper}};
+        grouped_cell_bound = [&, origin](const PointDetectorFootprint& footprint,
+                                         std::span<const PointDetectorCell> cells,
+                                         std::size_t& remaining) {
             return BoundKerrDetectorCells(*kerr_catalogue, brightness, camera.GetConfig(),
                                           *prepared, origin, footprint, cells, cancelled,
                                           remaining);
         };
+        cell_bound = [&](const PointDetectorFootprint& footprint, const DetectorCoordinate& lower,
+                         const DetectorCoordinate& upper, std::size_t& remaining) {
+            const std::array cells{PointDetectorCell{lower, upper}};
+            return grouped_cell_bound(footprint, cells, remaining);
+        };
     }
     const auto group =
         EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe, cancelled, {},
-                                   probe_batch, dark_cell, cell_bound);
+                                   probe_batch, dark_cell, cell_bound, grouped_cell_bound);
     if (!group) return std::unexpected(group.error());
     result.statistics = group->statistics;
     for (std::size_t i = 0; i < indices.size(); ++i) result.samples[indices[i]] = group->samples[i];

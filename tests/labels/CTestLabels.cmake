@@ -1462,6 +1462,7 @@ set_tests_properties(
     PointSourceDetector.SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer
     PointSourceDetector.ThousandFootprintsShareDiscoveryWithoutChangingTheirKernels
     PointSourceDetector.VisibleTerminalCellsUseTheOriginalFootprintAllowance
+    PointSourceDetector.SiblingBoundsChargeOneOriginalGaussianAndKeepRefusedVisits
     RayBundleTest.BundleFiniteAndDeterministicKerr
     RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns
     RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain
