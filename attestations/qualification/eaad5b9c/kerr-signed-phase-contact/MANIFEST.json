@@ -1,0 +1,142 @@
+{
+  "source_revision": "eaad5b9c177dbf3ac7f7c51a73bf385f4c047e1e",
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa6d55c1/kerr-longitude-windows/MANIFEST.json",
+      "bytes": 5366,
+      "sha256": "7cfdd89164a5ef3b0a5a7e5a6faa8673f8c0d7e3670e29724f51089018e69175"
+    },
+    {
+      "path": "attestations/qualification/fa6d55c1/kerr-longitude-windows/verification.tar.gz",
+      "bytes": 28839,
+      "sha256": "28e4073aa61537fbf37895705e02e333929b08577f450a71cdff7aaf73ba275f"
+    },
+    {
+      "path": "attestations/qualification/bb02a1e7/kerr-nonzero-fold/MANIFEST.json",
+      "bytes": 7214,
+      "sha256": "e51717dce2dfd33a2015bb9591b4eb315e78d447450f19e807d0b13d5ad58f36"
+    },
+    {
+      "path": "attestations/qualification/bb02a1e7/kerr-nonzero-fold/verification.tar.gz",
+      "bytes": 7515,
+      "sha256": "ff90a901f7b532e821c444c37172c6368dbefe7e148a2ca8c4300bfc400b7bde"
+    },
+    {
+      "path": "attestations/qualification/fe00d9ee/e2-and-kerr-detector/MANIFEST.json",
+      "bytes": 8988,
+      "sha256": "737e2f4d1fc48d8b21079821d52b852033a8fe2cd93d45111b33767314b824de"
+    }
+  ],
+  "scope": "Original Radeon 780M WSL2 Dozen footprint 704, block (928,608), terminal cell 66 and neighbour 65 at pupil 0 of the 1920×1080 four-SPP moving ThinLens, spin 0.9, disk off, beam-filtered 100000-star scene. The conditional complement probe partitions one catalogue contribution without rendering or publishing any pixels.",
+  "launch": {
+    "footprint_matrix": [
+      "0x1.d323e59e01b7bp-1",
+      "-0x1.9662de6ca9f26p-9",
+      "-0x0p+0",
+      "0x1.d520d6948dde7p-1"
+    ],
+    "pupil_origin": [
+      "0x0p+0",
+      "0x1.ep+4",
+      "0x1.657184ae74487p+0",
+      "0x0p+0"
+    ],
+    "pupil_beta": [
+      "0x1.999999999999ap-4",
+      "0x1.47ae147ae147bp-6",
+      "-0x1.47ae147ae147bp-7"
+    ],
+    "pupil_aperture": [
+      "0x1.06ec64p-4",
+      "0x1.55b746p-6"
+    ],
+    "pupil_sampling": [
+      "0x1p-2",
+      "0x1p-2",
+      "0x1.99999ap-3",
+      "0x1.24924ap-3"
+    ],
+    "retained_pupil_position": [
+      "[0x1.24a6d18db4c68p-10,0x1.24a6d18db5268p-10]",
+      "[0x1.d884a21ad7b85p+4,0x1.d884a21ad7ba7p+4]",
+      "[0x1.d04c7d7c1166dp-1,0x1.d04c7d7c116b3p-1]",
+      "[0x1.5173343961856p+2,0x1.51733439618eap+2]"
+    ]
+  },
+  "exceptional_catalogue_input": {
+    "zero_based_ordinal": 40024,
+    "binary32_direction_words": [
+      "0xbe020a32",
+      "0xbe26db28",
+      "0x3f7a7a46"
+    ],
+    "exact_angular_interval_matches": 1
+  },
+  "low_winding_proof": {
+    "signed_phase_limit": "0x1.48p-11",
+    "winding_counts": 512,
+    "direct_exclusions": 511,
+    "deferred_winding": 581,
+    "longitude_slope_at_right_edge": [
+      -2.9299852226520415,
+      -1.4922638371415096
+    ],
+    "absolute_clearance_to_nearest_azimuth_lift_radians": [
+      0.0009003984762820799,
+      0.008615895214476223
+    ],
+    "result": "No image of this entry exists in the terminal cell for north-compatible windings below 1025. A common radial-time strip covers winding 33 onward. A latitude contraction and longitude screen leave winding 581 for a separate enclosure using the derivative and curvature of the signed endpoint phase."
+  },
+  "high_winding_latitude_family": {
+    "winding_used_for_reported_lower_bound": 4503599627370495,
+    "normalized_fold_longitude_derivative": [
+      8.515096613788783,
+      9.207473360228157
+    ],
+    "unwrapped_longitude_span_lower_bound_radians": 51.09057968273266,
+    "result": "The signed phase has a strict unique interior longitude minimum at all sufficiently large odd windings, uniformly over the recorded source-latitude interval. The minimum moves through more than one turn as the latitude varies, so the interval contains caustic cases at the fixed catalogue azimuth. The limiting folds lie in the film chart interior already proved in the preceding evidence. For sufficiently large windings the strictly positive radial separation is small enough to preserve interior membership.",
+    "proof_scope": "This is an obstruction to a uniform inverse-Jacobian bound using the fixed-width independent latitude enclosure. The real catalogue entry has one fixed latitude determined by its three original words. Its exact large-winding clearance has yet to be established."
+  },
+  "partition_probe": {
+    "all_entries": {
+      "65": {
+        "accepted": true,
+        "candidate_visits": 2456,
+        "rgb_upper": 4.340251954720486e-10
+      },
+      "66": {
+        "accepted": false,
+        "candidate_visits": 312
+      }
+    },
+    "remaining_99999_entries": {
+      "65": {
+        "accepted": true,
+        "candidate_visits": 2455,
+        "rgb_upper": 4.340251954720486e-10
+      },
+      "66": {
+        "accepted": true,
+        "candidate_visits": 1885,
+        "rgb_upper": 3.876982671603444e-10
+      }
+    },
+    "peak_RSS_kib": [
+      282312,
+      292200
+    ],
+    "scope": "Conditional RGB bound from the production detector with the exact identified entry omitted from its catalogue. The baseline still refuses that same cell. Exact fixed-pupil coordinates, the pinned provider, the original cache policy and the 2048 MiB memory governor were retained."
+  },
+  "remaining": "Combine the retained finite and monotone-shoulder bounds with a bound on the positive large-winding fold core at the exact represented star and pupil. If d_n is the angular distance from a contributing source lift to the longitude minimum, the certified curvature gives a density proportional to s²/sqrt(n*d_n) and s <= 2^-n. For example a structural bound d_n >= 2^-2n would give a summable geometric upper bound. Neither the fixed-width input intervals nor further finite enumeration alone establishes this condition.",
+  "replay": [
+    "Extract the verification archive into out/kerr-signed-contact. Extract finite-fold.cpp from the earlier kerr-nonzero-fold verification archive and turn-support.cpp and turn-cells.inc from kerr-longitude-windows into the same scratch directory.",
+    "From inside the scratch directory use patch -o winding-581.cpp finite-fold.cpp < winding-581.patch, patch -o latitude-family.cpp finite-fold.cpp < latitude-family.patch and patch -o partition-contact.cpp turn-support.cpp < partition-contact.patch.",
+    "From the checkout run bash out/kerr-signed-contact/compile.sh finite-contact winding-581 latitude-family catalogue-input.",
+    "Verify the input runtime digests, build the exact source with python3 out/kerr-signed-contact/build.py and run bash out/kerr-signed-contact/run-partition.sh."
+  ],
+  "artifact": {
+    "path": "attestations/qualification/eaad5b9c/kerr-signed-phase-contact/verification.tar.gz",
+    "bytes": 15663,
+    "sha256": "80e42b2cafbfdd3965613476642f0a8579b2e6cabbe044a40beac792b2153a61"
+  }
+}
