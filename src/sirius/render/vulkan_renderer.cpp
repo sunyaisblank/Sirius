@@ -715,11 +715,8 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         clean_cancellation = true;
         return Fail(ErrorDomain::kPhysics, "publish retained frame", "render cancelled");
     }
-    const auto pixels = session.GetDisplayBuffer().SnapshotFloatData();
-    if (!std::all_of(pixels.begin(), pixels.end(),
-                     [](float value) { return std::isfinite(value); }))
+    if (!display.PublishFiniteFrameFrom(session.GetDisplayBuffer()))
         return Fail(ErrorDomain::kPhysics, "publish retained frame", "non-finite linear radiance");
-    display.UpdateTile(0, 0, config.width, config.height, pixels.data());
     const auto execution = executor.Statistics();
     VulkanRenderStats stats;
     stats.device_name = device.Info().name;

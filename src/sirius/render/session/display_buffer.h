@@ -47,23 +47,28 @@ class DisplayBuffer {
         SIRIUS_PRE(tile_x < width_ && tile_y < height_);
         SIRIUS_PRE(tile_width <= width_ - tile_x && tile_height <= height_ - tile_y);
 
-        for (int y = 0; y < tile_height; ++y) {
-            const int dest_y = tile_y + y;
-            for (int x = 0; x < tile_width; ++x) {
-                const int dest_x = tile_x + x;
+        CopyTileLocked(tile_x, tile_y, tile_width, tile_height, tile_data);
+    }
 
-                const std::size_t src_idx = (static_cast<std::size_t>(y) * tile_width + x) * 4;
-                const std::size_t dst_idx =
-                    (static_cast<std::size_t>(dest_y) * width_ + dest_x) * 4;
-
-                pixel_data_[dst_idx + 0] = tile_data[src_idx + 0];
-                pixel_data_[dst_idx + 1] = tile_data[src_idx + 1];
-                pixel_data_[dst_idx + 2] = tile_data[src_idx + 2];
-                pixel_data_[dst_idx + 3] = tile_data[src_idx + 3];
-            }
+    // Publish a completed frame in one update. Both buffers keep their
+    // dimensions. An exact-size transfer exchanges storage, while a larger
+    // destination retains its pixels outside the source rectangle.
+    [[nodiscard]] bool PublishFiniteFrameFrom(DisplayBuffer& source) {
+        SIRIUS_PRE(this != &source);
+        std::scoped_lock lock(mutex_, source.mutex_);
+        if (!std::ranges::all_of(source.pixel_data_,
+                                 [](float value) { return std::isfinite(value); }))
+            return false;
+        SIRIUS_PRE(source.width_ > 0 && source.height_ > 0);
+        SIRIUS_PRE(source.width_ <= width_ && source.height_ <= height_);
+        if (source.width_ == width_ && source.height_ == height_) {
+            pixel_data_.swap(source.pixel_data_);
+            ++update_counter_;
+            ++source.update_counter_;
+        } else {
+            CopyTileLocked(0, 0, source.width_, source.height_, source.pixel_data_.data());
         }
-
-        update_counter_++;
+        return true;
     }
 
     // Apply an owning-session transformation while retaining the buffer lock.
@@ -89,6 +94,14 @@ class DisplayBuffer {
                         tile.begin() + static_cast<std::size_t>(row) * width * 4);
         }
         return tile;
+    }
+
+    // Borrow completed pixels for a synchronous reader. The callback cannot
+    // retain the span or re-enter this buffer.
+    template <typename Callback>
+    [[nodiscard]] bool ReadFloatData(Callback&& callback) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return callback(std::span<const float>(pixel_data_));
     }
 
     // Stable copy for consumers that may overlap a render-thread update.
@@ -123,6 +136,27 @@ class DisplayBuffer {
     std::uint64_t GetUpdateCounter() const { return update_counter_.load(); }
 
   private:
+    void CopyTileLocked(int tile_x, int tile_y, int tile_width, int tile_height,
+                        const float* tile_data) {
+        for (int y = 0; y < tile_height; ++y) {
+            const int dest_y = tile_y + y;
+            for (int x = 0; x < tile_width; ++x) {
+                const int dest_x = tile_x + x;
+
+                const std::size_t src_idx = (static_cast<std::size_t>(y) * tile_width + x) * 4;
+                const std::size_t dst_idx =
+                    (static_cast<std::size_t>(dest_y) * width_ + dest_x) * 4;
+
+                pixel_data_[dst_idx + 0] = tile_data[src_idx + 0];
+                pixel_data_[dst_idx + 1] = tile_data[src_idx + 1];
+                pixel_data_[dst_idx + 2] = tile_data[src_idx + 2];
+                pixel_data_[dst_idx + 3] = tile_data[src_idx + 3];
+            }
+        }
+
+        update_counter_++;
+    }
+
     int width_ = 0;
     int height_ = 0;
     std::vector<float> pixel_data_;  // RGBA float [0, inf).

@@ -88,6 +88,7 @@ class InteractiveViewer {
         int height = 0;
     };
 
+    // Completed pixels are immutable and borrowed for the duration of the call.
     using FrameCallback = std::function<void(const float* data, int width, int height)>;
     // A provisional, configured display-linear snapshot. Borrowed pixels last
     // for the call; a presentation owner checks the generation again at upload.
@@ -144,7 +145,7 @@ class InteractiveViewer {
     void RequestRestart(std::chrono::milliseconds settle_time);
     void RenderThread();
     [[nodiscard]] bool RenderStep();
-    void NotifyFrame();
+    void NotifyFrame(const FrameSnapshot& frame);
 
     ViewerConfig config_;
     CameraState camera_;
@@ -162,7 +163,7 @@ class InteractiveViewer {
     mutable std::mutex thread_mutex_;
     mutable std::mutex session_mutex_;
     mutable std::mutex frame_mutex_;
-    FrameSnapshot frame_;
+    std::shared_ptr<const FrameSnapshot> frame_;
     std::string last_error_;
 
     FrameCallback frame_callback_;

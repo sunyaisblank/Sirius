@@ -1058,9 +1058,6 @@ base::Expected<void> RenderSession::WriteOutput() {
         // EXR is the HDR interchange path: the linear radiance buffer is
         // written untouched. Tonemapping, grading, and transfer encoding are
         // display concerns and deliberately do not apply here.
-        ImageBufferRGBA hdr(width, height);
-        hdr.pixels = display_.SnapshotFloatData();
-
         EXRMetadata meta;
         meta.metric_type = core::MetricInfoFor(config_.metric_id).canonical_name;
         meta.black_hole_mass = config_.black_hole_mass;
@@ -1069,7 +1066,9 @@ base::Expected<void> RenderSession::WriteOutput() {
         meta.observer_inclination = config_.observer_inclination * 180.0 / math::kPi;
         meta.samples_per_pixel = config_.samples_per_pixel;
 
-        if (!EXRWriter::WriteExr(config_.output_path, hdr, meta)) {
+        if (!display_.ReadFloatData([&](std::span<const float> pixels) {
+                return EXRWriter::WriteExrRgba(config_.output_path, width, height, pixels, meta);
+            })) {
             return base::Fail(base::ErrorDomain::kIo, "write EXR", config_.output_path);
         }
     } else {
@@ -1085,23 +1084,25 @@ base::Expected<void> RenderSession::WriteOutput() {
                               "produced a non-finite sample at channel " + std::to_string(*bad));
         }
 
-        const std::vector<float> output = display_.SnapshotFloatData();
-        const float* data = output.data();
-
-        if (!config_.write_output) {
-            // In-memory progressive previews consume the display-linear
-            // buffer directly and must not overwrite the configured output.
-        } else if (ext == "png") {
-            if (!PNGWriter::WriteRgba(config_.output_path, width, height, data)) {
-                return base::Fail(base::ErrorDomain::kIo, "write PNG", config_.output_path);
-            }
-        } else {
-            if (ext != "ppm") {
-                std::cout << "[Session] Unrecognised output extension '" << ext
-                          << "'; writing PPM data" << std::endl;
-            }
-            if (!EXRWriter::WritePpmRgba(config_.output_path, width, height, data)) {
-                return base::Fail(base::ErrorDomain::kIo, "write PPM", config_.output_path);
+        if (config_.write_output) {
+            if (ext == "png") {
+                if (!display_.ReadFloatData([&](std::span<const float> pixels) {
+                        return PNGWriter::WriteRgba(config_.output_path, width, height,
+                                                    pixels.data());
+                    })) {
+                    return base::Fail(base::ErrorDomain::kIo, "write PNG", config_.output_path);
+                }
+            } else {
+                if (ext != "ppm") {
+                    std::cout << "[Session] Unrecognised output extension '" << ext
+                              << "'; writing PPM data" << std::endl;
+                }
+                if (!display_.ReadFloatData([&](std::span<const float> pixels) {
+                        return EXRWriter::WritePpmRgba(config_.output_path, width, height,
+                                                       pixels.data());
+                    })) {
+                    return base::Fail(base::ErrorDomain::kIo, "write PPM", config_.output_path);
+                }
             }
         }
     }
