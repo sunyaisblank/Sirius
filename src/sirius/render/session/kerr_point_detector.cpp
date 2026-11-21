@@ -490,7 +490,9 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const auto screen = ScreenFiniteWindings(mass, spin, radius, scale, *whole, *polar, *phase,
                                              *angular, cutoffs, amplitude, clearance, remaining,
                                              cancelled, phases ? &*phases : nullptr,
-                                             excluded_turns);
+                                             excluded_turns,
+                                             finite_cutoff ? std::optional(finite_scale)
+                                                           : std::nullopt);
     if (!screen) return {};
     for (const auto& candidate : screen->candidates) {
         const auto density =

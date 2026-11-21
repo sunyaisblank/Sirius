@@ -296,7 +296,8 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
     const AngularCatalogue& catalogue, const std::array<unsigned, 3>& cutoffs, Range turn_amplitude,
     double clearance, std::size_t& remaining, const std::function<bool()>& cancelled,
     const NearCriticalPhases* shared_phases,
-    std::span<const AngularCatalogue::Entry* const> excluded_turns = {}) {
+    std::span<const AngularCatalogue::Entry* const> excluded_turns,
+    std::optional<Range> finite_scale) {
     const Range fixed_phi = FixedPupilAzimuth(mass, spin, chart);
     const Range amplitude = sqrt(polar.shape.amplitude2);
     if (!fixed_phi.Finite() ||
@@ -312,6 +313,40 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
         EvaluateFiniteRadialPhase(mass, spin, centre, Range(0.0), chart.inverse_start);
     if (!edge || !critical || !initial[0].Finite() || !period[0].Finite()) return {};
     const Range edge_time = Range(-2.0) * edge->leading * largest_log + edge->time_residual;
+    std::optional<FiniteRadialPhase> physical_radial;
+    double earliest = edge_time.lo;
+    double latest = kInfinity;
+    if (finite_scale) {
+        physical_radial =
+            EvaluateFiniteRadialPhase(mass, spin, centre, *finite_scale, chart.inverse_start);
+        if (physical_radial) {
+            const Range time = Range(-2.0) * physical_radial->leading * LogBounds(*finite_scale) +
+                               physical_radial->time_residual;
+            if (time.Finite()) {
+                earliest = std::max(earliest, time.lo);
+                latest = time.hi;
+            }
+        }
+    }
+    // Screen against the physical escape interval. Root counting below
+    // still needs the complete latitude branch over the wider radial chart.
+    const auto can_arrive = [&](Range time) {
+        return !(time.hi < earliest || time.lo > latest);
+    };
+    const auto sky_window = [&](Range angle, Range time, const FiniteRadialPhase& radial) {
+        const Range arrival = std::isfinite(latest) && time.Finite()
+                                  ? Range(std::max(time.lo, earliest), std::min(time.hi, latest))
+                                  : time;
+        const Range original =
+            fixed_phi - (angle + radial.drag_at_turn * arrival + radial.spin_residual);
+        if (!physical_radial) return original;
+        const Range physical = fixed_phi -
+                               (angle + physical_radial->drag_at_turn * arrival +
+                                physical_radial->spin_residual);
+        if (!physical.Finite()) return original;
+        if (!original.Finite()) return physical;
+        return Range(std::max(original.lo, physical.lo), std::min(original.hi, physical.hi));
+    };
     const Range twice_leading = Range(2.0) * prior.leading_factor;
     const auto radial_bound = [&](Range log_scale) -> std::optional<FiniteRadialPhase> {
         const Range span = ExpBounds(log_scale);
@@ -397,7 +432,7 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
         if (cancelled && cancelled()) return {};
         const Range m_value(m);
         const Range full = m_value * period[0] + initial[0] + Range(0.0, period[0].hi);
-        if (full.hi < edge_time.lo) continue;
+        if (!can_arrive(full)) continue;
         const Range log_span = (prior.time_remainder.value - full) / twice_leading;
         const Range log_branch(log_span.lo, std::min(largest_log.hi, log_span.hi));
         if (!log_span.Finite()) return {};
@@ -425,10 +460,9 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
             const auto part = EquatorToEnd(equator, approach);
             const Range tau = m_value * active_period[0] + active_initial[0] + part[0];
             const Range phi = m_value * active_period[1] + active_initial[1] + part[1];
-            if (tau.hi < edge_time.lo) return true;
-            const Range sky =
-                fixed_phi - (phi + coarse->drag_at_turn * tau + coarse->spin_residual);
-            if (!AzimuthMayMatch(sky, star.azimuth)) return true;
+            if (!can_arrive(tau)) return true;
+            const Range sky = sky_window(phi, tau, *coarse);
+            if (sky.lo > sky.hi || !AzimuthMayMatch(sky, star.azimuth)) return true;
 
             const Range local_log = (coarse->time_residual - tau) / (Range(2.0) * coarse->leading);
             // Without the shared radial integrals the critical-limit
@@ -461,10 +495,10 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                 const auto part = EquatorToEnd(
                     near_critical ? prepared.critical_equator : prepared.equator, approach);
                 const Range tau = m_value * active_period[0] + active_initial[0] + part[0];
-                if (tau.hi < edge_time.lo) continue;
+                if (!can_arrive(tau)) continue;
                 const Range phi = m_value * active_period[1] + active_initial[1] + part[1];
-                const Range sky =
-                    fixed_phi - (phi + coarse->drag_at_turn * tau + coarse->spin_residual);
+                const Range sky = sky_window(phi, tau, *coarse);
+                if (sky.lo > sky.hi) continue;
                 const auto visit = [&](const AngularCatalogue::Entry& entry) {
                     if (remaining == 0 || (cancelled && cancelled())) return false;
                     --remaining;
