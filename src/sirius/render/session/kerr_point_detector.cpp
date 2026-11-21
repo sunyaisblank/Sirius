@@ -3,6 +3,7 @@
 #include "sirius/backend/trace_step_executor.h"
 #include "sirius/core/camera.h"
 #include "sirius/core/kerr_detector/finite_screen.h"
+#include "sirius/core/spectral/blackbody_laws.h"
 
 #include <mutex>
 #include <new>
@@ -249,10 +250,9 @@ Range BoundGaussian(const FilmVector& box) {
 // x/expm1(x). Positive Taylor terms give a lower bound on expm1(x)/x
 // at the least exponent admitted by the physical shift and spectral band.
 Range PlanckFraction(Range shifted_temperature) {
-    using namespace core::constants;
     if (!shifted_temperature.Finite() || !(shifted_temperature.hi > 0.0)) return Range(1.0);
-    const Range exponent =
-        Range(physical::kPlanckC2) / (Range(spectral::kLambdaMax) * Range(shifted_temperature.hi));
+    const Range exponent = core::spectral::PlanckExponentFromWavelengthTemperature(
+        Range(core::constants::spectral::kLambdaMax) * Range(shifted_temperature.hi));
     if (!exponent.Finite() || !(exponent.lo > 0.0)) return Range(1.0);
     const Range x(exponent.lo), x2 = Square(x);
     const Range terms = Range(1.0) + x / Range(2.0) + x2 / Range(6.0) + x2 * x / Range(24.0) +
@@ -287,9 +287,8 @@ std::optional<Range> ColourEnvelope(Range camera_frequency, Range gaussian, doub
         std::max({channel(x.r, y.r, z.r), channel(x.g, y.g, z.g), channel(x.b, y.b, z.b)});
     // Retain a factor-four margin over the absolute-coefficient envelope
     // for the represented spectral arithmetic.
-    const Range result = gaussian * Range(4.0) * Range(band) *
-                         Range(core::constants::physical::kPlanckC1) * camera_frequency *
-                         Range(brightness) / Range(core::constants::physical::kPlanckC2);
+    const Range result = core::spectral::ScaleRayleighJeansSpectralBand(
+        gaussian * Range(4.0) * Range(band), camera_frequency, Range(brightness));
     return result.Finite() ? std::optional(result) : std::nullopt;
 }
 

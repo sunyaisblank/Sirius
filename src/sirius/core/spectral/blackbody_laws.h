@@ -19,6 +19,22 @@
 
 namespace sirius::core::spectral {
 
+// Keep the same operation order for scalar and outward-rounded interval use.
+// The caller establishes that the wavelength-temperature product is positive.
+template <typename Number>
+[[nodiscard]] inline Number PlanckExponentFromWavelengthTemperature(Number product) {
+    return Number(constants::physical::kPlanckC2) / product;
+}
+
+// Apply the Rayleigh-Jeans prefactor to an already integrated lambda^-4 band.
+// Keep multiplication and division separate so interval callers enclose each.
+template <typename Number>
+[[nodiscard]] inline Number ScaleRayleighJeansSpectralBand(Number band, Number temperature_factor,
+                                                           Number brightness) {
+    return band * Number(constants::physical::kPlanckC1) * temperature_factor * brightness /
+           Number(constants::physical::kPlanckC2);
+}
+
 [[nodiscard]] inline std::optional<double> TryPlanckSpectralRadiancePerMetre(
     double wavelength_metres, double temperature_kelvin) {
     if (!std::isfinite(wavelength_metres) || !(wavelength_metres > 0.0) ||
@@ -38,7 +54,7 @@ namespace sirius::core::spectral {
 
     const double wavelength_temperature = wavelength_metres * temperature_kelvin;
     const double exponent = std::isfinite(wavelength_temperature) && wavelength_temperature > 0.0
-                                ? constants::physical::kPlanckC2 / wavelength_temperature
+                                ? PlanckExponentFromWavelengthTemperature(wavelength_temperature)
                                 : std::exp(log_exponent);
 
     double exponential_minus_one = std::numeric_limits<double>::infinity();

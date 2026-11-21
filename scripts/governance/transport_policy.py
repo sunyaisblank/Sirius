@@ -271,10 +271,14 @@ def thin_lens_authority_errors(documents: dict[Path, str]) -> list[str]:
                 launch = cpu[signature.end():index]
                 break
     launch_flow = re.search(
-        r"auto\s+launch\s*=\s*(?:step_executor_\s*\?\s*"
-        r"step_executor_->Launch\(observer_metric,\s*cached_a_\s*\*\s*cached_m_,\s*camera_ray\)\s*:\s*)?"
+        r"(?:const\s+double\s+(?P<spin_alias>spin)\s*=\s*cached_a_\s*\*\s*cached_m_\s*;\s*)?"
+        r"auto\s+launch\s*=\s*"
+        r"(?:detector_launch\s*\?\s*std::optional\{detector_launch->central\}\s*:\s*)?"
+        r"(?:step_executor_\s*\?\s*"
+        r"step_executor_->Launch\(observer_metric,\s*"
+        r"(?(spin_alias)spin|cached_a_\s*\*\s*cached_m_),\s*camera_ray\)\s*:\s*)?"
         r"LaunchCameraRay\(observer_metric,\s*"
-        r"cached_a_\s*\*\s*cached_m_,\s*camera_ray\)\s*;"
+        r"(?(spin_alias)spin|cached_a_\s*\*\s*cached_m_),\s*camera_ray\)\s*;"
         r".*?const\s+auto\s+mapping\s*=\s*"
         r"outgoing_chart_->FromIngoing\(launch->position\)\s*;"
         r".*?launch->position\s*=\s*mapping->position\s*;"
@@ -394,6 +398,27 @@ def verify_thin_lens_authority_policy() -> None:
     }
     if thin_lens_authority_errors(valid):
         raise RuntimeError("thin-lens policy rejected the finite-pupil wiring")
+
+    prepared = dict(valid)
+    prepared[THIN_LENS_CPU_CONSUMER] = valid[THIN_LENS_CPU_CONSUMER].replace(
+        "auto launch = LaunchCameraRay(observer_metric, cached_a_ * cached_m_, camera_ray);",
+        "const double spin = cached_a_ * cached_m_; "
+        "auto launch = detector_launch ? std::optional{detector_launch->central} "
+        ": step_executor_ ? step_executor_->Launch(observer_metric, spin, camera_ray) "
+        ": LaunchCameraRay(observer_metric, spin, camera_ray);",
+    )
+    if thin_lens_authority_errors(prepared):
+        raise RuntimeError("thin-lens policy rejected the prepared finite-pupil launch")
+    for original, replacement in (
+        ("detector_launch->central", "pinhole_launch"),
+        ("const double spin = cached_a_ * cached_m_", "const double spin = 0"),
+        ("step_executor_->Launch(observer_metric, spin, camera_ray)",
+         "step_executor_->Launch(observer_metric, spin, central_ray)"),
+    ):
+        changed = dict(prepared)
+        changed[THIN_LENS_CPU_CONSUMER] = changed[THIN_LENS_CPU_CONSUMER].replace(original, replacement)
+        if not thin_lens_authority_errors(changed):
+            raise RuntimeError(f"thin-lens policy accepted broken prepared pupil wiring: {original}")
 
     for path, original, replacement in (
         (THIN_LENS_DISPATCH_BOUNDARY, "ForEachCameraSample", "ForEachImageSample"),
