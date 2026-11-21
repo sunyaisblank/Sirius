@@ -169,6 +169,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         base::Expected<RetainedDopriSampleOutput> sample_result = RetainedDopriSampleOutput{};
         // Known completed attempts remain charged after retry, error or cancellation.
         std::uint32_t completed_stages = 0;
+        std::condition_variable completion;
         bool completed = false;
         bool cancelled = false;
         bool registered = false;
@@ -183,7 +184,7 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     std::function<bool()> should_cancel_;
     SphericalEscape spherical_escape_;
     mutable std::mutex mutex_;
-    std::condition_variable available_, completed_;
+    std::condition_variable available_;
     std::deque<Request*> requests_;
     std::map<std::thread::id, Continuation> continuations_;
     // The common four pupil samples stay resident across canonical blocks.

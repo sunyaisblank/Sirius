@@ -369,9 +369,11 @@ void RetainedTraceExecutor::Run() {
                     request->sample_result = std::unexpected(*error_);
                 }
                 request->completed = true;
+                // The waiter owns this request on its stack. Hold the lock
+                // until all notifications have returned.
+                request->completion.notify_one();
             }
         }
-        completed_.notify_all();
     }
 }
 
@@ -531,7 +533,7 @@ std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
         requests_.push_back(&request);
         if (request.registered) ++queued_registered_;
         available_.notify_one();
-        completed_.wait(lock, [&] { return request.completed; });
+        request.completion.wait(lock, [&] { return request.completed; });
     }
     if (!request.camera_result || !request.camera_result->valid) return std::nullopt;
     return *request.camera_result;
@@ -732,7 +734,7 @@ bool RetainedTraceExecutor::Step(core::Lightray& ray, core::IMetric& metric,
         requests_.push_back(&request);
         if (request.registered) ++queued_registered_;
         available_.notify_one();
-        completed_.wait(lock, [&] { return request.completed; });
+        request.completion.wait(lock, [&] { return request.completed; });
     }
     coupled.central_stages += request.completed_stages;
     coupled.variation_stages += request.completed_stages;
@@ -842,7 +844,7 @@ std::optional<core::CoupledSegmentSample> RetainedTraceExecutor::Sample(core::Co
             requests_.push_back(&request);
             if (request.registered) ++queued_registered_;
             available_.notify_one();
-            completed_.wait(lock, [&] { return request.completed; });
+            request.completion.wait(lock, [&] { return request.completed; });
         }
     }
     if ((should_cancel_ && should_cancel_()) || !request.sample_result ||
