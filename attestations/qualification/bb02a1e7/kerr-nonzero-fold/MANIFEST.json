@@ -1,0 +1,141 @@
+{
+  "schema": "sirius-kerr-nonzero-fold-v1",
+  "source_revision": "bb02a1e730a7c3ccb8a94be577abfe011290404e",
+  "scope": "Disk-free Kerr geometry with M=1 and a=0.9, the first original 1080p moving ThinLens pupil, the star on the archived polar-turn contact in cell 396, and one signed phase chart. Fixed-pupil and source angles are taken from their prior outward intervals.",
+  "inputs": [
+    {
+      "path": "attestations/qualification/b4f9c01a/kerr-tail-stationary-longitude/MANIFEST.json",
+      "bytes": 6293,
+      "sha256": "722c6975da9fa28b6ab33095355f6a8ee630fb7960f50e3b975b64f07f8b5b82"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/kerr-tail-stationary-longitude/fold.log.gz",
+      "bytes": 941,
+      "sha256": "4cf10ac66b075de6f4e5b7ba938caf698f7114c91133ae4c134b5b357fc8b26c"
+    },
+    {
+      "path": "attestations/qualification/ce1906b6/dozen-mixed-endpoint-and-kerr-fold/MANIFEST.json",
+      "bytes": 5791,
+      "sha256": "786fab6e87fb0500e216b2c0931cfb423f441c6d02c857923d0183aed46a8d7f"
+    },
+    {
+      "path": "attestations/qualification/ce1906b6/dozen-mixed-endpoint-and-kerr-fold/verification.tar.gz",
+      "bytes": 15105,
+      "sha256": "d202cb2455978516c3647136f897d9b4c2063ee351e51878e04427713cac1d00"
+    }
+  ],
+  "validity_box": {
+    "signed_phase": [
+      "0",
+      "2^-10"
+    ],
+    "inverse_stationary_radius": [
+      0.43759975,
+      0.4376005
+    ],
+    "log_separation_divided_by_winding": [
+      -1.4,
+      -1.1
+    ],
+    "minimum_winding": 1025,
+    "separation_in_equations": "Strictly positive exp(winding*w), kept by uniform weighted exponential enclosures."
+  },
+  "proof": [
+    "Normalize the radial-time residual and the longitude by winding. Their explicit winding dependence then enters through its inverse. Bound separation and its first two derivatives by bounding n^j exp(n*w) for j up to three over the entire domain.",
+    "Factor the residual radial integrands into a smooth part and sqrt(y/(y+s*h)). The integral of s*h/(y+s*h) gives a logarithmic bound on the difference from the smooth integral and on both derivatives. This controls the integrable boundary layer without evaluating a floating-point separation or discarding it.",
+    "Check opposite latitude signs at the inverse-radius faces and opposite time signs at the normalized log-separation faces. The latitude and time Jacobian determinant stays positive. After solving latitude, the normalized time residual decreases with log separation. These checks establish a unique conditioned branch in the box.",
+    "Check negative longitude slope at phase zero, positive slope at the right phase boundary, and a strictly positive lower curvature proportional to winding along that branch. Hence the branch has exactly one longitude minimum in the phase interval for each winding.",
+    "Bound the minimum longitude relative to phase zero by integrating the lower and upper quadratic envelopes from the common slope. Screen the fixed catalogue longitude modulo one turn for each winding in the finite band. Positive clearance to the minimum bounds the squared longitude slope at an image from below by twice curvature times clearance.",
+    "For this finite band, the full longitude range of a single winding is narrower than one turn, so at most one lift of the source can intersect it, with at most two images. Combine the inverse-slope bound with the latitude and time determinant, the polar phase rate, and the exact derivative magnitude 2*s^2 of the radial minimum relative to log separation. Sum the finite density using the conservative envelope s <= 2^-n."
+  ],
+  "bounds_hex": {
+    "latitude_and_time_determinant": [
+      "0x1.e4f5318ef30f3p-2",
+      "0x1.e539bd4f31c7cp-2"
+    ],
+    "left_latitude_residual": [
+      "0x1.38c39d6ffffffp-23",
+      "0x1.48ab36f200001p-21"
+    ],
+    "right_latitude_residual": [
+      "-0x1.0703751700001p-21",
+      "-0x1.912604fffffffp-26"
+    ],
+    "early_time_residual": [
+      "0x1.307088a807c77p-4",
+      "0x1.3549a2e560989p-4"
+    ],
+    "late_time_residual": [
+      "-0x1.7e7f85daee061p-4",
+      "-0x1.79a99aab872ffp-4"
+    ],
+    "longitude_curvature_per_winding": [
+      "0x1.d14cd1f4148b9p+2",
+      "0x1.41893904bb9c4p+3"
+    ],
+    "zero-phase_longitude_slope": [
+      "-0x1.570c3d868ecf6p+2",
+      "-0x1.56ca7ef9e0deep+2"
+    ],
+    "right-edge_longitude_slope_at_first_winding": [
+      "0x1.ead39e880b047p+0",
+      "0x1.2ce8b7ac18b7dp+2"
+    ],
+    "winding_1025_fold_phase": [
+      "0x1.10a80f394963p-11",
+      "0x1.791c0e6731824p-11"
+    ],
+    "winding_2049_fold_phase": [
+      "0x1.10ca1ff918924p-12",
+      "0x1.794b2c054aa55p-12"
+    ],
+    "winding_4097_fold_phase": [
+      "0x1.10db2b8a5f0f6p-13",
+      "0x1.7962bf3ed7612p-13"
+    ],
+    "winding_8193_fold_phase": [
+      "0x1.10e3b21f86b91p-14",
+      "0x1.796e89f67b9acp-14"
+    ],
+    "zero-phase_longitude_offset": [
+      "-0x1.91af66677c851p-3",
+      "-0x1.90a8722b2959fp-3"
+    ],
+    "zero-phase_longitude_period": [
+      "0x1.3224c7ec2557ep+2",
+      "0x1.3224c8587c668p+2"
+    ],
+    "finite_band_invariant-chart_density_prefactor_(times_2^-2050)": [
+      "0x1.23d7cf71f8643p-2",
+      "0x1.23d885ab0dd13p-2"
+    ]
+  },
+  "finite_band": {
+    "first_winding": 1025,
+    "last_winding": 8193,
+    "windings_covered": 7169,
+    "direct_refinements": 0,
+    "unresolved": 0,
+    "longitude_clearance_lower_hex": "0x1.55d2cf6550f82p-8",
+    "longitude_clearance_lower_rad": 0.005215812333805194,
+    "closest_certified_winding": 8114,
+    "invariant_chart_density_upper_factor": 0.286,
+    "invariant_chart_density_binary_exponent": -2050,
+    "density_contains": "The image densities in the tested (inverse stationary radius, radial minimum) chart. Film, Gaussian, spectral and per-cell factors remain to be applied by the renderer."
+  },
+  "independent_reference": "The archived 58-digit elliptic-integral calculation at the spherical limit lies within the new finite intervals for phase, curvature per winding and wrapped longitude gap at windings 1025, 2049, 4097 and 8193.",
+  "remaining": "The same fixed interval for one revolution grows with winding and by approximately winding 62,271,689 its uncertainty alone spans a turn. The remaining tail needs a structural longitude-clearance bound, plus coverage of other signed phase charts and the lower winding range before a full render can be admitted. This proof has not been integrated into rendering.",
+  "compiler": "14.2.0",
+  "replay": [
+    "Extract verification.tar.gz into out/kerr-fold-nonzero and build from the checkout on the recorded source revision.",
+    "Use g++-14 -std=c++2c -O2 -fno-fast-math -ffp-contract=off -frounding-math -Wall -Wextra -Werror -Isrc out/kerr-fold-nonzero/finite-fold.cpp src/sirius/base/contracts.cpp -o out/kerr-fold-nonzero/finite-fold.",
+    "Run /usr/bin/time -v out/kerr-fold-nonzero/finite-fold, using its output for finite-fold.log, then run python3 out/kerr-fold-nonzero/cross-check.py."
+  ],
+  "files": [
+    {
+      "path": "attestations/qualification/bb02a1e7/kerr-nonzero-fold/verification.tar.gz",
+      "bytes": 7515,
+      "sha256": "ff90a901f7b532e821c444c37172c6368dbefe7e148a2ca8c4300bfc400b7bde"
+    }
+  ]
+}
