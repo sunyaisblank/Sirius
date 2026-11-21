@@ -1087,7 +1087,8 @@ base::Expected<void> RenderSession::WriteOutput() {
         if (config_.write_output) {
             if (ext == "png") {
                 if (!display_.ReadFloatData([&](std::span<const float> pixels) {
-                        return PNGWriter::WriteRgba(config_.output_path, width, height, pixels.data());
+                        return PNGWriter::WriteRgba(config_.output_path, width, height,
+                                                    pixels.data());
                     })) {
                     return base::Fail(base::ErrorDomain::kIo, "write PNG", config_.output_path);
                 }
@@ -1098,7 +1099,7 @@ base::Expected<void> RenderSession::WriteOutput() {
                 }
                 if (!display_.ReadFloatData([&](std::span<const float> pixels) {
                         return EXRWriter::WritePpmRgba(config_.output_path, width, height,
-                                                      pixels.data());
+                                                       pixels.data());
                     })) {
                     return base::Fail(base::ErrorDomain::kIo, "write PPM", config_.output_path);
                 }

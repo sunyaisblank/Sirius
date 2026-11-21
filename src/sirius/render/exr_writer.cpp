@@ -235,7 +235,8 @@ bool EXRWriter::WriteExr(const std::string& path, const ImageBufferRGBA& buffer,
 bool EXRWriter::WriteExrRgba(const std::string& path, int width, int height,
                              std::span<const float> pixels, const EXRMetadata& meta) {
     if (width <= 0 || height <= 0 ||
-        static_cast<std::uint64_t>(width) * height * 4 != pixels.size()) return false;
+        static_cast<std::uint64_t>(width) * height * 4 != pixels.size())
+        return false;
 
     return WriteRgbaFloat(path, width, height, pixels.data(), meta);
 }
