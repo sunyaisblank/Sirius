@@ -69,9 +69,11 @@ bool InteractiveViewer::Initialise(const ViewerConfig& config) {
                             config.black_hole_mass >= 0.1 && config.black_hole_mass <= 100.0;
     const double minimum_distance = 5.0 * config.black_hole_mass;
     const double maximum_distance = 1000.0 * config.black_hole_mass;
-    if (running_ || !metric_supported || !mass_valid || !spin_valid || config.preview_width < 64 ||
-        config.preview_height < 64 || config.final_width < config.preview_width ||
-        config.final_height < config.preview_height || config.final_width > 8192 ||
+    const int minimum_preview = config.backend == render::RenderBackend::Vulkan ? 1 : 64;
+    if (running_ || !metric_supported || !mass_valid || !spin_valid ||
+        config.preview_width < minimum_preview || config.preview_height < minimum_preview ||
+        config.final_width < std::max(64, config.preview_width) ||
+        config.final_height < std::max(64, config.preview_height) || config.final_width > 8192 ||
         config.final_height > 8192 || config.refinement_levels < 1 ||
         config.refinement_levels > 32 || config.samples_per_level < 1 ||
         config.samples_per_level > 4096 || !std::isfinite(config.move_speed) ||

@@ -313,6 +313,14 @@ TEST(ViewCommandOperational, RefinementLadderPreservesRequestedDimensions) {
     };
     ASSERT_NO_FATAL_FAILURE(check(ViewerConfig{}));
 
+    ViewerConfig vulkan;
+    vulkan.backend = render::RenderBackend::Vulkan;
+    vulkan.preview_width = 32;
+    vulkan.preview_height = 24;
+    vulkan.final_width = 1024;
+    vulkan.final_height = 768;
+    ASSERT_NO_FATAL_FAILURE(check(vulkan));
+
     ViewerConfig config;
     config.preview_width = 64;
     config.preview_height = 64;

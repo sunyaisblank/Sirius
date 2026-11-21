@@ -404,10 +404,22 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
 
     ViewerConfig view_config;
     view_config.session_template = resolved;
-    view_config.preview_width =
-        std::min(config.render.width, std::max(64, config.render.width / 4));
-    view_config.preview_height =
-        std::min(config.render.height, std::max(64, config.render.height / 4));
+    if (resolved.backend == render::RenderBackend::Vulkan) {
+        // Bound the first complete preview independently of the window size.
+        // The subsequent refinement still reaches the requested dimensions.
+        constexpr int kFirstPreviewLongEdge = 32;
+        const int long_edge = std::max(config.render.width, config.render.height);
+        const auto first_preview_dimension = [long_edge](int dimension) {
+            return std::max(1, (dimension * kFirstPreviewLongEdge + long_edge / 2) / long_edge);
+        };
+        view_config.preview_width = first_preview_dimension(config.render.width);
+        view_config.preview_height = first_preview_dimension(config.render.height);
+    } else {
+        view_config.preview_width =
+            std::min(config.render.width, std::max(64, config.render.width / 4));
+        view_config.preview_height =
+            std::min(config.render.height, std::max(64, config.render.height / 4));
+    }
     view_config.final_width = config.render.width;
     view_config.final_height = config.render.height;
     view_config.black_hole_mass = resolved.black_hole_mass;
