@@ -829,6 +829,14 @@ class Detector {
             source_reach[axis] += 2 * source_residual[axis] +
                                   policy_.root_error * std::hypot(matrix[axis][0], matrix[axis][1]);
         double query_radius = reach * (2 * cell.Width() + residual_bound);
+        if (cell_bound_ && mixed && query_radius >= std::numbers::pi) {
+            // Across the Kerr shadow a large derivative can turn the
+            // tangent-plane estimate into a whole-sky search. Subdivide
+            // without searching that envelope. At the original depth
+            // limit the continuous cell bound owns the classification.
+            result.regular = false;
+            return result;
+        }
         if (!mixed) {
             // The exact same rectangular forward-range predicate below
             // already rejects everything outside this circumscribed disk.

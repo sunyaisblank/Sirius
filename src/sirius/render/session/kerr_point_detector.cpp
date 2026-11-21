@@ -161,6 +161,57 @@ std::optional<Range> ColourEnvelope(Range camera_frequency, Range gaussian, doub
         (Range(core::constants::physical::kPlanckC2) * Square(Square(Range(first))));
     return result.Finite() ? std::optional(result) : std::nullopt;
 }
+
+std::optional<Range> BoundAzimuthImages(double mass, double spin, Range centre, Range scale,
+                                        const StationaryChart& chart, const CatalogueScreen& screen,
+                                        const PolarIntegralTable& polar, FiniteCandidate candidate,
+                                        const std::function<bool()>& cancelled,
+                                        std::size_t& remaining) {
+    if (cancelled && cancelled()) return {};
+    const auto& star = *candidate.source;
+    const auto refined = RefineFiniteAzimuth(mass, spin, centre, scale, chart, candidate,
+                                             star.latitude, star.azimuth);
+    if (!refined) return {};
+    if (!refined->possible) return Range{};
+    // This verifies the latitude root exists continuously over radius.
+    // Thus a sign-definite azimuth slope permits at most one root per wrap.
+    if (!EntireLatitudeBranchExists(screen, polar, candidate)) return {};
+    const Range wraps = (refined->azimuth - star.azimuth) / (Range(2.0) * kPiBounds);
+    const Range separation = ExpBounds(refined->log_scale);
+    if (!wraps.Finite() || !separation.Finite()) return {};
+    const double first = std::ceil(wraps.lo), last = std::floor(wraps.hi);
+    if (first > last) return Range{};
+    const auto derivative = DifferentiateFiniteAzimuth(
+        mass, spin, centre, Range(separation.lo, std::min(separation.hi, scale.hi)),
+        refined->log_scale, chart, candidate.winding, candidate.approaching_equator, star.latitude);
+    if (derivative) {
+        const Range slope = Abs(derivative->conditioned_radial_slope);
+        if (slope.lo > 0.0) {
+            const Range roots = Range(last) - Range(first) + Range(1.0);
+            const Range density =
+                roots * Range(2.0) * Square(separation) /
+                (slope * derivative->latitude_log_slope_magnitude * derivative->mu_speed);
+            if (density.Finite()) return density;
+        }
+    }
+
+    // An inconclusive derivative need not imply a caustic image. Retest
+    // longitude on each radius half before requesting a derivative there.
+    // Closed halves may count a shared endpoint twice, conservatively.
+    const double middle = std::midpoint(centre.lo, centre.hi);
+    if (!(centre.lo < middle && middle < centre.hi)) return {};
+    candidate.log_scale = refined->log_scale;
+    Range total;
+    for (Range half : {Range(centre.lo, middle), Range(middle, centre.hi)}) {
+        if (remaining == 0) return {};
+        --remaining;
+        const auto bound = BoundAzimuthImages(mass, spin, half, scale, chart, screen, polar,
+                                              candidate, cancelled, remaining);
+        if (!bound) return {};
+        total = total + *bound;
+    }
+    return total.Finite() ? std::optional(total) : std::nullopt;
+}
 }  // namespace
 
 class KerrDetectorCatalogue {
@@ -257,30 +308,12 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
                              cutoffs, amplitude, clearance, remaining, cancelled);
     if (!screen) return {};
     for (const auto& candidate : screen->candidates) {
-        if (cancelled && cancelled()) return {};
-        const auto& star = *candidate.source;
-        const auto refined = RefineFiniteAzimuth(mass, spin, target[0], scale, *whole, candidate,
-                                                 star.latitude, star.azimuth);
-        if (!refined) return {};
-        if (!refined->possible) continue;
-        if (!EntireLatitudeBranchExists(*screen, *polar, candidate)) return {};
-        const Range wraps = (refined->azimuth - star.azimuth) / (Range(2.0) * kPiBounds);
-        const Range separation = ExpBounds(refined->log_scale);
-        if (!wraps.Finite() || !separation.Finite() || std::ceil(wraps.lo) != std::floor(wraps.hi))
-            return {};
-        const auto derivative = DifferentiateFiniteAzimuth(
-            mass, spin, target[0], Range(separation.lo, std::min(separation.hi, scale.hi)),
-            refined->log_scale, *whole, candidate.winding, candidate.approaching_equator,
-            star.latitude);
-        if (!derivative || !(Abs(derivative->conditioned_radial_slope).lo > 0.0)) return {};
-
-        // Count at most one image on this winding and polar leg, at the
-        // largest density anywhere on the enclosed branch of this cell.
-        const Range density =
-            Range(2.0) * Square(separation) /
-            (Abs(derivative->conditioned_radial_slope) * derivative->latitude_log_slope_magnitude *
-             derivative->mu_speed * determinant);
-        const Range contribution = *colour * star.weighted_temperature * density;
+        const auto density = BoundAzimuthImages(mass, spin, target[0], scale, *whole, *screen,
+                                                *polar, candidate, cancelled, remaining);
+        if (!density) return {};
+        if (density->hi == 0.0) continue;
+        const Range contribution =
+            *colour * candidate.source->weighted_temperature * *density / determinant;
         if (!contribution.Finite() || contribution.hi < 0.0) return {};
         upper_bound = upper_bound + Range(0.0, contribution.hi);
     }
