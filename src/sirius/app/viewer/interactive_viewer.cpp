@@ -329,23 +329,26 @@ RefinementState InteractiveViewer::GetRefinementState() const {
 }
 
 InteractiveViewer::FrameSnapshot InteractiveViewer::GetFrameSnapshot() const {
-    std::lock_guard<std::mutex> lock(frame_mutex_);
-    return frame_;
+    std::shared_ptr<const FrameSnapshot> completed;
+    {
+        std::lock_guard<std::mutex> lock(frame_mutex_);
+        completed = frame_;
+    }
+    return completed ? *completed : FrameSnapshot{};
 }
 
 std::vector<float> InteractiveViewer::GetFrameBufferSnapshot() const {
-    std::lock_guard<std::mutex> lock(frame_mutex_);
-    return frame_.pixels;
+    return GetFrameSnapshot().pixels;
 }
 
 int InteractiveViewer::GetFrameWidth() const {
     std::lock_guard<std::mutex> lock(frame_mutex_);
-    return frame_.width;
+    return frame_ ? frame_->width : 0;
 }
 
 int InteractiveViewer::GetFrameHeight() const {
     std::lock_guard<std::mutex> lock(frame_mutex_);
-    return frame_.height;
+    return frame_ ? frame_->height : 0;
 }
 
 std::string InteractiveViewer::GetLastError() const {
@@ -582,26 +585,24 @@ bool InteractiveViewer::RenderStep() {
         last_error_ = "viewer render completed without a correctly sized display buffer";
         return false;
     }
+    const auto completed =
+        std::make_shared<const FrameSnapshot>(FrameSnapshot{std::move(snapshot), width, height});
     {
         // A restart and a completed-frame commit share the generation lock.
         std::scoped_lock lock(state_mutex_, frame_mutex_);
         if (!current_generation()) return !stop_requested_;
-        frame_.pixels = std::move(snapshot);
-        frame_.width = width;
-        frame_.height = height;
+        frame_ = completed;
     }
 
-    NotifyFrame();
+    NotifyFrame(*completed);
     return true;
 }
 
-void InteractiveViewer::NotifyFrame() {
+void InteractiveViewer::NotifyFrame(const FrameSnapshot& frame) {
     FrameCallback callback;
-    FrameSnapshot frame;
     {
         std::lock_guard<std::mutex> lock(frame_mutex_);
         callback = frame_callback_;
-        frame = frame_;
     }
     if (callback) {
         callback(frame.pixels.data(), frame.width, frame.height);
