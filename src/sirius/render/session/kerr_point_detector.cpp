@@ -103,18 +103,22 @@ FilmVector CoverEscapingChart(const FilmVector& cell, const StationaryChart& who
     std::array<double, 2> shallow, deep;
     std::array<bool, 2> increasing;
     for (unsigned axis = 0; axis < 2; ++axis) {
-        if (!(potential[axis].lo > 0.0 || potential[axis].hi < 0.0) ||
-            !(radial[axis].lo > 0.0 || radial[axis].hi < 0.0))
-            return target;
+        if (!(Abs(potential[axis]).lo > 0.0)) return target;
         const bool reversed = potential[axis].lo > 0.0;
         shallow[axis] = reversed ? cell[axis].hi : cell[axis].lo;
         deep[axis] = reversed ? cell[axis].lo : cell[axis].hi;
         increasing[axis] = (radial[axis].lo > 0.0) != reversed;
     }
     const FilmVector deepest{Range(deep[0]), Range(deep[1])};
-    if (const auto corner = evaluate(deepest))
-        target[1].lo = std::max(target[1].lo, corner->coordinate[1].lo);
-    if (increasing[0] == increasing[1]) return target;
+    const auto lowest = evaluate(deepest);
+    if (lowest) target[1].lo = std::max(target[1].lo, lowest->coordinate[1].lo);
+    if (target[1].lo >= 0.0 || target[1].hi < 0.0) return target;
+    const FilmVector shallowest{Range(shallow[0]), Range(shallow[1])};
+    if (const auto highest = evaluate(shallowest))
+        target[1].hi = std::min(target[1].hi, highest->coordinate[1].hi);
+    if (!lowest || !(lowest->coordinate[1].hi < 0.0) || target[1].hi < 0.0 ||
+        !(Abs(radial[0]).lo > 0.0 && Abs(radial[1]).lo > 0.0) || increasing[0] == increasing[1])
+        return target;
 
     // Along either axis the chosen deep direction decreases the potential.
     // Extrema on the escaping side occur on an edge with the other axis
@@ -126,22 +130,25 @@ FilmVector CoverEscapingChart(const FilmVector& cell, const StationaryChart& who
             const auto point = evaluate(edge);
             return point ? point->coordinate[1] : InvalidRange();
         };
-        if (!(potential_at(shallow[axis]).lo > 0.0 && potential_at(deep[axis]).hi < 0.0)) return {};
-        const auto tighten = [&](double known, double other, bool positive) {
-            for (unsigned i = 0; i < 45; ++i) {
-                const double mid = std::midpoint(known, other);
-                if (mid == known || mid == other) break;
-                const auto value = potential_at(mid);
-                if (positive ? value.lo > 0.0 : value.hi < 0.0)
-                    known = mid;
-                else
-                    other = mid;
-            }
-            return known;
-        };
-        const double left = tighten(shallow[axis], deep[axis], true);
-        const double right = tighten(deep[axis], left, false);
-        edge[axis] = Range(std::min(left, right), std::max(left, right));
+        if (!(potential_at(shallow[axis]).lo > 0.0)) return {};
+        Range root = cell[axis];
+        const bool sign_is_positive = potential[axis].lo > 0.0;
+        const Range slope = Abs(potential[axis]);
+        // The bracket contains a crossing and the whole-edge derivative
+        // excludes zero. Intersect it with the mean-value enclosure of the
+        // root, retaining both signs of the pointwise rounding uncertainty.
+        for (unsigned i = 0; i < 8; ++i) {
+            const double mid = std::midpoint(root.lo, root.hi);
+            const Range value = potential_at(mid);
+            const Range oriented = sign_is_positive ? value : Range(0.0) - value;
+            const Range image = Range(mid) - oriented / slope;
+            if (!image.Finite()) break;
+            const Range narrowed(std::max(root.lo, image.lo), std::min(root.hi, image.hi));
+            if (!narrowed.Finite()) return {};
+            if (narrowed.lo == root.lo && narrowed.hi == root.hi) break;
+            root = narrowed;
+        }
+        edge[axis] = root;
         const auto enclosure = evaluate(edge);
         return enclosure ? std::optional(enclosure->coordinate[0]) : std::nullopt;
     };
@@ -302,6 +309,7 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     std::optional<FilmVector> film_hull;
     Range radius;
     double minimum_potential = 0.0;
+    double maximum_potential = -kInfinity;
     double minimum_determinant = kInfinity;
     double maximum_gaussian = 0.0;
     for (const auto& cell : cells) {
@@ -335,6 +343,7 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
         if (!(determinant.lo > 0.0 && target[1].lo < 0.0 && gaussian.Finite())) return {};
         radius = film_hull ? hull(radius, target[0]) : target[0];
         minimum_potential = std::min(minimum_potential, target[1].lo);
+        maximum_potential = std::max(maximum_potential, target[1].hi);
         minimum_determinant = std::min(minimum_determinant, determinant.lo);
         maximum_gaussian = std::max(maximum_gaussian, gaussian.hi);
         film_hull = film_hull
@@ -370,13 +379,32 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
                                        Range(maximum_gaussian), brightness);
     if (!latitude || !colour) return {};
 
+    // A group lying strictly on the escaping side has a finite maximum
+    // radial time. Each complete polar half-libration consumes at least
+    // the lower period bound, even at a source on the edge of a cell.
+    constexpr unsigned first_tail_winding = 8;
+    std::optional<unsigned> finite_cutoff;
+    if (maximum_potential < 0.0) {
+        const Range minimum_scale = sqrt(Range(-maximum_potential));
+        const Range maximum_time =
+            Range(-2.0) * phase->leading_factor * LogPoint(minimum_scale.lo) +
+            phase->time_remainder.value;
+        const double maximum_winding = (maximum_time / latitude->half_period).hi;
+        if (maximum_winding >= 0.0 && maximum_winding < first_tail_winding)
+            finite_cutoff = static_cast<unsigned>(maximum_winding) + 1;
+    }
     Range upper_bound;
     std::array<unsigned, 3> cutoffs{};
     for (std::size_t i = 0; i < bands->size(); ++i) {
         const auto& band = (*bands)[i];
         if (band.clearance == kInfinity) continue;
-        const auto tail = EncloseWindingTail(mass, spin, radius, scale, whole->initial_mu,
-                                             band.clearance, determinant, *phase, *latitude, 8);
+        if (finite_cutoff) {
+            cutoffs[i] = *finite_cutoff;
+            continue;
+        }
+        const auto tail =
+            EncloseWindingTail(mass, spin, radius, scale, whole->initial_mu, band.clearance,
+                               determinant, *phase, *latitude, first_tail_winding);
         if (!tail) return {};
         const double factor =
             (*colour * band.weighted_temperature * Range(tail->tail_prefactor)).hi;
