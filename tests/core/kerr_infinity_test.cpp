@@ -485,8 +485,17 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
              {-0x1.92f7f407dc8c7p-1, -0x1.93ad4880817b2p-4, -0x1.a2f4ea78b027p-3}),
         Four(-0x1.de917a1a791bbp-1,
              {-0x1.942f58adb117fp-1, -0x1.941f5365512dfp-4, -0x1.8cbe679530dcp-3}),
+        Four(-0x1.de914d60819c1p-1,
+             {-0x1.94319243b7847p-1, -0x1.93f086614a59p-4, -0x1.8ca0f3bf482dp-3}),
+        Four(-0x1.de9114dc37fafp-1,
+             {-0x1.94334b86ad86p-1, -0x1.93fc4dac70a0bp-4, -0x1.8c7dbf5d817cp-3}),
+        Four(-0x1.de90e141a4c6fp-1,
+             {-0x1.9434cc8dfbae1p-1, -0x1.940b9b8b24eb6p-4, -0x1.8c5db9300432p-3}),
+        Four(-0x1.de90c471408dp-1,
+             {-0x1.9435b18a1a608p-1, -0x1.9410965fa77dp-4, -0x1.8c4bbc809922p-3}),
     };
-    constexpr std::array decimal_radii{2.075103142542746, 1.712572390557077};
+    constexpr std::array decimal_radii{2.075103142542746, 1.712572390557077, 1.694091803789609,
+                                      1.689357681104494, 1.686593027729126, 1.682462964901301};
     auto through_turn = Accurate();
     through_turn.allow_radial_turn = true;
     for (std::size_t i = 0; i < scattering.size(); ++i) {
@@ -520,6 +529,18 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
 }
 
 TEST(KerrInfinity, RejectsHiddenRadialTurningPoint) {
+    using kerr_infinity_detail::Constants;
+    using kerr_infinity_detail::ExactRadialSign;
+    Constants critical;
+    critical.energy = kerr_infinity_detail::Jet(-1.0);
+    // At u=1/4 in Schwarzschild, H=1-C/32. Adjacent binary64 values
+    // of C must yield opposite signs, while C=32 gives exactly zero.
+    for (const auto& [carter, sign] : std::array{std::pair{std::nextafter(32.0, 0.0), 1},
+                                               std::pair{32.0, 0},
+                                               std::pair{std::nextafter(32.0, 64.0), -1}}) {
+        critical.carter_combination = kerr_infinity_detail::Jet(carter);
+        EXPECT_EQ(ExactRadialSign(1, 0, critical, .25), sign);
+    }
     // r=2.5 is inside the photon sphere. This ray initially moves outward,
     // but b=5.3 exceeds sqrt(27), producing a forbidden radial interval before
     // infinity. H is positive at both endpoints and negative at r=3.

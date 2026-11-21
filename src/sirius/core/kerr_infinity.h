@@ -4,8 +4,10 @@
 #include "sirius/core/source_sky_map.h"
 #include "sirius/core/spherical_continuation/radial_quadrature.h"
 #include "sirius/core/trace_boundary.h"
+#include "sirius/core/twofold.h"
 
 #include <algorithm>
+#include <cfloat>
 #include <expected>
 
 namespace sirius::core::relativity {
@@ -255,6 +257,95 @@ std::array<Scalar, 4> DeflateRadialTurn(const std::array<Scalar, 5>& coefficient
     return result;
 }
 
+// A short, nonoverlapping expansion for the sign of the represented radial
+// potential. The words are ordered from least to most significant. Adding
+// one word uses Shewchuk's grow-expansion with the existing error-free sums.
+class RadialExpansion {
+  public:
+    explicit RadialExpansion(double value = 0.0) { Add(value); }
+
+    int Sign() const {
+        if (!valid_ || size_ == 0) return 0;
+        return words_[size_ - 1] > 0.0 ? 1 : -1;
+    }
+
+    friend RadialExpansion operator+(RadialExpansion left, const RadialExpansion& right) {
+        left.valid_ = left.valid_ && right.valid_;
+        for (std::size_t i = 0; i < right.size_; ++i) left.Add(right.words_[i]);
+        return left;
+    }
+
+    friend RadialExpansion operator-(RadialExpansion left, const RadialExpansion& right) {
+        left.valid_ = left.valid_ && right.valid_;
+        for (std::size_t i = 0; i < right.size_; ++i) left.Add(-right.words_[i]);
+        return left;
+    }
+
+    friend RadialExpansion operator*(const RadialExpansion& left, const RadialExpansion& right) {
+        RadialExpansion result;
+        result.valid_ = left.valid_ && right.valid_;
+        for (std::size_t i = 0; result.valid_ && i < left.size_; ++i) {
+            for (std::size_t j = 0; result.valid_ && j < right.size_; ++j) {
+                const auto product = Twofold::Product(left.words_[i], right.words_[j]);
+                // Keep both the rounded product and its FMA residual away
+                // from exponent limits. The residual then fits in binary64.
+                const double magnitude = std::abs(product.hi);
+                if (!(magnitude >= 0x1p-900 && magnitude <= 0x1p900)) {
+                    result.valid_ = false;
+                    break;
+                }
+                result.Add(product.lo);
+                result.Add(product.hi);
+            }
+        }
+        return result;
+    }
+
+  private:
+    void Add(double value) {
+        if (!valid_ || value == 0.0) return;
+        if (!std::isfinite(value)) {
+            valid_ = false;
+            return;
+        }
+        std::size_t written = 0;
+        for (std::size_t i = 0; i < size_; ++i) {
+            const auto sum = Twofold::Sum(value, words_[i]);
+            if (!std::isfinite(sum.hi) || !std::isfinite(sum.lo)) {
+                valid_ = false;
+                return;
+            }
+            if (sum.lo != 0.0) words_[written++] = sum.lo;
+            value = sum.hi;
+        }
+        if (value != 0.0) {
+            if (written == words_.size()) {
+                valid_ = false;
+                return;
+            }
+            words_[written++] = value;
+        }
+        size_ = written;
+    }
+
+    std::array<double, 32> words_{};
+    std::size_t size_ = 0;
+    bool valid_ = true;
+};
+
+inline int ExactRadialSign(double mass, double spin, const Constants& c, double inverse_radius) {
+    // The enclosing solver has already checked rounding and gradual
+    // underflow. Error-free transforms also require binary64 evaluation.
+    if (FLT_EVAL_METHOD != 0) return 0;
+    const RadialExpansion m(mass), a(spin), e(c.energy.real), l(c.angular_momentum.real);
+    const RadialExpansion q(c.carter_combination.real), u(inverse_radius);
+    const RadialExpansion one(1.0), two(2.0);
+    const auto au = a * u;
+    const auto p = e + (a * e - l) * (au * u);
+    const auto d = one - (two * m) * u + au * au;
+    return (p * p - d * (u * u) * q).Sign();
+}
+
 struct RadialTurn {
     Jet root, start, travel;
     std::array<Jet, 4> factor;
@@ -286,35 +377,14 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
                              : horizon_inverse.lo;
     if (!(lower < limit)) return {};
 
-    const auto sign_bounds = [&](double inverse_radius) {
-        const Range u(inverse_radius);
-        const Range horner = EvaluateRadial(interval_coefficients, u);
-        if (!horner.Finite() || horner.lo > 0.0 || horner.hi < 0.0) return horner;
-        // At a near-cancelling root the independent, factored expression
-        // can enclose the sign more tightly than the power basis.
-        using finite_tail_detail::Square;
-        const auto fused = [](Range left, Range right, Range addend) {
-            if (!left.Finite() || !right.Finite() || !addend.Finite())
-                return finite_tail_detail::InvalidRange();
-            double low = finite_tail_detail::kInfinity, high = -finite_tail_detail::kInfinity;
-            for (double l : {left.lo, left.hi})
-                for (double r : {right.lo, right.hi}) {
-                    low = std::min(low, std::fma(l, r, addend.lo));
-                    high = std::max(high, std::fma(l, r, addend.hi));
-                }
-            return finite_tail_detail::Widen(low, high);
-        };
-        const Range u2 = Square(u);
-        const Range e(c.energy.real), l(c.angular_momentum.real), q(c.carter_combination.real);
-        const Range au = a * u;
-        const Range p = fused(fused(a, e, Range(0.0) - l), au * u, e);
-        const Range d = fused(au, au, fused(Range(-std::ldexp(mass, 1)), u, Range(1.0)));
-        const Range factored = fused(p, p, Range(0.0) - d * u2 * q);
-        const Range overlap(std::max(horner.lo, factored.lo), std::min(horner.hi, factored.hi));
-        return overlap.Finite() ? overlap : horner;
+    const auto sign = [&](double inverse_radius) {
+        const Range bound = EvaluateRadial(interval_coefficients, Range(inverse_radius));
+        if (bound.lo > 0.0) return 1;
+        if (bound.hi < 0.0) return -1;
+        return ExactRadialSign(mass, spin, c, inverse_radius);
     };
     const auto negative = [&](double candidate) {
-        return lower < candidate && sign_bounds(candidate).hi < 0.0;
+        return lower < candidate && sign(candidate) < 0;
     };
     // Search only as far as the physical horizon or the configured
     // cutoff. A sign-definite turn inside the ergosphere is still regular.
@@ -349,10 +419,10 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
         --sign_evaluations;
         const double mid = std::midpoint(lower, upper);
         if (!(lower < mid && mid < upper)) break;
-        const auto value = sign_bounds(mid);
-        if (value.lo > 0.0) {
+        const int value = sign(mid);
+        if (value > 0) {
             lower = mid;
-        } else if (value.hi < 0.0) {
+        } else if (value < 0) {
             upper = mid;
         } else {
             // The sign at the centre can become ambiguous before the
@@ -364,8 +434,8 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
                     const double candidate = std::midpoint(proven, unknown);
                     if (candidate == proven || candidate == unknown) break;
                     --sign_evaluations;
-                    const auto bound = sign_bounds(candidate);
-                    if (positive ? bound.lo > 0.0 : bound.hi < 0.0)
+                    const int candidate_sign = sign(candidate);
+                    if (positive ? candidate_sign > 0 : candidate_sign < 0)
                         proven = candidate;
                     else
                         unknown = candidate;
