@@ -1,0 +1,205 @@
+{
+  "recorded_utc": "2026-11-21T07:33:30.829903+00:00",
+  "production_source": "ed95bfc0ec6a09f4066b5c423e73b1c46aca590b",
+  "experimental_scheduler_base": "3aa0dbd22623056a3f4cf1b5e18188900ad518e0",
+  "branch": "development/kerr-exterior-turn-2026-11-21",
+  "device": "Physical AMD Radeon 780M through Mesa Dozen",
+  "scope": "Seven exact previously certified cells and the governed canonical block (928,608) of the original 1920x1080 vacuum Kerr scene. Focused source verification only. No full-frame, installed, or external-domain acceptance.",
+  "previous_independent_seven_cell_result": {
+    "manifest": {
+      "path": "attestations/qualification/07c90bd2/kerr-winding69/MANIFEST.json",
+      "bytes": 20035,
+      "sha256": "a29fc2d6ce97b09a9a7a7461d50fff462f6eb5693b013b01a4135a08ae7a19e1"
+    },
+    "candidate_visits": 123739,
+    "combined_bound_per_channel": 2.216873875889148e-07
+  },
+  "shared_seven_cell_proof": {
+    "exit": 0,
+    "candidate_visits": 67117,
+    "bound_per_channel": 9.819852759079907e-09,
+    "wall": "1:50.00",
+    "max_rss_kib": 293652
+  },
+  "single_mixed_cell_with_new_passband": {
+    "exit": 0,
+    "candidate_visits": 16982,
+    "bound_per_channel": 5.2632268347681267e-11,
+    "wall": "0:12.47",
+    "max_rss_kib": 290392
+  },
+  "frame_policy": {
+    "memory_governor_mib": 2048,
+    "maximum_candidate_visits": 131072,
+    "maximum_probes": 16384,
+    "maximum_depth": 16,
+    "absolute_rgb_allowance": 1e-07
+  },
+  "architecture_retained": "Combine conservative per-cell chart ranges, require injectivity on the film hull, and bound each sky root by the worst original Gaussian weight and smallest admitted cell determinant. Calculate the spectral envelope using the represented 32 wavelengths, CIE weights and D65 map. Production calls this primitive at its existing cell scheduling point with a one-cell span.",
+  "field_experiment": {
+    "initial": [
+      "leaf_decline index=704 centre=0x0p+0,0x1.6p+4 probes=5049 cells=1083 visits=170 reason=5",
+      "physics: shade block: block (928, 608), sample 0: point detector failure 5 after 30562 probes, 6404 cells and 646109 candidate visits",
+      "\tExit status: 8"
+    ],
+    "all_terminal": [
+      "leaf_decline index=704 centre=0x0p+0,0x1.6p+4 probes=16380 cells=2867 visits=52889 reason=4",
+      "physics: shade block: block (928, 608), sample 0: point detector failure 4 after 41893 probes, 8188 cells and 698828 candidate visits",
+      "\tExit status: 8"
+    ],
+    "narrower_defer": [
+      "pending_prefix cells=794 probes=16380 remaining_visits=78183",
+      "kerr_union cells=794 film0=[-0x1.9e9p+1,-0x1.9d88p+1] film1=[0x1.2c78p+1,0x1.2d8p+1] radius=[0x1.c018e627544aap-2,0x1.c01d51806e569p-2] H_lower=-0x1.dc75661300001p-15",
+      "kerr_decline cells=794 line=363 available=78183 visits=125",
+      "pending_bound debit=125 outcome=0 rgb=-0x1p+0",
+      "leaf_decline index=704 centre=0x0p+0,0x1.6p+4 probes=16380 cells=2867 visits=52889 reason=4",
+      "physics: shade block: block (928, 608), sample 0: point detector failure 4 after 41893 probes, 8188 cells and 698828 candidate visits",
+      "\tExit status: 8"
+    ],
+    "earlier_defer": [
+      "pending_prefix cells=558 probes=16379 remaining_visits=97200",
+      "kerr_union cells=558 film0=[-0x1.9e9p+1,-0x1.9cp+1] film1=[0x1.2c7p+1,0x1.2f8p+1] radius=[0x1.c011fb5729b87p-2,0x1.c01d51806e569p-2] H_lower=-0x1.68c41a5c48001p-13",
+      "kerr_decline cells=558 line=363 available=97200 visits=115",
+      "pending_bound debit=115 outcome=0 rgb=-0x1p+0",
+      "leaf_decline index=704 centre=0x0p+0,0x1.6p+4 probes=16379 cells=3110 visits=33872 reason=4",
+      "physics: shade block: block (928, 608), sample 0: point detector failure 4 after 41892 probes, 8431 cells and 679811 candidate visits",
+      "\tExit status: 8"
+    ],
+    "adoption": "The combined proof is retained. The footprint-wide deferral prototype remains an evidence patch, because the original probe limit precedes its final query and the resulting chart admits a catalogue polar turn."
+  },
+  "catalogue_turn_verification": {
+    "method": "Reconstruct the logged stationary-radius and minimum-potential ranges. Evaluate the represented physical point catalogue with the interval polar shape on the full domain and on h=0. Catalogue latitude and azimuth intervals are identical to the renderer index.",
+    "replay_command": "g++-14 -std=c++2c -O3 -Wall -Wextra -Werror -DSIRIUS_CONTRACT_MODE=2 -Isrc out/kerr-footprint/polar-straddlers.cpp bin/linux-ci/src/sirius/core/libsirius_core.a bin/linux-ci/src/sirius/libsirius_base.a -o out/kerr-footprint/polar-straddlers",
+    "findings": [
+      "cells=7 amplitude=[0x1.f4f348af90e23p-1,0x1.f4f379586e8f3p-1] critical_amplitude=[0x1.f4f348afd7e1p-1,0x1.f4f375a6b5387p-1] dA_du=[-0x1.b2357bc602411p-1,-0x1.b1ae0650fd1p-1] dA_dH=[-0x1.35e0670c2fba7p-6,-0x1.34405f973714bp-6]",
+      "  stars=0 separatrix_stars=0",
+      "cells=794 amplitude=[0x1.f4f3486000463p-1,0x1.f4f54c66c8056p-1] critical_amplitude=[0x1.f4f3487c6c875p-1,0x1.f4f5284c4c588p-1] dA_du=[-0x1.b4b0cd5a1045ap-1,-0x1.af163c10fe155p-1] dA_dH=[-0x1.3da6d0c678b12p-6,-0x1.2c732c8ea5831p-6]",
+      "  stars=3 separatrix_stars=1",
+      "cells=558 amplitude=[0x1.f4f34678939eap-1,0x1.f4f885c5a02e9p-1] critical_amplitude=[0x1.f4f3475ae64f9p-1,0x1.f4f817aa8b3fap-1] dA_du=[-0x1.b912eb464b3ep-1,-0x1.aa83ac70d2a63p-1] dA_dH=[-0x1.4b6361decba2ap-6,-0x1.1ea8668fae978p-6]",
+      "  stars=8 separatrix_stars=6"
+    ]
+  },
+  "execution_environment": {
+    "VK_DRIVER_FILES": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+    "SIRIUS_VULKAN_DEVICE": "0",
+    "SIRIUS_MEMORY_BUDGET_MB": "2048",
+    "resource_symlink_target": "bin/linux-ci/tests/backend/resources",
+    "TMPDIR": "out/kerr-footprint",
+    "MESA_SHADER_CACHE_DIR": "out/kerr-footprint/shader-cache"
+  },
+  "strict_build": [
+    "cmake -S . -B bin/linux-ci",
+    "cmake --build bin/linux-ci --target sirius sirius_render_tests -j 4"
+  ],
+  "tests": [
+    "PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand",
+    "PointSourceDetector.BulkProbesPreserveSharedAndOriginalCoordinateTransforms",
+    "PointSourceDetector.GroupSplitsAnUnrepresentedGapAndKeepsOriginalOutputOrder",
+    "PointSourceDetector.GroupNeverPublishesEarlierLeavesAfterFailureOrCancellation",
+    "PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+    "PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance"
+  ],
+  "next_action": "Use a signed polar phase through the turning point to avoid the asin derivative in the moving-latitude equation. The certified nonzero dA/du permits an implicit radial solve there. The all-terminal prefix has one catalogue star overlapping even the h=0 amplitude, so merely limiting depth in h cannot admit the full group. Use small admitted charts for remaining branches and route the supported rim before exhausting the probe budget.",
+  "files": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/deferred-footprint.diff.gz",
+      "bytes": 6668,
+      "sha256": "eaa2269005df004eb2770bdda3b50c258856c76aa1f20ff6693997b78bb2c019"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/initial.log.gz",
+      "bytes": 1208,
+      "sha256": "29fc5077985685374dab582d94d5d5515171a3952ae6ae49f680507d395a2dcd"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/terminal.log.gz",
+      "bytes": 1221,
+      "sha256": "89d9542d2bf98775855b118b6f593a5ed94c4da0ffbc571823737aed15727625"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix.log.gz",
+      "bytes": 6037,
+      "sha256": "9f2167fcad38190148710ff5b5678a1208663a77216df71ed996166d0d064c72"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/earlier.log.gz",
+      "bytes": 4553,
+      "sha256": "fb104f5eaaf9d30d7f54a64d5be46ad0c06a62057a0df5a4540d4b59f49621bc"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/initial-build.json.gz",
+      "bytes": 709,
+      "sha256": "1b91df25d75207d2b84f21c1c897a59363e3bcf4b3aac80ed4805894e8c0337f"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix-build.json.gz",
+      "bytes": 566,
+      "sha256": "b0e6650cf1b7bcebbdaacbaeb6132437ec78b30ce4264d9bdfe65cf32dbb0a50"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/earlier-build.json.gz",
+      "bytes": 566,
+      "sha256": "a4f5eef40dd3141d8a9d1ca94a68e484c0be704ef0d27a7e533f306876cc5f3f"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/observed_kerr_point_detector.cpp.gz",
+      "bytes": 6319,
+      "sha256": "c843bc9497b12fdf55fe9532ba0b2dfa881bd25c792d847abe1fc407b5148cf5"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/observed_prefix_detector.cpp.gz",
+      "bytes": 16808,
+      "sha256": "90b50bf578ce94a4e7d7363202585759f20b57eae962d3d1756ee55bac87ad8b"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/observed_earlier_detector.cpp.gz",
+      "bytes": 16781,
+      "sha256": "9476e86fd81f932d8d5ba1bbc405f20c897e3471075cdc048ad2126eef2f424a"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix_check.cpp.gz",
+      "bytes": 1438,
+      "sha256": "0894d5c67ab701adcc8fa87d1212bbdbb182d270bcf229dc4cdd44eee9f7ed03"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix-check-build.json.gz",
+      "bytes": 363,
+      "sha256": "07acf2a82e442fdd52f50be549d372398f91dca16992a49bcf11b8f0f2d0b61e"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix-check.log.gz",
+      "bytes": 782,
+      "sha256": "adc64747e9bb53e5f993aa4f22dfbe488a3ea879c43ac4ad6ff5b882b41e01d4"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/single-check.log.gz",
+      "bytes": 770,
+      "sha256": "7894a2e79936cdf1197e218a7c18f7aeda6bb3d94e6e7817d4c87287c3aba929"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/single-check-build.json.gz",
+      "bytes": 363,
+      "sha256": "f8c39e6838c80859eae7b93a7c861e55ff486ebdfc59b1de984566e380b316d5"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/polar-straddlers.cpp.gz",
+      "bytes": 1195,
+      "sha256": "5098dd0a9d4855bab9de6d018244056cef9cb23acdcbd04e0bf9b00cbb3778dd"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/polar-straddlers.log.gz",
+      "bytes": 631,
+      "sha256": "aa75b60f57668bfb2e8ca9fbcb816e5929fba59206e738d8cbcf60133e920a8f"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/build.log.gz",
+      "bytes": 558,
+      "sha256": "06423f7bdb9402868371be21bf8ef1db8f4004a2534d62bcf36ca3b871726ae8"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/focused-tests.log.gz",
+      "bytes": 562,
+      "sha256": "c5b4bf02db1122a6028bdd06b51025d87eb192594ac4dc460813777ce0954303"
+    }
+  ]
+}
