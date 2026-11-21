@@ -247,13 +247,36 @@ done
 }
 
 xdotool windowactivate --sync "$WINDOW_ID"
+INPUT_START_LINE="$(wc -l <"$TRANSCRIPT")"
+INITIAL_GENERATION="$(awk -F '[ =]' '/^tile-preview-published generation=/ {generation=$3} END {print generation}' "$TRANSCRIPT")"
+[[ "$INITIAL_GENERATION" =~ ^[0-9]+$ ]] || {
+    say "the native Vulkan viewer recorded no initial tile generation"
+    exit 1
+}
 xdotool keydown --window "$WINDOW_ID" w
 xdotool keyup --window "$WINDOW_ID" w
-xdotool mousemove --window "$WINDOW_ID" 120 120
-xdotool mousedown --window "$WINDOW_ID" 1
-xdotool mousemove --window "$WINDOW_ID" 180 160
-xdotool mouseup --window "$WINDOW_ID" 1
-xdotool click --window "$WINDOW_ID" 4
+# Older xdotool builds call XWarpPointer even for absolute motion. Send
+# motion and buttons explicitly through XTEST on the visible window.
+python3 scripts/viewer-x11-pointer.py "$WINDOW_ID"
+
+REPLACEMENT_READY=0
+REPLACEMENT_DEADLINE=$((SECONDS + 600))
+while ((SECONDS < REPLACEMENT_DEADLINE)); do
+    if awk -F '[ =]' -v start="$INPUT_START_LINE" -v initial="$INITIAL_GENERATION" '
+        NR > start && /^pointer-callback kind=scroll / {scroll=1}
+        NR > start && scroll && /^tile-preview-published generation=/ && $3 > initial {ready=1}
+        END {exit !ready}
+    ' "$TRANSCRIPT"; then
+        REPLACEMENT_READY=1
+        break
+    fi
+    kill -0 "$VIEWER_PID" 2>/dev/null || break
+    sleep 0.1
+done
+[[ "$REPLACEMENT_READY" -eq 1 ]] || {
+    say "the native Vulkan viewer published no replacement tile after input within 600 seconds"
+    exit 1
+}
 xdotool key --window "$WINDOW_ID" Escape
 
 if ! wait "$VIEWER_PID"; then
@@ -270,8 +293,9 @@ grep -q '^frame-published backend=Vulkan ' "$TRANSCRIPT" || {
     say "no progressive Vulkan frame was recorded"
     exit 1
 }
-grep -q '^keyboard-callback ' "$TRANSCRIPT" || { say "no keyboard callback was recorded"; exit 1; }
-grep -q '^pointer-callback kind=cursor ' "$TRANSCRIPT" || { say "no cursor callback was recorded"; exit 1; }
+grep -q '^keyboard-callback key=87 action=press' "$TRANSCRIPT" || { say "no W press callback was recorded"; exit 1; }
+grep -q '^keyboard-callback key=87 action=release' "$TRANSCRIPT" || { say "no W release callback was recorded"; exit 1; }
+grep -q '^pointer-callback kind=cursor .* dragging=true' "$TRANSCRIPT" || { say "no cursor drag callback was recorded"; exit 1; }
 grep -q '^pointer-callback kind=scroll ' "$TRANSCRIPT" || { say "no scroll callback was recorded"; exit 1; }
 tee -a "$LOG" <"$TRANSCRIPT"
 assert_source_identity
