@@ -4,6 +4,7 @@
 #include "sirius/core/kerr_detector/finite_phase.h"
 
 #include <functional>
+#include <span>
 #include <vector>
 
 namespace sirius::core::relativity::finite_tail_detail {
@@ -294,7 +295,8 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
     const PolarIntegralTable& polar, const RegularizedRadialPhase& prior,
     const AngularCatalogue& catalogue, const std::array<unsigned, 3>& cutoffs, Range turn_amplitude,
     double clearance, std::size_t& remaining, const std::function<bool()>& cancelled,
-    const NearCriticalPhases* shared_phases) {
+    const NearCriticalPhases* shared_phases,
+    std::span<const AngularCatalogue::Entry* const> excluded_turns = {}) {
     const Range fixed_phi = FixedPupilAzimuth(mass, spin, chart);
     const Range amplitude = sqrt(polar.shape.amplitude2);
     if (!fixed_phi.Finite() ||
@@ -357,7 +359,7 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
             };
             const Range gap = turn_amplitude - row.latitude;
             const unsigned group = LatitudeBand(gap.lo);
-            if (row.latitude.hi <= reach && group == LatitudeBand(gap.hi)) {
+            if (gap.lo > 0.0 && row.latitude.hi <= reach && group == LatitudeBand(gap.hi)) {
                 if (!prepare({}, row.latitude, group)) return {};
                 continue;
             }
@@ -370,7 +372,13 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                 if (remaining == 0 || (cancelled && cancelled())) return {};
                 --remaining;
                 if (entry.latitude.lo > reach) continue;
-                const unsigned index = LatitudeBand((turn_amplitude - entry.latitude).lo);
+                const Range star_gap = turn_amplitude - entry.latitude;
+                if (!(star_gap.lo > 0.0)) {
+                    if (std::ranges::find(excluded_turns, &entry) == excluded_turns.end())
+                        return {};
+                    continue;
+                }
+                const unsigned index = LatitudeBand(star_gap.lo);
                 auto& subset = by_band[index];
                 auto& bounds = latitude[index];
                 bounds = subset.empty() ? entry.latitude

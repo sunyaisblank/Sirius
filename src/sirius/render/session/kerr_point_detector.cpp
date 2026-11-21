@@ -16,9 +16,10 @@ struct SourceBand {
     double clearance = kInfinity;
 };
 
+template <typename ExcludeTurn>
 std::optional<std::array<SourceBand, 3>> CollectReachableSources(
     const AngularCatalogue& catalogue, Range amplitude, std::size_t& remaining,
-    const std::function<bool()>& cancelled) {
+    const std::function<bool()>& cancelled, const ExcludeTurn& exclude_turn) {
     std::array<SourceBand, 3> result{};
     const auto add = [&](unsigned group, Range weight, double clearance) {
         auto& band = result[group];
@@ -34,19 +35,72 @@ std::optional<std::array<SourceBand, 3>> CollectReachableSources(
                 add(LatitudeBand(gap.lo), row.weighted_temperature, gap.lo);
                 continue;
             }
-            // Only rows touching a band edge or a polar turn require individual
-            // visits. A source which may touch a turn needs a different proof.
+            // Only rows touching a band edge or a polar turn require individual visits.
             for (const auto& entry : row.entries) {
                 if (remaining == 0) return {};
                 --remaining;
                 if (entry.latitude.lo > amplitude.hi) continue;
                 const Range star_gap = amplitude - entry.latitude;
-                if (!(star_gap.lo > 0.0)) return {};
+                if (!(star_gap.lo > 0.0)) {
+                    if (!exclude_turn(entry, north)) return {};
+                    continue;
+                }
                 add(LatitudeBand(star_gap.lo), entry.weighted_temperature, star_gap.lo);
             }
         }
     }
     return result;
+}
+
+struct FiniteTurnScreen {
+    FiniteRadialPhase radial;
+    Range radial_time, fixed_azimuth;
+    PhasePair half, initial;
+};
+
+std::optional<FiniteTurnScreen> PrepareFiniteTurnScreen(double mass, double spin, Range radius,
+                                                        Range scale, const StationaryChart& chart,
+                                                        const FinitePolarShape& shape,
+                                                        Range amplitude) {
+    const auto radial = EvaluateFiniteRadialPhase(mass, spin, radius, scale, chart.inverse_start);
+    if (!radial) return {};
+    const Range time = Range(-2.0) * radial->leading * LogBounds(scale) + radial->time_residual;
+    const Range azimuth = FixedPupilAzimuth(mass, spin, chart);
+    const auto half = IntegratePolarPartial(shape, kPiBounds * Range(.5));
+    const auto initial = IntegratePolarPartial(shape, AsinBounds(chart.initial_mu / amplitude));
+    if (!time.Finite() || !azimuth.Finite() || !std::ranges::all_of(half, &Range::Finite) ||
+        !std::ranges::all_of(initial, &Range::Finite))
+        return {};
+    return FiniteTurnScreen{*radial, time, azimuth, half, initial};
+}
+
+bool ExcludeFinitePolarTurn(const FiniteTurnScreen& screen, const FinitePolarShape& shape,
+                            Range amplitude, const AngularCatalogue::Entry& source, bool north,
+                            unsigned cutoff, std::size_t& remaining,
+                            const std::function<bool()>& cancelled) {
+    // The latitude restricts the endpoint on either side of the polar turn.
+    // Reflection about pi/2 covers both legs without differentiating asin.
+    const Range ratio = Range(source.latitude.lo) / Range(amplitude.hi);
+    const Range lower_angle = AsinBounds(Range(ratio.lo));
+    if (!lower_angle.Finite()) return false;
+    const auto lower = IntegratePolarPartial(shape, Range(lower_angle.lo));
+    const PhasePair endpoint{
+        Range(lower[0].lo, (Range(2.0) * screen.half[0] - lower[0]).hi),
+        Range(lower[1].lo, (Range(2.0) * screen.half[1] - lower[1]).hi),
+    };
+    if (!std::ranges::all_of(endpoint, &Range::Finite)) return false;
+    for (unsigned m = north ? 1U : 0U; m < cutoff; m += 2) {
+        if (remaining == 0 || (cancelled && cancelled())) return false;
+        --remaining;
+        const Range time = Range(2.0 * m) * screen.half[0] + screen.initial[0] + endpoint[0];
+        if (!time.Finite()) return false;
+        if (time.hi < screen.radial_time.lo || time.lo > screen.radial_time.hi) continue;
+        const Range angle = Range(2.0 * m) * screen.half[1] + screen.initial[1] + endpoint[1];
+        const Range longitude = screen.fixed_azimuth - (angle + screen.radial.drag_at_turn * time +
+                                                        screen.radial.spin_residual);
+        if (!longitude.Finite() || AzimuthMayMatch(longitude, source.azimuth)) return false;
+    }
+    return true;
 }
 
 std::optional<StationaryChart> EvaluateFilmChart(const core::CameraConfig& camera,
@@ -366,9 +420,39 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const auto shape = MakeFinitePolarShape(mass, spin, radius, scale);
     if (!phase || !shape) return {};
     const Range amplitude = sqrt(shape->amplitude2);
+
+    // Each complete polar half-libration consumes at least the lower
+    // period bound, even when a source can lie on a turning latitude.
+    constexpr unsigned first_tail_winding = 8;
+    Range finite_scale;
+    std::optional<unsigned> finite_cutoff;
+    if (maximum_potential < 0.0) {
+        finite_scale = Range(sqrt(Range(-maximum_potential)).lo, scale.hi);
+        const Range maximum_time = Range(-2.0) * phase->leading_factor * LogPoint(finite_scale.lo) +
+                                   phase->time_remainder.value;
+        const Range half_period =
+            kPiBounds / sqrt(shape->omega2 + shape->modulation * Range(0.0, 1.0));
+        const double maximum_winding = (maximum_time / half_period).hi;
+        if (maximum_winding >= 0.0 && maximum_winding < first_tail_winding)
+            finite_cutoff = static_cast<unsigned>(maximum_winding) + 1;
+    }
     const auto* angular = catalogue.Get(cancelled);
     if (!angular) return {};
-    const auto bands = CollectReachableSources(*angular, amplitude, remaining, cancelled);
+    std::optional<FiniteTurnScreen> turn_screen;
+    std::vector<const AngularCatalogue::Entry*> excluded_turns;
+    const auto exclude_turn = [&](const AngularCatalogue::Entry& source, bool north) {
+        if (!finite_cutoff) return false;
+        if (!turn_screen)
+            turn_screen = PrepareFiniteTurnScreen(mass, spin, radius, finite_scale, *whole, *shape,
+                                                  amplitude);
+        if (!turn_screen || !ExcludeFinitePolarTurn(*turn_screen, *shape, amplitude, source, north,
+                                                    *finite_cutoff, remaining, cancelled))
+            return false;
+        excluded_turns.push_back(&source);
+        return true;
+    };
+    const auto bands =
+        CollectReachableSources(*angular, amplitude, remaining, cancelled, exclude_turn);
     if (!bands) return {};
     double clearance = kInfinity;
     for (const auto& band : *bands) clearance = std::min(clearance, band.clearance);
@@ -379,20 +463,6 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
                                        Range(maximum_gaussian), brightness);
     if (!latitude || !colour) return {};
 
-    // A group lying strictly on the escaping side has a finite maximum
-    // radial time. Each complete polar half-libration consumes at least
-    // the lower period bound, even at a source on the edge of a cell.
-    constexpr unsigned first_tail_winding = 8;
-    std::optional<unsigned> finite_cutoff;
-    if (maximum_potential < 0.0) {
-        const Range minimum_scale = sqrt(Range(-maximum_potential));
-        const Range maximum_time =
-            Range(-2.0) * phase->leading_factor * LogPoint(minimum_scale.lo) +
-            phase->time_remainder.value;
-        const double maximum_winding = (maximum_time / latitude->half_period).hi;
-        if (maximum_winding >= 0.0 && maximum_winding < first_tail_winding)
-            finite_cutoff = static_cast<unsigned>(maximum_winding) + 1;
-    }
     Range upper_bound;
     std::array<unsigned, 3> cutoffs{};
     for (std::size_t i = 0; i < bands->size(); ++i) {
@@ -419,7 +489,8 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const auto phases = PrepareNearCriticalPhases(mass, spin, radius, scale, *whole);
     const auto screen = ScreenFiniteWindings(mass, spin, radius, scale, *whole, *polar, *phase,
                                              *angular, cutoffs, amplitude, clearance, remaining,
-                                             cancelled, phases ? &*phases : nullptr);
+                                             cancelled, phases ? &*phases : nullptr,
+                                             excluded_turns);
     if (!screen) return {};
     for (const auto& candidate : screen->candidates) {
         const auto density =
