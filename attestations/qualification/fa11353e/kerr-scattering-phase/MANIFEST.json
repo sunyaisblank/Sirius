@@ -1,0 +1,130 @@
+{
+  "recorded_at": "2026-11-21T05:28:09.654173+00:00",
+  "parent_render_source": "fa11353e2d2ad471af48f1b2ecefc5052eb35cab",
+  "reused_preset_build": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+  "scope": "Executable interval prototype on the CPU fixed-pupil replay of the original Radeon failure. No production renderer change or render qualification.",
+  "input_geometry": "Original footprint 544, depth-16 cell, 1080p, first pupil in the recorded four-sample sequence, binary64 launch and camera constants.",
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-minimum/MANIFEST.json",
+      "bytes": 6540,
+      "sha256": "5fdd3d149fe6780c056870d5b5196fdd2566edbd09c7daf87a4ceab92547bf29"
+    },
+    {
+      "path": "attestations/qualification/3f5ce75c/correlated-kerr-shadow/boundary-replay.log.gz",
+      "bytes": 162,
+      "sha256": "d8919a8ce83c631d065f0d427cdfd23a125f4b9088619c9ffb52a5063d964b06"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  ],
+  "build": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-scattering-phase/src",
+      "-Isrc",
+      "out/kerr-scattering-phase/phase-cell.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-scattering-phase/phase-cell"
+    ],
+    "compiler": "14.2.0",
+    "overlay": "Use headers changed between reused preset revision and parent render source, then apply kerr-launch-invariants.patch. The compressed C++ files belong next to the overlay.",
+    "prototype_executable_removed_after_check": {
+      "path": "out/kerr-scattering-phase/phase-cell",
+      "bytes": 250864,
+      "sha256": "3244e659012fd113abfc8076d1f3187c326c5b1131b4701084ee9e7e73809547"
+    }
+  },
+  "method": "Bracket both roots around the stationary minimum with correlated outward intervals. Factor H=(u_turn-u)(u_inner-u)G; treat the phase weight analytically. Use the separated angular potential to bound the equator count and terminal latitude.",
+  "results": {
+    "original_whole_cell_classified": false,
+    "boxes_tested": 16,
+    "boxes_with_radial_phase_bound": 16,
+    "boxes_with_uniform_crossing_count_and_catalogue_bound": 14,
+    "certified_count_in_these_boxes": 7,
+    "possible_catalogue_overlap_per_certified_box": [
+      9003,
+      17268
+    ],
+    "catalogue_size": 100000,
+    "latitude_basis": "Normalized generated catalogue Z in the nonrotated asymptotic frame.",
+    "independent_point_references": [
+      {
+        "turn": "0.547204728163503628554242381497902805482675902833853242673928803",
+        "inner": "0.547494512976928397126494864065346092148428058292935542677070699",
+        "mino": "7.899135899849876310430520419627594559201436039823994793958826911",
+        "half": "1.0751801190713615",
+        "first": "0.07650518128985458",
+        "source_mu": "0.607186802083412",
+        "polar_crossings": 8,
+        "radial_refinement_gap": "1.91094608849525794848174376984864222122487032680357E-13",
+        "absolute_agreement_with_existing_tracer_source_z": 1.269831839678659e-08
+      },
+      {
+        "turn": "0.547055049327613830117764824412138212563409982515679529791784012",
+        "inner": "0.547643892753785248451715150010950477976509874240209835344704509",
+        "mino": "7.289739282672195762685467302433032627622991771009274636456423464",
+        "half": "1.0751795907706274",
+        "first": "0.07650512288889459",
+        "source_mu": "-0.6318963741303947",
+        "polar_crossings": 7,
+        "radial_refinement_gap": "1.90704535595041187348237939967226471728414336885563E-13",
+        "absolute_agreement_with_existing_tracer_source_z": 5.604091524169519e-09
+      }
+    ]
+  },
+  "remaining": "Absolute and relative RGB bound for the mixed cell still needs azimuth and a Jacobian or caustic enclosure against the actual catalogue, including the high-order tail.",
+  "references": [
+    "https://arxiv.org/html/1910.12881",
+    "https://arxiv.org/html/1910.12873"
+  ],
+  "artifacts": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/kerr-launch-invariants.patch.gz",
+      "bytes": 474,
+      "sha256": "fbaeff091325d3d8828b34c8c5b99fdf596f2565a4153aa6d88ffdf65ede3ecf"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/scattering-phase.h.gz",
+      "bytes": 2916,
+      "sha256": "f2865811b068f060fb67a677ad4941a4e51001f9307c32cd8e5d5a461d49c66b"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/phase-cell.cpp.gz",
+      "bytes": 2193,
+      "sha256": "596a047ccbc9a658677b863b4a836b737d303bc38d7d08c4b19d382c7c55eb3c"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/reference.py.gz",
+      "bytes": 2189,
+      "sha256": "a1c4486564efd780598a3ebb39c1cbff77cf168522367a23725f8327341d6f19"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/phase.log.gz",
+      "bytes": 2859,
+      "sha256": "52713043a7a73056e44eb7fb5da7eec745da3efab32a2e2bcf219532da2c52ac"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/reference.log.gz",
+      "bytes": 471,
+      "sha256": "08622efaca8be576545db937d5da540be66fdec041b46ba77eb6b150ea0adb11"
+    }
+  ]
+}
