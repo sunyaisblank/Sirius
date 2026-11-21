@@ -1,0 +1,241 @@
+{
+  "schema": "sirius-packaged-live-relocation-v1",
+  "source_revision": "b4f9c01a96e4ae0f6c3238dcf4261e13226f71dd",
+  "recorded_utc": "2026-11-21T08:00:39.379078+00:00",
+  "scope": "Linux x86-64 WSL2, normal linux-ci qualification preset with the accepted sealed Vulkan bundle. Live inventory and focused Vulkan rendering through a relocated install-shaped share/sirius resource volume. No generated Mandatory receipt in the layout. The install gate, release CLI rendering, native viewer input and full cold Kerr gate remain separate.",
+  "build": {
+    "build_commands": [
+      [
+        "cmake",
+        "--preset",
+        "linux-ci",
+        "-DSIRIUS_SOFTWARE_VULKAN_BUNDLE=/home/astra/.project/Sirius/attestations/qualification/c096156f/accepted-packaged-software-inputs"
+      ],
+      [
+        "cmake",
+        "--build",
+        "--preset",
+        "linux-ci",
+        "--target",
+        "sirius",
+        "sirius_app_tests",
+        "sirius_backend_tests",
+        "-j",
+        "5"
+      ],
+      [
+        "cmake",
+        "--build",
+        "--preset",
+        "linux-ci",
+        "--target",
+        "sirius_render_tests",
+        "-j",
+        "5"
+      ]
+    ],
+    "compiler": "g++-14 (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0",
+    "inputs_manifest": {
+      "path": "attestations/qualification/c096156f/accepted-packaged-software-inputs/MANIFEST.json",
+      "bytes": 1679,
+      "sha256": "dc750f87cc2cc2ff06de0373898bd65fdde286e159028e08fea658a65c5da3c7"
+    },
+    "mandatory_consumer_precheck": {
+      "consumer_check": "passed",
+      "generated_test_inputs": 20,
+      "tested_consumers": {
+        "sirius": {
+          "root": "build",
+          "path": "src/sirius/app/sirius",
+          "bytes": 10253800,
+          "sha256": "4f416f974059dea6ba9255f26f83a4fce3123faee498ef1db8c27f23e841c264"
+        },
+        "sirius_app_tests": {
+          "root": "build",
+          "path": "src/sirius/app/sirius_app_tests",
+          "bytes": 11802168,
+          "sha256": "65309aff3d976655c07ea5eabcfbefc53f2342935637bb18b1fbc04a324cf246"
+        },
+        "sirius_backend_tests": {
+          "root": "build",
+          "path": "tests/backend/sirius_backend_tests",
+          "bytes": 13832496,
+          "sha256": "c8d983eed8e5b83111eb9fd4360ddd902cd6c668b577e41000acb7aea11da56f"
+        },
+        "sirius_render_tests": {
+          "root": "build",
+          "path": "src/sirius/app/sirius_render_tests",
+          "bytes": 12800216,
+          "sha256": "48a7c4c6406e5e1270893f6010222e46d8cc5e99155d851014ba79d0e8ecb922"
+        }
+      },
+      "driver": {
+        "root": "build",
+        "path": "src/sirius/app/resources/providers/linux-x86_64/libvulkan_lvp.so",
+        "bytes": 49450264,
+        "sha256": "19d58dbf2227ac60c7adb0f2d7d9fc16369c84425a2522af651b78db3808f6f3"
+      }
+    }
+  },
+  "relocation": {
+    "method": "Hardlink each named product file in the existing preset to the bin and share/sirius directory layout of an independent path containing a space. No bin/resources directory. The output and scratch are discarded after digesting.",
+    "resource_records": [
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/assets/Starfield.png",
+        "bytes": 29984397,
+        "sha256": "a87d68cb9e9e5ac2be1b7f1d5bdee2a8eabf07639d567643575102f202a1702c"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/kernels/trace.spv",
+        "bytes": 2552860,
+        "sha256": "59b436c02e48138599e250b3f0af165ddc0073848c121b7255a14b347eb3d38e"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/kernels/trace_fp32comp.spv",
+        "bytes": 2556184,
+        "sha256": "815aaa86047a6147a72700960863c88602eb9d2b44d903f97ee16f180bf00e58"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/kernels/trace_fp64.spv",
+        "bytes": 2579356,
+        "sha256": "59f90da886d2c578c356a4f17052205885e314c087aa352fa8bf78b3a7678210"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/model/alignment_receipt.json",
+        "bytes": 1240,
+        "sha256": "e17337baef04d8c2cb009a3caa7295c2cbabb7954404c67e33bb4139d6bbd8ea"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/model/operating_model.json",
+        "bytes": 130827,
+        "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/providers/linux-x86_64/libvulkan_lvp.so",
+        "bytes": 49450264,
+        "sha256": "19d58dbf2227ac60c7adb0f2d7d9fc16369c84425a2522af651b78db3808f6f3"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/shaders/RDSD003A.frag",
+        "bytes": 1167,
+        "sha256": "d3ba83e9c11bc2be8c5e4ff9a26e1ddffb39002d019b1daba94fbeeea5bf040c"
+      },
+      {
+        "path": "out/release-package-current/relocated package/share/sirius/shaders/RDSD003A.vert",
+        "bytes": 198,
+        "sha256": "b650ce0806b9446f617bee0fd99abdcdb4f01b05066c5da681356c3f8518e1de"
+      }
+    ],
+    "render_test": {
+      "path": "out/release-package-current/relocated package/bin/sirius_render_tests",
+      "bytes": 12800216,
+      "sha256": "48a7c4c6406e5e1270893f6010222e46d8cc5e99155d851014ba79d0e8ecb922"
+    },
+    "exclusive_provider": {
+      "driver": {
+        "bytes": 49450264,
+        "path": "/home/astra/.project/Sirius/out/release-package-current/relocated package/share/sirius/providers/linux-x86_64/libvulkan_lvp.so",
+        "sha256": "19d58dbf2227ac60c7adb0f2d7d9fc16369c84425a2522af651b78db3808f6f3"
+      },
+      "llvm": {
+        "bytes": 138493144,
+        "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+        "sha256": "fd419f2d3eddfbdece987a7757da8f66794ab933dde48fa685c2ad1c9478225e"
+      }
+    }
+  },
+  "execution": {
+    "unset": [
+      "VK_ICD_FILENAMES",
+      "VK_ADD_DRIVER_FILES",
+      "VK_LOADER_DRIVERS_SELECT",
+      "VK_LOADER_DRIVERS_DISABLE"
+    ],
+    "environment": {
+      "VK_DRIVER_FILES": "/sirius/missing-icd.json",
+      "SIRIUS_PACKAGED_SOFTWARE_VULKAN": "1",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "SIRIUS_MEMORY_BUDGET_MB": "2048",
+      "MESA_SHADER_CACHE_DISABLE": "true"
+    },
+    "render_scoped_environment": {
+      "MESA_SHADER_CACHE_DIR": "out/release-package-current/no-cache",
+      "XDG_CACHE_HOME": "out/release-package-current/xdg-cache",
+      "TMPDIR": "out/release-package-current"
+    },
+    "gtest_executable": "out/release-package-current/relocated package/bin/sirius_render_tests",
+    "test_filter": "VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget:VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance",
+    "wall_seconds": 92.86,
+    "max_rss_kib": 1513648,
+    "tests": {
+      "VulkanRenderSession.RetainedMovingThinLensKerrDetectorMatchesCpuLinearRadiance": {
+        "seconds": 20.937,
+        "properties": {
+          "relative_linear_radiance_error": "0"
+        }
+      },
+      "VulkanRenderSession.ContinuationRendererPublishesOnlyCompleteFramesWithinActualBudget": {
+        "seconds": 71.678,
+        "properties": {
+          "physical_submissions": "4098",
+          "advance_submissions": "0",
+          "maximum_submit_ms": "4.252224",
+          "explicit_allocation_bytes": "15225372",
+          "reusable_preview_identity": "1",
+          "repeated_initialization_seconds": "0.007381297999999997",
+          "cancelled_completed_tiles": "1",
+          "resumed_pipeline_created": "0"
+        }
+      }
+    },
+    "discarded_exr_records": [
+      {
+        "path": "out/release-package-current/sirius_cpu_moving_kerr.exr",
+        "bytes": 924,
+        "sha256": "6f2d397e8cd8cb10f914020cb3c0ba84b65fb0b21caff4bf1be1ad4726832a5d"
+      },
+      {
+        "path": "out/release-package-current/sirius_retained_moving_kerr.exr",
+        "bytes": 924,
+        "sha256": "6f2d397e8cd8cb10f914020cb3c0ba84b65fb0b21caff4bf1be1ad4726832a5d"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/configure.log.gz",
+      "bytes": 596,
+      "sha256": "c07b07ca6882c810516de321d61b271d81eab3b83a892dfd56c1e88ee3215a9c"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/build.log.gz",
+      "bytes": 1339,
+      "sha256": "b7c074160e3b2b9c2e0236a4a0ec7b4ed3a6a3b0f76d955ac830acd5a08536ea"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/render-build.log.gz",
+      "bytes": 974,
+      "sha256": "66c1d2554be06940e8e31a91cfd9e6eb1ca70065478eb232a302d0056dbe5a56"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/input-verifier.json.gz",
+      "bytes": 503,
+      "sha256": "b3528689d6420dbc954a4d193e601120c9104dd96ba4380c6da9dbe8a3c669be"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/relocated-runtime.json.gz",
+      "bytes": 3431,
+      "sha256": "910dfcf5500b40f344e0d1f284a8401215f8a70784b9fa8c181d10ef7fa1d2a1"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/relocated-render.log.gz",
+      "bytes": 5598,
+      "sha256": "56544b1bcb998c55ad02807c5cb01bc60df11c8f44ecf15cb18fd14d1f2d37e9"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/packaged-live-relocation/relocated-render.xml.gz",
+      "bytes": 613,
+      "sha256": "7ba62b36fea58053bd0f82c2aa4941f0b3aaabe0a9516c40d7d325792192ac97"
+    }
+  ]
+}

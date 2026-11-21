@@ -1,0 +1,150 @@
+{
+  "schema": "sirius-kerr-tail-stationary-longitude-v1",
+  "source_revision": "b4f9c01a96e4ae0f6c3238dcf4261e13226f71dd",
+  "recorded_utc": "2026-11-21T08:00:39.379078+00:00",
+  "scope": "Canonical block (928,608), footprint 704, cell 396, sample zero and the one turning catalogue star in the original moving-ThinLens Kerr 1080p scene. The real Radeon 780M through Mesa Dozen prepared the exact pupil. CPU outward interval arithmetic certifies the continuous longitude along the latitude/time branch.",
+  "base_inputs": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/MANIFEST.json",
+      "bytes": 10959,
+      "sha256": "466ee172b8457bb38a78fc62f00aa0bb18854fde9ce89434d4c058591c262ac6"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/signed_polar.h.gz",
+      "bytes": 2291,
+      "sha256": "550c4694ba46cf2544f078afbb5b749883246d751794e70ce7b86253ce164d96"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/signed_check.cpp.gz",
+      "bytes": 2493,
+      "sha256": "fc0c0b218d02ae22d47347a9a5e00d2abe7d8c4573eaa72a2bdbc9de6f089a25"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/turn_certificate.h.gz",
+      "bytes": 926,
+      "sha256": "e2661afc8abcd2c48c6c605aaae47780856b9849c80057da5efebbe29bdcf7b8"
+    }
+  ],
+  "diagnostic": {
+    "winding": 2049,
+    "signed_phase_interval": [
+      "0x0p+0",
+      "0x1p-11"
+    ],
+    "log_separation_interval": [
+      "-0x1.44403e522548fp+11",
+      "-0x1.44403a4ce107ep+11"
+    ],
+    "whole_branch_film_radius_squared_upper": "0x1.ff8a756163debp+3",
+    "longitude_slope_at_phase_zero": [
+      "-0x1.56eae3c41f99p+2",
+      "-0x1.56e9655c63c0ap+2"
+    ],
+    "longitude_slope_at_phase_upper": [
+      "0x1.28bce10c041eap+0",
+      "0x1.60455008e43c4p+2"
+    ],
+    "star_longitude_matches_branch": false,
+    "deduction": "The interval contraction proves an interior latitude/time solution for each phase. Its nonsingular Jacobian provides a continuous differentiable branch. The slope changes sign, so the sky determinant vanishes somewhere inside the Gaussian at this winding. The branch longitude enclosure excludes this star at this winding across the tested phase interval.",
+    "large_depth": "Keep actual log(s) in the time equation and bound s between zero and the outward upper exponential at -700. This encloses the positive mathematical scale without evaluating exp near -2594.",
+    "wall_seconds": 2.23,
+    "max_rss_kib": 278444
+  },
+  "replay": {
+    "preparation": "Decompress the three input source files into out/kerr-tail-fold and apply the diagnostic patch with patch -p1 from that directory. Point the scratch resources link at bin/linux-ci/tests/backend/resources.",
+    "build_from_checkout": [
+      "g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-Isrc",
+      "-Ibin/linux-ci/src/sirius/backend/retained",
+      "out/kerr-tail-fold/signed_check.cpp",
+      "bin/linux-ci/src/sirius/render/libsirius_render.a",
+      "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+      "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-lrt",
+      "-pthread",
+      "-o",
+      "out/kerr-tail-fold/fold"
+    ],
+    "linked_libraries": [
+      {
+        "path": "bin/linux-ci/src/sirius/render/libsirius_render.a",
+        "bytes": 4546632,
+        "sha256": "d5ca236bf53377ed8c26444a559dea24d59d3a21ff573e3f93708e2504802ab5"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+        "bytes": 826594,
+        "sha256": "19838541b7a27139d42d89b7225b427f3b828d0a31c478b101a26c663b01539d"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+        "bytes": 7379864,
+        "sha256": "c386cc09cecfd1f360d7a5509c1c37d96ebd2b9cdf8585550325a80297e61bc8"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+        "bytes": 478012,
+        "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+        "bytes": 35862,
+        "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+      }
+    ],
+    "driver_inputs": [
+      {
+        "path": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+        "bytes": 198,
+        "sha256": "fde51461538211ae38c973644f99f6c6adb4e9d8fcfe16ed172533c9aa9ef392"
+      },
+      {
+        "path": "/home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+        "bytes": 11328704,
+        "sha256": "72de4021c66f994f59a733e643f775c3dd416b566c88b8aedec7efa38c26e071"
+      }
+    ],
+    "environment": {
+      "VK_DRIVER_FILES": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "SIRIUS_MEMORY_BUDGET_MB": "2048",
+      "MESA_SHADER_CACHE_DISABLE": "true",
+      "XDG_CACHE_HOME": "out/kerr-tail-fold/xdg-cache",
+      "TMPDIR": "out/kerr-tail-fold"
+    },
+    "unset": [
+      "SIRIUS_PACKAGED_SOFTWARE_VULKAN"
+    ],
+    "command_from_scratch": [
+      "/usr/bin/time",
+      "-v",
+      "./fold"
+    ]
+  },
+  "remaining": "Turn-region flux bounds must condition on the source longitude's distance from the changing caustic, or use a different proof of weighted image transfer. The observed sign change rules out globally nonzero fixed-latitude slopes on this region. The demonstrated longitude exclusion covers one high winding, not the full tail. No production change or full hardware render.",
+  "files": [
+    {
+      "path": "attestations/qualification/b4f9c01a/kerr-tail-stationary-longitude/signed-tail.patch.gz",
+      "bytes": 1296,
+      "sha256": "452d0a8a4402c0acd42ce2b8271bf6ab67ee05f9b07daf452d3e5c631a09d5f8"
+    },
+    {
+      "path": "attestations/qualification/b4f9c01a/kerr-tail-stationary-longitude/fold.log.gz",
+      "bytes": 941,
+      "sha256": "4cf10ac66b075de6f4e5b7ba938caf698f7114c91133ae4c134b5b357fc8b26c"
+    }
+  ]
+}
