@@ -2,12 +2,8 @@
 #include "support/point_source_band_reference.h"
 #include "support/scoped_environment.h"
 #include "support/separated_geodesic_reference.h"
-// End-to-end CPU render-session probe (session-level gate).
-//
-// Drives RenderSession CPU-only at 64x64, 4 spp, Kerr a=0.9, writing a PNG and
-// an EXR to a temp directory. Asserts: the session reaches Complete, both files
-// exist, the PNG decodes (stb) and the EXR loads (tinyexr), and each decoded
-// image is finite and non-constant.
+// End-to-end CPU render-session checks, including a full Kerr EXR and
+// small moving-Kerr frames through the PNG and PPM output paths.
 
 #include "sirius/core/camera_sampling.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
@@ -25,6 +21,7 @@
 #include <stb_image.h>
 #include <tinyexr.h>
 
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <cmath>
@@ -35,6 +32,7 @@
 #include <future>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <numbers>
 #include <optional>
 #include <sstream>
@@ -63,18 +61,22 @@ SessionConfig ProbeConfig(const std::string& output_path) {
     return cfg;
 }
 
-// Run one CPU render to output_path; returns the terminal session state.
-SessionState RenderTo(const std::string& output_path) {
-    auto config = ProbeConfig(output_path);
-    // Writer coverage uses the complete physical frame. Independent tiles can
-    // use the normal worker pool; serial/parallel equality has its own probe.
-    config.tile_size = 8;
-    config.enable_parallel_rendering = true;
+SessionState RenderTo(SessionConfig config, const std::string& output_path) {
+    config.output_path = output_path;
+    config.write_output = true;
     RenderSession session;
     if (!session.Configure(config)) {
         return SessionState::Failed;
     }
     return session.Execute();
+}
+
+template <typename Sample>
+bool HasSpatialRgbVariation(const Sample* pixels, int width, int height, int channels) {
+    for (int pixel = 1; pixel < width * height; ++pixel) {
+        if (!std::equal(pixels, pixels + 3, pixels + pixel * channels)) return true;
+    }
+    return false;
 }
 
 }  // namespace
@@ -352,48 +354,41 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPngAndExr) {
     const std::string png_path = (dir / "probe_kerr.png").string();
     const std::string exr_path = (dir / "probe_kerr.exr").string();
 
-    // --- PNG render ---------------------------------------------------------
-    ASSERT_EQ(RenderTo(png_path), SessionState::Complete) << "PNG render did not complete";
+    const auto writer_scene = DiskCompositionConfig(.7);
+    ASSERT_EQ(RenderTo(writer_scene, png_path), SessionState::Complete)
+        << "PNG render did not complete";
     ASSERT_TRUE(fs::exists(png_path)) << "PNG file was not written";
 
     int pw = 0, ph = 0, pc = 0;
-    unsigned char* png = stbi_load(png_path.c_str(), &pw, &ph, &pc, 3);
+    const std::unique_ptr<stbi_uc, decltype(&stbi_image_free)> png(
+        stbi_load(png_path.c_str(), &pw, &ph, &pc, 3), stbi_image_free);
     ASSERT_NE(png, nullptr) << "PNG failed to decode: " << stbi_failure_reason();
-    EXPECT_EQ(pw, 64);
-    EXPECT_EQ(ph, 64);
+    ASSERT_EQ(pw, writer_scene.width);
+    ASSERT_EQ(ph, writer_scene.height);
+    EXPECT_TRUE(HasSpatialRgbVariation(png.get(), pw, ph, 3)) << "PNG pixels are uniform";
 
-    // PNG (8-bit) is always finite; require it to be non-constant.
-    bool png_varies = false;
-    for (int i = 3; i < pw * ph * 3 && !png_varies; ++i) {
-        if (png[i] != png[0]) png_varies = true;
-    }
-    EXPECT_TRUE(png_varies) << "PNG image is constant (nothing rendered)";
-    stbi_image_free(png);
-
-    // --- EXR render ---------------------------------------------------------
-    ASSERT_EQ(RenderTo(exr_path), SessionState::Complete) << "EXR render did not complete";
+    auto full_scene = ProbeConfig(exr_path);
+    full_scene.tile_size = 8;
+    full_scene.enable_parallel_rendering = true;
+    ASSERT_EQ(RenderTo(full_scene, exr_path), SessionState::Complete)
+        << "EXR render did not complete";
     ASSERT_TRUE(fs::exists(exr_path)) << "EXR file was not written";
 
-    float* exr = nullptr;
+    float* decoded = nullptr;
     int ew = 0, eh = 0;
     const char* err = nullptr;
-    int ret = LoadEXR(&exr, &ew, &eh, exr_path.c_str(), &err);
-    ASSERT_EQ(ret, TINYEXR_SUCCESS) << (err ? err : "unknown tinyexr error");
-    EXPECT_EQ(ew, 64);
-    EXPECT_EQ(eh, 64);
-
-    // EXR carries linear HDR floats; require every sample finite and the frame
-    // non-constant.
-    bool exr_finite = true;
-    bool exr_varies = false;
-    const float first = exr[0];
-    for (int i = 0; i < ew * eh * 4; ++i) {
-        if (!std::isfinite(exr[i])) exr_finite = false;
-        if ((i % 4) != 3 && exr[i] != first) exr_varies = true;  // Ignore the alpha channel.
-    }
-    EXPECT_TRUE(exr_finite) << "EXR contains non-finite samples";
-    EXPECT_TRUE(exr_varies) << "EXR image is constant (nothing rendered)";
-    std::free(exr);
+    const int ret = LoadEXR(&decoded, &ew, &eh, exr_path.c_str(), &err);
+    const std::unique_ptr<const char, decltype(&FreeEXRErrorMessage)> error(err,
+                                                                            FreeEXRErrorMessage);
+    const std::unique_ptr<float, decltype(&std::free)> exr(decoded, std::free);
+    ASSERT_EQ(ret, TINYEXR_SUCCESS) << (error ? error.get() : "unknown tinyexr error");
+    ASSERT_NE(exr, nullptr);
+    ASSERT_EQ(ew, full_scene.width);
+    ASSERT_EQ(eh, full_scene.height);
+    EXPECT_TRUE(std::all_of(exr.get(), exr.get() + ew * eh * 4, [](float value) {
+        return std::isfinite(value);
+    })) << "EXR contains non-finite samples";
+    EXPECT_TRUE(HasSpatialRgbVariation(exr.get(), ew, eh, 4)) << "EXR pixels are uniform";
 }
 
 TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
@@ -401,7 +396,9 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
     const ScopedTemporaryDirectory temporary_directory("sirius-ppm-probe");
     const fs::path output = temporary_directory.path() / "probe_kerr.ppm";
 
-    ASSERT_EQ(RenderTo(output.string()), SessionState::Complete) << "PPM render did not complete";
+    const auto writer_scene = DiskCompositionConfig(.7);
+    ASSERT_EQ(RenderTo(writer_scene, output.string()), SessionState::Complete)
+        << "PPM render did not complete";
     std::ifstream file(output, std::ios::binary);
     ASSERT_TRUE(file) << "PPM file was not written";
     std::string magic;
@@ -410,8 +407,8 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
     int maximum = 0;
     ASSERT_TRUE(file >> magic >> width >> height >> maximum);
     EXPECT_EQ(magic, "P6");
-    EXPECT_EQ(width, 64);
-    EXPECT_EQ(height, 64);
+    ASSERT_EQ(width, writer_scene.width);
+    ASSERT_EQ(height, writer_scene.height);
     EXPECT_EQ(maximum, 255);
     ASSERT_EQ(file.get(), '\n');
 
@@ -420,10 +417,8 @@ TEST(RenderSessionProbe, CpuKerrRenderProducesValidPpmThroughTheOwnedWriter) {
     ASSERT_EQ(file.gcount(), static_cast<std::streamsize>(pixels.size()));
     EXPECT_EQ(file.peek(), std::char_traits<char>::eof())
         << "PPM has an unexpected trailing payload";
-    const bool varies =
-        std::any_of(pixels.begin() + 1, pixels.end(),
-                    [first = pixels.front()](unsigned char value) { return value != first; });
-    EXPECT_TRUE(varies) << "PPM image is constant (nothing rendered)";
+    EXPECT_TRUE(HasSpatialRgbVariation(pixels.data(), width, height, 3))
+        << "PPM pixels are uniform";
 }
 
 TEST(RenderSessionProbe, PhysicalPointDetectorCompletesAMovingThinLensKerrFrame) {
