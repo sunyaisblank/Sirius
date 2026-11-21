@@ -88,6 +88,43 @@ PointDetectorProbeBatchSampler BulkSampler(const PointDetectorSampler& sample) {
     };
 }
 
+TEST(PointSourceDetector, VisibleTerminalCellsUseTheOriginalFootprintAllowance) {
+    const core::StarfieldSpatialIndex catalogue(std::vector<core::StarEntry>{});
+    const std::array footprints{PointDetectorFootprint{{0, 0}, {{{1, 0}, {0, 1}}}}};
+    const PointDetectorSampler sample = [](DetectorCoordinate coordinate) {
+        return Gnomonic(kScale * coordinate[0], kScale * coordinate[1], kScale, kScale);
+    };
+    PointDetectorPolicy policy;
+    policy.minimum_depth = policy.maximum_depth = 1;
+    for (const double upper_bound : {1e-9, 5e-8}) {
+        SCOPED_TRACE(upper_bound);
+        std::size_t callbacks = 0;
+        const PointDetectorCellBound bound =
+            [&](const PointDetectorFootprint&, const DetectorCoordinate&, const DetectorCoordinate&,
+                std::size_t& remaining) -> std::optional<std::array<double, 3>> {
+            ++callbacks;
+            --remaining;
+            return std::array{upper_bound, upper_bound, upper_bound};
+        };
+        const auto result =
+            EvaluatePointDetectorGroup(catalogue, 1, footprints, sample, {}, policy, {}, {}, bound);
+        EXPECT_EQ(callbacks, 4U);
+        if (upper_bound == 1e-9) {
+            ASSERT_TRUE(result);
+            EXPECT_EQ(result->statistics.candidate_visits, callbacks);
+            EXPECT_EQ(result->samples.front().rgb, (std::array<double, 3>{}));
+            for (const double error : result->samples.front().estimated_error) {
+                EXPECT_GE(error, 4e-9);
+                EXPECT_LT(error, policy.absolute_rgb_error);
+            }
+        } else {
+            ASSERT_FALSE(result);
+            EXPECT_EQ(result.error().reason, PointDetectorFailure::Unresolved);
+            EXPECT_EQ(result.error().statistics.candidate_visits, callbacks);
+        }
+    }
+}
+
 TEST(PointSourceDetector, BulkProbesPreserveScalarRefinementAndRadiance) {
     for (int mode = 0; mode < 4; ++mode) {
         SCOPED_TRACE(mode);

@@ -1048,7 +1048,9 @@ class Detector {
         // this original Gaussian, and an inconclusive proof spends visits.
         const bool last_whole_sky_split =
             coarse.whole_sky_query && cell.depth + 1 == policy_.maximum_depth;
-        if (cell_bound_ && ((terminal && coarse.has_hidden_probe) || last_whole_sky_split)) {
+        // Visible probes can agree on visibility while the terminal cell's
+        // flux is still unresolved. The continuous bound can cover either case.
+        if (cell_bound_ && (terminal || last_whole_sky_split)) {
             const auto available = policy_.maximum_candidate_visits - statistics_.candidate_visits;
             auto remaining = available;
             const auto bound = (*cell_bound_)(cell.lower, cell.upper, remaining);

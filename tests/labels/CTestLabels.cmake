@@ -1461,6 +1461,7 @@ set_tests_properties(
     PointSourceDetector.SharedDiscoveryDeclinesUncertainOriginalSupportOwnership
     PointSourceDetector.SharedDiscoveryPreservesDistinctGaussianShapesAndTransfer
     PointSourceDetector.ThousandFootprintsShareDiscoveryWithoutChangingTheirKernels
+    PointSourceDetector.VisibleTerminalCellsUseTheOriginalFootprintAllowance
     RayBundleTest.BundleFiniteAndDeterministicKerr
     RayBundleTest.CurvatureStencilPreservesMassScaleAndBothSpinSigns
     RayBundleTest.CurvatureStencilStaysInsideTheActualKerrChartDomain
