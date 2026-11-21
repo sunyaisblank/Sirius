@@ -21,6 +21,18 @@ if("@SIRIUS_INSTALL_HAS_VULKAN@" STREQUAL "TRUE")
         "${_sirius_install_root}/share/sirius/kernels/trace_fp64.spv")
 endif()
 
+if("@SIRIUS_INSTALL_HAS_PACKAGED_SOFTWARE@" STREQUAL "TRUE")
+    set(_sirius_provider
+        "${_sirius_install_root}/share/sirius/@SIRIUS_PACKAGED_SOFTWARE_SUBDIR@/libvulkan_lvp.so")
+    if(NOT EXISTS "${_sirius_provider}" OR IS_SYMLINK "${_sirius_provider}")
+        message(FATAL_ERROR "Sirius install requires a regular packaged software Vulkan driver")
+    endif()
+    file(SHA256 "${_sirius_provider}" _sirius_provider_digest)
+    if(NOT _sirius_provider_digest STREQUAL "@SIRIUS_PACKAGED_SOFTWARE_DRIVER_SHA256@")
+        message(FATAL_ERROR "The installed software Vulkan driver differs from the qualified SHA-256")
+    endif()
+endif()
+
 foreach(_sirius_path IN LISTS _sirius_required)
     if(NOT EXISTS "${_sirius_path}")
         message(FATAL_ERROR "Sirius install invariant failed: missing ${_sirius_path}")

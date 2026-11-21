@@ -235,6 +235,15 @@ if(SIRIUS_VIEWER_AVAILABLE)
         COMMENT "Staging interactive-viewer shaders beside the executable")
 endif()
 
+if(SIRIUS_PACKAGED_SOFTWARE_DRIVER)
+    set_property(TARGET sirius APPEND PROPERTY LINK_DEPENDS "${SIRIUS_PACKAGED_SOFTWARE_DRIVER}")
+    sirius_packaged_software_stage_arguments(sirius packaged_software_commands)
+    add_custom_command(TARGET sirius POST_BUILD
+        ${packaged_software_commands}
+        COMMENT "Staging the qualified software Vulkan driver"
+        VERBATIM)
+endif()
+
 if(TARGET sirius_kernels)
     add_custom_command(TARGET sirius POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory

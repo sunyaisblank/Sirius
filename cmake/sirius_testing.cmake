@@ -65,6 +65,10 @@ if(BUILD_TESTS)
                     "${SIRIUS_KERNEL_BINARY_DIR}/trace_fp64.spv"
                     "$<TARGET_FILE_DIR:${test_target}>/resources/kernels")
         endif()
+        if(SIRIUS_PACKAGED_SOFTWARE_DRIVER AND test_target STREQUAL "sirius_backend_tests")
+            sirius_packaged_software_stage_arguments(${test_target} packaged_software_commands)
+            list(APPEND volume_commands ${packaged_software_commands})
+        endif()
         add_custom_target(${test_target}_input_volume
             ${volume_commands}
             DEPENDS ${sirius_test_input_dependencies}

@@ -154,7 +154,16 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
     target_link_libraries(sirius_backend PUBLIC sirius_core)
     target_include_directories(sirius_backend PRIVATE "${retained_build}")
     target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_RETAINED_COMPUTE=1)
+    if(SIRIUS_PACKAGED_SOFTWARE_DRIVER)
+        sirius_embed_packaged_software("${retained_build}" "${retained_header}")
+        target_sources(sirius_backend PRIVATE vulkan/packaged_software.cpp
+            "${retained_build}/sealed_shaders.h")
+        target_compile_definitions(sirius_backend PUBLIC SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN=1)
+    endif()
 else()
+    if(SIRIUS_PACKAGED_SOFTWARE_DRIVER)
+        message(FATAL_ERROR "The software Vulkan bundle requires retained SPIR-V build tools")
+    endif()
     message(STATUS "Retained compute unavailable: SPIR-V build tools are incomplete")
 endif()
 

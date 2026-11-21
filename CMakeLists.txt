@@ -33,6 +33,7 @@ endif()
 include(cmake/sirius_toolchain.cmake)
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+include(cmake/sirius_packaged_software.cmake)
 
 include(cmake/sirius_build_policy.cmake)
 sirius_verify_configure_policy()
@@ -51,6 +52,9 @@ if(NOT SIRIUS_MODERN_AVAILABLE)
 endif()
 
 add_subdirectory(src/sirius)
+if(SIRIUS_PACKAGED_SOFTWARE_DRIVER AND NOT TARGET sirius_kernels)
+    message(FATAL_ERROR "The software Vulkan bundle requires a compiled Vulkan backend and kernels")
+endif()
 sirius_verify_product_policy()
 
 include(cmake/sirius_testing.cmake)

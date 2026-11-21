@@ -15,6 +15,12 @@ if(TARGET sirius)
             src/sirius/app/viewer/shaders/RDSD003A.frag
             DESTINATION share/sirius/shaders)
     endif()
+    if(SIRIUS_PACKAGED_SOFTWARE_DRIVER)
+        install(FILES "${SIRIUS_PACKAGED_SOFTWARE_DRIVER}"
+            DESTINATION "share/sirius/${SIRIUS_PACKAGED_SOFTWARE_SUBDIR}"
+            RENAME libvulkan_lvp.so)
+        set(SIRIUS_INSTALL_HAS_PACKAGED_SOFTWARE TRUE)
+    endif()
     if(TARGET sirius_kernels)
         install(FILES
             "${SIRIUS_KERNEL_BINARY_DIR}/trace.spv"

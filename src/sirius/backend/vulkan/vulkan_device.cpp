@@ -3,6 +3,8 @@
 #include "sirius/backend/vulkan/vulkan_portability.h"
 #include "sirius/base/contracts.h"
 
+#include "packaged_software.h"
+
 #include <algorithm>
 #include <charconv>
 #include <chrono>
@@ -189,7 +191,14 @@ ProcessPipelineCache& PipelineCacheStore() {
         .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
         .pApplicationInfo = &app_info,
     };
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+    return detail::CreateProbedInstance(create_info);
+#else
+    if (detail::PackagedSoftwareRequested())
+        return Fail(ErrorDomain::kDevice, "open sealed Vulkan driver",
+                    "the software Vulkan provider is not enabled in this package");
     return detail::CreateInstanceWithPortability(create_info);
+#endif
 }
 
 [[nodiscard]] Expected<std::vector<VkPhysicalDevice>> ListPhysicalDevices(VkInstance instance) {
@@ -372,6 +381,9 @@ bool detail::VulkanPipelineCacheDataCompatible(std::span<const std::byte> data,
 Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices() {
     auto instance = CreateInstance();
     if (!instance) {
+        if (detail::PackagedSoftwareRequested()) {
+            return std::unexpected(instance.error());
+        }
         // No loader or no ICD is a decline: the caller falls back to the
         // CPU tracer with a clear message, never a fabricated device.
         return std::vector<DeviceInfo>{};
@@ -761,6 +773,9 @@ Expected<void> ValidateVulkanKernelPrecision(std::span<const std::uint32_t> spir
 }
 
 Expected<KernelHandle> VulkanDevice::LoadKernel(std::span<const std::uint32_t> spirv) {
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+    spirv = detail::SelectSealedRetainedModule(info_, spirv);
+#endif
     if (auto precision = ValidateVulkanKernelPrecision(
             spirv, info_.supports_fp64, info_.fma_fp32_enabled, info_.supports_int64);
         !precision) {

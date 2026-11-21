@@ -12,6 +12,11 @@
 #include "sirius/render/vulkan_renderer.h"
 
 #include "sirius/backend/device.h"
+
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+#include "sirius/backend/vulkan/packaged_software.h"
+#endif
+
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
 #include "sirius/backend/retained_trace_executor.h"
 #endif
@@ -553,6 +558,10 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
     auto spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Disabled;
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+    if (rung != PrecisionRung::Fp64 && backend::detail::UsesSealedRetainedModules(device.Info()))
+        spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Certified;
+#endif
 #if !SIRIUS_RELEASE_RESOURCE_LOCKED
     if (const char* cert = std::getenv("SIRIUS_CERTIFIED_SPHERICAL_ESCAPE");
         cert && std::strcmp(cert, "1") == 0)
