@@ -62,15 +62,26 @@ class VerifiedDriver {
             llvm_owner.dli_fname == nullptr) {
             return std::unexpected("cannot identify the loaded LLVM runtime");
         }
-        const auto llvm_digest = sirius::base::Sha256File(llvm_owner.dli_fname);
+        std::error_code error;
+        const auto llvm_path = std::filesystem::canonical(llvm_owner.dli_fname, error);
+        if (error) return std::unexpected("cannot resolve the loaded LLVM runtime");
+        const auto llvm_bytes = std::filesystem::file_size(llvm_path, error);
+        if (error || llvm_bytes == 0)
+            return std::unexpected("cannot determine the loaded LLVM runtime size");
+        const auto llvm_digest = sirius::base::Sha256File(llvm_path);
         if (!llvm_digest || *llvm_digest != retained_program::kPackagedLlvmSha256) {
             return std::unexpected("LLVM runtime SHA-256 mismatch");
         }
+        identity_ = PackagedVulkanProvider{
+            {path.string(), static_cast<std::uint64_t>(before.st_size), *digest},
+            {llvm_path.string(), llvm_bytes, *llvm_digest},
+        };
         entry_ = reinterpret_cast<PFN_vkGetInstanceProcAddrLUNARG>(symbol);
         return {};
     }
 
     PFN_vkGetInstanceProcAddrLUNARG Entry() const { return entry_; }
+    const std::optional<PackagedVulkanProvider>& Identity() const { return identity_; }
 
   private:
     bool Unchanged(const struct stat& before) const {
@@ -85,6 +96,7 @@ class VerifiedDriver {
     int file_ = -1;
     void* handle_ = nullptr;
     PFN_vkGetInstanceProcAddrLUNARG entry_ = nullptr;
+    std::optional<PackagedVulkanProvider> identity_;
 };
 
 struct Configuration {
@@ -109,6 +121,14 @@ const Configuration& BoundDriver() {
 }
 
 }  // namespace
+
+namespace sirius::backend {
+
+std::optional<PackagedVulkanProvider> GetPackagedVulkanProvider() {
+    return BoundDriver().driver.Identity();
+}
+
+}  // namespace sirius::backend
 
 namespace sirius::backend::detail {
 

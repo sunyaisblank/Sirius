@@ -18,11 +18,13 @@ import tempfile
 
 CONTROLS = ("supports_fp64", "preserves_fp32_denormals",
             "rounds_fp32_to_nearest", "rounds_fp64_to_nearest")
+PACKAGED_SELECTOR = "SIRIUS_PACKAGED_SOFTWARE_VULKAN"
+PACKAGED_ROUTE = {"name": PACKAGED_SELECTOR, "value": "1", "kind": "packaged_direct"}
 ENVIRONMENT = ("VK_DRIVER_FILES", "VK_ICD_FILENAMES", "VK_ADD_DRIVER_FILES",
                "VK_LOADER_DRIVERS_SELECT", "VK_LOADER_DRIVERS_DISABLE",
                "VULKAN_SDK", "LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH", "PATH", "SystemRoot",
                "SIRIUS_VULKAN_DEVICE", "SIRIUS_PRECISION", "LP_PERF",
-               "LP_NATIVE_VECTOR_WIDTH", "GALLIVM_PERF", "MESA_SHADER_CACHE_DISABLE")
+               "LP_NATIVE_VECTOR_WIDTH", "GALLIVM_PERF", "MESA_SHADER_CACHE_DISABLE", PACKAGED_SELECTOR)
 
 
 def require(condition, message):
@@ -103,7 +105,45 @@ def library_candidates(name, manifest, directories):
             if path.is_file()]
 
 
-def provider_inputs(executable, environment, selected, required):
+def packaged_provider(inventory, environment, selected):
+    vulkan = (inventory or {}).get("backends", {}).get("vulkan", {})
+    provider = vulkan.get("packaged_software")
+    if environment.get(PACKAGED_SELECTOR) != "1":
+        require(provider is None, "packaged provider was reported without its selection")
+        return None
+    require(selected is not None and selected.get("kind") == "software"
+            and len(vulkan.get("devices", [])) == 1 and selected.get("preserves_fp32_denormals") is True
+            and selected.get("rounds_fp32_to_nearest") is True,
+            "packaged software selection did not report its exclusive native binary32 device")
+    require(isinstance(provider, dict) and set(provider) == {"driver", "llvm"},
+            "packaged software selection lacks its verified driver and LLVM files")
+    for file in provider.values():
+        require(isinstance(file, dict) and set(file) == {"path", "bytes", "sha256"}
+                and isinstance(file["path"], str) and file["path"].startswith("/"),
+                "packaged software file identity is malformed")
+    return provider
+
+
+def loader_candidates(executable, directories):
+    names = ("vulkan-1.dll",) if sys.platform == "win32" else (
+        ("libvulkan.1.dylib", "libvulkan.dylib") if sys.platform == "darwin" else ("libvulkan.so.1",))
+    records = [record for name in names
+               for record in library_candidates(name, Path(executable), directories)]
+    return list({record["path"]: record for record in records}.values())
+
+
+def provider_inputs(executable, environment, selected, required, inventory=None):
+    packaged = packaged_provider(inventory, environment, selected)
+    if packaged is not None:
+        for file in packaged.values():
+            require(identity(file["path"]) == file,
+                    f"loaded packaged file changed after the inventory query: {file['path']}")
+        loaders = loader_candidates(executable, search_directories(executable, environment))
+        require(loaders or not required, "required Vulkan loader input identity is unresolved")
+        return {"scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
+                "selector": dict(PACKAGED_ROUTE), "packaged_software": packaged,
+                "manifests": [], "loader_candidates": loaders, "unresolved_optional_manifests": []}
+
     effective = "VK_DRIVER_FILES" if environment.get("VK_DRIVER_FILES") else "VK_ICD_FILENAMES"
     explicit = environment.get(effective, "")
     if explicit:
@@ -143,11 +183,7 @@ def provider_inputs(executable, environment, selected, required):
         manifests.append({"selector_path": str(path), "manifest": record,
                           "contents_base64": base64.b64encode(raw).decode("ascii"), "library_path": library,
                           "driver_candidates": candidates})
-    loader_names = ("vulkan-1.dll",) if sys.platform == "win32" else (
-        ("libvulkan.1.dylib", "libvulkan.dylib") if sys.platform == "darwin" else ("libvulkan.so.1",))
-    loaders = [record for name in loader_names
-               for record in library_candidates(name, Path(executable), directories)]
-    loaders = list({record["path"]: record for record in loaders}.values())
+    loaders = loader_candidates(executable, directories)
     if required and selected is not None:
         require(manifests and loaders, "required Vulkan provider/loader input identity is unresolved")
     return {"scope": "hashed input candidates; not actual loaded-module or per-ICD execution proof",
@@ -208,7 +244,13 @@ def validate_record(record, revision, executable_record, inventory=None, require
     effective = "VK_DRIVER_FILES" if environment.get("VK_DRIVER_FILES") else "VK_ICD_FILENAMES"
     selector = inputs.get("selector", {})
     explicit = environment.get(effective, "")
-    if explicit:
+    packaged = packaged_provider(observed, environment, selected)
+    if packaged is not None:
+        require(record.get("host", {}).get("platform") == "linux" and selector == PACKAGED_ROUTE
+                and inputs.get("packaged_software") == packaged and inputs.get("manifests") == []
+                and inputs.get("unresolved_optional_manifests") == [],
+                "packaged software inputs differ from the verified direct selection")
+    elif explicit:
         require(selector == {"name": effective, "value": explicit, "kind": "explicit_manifest_list"},
                 "effective provider selector differs from the captured environment")
     else:
@@ -216,13 +258,15 @@ def validate_record(record, revision, executable_record, inventory=None, require
                 "default provider catalogue was misclassified as explicit selection")
     manifests = inputs.get("manifests", [])
     loaders = inputs.get("loader_candidates", [])
+    require(packaged is not None or "packaged_software" not in inputs,
+            "ordinary Vulkan input record claims a packaged software provider")
     require(isinstance(manifests, list) and isinstance(loaders, list), "provider inputs must be lists")
     require(all(isinstance(value, dict) for value in manifests + loaders), "provider input records must be objects")
     if required:
-        require(manifests and loaders, "required provider input identity was omitted")
+        require(loaders and (packaged is not None or manifests), "required provider input identity was omitted")
         require(all(value.get("driver_candidates") for value in manifests),
                 "required provider driver inputs were omitted")
-    if explicit and selected is not None:
+    if packaged is None and explicit and selected is not None:
         host_platform = record.get("host", {}).get("platform")
         require(host_platform in ("win32", "darwin", "linux"), "provider input platform is missing")
         separator = ";" if host_platform == "win32" else ":"
@@ -230,6 +274,8 @@ def validate_record(record, revision, executable_record, inventory=None, require
         require([value.get("selector_path") for value in manifests] == paths,
                 "provider manifests differ from the effective explicit selector")
     artifacts = list(loaders)
+    if packaged is not None:
+        artifacts.extend(packaged.values())
     for value in manifests:
         require(isinstance(value, dict) and isinstance(value.get("library_path"), str) and value["library_path"],
                 "provider library path is missing")
@@ -289,7 +335,7 @@ def capture(source_root, revision, clean, executable, required, phase, inventory
         require(actual_inventory == inventory, "actual identity query differs from producer's bound inventory")
     inventory = actual_inventory
     classification, selected = selected_inventory(inventory, required)
-    inputs = provider_inputs(executable, environment, selected, required)
+    inputs = provider_inputs(executable, environment, selected, required, inventory)
     require(identity(executable) == executable_before, "identity executable changed during query")
     require(subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source_root, text=True).strip() == revision
             and (not subprocess.check_output(["git", "status", "--porcelain"], cwd=source_root)) == clean,
@@ -389,6 +435,31 @@ def self_test():
             else: raise ValueError(f"identity accepted negative sidecar control: {change}")
         require(provider_inputs(library, {"VK_DRIVER_FILES": "unrelated-absent.json"}, None, False)["manifests"] == [],
                 "CPU-only capture inspected an unrelated provider file")
+        direct = json.loads(json.dumps(record))
+        direct["host"]["platform"] = "linux"
+        direct["environment"][PACKAGED_SELECTOR] = "1"
+        direct_device = direct["inventory"]["backends"]["vulkan"]["devices"][0]
+        direct_device.update(preserves_fp32_denormals=True, rounds_fp32_to_nearest=True)
+        files = {"driver": {**identity(library), "path": "/package/libvulkan_lvp.so"},
+                 "llvm": {**identity(library), "path": "/lib/libLLVM.so.21.1"}}
+        direct["inventory"]["backends"]["vulkan"]["packaged_software"] = files
+        direct["selected_device"] = direct_device
+        data = json.dumps(direct["inventory"]).encode()
+        direct["query"].update(stdout_base64=base64.b64encode(data).decode(),
+                               stdout_sha256=hashlib.sha256(data).hexdigest())
+        direct["provider_inputs"].update(selector=PACKAGED_ROUTE, manifests=[],
+                                         unresolved_optional_manifests=[], packaged_software=files)
+        validate_record(direct, "synthetic", executable, clean=True)
+        for change in ("missing_identity", "changed_compiler", "catalogue_instead", "disabled_selection"):
+            value = json.loads(json.dumps(direct))
+            inputs = value["provider_inputs"]
+            if change == "missing_identity": del inputs["packaged_software"]
+            if change == "changed_compiler": inputs["packaged_software"]["llvm"]["sha256"] = "0" * 64
+            if change == "catalogue_instead": inputs["manifests"] = record["provider_inputs"]["manifests"]
+            if change == "disabled_selection": del value["environment"][PACKAGED_SELECTOR]
+            try: validate_record(value, "synthetic", executable, clean=True)
+            except ValueError: rejected += 1
+            else: raise ValueError(f"identity accepted negative packaged-provider control: {change}")
     return {"passed": True, "rejected": rejected, "actual_query_executed": False}
 
 

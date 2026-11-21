@@ -510,6 +510,18 @@ int InfoCommand::ShowSystem(const GlobalOptions& globals) {
                 if (auto selected = backend::ResolveVulkanDeviceIndex(*devices); selected) {
                     j["backends"]["vulkan"]["selected_device_index"] = *selected;
                     j["backends"]["vulkan"]["selected_device_name"] = (*devices)[*selected].name;
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+                    if (const auto provider = backend::GetPackagedVulkanProvider()) {
+                        const auto file_json = [](const backend::ProviderFileIdentity& file) {
+                            return nlohmann::json{{"path", file.path}, {"bytes", file.bytes},
+                                                  {"sha256", file.sha256}};
+                        };
+                        j["backends"]["vulkan"]["packaged_software"] = {
+                            {"driver", file_json(provider->driver)},
+                            {"llvm", file_json(provider->llvm)},
+                        };
+                    }
+#endif
                 } else {
                     j["backends"]["vulkan"]["selection_error"] = selected.error().Description();
                 }

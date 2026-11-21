@@ -206,6 +206,22 @@ class ComputeDevice {
 // present; that is a decline, not an error).
 [[nodiscard]] base::Expected<std::vector<DeviceInfo>> EnumerateVulkanDevices();
 
+#ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
+struct ProviderFileIdentity {
+    std::string path;
+    std::uint64_t bytes;
+    std::string sha256;
+};
+
+struct PackagedVulkanProvider {
+    ProviderFileIdentity driver;
+    ProviderFileIdentity llvm;
+};
+
+// Available after the packaged provider and its LLVM dependency were verified.
+[[nodiscard]] std::optional<PackagedVulkanProvider> GetPackagedVulkanProvider();
+#endif
+
 // Resolves SIRIUS_VULKAN_DEVICE as a strict zero-based index into `devices`.
 // An unset selector chooses index zero; malformed and out-of-range selectors
 // decline rather than silently targeting different silicon.
