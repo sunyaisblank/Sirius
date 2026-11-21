@@ -192,18 +192,57 @@ Scalar EvaluateRadial(const std::array<Scalar, N>& coefficients, Scalar u) {
     return value;
 }
 
+inline bool ProvePositiveRadialBernstein(
+    std::array<finite_tail_detail::Range, 5> coefficients, unsigned& budget) {
+    using finite_tail_detail::Range;
+    if (budget == 0) return false;
+    --budget;
+    if (!std::ranges::all_of(coefficients, &Range::Finite)) return false;
+    if (std::ranges::all_of(coefficients, [](Range c) { return c.lo > 0.0; })) return true;
+    if (coefficients.front().hi <= 0.0 || coefficients.back().hi <= 0.0) return false;
+
+    // Each half lies in the convex hull of its Bernstein coefficients.
+    // De Casteljau subdivision at the exact parameter 1/2 tightens that hull
+    // without losing the cancellation already represented by the polynomial.
+    std::array<Range, 5> left, right;
+    left.front() = coefficients.front();
+    right.back() = coefficients.back();
+    for (std::size_t remaining = coefficients.size() - 1; remaining != 0; --remaining) {
+        for (std::size_t i = 0; i < remaining; ++i)
+            coefficients[i] = (coefficients[i] + coefficients[i + 1]) * Range(0.5);
+        left[coefficients.size() - remaining] = coefficients.front();
+        right[remaining - 1] = coefficients[remaining - 1];
+    }
+    return ProvePositiveRadialBernstein(left, budget) &&
+           ProvePositiveRadialBernstein(right, budget);
+}
+
 inline bool ProvePositiveRadialPotential(
     const std::array<finite_tail_detail::Range, 5>& coefficients,
     finite_tail_detail::Range interval, unsigned& budget) {
-    if (budget == 0) return false;
-    --budget;
-    const auto potential = EvaluateRadial(coefficients, interval);
-    if (potential.lo > 0.0) return true;
-    if (!potential.Finite() || potential.hi <= 0.0) return false;
-    const double mid = std::midpoint(interval.lo, interval.hi);
-    if (!(interval.lo < mid && mid < interval.hi)) return false;
-    return ProvePositiveRadialPotential(coefficients, {interval.lo, mid}, budget) &&
-           ProvePositiveRadialPotential(coefficients, {mid, interval.hi}, budget);
+    using finite_tail_detail::Range;
+    if (budget == 0 || !interval.Finite()) return false;
+    if (EvaluateRadial(coefficients, interval).lo > 0.0) {
+        --budget;
+        return true;
+    }
+
+    // Compose H(lower + width*t) by Horner in the power basis, then
+    // convert the resulting quartic on t in [0,1] to Bernstein form.
+    const Range lower(interval.lo), width = Range(interval.hi) - lower;
+    std::array<Range, 5> power{};
+    power[0] = coefficients.back();
+    for (std::size_t degree = 1; degree < power.size(); ++degree) {
+        for (std::size_t i = degree; i != 0; --i)
+            power[i] = lower * power[i] + width * power[i - 1];
+        power[0] = lower * power[0] + coefficients[power.size() - 1 - degree];
+    }
+    const auto& [p0, p1, p2, p3, p4] = power;
+    return ProvePositiveRadialBernstein(
+        {p0, p0 + p1 * Range(0.25), p0 + p1 * Range(0.5) + p2 / Range(6.0),
+         p0 + p1 * Range(0.75) + p2 * Range(0.5) + p3 * Range(0.25),
+         p0 + p1 + p2 + p3 + p4},
+        budget);
 }
 
 template <typename Scalar>

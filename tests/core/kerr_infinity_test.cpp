@@ -464,6 +464,31 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
                 parameters, position_bounds, tangent_bounds, 64));
         }
     }
+    // The first rejected Radeon launches in the governed 1080p scene.
+    // Hexadecimal literals retain the actual public ingoing binary64 state.
+    const auto position = Four(0x1.24a6d18db4p-10,
+                               {0x1.d884a21ad7b96p+4, 0x1.d04c7d7c1169p-1, 0x1.51733439618ap+2});
+    const std::array tangents{
+        Four(-0x1.deb0a674e7f3p-1,
+             {-0x1.935b61994b898p-1, -0x1.858031d03bdb1p-4, -0x1.9f7b1fe6305p-3}),
+        Four(-0x1.deb9d8491266p-1,
+             {-0x1.93366da6c8fd1p-1, -0x1.7a9ddae0f2a43p-4, -0x1.a4992d0defep-3}),
+    };
+    const auto kerr = KerrSchildParams::Kerr(1, 0.9);
+    for (const auto& tangent : tangents) {
+        EXPECT_TRUE(CertifyKerrDetectorCapture(kerr, position, tangent, 64));
+        EXPECT_FALSE(CertifyKerrDetectorCapture(kerr, position, tangent, 0));
+    }
+
+    // The exact Schwarzschild potential has its minimum at u=1/3 and
+    // its sign is fixed by b^2 versus 27. Test both sides of the boundary.
+    for (double shift : {-1e-9, 1e-9}) {
+        const double impact = std::sqrt(27.0) * (1.0 + shift);
+        const auto close = CarterEvent({1, 0, 20, equator, 0, -1, impact, 0}, -1);
+        EXPECT_EQ(CertifyKerrDetectorCapture(KerrSchildParams::Schwarzschild(1), close.x, close.k,
+                                             64),
+                  1.0 - impact * impact / 27.0 > 0.0);
+    }
 }
 
 TEST(KerrInfinity, RejectsHiddenRadialTurningPoint) {
