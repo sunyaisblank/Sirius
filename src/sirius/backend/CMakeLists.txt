@@ -88,6 +88,7 @@ if(SIRIUS_SPIRV_VAL AND SIRIUS_SPIRV_AS AND SIRIUS_SPIRV_DIS AND SIRIUS_SPIRV_OP
         BYPRODUCTS "${retained_build}/retained_camera.spv"
                    "${retained_build}/retained_transport.spv"
                    "${retained_build}/retained_endpoint.spv"
+                   "${retained_build}/retained_endpoint_curved.spv"
                    "${retained_build}/retained_dense.spv"
                    "${retained_build}/retained_initialize.spv"
                    "${retained_build}/retained_ray_camera.spv"
