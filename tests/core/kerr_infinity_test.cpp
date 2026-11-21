@@ -317,7 +317,7 @@ std::optional<Vector> ScatteringReference(const CarterInput& c, long double step
     };
     const long double u = 1 / static_cast<long double>(c.radius);
     State y{c.theta, c.polar_momentum, c.phi, u, std::sqrt(E * E + u * u * (A + u * (B + u * D)))};
-    for (unsigned i = 0; i < 50000; ++i) {
+    for (unsigned i = 0; i < 100000; ++i) {
         const auto next = advance(y, step);
         if (next[3] <= 0) {
             long double lo = 0, hi = step;
@@ -357,6 +357,8 @@ TEST(KerrInfinity, RadialTurnMatchesIndependentMinoTimeScatteringAndColumns) {
         // The potential is positive at both 2M and 4M and negative between
         // two roots, so endpoint-only probing will miss this scattering ray.
         ScatteringCase{{1, 0.7, 20, equator, 1.1, -1, -1, std::sqrt(28.6)}, 3.7, 4},
+        ScatteringCase{{1, 0, 20, equator, 1.1, -1, 5.3, 0}, 3.4, 3.5},
+        ScatteringCase{{1, 0.9, 20, equator, 1.1, -1, -2.9, 0}, 1.70, 1.72},
     };
     for (const auto& [input, min_radius, max_radius] : cases) {
         const double spin = input.spin;
@@ -416,7 +418,6 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
     const std::array inputs{
         CarterInput{1, 0, 20, equator, 0, -1, 2.0, 0},
         CarterInput{1, 0, 20, equator, 0, -1, std::sqrt(27.0), 0},
-        CarterInput{1, 0, 20, equator, 0, -1, 5.3, 0},
         CarterInput{1, 0.9, 20, equator, 0, -1, -2.0, 0},
     };
     for (const auto& input : inputs) {
@@ -475,6 +476,33 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
              {-0x1.93366da6c8fd1p-1, -0x1.7a9ddae0f2a43p-4, -0x1.a4992d0defep-3}),
     };
     const auto kerr = KerrSchildParams::Kerr(1, 0.9);
+    KerrSchildFamily kerr_metric(kerr);
+    Metric4d device_metric;
+    Tensor<Dual<double>, 4, 4, 4> device_derivatives;
+    kerr_metric.Evaluate(position, device_metric, device_derivatives);
+    const std::array scattering{
+        Four(-0x1.deb5b5c6e8e38p-1,
+             {-0x1.92f7f407dc8c7p-1, -0x1.93ad4880817b2p-4, -0x1.a2f4ea78b027p-3}),
+        Four(-0x1.de917a1a791bbp-1,
+             {-0x1.942f58adb117fp-1, -0x1.941f5365512dfp-4, -0x1.8cbe679530dcp-3}),
+    };
+    constexpr std::array decimal_radii{2.075103142542746, 1.712572390557077};
+    auto through_turn = Accurate();
+    through_turn.allow_radial_turn = true;
+    for (std::size_t i = 0; i < scattering.size(); ++i) {
+        const auto& tangent = scattering[i];
+        EXPECT_FALSE(CertifyKerrDetectorCapture(kerr, position, tangent, 64));
+        double radius = 0.0;
+        const auto resumed = TraceKerrInfinity(1, 0.9, device_metric, device_derivatives, position,
+                                                tangent, {}, {}, 1e-3, through_turn, &radius);
+        ASSERT_TRUE(resumed);
+        EXPECT_NEAR(radius, decimal_radii[i], 2e-12);
+    }
+    through_turn.minimum_turn_radius = 2.0;
+    const auto governed = TraceKerrInfinity(1, 0.9, device_metric, device_derivatives, position,
+                                             scattering.back(), {}, {}, 1e-3, through_turn);
+    ASSERT_FALSE(governed);
+    EXPECT_EQ(governed.error(), KerrInfinityFailure::RadialUnresolved);
     for (const auto& tangent : tangents) {
         EXPECT_TRUE(CertifyKerrDetectorCapture(kerr, position, tangent, 64));
         EXPECT_FALSE(CertifyKerrDetectorCapture(kerr, position, tangent, 0));

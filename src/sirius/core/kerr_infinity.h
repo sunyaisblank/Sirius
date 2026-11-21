@@ -274,25 +274,52 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
     if (!(lower > 0.0) || !(EvaluateRadial(interval_coefficients, Range(lower)).lo > 0.0))
         return {};
 
+    const Range M(mass), a(spin), absolute_spin(std::abs(spin));
+    const Range outer_horizon = absolute_spin.IsPoint(mass)
+                                    ? M
+                                    : M + sqrt((M - absolute_spin) * (M + absolute_spin));
+    const Range horizon_inverse = Range(1.0) / outer_horizon;
+    if (!horizon_inverse.Finite()) return {};
+    const double limit = minimum_radius > 0.0
+                             ? std::min(horizon_inverse.lo,
+                                        (Range(1.0) / Range(minimum_radius)).lo)
+                             : horizon_inverse.lo;
+    if (!(lower < limit)) return {};
+
+    const auto sign_bounds = [&](double inverse_radius) {
+        const Range u(inverse_radius);
+        const Range horner = EvaluateRadial(interval_coefficients, u);
+        if (!horner.Finite() || horner.lo > 0.0 || horner.hi < 0.0) return horner;
+        // At a near-cancelling root the independent, factored expression
+        // can enclose the sign more tightly than the power basis.
+        using finite_tail_detail::Square;
+        const auto fused = [](Range left, Range right, Range addend) {
+            if (!left.Finite() || !right.Finite() || !addend.Finite())
+                return finite_tail_detail::InvalidRange();
+            double low = finite_tail_detail::kInfinity, high = -finite_tail_detail::kInfinity;
+            for (double l : {left.lo, left.hi})
+                for (double r : {right.lo, right.hi}) {
+                    low = std::min(low, std::fma(l, r, addend.lo));
+                    high = std::max(high, std::fma(l, r, addend.hi));
+                }
+            return finite_tail_detail::Widen(low, high);
+        };
+        const Range u2 = Square(u);
+        const Range e(c.energy.real), l(c.angular_momentum.real), q(c.carter_combination.real);
+        const Range au = a * u;
+        const Range p = fused(fused(a, e, Range(0.0) - l), au * u, e);
+        const Range d = fused(au, au, fused(Range(-std::ldexp(mass, 1)), u, Range(1.0)));
+        const Range factored = fused(p, p, Range(0.0) - d * u2 * q);
+        const Range overlap(std::max(horner.lo, factored.lo), std::min(horner.hi, factored.hi));
+        return overlap.Finite() ? overlap : horner;
+    };
     const auto negative = [&](double candidate) {
-        return lower < candidate &&
-               EvaluateRadial(interval_coefficients, Range(candidate)).hi < 0.0;
+        return lower < candidate && sign_bounds(candidate).hi < 0.0;
     };
-    const auto search_limit = [&](double inverse_radius_times_mass) {
-        const double exterior = (Range(inverse_radius_times_mass) / Range(mass)).lo;
-        return minimum_radius > 0.0 ? std::min(exterior, (Range(1.0) / Range(minimum_radius)).lo)
-                                    : exterior;
-    };
-    double upper = search_limit(0.25);
+    // Search only as far as the physical horizon or the configured
+    // cutoff. A sign-definite turn inside the ergosphere is still regular.
+    double upper = std::min((Range(0.25) / M).lo, limit);
     if (!negative(upper)) {
-        // Outside 2M, the Kerr radial denominator decreases with u. Bound
-        // it at the inner search limit to keep the entire segment regular.
-        if (spin == 0.0) return {};
-        const double limit = search_limit(0.5);
-        const Range u(limit);
-        const Range a(spin);
-        const auto denominator = Range(1.0) - Range(2.0) * Range(mass) * u + a * a * u * u;
-        if (!(lower < limit) || !(denominator.lo > 0.0)) return {};
         upper = limit;
         if (!negative(upper)) {
             // The forbidden interval may be wholly inside the search range.
@@ -317,32 +344,56 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
         }
     }
 
-    for (unsigned split = 0; split < 60; ++split) {
+    unsigned sign_evaluations = 60;
+    while (sign_evaluations != 0) {
+        --sign_evaluations;
         const double mid = std::midpoint(lower, upper);
         if (!(lower < mid && mid < upper)) break;
-        const auto value = EvaluateRadial(interval_coefficients, Range(mid));
-        if (value.lo > 0.0)
+        const auto value = sign_bounds(mid);
+        if (value.lo > 0.0) {
             lower = mid;
-        else if (value.hi < 0.0)
+        } else if (value.hi < 0.0) {
             upper = mid;
-        else
-            break;
+        } else {
+            // The sign at the centre can become ambiguous before the
+            // bracket is narrow enough. Signs on either side can still
+            // shrink it without inferring a sign for the ambiguous point.
+            const auto tighten = [&](double proven, bool positive) {
+                double unknown = mid;
+                for (unsigned i = 0; i < 4 && sign_evaluations != 0; ++i) {
+                    const double candidate = std::midpoint(proven, unknown);
+                    if (candidate == proven || candidate == unknown) break;
+                    --sign_evaluations;
+                    const auto bound = sign_bounds(candidate);
+                    if (positive ? bound.lo > 0.0 : bound.hi < 0.0)
+                        proven = candidate;
+                    else
+                        unknown = candidate;
+                }
+                return proven;
+            };
+            const double left = tighten(lower, true);
+            const double right = tighten(upper, false);
+            if (left == lower && right == upper) break;
+            lower = left;
+            upper = right;
+        }
     }
     if (!(lower > c.inverse_radius.real) ||
         !(upper - lower <= 128 * std::numeric_limits<double>::epsilon() * upper))
         return {};
 
-    // A sign bracket alone can hide several roots. Certify G > 0 from
-    // infinity through the entire root bracket, so this is the first simple
-    // root and lies on the only reachable exterior scattering branch.
+    // Both factors of the Kerr radial denominator are positive through
+    // the bracket when the larger horizon radius is still below the turn.
+    if (!((Range(1.0) - outer_horizon * Range(upper)).lo > 0.0)) return {};
+
+    // The deflated factor must stay positive from infinity through the
+    // entire bracket. This rules out an earlier or a multiple root.
     const auto factor = DeflateRadialTurn(interval_coefficients, Range(lower, upper));
-    constexpr unsigned panels = 16;
-    for (unsigned i = 0; i < panels; ++i) {
-        const Range a = Range(upper) * Range(static_cast<double>(i) / panels);
-        const Range b = Range(upper) * Range(static_cast<double>(i + 1) / panels);
-        const auto bound = EvaluateRadial(factor, Range(a.lo, b.hi));
-        if (!bound.Finite() || !(bound.lo > 0.0)) return {};
-    }
+    unsigned panels = 16;
+    if (!ProvePositiveRadialPotential({factor[0], factor[1], factor[2], factor[3], Range(0.0)},
+                                     Range(0.0, upper), panels))
+        return {};
 
     const double root = std::midpoint(lower, upper);
     const Jet fixed_root(root);
