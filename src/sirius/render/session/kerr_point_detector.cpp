@@ -85,6 +85,20 @@ template <typename Evaluate>
 FilmVector CoverEscapingChart(const FilmVector& cell, const StationaryChart& whole,
                               const Evaluate& evaluate) {
     auto target = whole.coordinate;
+    const FilmVector middle{Range(std::midpoint(cell[0].lo, cell[0].hi)),
+                            Range(std::midpoint(cell[1].lo, cell[1].hi))};
+    if (const auto anchor = evaluate(middle)) {
+        // Use a common film point so the radius and minimum enclosures
+        // retain the correlations lost in direct interval evaluation.
+        for (unsigned i = 0; i < 2; ++i) {
+            const Range anchored = anchor->coordinate[i] +
+                                   whole.jacobian[i][0] * (cell[0] - middle[0]) +
+                                   whole.jacobian[i][1] * (cell[1] - middle[1]);
+            if (anchored.Finite())
+                target[i] =
+                    Range(std::max(target[i].lo, anchored.lo), std::min(target[i].hi, anchored.hi));
+        }
+    }
     const auto& [radial, potential] = whole.jacobian;
     std::array<double, 2> shallow, deep;
     std::array<bool, 2> increasing;
@@ -98,7 +112,8 @@ FilmVector CoverEscapingChart(const FilmVector& cell, const StationaryChart& who
         increasing[axis] = (radial[axis].lo > 0.0) != reversed;
     }
     const FilmVector deepest{Range(deep[0]), Range(deep[1])};
-    if (const auto corner = evaluate(deepest)) target[1].lo = corner->coordinate[1].lo;
+    if (const auto corner = evaluate(deepest))
+        target[1].lo = std::max(target[1].lo, corner->coordinate[1].lo);
     if (increasing[0] == increasing[1]) return target;
 
     // Along either axis the chosen deep direction decreases the potential.
@@ -131,8 +146,10 @@ FilmVector CoverEscapingChart(const FilmVector& cell, const StationaryChart& who
         return enclosure ? std::optional(enclosure->coordinate[0]) : std::nullopt;
     };
     const unsigned increasing_axis = increasing[0] ? 0 : 1;
-    if (const auto edge = crossing(increasing_axis)) target[0].lo = edge->lo;
-    if (const auto edge = crossing(1 - increasing_axis)) target[0].hi = edge->hi;
+    if (const auto edge = crossing(increasing_axis))
+        target[0].lo = std::max(target[0].lo, edge->lo);
+    if (const auto edge = crossing(1 - increasing_axis))
+        target[0].hi = std::min(target[0].hi, edge->hi);
     return target;
 }
 
@@ -290,11 +307,12 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
     const Range determinant = Abs(radial_gradient[0] * potential_gradient[1] -
                                   radial_gradient[1] * potential_gradient[0]);
     const auto target = CoverEscapingChart(box, *whole, evaluate);
+    if (!target[0].Finite() || !target[1].Finite()) return {};
     // MakeStationaryChart admits the only positive radial minimum and an
     // inward launch. Positive bounds there and at both ends rule out a
     // turning point throughout the supported film rectangle.
     if (target[1].lo > 0.0 && whole->positive_radial_endpoints) return std::array<double, 3>{};
-    if (!(determinant.lo > 0.0 && target[0].Finite() && target[1].lo < 0.0)) return {};
+    if (!(determinant.lo > 0.0 && target[1].lo < 0.0)) return {};
     const Range scale(0.0, sqrt(Range(-target[1].lo)).hi);
 
     const auto phase =
@@ -333,11 +351,11 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
 
     const auto polar = MakePolarIntegralTable(*shape);
     if (!polar) return {};
-    const auto screen =
-        ScreenFiniteWindings(mass, spin, target[0], scale, *whole, *polar, *phase, *angular,
-                             cutoffs, amplitude, clearance, remaining, cancelled);
-    if (!screen) return {};
     const auto phases = PrepareNearCriticalPhases(mass, spin, target[0], scale, *whole);
+    const auto screen = ScreenFiniteWindings(mass, spin, target[0], scale, *whole, *polar, *phase,
+                                             *angular, cutoffs, amplitude, clearance, remaining,
+                                             cancelled, phases ? &*phases : nullptr);
+    if (!screen) return {};
     for (const auto& candidate : screen->candidates) {
         const auto density =
             BoundAzimuthImages(mass, spin, target[0], scale, *whole, *screen, *polar, candidate,

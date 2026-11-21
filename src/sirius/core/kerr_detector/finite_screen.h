@@ -180,140 +180,6 @@ inline Range FixedPupilAzimuth(double mass, double spin, const StationaryChart& 
                LogBounds((Range(1.0) - low * u) / (Range(1.0) - high * u));
 }
 
-struct CatalogueScreen {
-    std::vector<FiniteCandidate> candidates;
-    Range edge_time;
-    PhasePair period, initial;
-};
-
-inline std::optional<CatalogueScreen> ScreenFiniteWindings(
-    double mass, double spin, Range centre, Range scale, const StationaryChart& chart,
-    const PolarIntegralTable& polar, const RegularizedRadialPhase& prior,
-    const AngularCatalogue& catalogue, const std::array<unsigned, 3>& cutoffs, Range turn_amplitude,
-    double clearance, std::size_t& remaining, const std::function<bool()>& cancelled) {
-    const Range fixed_phi = FixedPupilAzimuth(mass, spin, chart);
-    const Range amplitude = sqrt(polar.shape.amplitude2);
-    if (!fixed_phi.Finite() ||
-        !(chart.energy.hi < 0.0 && chart.initial_mu.lo > 0.0 && chart.mu_rate.hi < 0.0))
-        return {};
-    const auto half = polar.Partial(Range(kPiBounds.lo * .5, kPiBounds.hi * .5));
-    const PhasePair period{half[0] * Range(2.0), half[1] * Range(2.0)};
-    const auto initial = polar.Partial(AsinBounds(chart.initial_mu / amplitude));
-    const Range largest_log = LogPoint(scale.hi);
-    const auto edge =
-        EvaluateFiniteRadialPhase(mass, spin, centre, Range(scale.hi), chart.inverse_start);
-    const auto critical =
-        EvaluateFiniteRadialPhase(mass, spin, centre, Range(0.0), chart.inverse_start);
-    if (!edge || !critical || !initial[0].Finite() || !period[0].Finite()) return {};
-    const Range edge_time = Range(-2.0) * edge->leading * largest_log + edge->time_residual;
-    const Range twice_leading = Range(2.0) * prior.leading_factor;
-    const auto radial_bound = [&](Range log_scale) -> std::optional<FiniteRadialPhase> {
-        const Range span = ExpBounds(log_scale);
-        if (!span.Finite() || span.lo > scale.hi) return {};
-        if (span.hi > 1e-6) {
-            return EvaluateFiniteRadialPhase(mass, spin, centre,
-                                             Range(span.lo, std::min(span.hi, scale.hi)),
-                                             chart.inverse_start);
-        }
-        const Range decay = Range(span.hi) * (Range(prior.spin_derivative_constant) +
-                                              Range(prior.spin_derivative_log_coefficient) *
-                                                  (Range(1.0) - LogPoint(span.hi)));
-        auto phase = *critical;
-        phase.drag_at_turn = phase.drag_at_turn + Range(0.0, span.hi) * prior.drag_gradient[1];
-        phase.spin_residual = phase.spin_residual + Range(-decay.hi, decay.hi);
-        return phase;
-    };
-    struct ScreenRow {
-        const AngularCatalogue::Row* row;
-        PhasePair equator;
-        unsigned cutoff;
-    };
-    std::array<std::vector<ScreenRow>, 2> screen_rows;
-    const double reach = (Range(turn_amplitude.lo) - Range(clearance)).hi;
-    const unsigned last = *std::ranges::max_element(cutoffs);
-    for (const bool north : {false, true}) {
-        auto& output = screen_rows[north ? 1 : 0];
-        for (const auto& row : catalogue.Rows(north)) {
-            if (row.entries.empty() || row.latitude.lo > reach) continue;
-            const unsigned group = LatitudeBand((turn_amplitude - row.latitude).lo);
-            const Range clipped(row.latitude.lo, std::min(row.latitude.hi, reach));
-            const auto equator = polar.Partial(AsinBounds(clipped / amplitude));
-            if (!equator[0].Finite() || !equator[1].Finite()) return {};
-            output.push_back({&row, equator, cutoffs[group]});
-        }
-    }
-    CatalogueScreen result{{}, edge_time, period, initial};
-    for (unsigned m = 0; m < last; ++m) {
-        if (cancelled && cancelled()) return {};
-        const Range m_value(m);
-        const Range full = m_value * period[0] + initial[0] + Range(0.0, period[0].hi);
-        if (full.hi < edge_time.lo) continue;
-        const Range log_span = (prior.time_remainder.value - full) / twice_leading;
-        const Range log_branch(log_span.lo, std::min(largest_log.hi, log_span.hi));
-        if (!log_span.Finite()) return {};
-        if (log_branch.lo > log_branch.hi) continue;
-        const auto coarse = radial_bound(log_branch);
-        if (!coarse) return {};
-        const bool full_radial = ExpPoint(log_branch.hi).lo > 1e-6;
-        const auto EquatorToEnd = [&](PhasePair equator, bool approach) {
-            return approach ? PhasePair{period[0] - equator[0], period[1] - equator[1]} : equator;
-        };
-        const auto inspect = [&](const AngularCatalogue::Entry& star, bool approach) -> bool {
-            const auto equator = polar.Partial(AsinBounds(star.latitude / amplitude));
-            if (!equator[0].Finite() || !equator[1].Finite()) return false;
-            const auto part = EquatorToEnd(equator, approach);
-            const Range tau = m_value * period[0] + initial[0] + part[0];
-            const Range phi = m_value * period[1] + initial[1] + part[1];
-            if (tau.hi < edge_time.lo) return true;
-            const Range sky =
-                fixed_phi - (phi + coarse->drag_at_turn * tau + coarse->spin_residual);
-            if (!AzimuthMayMatch(sky, star.azimuth)) return true;
-
-            const Range local_log = (coarse->time_residual - tau) / (Range(2.0) * coarse->leading);
-            // At tiny s the reused critical helper only adjusts the
-            // spin terms. Keep the full logarithmic timing envelope.
-            const Range preliminary = (prior.time_remainder.value - tau) / twice_leading;
-            Range valid(std::max(log_branch.lo, preliminary.lo),
-                        std::min(log_branch.hi, preliminary.hi));
-            if (!preliminary.Finite() || (full_radial && !local_log.Finite())) return false;
-            if (full_radial) {
-                valid = Range(std::max(valid.lo, local_log.lo), std::min(valid.hi, local_log.hi));
-            }
-            if (valid.lo > valid.hi) return true;
-            if (!valid.Finite()) return false;
-            const auto refined = radial_bound(valid);
-            if (!refined) return false;
-            const Range tighter =
-                fixed_phi - (phi + refined->drag_at_turn * tau + refined->spin_residual);
-            if (!AzimuthMayMatch(tighter, star.azimuth)) return true;
-            result.candidates.push_back({m, &star, approach, valid});
-            return true;
-        };
-        // The represented polar motion begins north of the equator and
-        // toward it. Each complete half-libration switches hemispheres.
-        for (const auto& prepared : screen_rows[m % 2]) {
-            if (m >= prepared.cutoff) continue;
-            for (const bool approach : {false, true}) {
-                const auto part = EquatorToEnd(prepared.equator, approach);
-                const Range tau = m_value * period[0] + initial[0] + part[0];
-                if (tau.hi < edge_time.lo) continue;
-                const Range phi = m_value * period[1] + initial[1] + part[1];
-                const Range sky =
-                    fixed_phi - (phi + coarse->drag_at_turn * tau + coarse->spin_residual);
-                const auto visit = [&](const AngularCatalogue::Entry& entry) {
-                    if (remaining == 0 || (cancelled && cancelled())) return false;
-                    --remaining;
-                    if (entry.latitude.lo > reach) return true;
-                    const unsigned group = LatitudeBand((turn_amplitude - entry.latitude).lo);
-                    return m >= cutoffs[group] || inspect(entry, approach);
-                };
-                if (!prepared.row->Query(sky, visit)) return {};
-            }
-        }
-    }
-    return result;
-}
-
 inline PhasePair IntegratePolarPartial(const FinitePolarShape& polar, Range phase) {
     const auto integrand = [&](auto angle) {
         using N = decltype(angle);
@@ -415,6 +281,201 @@ inline std::optional<NearCriticalPhases> PrepareNearCriticalPhases(double mass, 
         *radial,    std::move(*table), {Range(2.0) * half[0], Range(2.0) * half[1]},
         initial,    amplitude,         azimuth,
         log_edge.lo};
+}
+
+struct CatalogueScreen {
+    std::vector<FiniteCandidate> candidates;
+    Range edge_time;
+    PhasePair period, initial;
+};
+
+inline std::optional<CatalogueScreen> ScreenFiniteWindings(
+    double mass, double spin, Range centre, Range scale, const StationaryChart& chart,
+    const PolarIntegralTable& polar, const RegularizedRadialPhase& prior,
+    const AngularCatalogue& catalogue, const std::array<unsigned, 3>& cutoffs, Range turn_amplitude,
+    double clearance, std::size_t& remaining, const std::function<bool()>& cancelled,
+    const NearCriticalPhases* shared_phases) {
+    const Range fixed_phi = FixedPupilAzimuth(mass, spin, chart);
+    const Range amplitude = sqrt(polar.shape.amplitude2);
+    if (!fixed_phi.Finite() ||
+        !(chart.energy.hi < 0.0 && chart.initial_mu.lo > 0.0 && chart.mu_rate.hi < 0.0))
+        return {};
+    const auto half = polar.Partial(Range(kPiBounds.lo * .5, kPiBounds.hi * .5));
+    const PhasePair period{half[0] * Range(2.0), half[1] * Range(2.0)};
+    const auto initial = polar.Partial(AsinBounds(chart.initial_mu / amplitude));
+    const Range largest_log = LogPoint(scale.hi);
+    const auto edge =
+        EvaluateFiniteRadialPhase(mass, spin, centre, Range(scale.hi), chart.inverse_start);
+    const auto critical =
+        EvaluateFiniteRadialPhase(mass, spin, centre, Range(0.0), chart.inverse_start);
+    if (!edge || !critical || !initial[0].Finite() || !period[0].Finite()) return {};
+    const Range edge_time = Range(-2.0) * edge->leading * largest_log + edge->time_residual;
+    const Range twice_leading = Range(2.0) * prior.leading_factor;
+    const auto radial_bound = [&](Range log_scale) -> std::optional<FiniteRadialPhase> {
+        const Range span = ExpBounds(log_scale);
+        if (!span.Finite() || span.lo > scale.hi) return {};
+        if (span.hi > 1e-6) {
+            return EvaluateFiniteRadialPhase(mass, spin, centre,
+                                             Range(span.lo, std::min(span.hi, scale.hi)),
+                                             chart.inverse_start);
+        }
+        const Range decay = Range(span.hi) * (Range(prior.spin_derivative_constant) +
+                                              Range(prior.spin_derivative_log_coefficient) *
+                                                  (Range(1.0) - LogPoint(span.hi)));
+        auto phase = *critical;
+        phase.drag_at_turn = phase.drag_at_turn + Range(0.0, span.hi) * prior.drag_gradient[1];
+        phase.spin_residual = phase.spin_residual + Range(-decay.hi, decay.hi);
+        return phase;
+    };
+    struct ScreenRow {
+        const AngularCatalogue::Row* row;
+        std::vector<const AngularCatalogue::Entry*> subset;
+        PhasePair equator, critical_equator;
+        unsigned cutoff;
+    };
+    std::array<std::vector<ScreenRow>, 2> screen_rows;
+    const double reach = (Range(turn_amplitude.lo) - Range(clearance)).hi;
+    const unsigned last = *std::ranges::max_element(cutoffs);
+    for (const bool north : {false, true}) {
+        auto& output = screen_rows[north ? 1 : 0];
+        for (const auto& row : catalogue.Rows(north)) {
+            if (row.entries.empty() || row.latitude.lo > reach) continue;
+            const auto prepare = [&](std::vector<const AngularCatalogue::Entry*> entries,
+                                     Range latitude, unsigned group) {
+                const Range clipped(latitude.lo, std::min(latitude.hi, reach));
+                const auto equator = polar.Partial(AsinBounds(clipped / amplitude));
+                if (!equator[0].Finite() || !equator[1].Finite()) return false;
+                PhasePair critical_equator = equator;
+                if (shared_phases) {
+                    const auto partial = shared_phases->polar.Partial(
+                        AsinBounds(clipped / shared_phases->absolute_amplitude));
+                    if (partial[0].Finite() && partial[1].Finite()) critical_equator = partial;
+                }
+                output.push_back(
+                    {&row, std::move(entries), equator, critical_equator, cutoffs[group]});
+                return true;
+            };
+            const Range gap = turn_amplitude - row.latitude;
+            const unsigned group = LatitudeBand(gap.lo);
+            if (row.latitude.hi <= reach && group == LatitudeBand(gap.hi)) {
+                if (!prepare({}, row.latitude, group)) return {};
+                continue;
+            }
+            // Split the few rows crossing a turning or winding-band boundary
+            // once. Iteration preserves longitude order within each subset.
+            // Every preparation visit is charged to the original footprint.
+            std::array<std::vector<const AngularCatalogue::Entry*>, 3> by_band;
+            std::array<Range, 3> latitude;
+            for (const auto& entry : row.entries) {
+                if (remaining == 0 || (cancelled && cancelled())) return {};
+                --remaining;
+                if (entry.latitude.lo > reach) continue;
+                const unsigned index = LatitudeBand((turn_amplitude - entry.latitude).lo);
+                auto& subset = by_band[index];
+                auto& bounds = latitude[index];
+                bounds = subset.empty() ? entry.latitude
+                                        : Range(std::min(bounds.lo, entry.latitude.lo),
+                                                std::max(bounds.hi, entry.latitude.hi));
+                subset.push_back(&entry);
+            }
+            for (unsigned i = 0; i < by_band.size(); ++i) {
+                if (!by_band[i].empty() && !prepare(std::move(by_band[i]), latitude[i], i))
+                    return {};
+            }
+        }
+    }
+    CatalogueScreen result{{}, edge_time, period, initial};
+    for (unsigned m = 0; m < last; ++m) {
+        if (cancelled && cancelled()) return {};
+        const Range m_value(m);
+        const Range full = m_value * period[0] + initial[0] + Range(0.0, period[0].hi);
+        if (full.hi < edge_time.lo) continue;
+        const Range log_span = (prior.time_remainder.value - full) / twice_leading;
+        const Range log_branch(log_span.lo, std::min(largest_log.hi, log_span.hi));
+        if (!log_span.Finite()) return {};
+        if (log_branch.lo > log_branch.hi) continue;
+        const bool near_critical =
+            shared_phases && log_branch.hi <= shared_phases->maximum_log_scale;
+        const auto coarse =
+            near_critical ? std::optional(shared_phases->radial) : radial_bound(log_branch);
+        if (!coarse) return {};
+        const bool full_radial = near_critical || ExpPoint(log_branch.hi).lo > 1e-6;
+        const auto& active_period = near_critical ? shared_phases->period : period;
+        const auto& active_initial = near_critical ? shared_phases->initial : initial;
+        const auto EquatorToEnd = [&](PhasePair equator, bool approach) {
+            return approach
+                       ? PhasePair{active_period[0] - equator[0], active_period[1] - equator[1]}
+                       : equator;
+        };
+        const auto inspect = [&](const AngularCatalogue::Entry& star, bool approach) -> bool {
+            auto equator = near_critical ? shared_phases->polar.Partial(AsinBounds(
+                                               star.latitude / shared_phases->absolute_amplitude))
+                                         : polar.Partial(AsinBounds(star.latitude / amplitude));
+            if (near_critical && (!equator[0].Finite() || !equator[1].Finite()))
+                equator = polar.Partial(AsinBounds(star.latitude / amplitude));
+            if (!equator[0].Finite() || !equator[1].Finite()) return false;
+            const auto part = EquatorToEnd(equator, approach);
+            const Range tau = m_value * active_period[0] + active_initial[0] + part[0];
+            const Range phi = m_value * active_period[1] + active_initial[1] + part[1];
+            if (tau.hi < edge_time.lo) return true;
+            const Range sky =
+                fixed_phi - (phi + coarse->drag_at_turn * tau + coarse->spin_residual);
+            if (!AzimuthMayMatch(sky, star.azimuth)) return true;
+
+            const Range local_log = (coarse->time_residual - tau) / (Range(2.0) * coarse->leading);
+            // Without the shared radial integrals the critical-limit
+            // estimate adjusts only the spin terms. Retain the full
+            // logarithmic timing envelope in that case.
+            const Range preliminary = (prior.time_remainder.value - tau) / twice_leading;
+            Range valid(std::max(log_branch.lo, preliminary.lo),
+                        std::min(log_branch.hi, preliminary.hi));
+            if (!preliminary.Finite() || (full_radial && !local_log.Finite())) return false;
+            if (full_radial) {
+                valid = Range(std::max(valid.lo, local_log.lo), std::min(valid.hi, local_log.hi));
+            }
+            if (valid.lo > valid.hi) return true;
+            if (!valid.Finite()) return false;
+            if (!near_critical) {
+                const auto refined = radial_bound(valid);
+                if (!refined) return false;
+                const Range tighter =
+                    fixed_phi - (phi + refined->drag_at_turn * tau + refined->spin_residual);
+                if (!AzimuthMayMatch(tighter, star.azimuth)) return true;
+            }
+            result.candidates.push_back({m, &star, approach, valid});
+            return true;
+        };
+        // The represented polar motion begins north of the equator and
+        // toward it. Each complete half-libration switches hemispheres.
+        for (const auto& prepared : screen_rows[m % 2]) {
+            if (m >= prepared.cutoff) continue;
+            for (const bool approach : {false, true}) {
+                const auto part = EquatorToEnd(
+                    near_critical ? prepared.critical_equator : prepared.equator, approach);
+                const Range tau = m_value * active_period[0] + active_initial[0] + part[0];
+                if (tau.hi < edge_time.lo) continue;
+                const Range phi = m_value * active_period[1] + active_initial[1] + part[1];
+                const Range sky =
+                    fixed_phi - (phi + coarse->drag_at_turn * tau + coarse->spin_residual);
+                const auto visit = [&](const AngularCatalogue::Entry& entry) {
+                    if (remaining == 0 || (cancelled && cancelled())) return false;
+                    --remaining;
+                    return inspect(entry, approach);
+                };
+                const auto dereference =
+                    [](const AngularCatalogue::Entry* entry) -> const AngularCatalogue::Entry& {
+                    return *entry;
+                };
+                const bool completed = prepared.subset.empty()
+                                           ? prepared.row->Query(sky, visit)
+                                           : AngularCatalogue::Row::QueryEntries(
+                                                 prepared.subset, prepared.row->longitude_error,
+                                                 sky, dereference, visit);
+                if (!completed) return {};
+            }
+        }
+    }
+    return result;
 }
 
 inline std::optional<RefinedCandidate> RefineFiniteAzimuth(double mass, double spin, Range centre,

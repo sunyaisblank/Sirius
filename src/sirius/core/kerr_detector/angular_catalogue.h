@@ -70,8 +70,16 @@ class AngularCatalogue {
 
         template <class Visit>
         bool Query(Range unwrapped, Visit&& visit) const {
+            return QueryEntries(entries, longitude_error, unwrapped, std::identity{}, visit);
+        }
+
+        template <class Entries, class GetEntry, class Visit>
+        static bool QueryEntries(const Entries& entries, double longitude_error, Range unwrapped,
+                                 GetEntry get_entry, Visit&& visit) {
             if (entries.empty()) return true;
             if (!unwrapped.Finite()) return false;
+            const auto apply = [&](const auto& item) { return visit(get_entry(item)); };
+            const auto key = [&](const auto& item) { return get_entry(item).longitude_key; };
             const Range full(-kPiBounds.hi, kPiBounds.hi);
             const Range two_pi = Range(2.0) * kPiBounds;
             const Range wrap_range = (unwrapped - full) / two_pi;
@@ -81,18 +89,16 @@ class AngularCatalogue {
             // visit per catalogue entry.
             if (last - first > 1 ||
                 (Range(unwrapped.hi) - Range(unwrapped.lo)).hi + 2 * longitude_error >= two_pi.lo) {
-                return std::all_of(entries.begin(), entries.end(), visit);
+                return std::all_of(entries.begin(), entries.end(), apply);
             }
-            using Iterator = std::vector<Entry>::const_iterator;
+            using Iterator = decltype(entries.begin());
             std::array<std::pair<Iterator, Iterator>, 2> slices{};
             unsigned count = 0;
             for (int winding = first; winding <= last; ++winding) {
                 const Range arc =
                     unwrapped - two_pi * Range(winding) + Range(-longitude_error, longitude_error);
-                const auto lo =
-                    std::ranges::lower_bound(entries, arc.lo, {}, &Entry::longitude_key);
-                const auto hi =
-                    std::ranges::upper_bound(entries, arc.hi, {}, &Entry::longitude_key);
+                const auto lo = std::ranges::lower_bound(entries, arc.lo, {}, key);
+                const auto hi = std::ranges::upper_bound(entries, arc.hi, {}, key);
                 if (lo != hi) slices[count++] = {lo, hi};
             }
             if (count == 2 && slices[1].first < slices[0].first) std::swap(slices[0], slices[1]);
@@ -100,7 +106,7 @@ class AngularCatalogue {
             for (unsigned i = 0; i < count; ++i) {
                 const auto [lo, hi] = slices[i];
                 for (auto at = std::max(lo, previous_end); at < hi; ++at)
-                    if (!visit(*at)) return false;
+                    if (!apply(*at)) return false;
                 previous_end = std::max(previous_end, hi);
             }
             return true;
