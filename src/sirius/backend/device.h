@@ -238,7 +238,11 @@ struct PackagedVulkanProvider {
 [[nodiscard]] base::Expected<std::size_t> ResolveVulkanDeviceIndex(
     std::span<const DeviceInfo> devices);
 
+enum class VulkanPipelineOptimization { kDefault, kDisabled };
+
 // Opens device `index` as enumerated by EnumerateVulkanDevices.
 [[nodiscard]] base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index);
+[[nodiscard]] base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(
+    std::size_t index, VulkanPipelineOptimization optimization);
 
 }  // namespace sirius::backend

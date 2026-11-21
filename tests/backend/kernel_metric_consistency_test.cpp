@@ -56,7 +56,7 @@ void CheckMetricConsistency(const std::string& artifact) {
     if (inventory->empty()) GTEST_SKIP() << "no Vulkan device available";
     const auto index = ResolveVulkanDeviceIndex(*inventory);
     ASSERT_TRUE(index.has_value()) << index.error().Description();
-    auto opened = CreateVulkanDevice(*index);
+    auto opened = CreateVulkanDevice(*index, VulkanPipelineOptimization::kDisabled);
     ASSERT_TRUE(opened.has_value()) << opened.error().Description();
     auto device = std::move(*opened);
     const auto& info = device->Info();

@@ -146,7 +146,8 @@ class VulkanDevice final : public ComputeDevice {
         IndependentPairTiming* timing = nullptr) override;
 
   private:
-    friend base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index);
+    friend base::Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(
+        std::size_t index, VulkanPipelineOptimization optimization);
 
     struct Buffer {
         VkBuffer buffer = VK_NULL_HANDLE;
@@ -219,6 +220,7 @@ class VulkanDevice final : public ComputeDevice {
     VulkanPipelineCacheStats pipeline_cache_stats_;
     bool pipeline_cache_modified_ = false;
     DeviceInfo info_;
+    VulkanPipelineOptimization pipeline_optimization_ = VulkanPipelineOptimization::kDefault;
 
     struct Kernel {
         std::vector<std::uint32_t> words;

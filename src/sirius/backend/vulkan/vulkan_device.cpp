@@ -427,12 +427,18 @@ Expected<std::size_t> ResolveVulkanDeviceIndex(std::span<const DeviceInfo> devic
 }
 
 Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
+    return CreateVulkanDevice(index, VulkanPipelineOptimization::kDefault);
+}
+
+Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(
+    std::size_t index, VulkanPipelineOptimization optimization) {
     auto instance = CreateInstance();
     if (!instance) {
         return std::unexpected(instance.error());
     }
     auto device = std::make_unique<VulkanDevice>();
     device->instance_ = *instance;
+    device->pipeline_optimization_ = optimization;
 
     auto physicals = ListPhysicalDevices(device->instance_);
     if (!physicals) {
@@ -1018,6 +1024,9 @@ Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(
     // slangc names every SPIR-V compute entry point "main".
     const VkComputePipelineCreateInfo pipeline_info{
         .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+        .flags = pipeline_optimization_ == VulkanPipelineOptimization::kDisabled
+                     ? VkPipelineCreateFlags{VK_PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT}
+                     : VkPipelineCreateFlags{},
         .stage =
             VkPipelineShaderStageCreateInfo{
                 .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
