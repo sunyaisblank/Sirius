@@ -1,0 +1,96 @@
+{
+  "issue": "https://github.com/sunyaisblank/Sirius/issues/100",
+  "recovered_utc": "2026-11-21T12:28:04.065388+00:00",
+  "classification": "Contemporaneous text of the previously missing baseline provenance file, recovered from a recorded direct read",
+  "original_tape_authority": {
+    "recorded_date": "2026-07-17",
+    "recorded_source_revision": "58c97dab08ffb94a1534e443203922412a86a884",
+    "kerr_dimensions": [
+      640,
+      360
+    ],
+    "warp_dimensions": [
+      320,
+      180
+    ],
+    "source_scope": "The recovered note gives the original tape revision and dimensions. It says these tapes had no reproducible script."
+  },
+  "regenerated_tape_authority": {
+    "recorded_date": "2026-07-18",
+    "intentional_transition_commit": "e736ffe0c318dcd637f1453beb3523ad14a15047",
+    "recorded_preset": "linux-gcc, GCC 14 Release",
+    "transcript_observed_outputs": {
+      "kerr_png": "512×512 8-bit RGBA PNG",
+      "kerr_exr": "512×512 scanline OpenEXR with ZIP compression",
+      "warp_png": "512×512 8-bit RGBA PNG",
+      "wormhole_png": "512×512 8-bit RGBA PNG"
+    },
+    "observed_regeneration_command_for_kerr_png": "./bin/linux-gcc/src/sirius/app/sirius render -m Kerr -a 0.9 -w 512 -h 512 -s 32 -d 30 -i 80 --fov 60 -o renders/rebuild-baseline/kerr.png",
+    "corroboration": "The render command was observed as an active process while the historical fix was being prepared. It predates the later explicit CPU override documented in the recovered file.",
+    "independent_transition_witness": "attestations/qualification/c096156f/rk45-reference-transition/MANIFEST.json"
+  },
+  "provenance": {
+    "read_command": {
+      "path_relative_to_codex_session_archive": "2026/07/30/rollout-2026-07-30T12-14-21-019fb0cd-2312-7e82-a510-710f51f64f34.jsonl.gz",
+      "archive_bytes": 4562549,
+      "archive_sha256": "2dbc981d2bafe90e9f98582410af16f068b9436db37de937df1684de57445dbc",
+      "jsonl_line_number": 258,
+      "verbatim_jsonl_line_sha256": "26dcf95d64a750dabb60d3608412b78de87f5ca2ee062bfc1875abcfde25e875",
+      "timestamp_utc": "2026-07-30T02:25:11.401Z",
+      "call_id": "call_nm1bc91no1R9AZDZB0CZ5FEh"
+    },
+    "read_output": {
+      "path_relative_to_codex_session_archive": "2026/07/30/rollout-2026-07-30T12-14-21-019fb0cd-2312-7e82-a510-710f51f64f34.jsonl.gz",
+      "archive_bytes": 4562549,
+      "archive_sha256": "2dbc981d2bafe90e9f98582410af16f068b9436db37de937df1684de57445dbc",
+      "jsonl_line_number": 259,
+      "verbatim_jsonl_line_sha256": "f80c116caaf98f0f52739d1333dfc1b1f67d7f161ea5e3cf2e88e15bec52bc8a",
+      "timestamp_utc": "2026-07-30T02:25:11.587Z",
+      "call_id": "call_nm1bc91no1R9AZDZB0CZ5FEh"
+    },
+    "observed_process": {
+      "path_relative_to_codex_session_archive": "2026/07/17/rollout-2026-07-17T11-48-10-019f6dc2-7f52-7703-9c3c-94b6391e09b5.jsonl.gz",
+      "archive_bytes": 22468263,
+      "archive_sha256": "d0539fe15d05864c327c7a179011e56e4520046b927842e3de4e7b7bf3541117",
+      "jsonl_line_number": 15721,
+      "verbatim_jsonl_line_sha256": "9c892ba8c75506d65e77224e145700dbc07cf622a29182443594547ecd69fa1d",
+      "timestamp_utc": "2026-07-18T06:44:14.269Z",
+      "call_id": "call_JpKHj4kroMEhXeWSmh5Fu1nO"
+    },
+    "recovered_readme": {
+      "path": "attestations/qualification/58c97dab/july-tape-provenance/rebuild-baseline-README.md",
+      "bytes": 1502,
+      "sha256": "2ab8cb6eb50b8d4311291ccb4b00e547ad8c8362fc9ecf9069191b37b8941388"
+    }
+  },
+  "existing_new_reconstruction_pairs": {
+    "kerr_png": {
+      "revision": "5bf74646ce0aada68b67fbc315b50ed6e60ba283",
+      "path": "attestations/forensic-images/b739f92/kerr-png-reconstruction-pair/result.json",
+      "sha256": "537ccddcb71df7c1a50726266434cb60bbd78930cb3750edce87bca98a7bf990",
+      "bytes": 2496,
+      "width": 512,
+      "height": 512,
+      "effective_spp": 25
+    },
+    "kerr_exr": {
+      "revision": "38c6a264f7ac18d9b75f798337eaa2027e4264ac",
+      "path": "attestations/forensic-images/b739f92/kerr-exr-reconstruction-pair/result.json",
+      "sha256": "c95e3e4250c5f79059675851ff1e1d2d0f4a676b7a58506e80120b8f76963778",
+      "bytes": 2293,
+      "width": 512,
+      "height": 512,
+      "effective_spp": 25
+    },
+    "alcubierre_png": {
+      "revision": "9fde062e2d95f1fd679d57c2762d11859c9f1358",
+      "path": "attestations/forensic-images/b739f92/alcubierre-png-reconstruction-pair/result.json",
+      "sha256": "b7b9b402af54314023b075c43704ed161dcce52c1140134bfc6563a92e7f9b3c",
+      "bytes": 2316,
+      "width": 1920,
+      "height": 1080,
+      "effective_spp": 64
+    }
+  },
+  "remaining": "The recorded commands apply to July 18 regenerated outputs. The authentic original July 17 images and their digests are still missing. The three verified reconstruction pairs remain under their separately recorded provenance."
+}
