@@ -54,6 +54,7 @@ struct StationaryChart {
     FilmMatrix jacobian;
     Range lambda, eta;  // L/E, Q/E².
     Range inverse_start, initial_mu, energy, mu_rate, nx, ny;
+    bool positive_radial_endpoints;
 };
 
 inline std::optional<StationaryChart> MakeStationaryChart(
@@ -91,6 +92,11 @@ inline std::optional<StationaryChart> MakeStationaryChart(
         !std::ranges::all_of(h.derivative, &Range::Finite) ||
         !std::ranges::all_of(stationary_gradient, &Range::Finite))
         return {};
+    std::array<Range, 5> potential;
+    for (std::size_t i = 0; i < c.size(); ++i) potential[i] = c[i].value;
+    const bool positive_radial_endpoints =
+        EvaluateRadial(potential, Range(state.start.lo)).lo > 0.0 &&
+        EvaluateRadial(potential, Range(state.horizon.hi)).lo > 0.0;
     return StationaryChart{{u, h.value},
                            {stationary_gradient, h.derivative},
                            lambda,
@@ -100,7 +106,8 @@ inline std::optional<StationaryChart> MakeStationaryChart(
                            state.energy.value,
                            state.mu_rate.value,
                            state.nx.value,
-                           state.ny.value};
+                           state.ny.value,
+                           positive_radial_endpoints};
 }
 
 template <typename Scalar>

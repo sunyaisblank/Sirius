@@ -243,6 +243,7 @@ struct Estimate {
     bool has_hidden_probe = false;
     bool certified_dark = false;
     bool bounded_omission = false;
+    bool whole_sky_query = false;
 };
 
 class Detector {
@@ -831,10 +832,10 @@ class Detector {
         double query_radius = reach * (2 * cell.Width() + residual_bound);
         if (cell_bound_ && mixed && query_radius >= std::numbers::pi) {
             // Across the Kerr shadow a large derivative can turn the
-            // tangent-plane estimate into a whole-sky search. Subdivide
-            // without searching that envelope. At the original depth
-            // limit the continuous cell bound owns the classification.
+            // tangent-plane estimate into a whole-sky search. Route it
+            // to refinement without searching that envelope.
             result.regular = false;
+            result.whole_sky_query = true;
             return result;
         }
         if (!mixed) {
@@ -1030,38 +1031,41 @@ class Detector {
     }
     Estimate Refine(const Cell& cell, const Estimate& coarse) {
         if (coarse.certified_dark || !cell.IntersectsSupport()) return coarse;
-        if (cell.depth >= policy_.maximum_depth) {
+        const bool terminal = cell.depth >= policy_.maximum_depth;
+        if (terminal && dark_cell_ && coarse.has_hidden_probe) {
             // Refine the enclosure, without requesting a deeper detector
             // sample or extending any of the detector's work limits.
-            if (dark_cell_ && coarse.has_hidden_probe) {
-                const bool certified = dark_cell_(cell.lower, cell.upper, 4);
-                CheckCancellation();
-                if (certified) {
-                    Estimate result;
-                    result.certified_dark = true;
-                    return result;
-                }
+            const bool certified = dark_cell_(cell.lower, cell.upper, 4);
+            CheckCancellation();
+            if (certified) {
+                Estimate result;
+                result.certified_dark = true;
+                return result;
             }
-            if (cell_bound_ && coarse.has_hidden_probe) {
-                const auto available =
-                    policy_.maximum_candidate_visits - statistics_.candidate_visits;
-                auto remaining = available;
-                const auto bound = (*cell_bound_)(cell.lower, cell.upper, remaining);
-                if (remaining > available) Fail(PointDetectorFailure::Arithmetic);
-                statistics_.candidate_visits += available - remaining;
-                CheckCancellation();
-                if (bound && std::ranges::all_of(*bound, [&](double error) {
-                        return std::isfinite(error) && error >= 0.0 &&
-                               error <= policy_.absolute_rgb_error;
-                    })) {
-                    Estimate result;
-                    result.error = *bound;
-                    result.bounded_omission = true;
-                    return result;
-                }
-            }
-            Fail(PointDetectorFailure::Unresolved);
         }
+        // At the last split a whole-sky cell can use a single continuous
+        // proof for its four children. Its full error is still charged to
+        // this original Gaussian, and an inconclusive proof spends visits.
+        const bool last_whole_sky_split =
+            coarse.whole_sky_query && cell.depth + 1 == policy_.maximum_depth;
+        if (cell_bound_ && ((terminal && coarse.has_hidden_probe) || last_whole_sky_split)) {
+            const auto available = policy_.maximum_candidate_visits - statistics_.candidate_visits;
+            auto remaining = available;
+            const auto bound = (*cell_bound_)(cell.lower, cell.upper, remaining);
+            if (remaining > available) Fail(PointDetectorFailure::Arithmetic);
+            statistics_.candidate_visits += available - remaining;
+            CheckCancellation();
+            if (bound && std::ranges::all_of(*bound, [&](double error) {
+                    return std::isfinite(error) && error >= 0.0 &&
+                           error <= policy_.absolute_rgb_error;
+                })) {
+                Estimate result;
+                result.error = *bound;
+                result.bounded_omission = true;
+                return result;
+            }
+        }
+        if (terminal) Fail(PointDetectorFailure::Unresolved);
         const auto children = cell.Children();
         std::array<Estimate, 4> estimates;
         for (int i = 0; i < 4; ++i) estimates[i] = Measure(children[i]);

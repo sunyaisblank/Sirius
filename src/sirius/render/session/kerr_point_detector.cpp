@@ -166,11 +166,17 @@ std::optional<Range> BoundAzimuthImages(double mass, double spin, Range centre, 
                                         const StationaryChart& chart, const CatalogueScreen& screen,
                                         const PolarIntegralTable& polar, FiniteCandidate candidate,
                                         const std::function<bool()>& cancelled,
-                                        std::size_t& remaining) {
+                                        std::size_t& remaining,
+                                        const NearCriticalPhases* shared_phases = nullptr) {
     if (cancelled && cancelled()) return {};
     const auto& star = *candidate.source;
-    const auto refined = RefineFiniteAzimuth(mass, spin, centre, scale, chart, candidate,
-                                             star.latitude, star.azimuth);
+    std::optional<RefinedCandidate> refined;
+    if (shared_phases && candidate.log_scale.hi <= shared_phases->maximum_log_scale)
+        refined = shared_phases->Refine(candidate);
+    const bool used_shared_phases = refined.has_value();
+    if (!refined)
+        refined = RefineFiniteAzimuth(mass, spin, centre, scale, chart, candidate, star.latitude,
+                                      star.azimuth);
     if (!refined) return {};
     if (!refined->possible) return Range{};
     // This verifies the latitude root exists continuously over radius.
@@ -195,12 +201,19 @@ std::optional<Range> BoundAzimuthImages(double mass, double spin, Range centre, 
         }
     }
 
+    candidate.log_scale = refined->log_scale;
+    if (used_shared_phases) {
+        if (remaining == 0) return {};
+        --remaining;
+        return BoundAzimuthImages(mass, spin, centre, scale, chart, screen, polar, candidate,
+                                  cancelled, remaining);
+    }
+
     // An inconclusive derivative need not imply a caustic image. Retest
     // longitude on each radius half before requesting a derivative there.
     // Closed halves may count a shared endpoint twice, conservatively.
     const double middle = std::midpoint(centre.lo, centre.hi);
     if (!(centre.lo < middle && middle < centre.hi)) return {};
-    candidate.log_scale = refined->log_scale;
     Range total;
     for (Range half : {Range(centre.lo, middle), Range(middle, centre.hi)}) {
         if (remaining == 0) return {};
@@ -252,7 +265,20 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
         (cancelled && cancelled()))
         return {};
     const KerrSchildParams metric{mass, spin, charge, lambda};
-    const FilmVector box{Range(lower[0], upper[0]), Range(lower[1], upper[1])};
+    FilmVector box{Range(lower[0], upper[0]), Range(lower[1], upper[1])};
+    if (!box[0].Finite() || !box[1].Finite()) return {};
+    // Tighten the rectangle to the axis-aligned hull of its intersection
+    // with the original Gaussian disk. At its rim the active part can be
+    // much narrower than the cell, and only that part needs a sky bound.
+    const std::array nearest{std::clamp(0.0, box[0].lo, box[0].hi),
+                             std::clamp(0.0, box[1].lo, box[1].hi)};
+    for (unsigned axis = 0; axis < 2; ++axis) {
+        const Range extent2 = Range(16.0) - Square(Range(nearest[1 - axis]));
+        if (extent2.hi < 0.0) return std::array<double, 3>{};
+        const double extent = sqrt(Range(extent2.hi)).hi;
+        box[axis] = Range(std::max(box[axis].lo, -extent), std::min(box[axis].hi, extent));
+        if (box[axis].hi < box[axis].lo) return std::array<double, 3>{};
+    }
     const auto evaluate = [&](const FilmVector& region) {
         return EvaluateFilmChart(camera, metric, launch, film_origin, footprint, region);
     };
@@ -264,6 +290,10 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
     const Range determinant = Abs(radial_gradient[0] * potential_gradient[1] -
                                   radial_gradient[1] * potential_gradient[0]);
     const auto target = CoverEscapingChart(box, *whole, evaluate);
+    // MakeStationaryChart admits the only positive radial minimum and an
+    // inward launch. Positive bounds there and at both ends rule out a
+    // turning point throughout the supported film rectangle.
+    if (target[1].lo > 0.0 && whole->positive_radial_endpoints) return std::array<double, 3>{};
     if (!(determinant.lo > 0.0 && target[0].Finite() && target[1].lo < 0.0)) return {};
     const Range scale(0.0, sqrt(Range(-target[1].lo)).hi);
 
@@ -307,9 +337,11 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
         ScreenFiniteWindings(mass, spin, target[0], scale, *whole, *polar, *phase, *angular,
                              cutoffs, amplitude, clearance, remaining, cancelled);
     if (!screen) return {};
+    const auto phases = PrepareNearCriticalPhases(mass, spin, target[0], scale, *whole);
     for (const auto& candidate : screen->candidates) {
-        const auto density = BoundAzimuthImages(mass, spin, target[0], scale, *whole, *screen,
-                                                *polar, candidate, cancelled, remaining);
+        const auto density =
+            BoundAzimuthImages(mass, spin, target[0], scale, *whole, *screen, *polar, candidate,
+                               cancelled, remaining, phases ? &*phases : nullptr);
         if (!density) return {};
         if (density->hi == 0.0) continue;
         const Range contribution =

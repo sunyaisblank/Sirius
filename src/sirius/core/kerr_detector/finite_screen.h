@@ -362,6 +362,61 @@ struct RefinedCandidate {
     Range log_scale, azimuth;
 };
 
+// High windings reach the same near-critical strip of the radial chart.
+// Share enclosures of the radial integrals and polar antiderivatives over
+// the strip instead of reintegrating them for each catalogue candidate.
+struct NearCriticalPhases {
+    FiniteRadialPhase radial;
+    PolarIntegralTable polar;
+    PhasePair period, initial;
+    Range absolute_amplitude, fixed_azimuth;
+    double maximum_log_scale;
+
+    std::optional<RefinedCandidate> Refine(const FiniteCandidate& candidate) const {
+        const auto& star = *candidate.source;
+        const auto final = polar.Partial(AsinBounds(star.latitude / absolute_amplitude));
+        PhasePair target;
+        for (unsigned axis = 0; axis < 2; ++axis) {
+            const Range endpoint =
+                candidate.approaching_equator ? period[axis] - final[axis] : final[axis];
+            target[axis] = Range(candidate.winding) * period[axis] + initial[axis] + endpoint;
+        }
+        const Range azimuth =
+            fixed_azimuth - (target[1] + radial.drag_at_turn * target[0] + radial.spin_residual);
+        const Range timing = (radial.time_residual - target[0]) / (Range(2.0) * radial.leading);
+        if (!azimuth.Finite() || !timing.Finite()) return {};
+        const Range log_scale(std::max(timing.lo, candidate.log_scale.lo),
+                              std::min(timing.hi, candidate.log_scale.hi));
+        return RefinedCandidate{log_scale.Finite() && AzimuthMayMatch(azimuth, star.azimuth),
+                                log_scale, azimuth};
+    }
+};
+
+inline std::optional<NearCriticalPhases> PrepareNearCriticalPhases(double mass, double spin,
+                                                                   Range centre, Range scale,
+                                                                   const StationaryChart& chart) {
+    // The strip lies inside the admitted radial domain. This cutoff selects
+    // a shared integration domain and does not discard any source.
+    const double edge = std::min(0x1p-40, scale.hi);
+    const Range limit(0.0, edge);
+    const auto radial = EvaluateFiniteRadialPhase(mass, spin, centre, limit, chart.inverse_start);
+    const auto shape = MakeFinitePolarShape(mass, spin, centre, limit);
+    const Range azimuth = FixedPupilAzimuth(mass, spin, chart);
+    const Range log_edge = LogPoint(edge);
+    if (!radial || !shape || !azimuth.Finite() || !log_edge.Finite()) return {};
+    const Range amplitude = sqrt(shape->amplitude2);
+    const auto half = IntegratePolarPartial(*shape, Range(kPiBounds.lo * .5, kPiBounds.hi * .5));
+    const auto initial = IntegratePolarPartial(*shape, AsinBounds(chart.initial_mu / amplitude));
+    auto table = MakePolarIntegralTable(*shape);
+    if (!table || !half[0].Finite() || !half[1].Finite() || !initial[0].Finite() ||
+        !initial[1].Finite())
+        return {};
+    return NearCriticalPhases{
+        *radial,    std::move(*table), {Range(2.0) * half[0], Range(2.0) * half[1]},
+        initial,    amplitude,         azimuth,
+        log_edge.lo};
+}
+
 inline std::optional<RefinedCandidate> RefineFiniteAzimuth(double mass, double spin, Range centre,
                                                            Range outer_scale,
                                                            const StationaryChart& chart,
