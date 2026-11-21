@@ -85,6 +85,7 @@ struct VulkanRenderStats {
     std::array<backend::RetainedCompute::StageStats, backend::RetainedCompute::kStageCount>
         retained_stages{};
     backend::RetainedCompute::StageStats endpoint_dense_timing;
+    backend::RetainedCompute::StageStats dopri_endpoint_timing;
     std::uint64_t queue_submissions = 0;
     struct RetainedTiming {
         // Allocated stage rows; the adaptive submission budget can be lower.

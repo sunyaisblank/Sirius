@@ -430,6 +430,7 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
     }
     if (dopri) {
         std::vector<RetainedEndpointInput> midpoint_packets(count);
+        std::optional<std::vector<RetainedEndpointOutput>> midpoint_projected;
         bool needed = false;
         // All four private trial packets already exist. Preserve trial-major
         // row positions while filling each current governor-sized dispatch;
@@ -451,7 +452,19 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
                     if (trial == 0) packets[item].values[361] = RetainedValue::FromDouble(.5);
                 }
             }
-            const auto sampled = compute.DopriPhase(packets);
+            auto sampled = [&]() -> base::Expected<std::vector<RetainedDopriPhaseOutput>> {
+                // Trial zero finishes in the first chunk because its size is at
+                // least count. Its midpoint packets are therefore independent of
+                // the final chunk, and remain private until all trials are checked.
+                if (offset > 0 && offset + rows == total && needed && std::max(rows, count) > 1 &&
+                    compute.SupportsIndependentPair()) {
+                    auto paired = compute.DopriPhaseAndEndpoint(packets, midpoint_packets);
+                    if (!paired) return std::unexpected(paired.error());
+                    midpoint_projected = std::move(paired->endpoints);
+                    return std::move(paired->phase);
+                }
+                return compute.DopriPhase(packets);
+            }();
             // Performed transfer/malformed-result failures stay global, even
             // if an earlier private trial in this dispatch refused its row.
             if (!sampled) return std::unexpected(sampled.error());
@@ -475,12 +488,15 @@ base::Expected<std::vector<RetainedIntervalOutput>> AttemptIntervals(
             offset += rows;
         }
         if (needed) {
-            const auto sampled = compute.Endpoint(midpoint_packets);
-            if (!sampled) return std::unexpected(sampled.error());
+            if (!midpoint_projected) {
+                auto sampled = compute.Endpoint(midpoint_packets);
+                if (!sampled) return std::unexpected(sampled.error());
+                midpoint_projected = std::move(*sampled);
+            }
             for (std::size_t row = 0; row < count; ++row)
                 if (active[row] && curves[row]) {
-                    dense[row].physical = (*sampled)[row].physical;
-                    dense[row].valid = (*sampled)[row].valid;
+                    dense[row].physical = (*midpoint_projected)[row].physical;
+                    dense[row].valid = (*midpoint_projected)[row].valid;
                 }
         }
     }

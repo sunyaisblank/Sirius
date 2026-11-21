@@ -685,14 +685,17 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
                     stage.completion_flag_counts[0], stage.completion_flag_counts[1],
                     stage.completion_flag_counts[2]);
             }
-            const auto& shared = progress.endpoint_dense_timing;
-            std::clog << std::format(
-                "[Vulkan] Retained cumulative shared Endpoint/Dense host timing: "
-                "queue_submissions={}, submit_wait_ms={:.6f}, pipeline_setup_ms={:.6f}, "
-                "command_setup_ms={:.6f}, cleanup_ms={:.6f}, "
-                "dispatch_total_ms_inclusive={:.6f}\n",
-                shared.submissions, shared.submit_wait_ms, shared.pipeline_setup_ms,
-                shared.command_setup_ms, shared.cleanup_ms, shared.dispatch_total_ms);
+            const auto log_pair = [](const char* stages, const auto& shared) {
+                std::clog << std::format(
+                    "[Vulkan] Retained cumulative shared {} host timing: "
+                    "queue_submissions={}, submit_wait_ms={:.6f}, pipeline_setup_ms={:.6f}, "
+                    "command_setup_ms={:.6f}, cleanup_ms={:.6f}, "
+                    "dispatch_total_ms_inclusive={:.6f}\n",
+                    stages, shared.submissions, shared.submit_wait_ms, shared.pipeline_setup_ms,
+                    shared.command_setup_ms, shared.cleanup_ms, shared.dispatch_total_ms);
+            };
+            log_pair("Endpoint/Dense", progress.endpoint_dense_timing);
+            log_pair("DopriPhase/Endpoint", progress.dopri_endpoint_timing);
             next_progress = std::chrono::steady_clock::now() + std::chrono::seconds(30);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -792,20 +795,23 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
         timing.read_buffer_bytes += stages[i].read_buffer_bytes;
         timing.pipeline_creations += stages[i].pipeline_creations;
     }
-    const auto paired = compute->EndpointDenseStatistics();
-    stats.endpoint_dense_timing = paired;
-    stats.queue_submissions =
-        static_cast<std::uint64_t>(stats.band_dispatches) - paired.submissions;
-    stats.dispatch_seconds += paired.submit_wait_ms / 1000;
-    stats.maximum_dispatch_ms = std::max(stats.maximum_dispatch_ms, paired.maximum_submit_wait_ms);
-    stats.initialization_seconds += paired.pipeline_setup_ms / 1000;
-    stats.dispatch_target_overshoots += static_cast<std::int64_t>(paired.target_overshoots);
-    timing.pipeline_setup_ms += paired.pipeline_setup_ms;
-    timing.command_setup_ms += paired.command_setup_ms;
-    timing.submit_wait_ms += paired.submit_wait_ms;
-    timing.cleanup_ms += paired.cleanup_ms;
-    timing.dispatch_total_ms += paired.dispatch_total_ms;
-    timing.pipeline_creations += paired.pipeline_creations;
+    stats.endpoint_dense_timing = compute->EndpointDenseStatistics();
+    stats.dopri_endpoint_timing = compute->DopriEndpointStatistics();
+    stats.queue_submissions = static_cast<std::uint64_t>(stats.band_dispatches);
+    for (const auto* pair : {&stats.endpoint_dense_timing, &stats.dopri_endpoint_timing}) {
+        stats.queue_submissions -= pair->submissions;
+        stats.dispatch_seconds += pair->submit_wait_ms / 1000;
+        stats.maximum_dispatch_ms =
+            std::max(stats.maximum_dispatch_ms, pair->maximum_submit_wait_ms);
+        stats.initialization_seconds += pair->pipeline_setup_ms / 1000;
+        stats.dispatch_target_overshoots += static_cast<std::int64_t>(pair->target_overshoots);
+        timing.pipeline_setup_ms += pair->pipeline_setup_ms;
+        timing.command_setup_ms += pair->command_setup_ms;
+        timing.submit_wait_ms += pair->submit_wait_ms;
+        timing.cleanup_ms += pair->cleanup_ms;
+        timing.dispatch_total_ms += pair->dispatch_total_ms;
+        timing.pipeline_creations += pair->pipeline_creations;
+    }
     return stats;
 }
 #endif

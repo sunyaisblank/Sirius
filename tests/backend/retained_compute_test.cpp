@@ -4825,6 +4825,57 @@ TEST_F(RetainedComputeTest, SharedEndpointDensePreservesPrivateIntervalsAndSeria
               before_decode_failure[3].completion_flag_counts);
     probe.after_read = {};
     EXPECT_EQ(device->BufferAllocationBytes(), resident);
+
+    // Keep the same projection and DP chunk sizes in both schedules.
+    probe.independent_pairs = false;
+    probe.submission_ms = {};
+    probe.pair_submit_ms.reset();
+    const auto before = observed.Statistics();
+    const auto serial_dispatches = probe.forwarded_dispatches;
+    const auto dp_serial = AttemptRetainedDopriIntervals(observed, inputs, 4);
+    ASSERT_TRUE(dp_serial) << dp_serial.error().Description();
+    const auto serial_count = probe.forwarded_dispatches - serial_dispatches;
+    const auto expected_stages = observed.Statistics();
+    for (const auto& row : *dp_serial) {
+        ASSERT_TRUE(row.admissible);
+        ASSERT_TRUE(row.dopri);
+    }
+    probe.independent_pairs = true;
+    const auto prior_pairs = probe.pair_calls;
+    const auto paired_dispatches = probe.forwarded_dispatches;
+    const auto dp_paired = AttemptRetainedDopriIntervals(observed, inputs, 4);
+    ASSERT_TRUE(dp_paired) << dp_paired.error().Description();
+    EXPECT_EQ(probe.pair_calls - prior_pairs, 1U);
+    EXPECT_EQ(probe.forwarded_dispatches - paired_dispatches + 2, serial_count);
+    EXPECT_EQ(observed.DopriEndpointStatistics().submissions, 1U);
+    const auto current = observed.Statistics();
+    for (std::size_t stage = 0; stage < current.size(); ++stage)
+        EXPECT_EQ(current[stage].submissions - expected_stages[stage].submissions,
+                  expected_stages[stage].submissions - before[stage].submissions);
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*dp_paired)[row], (*dp_serial)[row]));
+
+    const auto dp_output = probe.allocations[13].handle;
+    unsigned reads_after_pair = 0;
+    probe.after_pair = [&] {
+        probe.after_read = [&](BufferHandle buffer, std::span<std::byte> bytes) {
+            ++reads_after_pair;
+            EXPECT_EQ(buffer.value, dp_output.value);
+            const std::uint32_t malformed = 2;
+            std::memcpy(bytes.data(), &malformed, sizeof(malformed));
+        };
+    };
+    const auto bad_dp_pair = AttemptRetainedDopriIntervals(observed, inputs, 4);
+    ASSERT_FALSE(bad_dp_pair);
+    EXPECT_EQ(bad_dp_pair.error().operation(), "read retained DP phase");
+    EXPECT_EQ(reads_after_pair, 1U);
+    probe.after_pair = {};
+    probe.after_read = {};
+    const auto recovered_dp_pair = AttemptRetainedDopriIntervals(observed, inputs, 4);
+    ASSERT_TRUE(recovered_dp_pair) << recovered_dp_pair.error().Description();
+    for (std::size_t row = 0; row < inputs.size(); ++row)
+        EXPECT_TRUE(IntervalBitsAgree((*recovered_dp_pair)[row], (*dp_serial)[row]));
+    EXPECT_EQ(device->BufferAllocationBytes(), resident);
     RecordProperty("device", device->Info().name);
     RecordProperty("scope",
                    "actual pair arithmetic/word equivalence and injected rejection/read/governor "

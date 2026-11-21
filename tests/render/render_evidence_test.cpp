@@ -51,8 +51,8 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         stats.maximum_dispatch_rays = 64;
         stats.band_dispatches = imax ? 32736 : 3000;
         stats.retained_stage_dispatches =
-            imax ? std::array<std::int64_t, 7>{0, 5000, 5000, 5000, 5000, 12736, 0}
-                 : std::array<std::int64_t, 7>{0, 500, 500, 500, 500, 1000, 0};
+            imax ? std::array<std::int64_t, 7>{0, 5000, 5000, 4970, 5000, 12736, 30}
+                 : std::array<std::int64_t, 7>{0, 500, 500, 490, 500, 1000, 10};
         for (std::size_t i = 0; i < stats.retained_stages.size(); ++i) {
             auto& stage = stats.retained_stages[i];
             stage.submissions = static_cast<std::uint64_t>(stats.retained_stage_dispatches[i]);
@@ -71,8 +71,13 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         paired.dispatch_total_ms = paired.submit_wait_ms + 12;
         paired.pipeline_creations = 2;
         paired.target_overshoots = 0;
-        stats.queue_submissions =
-            static_cast<std::uint64_t>(stats.band_dispatches) - paired.submissions;
+        auto& dp_pair = stats.dopri_endpoint_timing;
+        dp_pair.submissions = imax ? 9 : 3;
+        dp_pair.submit_wait_ms = imax ? 45 : 15;
+        dp_pair.maximum_submit_wait_ms = 5;
+        dp_pair.dispatch_total_ms = dp_pair.submit_wait_ms;
+        stats.queue_submissions = static_cast<std::uint64_t>(stats.band_dispatches) -
+                                  paired.submissions - dp_pair.submissions;
         stats.camera_batches = imax ? 12736 : 1000;
         stats.accepted_intervals = imax ? 10000 : 1000;
         stats.dispatch_seconds = imax ? 90.0 : 15.0;
@@ -115,6 +120,8 @@ TEST(RenderEvidence, RetainedWireRecordsFeedAttestationControls) {
         EXPECT_EQ(decoded["shared_endpoint_dense"]["submissions"], paired.submissions);
         EXPECT_EQ(decoded["shared_endpoint_dense"]["submit_wait_ms"], paired.submit_wait_ms);
         EXPECT_EQ(decoded["shared_endpoint_dense"]["dispatch_total_ms"], paired.dispatch_total_ms);
+        EXPECT_EQ(decoded["shared_dopri_endpoint"]["submissions"], dp_pair.submissions);
+        EXPECT_EQ(decoded["shared_dopri_endpoint"]["submit_wait_ms"], dp_pair.submit_wait_ms);
         std::cout << kSceneEvidencePrefix << scene << '\n'
                   << kSourceSceneEvidencePrefix << scene << '\n'
                   << kVulkanEvidencePrefix << completion << '\n';

@@ -232,6 +232,7 @@ void RetainedTraceExecutor::Run() {
             if (!draining_error) {
                 stats_.stage_timing = compute_.Statistics();
                 stats_.endpoint_dense_timing = compute_.EndpointDenseStatistics();
+                stats_.dopri_endpoint_timing = compute_.DopriEndpointStatistics();
             }
             ++stats_.batches;
             ++stats_.batch_row_counts[batch.size()];

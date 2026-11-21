@@ -125,9 +125,10 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         // Preparation has separate counters. Earlier serialized work on the
         // same compute, if any, remains included in these cumulative values.
         // Stage counts include shared commands; shared submission timing lives
-        // only in endpoint_dense_timing, so it must be counted once.
+        // only in the corresponding pair timing, so it must be counted once.
         std::array<RetainedCompute::StageStats, RetainedCompute::kStageCount> stage_timing{};
         RetainedCompute::StageStats endpoint_dense_timing{};
+        RetainedCompute::StageStats dopri_endpoint_timing{};
         // Summed worker intervals can overlap each other and the dispatcher.
         // They are not an exclusive component of render wall time.
         std::uint64_t acceleration_calls = 0;

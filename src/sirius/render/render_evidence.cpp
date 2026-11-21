@@ -163,21 +163,23 @@ std::string VulkanRenderEvidenceJson(const SessionConfig& config, const VulkanRe
             {"wall_ms", stats.retained_preparation.wall_ms},
             {"stages", std::move(preparation_stages)}};
         const auto& timing = stats.retained_timing;
-        const auto& paired = stats.endpoint_dense_timing;
         evidence["queue_submissions"] = stats.queue_submissions;
-        evidence["shared_endpoint_dense"] = {
-            {"scope",
-             "one shared submit/wait per independent Endpoint+Dense pair; included once "
-             "in total timing; retained_stage_dispatches count both kernel commands"},
-            {"submissions", paired.submissions},
-            {"submit_wait_ms", paired.submit_wait_ms},
-            {"maximum_submit_wait_ms", paired.maximum_submit_wait_ms},
-            {"pipeline_setup_ms", paired.pipeline_setup_ms},
-            {"command_setup_ms", paired.command_setup_ms},
-            {"cleanup_ms", paired.cleanup_ms},
-            {"dispatch_total_ms", paired.dispatch_total_ms},
-            {"pipeline_creations", paired.pipeline_creations},
-            {"target_overshoots", paired.target_overshoots}};
+        const auto shared_timing = [](const auto& paired) -> nlohmann::ordered_json {
+            return {{"scope",
+                     "one submit/wait per independent pair; included once in total "
+                     "timing; retained_stage_dispatches count both kernel commands"},
+                    {"submissions", paired.submissions},
+                    {"submit_wait_ms", paired.submit_wait_ms},
+                    {"maximum_submit_wait_ms", paired.maximum_submit_wait_ms},
+                    {"pipeline_setup_ms", paired.pipeline_setup_ms},
+                    {"command_setup_ms", paired.command_setup_ms},
+                    {"cleanup_ms", paired.cleanup_ms},
+                    {"dispatch_total_ms", paired.dispatch_total_ms},
+                    {"pipeline_creations", paired.pipeline_creations},
+                    {"target_overshoots", paired.target_overshoots}};
+        };
+        evidence["shared_endpoint_dense"] = shared_timing(stats.endpoint_dense_timing);
+        evidence["shared_dopri_endpoint"] = shared_timing(stats.dopri_endpoint_timing);
         evidence["retained_timing"] = {
             {"scope",
              "host steady-clock wall observations; worker acceleration sums overlap "

@@ -104,6 +104,11 @@ struct RetainedEndpointDenseOutput {
     std::vector<base::Expected<RetainedDenseOutput>> dense;
 };
 
+struct RetainedDopriEndpointOutput {
+    std::vector<RetainedDopriPhaseOutput> phase;
+    std::vector<RetainedEndpointOutput> endpoints;
+};
+
 struct RetainedInitializeInput {
     // M,a,Q,L; physical x,k and four X,V columns; exact chart reflection.
     std::array<RetainedValue, 45> values{};
@@ -255,6 +260,9 @@ class RetainedCompute {
     [[nodiscard]] base::Expected<RetainedEndpointDenseOutput> EndpointAndDense(
         std::span<const RetainedEndpointInput> endpoints, std::span<const RetainedDenseInput> dense,
         std::span<const StageSevenToken> owners = {});
+    [[nodiscard]] base::Expected<RetainedDopriEndpointOutput> DopriPhaseAndEndpoint(
+        std::span<const RetainedDopriPhaseInput> phase,
+        std::span<const RetainedEndpointInput> endpoints);
     [[nodiscard]] base::Expected<std::vector<RetainedInitializeOutput>> Initialize(
         std::span<const RetainedInitializeInput> inputs, DispatchTiming* timing = nullptr);
     [[nodiscard]] std::size_t Capacity() const { return capacity_; }
@@ -283,6 +291,7 @@ class RetainedCompute {
     // Kernel command counts above include both commands in a shared submit.
     // All timing for that submit belongs here, never to either individual stage.
     [[nodiscard]] StageStats EndpointDenseStatistics() const { return endpoint_dense_stats_; }
+    [[nodiscard]] StageStats DopriEndpointStatistics() const { return dopri_endpoint_stats_; }
 
   private:
     explicit RetainedCompute(ComputeDevice& device, std::size_t capacity)
@@ -306,7 +315,15 @@ class RetainedCompute {
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
                                                 DispatchTiming* timing, bool owned = false);
+    [[nodiscard]] base::Expected<void> Upload(Stage& stage, std::size_t active_rows);
+    [[nodiscard]] base::Expected<void> DispatchPair(Stage& first, std::size_t first_rows,
+                                                    Stage& second, std::size_t second_rows,
+                                                    StageStats& stats, bool first_owned = false);
     [[nodiscard]] base::Expected<void> ReadOutput(Stage& stage, std::size_t active_rows);
+    [[nodiscard]] base::Expected<std::vector<RetainedEndpointOutput>> DecodeEndpoints(
+        std::size_t rows) const;
+    [[nodiscard]] base::Expected<std::vector<RetainedDopriPhaseOutput>> DecodeDopriPhases(
+        std::size_t rows) const;
     void InvalidateStageSevenOwner();
     [[nodiscard]] base::Expected<void> WriteStageSevenControl(Stage& stage);
     [[nodiscard]] base::Expected<bool> AuthorizeStageSevenEndpoint(
@@ -317,6 +334,7 @@ class RetainedCompute {
     double dispatch_target_ms_ = 250;
     SubmissionFeedback submission_feedback_;
     StageStats endpoint_dense_stats_;
+    StageStats dopri_endpoint_stats_;
     std::optional<StageSevenOwner> stage_seven_;
     double stage_seven_provisioning_ms_ = 0;
     Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_, dopri_phase_;

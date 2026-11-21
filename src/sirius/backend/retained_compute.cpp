@@ -459,28 +459,32 @@ void RetainedCompute::ResetStatistics() {
         stage->stats = {.command_row_counts = std::move(counts)};
     }
     endpoint_dense_stats_ = {};
+    dopri_endpoint_stats_ = {};
     submission_feedback_ = {};
 }
 
-base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
-                                               DispatchTiming* timing, bool owned) {
+base::Expected<void> RetainedCompute::Upload(Stage& stage, std::size_t active_rows) {
     using Clock = std::chrono::steady_clock;
-    const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
-        return std::chrono::duration<double, std::milli>(finished - started).count();
-    };
-    // A failed write must not leave the caller's previous dispatch observation.
-    if (timing) *timing = {};
     auto input = std::span(stage.input);
     // The fixed-capacity header and program tail define shader indexing. Once
     // that immutable tail has reached the device, only requested rows change.
     if (stage.program_uploaded) input = input.first(1 + active_rows * stage.input_words_per_row);
     const auto write_started = Clock::now();
     auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
-    const auto write_finished = Clock::now();
-    stage.stats.write_buffer_ms += milliseconds(write_started, write_finished);
+    stage.stats.write_buffer_ms +=
+        std::chrono::duration<double, std::milli>(Clock::now() - write_started).count();
     if (!status) return status;
     stage.program_uploaded = true;
     stage.stats.write_buffer_bytes += input.size_bytes();
+    return {};
+}
+
+base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
+                                               DispatchTiming* timing, bool owned) {
+    // A failed write must not leave the caller's previous dispatch observation.
+    if (timing) *timing = {};
+    auto status = Upload(stage, active_rows);
+    if (!status) return status;
     DispatchTiming measured;
     auto* observed = timing ? timing : &measured;
     // Buffer strides and the immutable program retain their capacity layout.
@@ -658,8 +662,13 @@ base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
     std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());
     auto status = Dispatch(endpoint_, inputs.size(), timing, *owned);
     if (!status) return std::unexpected(status.error());
-    std::vector<RetainedEndpointOutput> result(inputs.size());
-    for (std::size_t row = 0; row < inputs.size(); ++row) {
+    return DecodeEndpoints(inputs.size());
+}
+
+base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::DecodeEndpoints(
+    std::size_t rows) const {
+    std::vector<RetainedEndpointOutput> result(rows);
+    for (std::size_t row = 0; row < rows; ++row) {
         auto output = DecodeEndpoint(endpoint_.output.data() + row * kEndpointRowWords);
         if (!output) return std::unexpected(output.error());
         result[row] = *output;
@@ -696,8 +705,13 @@ base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DopriPhas
     std::memcpy(dopri_phase_.input.data() + 1, inputs.data(), inputs.size_bytes());
     auto status = Dispatch(dopri_phase_, inputs.size(), timing);
     if (!status) return std::unexpected(status.error());
-    std::vector<RetainedDopriPhaseOutput> result(inputs.size());
-    for (std::size_t row = 0; row < inputs.size(); ++row) {
+    return DecodeDopriPhases(inputs.size());
+}
+
+base::Expected<std::vector<RetainedDopriPhaseOutput>> RetainedCompute::DecodeDopriPhases(
+    std::size_t rows) const {
+    std::vector<RetainedDopriPhaseOutput> result(rows);
+    for (std::size_t row = 0; row < rows; ++row) {
         const auto* words = dopri_phase_.output.data() + row * kDopriPhaseRowWords;
         auto& output = result[row];
         if (words[0] == 0) continue;
@@ -729,55 +743,82 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     }
     auto owned = AuthorizeStageSevenEndpoint(endpoints, owners);
     if (!owned) return std::unexpected(owned.error());
-    using Clock = std::chrono::steady_clock;
-    const auto milliseconds = [](auto started, auto finished) {
-        return std::chrono::duration<double, std::milli>(finished - started).count();
-    };
     std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
     std::memcpy(endpoint_.input.data() + 1, endpoints.data(), endpoints.size_bytes());
     std::fill_n(dense_.input.begin() + 1, capacity_ * 560, 0U);
     std::memcpy(dense_.input.data() + 1, dense.data(), dense.size_bytes());
-    const auto write = [&](Stage& stage, std::size_t active) -> base::Expected<void> {
-        auto input = std::span(stage.input);
-        if (stage.program_uploaded) input = input.first(1 + active * stage.input_words_per_row);
-        const auto started = Clock::now();
-        auto status = device_.WriteBuffer(stage.buffers[0], std::as_bytes(input));
-        stage.stats.write_buffer_ms += milliseconds(started, Clock::now());
-        if (status) {
-            stage.program_uploaded = true;
-            stage.stats.write_buffer_bytes += input.size_bytes();
-        }
-        return status;
+    auto status = DispatchPair(endpoint_, endpoints.size(), dense_, dense.size(),
+                               endpoint_dense_stats_, *owned);
+    if (!status) return std::unexpected(status.error());
+    status = ReadOutput(endpoint_, endpoints.size());
+    if (!status) return std::unexpected(status.error());
+    auto decoded = DecodeEndpoints(endpoints.size());
+    if (!decoded) return std::unexpected(decoded.error());
+    status = ReadOutput(dense_, dense.size());
+    if (!status) return std::unexpected(status.error());
+    RetainedEndpointDenseOutput result{.endpoints = std::move(*decoded), .dense = {}};
+    result.dense.reserve(dense.size());
+    for (std::size_t row = 0; row < dense.size(); ++row)
+        result.dense.push_back(DecodeDense(dense_.output.data() + row * kDenseRowWords));
+    return result;
+}
+
+base::Expected<RetainedDopriEndpointOutput> RetainedCompute::DopriPhaseAndEndpoint(
+    std::span<const RetainedDopriPhaseInput> phase,
+    std::span<const RetainedEndpointInput> endpoints) {
+    InvalidateStageSevenOwner();
+    const auto rows = std::max(phase.size(), endpoints.size());
+    if (!SupportsIndependentPair() || phase.empty() || endpoints.empty() || rows <= 1 ||
+        rows > capacity_)
+        return Fail(ErrorDomain::kDevice, "dispatch retained DP phase and endpoint",
+                    "invalid or unsupported independent pair");
+    std::fill_n(dopri_phase_.input.begin() + 1, capacity_ * 1810, 0U);
+    std::memcpy(dopri_phase_.input.data() + 1, phase.data(), phase.size_bytes());
+    std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
+    std::memcpy(endpoint_.input.data() + 1, endpoints.data(), endpoints.size_bytes());
+    auto status = DispatchPair(dopri_phase_, phase.size(), endpoint_, endpoints.size(),
+                               dopri_endpoint_stats_);
+    if (!status) return std::unexpected(status.error());
+    status = ReadOutput(dopri_phase_, phase.size());
+    if (!status) return std::unexpected(status.error());
+    auto phases = DecodeDopriPhases(phase.size());
+    if (!phases) return std::unexpected(phases.error());
+    status = ReadOutput(endpoint_, endpoints.size());
+    if (!status) return std::unexpected(status.error());
+    auto projected = DecodeEndpoints(endpoints.size());
+    if (!projected) return std::unexpected(projected.error());
+    return RetainedDopriEndpointOutput{std::move(*phases), std::move(*projected)};
+}
+
+base::Expected<void> RetainedCompute::DispatchPair(Stage& first, std::size_t first_rows,
+                                                   Stage& second, std::size_t second_rows,
+                                                   StageStats& stats, bool first_owned) {
+    auto status = Upload(first, first_rows);
+    if (!status) return status;
+    status = Upload(second, second_rows);
+    if (!status) return status;
+    const std::array owned_buffers{first.buffers[0], first.buffers[1],
+                                   first_owned ? stage_seven_->buffer : BufferHandle{}};
+    const auto first_buffers = first_owned ? std::span<const BufferHandle>(owned_buffers)
+                                           : std::span<const BufferHandle>(first.buffers);
+    const auto groups = [](std::size_t rows) {
+        return static_cast<std::uint32_t>((rows + kRetainedGroupRows - 1) / kRetainedGroupRows);
     };
-    auto status = write(endpoint_, endpoints.size());
-    if (!status) return std::unexpected(status.error());
-    status = write(dense_, dense.size());
-    if (!status) return std::unexpected(status.error());
-    const std::array owned_buffers{endpoint_.buffers[0], endpoint_.buffers[1],
-                                   *owned ? stage_seven_->buffer : BufferHandle{}};
-    const auto endpoint_buffers = *owned ? std::span<const BufferHandle>(owned_buffers)
-                                         : std::span<const BufferHandle>(endpoint_.buffers);
     const std::array commands{
-        ComputeDispatch{*owned ? stage_seven_->endpoint : endpoint_.kernel, endpoint_buffers,
-                        static_cast<std::uint32_t>((endpoints.size() + kRetainedGroupRows - 1) /
-                                                   kRetainedGroupRows),
-                        1, 1},
-        ComputeDispatch{dense_.kernel, dense_.buffers,
-                        static_cast<std::uint32_t>((dense.size() + kRetainedGroupRows - 1) /
-                                                   kRetainedGroupRows),
-                        1, 1}};
+        ComputeDispatch{first_owned ? stage_seven_->endpoint : first.kernel, first_buffers,
+                        groups(first_rows), 1, 1},
+        ComputeDispatch{second.kernel, second.buffers, groups(second_rows), 1, 1}};
     IndependentPairTiming observed;
     status = device_.DispatchIndependentPair(commands, &observed);
-    if (!status) return std::unexpected(status.error());
+    if (!status) return status;
     const auto& timing = observed.combined;
     if (!std::isfinite(timing.submit_wait_ms) || timing.submit_wait_ms < 0)
-        return Fail(ErrorDomain::kDevice, "dispatch retained endpoint and dense",
+        return Fail(ErrorDomain::kDevice, "dispatch retained compute pair",
                     "invalid submission timing");
-    ++endpoint_.stats.submissions;
-    ++dense_.stats.submissions;
-    ++endpoint_.stats.command_row_counts[endpoints.size()];
-    ++dense_.stats.command_row_counts[dense.size()];
-    auto& stats = endpoint_dense_stats_;
+    ++first.stats.submissions;
+    ++second.stats.submissions;
+    ++first.stats.command_row_counts[first_rows];
+    ++second.stats.command_row_counts[second_rows];
     ++stats.submissions;
     stats.submit_wait_ms += timing.submit_wait_ms;
     stats.maximum_submit_wait_ms = std::max(stats.maximum_submit_wait_ms, timing.submit_wait_ms);
@@ -788,28 +829,14 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     stats.pipeline_creations += observed.pipeline_creations;
     if (dispatch_target_ms_ > 0 && timing.submit_wait_ms > dispatch_target_ms_)
         ++stats.target_overshoots;
+    const auto rows = std::max(first_rows, second_rows);
+    // A pair remains reducible. A budget-one retry issues individual commands.
     if (timing.submit_wait_ms >= submission_feedback_.peak_ms) {
         submission_feedback_.peak_ms = timing.submit_wait_ms;
         submission_feedback_.peak_rows = rows;
     }
     submission_feedback_.maximum_rows = std::max(submission_feedback_.maximum_rows, rows);
-    // A pair is reducible even for one logical ray. The caller must retry it
-    // through budget-one individual stages, never call it an irreducible stage.
-    status = ReadOutput(endpoint_, endpoints.size());
-    if (!status) return std::unexpected(status.error());
-    RetainedEndpointDenseOutput result;
-    result.endpoints.reserve(endpoints.size());
-    for (std::size_t row = 0; row < endpoints.size(); ++row) {
-        auto output = DecodeEndpoint(endpoint_.output.data() + row * kEndpointRowWords);
-        if (!output) return std::unexpected(output.error());
-        result.endpoints.push_back(*output);
-    }
-    status = ReadOutput(dense_, dense.size());
-    if (!status) return std::unexpected(status.error());
-    result.dense.reserve(dense.size());
-    for (std::size_t row = 0; row < dense.size(); ++row)
-        result.dense.push_back(DecodeDense(dense_.output.data() + row * kDenseRowWords));
-    return result;
+    return {};
 }
 
 base::Expected<std::vector<RetainedInitializeOutput>> RetainedCompute::Initialize(
