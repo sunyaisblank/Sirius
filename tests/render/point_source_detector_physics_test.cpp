@@ -1,5 +1,6 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
+#include "sirius/core/camera_sampling.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/ray_work_queue.h"
@@ -375,6 +376,62 @@ TEST(PointSourceDetector, RetainedFixedPupilPreservesFourLaunchColumns) {
     EXPECT_FALSE(executor.Error());
     RecordProperty("largest_launch_error", std::format("{:.17g}", largest_launch_error));
     RecordProperty("largest_map_direction_error", std::format("{:.17g}", largest_map_error));
+
+    // The original failing rectangle is a depth-16 subcell near an original
+    // detector rim. Preserve its continuous film chart and first pupil.
+    core::CameraConfig rim_config;
+    rim_config.r = 30;
+    rim_config.theta = 80 * std::numbers::pi / 180.0;
+    rim_config.fov = 60;
+    rim_config.width = 1920;
+    rim_config.height = 1080;
+    rim_config.beta_x = .1;
+    rim_config.beta_y = .02;
+    rim_config.beta_z = -.01;
+    rim_config.focal_length = 50;
+    rim_config.aperture = 2.8f;
+    rim_config.focus_distance = 30;
+    core::ThinLensCamera rim_camera(rim_config);
+    core::KerrSchildFamily rim_metric(core::KerrSchildParams::Kerr(1, .9));
+    backend::GeodesicTracer rim_tracer(&rim_metric, trace_config);
+    rim_tracer.SetStepExecutor(&executor);
+
+    core::CameraSample first_pupil{};
+    int sample = 0;
+    core::ForEachCameraSample(4, [&](auto p) {
+        if (sample++ == 0) first_pupil = p;
+    });
+    const double x = 896 + double(first_pupil.image_u), y = 576 + double(first_pupil.image_v);
+    const auto rim = rim_camera.ProjectFilmForObserver(
+        x, y, first_pupil.pupil_u, first_pupil.pupil_v);
+    ASSERT_TRUE(rim);
+    const auto rim_frame = rim_tracer.PrepareDetectorPupil(rim->ray);
+    ASSERT_TRUE(rim_frame);
+    using Range = backend::DetectorLaunchFrame::Range;
+    const Range z0(0x1.2b5p-1, 0x1.2b6p-1), z1(0x1.fa74p+1, 0x1.fa78p+1);
+    const std::array dark{
+        Range(x) + Range(-0x1.d357ebd0e3748p-1) * z1,
+        Range(y) + (Range(17) + (Range(0x1.d30c6a29fa83fp-1) * z0 +
+                                 Range(0x1.e454f19fc15dep-9) * z1))};
+    RecordProperty("rim_independent_interval",
+                   rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, dark, 0));
+    EXPECT_TRUE(rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, dark));
+    const Range mixed_z0(0x1.2b6p-1, 0x1.2b7p-1), mixed_z1(0x1.fa7cp+1, 0x1.fa8p+1);
+    const std::array mixed{
+        Range(x) + Range(-0x1.d357ebd0e3748p-1) * mixed_z1,
+        Range(y) + (Range(17) + (Range(0x1.d30c6a29fa83fp-1) * mixed_z0 +
+                                 Range(0x1.e454f19fc15dep-9) * mixed_z1))};
+    EXPECT_FALSE(rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, mixed));
+    const std::array bright{dark[0], dark[1] + Range(250)};
+    EXPECT_FALSE(rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, bright));
+    const auto bright_centre = rim_camera.ProjectFilmForObserver(
+        std::midpoint(bright[0].lo, bright[0].hi), std::midpoint(bright[1].lo, bright[1].hi),
+        first_pupil.pupil_u, first_pupil.pupil_v);
+    ASSERT_TRUE(bright_centre);
+    const auto light = rim_tracer.TraceDetectorRay(bright_centre->ray, &*rim_frame);
+    ASSERT_TRUE(light);
+    EXPECT_EQ(light->outcome, backend::TraceResult::Outcome::Escaped);
+    EXPECT_TRUE(light->beam.infinity_source_map);
 #else
     GTEST_SKIP() << "retained compute kernels unavailable; numerical backend unqualified";
 #endif

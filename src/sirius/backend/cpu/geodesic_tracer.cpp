@@ -832,8 +832,13 @@ bool GeodesicTracer::CertifyThinLensDetectorRegion(
         for (int i = 0; i < 4; ++i)
             tangent[i] = Range(0.0) - frame->tetrad[0][i] + frame->tetrad[1][i] * n[0] +
                          frame->tetrad[2][i] * n[1] + frame->tetrad[3][i] * n[2];
-        return relativity::CertifyKerrDetectorCapture(
-            parameters, frame->position, tangent, static_cast<unsigned>(config_.max_steps));
+        const auto budget = static_cast<unsigned>(config_.max_steps);
+        if (relativity::CertifyKerrDetectorCapture(parameters, frame->position, tangent, budget))
+            return true;
+        if (splits == 0 || !(n[1].hi - n[1].lo < 1e-3 && n[2].hi - n[2].lo < 1e-3))
+            return false;
+        return relativity::CertifyCorrelatedKerrDetectorCapture(
+            parameters, frame->position, frame->tetrad, n, budget);
     };
     // Splitting only the film bounds tightens the enclosure without another
     // device launch. One unproved box sends the whole sample to the detector.

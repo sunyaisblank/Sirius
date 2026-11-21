@@ -2,13 +2,14 @@
 
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/source_sky_map.h"
-#include "sirius/core/spherical_continuation/radial_quadrature.h"
+#include "sirius/core/spherical_continuation/pupil_affine.h"
 #include "sirius/core/trace_boundary.h"
 #include "sirius/core/twofold.h"
 
 #include <algorithm>
 #include <cfloat>
 #include <expected>
+#include <type_traits>
 
 namespace sirius::core::relativity {
 
@@ -194,24 +195,27 @@ Scalar EvaluateRadial(const std::array<Scalar, N>& coefficients, Scalar u) {
     return value;
 }
 
-inline bool ProvePositiveRadialBernstein(
-    std::array<finite_tail_detail::Range, 5> coefficients, unsigned& budget) {
-    using finite_tail_detail::Range;
+template <typename Scalar>
+inline bool ProvePositiveRadialBernstein(std::array<Scalar, 5> coefficients, unsigned& budget) {
+    using finite_tail_detail::Enclosure;
     if (budget == 0) return false;
     --budget;
-    if (!std::ranges::all_of(coefficients, &Range::Finite)) return false;
-    if (std::ranges::all_of(coefficients, [](Range c) { return c.lo > 0.0; })) return true;
-    if (coefficients.front().hi <= 0.0 || coefficients.back().hi <= 0.0) return false;
+    std::array<finite_tail_detail::Range, 5> bounds;
+    std::ranges::transform(coefficients, bounds.begin(),
+                           [](const Scalar& x) { return Enclosure(x); });
+    if (!std::ranges::all_of(bounds, &finite_tail_detail::Range::Finite)) return false;
+    if (std::ranges::all_of(bounds, [](auto c) { return c.lo > 0.0; })) return true;
+    if (bounds.front().hi <= 0.0 || bounds.back().hi <= 0.0) return false;
 
     // Each half lies in the convex hull of its Bernstein coefficients.
     // De Casteljau subdivision at the exact parameter 1/2 tightens that hull
     // without losing the cancellation already represented by the polynomial.
-    std::array<Range, 5> left, right;
+    std::array<Scalar, 5> left, right;
     left.front() = coefficients.front();
     right.back() = coefficients.back();
     for (std::size_t remaining = coefficients.size() - 1; remaining != 0; --remaining) {
         for (std::size_t i = 0; i < remaining; ++i)
-            coefficients[i] = (coefficients[i] + coefficients[i + 1]) * Range(0.5);
+            coefficients[i] = (coefficients[i] + coefficients[i + 1]) * Scalar(0.5);
         left[coefficients.size() - remaining] = coefficients.front();
         right[remaining - 1] = coefficients[remaining - 1];
     }
@@ -219,20 +223,21 @@ inline bool ProvePositiveRadialBernstein(
            ProvePositiveRadialBernstein(right, budget);
 }
 
-inline bool ProvePositiveRadialPotential(
-    const std::array<finite_tail_detail::Range, 5>& coefficients,
-    finite_tail_detail::Range interval, unsigned& budget) {
+template <typename Scalar>
+inline bool ProvePositiveRadialPotentialFor(const std::array<Scalar, 5>& coefficients,
+                                          finite_tail_detail::Range interval, unsigned& budget) {
+    using finite_tail_detail::Enclosure;
     using finite_tail_detail::Range;
     if (budget == 0 || !interval.Finite()) return false;
-    if (EvaluateRadial(coefficients, interval).lo > 0.0) {
+    if (Enclosure(EvaluateRadial(coefficients, Scalar(interval))).lo > 0.0) {
         --budget;
         return true;
     }
 
     // Compose H(lower + width*t) by Horner in the power basis, then
     // convert the resulting quartic on t in [0,1] to Bernstein form.
-    const Range lower(interval.lo), width = Range(interval.hi) - lower;
-    std::array<Range, 5> power{};
+    const Scalar lower(interval.lo), width(Range(interval.hi) - Range(interval.lo));
+    std::array<Scalar, 5> power{};
     power[0] = coefficients.back();
     for (std::size_t degree = 1; degree < power.size(); ++degree) {
         for (std::size_t i = degree; i != 0; --i)
@@ -240,11 +245,17 @@ inline bool ProvePositiveRadialPotential(
         power[0] = lower * power[0] + coefficients[power.size() - 1 - degree];
     }
     const auto& [p0, p1, p2, p3, p4] = power;
-    return ProvePositiveRadialBernstein(
-        {p0, p0 + p1 * Range(0.25), p0 + p1 * Range(0.5) + p2 / Range(6.0),
-         p0 + p1 * Range(0.75) + p2 * Range(0.5) + p3 * Range(0.25),
+    return ProvePositiveRadialBernstein<Scalar>(
+        {p0, p0 + p1 * Scalar(0.25), p0 + p1 * Scalar(0.5) + p2 / Scalar(6.0),
+         p0 + p1 * Scalar(0.75) + p2 * Scalar(0.5) + p3 * Scalar(0.25),
          p0 + p1 + p2 + p3 + p4},
         budget);
+}
+
+inline bool ProvePositiveRadialPotential(
+    const std::array<finite_tail_detail::Range, 5>& coefficients,
+    finite_tail_detail::Range interval, unsigned& budget) {
+    return ProvePositiveRadialPotentialFor(coefficients, interval, budget);
 }
 
 template <typename Scalar>
@@ -546,78 +557,93 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
 // the past null launch and prove the radial potential is strictly positive all
 // the way to the outer horizon. No terminal state is computed here.
 namespace kerr_infinity_detail {
+template <typename Scalar>
 struct DetectorRadialBounds {
-    std::array<finite_tail_detail::Range, 5> coefficients;
+    std::array<Scalar, 5> coefficients;
     finite_tail_detail::Range start;
     finite_tail_detail::Range horizon;
     bool inward;
 };
 
-[[nodiscard]] inline std::optional<DetectorRadialBounds> EncloseDetectorRadialState(
-    const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
-    const std::array<finite_tail_detail::Range, 4>& tangent) {
+template <typename Scalar>
+[[nodiscard]] inline std::optional<DetectorRadialBounds<Scalar>> EncloseDetectorRadialState(
+    const KerrSchildParams& parameters, const std::array<Scalar, 4>& position,
+    const std::array<Scalar, 4>& tangent) {
+    using finite_tail_detail::Enclosure;
     using finite_tail_detail::Range;
+    const auto finite = [](const Scalar& value) { return Enclosure(value).Finite(); };
     const auto [mass, spin, charge, cosmological_constant] = parameters;
     if (charge != 0.0 || cosmological_constant != 0.0 || !(mass > std::abs(spin)) ||
         !std::isfinite(mass) || !finite_tail_detail::RoundingEnvironment() ||
-        !std::ranges::all_of(position, &Range::Finite) || !std::ranges::all_of(tangent, &Range::Finite))
+        !std::ranges::all_of(position, finite) || !std::ranges::all_of(tangent, finite))
         return std::nullopt;
 
     using finite_tail_detail::Square;
-    const Range M(mass), a(spin);
-    const Range x = position[1], y = position[2], z = position[3];
-    const Range reduced = Square(x) + Square(y) + Square(z) - Square(a);
-    const Range discriminant = sqrt(Square(reduced) + Range(4.0) * Square(a) * Square(z));
-    const Range r = sqrt((reduced + discriminant) * Range(0.5));
-    if (!(r.lo > (Range(2.0) * M).hi)) return std::nullopt;
+    const Scalar M(mass), a(spin);
+    const Scalar x = position[1], y = position[2], z = position[3];
+    const Scalar reduced = Square(x) + Square(y) + Square(z) - Square(a);
+    const Scalar discriminant = sqrt(Square(reduced) + Scalar(4.0) * Square(a) * Square(z));
+    const Scalar r = sqrt((reduced + discriminant) * Scalar(0.5));
+    if (!(Enclosure(r).lo > (Range(2.0) * Range(mass)).hi)) return std::nullopt;
 
-    const Range kx = tangent[1], ky = tangent[2], kz = tangent[3];
+    const Scalar kx = tangent[1], ky = tangent[2], kz = tangent[3];
     // The denominator of the oblate radius gradient is positive. Its
     // numerator fixes the radial branch before looking for any roots.
-    const Range r2_plus_a2 = r * r + a * a;
-    const Range radial = r * (x * kx + y * ky) + r2_plus_a2 * z * kz / r;
-    if (!(radial.hi < 0.0 || radial.lo > 0.0)) return std::nullopt;
+    const Scalar r2_plus_a2 = r * r + a * a;
+    const Scalar radial = r * (x * kx + y * ky) + r2_plus_a2 * z * kz / r;
+    const Range radial_bounds = Enclosure(radial);
+    if (!(radial_bounds.hi < 0.0 || radial_bounds.lo > 0.0)) return std::nullopt;
 
     const auto ell = metric_detail::KerrSchildNullCovector(x, y, z, r, spin);
     const auto H = metric_detail::KerrSchildFactor(r, z, parameters);
-    const Range spatial = ell[1] * kx + ell[2] * ky + ell[3] * kz;
-    const Range B = H * spatial;
-    const Range C = Square(kx) + Square(ky) + Square(kz) + H * Square(spatial);
-    const Range minus_gtt = Range(1.0) - H;
-    const Range null_time = (B - sqrt(Square(B) + minus_gtt * C)) / minus_gtt;
-    const Range time = tangent[0];
-    if (!null_time.Finite() || !(null_time.hi < 0.0) || !(time.hi < 0.0)) return std::nullopt;
-    // Point inputs must be close to null. The regional caller constructs
-    // correlated null tangents from a certified observer frame and unit rays.
-    const bool point = std::ranges::all_of(position, [](Range v) { return v.lo == v.hi; }) &&
-                       std::ranges::all_of(tangent, [](Range v) { return v.lo == v.hi; });
-    if (point && finite_tail_detail::Magnitude(null_time - time) >
-                     -time.hi * KerrInfinityConfig{}.input_constraint_tolerance)
+    const Scalar spatial = ell[1] * kx + ell[2] * ky + ell[3] * kz;
+    const Scalar B = H * spatial;
+    const Scalar C = Square(kx) + Square(ky) + Square(kz) + H * Square(spatial);
+    const Scalar minus_gtt = Scalar(1.0) - H;
+    const Scalar null_time = (B - sqrt(Square(B) + minus_gtt * C)) / minus_gtt;
+    const Scalar time = tangent[0];
+    const Range null_bounds = Enclosure(null_time), time_bounds = Enclosure(time);
+    if (!null_bounds.Finite() || !(null_bounds.hi < 0.0) || !(time_bounds.hi < 0.0))
         return std::nullopt;
-    const Range kt(std::min(time.lo, null_time.lo), std::max(time.hi, null_time.hi));
-    const Range correction = H * (kt + spatial);
-    const Range energy = kt - correction;
-    if (!(energy.hi < 0.0)) return std::nullopt;
-    const Range px = kx + correction * ell[1];
-    const Range py = ky + correction * ell[2];
-    const Range pz = kz + correction * ell[3];
-    const Range angular = x * py - y * px;
+
+    Scalar kt;
+    if constexpr (std::is_same_v<Scalar, Range>) {
+        const auto point = [](Range v) { return v.lo == v.hi; };
+        if (std::ranges::all_of(position, point) && std::ranges::all_of(tangent, point) &&
+            finite_tail_detail::Magnitude(null_time - time) >
+                -time.hi * KerrInfinityConfig{}.input_constraint_tolerance)
+            return std::nullopt;
+        kt = Range(std::min(time.lo, null_time.lo), std::max(time.hi, null_time.hi));
+    } else {
+        // Preserve the common pupil variation in the represented and null
+        // launch. Only the difference between those two times needs a hull.
+        const Range correction = Enclosure(null_time - time);
+        if (!correction.Finite()) return std::nullopt;
+        kt = time + Scalar(Range(std::min(0.0, correction.lo), std::max(0.0, correction.hi)));
+    }
+    const Scalar correction = H * (kt + spatial);
+    const Scalar energy = kt - correction;
+    if (!(Enclosure(energy).hi < 0.0)) return std::nullopt;
+    const Scalar px = kx + correction * ell[1];
+    const Scalar py = ky + correction * ell[2];
+    const Scalar pz = kz + correction * ell[3];
+    const Scalar angular = x * py - y * px;
 
     // Express the Carter combination as the squared norm of the angular
     // covector less the axial spin term. This form is regular on the axis.
     const std::array w{r * px + a * py, r * py - a * px, r * pz};
-    const Range projected = ell[1] * w[0] + ell[2] * w[1] + ell[3] * w[2];
-    const Range vx = w[0] - ell[1] * projected + a * energy * ell[2];
-    const Range vy = w[1] - ell[2] * projected - a * energy * ell[1];
-    const Range vz = w[2] - ell[3] * projected;
-    const Range carter = Square(vx) + Square(vy) + Square(vz);
+    const Scalar projected = ell[1] * w[0] + ell[2] * w[1] + ell[3] * w[2];
+    const Scalar vx = w[0] - ell[1] * projected + a * energy * ell[2];
+    const Scalar vy = w[1] - ell[2] * projected - a * energy * ell[1];
+    const Scalar vz = w[2] - ell[3] * projected;
+    const Scalar carter = Square(vx) + Square(vy) + Square(vz);
     const auto coefficients = RadialCoefficients(mass, spin, energy, angular, carter);
-    const auto start = Range(1.0) / r;
-    const auto horizon = Range(1.0) / (M + sqrt(M * M - a * a));
+    const auto start = Enclosure(Scalar(1.0) / r);
+    const auto horizon = Enclosure(Scalar(1.0) / (M + sqrt(M * M - a * a)));
     if (!start.Finite() || !horizon.Finite() || !(start.lo > 0.0 && start.hi < horizon.lo))
         return std::nullopt;
 
-    return DetectorRadialBounds{coefficients, start, horizon, radial.hi < 0.0};
+    return DetectorRadialBounds<Scalar>{coefficients, start, horizon, radial_bounds.hi < 0.0};
 }
 }  // namespace kerr_infinity_detail
 
@@ -628,6 +654,37 @@ struct DetectorRadialBounds {
     if (!bounds || !bounds->inward) return false;
     unsigned budget = std::min(maximum_panels, 64U);
     return kerr_infinity_detail::ProvePositiveRadialPotential(
+        bounds->coefficients, {bounds->start.lo, bounds->horizon.hi}, budget);
+}
+
+// The two transverse components parameterize the physical unit direction.
+// Their shared dependence is kept through the radial polynomial and its
+// Bernstein subdivision.
+[[nodiscard]] inline bool CertifyCorrelatedKerrDetectorCapture(
+    const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
+    const std::array<std::array<finite_tail_detail::Range, 4>, 4>& tetrad,
+    const std::array<finite_tail_detail::Range, 3>& direction, unsigned maximum_panels) {
+    using finite_tail_detail::PupilAffine;
+    using finite_tail_detail::Square;
+    if (!std::ranges::all_of(direction, &finite_tail_detail::Range::Finite) ||
+        !(direction[0].hi < 0.0))
+        return false;
+
+    const auto right = PupilAffine::Coordinate(direction[1], true);
+    const auto up = PupilAffine::Coordinate(direction[2], false);
+    const auto radial = PupilAffine(0.0) - sqrt(PupilAffine(1.0) - Square(right) - Square(up));
+    if (!radial.Bounds().Finite()) return false;
+    std::array<PupilAffine, 4> event, tangent;
+    for (int i = 0; i < 4; ++i) {
+        event[i] = PupilAffine(position[i]);
+        tangent[i] = PupilAffine(0.0) - PupilAffine(tetrad[0][i]) +
+                     PupilAffine(tetrad[1][i]) * radial + PupilAffine(tetrad[2][i]) * right +
+                     PupilAffine(tetrad[3][i]) * up;
+    }
+    const auto bounds = kerr_infinity_detail::EncloseDetectorRadialState(parameters, event, tangent);
+    if (!bounds || !bounds->inward) return false;
+    unsigned budget = std::min(maximum_panels, 64U);
+    return kerr_infinity_detail::ProvePositiveRadialPotentialFor(
         bounds->coefficients, {bounds->start.lo, bounds->horizon.hi}, budget);
 }
 
