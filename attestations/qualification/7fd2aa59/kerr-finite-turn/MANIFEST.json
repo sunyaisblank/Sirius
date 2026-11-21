@@ -1,0 +1,134 @@
+{
+  "schema": "sirius-kerr-finite-turn-v1",
+  "recorded_utc": "2026-11-21T08:32:03.321485+00:00",
+  "source_revision": "7fd2aa59e9fc31ef85b2e190a41834e3f11e87f1",
+  "prior_evidence": {
+    "path": "attestations/qualification/a800a216/kerr-finite-depth/MANIFEST.json",
+    "bytes": 8901,
+    "sha256": "0b9397bff178a9dc3fd0a46c8e86e940f00093e8029fc3162f71193c3480f60d"
+  },
+  "scope": "Original moving ThinLens Kerr Radeon 780M scene with 100000 stars, 1920x1080 at the 2048 MiB setting. Block (928,608), footprint 704, first of the four samples. Focused continuous proofs and one bounded experimental scheduler replay.",
+  "physical_provider": [
+    {
+      "path": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+      "bytes": 198,
+      "sha256": "fde51461538211ae38c973644f99f6c6adb4e9d8fcfe16ed172533c9aa9ef392"
+    },
+    {
+      "path": "/home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+      "bytes": 11328704,
+      "sha256": "72de4021c66f994f59a733e643f775c3dd416b566c88b8aedec7efa38c26e071"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix.log.gz",
+      "bytes": 6037,
+      "sha256": "9f2167fcad38190148710ff5b5678a1208663a77216df71ed996166d0d064c72"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/MANIFEST.json",
+      "bytes": 10959,
+      "sha256": "466ee172b8457bb38a78fc62f00aa0bb18854fde9ce89434d4c058591c262ac6"
+    },
+    {
+      "path": "attestations/qualification/a41e75fd/kerr-detector-integration/block.cpp.gz",
+      "bytes": 957,
+      "sha256": "577b9a9c7894efa4be23eb2298c23e807dff07721077015a532d3fc15e03c628"
+    }
+  ],
+  "production_change": "For a finite radial-time window the polar phase can be enclosed over both sides of the turn using equator-to-latitude reflection. Exclude a source only when every parity-admissible winding is proven time-incompatible or longitude-incompatible. Every contact check debits the same catalogue ledger. Carry proven-absent entry identities through the ordinary screen.",
+  "exact_cells": {
+    "archived_cells_examined": 794,
+    "finite_turning_cells_excluded_for_recorded_star": 28,
+    "critical_cells_overlapping_same_star": 1,
+    "ambiguous_finite_cells": 0,
+    "individual_contact_winding_visits": 84,
+    "shared_28_cell_bound_per_channel": 7.691877300318863e-08,
+    "absolute_rgb_error_allowance": 1e-07,
+    "full_catalogue_visits": 5731,
+    "synthetic_overlap_was_refused": true,
+    "elapsed_seconds": 10.24,
+    "max_rss_kib": 270728
+  },
+  "canonical_block_experimental_schedule": {
+    "policy": "Consider a short finite-depth proof before subdividing an irregular cell within three levels of maximum depth, keeping ordinary terminal proofs and debiting successful and refused catalogue visits from the original footprint.",
+    "wait_limit_seconds": 150,
+    "wall": "2:14.80",
+    "exit_code": 8,
+    "completed": false,
+    "refusal": {
+      "reason": 5,
+      "probes": 30366,
+      "cells": 6352,
+      "candidate_visits": 777011
+    },
+    "early_calls_with_catalogue_debit": 0,
+    "early_calls_returning_any_bound": 0,
+    "adopted": false
+  },
+  "strict_build": {
+    "commands": [
+      "cmake --preset linux-ci",
+      "cmake --build --preset linux-ci --target sirius sirius_render_tests -j 4"
+    ],
+    "focused_tests": [
+      "PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand",
+      "PointSourceDetector.GroupNeverPublishesEarlierLeavesAfterFailureOrCancellation",
+      "PointSourceDetector.FoldKeepsBothImagesOfTheSameCatalogueEntry"
+    ]
+  },
+  "replay": {
+    "finite_witness": "Restore finite_turn.cpp and replay.sh into out/kerr-finite-turn. Generate cells.inc as documented in the prior manifest and link resources from the existing linux-ci backend test directory.",
+    "scheduler": "Apply early-scheduling.patch in an out-only include and source overlay, then compile and link the commands named in early-build.json. Use the unchanged extracted canonical block.cpp.",
+    "runtime": "Use the replay.sh environment, launch the out/early block and preserve its physical guards."
+  },
+  "remaining": "The genuine contact at H=0 still requires an all-winding flux bound, and the near-contour work must be scheduled under the original sample-level budget. Higher-order escape, full scenes and external/device release qualification remain separate.",
+  "files": [
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/finite_turn.cpp.gz",
+      "bytes": 2729,
+      "sha256": "cd756490c545e5945818e2804f0bf433ec044cf2d4aab89973aaa472b45fa68c"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/replay.sh.gz",
+      "bytes": 502,
+      "sha256": "2c461e7b2f893478ba33246037ecaf5c66558fb8b717f564097b08305cf901a6"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/finite-turn.log.gz",
+      "bytes": 630,
+      "sha256": "e94f6ab792948003fe3c29fce50644551b0dee8791a4a26b7b1ea5489816b042"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/configure.log.gz",
+      "bytes": 596,
+      "sha256": "b35e276ffb2eff68d34b3d0e49127433ddf0229d6e363bfc7948688516b7a486"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/build.log.gz",
+      "bytes": 355,
+      "sha256": "05bcac7df61660433f4d676e65e765f1369048ce5eb1042c5c9669d01bc019f7"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/focused.log.gz",
+      "bytes": 421,
+      "sha256": "ac1a58f13da28561d72be02787793525ca810f2f34bd191a77118e87f4a8c87f"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/early-block.log.gz",
+      "bytes": 1136,
+      "sha256": "777a944a4bc9ab3101b4356b92b734941d2da10c47f3cacd12a166eada5e5a35"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/early-scheduling.patch.gz",
+      "bytes": 1890,
+      "sha256": "17263447a708dbc744f612c08cc60ca138bb815b7cd7d0244b0133aacb326457"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/early-build.json.gz",
+      "bytes": 715,
+      "sha256": "004a8ad8800bad4adc2eea6910e5d2bb215b93a2e045024258d5136e99050a44"
+    }
+  ]
+}
