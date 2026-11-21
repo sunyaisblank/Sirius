@@ -723,6 +723,57 @@ struct AzimuthDerivative {
     Range mu_speed;
 };
 
+// Integrate the fixed-angle parameter derivatives with the same enclosed
+// Gauss rule used for the phase values. Leibniz's boundary term carries the
+// changing polar endpoint.
+inline std::array<FilmJet, 2> IntegratePolarDerivatives(const FilmJet& phase, const FilmJet& omega2,
+                                                        const FilmJet& modulation,
+                                                        const FilmJet& amplitude2,
+                                                        const FilmJet& angular,
+                                                        const FilmJet& drag) {
+    std::array<FilmJet, 2> result{};
+    if (!phase.value.Finite() || phase.value.lo < 0.0 || phase.value.hi > kPiBounds.hi * .5) {
+        for (auto& term : result) term.derivative.fill(InvalidRange());
+        return result;
+    }
+    const auto density = [&](auto sin2, auto frequency, auto variation, auto amplitude,
+                             auto momentum, auto radial_drag) {
+        using N = decltype(sin2);
+        const N time = N(1.0) / sqrt(frequency + variation * sin2);
+        return std::array{time, time * (momentum / (N(1.0) - amplitude * sin2) + radial_drag)};
+    };
+    const auto boundary = density(PolarSineSquared(phase.value), omega2.value, modulation.value,
+                                  amplitude2.value, angular.value, drag.value);
+    constexpr unsigned panels = 32;
+    const Range step = Range(phase.value.lo) / Range(panels);
+    const double tail = (Range(phase.value.hi) - Range(phase.value.lo)).hi;
+    for (unsigned axis = 0; axis < phase.derivative.size(); ++axis) {
+        const auto differential = [&](auto angle) {
+            using N = decltype(angle);
+            using Jet = RadialJet<N>;
+            const auto jet = [&](const FilmJet& p) {
+                return Jet(N(p.value), N(p.derivative[axis]));
+            };
+            const auto q = density(Jet(PolarSineSquared(angle)), jet(omega2), jet(modulation),
+                                   jet(amplitude2), jet(angular), jet(drag));
+            return std::array{q[0].dual, q[1].dual};
+        };
+        PhasePair integral{};
+        if (phase.value.lo > 0.0) {
+            for (unsigned i = 0; i < panels; ++i) {
+                const auto part =
+                    PhaseGaussPanel(Range(i) * step, Range(i + 1) * step, differential);
+                for (unsigned j = 0; j < part.size(); ++j) integral[j] = integral[j] + part[j];
+            }
+        }
+        const auto end = differential(phase.value);
+        for (unsigned j = 0; j < result.size(); ++j)
+            result[j].derivative[axis] =
+                integral[j] + Range(0.0, tail) * end[j] + boundary[j] * phase.derivative[axis];
+    }
+    return result;
+}
+
 inline std::optional<AzimuthDerivative> DifferentiateFiniteAzimuth(
     double mass, double spin, Range centre, Range s, Range log_s, const StationaryChart& chart,
     unsigned winding, bool approach, Range source_mu) {
@@ -762,28 +813,40 @@ inline std::optional<AzimuthDerivative> DifferentiateFiniteAzimuth(
         }
         return result;
     };
-    const auto half = integrate(FilmJet(Range(kPiBounds.lo * .5, kPiBounds.hi * .5)));
-    const auto initial = integrate(asin_mu(chart.initial_mu));
-    const auto final = integrate(asin_mu(source_mu));
-    std::array<FilmJet, 2> target;
-    for (unsigned i = 0; i < 2; ++i) {
-        const FilmJet period = half[i] * FilmJet(2.0);
-        target[i] =
-            period * FilmJet(winding) + initial[i] + (approach ? period - final[i] : final[i]);
-    }
-    const Range radial_u =
-        Range(-2.0) * radial->leading_gradient[0] * log_s + radial->time_remainder.radial;
-    const Range transverse = s * target[0].derivative[1] - radial->time_log_derivative;
-    if (!(transverse.lo > 0.0)) return {};
-    const Range log_s_u = (radial_u - target[0].derivative[0]) / transverse;
-    const Range conditioned =
-        Range(0.0) - (target[1].derivative[0] + radial->spin_remainder.radial +
-                      (s * target[1].derivative[1] + radial->spin_remainder.log_scale) * log_s_u);
-    if (!conditioned.Finite() || !transverse.Finite()) return {};
-    const Range z2 = Square(Abs(source_mu));
-    const Range speed = sqrt((amplitude2.value - z2) * (omega2.value + a2.value * z2));
-    if (!speed.Finite() || !(speed.lo > 0.0)) return {};
-    return AzimuthDerivative{conditioned, transverse, speed};
+    const auto derivative = [&](const auto& quadrature) -> std::optional<AzimuthDerivative> {
+        const auto half = quadrature(FilmJet(Range(kPiBounds.lo * .5, kPiBounds.hi * .5)));
+        const auto initial = quadrature(asin_mu(chart.initial_mu));
+        const auto final = quadrature(asin_mu(source_mu));
+        std::array<FilmJet, 2> target;
+        for (unsigned i = 0; i < 2; ++i) {
+            const FilmJet period = half[i] * FilmJet(2.0);
+            target[i] =
+                period * FilmJet(winding) + initial[i] + (approach ? period - final[i] : final[i]);
+        }
+        const Range radial_u =
+            Range(-2.0) * radial->leading_gradient[0] * log_s + radial->time_remainder.radial;
+        const Range transverse = s * target[0].derivative[1] - radial->time_log_derivative;
+        if (!(transverse.lo > 0.0)) return {};
+        const Range log_s_u = (radial_u - target[0].derivative[0]) / transverse;
+        const Range conditioned =
+            Range(0.0) -
+            (target[1].derivative[0] + radial->spin_remainder.radial +
+             (s * target[1].derivative[1] + radial->spin_remainder.log_scale) * log_s_u);
+        if (!conditioned.Finite() || !transverse.Finite()) return {};
+        const Range z2 = Square(Abs(source_mu));
+        const Range speed = sqrt((amplitude2.value - z2) * (omega2.value + a2.value * z2));
+        if (!speed.Finite() || !(speed.lo > 0.0)) return {};
+        return AzimuthDerivative{conditioned, transverse, speed};
+    };
+    const auto coarse = derivative(integrate);
+    if (s.hi >= 0x1p-20 || (coarse && Abs(coarse->conditioned_radial_slope).lo > 0.0))
+        return coarse;
+    const auto enclosed = [&](const FilmJet& endpoint) {
+        return IntegratePolarDerivatives(endpoint, omega2, a2 * amplitude2, amplitude2,
+                                         constants->lambda, drag);
+    };
+    const auto sharp = derivative(enclosed);
+    return sharp ? sharp : coarse;
 }
 
 }  // namespace sirius::core::relativity::finite_tail_detail

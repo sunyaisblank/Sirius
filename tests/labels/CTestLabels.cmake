@@ -1447,6 +1447,7 @@ set_tests_properties(
     PointSourceDetector.FoldOwnershipSurvivesRotationTranslationAndTighterRefinement
     PointSourceDetector.GroupNeverPublishesEarlierLeavesAfterFailureOrCancellation
     PointSourceDetector.GroupSplitsAnUnrepresentedGapAndKeepsOriginalOutputOrder
+    PointSourceDetector.HighWindingKerrLongitudeSlopeStaysNegative
     PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce
     PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets
     PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand

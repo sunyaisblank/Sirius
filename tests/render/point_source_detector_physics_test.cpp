@@ -1,6 +1,7 @@
 #include "sirius/backend/cpu/geodesic_tracer.h"
 #include "sirius/core/camera.h"
 #include "sirius/core/camera_sampling.h"
+#include "sirius/core/kerr_detector/finite_screen.h"
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/ray_work_queue.h"
@@ -30,6 +31,26 @@
 namespace sirius::test {
 namespace {
 using namespace sirius::render;
+
+// The represented winding-69 source can intersect a shadow-edge cell.
+// The 128 rectangle panels admit both signs even when radius is isolated.
+TEST(PointSourceDetector, HighWindingKerrLongitudeSlopeStaysNegative) {
+    namespace detector = core::relativity::finite_tail_detail;
+    using detector::Range;
+    detector::StationaryChart chart{};
+    chart.initial_mu = {0x1.67f25c4fe005p-3, 0x1.67f25c4fe0117p-3};
+    chart.inverse_start = {0x1.111112f155084p-5, 0x1.111112f1550a2p-5};
+    const Range centre(0x1.c01bf13a8b6fbp-2, 0x1.c01c02e6d537ap-2);
+    const Range log_separation(-88.0, -85.0);
+    const Range source_latitude(0x1.f4ed100889174p-1, 0x1.f4ed10088917ep-1);
+    const auto derivative =
+        detector::DifferentiateFiniteAzimuth(1.0, .9, centre, detector::ExpBounds(log_separation),
+                                             log_separation, chart, 69, true, source_latitude);
+    ASSERT_TRUE(derivative);
+    EXPECT_LT(derivative->conditioned_radial_slope.hi, 0.0);
+    EXPECT_GT(derivative->latitude_log_slope_magnitude.lo, 0.0);
+    EXPECT_GT(derivative->mu_speed.lo, 0.0);
+}
 
 void CheckIndependentMovingKerrFlux(backend::TraceStepExecutor* executor = nullptr) {
     namespace reference = separated_reference;
