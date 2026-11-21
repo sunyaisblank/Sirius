@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <expected>
 #include <functional>
+#include <optional>
 #include <span>
 #include <vector>
 
@@ -106,6 +107,13 @@ struct PointDetectorFootprint {
     core::AngularMatrix2 chart_from_standard{{{1, 0}, {0, 1}}};
 };
 
+// A terminal cell of an original footprint may be enclosed by an absolute
+// RGB bound. The callback debits every catalogue visit from the remaining
+// budget, including when it cannot certify the cell.
+using PointDetectorCellBound = std::function<std::optional<std::array<double, 3>>(
+    const PointDetectorFootprint&, const DetectorCoordinate&, const DetectorCoordinate&,
+    std::size_t& remaining_candidate_visits)>;
+
 struct PointDetectorBatchResult {
     struct Sample {
         std::array<double, 3> rgb{};
@@ -121,8 +129,7 @@ struct PointDetectorBatchResult {
 [[nodiscard]] std::expected<PointDetectorResult, PointDetectorError> EvaluatePointDetector(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
-    const PointDetectorPolicy& policy = {},
-    const PointDetectorProbeBatchSampler& sample_batch = {},
+    const PointDetectorPolicy& policy = {}, const PointDetectorProbeBatchSampler& sample_batch = {},
     const PointDetectorDarkCell& dark_cell = {});
 
 // Shared finite image discovery for up to kPointDetectorBatchCapacity samples. The
@@ -139,7 +146,7 @@ EvaluatePointDetectorBatch(const core::StarfieldSpatialIndex& catalogue, double 
                            const std::function<bool()>& cancelled,
                            const PointDetectorPolicy& policy = {},
                            const PointDetectorProbeBatchSampler& sample_batch = {},
-    const PointDetectorDarkCell& dark_cell = {});
+                           const PointDetectorDarkCell& dark_cell = {});
 
 // Try common discovery, bisect declined regions along their widest film axis,
 // and finish unresolved leaves with the original scalar detector. The shared
@@ -153,6 +160,7 @@ EvaluatePointDetectorGroup(const core::StarfieldSpatialIndex& catalogue, double 
                            const std::function<bool()>& cancelled,
                            const PointDetectorPolicy& policy = {},
                            const PointDetectorProbeBatchSampler& sample_batch = {},
-    const PointDetectorDarkCell& dark_cell = {});
+                           const PointDetectorDarkCell& dark_cell = {},
+                           const PointDetectorCellBound& cell_bound = {});
 
 }  // namespace sirius::render

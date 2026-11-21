@@ -9,6 +9,7 @@
 #include "sirius/render/film_pipeline.h"
 #include "sirius/render/image_buffer.h"
 #include "sirius/render/png_writer.h"
+#include "sirius/render/session/kerr_point_detector.h"
 #include "sirius/render/trace_domain.h"
 
 #ifdef SIRIUS_HAS_VULKAN_BACKEND
@@ -37,6 +38,7 @@
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <typeinfo>
 
 namespace sirius::render {
 
@@ -721,12 +723,16 @@ base::Expected<void> RenderSession::Initialise() {
     // Filtered point-source star field (P3): build the deterministic catalogue
     // once. The beam footprint (ray bundles on) or a pinhole sigma (bundles
     // off) filters it per escaping ray.
+    kerr_detector_catalogue_.reset();
     if (config_.point_starfield) {
         const core::StarfieldConfig scfg =
             core::ExpandPointStarfieldConfig(config_.point_starfield_config);
         star_generator_ = std::make_unique<core::StarfieldGenerator>(scfg);
         star_index_ =
             std::make_unique<core::StarfieldSpatialIndex>(star_generator_->GenerateCatalogue());
+        if (external_step_executor_ && UsesPhysicalPointDetector() && !config_.enable_disk &&
+            config_.black_hole_spin > 0.0 && typeid(*camera_) == typeid(core::ThinLensCamera))
+            kerr_detector_catalogue_ = PrepareKerrDetectorCatalogue(*star_index_);
         std::cout << "[Session] Point-source star field: " << star_index_->Size() << " stars, "
                   << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
                   << (config_.ray_bundles ? "on" : "off") << std::endl;
@@ -799,13 +805,13 @@ base::Expected<void> RenderSession::Initialise() {
             tracer->SetCancellationCallback([this] { return IsStopping(); });
             probe_tracers_.push_back(std::move(tracer));
         }
-        probe_workers_ =
-            std::make_unique<RayWorkQueue>(static_cast<std::size_t>(probe_threads),
-                                           [this](std::size_t worker, const core::CameraRay& ray,
-                                                  const backend::DetectorLaunchFrame* pupil) {
-                                               return probe_tracers_[worker]->TraceDetectorRay(
-                                                   ray, pupil);
-                                           }, std::in_place);
+        probe_workers_ = std::make_unique<RayWorkQueue>(
+            static_cast<std::size_t>(probe_threads),
+            [this](std::size_t worker, const core::CameraRay& ray,
+                   const backend::DetectorLaunchFrame* pupil) {
+                return probe_tracers_[worker]->TraceDetectorRay(ray, pupil);
+            },
+            std::in_place);
     }
 
     if (progress_.GetCancellationToken().IsCancelled()) {

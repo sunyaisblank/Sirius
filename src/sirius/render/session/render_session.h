@@ -47,6 +47,8 @@
 
 namespace sirius::render {
 
+class KerrDetectorCatalogue;
+
 // Compile-time transition table for the session DFA.
 inline constexpr std::array<Transition<SessionState, SessionEvent>, 14> kSessionTransitions = {{
     // From Idle.
@@ -366,6 +368,7 @@ class RenderSession {
     // off, the flicker baseline).
     std::unique_ptr<core::StarfieldGenerator> star_generator_;
     std::unique_ptr<core::StarfieldSpatialIndex> star_index_;
+    std::shared_ptr<const KerrDetectorCatalogue> kerr_detector_catalogue_;
     double pixel_angular_size_ = 0.0;  // fov / height, radians.
     void SampleStarfieldPoints(const backend::TraceResult& result, float& r, float& g,
                                float& b) const;

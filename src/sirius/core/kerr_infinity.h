@@ -225,7 +225,7 @@ inline bool ProvePositiveRadialBernstein(std::array<Scalar, 5> coefficients, uns
 
 template <typename Scalar>
 inline bool ProvePositiveRadialPotentialFor(const std::array<Scalar, 5>& coefficients,
-                                          finite_tail_detail::Range interval, unsigned& budget) {
+                                            finite_tail_detail::Range interval, unsigned& budget) {
     using finite_tail_detail::Enclosure;
     using finite_tail_detail::Range;
     if (budget == 0 || !interval.Finite()) return false;
@@ -247,8 +247,7 @@ inline bool ProvePositiveRadialPotentialFor(const std::array<Scalar, 5>& coeffic
     const auto& [p0, p1, p2, p3, p4] = power;
     return ProvePositiveRadialBernstein<Scalar>(
         {p0, p0 + p1 * Scalar(0.25), p0 + p1 * Scalar(0.5) + p2 / Scalar(6.0),
-         p0 + p1 * Scalar(0.75) + p2 * Scalar(0.5) + p3 * Scalar(0.25),
-         p0 + p1 + p2 + p3 + p4},
+         p0 + p1 * Scalar(0.75) + p2 * Scalar(0.5) + p3 * Scalar(0.25), p0 + p1 + p2 + p3 + p4},
         budget);
 }
 
@@ -377,14 +376,12 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
         return {};
 
     const Range M(mass), a(spin), absolute_spin(std::abs(spin));
-    const Range outer_horizon = absolute_spin.IsPoint(mass)
-                                    ? M
-                                    : M + sqrt((M - absolute_spin) * (M + absolute_spin));
+    const Range outer_horizon =
+        absolute_spin.IsPoint(mass) ? M : M + sqrt((M - absolute_spin) * (M + absolute_spin));
     const Range horizon_inverse = Range(1.0) / outer_horizon;
     if (!horizon_inverse.Finite()) return {};
     const double limit = minimum_radius > 0.0
-                             ? std::min(horizon_inverse.lo,
-                                        (Range(1.0) / Range(minimum_radius)).lo)
+                             ? std::min(horizon_inverse.lo, (Range(1.0) / Range(minimum_radius)).lo)
                              : horizon_inverse.lo;
     if (!(lower < limit)) return {};
 
@@ -473,7 +470,7 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
     const auto factor = DeflateRadialTurn(interval_coefficients, Range(lower, upper));
     unsigned panels = 16;
     if (!ProvePositiveRadialPotential({factor[0], factor[1], factor[2], factor[3], Range(0.0)},
-                                     Range(0.0, upper), panels))
+                                      Range(0.0, upper), panels))
         return {};
 
     const double root = std::midpoint(lower, upper);
@@ -563,9 +560,10 @@ struct DetectorRadialBounds {
     finite_tail_detail::Range start;
     finite_tail_detail::Range horizon;
     bool inward;
+    Scalar energy{}, angular{}, carter{}, mu{}, mu_rate{}, nx{}, ny{};
 };
 
-template <typename Scalar>
+template <bool ExactNullLaunch = false, typename Scalar>
 [[nodiscard]] inline std::optional<DetectorRadialBounds<Scalar>> EncloseDetectorRadialState(
     const KerrSchildParams& parameters, const std::array<Scalar, 4>& position,
     const std::array<Scalar, 4>& tangent) {
@@ -607,7 +605,9 @@ template <typename Scalar>
         return std::nullopt;
 
     Scalar kt;
-    if constexpr (std::is_same_v<Scalar, Range>) {
+    if constexpr (ExactNullLaunch) {
+        kt = null_time;
+    } else if constexpr (std::is_same_v<Scalar, Range>) {
         const auto point = [](Range v) { return v.lo == v.hi; };
         if (std::ranges::all_of(position, point) && std::ranges::all_of(tangent, point) &&
             finite_tail_detail::Magnitude(null_time - time) >
@@ -643,7 +643,19 @@ template <typename Scalar>
     if (!start.Finite() || !horizon.Finite() || !(start.lo > 0.0 && start.hi < horizon.lo))
         return std::nullopt;
 
-    return DetectorRadialBounds<Scalar>{coefficients, start, horizon, radial_bounds.hi < 0.0};
+    DetectorRadialBounds<Scalar> bounds{coefficients, start, horizon, radial_bounds.hi < 0.0};
+    if constexpr (ExactNullLaunch) {
+        const Scalar mu = z / r;
+        const Scalar dr = radial / (r * r + Square(a * mu));
+        bounds.energy = energy;
+        bounds.angular = angular;
+        bounds.carter = carter;
+        bounds.mu = mu;
+        bounds.mu_rate = kz - mu * dr;
+        bounds.nx = ell[1];
+        bounds.ny = ell[2];
+    }
+    return bounds;
 }
 // For H(u)=c0+c2*u²+c3*u³+c4*u⁴ with c2<0, H'/u is
 // quadratic and starts negative. Its first sign change, if present, is
@@ -671,12 +683,10 @@ template <typename Scalar>
     // The root on the increasing branch remains well conditioned when
     // the quartic coefficient vanishes, including in Schwarzschild.
     const Range u = Range(-2.0) * d / (b + sqrt(discriminant));
-    if (!u.Finite() || !(u.lo > bounds.start.hi && u.hi < bounds.horizon.lo))
-        return {};
+    if (!u.Finite() || !(u.lo > bounds.start.hi && u.hi < bounds.horizon.lo)) return {};
 
     const Range curvature = Range(2.0) * Enclosure(c[2]) +
-                            u * (Range(6.0) * Enclosure(c[3]) +
-                                 u * Range(12.0) * Enclosure(c[4]));
+                            u * (Range(6.0) * Enclosure(c[3]) + u * Range(12.0) * Enclosure(c[4]));
     if (!(curvature.lo > 0.0)) return {};
 
     // Evaluate H at a shared fixed centre, retaining pupil correlation.
@@ -688,7 +698,8 @@ template <typename Scalar>
     const std::array derivative{Scalar{}, c[2] * Scalar(2.0), c[3] * Scalar(3.0),
                                 c[4] * Scalar(4.0)};
     const Range slope = Enclosure(EvaluateRadial(derivative, centre));
-    const Range lower = value - Range(Magnitude(slope)) * Range(finite_tail_detail::MidpointError(u));
+    const Range lower =
+        value - Range(Magnitude(slope)) * Range(finite_tail_detail::MidpointError(u));
     if (!value.Finite() || !lower.Finite()) return {};
     return RadialMinimum{u, Range(lower.lo, value.hi)};
 }
@@ -697,7 +708,8 @@ template <typename Scalar>
 [[nodiscard]] inline bool CertifyKerrDetectorCapture(
     const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
     const std::array<finite_tail_detail::Range, 4>& tangent, unsigned maximum_panels) {
-    const auto bounds = kerr_infinity_detail::EncloseDetectorRadialState(parameters, position, tangent);
+    const auto bounds =
+        kerr_infinity_detail::EncloseDetectorRadialState(parameters, position, tangent);
     if (!bounds || !bounds->inward) return false;
     unsigned budget = std::min(maximum_panels, 64U);
     return kerr_infinity_detail::ProvePositiveRadialPotential(
@@ -751,8 +763,8 @@ EncloseCorrelatedKerrDetectorState(
             return true;
     }
     unsigned budget = std::min(maximum_panels, 64U);
-    return ProvePositiveRadialPotentialFor(
-        bounds->coefficients, {bounds->start.lo, bounds->horizon.hi}, budget);
+    return ProvePositiveRadialPotentialFor(bounds->coefficients,
+                                           {bounds->start.lo, bounds->horizon.hi}, budget);
 }
 
 // The shared launch can publish an escape only if the whole launch enclosure

@@ -6,6 +6,7 @@
 #include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/spectral/blackbody.h"
 #include "sirius/render/pixel_sampling.h"
+#include "sirius/render/session/kerr_point_detector.h"
 #include "sirius/render/session/point_source_detector.h"
 #include "sirius/render/session/render_session.h"
 
@@ -151,7 +152,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     const core::ICamera& camera, GeodesicTracer& tracer,
     const core::StarfieldSpatialIndex& catalogue, double brightness, double sigma, int x, int y,
     int width, int height, const CameraSample& sample, const std::function<bool()>& cancelled,
-    RayWorkQueue* workers) {
+    RayWorkQueue* workers, const KerrDetectorCatalogue* kerr_catalogue) {
     std::vector<PointDetectorFootprint> footprints;
     std::vector<std::size_t> indices;
     const auto count = static_cast<std::size_t>(width * height);
@@ -190,7 +191,8 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     if (prepared) {
         using backend::DetectorLaunchFrame;
         using Range = DetectorLaunchFrame::Range;
-        const std::array origin{Range(x + double(sample.image_u)), Range(y + double(sample.image_v))};
+        const std::array origin{Range(x + double(sample.image_u)),
+                                Range(y + double(sample.image_v))};
         std::array<Range, 2> bounds;
         for (std::size_t i = 0; i < footprints.size(); ++i) {
             const auto& footprint = footprints[i];
@@ -198,19 +200,23 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
                 const auto& row = footprint.chart_from_standard[axis];
                 // Each original Gaussian has |z| <= 4 in its own standard
                 // coordinates. This rectangle covers their union at this pupil.
-                const auto radius = Range(4.0) * (Range(std::abs(row[0])) + Range(std::abs(row[1])));
+                const auto radius =
+                    Range(4.0) * (Range(std::abs(row[0])) + Range(std::abs(row[1])));
                 const auto support =
                     origin[axis] + (Range(footprint.centre[axis]) + Range(-radius.hi, radius.hi));
                 if (!support.Finite()) {
                     bounds[axis] = support;
                     continue;
                 }
-                if (i == 0) bounds[axis] = support;
-                else bounds[axis] = {std::min(bounds[axis].lo, support.lo),
-                                     std::max(bounds[axis].hi, support.hi)};
+                if (i == 0)
+                    bounds[axis] = support;
+                else
+                    bounds[axis] = {std::min(bounds[axis].lo, support.lo),
+                                    std::max(bounds[axis].hi, support.hi)};
             }
         }
-        if (tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *prepared, bounds)) return result;
+        if (tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *prepared, bounds))
+            return result;
     }
     const PointDetectorSampler probe = [&](const DetectorCoordinate& q)
         -> std::expected<PointDetectorProbe, PointDetectorFailure> {
@@ -260,17 +266,28 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     PointDetectorDarkCell dark_cell;
     if (prepared) {
         dark_cell = [&](const DetectorCoordinate& lower, const DetectorCoordinate& upper,
-                         unsigned splits) {
+                        unsigned splits) {
             using Range = backend::DetectorLaunchFrame::Range;
             const std::array film_bounds{
                 Range(x + double(sample.image_u)) + Range(lower[0], upper[0]),
                 Range(y + double(sample.image_v)) + Range(lower[1], upper[1])};
             return tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *prepared, film_bounds,
-                                                       splits);
+                                                        splits);
         };
     }
-    const auto group = EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe,
-                                                  cancelled, {}, probe_batch, dark_cell);
+    PointDetectorCellBound cell_bound;
+    if (prepared && kerr_catalogue) {
+        const DetectorCoordinate origin{x + double(sample.image_u), y + double(sample.image_v)};
+        cell_bound = [&, origin](const PointDetectorFootprint& footprint,
+                                 const DetectorCoordinate& lower, const DetectorCoordinate& upper,
+                                 std::size_t& remaining) {
+            return BoundKerrDetectorCell(*kerr_catalogue, brightness, camera.GetConfig(), *prepared,
+                                         origin, footprint, lower, upper, cancelled, remaining);
+        };
+    }
+    const auto group =
+        EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe, cancelled, {},
+                                   probe_batch, dark_cell, cell_bound);
     if (!group) return std::unexpected(group.error());
     result.statistics = group->statistics;
     for (std::size_t i = 0; i < indices.size(); ++i) result.samples[indices[i]] = group->samples[i];
@@ -307,7 +324,8 @@ base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int heig
                     *camera_, *tracer, *star_index_,
                     config_.point_starfield_config.brightness_scale,
                     pixel_angular_size_ * (config_.ray_bundles ? 1.0 : .3), x, y, width, height,
-                    sample, [&] { return IsStopping(); }, probe_workers_.get());
+                    sample, [&] { return IsStopping(); }, probe_workers_.get(),
+                    kerr_detector_catalogue_.get());
                 if (batch) {
                     shared = std::move(*batch);
                 } else {
