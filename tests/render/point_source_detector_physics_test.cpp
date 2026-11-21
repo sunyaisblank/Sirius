@@ -285,8 +285,8 @@ TEST(PointSourceDetector, MovingKerrFluxMatchesIndependentSeparatedImageAndBand)
     ASSERT_NO_FATAL_FAILURE(CheckIndependentMovingKerrFlux());
 }
 
-#ifdef SIRIUS_HAS_RETAINED_COMPUTE
 TEST(PointSourceDetector, RetainedFixedPupilPreservesFourLaunchColumns) {
+#ifdef SIRIUS_HAS_RETAINED_COMPUTE
     const auto inventory = backend::EnumerateVulkanDevices();
     ASSERT_TRUE(inventory) << inventory.error().Description();
     if (inventory->empty()) GTEST_SKIP() << "no Vulkan device; numerical backend unqualified";
@@ -375,8 +375,10 @@ TEST(PointSourceDetector, RetainedFixedPupilPreservesFourLaunchColumns) {
     EXPECT_FALSE(executor.Error());
     RecordProperty("largest_launch_error", std::format("{:.17g}", largest_launch_error));
     RecordProperty("largest_map_direction_error", std::format("{:.17g}", largest_map_error));
-}
+#else
+    GTEST_SKIP() << "retained compute kernels unavailable; numerical backend unqualified";
 #endif
+}
 
 TEST(PointSourceDetector, RetainedMovingKerrFluxMatchesIndependentSeparatedImageAndBand) {
 #ifdef SIRIUS_HAS_RETAINED_COMPUTE
