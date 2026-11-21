@@ -132,8 +132,7 @@ def parse_artifacts(values: list[str], option: str) -> dict[str, Path]:
 
 
 def _locate_under_resolved_roots(path: Path, source_root: Path, build_dir: Path) -> tuple[str, str]:
-    """Locate a fresh artifact path under this map's canonical roots."""
-    path = path.resolve()
+    """Locate a canonical artifact path under this map's canonical roots."""
     for name, root in (("build", build_dir), ("source", source_root)):
         try:
             relative = path.relative_to(root)
@@ -147,10 +146,14 @@ def _locate_under_resolved_roots(path: Path, source_root: Path, build_dir: Path)
 
 def artifact_records(artifacts: dict[str, Path], source_root: Path,
                      build_dir: Path) -> dict[str, dict[str, object]]:
-    # Resolve roots once for this map, never across separate pre/post checks.
-    # Each artifact still resolves freshly before the same containment checks.
-    build_dir = build_dir.resolve()
-    source_root = source_root.resolve()
+    return _record_resolved_artifacts(
+        {name: path.resolve() for name, path in artifacts.items()},
+        source_root.resolve(), build_dir.resolve(),
+    )
+
+
+def _record_resolved_artifacts(artifacts: dict[str, Path], source_root: Path,
+                               build_dir: Path) -> dict[str, dict[str, object]]:
     records = {}
     for name, path in sorted(artifacts.items()):
         root, relative = _locate_under_resolved_roots(path, source_root, build_dir)
@@ -164,6 +167,11 @@ def artifact_records(artifacts: dict[str, Path], source_root: Path,
 
 
 def resolve_record(record: dict[str, object], source_root: Path, build_dir: Path) -> Path:
+    return _resolve_record_under_roots(record, source_root.resolve(), build_dir.resolve())
+
+
+def _resolve_record_under_roots(record: dict[str, object], source_root: Path,
+                                build_dir: Path) -> Path:
     require(set(record) == {"root", "path", "bytes", "sha256"},
             "artifact receipt has an unsupported shape")
     root_name = record["root"]
@@ -180,7 +188,7 @@ def resolve_record(record: dict[str, object], source_root: Path, build_dir: Path
     require(not relative_path.is_absolute() and relative_path.parts and
             ".." not in relative_path.parts,
             "artifact receipt path escapes its declared root")
-    root = (source_root if root_name == "source" else build_dir).resolve()
+    root = source_root if root_name == "source" else build_dir
     path = (root / relative_path).resolve()
     try:
         path.relative_to(root)
@@ -413,16 +421,18 @@ def validate_native_build_document(document: object) -> dict:
 
 
 def verify_recorded_files(document: dict, source_root: Path, build_dir: Path) -> None:
+    source_root = source_root.resolve()
+    build_dir = build_dir.resolve()
     tested_paths = {}
     for collection_name in ("tested_artifacts", "product_artifacts", "test_input_artifacts"):
         collection = document[collection_name]
         for name, record in collection.items():
             require(isinstance(record, dict), "artifact receipt entry is not an object")
-            resolved = resolve_record(record, source_root, build_dir)
+            resolved = _resolve_record_under_roots(record, source_root, build_dir)
             if collection_name == "tested_artifacts":
                 tested_paths[name] = resolved
             if collection_name == "test_input_artifacts":
-                require(resolved == build_dir.resolve() / TEST_INPUT_PATHS[name],
+                require(resolved == build_dir / TEST_INPUT_PATHS[name],
                         f"recorded test input {name} resolves to a substituted kernel path")
     verify_test_input_copies(tested_paths, document["product_artifacts"],
                              document["test_input_artifacts"])
@@ -436,7 +446,7 @@ def verify_recorded_files(document: dict, source_root: Path, build_dir: Path) ->
     for key in ("junit", "log"):
         record = document["ctest"][key]
         require(isinstance(record, dict), f"Mandatory gate {key} record is invalid")
-        resolve_record(record, source_root, build_dir)
+        _resolve_record_under_roots(record, source_root, build_dir)
 
 
 def verify_test_input_copies(tested_paths: dict[str, Path], product_records: dict,
@@ -518,7 +528,7 @@ def verify_execution_inputs(
         (args.test_input_artifact, "--test-input-artifact", test_input_records),
     ):
         paths = parse_artifacts(values, option)
-        actual = artifact_records(paths, source_root, build_dir)
+        actual = _record_resolved_artifacts(paths, source_root, build_dir)
         require(actual == expected,
                 f"{option} artifacts changed while CTest ran; no receipt was written")
         if option == "--tested-artifact":
@@ -577,9 +587,9 @@ def run_gate(args: argparse.Namespace) -> None:
         require(set(products) == RELEASE_PRODUCTS,
                 f"{args.alignment_mode} Mandatory gate invocation omitted a product artifact")
 
-    tested_records = artifact_records(tested, source_root, build_dir)
-    product_records = artifact_records(products, source_root, build_dir)
-    test_input_records = artifact_records(test_inputs, source_root, build_dir)
+    tested_records = _record_resolved_artifacts(tested, source_root, build_dir)
+    product_records = _record_resolved_artifacts(products, source_root, build_dir)
+    test_input_records = _record_resolved_artifacts(test_inputs, source_root, build_dir)
     validate_test_input_records(test_input_records, args.alignment_mode, products)
     verify_test_input_copies(tested, product_records, test_input_records)
 
@@ -654,9 +664,9 @@ def run_native_build_gate(args: argparse.Namespace) -> None:
             "native build gate invocation omitted a compiled test executable")
     require(set(products) == RELEASE_PRODUCTS,
             "native build gate invocation omitted a strict product artifact")
-    tested_records = artifact_records(tested, source_root, build_dir)
-    product_records = artifact_records(products, source_root, build_dir)
-    test_input_records = artifact_records(test_inputs, source_root, build_dir)
+    tested_records = _record_resolved_artifacts(tested, source_root, build_dir)
+    product_records = _record_resolved_artifacts(products, source_root, build_dir)
+    test_input_records = _record_resolved_artifacts(test_inputs, source_root, build_dir)
     validate_test_input_records(test_input_records, args.alignment_mode, products)
     verify_test_input_copies(tested, product_records, test_input_records)
 
@@ -834,12 +844,17 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
         finally:
             path.write_bytes(originals[path])
     verify_test_input_copies(tested, product_records, test_input_records)
+    inventory_output = json.dumps(inventory)
+    altered_inventory = {**inventory, "tests": [
+        {**inventory["tests"][0], "command": ["replacement-test"]}, *inventory["tests"][1:],
+    ]}
+    altered_inventory_output = json.dumps(altered_inventory)
     for native, runner in ((False, run_gate), (True, run_native_build_gate)):
         for mutation in mutations:
             stamp = build / "execution-controls" / "gate.json"
             stamp.parent.mkdir(exist_ok=True)
             stamp.write_text("stale receipt\n", encoding="utf-8")
-            live_inventory = copy.deepcopy(inventory)
+            live_inventory_output = inventory_output
             live_revision = revision
             live_status = ""
             executed = False
@@ -904,13 +919,13 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 mutate_copy(action, consumer)
 
             def external_command(command, **kwargs):
-                nonlocal live_revision, live_status, executed
+                nonlocal live_inventory_output, live_revision, live_status, executed
                 if command[:3] == ["git", "rev-parse", "HEAD"]:
                     output = live_revision
                 elif command[:2] == ["git", "status"]:
                     output = live_status
                 elif "--show-only=json-v1" in command:
-                    output = json.dumps(live_inventory)
+                    output = live_inventory_output
                 else:
                     require("--output-junit" in command,
                             "unexpected self-test external command")
@@ -974,7 +989,7 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                         live_status = " M source.cpp"
                     elif mutation == "registration":
                         # Preserve names and labels while changing what CTest runs.
-                        live_inventory["tests"][0]["command"] = ["replacement-test"]
+                        live_inventory_output = altered_inventory_output
                     kwargs["stdout"].write(b"fixture CTest passed\n")
                     return subprocess.CompletedProcess(command, 0)
                 return subprocess.CompletedProcess(command, 0, stdout=output, stderr="")
