@@ -10,7 +10,7 @@ struct RayWorkQueue::Batch {
     explicit Batch(std::span<const core::CameraRay> input)
         : rays(input.begin(), input.end()), results(input.size()) {}
     std::vector<core::CameraRay> rays;
-    std::vector<backend::TraceResult> results;
+    std::vector<std::optional<backend::TraceResult>> results;
     std::mutex mutex;
     std::condition_variable completed;
     std::size_t remaining = 0;
@@ -43,12 +43,12 @@ void RayWorkQueue::Stop() {
         if (worker.joinable()) worker.join();
 }
 
-base::Expected<std::vector<backend::TraceResult>> RayWorkQueue::Execute(
+base::Expected<std::vector<std::optional<backend::TraceResult>>> RayWorkQueue::Execute(
     std::span<const core::CameraRay> rays) {
     if (rays.size() > kMaximumBatch)
         return base::Fail(base::ErrorDomain::kConfiguration, "trace probe batch",
                           "batch exceeds the bounded ray capacity");
-    if (rays.empty()) return std::vector<backend::TraceResult>{};
+    if (rays.empty()) return std::vector<std::optional<backend::TraceResult>>{};
     try {
         const auto batch = std::make_shared<Batch>(rays);
         batch->remaining = rays.size();

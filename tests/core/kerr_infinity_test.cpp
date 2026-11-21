@@ -433,6 +433,15 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
         ASSERT_FALSE(result) << input.angular_momentum;
         EXPECT_EQ(result.error(), KerrInfinityFailure::RadialUnresolved);
         EXPECT_EQ(turn_radius, -1.0);
+
+        const double impact = std::abs(input.angular_momentum);
+        const auto parameters = authority.GetParams();
+        EXPECT_EQ(
+            sirius::core::relativity::CertifyKerrDetectorCapture(parameters, event.x, event.k, 64),
+            impact == 2.0);
+        const auto outward = CarterEvent(input, 1);
+        EXPECT_FALSE(sirius::core::relativity::CertifyKerrDetectorCapture(parameters, outward.x,
+                                                                          outward.k, 64));
     }
 }
 

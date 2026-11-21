@@ -449,7 +449,8 @@ bool GeodesicTracer::FindDiskIntersection(const DopriPositionSegment& segment,
 // =============================================================================
 Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
                                             relativity::ObserverFrame* launch_frame,
-                                            GeodesicVariations* launch_variations) {
+                                            GeodesicVariations* launch_variations,
+                                            bool* detector_capture) {
     Lightray ray{};
     IMetric& observer_metric = outgoing_chart_ ? outgoing_chart_->Source() : *metric_;
     auto launch = step_executor_
@@ -458,6 +459,12 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     if (!launch) {
         ray.terminated = 3;
         return ray;
+    }
+    if (detector_capture) {
+        const auto* family = dynamic_cast<const KerrSchildFamily*>(&observer_metric);
+        *detector_capture = family && relativity::CertifyKerrDetectorCapture(
+                                          family->GetParams(), launch->position, launch->tangent,
+                                          static_cast<unsigned>(config_.max_steps));
     }
     if (outgoing_chart_) {
         const auto mapping = outgoing_chart_->FromIngoing(launch->position);
@@ -683,7 +690,15 @@ TraceResult GeodesicTracer::TracePointSource(const CameraRay& camera_ray) {
     return TraceTo(camera_ray, true);
 }
 
-TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infinity_handoff) {
+std::optional<TraceResult> GeodesicTracer::TraceDetectorRay(const CameraRay& camera_ray) {
+    bool captured = false;
+    auto trace = TraceTo(camera_ray, true, &captured);
+    if (captured && !trace.cancelled && !trace.numerical_failure) return std::nullopt;
+    return trace;
+}
+
+TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infinity_handoff,
+                                    bool* detector_capture) {
     struct ExecutionScope {
         TraceStepExecutor* executor;
         ~ExecutionScope() {
@@ -711,13 +726,14 @@ TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infi
         worker.page_thorne_reference_temperature_ = page_thorne_reference_temperature_;
         worker.page_thorne_cached_m_ = page_thorne_cached_m_;
         worker.page_thorne_cached_a_ = page_thorne_cached_a_;
-        return worker.TraceInCurrentChart(camera_ray, allow_infinity_handoff);
+        return worker.TraceInCurrentChart(camera_ray, allow_infinity_handoff, detector_capture);
     }
-    return TraceInCurrentChart(camera_ray, allow_infinity_handoff);
+    return TraceInCurrentChart(camera_ray, allow_infinity_handoff, detector_capture);
 }
 
 TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
-                                                bool allow_infinity_handoff) {
+                                                bool allow_infinity_handoff,
+                                                bool* detector_capture) {
     SIRIUS_PRE(IsRepresentedCameraRay(camera_ray) && camera_ray.active);
     TraceResult result;
     result.steps_taken = 0;
@@ -745,7 +761,11 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
 
     relativity::ObserverFrame launch_frame;
     GeodesicVariations launch_variations;
-    Lightray ray = InitializeLightray(camera_ray, &launch_frame, &launch_variations);
+    if (config_.enable_disk || config_.enable_volumetric || config_.enable_polarisation ||
+        config_.finite_causal_boundary || config_.strong_field_max_step > 0.0f)
+        detector_capture = nullptr;
+    Lightray ray =
+        InitializeLightray(camera_ray, &launch_frame, &launch_variations, detector_capture);
     // Initialization can return a device refusal after cancellation arrives.
     // Give cancellation the same precedence as after an attempted interval.
     if (should_cancel_ && should_cancel_()) return cancelled_result();
@@ -757,6 +777,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
         result.numerical_failure = true;
         return result;
     }
+    if (detector_capture && *detector_capture) return result;
 
     float min_r = 1e10f;
 

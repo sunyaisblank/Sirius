@@ -407,6 +407,10 @@ class GeodesicTracer {
     // Other metrics and declined handoffs retain the ordinary tracing path.
     TraceResult TracePointSource(const sirius::core::CameraRay& camera_ray);
 
+    // An empty result certifies a dark vacuum detector sample. Other results
+    // carry the usual traced state or error, including cancellation.
+    std::optional<TraceResult> TraceDetectorRay(const sirius::core::CameraRay& camera_ray);
+
     // Non-owning; the executor must outlive this tracer and any active trace.
     void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }
     // Configure before tracing. The owner supplies a thread-safe predicate.
@@ -460,9 +464,10 @@ class GeodesicTracer {
     std::function<bool()> should_cancel_;
     PolarisationObserver polarisation_observer_;
     const sirius::core::OutgoingKerrSchild* outgoing_chart_ = nullptr;
-    TraceResult TraceTo(const sirius::core::CameraRay& camera_ray, bool allow_infinity_handoff);
+    TraceResult TraceTo(const sirius::core::CameraRay& camera_ray, bool allow_infinity_handoff,
+                        bool* detector_capture = nullptr);
     TraceResult TraceInCurrentChart(const sirius::core::CameraRay& camera_ray,
-                                    bool allow_infinity_handoff);
+                                    bool allow_infinity_handoff, bool* detector_capture);
 
     // Metric parameters cached once per trace.
     double cached_m_ = 1.0;
@@ -478,7 +483,8 @@ class GeodesicTracer {
     // and return the same metric-orthonormal camera frame used for launch.
     sirius::core::Lightray InitializeLightray(const sirius::core::CameraRay& camera_ray,
                                               sirius::core::relativity::ObserverFrame* launch_frame,
-                                              sirius::core::GeodesicVariations* launch_variations);
+                                              sirius::core::GeodesicVariations* launch_variations,
+                                              bool* detector_capture);
 
     // Whether an accepted central-ray segment crosses the equatorial disk.
     // Solves z(lambda)=0 on the cubic Hermite segment and returns the crossing

@@ -21,26 +21,28 @@ TEST(RayWorkQueue, IndependentRaysOverlapAndReturnInRequestOrder) {
     bool overlapped = false;
     std::array<std::atomic<int>, 2> active{};
     std::atomic<bool> worker_reentered{false};
-    RayWorkQueue queue(2, [&](std::size_t worker, const CameraRay& ray) {
-        if (active[worker].fetch_add(1) != 0) worker_reentered = true;
-        const int index = static_cast<int>(ray.aperture_up);
-        if (index == 0) {
-            std::unique_lock lock(mutex);
-            overlapped =
-                completed.wait_for(lock, std::chrono::seconds(5), [&] { return second_finished; });
-        } else if (index == 1) {
-            {
-                std::lock_guard lock(mutex);
-                second_finished = true;
-            }
-            completed.notify_all();
-        }
-        TraceResult result;
-        result.steps_taken = index;
-        result.outcome = TraceResult::Outcome::Escaped;
-        --active[worker];
-        return result;
-    });
+    RayWorkQueue queue(2,
+                       [&](std::size_t worker, const CameraRay& ray) -> std::optional<TraceResult> {
+                           if (active[worker].fetch_add(1) != 0) worker_reentered = true;
+                           const int index = static_cast<int>(ray.aperture_up);
+                           if (index == 0) {
+                               std::unique_lock lock(mutex);
+                               overlapped = completed.wait_for(lock, std::chrono::seconds(5),
+                                                               [&] { return second_finished; });
+                           } else if (index == 1) {
+                               {
+                                   std::lock_guard lock(mutex);
+                                   second_finished = true;
+                               }
+                               completed.notify_all();
+                           }
+                           TraceResult result;
+                           result.steps_taken = index;
+                           result.outcome = TraceResult::Outcome::Escaped;
+                           --active[worker];
+                           if (index == 2) return std::nullopt;
+                           return result;
+                       });
     // Exceeds queue residency, exercising producer backpressure and reuse.
     std::array<CameraRay, RayWorkQueue::kMaximumBatch> rays;
     for (std::size_t i = 0; i < rays.size(); ++i) rays[i].aperture_up = static_cast<double>(i);
@@ -49,8 +51,14 @@ TEST(RayWorkQueue, IndependentRaysOverlapAndReturnInRequestOrder) {
     EXPECT_TRUE(overlapped);
     EXPECT_FALSE(worker_reentered.load());
     ASSERT_EQ(result->size(), rays.size());
-    for (std::size_t i = 0; i < rays.size(); ++i)
-        EXPECT_EQ((*result)[i].steps_taken, static_cast<int>(i));
+    for (std::size_t i = 0; i < rays.size(); ++i) {
+        if (i == 2) {
+            EXPECT_FALSE((*result)[i]);
+        } else {
+            ASSERT_TRUE((*result)[i]);
+            EXPECT_EQ((*result)[i]->steps_taken, static_cast<int>(i));
+        }
+    }
 }
 
 TEST(RayWorkQueue, ConcurrentCallersKeepTheirOwnResults) {
@@ -68,7 +76,8 @@ TEST(RayWorkQueue, ConcurrentCallersKeepTheirOwnResults) {
             const auto result = queue.Execute(rays);
             if (!result || result->size() != rays.size()) return false;
             for (std::size_t i = 0; i < rays.size(); ++i)
-                if ((*result)[i].affine_length != rays[i].aperture_up) return false;
+                if (!(*result)[i] || (*result)[i]->affine_length != rays[i].aperture_up)
+                    return false;
             return true;
         });
     for (auto& caller : callers) EXPECT_TRUE(caller.get());
@@ -94,8 +103,10 @@ TEST(RayWorkQueue, WorkerFailureDrainsBatchAndQueueRemainsUsable) {
     rays[6].aperture_up = 1;
     const auto next = queue.Execute(rays);
     ASSERT_TRUE(next);
-    EXPECT_TRUE((*next)[5].cancelled);
-    EXPECT_TRUE((*next)[6].numerical_failure);
+    ASSERT_TRUE((*next)[5]);
+    ASSERT_TRUE((*next)[6]);
+    EXPECT_TRUE((*next)[5]->cancelled);
+    EXPECT_TRUE((*next)[6]->numerical_failure);
     EXPECT_EQ(traced.load(), 26);
 }
 

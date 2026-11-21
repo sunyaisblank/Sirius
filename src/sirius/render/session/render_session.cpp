@@ -789,7 +789,7 @@ base::Expected<void> RenderSession::Initialise() {
         probe_workers_ =
             std::make_unique<RayWorkQueue>(static_cast<std::size_t>(num_threads_),
                                            [this](std::size_t worker, const core::CameraRay& ray) {
-                                               return probe_tracers_[worker]->TracePointSource(ray);
+                                               return probe_tracers_[worker]->TraceDetectorRay(ray);
                                            });
     }
 

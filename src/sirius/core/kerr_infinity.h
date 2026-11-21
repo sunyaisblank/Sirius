@@ -1,5 +1,6 @@
 #pragma once
 
+#include "sirius/core/metrics/kerr_schild_family.h"
 #include "sirius/core/source_sky_map.h"
 #include "sirius/core/spherical_continuation/radial_quadrature.h"
 #include "sirius/core/trace_boundary.h"
@@ -191,6 +192,20 @@ Scalar EvaluateRadial(const std::array<Scalar, N>& coefficients, Scalar u) {
     return value;
 }
 
+inline bool ProvePositiveRadialPotential(
+    const std::array<finite_tail_detail::Range, 5>& coefficients,
+    finite_tail_detail::Range interval, unsigned& budget) {
+    if (budget == 0) return false;
+    --budget;
+    const auto potential = EvaluateRadial(coefficients, interval);
+    if (potential.lo > 0.0) return true;
+    if (!potential.Finite() || potential.hi <= 0.0) return false;
+    const double mid = std::midpoint(interval.lo, interval.hi);
+    if (!(interval.lo < mid && mid < interval.hi)) return false;
+    return ProvePositiveRadialPotential(coefficients, {interval.lo, mid}, budget) &&
+           ProvePositiveRadialPotential(coefficients, {mid, interval.hi}, budget);
+}
+
 template <typename Scalar>
 std::array<Scalar, 4> DeflateRadialTurn(const std::array<Scalar, 5>& coefficients, Scalar root) {
     // H(u) = (root - u) G(u). Horner deflation avoids dividing a near-zero
@@ -366,6 +381,76 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     return true;
 }
 }  // namespace kerr_infinity_detail
+
+// A dark vacuum detector sample needs only capture classification. Enclose
+// the past null launch and prove the radial potential is strictly positive all
+// the way to the outer horizon. No terminal state is computed here.
+[[nodiscard]] inline bool CertifyKerrDetectorCapture(const KerrSchildParams& parameters,
+                                                     const Vec4& position, const Vec4& tangent,
+                                                     unsigned maximum_panels) {
+    using finite_tail_detail::Range;
+    using kerr_infinity_detail::RadialCoefficients;
+    const auto [mass, spin, charge, cosmological_constant] = parameters;
+    if (charge != 0.0 || cosmological_constant != 0.0 || !(mass > std::abs(spin)) ||
+        !std::isfinite(mass) || !IsFinite(position) || !IsFinite(tangent) ||
+        !finite_tail_detail::RoundingEnvironment())
+        return false;
+
+    const Range M(mass), a(spin);
+    const Range x(position(1)), y(position(2)), z(position(3));
+    const Range reduced = x * x + y * y + z * z - a * a;
+    const Range discriminant = sqrt(reduced * reduced + Range(4.0) * a * a * z * z);
+    const Range r = sqrt((reduced + discriminant) * Range(0.5));
+    if (!(r.lo > (Range(2.0) * M).hi)) return false;
+
+    const Range kx(tangent(1)), ky(tangent(2)), kz(tangent(3));
+    // The denominator of the oblate radius gradient is positive. Its
+    // numerator fixes the radial branch before looking for any roots.
+    const Range r2_plus_a2 = r * r + a * a;
+    const Range radial = r * (x * kx + y * ky) + r2_plus_a2 * z * kz / r;
+    if (!(radial.hi < 0.0)) return false;
+
+    const auto ell = metric_detail::KerrSchildNullCovector(x, y, z, r, spin);
+    const auto H = metric_detail::KerrSchildFactor(r, z, parameters);
+    const Range spatial = ell[1] * kx + ell[2] * ky + ell[3] * kz;
+    const Range B = H * spatial;
+    const Range C = kx * kx + ky * ky + kz * kz + B * spatial;
+    const Range minus_gtt = Range(1.0) - H;
+    const Range null_time = (B - sqrt(B * B + minus_gtt * C)) / minus_gtt;
+    // Enclose both the represented launch and its exact past null time with
+    // fixed spatial tangent. Large launch discrepancies decline.
+    const double time = tangent(0);
+    if (!null_time.Finite() || !(null_time.hi < 0.0) || !(time < 0.0) ||
+        finite_tail_detail::Magnitude(null_time - Range(time)) >
+            -time * KerrInfinityConfig{}.input_constraint_tolerance)
+        return false;
+    const Range kt(std::min(time, null_time.lo), std::max(time, null_time.hi));
+    const Range correction = H * (kt + spatial);
+    const Range energy = kt - correction;
+    if (!(energy.hi < 0.0)) return false;
+    const Range px = kx + correction * ell[1];
+    const Range py = ky + correction * ell[2];
+    const Range pz = kz + correction * ell[3];
+    const Range angular = x * py - y * px;
+
+    // Express the Carter combination as the squared norm of the angular
+    // covector less the axial spin term. This form is regular on the axis.
+    const std::array w{r * px + a * py, r * py - a * px, r * pz};
+    const Range projected = ell[1] * w[0] + ell[2] * w[1] + ell[3] * w[2];
+    const Range vx = w[0] - ell[1] * projected + a * energy * ell[2];
+    const Range vy = w[1] - ell[2] * projected - a * energy * ell[1];
+    const Range vz = w[2] - ell[3] * projected;
+    const Range carter = vx * vx + vy * vy + vz * vz;
+    const auto coefficients = RadialCoefficients(mass, spin, energy, angular, carter);
+    const auto start = Range(1.0) / r;
+    const auto horizon = Range(1.0) / (M + sqrt(M * M - a * a));
+    if (!start.Finite() || !horizon.Finite() || !(start.lo > 0.0 && start.hi < horizon.lo))
+        return false;
+
+    unsigned budget = std::min(maximum_panels, 64U);
+    return kerr_infinity_detail::ProvePositiveRadialPotential(coefficients, {start.lo, horizon.hi},
+                                                              budget);
+}
 
 // Inputs use the public ingoing Cartesian chart. Displacements are at the
 // actual handoff event; coordinate variations are K=V-Gamma(k,X). Both contain

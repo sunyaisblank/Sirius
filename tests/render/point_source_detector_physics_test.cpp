@@ -422,7 +422,11 @@ void CheckRotatingIsolatedStarBrightness(backend::TraceStepExecutor* executor = 
                             coordinates.size(), std::unexpected(PointDetectorFailure::TraceFailed));
                     PointDetectorProbeBatch values;
                     for (std::size_t i = 0; i < films.size(); ++i) {
-                        const auto& ray = (*traced)[i];
+                        if (!(*traced)[i]) {
+                            values.push_back(std::unexpected(PointDetectorFailure::TraceFailed));
+                            continue;
+                        }
+                        const auto& ray = *(*traced)[i];
                         if (ray.cancelled || ray.numerical_failure ||
                             ray.outcome != backend::TraceResult::Outcome::Escaped ||
                             !ray.beam.infinity_source_map || (mode == 0 && !ray.beam.valid)) {

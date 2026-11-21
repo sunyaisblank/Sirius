@@ -120,7 +120,9 @@ RenderSession::PixelResult RenderSession::ShadeEscaped(const TraceResult& result
 
 namespace {
 std::expected<PointDetectorProbe, PointDetectorFailure> MeasurePointDetector(
-    const core::CameraFilmProjection& film, const TraceResult& traced) {
+    const core::CameraFilmProjection& film, const std::optional<TraceResult>& trace) {
+    if (!trace) return PointDetectorProbe{};
+    const auto& traced = *trace;
     if (traced.cancelled) return std::unexpected(PointDetectorFailure::Cancelled);
     if (traced.numerical_failure || traced.outcome == TraceResult::Outcome::MaxSteps)
         return std::unexpected(PointDetectorFailure::TraceFailed);
@@ -189,7 +191,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
             if (!traced) return std::unexpected(PointDetectorFailure::TraceFailed);
             return MeasurePointDetector(*film, traced->front());
         }
-        return MeasurePointDetector(*film, tracer.TracePointSource(film->ray));
+        return MeasurePointDetector(*film, tracer.TraceDetectorRay(film->ray));
     };
     PointDetectorBatchResult result;
     result.samples.resize(count);
@@ -331,7 +333,13 @@ base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int heig
                             fail_sample(traced.error().Description());
                             return;
                         }
-                        trace_result = std::move(traced->front());
+                        // Disk-free detector shading already returned above.
+                        // This foreground trace must carry an actual state.
+                        if (!traced->front()) {
+                            fail_sample("foreground ray returned only detector visibility");
+                            return;
+                        }
+                        trace_result = std::move(*traced->front());
                     } else {
                         trace_result = physical_point_detector
                                            ? tracer->TracePointSource(camera_ray)

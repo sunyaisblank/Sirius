@@ -480,6 +480,14 @@ TEST(SourceSkyInfinityTrace, NonVacuumAndCapturedRaysDoNotClaimVacuumInfinity) {
         EXPECT_EQ(probe.steps_taken, result.steps_taken);
         EXPECT_FALSE(probe.beam.infinity_source_map);
         EXPECT_FALSE(probe.beam.infinity_source_failure);
+        EXPECT_FALSE(tracer.TraceDetectorRay(captured));
+
+        tracer.SetCancellationCallback([] { return true; });
+        const auto cancelled = tracer.TraceDetectorRay(captured);
+        ASSERT_TRUE(cancelled);
+        EXPECT_TRUE(cancelled->cancelled);
+        RecordProperty(spin == 0 ? "schwarzschild_full_capture_steps" : "kerr_full_capture_steps",
+                       result.steps_taken);
     }
 }
 

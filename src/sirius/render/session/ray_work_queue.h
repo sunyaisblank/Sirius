@@ -7,6 +7,7 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <span>
 #include <thread>
 #include <vector>
@@ -20,7 +21,8 @@ namespace sirius::render {
 // As with other owned executors, callers must finish Execute before destruction.
 class RayWorkQueue {
   public:
-    using TraceFunction = std::function<backend::TraceResult(std::size_t, const core::CameraRay&)>;
+    using TraceFunction =
+        std::function<std::optional<backend::TraceResult>(std::size_t, const core::CameraRay&)>;
     static constexpr std::size_t kMaximumBatch = 64;
 
     RayWorkQueue(std::size_t workers, TraceFunction trace);
@@ -28,7 +30,7 @@ class RayWorkQueue {
     RayWorkQueue(const RayWorkQueue&) = delete;
     RayWorkQueue& operator=(const RayWorkQueue&) = delete;
 
-    [[nodiscard]] base::Expected<std::vector<backend::TraceResult>> Execute(
+    [[nodiscard]] base::Expected<std::vector<std::optional<backend::TraceResult>>> Execute(
         std::span<const core::CameraRay> rays);
 
   private:
