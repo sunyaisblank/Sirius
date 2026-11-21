@@ -1450,6 +1450,7 @@ set_tests_properties(
     PointSourceDetector.HighWindingKerrLongitudeSlopeStaysNegative
     PointSourceDetector.ImageFrequencyAndTransmissionAreAppliedOnce
     PointSourceDetector.LargeSharedRegionMatchesOriginalMovingKerrPackets
+    PointSourceDetector.LongitudeWindowWeightPreservesWrappedSourceOwnership
     PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand
     PointSourceDetector.NewlyDetectedHiddenRegionRetainsOriginalSamplingDepth
     PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport

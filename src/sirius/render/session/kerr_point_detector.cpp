@@ -41,13 +41,13 @@ std::optional<ReachableCatalogue> CollectReachableSources(const AngularCatalogue
             if (gap.lo > 0.0 && LatitudeBand(gap.lo) == LatitudeBand(gap.hi)) {
                 const unsigned band = LatitudeBand(gap.lo);
                 add(band, row.weighted_temperature, gap.lo);
-                output.push_back({&row, row.latitude, band, {}});
+                output.push_back({&row, row.latitude, band, {}, row.weighted_temperature});
                 continue;
             }
             // Resolve the boundary rows once and keep their longitude order
             // for every later winding query.
             std::array<std::vector<const AngularCatalogue::Entry*>, 3> by_band;
-            std::array<Range, 3> latitude;
+            std::array<Range, 3> latitude, weight;
             for (const auto& entry : row.entries) {
                 if (remaining == 0 || (cancelled && cancelled())) return {};
                 --remaining;
@@ -64,11 +64,13 @@ std::optional<ReachableCatalogue> CollectReachableSources(const AngularCatalogue
                 limits = entries.empty() ? entry.latitude
                                          : Range(std::min(limits.lo, entry.latitude.lo),
                                                  std::max(limits.hi, entry.latitude.hi));
+                weight[band] = weight[band] + entry.weighted_temperature;
                 entries.push_back(&entry);
             }
             for (unsigned band = 0; band < by_band.size(); ++band)
                 if (!by_band[band].empty())
-                    output.push_back({&row, latitude[band], band, std::move(by_band[band])});
+                    output.push_back(
+                        {&row, latitude[band], band, std::move(by_band[band]), weight[band]});
         }
     }
     return result;

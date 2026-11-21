@@ -32,6 +32,49 @@ namespace sirius::test {
 namespace {
 using namespace sirius::render;
 
+TEST(PointSourceDetector, LongitudeWindowWeightPreservesWrappedSourceOwnership) {
+    namespace detector = core::relativity::finite_tail_detail;
+    using detector::Range;
+    const float latitude = .3f;
+    const float radial = std::sqrt(1.0f - latitude * latitude);
+    std::vector<core::StarEntry> stars;
+    for (const float azimuth : {-3.137f, -3.128f, -.62f, -.60f, .84f, 3.134f}) {
+        stars.push_back({radial * std::cos(azimuth), radial * std::sin(azimuth), latitude, 10.0f,
+                         0.0f, .65f, 5778.0f, 0.0f});
+    }
+    const auto catalogue = detector::AngularCatalogue::Build(stars, {});
+    ASSERT_TRUE(catalogue);
+    const auto rows = catalogue->Rows(true);
+    const auto row =
+        std::ranges::find_if(rows, [](const auto& row) { return !row.entries.empty(); });
+    ASSERT_NE(row, rows.end());
+    ASSERT_EQ(row->entries.size(), stars.size());
+
+    struct Window {
+        Range sky;
+        std::size_t count;
+    };
+    const std::array windows{Window{{3.12, 3.16}, 3}, Window{{9.40, 9.45}, 3},
+                             Window{{-.64, -.58}, 2}, Window{{.2, .4}, 0},
+                             Window{{-7.0, 7.0}, stars.size()}};
+    for (const auto& [sky, count] : windows) {
+        SCOPED_TRACE(sky.lo);
+        std::size_t visited = 0;
+        long double sum = 0;
+        ASSERT_TRUE(row->Query(sky, [&](const auto& source) {
+            ++visited;
+            sum += std::midpoint(source.weighted_temperature.lo, source.weighted_temperature.hi);
+            return true;
+        }));
+        const auto weight = row->QueryWeight(sky);
+        ASSERT_TRUE(weight);
+        EXPECT_EQ(visited, count);
+        EXPECT_LE(static_cast<long double>(weight->lo), sum);
+        EXPECT_GE(static_cast<long double>(weight->hi), sum);
+        EXPECT_NEAR(weight->hi, static_cast<double>(sum), 1e-12 * (1.0 + static_cast<double>(sum)));
+    }
+}
+
 // The represented winding-69 source can intersect a shadow-edge cell.
 // The 128 rectangle panels admit both signs even when radius is isolated.
 TEST(PointSourceDetector, HighWindingKerrLongitudeSlopeStaysNegative) {

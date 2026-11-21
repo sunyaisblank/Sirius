@@ -408,6 +408,7 @@ struct ReachableCatalogueRow {
     Range latitude;
     unsigned band;
     std::vector<const AngularCatalogue::Entry*> subset;
+    Range weighted_temperature;
 };
 
 using ReachableCatalogueRows = std::array<std::vector<ReachableCatalogueRow>, 2>;
@@ -495,7 +496,8 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
     const unsigned last = *std::ranges::max_element(cutoffs);
     // At small radial separations an entire row can contribute very
     // little even when its longitude window contains many sources.
-    constexpr unsigned first_grouped_winding = 12;
+    constexpr unsigned first_grouped_winding = 8;
+    constexpr unsigned first_whole_row_winding = 12;
     const auto strip = finite_scale || last <= first_grouped_winding
                            ? std::nullopt
                            : PolarDerivativeStrip::Prepare(mass, spin, centre, scale, chart);
@@ -518,8 +520,7 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                     AsinBounds(row.latitude / shared_phases->absolute_amplitude));
                 if (partial[0].Finite() && partial[1].Finite()) critical_equator = partial;
             }
-            const auto endpoint =
-                strip && row.subset.empty() ? strip->ToLatitude(row.latitude) : std::nullopt;
+            const auto endpoint = strip ? strip->ToLatitude(row.latitude) : std::nullopt;
             output.push_back({&row, endpoint, equator, critical_equator});
         }
     }
@@ -604,17 +605,28 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                         approach ? period[0] - prepared.equator[0] : prepared.equator[0];
                     const Range full_target = m_value * period[0] + initial[0] + full_part;
                     if (full_target.Finite() && full_target.lo > edge_time.hi) {
-                        // The immutable row total already includes every longitude.
-                        // No individual source is examined while applying this bound.
+                        // Reduce the matching longitude slices via prefix
+                        // sums, or use the row's outward aggregate for a
+                        // sufficiently faint winding.
                         const auto density =
                             strip->Density(sources.latitude, *prepared.endpoint, m, approach,
                                            log_branch, grouped_separation, sky);
                         if (density) {
+                            const bool whole_row =
+                                m >= first_whole_row_winding || !sources.subset.empty();
+                            const auto weight = whole_row
+                                                    ? std::optional(sources.weighted_temperature)
+                                                    : sources.row->QueryWeight(sky);
                             const Range contribution =
-                                density_to_rgb * sources.row->weighted_temperature * *density;
+                                weight ? density_to_rgb * *weight * *density : InvalidRange();
                             const Range total = result.grouped_rgb + Range(0.0, contribution.hi);
+                            // Keep most of the grouped allowance available to
+                            // deeper windings even when early windows match.
+                            const double allowance = m >= first_whole_row_winding
+                                                         ? grouped_allowance
+                                                         : grouped_allowance * .25;
                             if (contribution.Finite() && contribution.hi >= 0.0 &&
-                                total.hi <= grouped_allowance) {
+                                total.hi <= allowance) {
                                 result.grouped_rgb = total;
                                 continue;
                             }

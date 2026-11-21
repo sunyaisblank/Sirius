@@ -66,6 +66,7 @@ class AngularCatalogue {
 
     struct Row {
         std::vector<Entry> entries;
+        std::vector<Range> temperature_prefix;
         Range latitude, weighted_temperature;
         double longitude_error = 0.0;
 
@@ -74,12 +75,33 @@ class AngularCatalogue {
             return QueryEntries(entries, longitude_error, unwrapped, std::identity{}, visit);
         }
 
+        std::optional<Range> QueryWeight(Range unwrapped) const {
+            Range total;
+            const bool valid = QuerySlices(
+                entries, longitude_error, unwrapped, std::identity{}, [&](auto first, auto last) {
+                    const auto i = first - entries.begin(), j = last - entries.begin();
+                    total = total + (temperature_prefix[j] - temperature_prefix[i]);
+                    return total.Finite();
+                });
+            return valid ? std::optional(total) : std::nullopt;
+        }
+
         template <class Entries, class GetEntry, class Visit>
         static bool QueryEntries(const Entries& entries, double longitude_error, Range unwrapped,
                                  GetEntry get_entry, Visit&& visit) {
+            return QuerySlices(
+                entries, longitude_error, unwrapped, get_entry, [&](auto first, auto last) {
+                    return std::all_of(first, last,
+                                       [&](const auto& item) { return visit(get_entry(item)); });
+                });
+        }
+
+      private:
+        template <class Entries, class GetEntry, class Visit>
+        static bool QuerySlices(const Entries& entries, double longitude_error, Range unwrapped,
+                                GetEntry get_entry, Visit&& visit) {
             if (entries.empty()) return true;
             if (!unwrapped.Finite()) return false;
-            const auto apply = [&](const auto& item) { return visit(get_entry(item)); };
             const auto key = [&](const auto& item) { return get_entry(item).longitude_key; };
             const Range full(-kPiBounds.hi, kPiBounds.hi);
             const Range two_pi = Range(2.0) * kPiBounds;
@@ -90,7 +112,7 @@ class AngularCatalogue {
             // visit per catalogue entry.
             if (last - first > 1 ||
                 (Range(unwrapped.hi) - Range(unwrapped.lo)).hi + 2 * longitude_error >= two_pi.lo) {
-                return std::all_of(entries.begin(), entries.end(), apply);
+                return visit(entries.begin(), entries.end());
             }
             using Iterator = decltype(entries.begin());
             std::array<std::pair<Iterator, Iterator>, 2> slices{};
@@ -106,8 +128,8 @@ class AngularCatalogue {
             Iterator previous_end = entries.begin();
             for (unsigned i = 0; i < count; ++i) {
                 const auto [lo, hi] = slices[i];
-                for (auto at = std::max(lo, previous_end); at < hi; ++at)
-                    if (!apply(*at)) return false;
+                const auto first = std::max(lo, previous_end);
+                if (first < hi && !visit(first, hi)) return false;
                 previous_end = std::max(previous_end, hi);
             }
             return true;
@@ -153,7 +175,15 @@ class AngularCatalogue {
                                    std::midpoint(azimuth.lo, azimuth.hi), star.temperature_K});
         }
         for (auto& hemisphere : index.rows_)
-            for (auto& row : hemisphere) std::ranges::sort(row.entries, {}, &Entry::longitude_key);
+            for (auto& row : hemisphere) {
+                if (row.entries.empty()) continue;
+                std::ranges::sort(row.entries, {}, &Entry::longitude_key);
+                row.temperature_prefix.reserve(row.entries.size() + 1);
+                row.temperature_prefix.emplace_back();
+                for (const auto& entry : row.entries)
+                    row.temperature_prefix.push_back(row.temperature_prefix.back() +
+                                                     entry.weighted_temperature);
+            }
         return index;
     }
 
