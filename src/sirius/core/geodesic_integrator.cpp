@@ -504,19 +504,23 @@ inline Vec4 EndpointAcceleration(const Vec4& velocity, const RetainedMetricSampl
 }
 
 using WideConnection = std::array<std::array<std::array<Twofold, 4>, 4>, 4>;
-#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
-// Dispatch explicit Twofold fma operations while retaining the baseline path.
-__attribute__((target_clones("fma", "default")))
-#endif
-static WideConnection
-WideChristoffel(const Tensor<Twofold, 4, 4>& inverse, const Tensor<Twofold, 4, 4, 4>& dg) {
-    // Every raised component uses the same unscaled derivative sums.
-    // Keep the factor of one half after the original contraction.
+static WideConnection UnscaledFirstKindConnection(const Tensor<Twofold, 4, 4, 4>& dg) {
     WideConnection numerator;
     for (int v = 0; v < 4; ++v)
         for (int a = 0; a < 4; ++a)
             for (int b = 0; b < 4; ++b)
                 numerator[v][a][b] = dg(a, v, b) + dg(b, v, a) - dg(v, a, b);
+    return numerator;
+}
+
+#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
+// Dispatch explicit Twofold fma operations while retaining the baseline path.
+__attribute__((target_clones("fma", "default")))
+#endif
+static WideConnection
+WideChristoffel(const Tensor<Twofold, 4, 4>& inverse, const WideConnection& numerator) {
+    // Every raised component uses the same unscaled derivative sums.
+    // Keep the factor of one half after the original contraction.
     WideConnection G;
     for (int mu = 0; mu < 4; ++mu)
         for (int a = 0; a < 4; ++a)
@@ -645,10 +649,12 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVec
     if (analytic_hessian) ++control.variation_metric_evaluations;
     auto& second = hessian.values;
     constexpr std::array<int, 4> offsets{-2, -1, 1, 2};
-    const double radius = std::hypot(position(1), position(2), position(3));
-    const double local_scale = radius > 0.0 ? radius : control.length_scale;
-    for (int axis = control.stationary ? 1 : 0; axis < 4; ++axis) {
-        if (analytic_hessian) break;
+    double local_scale = control.length_scale;
+    if (!analytic_hessian) {
+        const double radius = std::hypot(position(1), position(2), position(3));
+        if (radius > 0.0) local_scale = radius;
+    }
+    for (int axis = control.stationary ? 1 : 0; !analytic_hessian && axis < 4; ++axis) {
         double spacing = 2.5e-4 * local_scale;
         std::array<Vec4, 4> nodes;
         bool represented = false;
@@ -913,7 +919,8 @@ ProjectVariations(const RetainedMetricSample& geometry, const WideVector& unproj
     // Metric compatibility gives delta p_mu = g_mu_nu V^nu +
     // Gamma_{a mu b} k^a X^b. Contract this first-kind expression directly:
     // lowering a rounded connection first would lose the small V terms.
-    const auto connection = WideChristoffel(inverse, derivatives);
+    const auto numerator = UnscaledFirstKindConnection(derivatives);
+    const auto connection = WideChristoffel(inverse, numerator);
     const int component = projection.component;
     std::array<Twofold, 4> projected_covector;
     double denominator_scale = 0;
@@ -936,7 +943,7 @@ ProjectVariations(const RetainedMetricSample& geometry, const WideVector& unproj
     for (int mu = 0; mu < 4; ++mu)
         for (int a = 0; a < 4; ++a)
             for (int b = 0; b < 4; ++b) {
-                first_kind_tangent[mu][a][b] = FirstKind(derivatives, a, mu, b) * unprojected(a);
+                first_kind_tangent[mu][a][b] = (numerator[a][mu][b] * .5) * unprojected(a);
                 connection_correction[mu][a][b] = connection[mu][a][b] * tangent_delta(a);
             }
     GeodesicVariations result;
@@ -1080,12 +1087,12 @@ std::optional<CoupledSegmentSample> Geodesic::SampleCoupledSegment(
     const auto initial_geometry = RetainedGeometry(*metric, start.position, metric_evaluations);
     const auto final_geometry = RetainedGeometry(*metric, end.position, metric_evaluations);
     const auto event_geometry = RetainedGeometry(*metric, result.ray.position, metric_evaluations);
-    const auto initial_connection =
-        WideChristoffel(initial_geometry.inverse, initial_geometry.derivative);
-    const auto final_connection =
-        WideChristoffel(final_geometry.inverse, final_geometry.derivative);
-    const auto event_connection =
-        WideChristoffel(event_geometry.inverse, event_geometry.derivative);
+    const auto initial_connection = WideChristoffel(
+        initial_geometry.inverse, UnscaledFirstKindConnection(initial_geometry.derivative));
+    const auto final_connection = WideChristoffel(
+        final_geometry.inverse, UnscaledFirstKindConnection(final_geometry.derivative));
+    const auto event_connection = WideChristoffel(
+        event_geometry.inverse, UnscaledFirstKindConnection(event_geometry.derivative));
     double denominator = 0.0, denominator_scale = 0.0;
     if (event_normal) {
         if (!FiniteVector(*event_normal)) return std::nullopt;
