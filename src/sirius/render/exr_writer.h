@@ -14,6 +14,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <span>
 #include <sstream>
 #include <string>
 
@@ -76,6 +77,11 @@ class EXRWriter {
     // Write an RGBA HDR buffer to EXR. Returns true on success.
     static bool WriteExr(const std::string& path, const ImageBufferRGBA& buffer,
                          const EXRMetadata& meta = EXRMetadata());
+
+    // Write borrowed interleaved RGBA float data with an exact shape.
+    static bool WriteExrRgba(const std::string& path, int width, int height,
+                             std::span<const float> pixels,
+                             const EXRMetadata& meta = EXRMetadata());
 
     // Explicit PPM writer (portable pixmap, 8-bit sRGB-encoded).
     static bool WritePpm(const std::string& path, const ImageBuffer& buffer) {

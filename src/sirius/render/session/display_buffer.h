@@ -96,6 +96,14 @@ class DisplayBuffer {
         return tile;
     }
 
+    // Borrow completed pixels for a synchronous reader. The callback cannot
+    // retain the span or re-enter this buffer.
+    template <typename Callback>
+    [[nodiscard]] bool ReadFloatData(Callback&& callback) const {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return callback(std::span<const float>(pixel_data_));
+    }
+
     // Stable copy for consumers that may overlap a render-thread update.
     [[nodiscard]] std::vector<float> SnapshotFloatData() const {
         std::lock_guard<std::mutex> lock(mutex_);
