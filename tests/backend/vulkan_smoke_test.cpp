@@ -979,6 +979,7 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
         RecordProperty(prefix + "_end_tick", std::to_string(observation->ticks[1]));
     };
     for (unsigned invocation = 0; invocation < 4; ++invocation) {
+        const auto reuses_before = vulkan->DescriptorSetReuses();
         const bool requested = invocation == 1 || invocation == 3;
         const auto configured = vulkan->SetDispatchTimestampsEnabled(requested);
         if (!requested || timestamps_supported) {
@@ -1001,6 +1002,8 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
             check_timestamp("single", single, timestamps_supported);
         }
         ASSERT_TRUE(device.DispatchIndependentPair(commands, &timing));
+        EXPECT_EQ(vulkan->DescriptorSetReuses() - reuses_before,
+                  invocation == 0 ? 0U : (invocation == 1 ? 3U : 2U));
         for (const auto& command : commands) advance_bound_epochs(command.buffers);
         check_epochs();
         check_timestamp("pair_" + std::to_string(invocation), timing.combined,
@@ -1035,6 +1038,7 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     auto overlapping = bindings[1];
     overlapping[1] = bindings[0][1];
     commands[1].buffers = overlapping;
+    const auto reuses_before_alias = vulkan->DescriptorSetReuses();
     const auto refused = device.DispatchIndependentPair(commands, &timing);
     ASSERT_FALSE(refused);
     check_epochs();  // Shared-buffer refusal precedes a mutation attempt.
@@ -1042,6 +1046,7 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
     EXPECT_EQ(refused.error().operation(), "dispatch independent compute pair");
     EXPECT_EQ(timing.combined.total_ms, 0);
     EXPECT_EQ(timing.pipeline_creations, 0U);
+    EXPECT_EQ(vulkan->DescriptorSetReuses(), reuses_before_alias);
     ASSERT_TRUE(vulkan->SetDispatchTimestampsEnabled(false));
     for (const auto& bound : bindings) {
         std::array<float, 194> actual{};
@@ -1086,6 +1091,40 @@ TEST(VulkanBackend, IndependentPairCompletesDistinctKernelsAndRejectsSharedBuffe
                    std::format("{},{},{};{},{},{}", expected_epochs[0][0], expected_epochs[0][1],
                                expected_epochs[0][2], expected_epochs[1][0], expected_epochs[1][1],
                                expected_epochs[1][2]));
+
+    // The same pipeline must distinguish ordered handle identities, even
+    // when every binding has the same usage and the array buffers match sizes.
+    auto reordered = bindings[0];
+    std::swap(reordered[0], reordered[1]);
+    ASSERT_TRUE(device.WriteBuffer(reordered[0], std::as_bytes(std::span(radii))));
+    ASSERT_TRUE(device.WriteBuffer(reordered[1], std::as_bytes(std::span(untouched))));
+    const auto reordered_before = vulkan->DescriptorSetReuses();
+    ASSERT_TRUE(device.Dispatch(*original, reordered, 2, 1, 1));
+    EXPECT_EQ(vulkan->DescriptorSetReuses(), reordered_before);
+    std::array<float, 194> output{};
+    ASSERT_TRUE(device.ReadBuffer(reordered[1], std::as_writable_bytes(std::span(output))));
+    EXPECT_NEAR(output[0], 1 - 2 * masses[0] / radii[0], 1e-6f);
+    EXPECT_EQ(output.back(), untouched.back());
+    ASSERT_TRUE(device.ReadBuffer(reordered[0], std::as_writable_bytes(std::span(output))));
+    EXPECT_EQ(output, radii);
+
+    // Exercise both admitted reuse and transient dispatch after the bounded
+    // cache fills. The fallback must still bind each fresh output buffer.
+    unsigned reused = 0;
+    for (unsigned entry = 0; entry < 20; ++entry) {
+        const auto fresh = device.CreateBuffer(sizeof(output), BufferUsage::kStorage);
+        ASSERT_TRUE(fresh);
+        const std::array fresh_bindings{reordered[0], *fresh, reordered[2]};
+        const auto before = vulkan->DescriptorSetReuses();
+        ASSERT_TRUE(device.Dispatch(*original, fresh_bindings, 2, 1, 1));
+        ASSERT_TRUE(device.Dispatch(*original, fresh_bindings, 2, 1, 1));
+        reused += vulkan->DescriptorSetReuses() != before;
+        ASSERT_TRUE(device.ReadBuffer(*fresh, std::as_writable_bytes(std::span(output))));
+        EXPECT_NEAR(output[0], 1 - 2 * masses[0] / radii[0], 1e-6f);
+    }
+    EXPECT_GT(reused, 0U);
+    EXPECT_LT(reused, 20U);
+    RecordProperty("descriptor_reuses", vulkan->DescriptorSetReuses());
 #endif
 }
 

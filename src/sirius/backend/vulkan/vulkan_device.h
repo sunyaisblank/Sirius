@@ -87,6 +87,9 @@ class VulkanDevice final : public ComputeDevice {
     [[nodiscard]] VulkanPipelineCacheStats PipelineCacheStatistics() const noexcept {
         return pipeline_cache_stats_;
     }
+    [[nodiscard]] std::uint64_t DescriptorSetReuses() const noexcept {
+        return descriptor_set_reuses_;
+    }
     // Caller serializes this with other device operations, as with Dispatch.
     // Publish a complete bounded snapshot for later fresh devices; no disk I/O.
     [[nodiscard]] base::Expected<VulkanPipelineCacheStats> SnapshotPipelineCache();
@@ -167,6 +170,15 @@ class VulkanDevice final : public ComputeDevice {
         VkPipelineLayout layout = VK_NULL_HANDLE;
         VkPipeline pipeline = VK_NULL_HANDLE;
     };
+    static constexpr std::uint32_t kDescriptorCacheCapacity = 16;
+    static constexpr std::uint32_t kCachedStorageBindings = 3;
+    struct CachedDispatchBindings {
+        VkDescriptorSet set = VK_NULL_HANDLE;
+        const Pipeline* pipeline = nullptr;
+        KernelHandle kernel;
+        std::array<BufferHandle, kCachedStorageBindings> buffers{};
+        std::size_t count = 0;
+    };
 
     [[nodiscard]] base::Expected<Pipeline*> GetOrCreatePipeline(
         KernelHandle kernel, std::span<const BufferHandle> buffers, bool* created);
@@ -177,12 +189,9 @@ class VulkanDevice final : public ComputeDevice {
     void InitialisePipelineCache();
 
     // At most one accepted submission can lack a confirmed completion. Further
-    // work/query reuse refuses; destruction waits before releasing its resources.
-    struct PendingDispatch {
-        std::array<VkDescriptorSet, 2> sets{};
-        std::uint32_t set_count = 0;
-    };
-    std::optional<PendingDispatch> pending_dispatch_;
+    // work/query reuse refuses. Its sets stay owned by the pool until destruction
+    // establishes that the device can be torn down.
+    bool pending_dispatch_ = false;
 
     VkInstance instance_ = VK_NULL_HANDLE;
     VkPhysicalDevice physical_ = VK_NULL_HANDLE;
@@ -194,6 +203,12 @@ class VulkanDevice final : public ComputeDevice {
     // after completion; the pool also owns its eventual destruction.
     VkCommandBuffer dispatch_command_ = VK_NULL_HANDLE;
     VkDescriptorPool descriptor_pool_ = VK_NULL_HANDLE;
+    VkDescriptorPool descriptor_cache_pool_ = VK_NULL_HANDLE;
+    // Buffers and pipeline layouts have stable identities for this device's
+    // lifetime. Keep a small immutable cache and use transient sets beyond it.
+    std::array<CachedDispatchBindings, kDescriptorCacheCapacity> descriptor_cache_{};
+    std::size_t descriptor_cache_size_ = 0;
+    std::uint64_t descriptor_set_reuses_ = 0;
     VkPipelineCache pipeline_cache_ = VK_NULL_HANDLE;
     VkQueryPool timestamp_pool_ = VK_NULL_HANDLE;
     VulkanTimestampProperties timestamp_properties_;
