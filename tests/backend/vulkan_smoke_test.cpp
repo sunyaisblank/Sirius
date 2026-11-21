@@ -1157,8 +1157,8 @@ TEST(VulkanBackend, TimestampSpansBoundWrapAndInvalidCounters) {
 TEST(VulkanBackend, SubmissionErrorsDoNotImplyIdleCompletion) {
     using sirius::backend::detail::VulkanSubmissionNeedsCompletion;
     // Fixed Vulkan lifetime decisions, not injected device or physics outcomes.
-    for (const auto waited : {VK_SUCCESS, VK_ERROR_DEVICE_LOST, VK_ERROR_OUT_OF_HOST_MEMORY,
-                              VK_ERROR_OUT_OF_DEVICE_MEMORY}) {
+    for (const auto waited : {VK_SUCCESS, VK_TIMEOUT, VK_ERROR_DEVICE_LOST,
+                              VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_OUT_OF_DEVICE_MEMORY}) {
         SCOPED_TRACE(waited);
         EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_ERROR_DEVICE_LOST, waited));
         EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_ERROR_OUT_OF_HOST_MEMORY, waited));
@@ -1166,6 +1166,7 @@ TEST(VulkanBackend, SubmissionErrorsDoNotImplyIdleCompletion) {
     }
     EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_SUCCESS));
     EXPECT_FALSE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_DEVICE_LOST));
+    EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_TIMEOUT));
     EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_OUT_OF_HOST_MEMORY));
     EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_SUCCESS, VK_ERROR_OUT_OF_DEVICE_MEMORY));
     EXPECT_TRUE(VulkanSubmissionNeedsCompletion(VK_ERROR_UNKNOWN, VK_SUCCESS));

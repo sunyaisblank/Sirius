@@ -507,6 +507,12 @@ Expected<std::unique_ptr<ComputeDevice>> CreateVulkanDevice(std::size_t index) {
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "create command pool", VkResultText(r));
     }
+    const VkFenceCreateInfo fence_info{.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+    if (const auto result =
+            vkCreateFence(device->device_, &fence_info, nullptr, &device->dispatch_fence_);
+        result != VK_SUCCESS) {
+        return Fail(ErrorDomain::kDevice, "create compute completion fence", VkResultText(result));
+    }
 
     // Keep the transient pool independent of long-lived descriptor allocations.
     const VkDescriptorPoolSize pool_sizes[] = {
@@ -560,6 +566,7 @@ VulkanDevice::~VulkanDevice() {
             }
         }
         vkDestroyCommandPool(device_, command_pool_, nullptr);
+        vkDestroyFence(device_, dispatch_fence_, nullptr);
         // The pools free all cached sets and any transient sets retained
         // after an unconfirmed submission.
         vkDestroyDescriptorPool(device_, descriptor_cache_pool_, nullptr);
@@ -1247,6 +1254,12 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         free_sets();
         return Fail(ErrorDomain::kDevice, "end compute command buffer", VkResultText(result));
     }
+    // The pending guard prevents fence reset after any unconfirmed completion.
+    // Reset is also valid for the initially unsignalled fence.
+    if (const auto result = vkResetFences(device_, 1, &dispatch_fence_); result != VK_SUCCESS) {
+        free_sets();
+        return Fail(ErrorDomain::kDevice, "reset compute completion fence", VkResultText(result));
+    }
 
     const VkSubmitInfo submit_info{
         .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -1254,12 +1267,13 @@ Expected<void> VulkanDevice::DispatchCommands(std::span<const ComputeDispatch> c
         .pCommandBuffers = &command,
     };
     const auto submit_start = std::chrono::steady_clock::now();
-    VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, VK_NULL_HANDLE);
+    VkResult submit_result = vkQueueSubmit(queue_, 1, &submit_info, dispatch_fence_);
     const VkResult submitted = submit_result;
     const auto queue_submit_end =
         timestamp_pool_ != VK_NULL_HANDLE ? std::chrono::steady_clock::now() : submit_start;
     if (submit_result == VK_SUCCESS) {
-        submit_result = vkQueueWaitIdle(queue_);
+        submit_result = vkWaitForFences(device_, 1, &dispatch_fence_, VK_TRUE,
+                                        std::numeric_limits<std::uint64_t>::max());
     }
 
     const auto submit_end = std::chrono::steady_clock::now();

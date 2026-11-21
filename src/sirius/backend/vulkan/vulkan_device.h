@@ -202,6 +202,8 @@ class VulkanDevice final : public ComputeDevice {
     // One primary belongs to this serialized device owner. Re-record only
     // after completion; the pool also owns its eventual destruction.
     VkCommandBuffer dispatch_command_ = VK_NULL_HANDLE;
+    // This owner submits one command buffer at a time and waits for its fence.
+    VkFence dispatch_fence_ = VK_NULL_HANDLE;
     VkDescriptorPool descriptor_pool_ = VK_NULL_HANDLE;
     VkDescriptorPool descriptor_cache_pool_ = VK_NULL_HANDLE;
     // Buffers and pipeline layouts have stable identities for this device's
