@@ -161,21 +161,34 @@ Range BoundGaussian(const FilmVector& box) {
 }
 
 std::optional<Range> ColourEnvelope(Range camera_frequency, Range gaussian, double brightness) {
-    // Rayleigh-Jeans bounds Planck at every represented wavelength. Use
-    // the absolute CIE envelope and the D65 matrix row norm, with margin
-    // for the represented spectral arithmetic.
+    // Bound the Rayleigh-Jeans spectrum at the same 32 wavelengths as
+    // point-source transfer. Absolute XYZ and D65 coefficients bound each
+    // linear-light channel even when the transform involves cancellation.
     constexpr double first = core::constants::spectral::kLambdaMin;
     constexpr double last = core::constants::spectral::kLambdaMax;
     constexpr double step = (last - first) / 32.0;
+    std::array<Range, 3> xyz{};
     for (unsigned i = 0; i < 32; ++i) {
-        const auto weight = core::spectral::WavelengthToXyz((first + (i + .5) * step) * 1e9);
-        if (!(std::abs(weight.X) < 2.0 && std::abs(weight.Y) < 2.0 && std::abs(weight.Z) < 2.0))
-            return {};
+        const double wavelength = first + (i + .5) * step;
+        const auto weight = core::spectral::WavelengthToXyz(wavelength * 1e9);
+        const Range response = Range(step) / Square(Square(Range(wavelength)));
+        xyz[0] = xyz[0] + response * Abs(Range(weight.X));
+        xyz[1] = xyz[1] + response * Abs(Range(weight.Y));
+        xyz[2] = xyz[2] + response * Abs(Range(weight.Z));
     }
-    const Range result =
-        gaussian * Range(64.0) * Range(32.0) * Range(step) *
-        Range(core::constants::physical::kPlanckC1) * camera_frequency * Range(brightness) /
-        (Range(core::constants::physical::kPlanckC2) * Square(Square(Range(first))));
+    constexpr auto x = core::colour::XyzD65ToLinearSrgb(1.0, 0.0, 0.0);
+    constexpr auto y = core::colour::XyzD65ToLinearSrgb(0.0, 1.0, 0.0);
+    constexpr auto z = core::colour::XyzD65ToLinearSrgb(0.0, 0.0, 1.0);
+    const auto channel = [&](double a, double b, double c) {
+        return (xyz[0] * Abs(Range(a)) + xyz[1] * Abs(Range(b)) + xyz[2] * Abs(Range(c))).hi;
+    };
+    const double band =
+        std::max({channel(x.r, y.r, z.r), channel(x.g, y.g, z.g), channel(x.b, y.b, z.b)});
+    // Retain a factor-four margin over the absolute-coefficient envelope
+    // for the represented spectral arithmetic.
+    const Range result = gaussian * Range(4.0) * Range(band) *
+                         Range(core::constants::physical::kPlanckC1) * camera_frequency *
+                         Range(brightness) / Range(core::constants::physical::kPlanckC2);
     return result.Finite() ? std::optional(result) : std::nullopt;
 }
 
@@ -270,54 +283,78 @@ std::shared_ptr<const KerrDetectorCatalogue> PrepareKerrDetectorCatalogue(
     return std::make_shared<KerrDetectorCatalogue>(stars.Stars());
 }
 
-std::optional<std::array<double, 3>> BoundKerrDetectorCell(
+std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const KerrDetectorCatalogue& catalogue, double brightness, const core::CameraConfig& camera,
     const backend::DetectorLaunchFrame& launch, const DetectorCoordinate& film_origin,
-    const PointDetectorFootprint& footprint, const DetectorCoordinate& lower,
-    const DetectorCoordinate& upper, const std::function<bool()>& cancelled,
-    std::size_t& remaining) {
+    const PointDetectorFootprint& footprint, std::span<const PointDetectorCell> cells,
+    const std::function<bool()>& cancelled, std::size_t& remaining) {
     using core::KerrSchildParams;
     const auto& [mass, spin, charge, lambda] = launch.metric;
-    if (!(mass > spin && spin > 0.0) || charge != 0.0 || lambda != 0.0 || !RoundingEnvironment() ||
-        (cancelled && cancelled()))
+    if (!(mass > spin && spin > 0.0) || charge != 0.0 || lambda != 0.0 || !RoundingEnvironment())
         return {};
     const KerrSchildParams metric{mass, spin, charge, lambda};
-    FilmVector box{Range(lower[0], upper[0]), Range(lower[1], upper[1])};
-    if (!box[0].Finite() || !box[1].Finite()) return {};
-    // Tighten the rectangle to the axis-aligned hull of its intersection
-    // with the original Gaussian disk. At its rim the active part can be
-    // much narrower than the cell, and only that part needs a sky bound.
-    const std::array nearest{std::clamp(0.0, box[0].lo, box[0].hi),
-                             std::clamp(0.0, box[1].lo, box[1].hi)};
-    for (unsigned axis = 0; axis < 2; ++axis) {
-        const Range extent2 = Range(16.0) - Square(Range(nearest[1 - axis]));
-        if (extent2.hi < 0.0) return std::array<double, 3>{};
-        const double extent = sqrt(Range(extent2.hi)).hi;
-        box[axis] = Range(std::max(box[axis].lo, -extent), std::min(box[axis].hi, extent));
-        if (box[axis].hi < box[axis].lo) return std::array<double, 3>{};
-    }
     const auto evaluate = [&](const FilmVector& region) {
         return EvaluateFilmChart(camera, metric, launch, film_origin, footprint, region);
     };
-    const auto whole = evaluate(box);
+    const auto hull = [](Range a, Range b) {
+        return Range(std::min(a.lo, b.lo), std::max(a.hi, b.hi));
+    };
+    std::optional<FilmVector> film_hull;
+    Range radius;
+    double minimum_potential = 0.0;
+    double minimum_determinant = kInfinity;
+    double maximum_gaussian = 0.0;
+    for (const auto& cell : cells) {
+        if (cancelled && cancelled()) return {};
+        FilmVector box{Range(cell.lower[0], cell.upper[0]), Range(cell.lower[1], cell.upper[1])};
+        if (!box[0].Finite() || !box[1].Finite()) return {};
+        // Retain only the axis-aligned hull of the original Gaussian disk
+        // in this cell. The omitted portion cannot reach a catalogue source.
+        const std::array nearest{std::clamp(0.0, box[0].lo, box[0].hi),
+                                 std::clamp(0.0, box[1].lo, box[1].hi)};
+        for (unsigned axis = 0; axis < 2; ++axis) {
+            const Range extent2 = Range(16.0) - Square(Range(nearest[1 - axis]));
+            if (extent2.hi < 0.0) {
+                box[axis] = InvalidRange();
+                break;
+            }
+            const double extent = sqrt(Range(extent2.hi)).hi;
+            box[axis] = Range(std::max(box[axis].lo, -extent), std::min(box[axis].hi, extent));
+        }
+        if (!box[0].Finite() || !box[1].Finite()) continue;
+        const auto chart = evaluate(box);
+        if (!chart) return {};
+        const auto target = CoverEscapingChart(box, *chart, evaluate);
+        if (!target[0].Finite() || !target[1].Finite()) return {};
+        // A positive sole radial minimum and positive endpoints exclude
+        // any turning point on this inward trajectory.
+        if (target[1].lo > 0.0 && chart->positive_radial_endpoints) continue;
+        const auto& [radial, potential] = chart->jacobian;
+        const Range determinant = Abs(radial[0] * potential[1] - radial[1] * potential[0]);
+        const Range gaussian = BoundGaussian(box);
+        if (!(determinant.lo > 0.0 && target[1].lo < 0.0 && gaussian.Finite())) return {};
+        radius = film_hull ? hull(radius, target[0]) : target[0];
+        minimum_potential = std::min(minimum_potential, target[1].lo);
+        minimum_determinant = std::min(minimum_determinant, determinant.lo);
+        maximum_gaussian = std::max(maximum_gaussian, gaussian.hi);
+        film_hull = film_hull
+                        ? FilmVector{hull((*film_hull)[0], box[0]), hull((*film_hull)[1], box[1])}
+                        : box;
+    }
+    if (!film_hull) return std::array<double, 3>{};
+    // Prove injectivity across the group so a sky root in the common
+    // invariant rectangle can contribute at most once across these leaves.
+    // The detailed per-cell charts supply the tighter radius, depth and gain.
+    const auto whole = evaluate(*film_hull);
     if (!whole || !(whole->initial_mu.lo > 0.0 && whole->mu_rate.hi < 0.0) ||
         !ProveInjectiveChart(whole->jacobian))
         return {};
-    const auto& [radial_gradient, potential_gradient] = whole->jacobian;
-    const Range determinant = Abs(radial_gradient[0] * potential_gradient[1] -
-                                  radial_gradient[1] * potential_gradient[0]);
-    const auto target = CoverEscapingChart(box, *whole, evaluate);
-    if (!target[0].Finite() || !target[1].Finite()) return {};
-    // MakeStationaryChart admits the only positive radial minimum and an
-    // inward launch. Positive bounds there and at both ends rule out a
-    // turning point throughout the supported film rectangle.
-    if (target[1].lo > 0.0 && whole->positive_radial_endpoints) return std::array<double, 3>{};
-    if (!(determinant.lo > 0.0 && target[1].lo < 0.0)) return {};
-    const Range scale(0.0, sqrt(Range(-target[1].lo)).hi);
+    const Range determinant(minimum_determinant);
+    const Range scale(0.0, sqrt(Range(-minimum_potential)).hi);
 
     const auto phase =
-        EncloseRegularizedRadialPhase(mass, spin, target[0], scale, whole->inverse_start, 128);
-    const auto shape = MakeFinitePolarShape(mass, spin, target[0], scale);
+        EncloseRegularizedRadialPhase(mass, spin, radius, scale, whole->inverse_start, 128);
+    const auto shape = MakeFinitePolarShape(mass, spin, radius, scale);
     if (!phase || !shape) return {};
     const Range amplitude = sqrt(shape->amplitude2);
     const auto* angular = catalogue.Get(cancelled);
@@ -327,10 +364,10 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
     double clearance = kInfinity;
     for (const auto& band : *bands) clearance = std::min(clearance, band.clearance);
     if (clearance == kInfinity) return std::array<double, 3>{};
-    const auto latitude = EncloseLatitudeRootMonotonicity(mass, spin, target[0], scale,
+    const auto latitude = EncloseLatitudeRootMonotonicity(mass, spin, radius, scale,
                                                           whole->initial_mu, clearance, *phase);
-    const auto colour =
-        ColourEnvelope(Range(1.0) / (Range(0.0) - whole->energy), BoundGaussian(box), brightness);
+    const auto colour = ColourEnvelope(Range(1.0) / (Range(0.0) - whole->energy),
+                                       Range(maximum_gaussian), brightness);
     if (!latitude || !colour) return {};
 
     Range upper_bound;
@@ -338,7 +375,7 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
     for (std::size_t i = 0; i < bands->size(); ++i) {
         const auto& band = (*bands)[i];
         if (band.clearance == kInfinity) continue;
-        const auto tail = EncloseWindingTail(mass, spin, target[0], scale, whole->initial_mu,
+        const auto tail = EncloseWindingTail(mass, spin, radius, scale, whole->initial_mu,
                                              band.clearance, determinant, *phase, *latitude, 8);
         if (!tail) return {};
         const double factor =
@@ -351,14 +388,14 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCell(
 
     const auto polar = MakePolarIntegralTable(*shape);
     if (!polar) return {};
-    const auto phases = PrepareNearCriticalPhases(mass, spin, target[0], scale, *whole);
-    const auto screen = ScreenFiniteWindings(mass, spin, target[0], scale, *whole, *polar, *phase,
+    const auto phases = PrepareNearCriticalPhases(mass, spin, radius, scale, *whole);
+    const auto screen = ScreenFiniteWindings(mass, spin, radius, scale, *whole, *polar, *phase,
                                              *angular, cutoffs, amplitude, clearance, remaining,
                                              cancelled, phases ? &*phases : nullptr);
     if (!screen) return {};
     for (const auto& candidate : screen->candidates) {
         const auto density =
-            BoundAzimuthImages(mass, spin, target[0], scale, *whole, *screen, *polar, candidate,
+            BoundAzimuthImages(mass, spin, radius, scale, *whole, *screen, *polar, candidate,
                                cancelled, remaining, phases ? &*phases : nullptr);
         if (!density) return {};
         if (density->hi == 0.0) continue;

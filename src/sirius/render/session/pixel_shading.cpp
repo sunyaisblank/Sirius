@@ -281,8 +281,10 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         cell_bound = [&, origin](const PointDetectorFootprint& footprint,
                                  const DetectorCoordinate& lower, const DetectorCoordinate& upper,
                                  std::size_t& remaining) {
-            return BoundKerrDetectorCell(*kerr_catalogue, brightness, camera.GetConfig(), *prepared,
-                                         origin, footprint, lower, upper, cancelled, remaining);
+            const std::array cells{PointDetectorCell{lower, upper}};
+            return BoundKerrDetectorCells(*kerr_catalogue, brightness, camera.GetConfig(),
+                                          *prepared, origin, footprint, cells, cancelled,
+                                          remaining);
         };
     }
     const auto group =
