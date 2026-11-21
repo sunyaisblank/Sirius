@@ -253,6 +253,46 @@ std::optional<Range> ColourEnvelope(Range camera_frequency, Range gaussian, doub
     return result.Finite() ? std::optional(result) : std::nullopt;
 }
 
+// The finite film cell ends before some latitude branches become complete
+// over radius. Continue the separated radial chart slightly past that edge
+// to certify a single branch. Only physical roots contribute to the flux.
+std::optional<AzimuthDerivative> ExtendLatitudeBranch(double mass, double spin, Range centre,
+                                                      Range scale, const StationaryChart& chart,
+                                                      const FiniteCandidate& candidate) {
+    const Range extended(0.0, (Range(scale.hi) * Range(65.0 / 64.0)).hi);
+    const auto prior =
+        EncloseRegularizedRadialPhase(mass, spin, centre, extended, chart.inverse_start, 128);
+    const auto shape = MakeFinitePolarShape(mass, spin, centre, extended);
+    if (!prior || !shape) return {};
+    const auto latitude = candidate.source->latitude;
+    const double clearance = (sqrt(shape->amplitude2) - latitude).lo;
+    if (!(clearance > 0.0) || !EncloseLatitudeRootMonotonicity(mass, spin, centre, extended,
+                                                               chart.initial_mu, clearance, *prior))
+        return {};
+    const Range edge_scale(extended.hi);
+    const auto edge =
+        EvaluateFiniteRadialPhase(mass, spin, centre, edge_scale, chart.inverse_start);
+    if (!edge) return {};
+    const Range edge_log = LogPoint(extended.hi);
+    const Range edge_time = Range(-2.0) * edge->leading * edge_log + edge->time_residual;
+    const Range target_at_edge =
+        PolarTargetAt(mass, spin, centre, edge_scale, chart.initial_mu, latitude, candidate.winding,
+                      candidate.approaching_equator)[0];
+    if (!edge_time.Finite() || !target_at_edge.Finite() || !(target_at_edge.lo > edge_time.hi))
+        return {};
+    const Range target = PolarTargetAt(mass, spin, centre, extended, chart.initial_mu, latitude,
+                                       candidate.winding, candidate.approaching_equator)[0];
+    const Range log_scale =
+        (prior->time_remainder.value - target) / (Range(2.0) * prior->leading_factor);
+    if (!log_scale.Finite()) return {};
+    const Range log_branch(log_scale.lo, std::min(edge_log.hi, log_scale.hi));
+    const Range separation = ExpBounds(log_branch);
+    if (!separation.Finite() || separation.lo > extended.hi) return {};
+    return DifferentiateFiniteAzimuth(
+        mass, spin, centre, {separation.lo, std::min(separation.hi, extended.hi)}, log_branch,
+        chart, candidate.winding, candidate.approaching_equator, latitude);
+}
+
 std::optional<Range> BoundAzimuthImages(double mass, double spin, Range centre, Range scale,
                                         const StationaryChart& chart, const CatalogueScreen& screen,
                                         const PolarIntegralTable& polar, FiniteCandidate candidate,
@@ -270,17 +310,24 @@ std::optional<Range> BoundAzimuthImages(double mass, double spin, Range centre, 
                                       star.azimuth);
     if (!refined) return {};
     if (!refined->possible) return Range{};
-    // This verifies the latitude root exists continuously over radius.
-    // Thus a sign-definite azimuth slope permits at most one root per wrap.
-    if (!EntireLatitudeBranchExists(screen, polar, candidate)) return {};
     const Range wraps = (refined->azimuth - star.azimuth) / (Range(2.0) * kPiBounds);
     const Range separation = ExpBounds(refined->log_scale);
     if (!wraps.Finite() || !separation.Finite()) return {};
     const double first = std::ceil(wraps.lo), last = std::floor(wraps.hi);
     if (first > last) return Range{};
-    const auto derivative = DifferentiateFiniteAzimuth(
-        mass, spin, centre, Range(separation.lo, std::min(separation.hi, scale.hi)),
-        refined->log_scale, chart, candidate.winding, candidate.approaching_equator, star.latitude);
+    // Count the physical azimuth wraps using a branch continuous over
+    // radius. Where necessary, certify that branch on a wider chart.
+    const bool whole_latitude = EntireLatitudeBranchExists(screen, polar, candidate);
+    if (!whole_latitude && (remaining == 0 || (cancelled && cancelled()))) return {};
+    if (!whole_latitude) --remaining;
+    const auto derivative =
+        whole_latitude
+            ? DifferentiateFiniteAzimuth(mass, spin, centre,
+                                         Range(separation.lo, std::min(separation.hi, scale.hi)),
+                                         refined->log_scale, chart, candidate.winding,
+                                         candidate.approaching_equator, star.latitude)
+            : ExtendLatitudeBranch(mass, spin, centre, scale, chart, candidate);
+    if (!whole_latitude && !derivative) return {};
     if (derivative) {
         const Range slope = Abs(derivative->conditioned_radial_slope);
         if (slope.lo > 0.0) {
