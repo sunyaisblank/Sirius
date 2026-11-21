@@ -1,0 +1,211 @@
+{
+  "schema": "sirius-kerr-finite-depth-v1",
+  "recorded_utc": "2026-11-21T08:21:37.414455+00:00",
+  "production_source": "a800a216da4f16701583a32365010b381fdd56ca",
+  "previous_source": "2a85b1f7e655171cb99b3ed16d57db7447ab414b",
+  "scope": "Original disk-free 100000-star moving-ThinLens Kerr 1920x1080 scene at the 2048 MiB setting. Real Radeon 780M via Dozen prepares the represented pupil. Region is sample zero at block (928,608), footprint 704. The focused replays and canonical block do not qualify a full frame.",
+  "inputs": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix.log.gz",
+      "bytes": 6037,
+      "sha256": "9f2167fcad38190148710ff5b5678a1208663a77216df71ed996166d0d064c72"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/initial.log.gz",
+      "bytes": 1208,
+      "sha256": "29fc5077985685374dab582d94d5d5515171a3952ae6ae49f680507d395a2dcd"
+    },
+    {
+      "path": "attestations/qualification/a41e75fd/kerr-detector-integration/block.cpp.gz",
+      "bytes": 957,
+      "sha256": "577b9a9c7894efa4be23eb2298c23e807dff07721077015a532d3fc15e03c628"
+    }
+  ],
+  "physical_provider": [
+    {
+      "path": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+      "bytes": 198,
+      "sha256": "fde51461538211ae38c973644f99f6c6adb4e9d8fcfe16ed172533c9aa9ef392"
+    },
+    {
+      "path": "/home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+      "bytes": 11328704,
+      "sha256": "72de4021c66f994f59a733e643f775c3dd416b566c88b8aedec7efa38c26e071"
+    }
+  ],
+  "compiler": "g++-14 (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0",
+  "geometry": {
+    "method": "Replace fixed-sign edge bisection with an interval Newton contraction using the same gradient enclosure. Derive upper potential from the opposite corner whenever the signs prove monotonicity.",
+    "all_original_cells": 794,
+    "geometry_evaluations_before": 7729,
+    "geometry_evaluations_after": 2073,
+    "geometry_range_checks_at_nodes": 7128,
+    "certified_captured": 2,
+    "already_captured_by_tracer_precheck": 2,
+    "strictly_escaping": 736,
+    "mixed": 56,
+    "star_turn_overlap": 29,
+    "star_turn_overlap_strictly_escaping": 28,
+    "maximum_finite_half_librations_over_those_28": 6
+  },
+  "finite_winding_comparison": {
+    "cells_zero_based_for_same_input": [
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "method": "Both versions use the original five lowest-index cells in the archived first 32 whose prior stationary enclosure is strictly negative. Use the same real pinned pupil and represented sky catalogue for the prior and candidate bounds.",
+    "measurement_scope": "Sequential isolated replays include real device setup. The geometry and finite-catalogue harnesses compile the edited equivalent source before clang-format. Preset builds and the canonical block use the final exact source.",
+    "finite-prior": {
+      "candidate_visits": 34895,
+      "rgb_bound_per_channel": 2.1499360556863387e-09,
+      "absolute_rgb_allowance": 1e-07,
+      "wall": "0:50.78"
+    },
+    "finite-new": {
+      "candidate_visits": 2601,
+      "rgb_bound_per_channel": 2.085895416030707e-09,
+      "absolute_rgb_allowance": 1e-07,
+      "wall": "0:05.71"
+    }
+  },
+  "canonical_block": {
+    "command": [
+      "/usr/bin/time",
+      "-v",
+      "timeout",
+      "180",
+      "./block"
+    ],
+    "exit_code": 8,
+    "wall": "2:07.98",
+    "detector_failure": {
+      "reason": 5,
+      "probes": 30583,
+      "cells": 6407,
+      "candidate_visits": 777011
+    },
+    "diagnostic_binary": {
+      "path": "out/kerr-edge-contraction/block",
+      "bytes": 8613376,
+      "sha256": "35ea8eba3da021b167a667f020adcde868cf25ab95f12050273282a670c2a050"
+    },
+    "production_render_archive": {
+      "path": "bin/linux-ci/src/sirius/render/libsirius_render.a",
+      "bytes": 4547960,
+      "sha256": "9e73215e9f244abfb17a0b274406a642160299f9dedaa46ffdd17d66c251ccd1"
+    },
+    "baseline_note": "The archived initial detector variant reached a first footprint refusal in this block. This replay uses the production scheduler and exact new core. The baseline diagnostic sources and scheduling variants were not published as the same authority."
+  },
+  "replay": {
+    "derive_cells": "Extract lines matching ^pending_cell lower=([^ ]+) upper=(\\S+) from prefix.log.gz, write each pair as PointDetectorCell{{lower}, {upper}}, and keep their original order.",
+    "derive_prior": "Write kerr_point_detector.cpp from the previous Git revision to scratch as baseline.cpp. Extract just the CoverEscapingChart template up to the BoundGaussian function as baseline.h and rename the template to BisectEscapingChart.",
+    "diagnostic_compile_from_checkout": [
+      "g++-14",
+      "-std=c++2c",
+      "-O3",
+      "-DNDEBUG",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+      "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+      "-Isrc",
+      "-Ibin/linux-ci/src/sirius/backend/retained"
+    ],
+    "diagnostic_link_libraries": [
+      "bin/linux-ci/src/sirius/render/libsirius_render.a",
+      "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+      "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-lvulkan",
+      "-ldl",
+      "-lrt",
+      "-pthread"
+    ],
+    "diagnostic_entry_points": [
+      "compare.cpp",
+      "finite_check.cpp",
+      "-DPRIOR_CATALOGUE finite_check.cpp"
+    ],
+    "native_provider_environment": {
+      "VK_DRIVER_FILES": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "SIRIUS_MEMORY_BUDGET_MB": "2048",
+      "MESA_SHADER_CACHE_DISABLE": "true",
+      "XDG_CACHE_HOME": "out/kerr-edge-contraction/xdg-cache",
+      "TMPDIR": "out/kerr-edge-contraction"
+    },
+    "unset": [
+      "SIRIUS_PACKAGED_SOFTWARE_VULKAN"
+    ],
+    "scratch_runtime_resources": "bin/linux-ci/tests/backend/resources",
+    "strict_build": [
+      "cmake --preset linux-ci",
+      "cmake --build --preset linux-ci --target sirius sirius_render_tests -j 4"
+    ],
+    "focused_google_tests": [
+      "PointSourceDetector.MovingKerrFluxMatchesIndependentSeparatedImageAndBand",
+      "PointSourceDetector.GroupNeverPublishesEarlierLeavesAfterFailureOrCancellation",
+      "PointSourceDetector.OriginalGaussianOwnsSharedEdgesAndRejectsOutsideSupport",
+      "PointSourceDetector.ExhaustionCancellationAndFailedTracesHaveNoPartialRadiance"
+    ]
+  },
+  "remaining": "Route finite charts earlier under the same detector ledger, then bound the exceptional turning source with a signed-phase screen. The genuine critical contact still requires a separate high-winding contribution bound before acceptance of the original scenes.",
+  "files": [
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/compare.cpp.gz",
+      "bytes": 2937,
+      "sha256": "217d03c315556a0667a2fab44af92e032e1e784f12984ee16c628da54e029781"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/finite_check.cpp.gz",
+      "bytes": 1782,
+      "sha256": "dfa0ab978b67428eaa04e63de8b44cf173c6a51b39491ae08f2114a7fc6918c9"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/compare.log.gz",
+      "bytes": 845,
+      "sha256": "bf104d9c8c433ec5d610a1e811251c5a3e44d0955ac71da0e3c865508b94aaf3"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/finite-prior.log.gz",
+      "bytes": 747,
+      "sha256": "0e013d3c2043cfd6be35520dc15cafa5b41aea79c4d5be502b2555155da98e21"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/finite-new.log.gz",
+      "bytes": 743,
+      "sha256": "55cc523ab51994ff45abe4d208022e2f360e3d2fc9c4156ac2a377c65d6be9a6"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/configure.log.gz",
+      "bytes": 594,
+      "sha256": "e61c062d0903501199d229454a1a911f49b423d2fd1d92a0172b3a95941d70f9"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/build.log.gz",
+      "bytes": 370,
+      "sha256": "f1910aae456ae67191fc43a0ece2d4759d723e8f0873b13a26df2e7fcf633dad"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/focused.log.gz",
+      "bytes": 472,
+      "sha256": "9be98f44a674cfbb96fb37b19994c86a7167b491c8c3afe001c18c4d912d7ae8"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/block-build.json.gz",
+      "bytes": 578,
+      "sha256": "06dbc6b8115e20642e2323794457c33aae7fa80ebd861d195920500012b480dd"
+    },
+    {
+      "path": "attestations/qualification/a800a216/kerr-finite-depth/block.log.gz",
+      "bytes": 1130,
+      "sha256": "7056bcd69fe3ee84e4d23923214d751aff2c7e2bc0d7319470bb48f612793e57"
+    }
+  ]
+}
