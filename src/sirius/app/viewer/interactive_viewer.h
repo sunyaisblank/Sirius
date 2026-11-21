@@ -8,6 +8,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -140,6 +141,7 @@ class InteractiveViewer {
     void GetResolutionForLevel(int level, int& width, int& height) const;
 
   private:
+    void RequestRestart(std::chrono::milliseconds settle_time);
     void RenderThread();
     [[nodiscard]] bool RenderStep();
     void NotifyFrame();
@@ -155,6 +157,8 @@ class InteractiveViewer {
     std::atomic<bool> restart_requested_{false};
 
     mutable std::mutex state_mutex_;
+    std::condition_variable render_changed_;
+    std::chrono::steady_clock::time_point restart_at_{};
     mutable std::mutex thread_mutex_;
     mutable std::mutex session_mutex_;
     mutable std::mutex frame_mutex_;

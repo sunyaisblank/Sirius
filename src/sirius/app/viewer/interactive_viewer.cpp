@@ -11,6 +11,8 @@
 namespace sirius::app {
 
 namespace {
+constexpr auto kCameraInputSettleTime = std::chrono::milliseconds(50);
+
 // A preview callback may Stop its viewer. It requests cancellation here and
 // leaves the render-thread join to an external owner, never joining itself.
 thread_local InteractiveViewer* rendering_viewer = nullptr;
@@ -156,8 +158,12 @@ bool InteractiveViewer::Start() {
 }
 
 void InteractiveViewer::Stop() {
-    stop_requested_ = true;
-    ++preview_generation_;
+    {
+        std::lock_guard lock(state_mutex_);
+        stop_requested_ = true;
+        ++preview_generation_;
+    }
+    render_changed_.notify_one();
     {
         std::lock_guard<std::mutex> lock(session_mutex_);
         if (session_) {
@@ -172,17 +178,20 @@ void InteractiveViewer::Stop() {
     running_ = false;
 }
 
-void InteractiveViewer::Restart() {
-    ++preview_generation_;
+void InteractiveViewer::Restart() { RequestRestart(std::chrono::milliseconds::zero()); }
+
+void InteractiveViewer::RequestRestart(std::chrono::milliseconds settle_time) {
     {
-        std::lock_guard<std::mutex> lock(state_mutex_);
+        std::scoped_lock lock(state_mutex_, session_mutex_);
+        ++preview_generation_;
         refinement_.needs_restart = true;
+        restart_at_ = std::chrono::steady_clock::now() + settle_time;
+        restart_requested_ = true;
+        if (session_) {
+            (void)session_->Cancel();
+        }
     }
-    restart_requested_ = true;
-    std::lock_guard<std::mutex> lock(session_mutex_);
-    if (session_) {
-        (void)session_->Cancel();
-    }
+    render_changed_.notify_one();
 }
 
 void InteractiveViewer::SetCameraPosition(double r, double theta, double phi) {
@@ -234,7 +243,7 @@ void InteractiveViewer::UpdateCamera(float dt) {
     }
 
     if (moved) {
-        Restart();
+        RequestRestart(kCameraInputSettleTime);
     }
 }
 
@@ -297,7 +306,7 @@ void InteractiveViewer::ProcessMouseMove(double xpos, double ypos, bool dragging
         last_mouse_x_ = xpos;
         last_mouse_y_ = ypos;
     }
-    if (moved) Restart();
+    if (moved) RequestRestart(kCameraInputSettleTime);
 }
 
 void InteractiveViewer::ProcessScroll(double yoffset) {
@@ -306,7 +315,7 @@ void InteractiveViewer::ProcessScroll(double yoffset) {
         std::lock_guard<std::mutex> lock(state_mutex_);
         camera_.fov = std::clamp(camera_.fov - static_cast<float>(yoffset) * 2.0f, 10.0f, 120.0f);
     }
-    Restart();
+    RequestRestart(kCameraInputSettleTime);
 }
 
 CameraState InteractiveViewer::GetCameraState() const {
@@ -384,25 +393,28 @@ void InteractiveViewer::RenderThread() {
         refinement_.start_time = std::chrono::steady_clock::now();
     }
 
-    while (!stop_requested_) {
-        if (restart_requested_.exchange(false)) {
-            std::lock_guard<std::mutex> lock(state_mutex_);
-            refinement_.current_level = 0;
-            refinement_.current_sample = 0;
-            refinement_.current_samples_per_pixel = 0;
-            refinement_.complete = false;
-            refinement_.needs_restart = false;
-            refinement_.start_time = std::chrono::steady_clock::now();
-        }
-
-        bool complete = false;
+    for (;;) {
         {
-            std::lock_guard<std::mutex> lock(state_mutex_);
-            complete = refinement_.complete;
-        }
-        if (complete) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
-            continue;
+            std::unique_lock lock(state_mutex_);
+            render_changed_.wait(lock, [this] {
+                return stop_requested_ || restart_requested_ || !refinement_.complete;
+            });
+            // Discard obsolete provisional tiles immediately. Wait to start
+            // the replacement until this burst of native camera input ends.
+            while (restart_requested_ && !stop_requested_ &&
+                   std::chrono::steady_clock::now() < restart_at_) {
+                const auto deadline = restart_at_;
+                render_changed_.wait_until(lock, deadline);
+            }
+            if (stop_requested_) break;
+            if (restart_requested_.exchange(false)) {
+                refinement_.current_level = 0;
+                refinement_.current_sample = 0;
+                refinement_.current_samples_per_pixel = 0;
+                refinement_.complete = false;
+                refinement_.needs_restart = false;
+                refinement_.start_time = std::chrono::steady_clock::now();
+            }
         }
 
         if (!RenderStep()) {
