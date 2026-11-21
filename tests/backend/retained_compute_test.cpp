@@ -990,7 +990,8 @@ class TransferProbeDevice final : public ComputeDevice {
     bool independent_pairs = false;
     std::uint64_t pair_calls = 0;
     std::function<void()> after_pair;
-    std::function<void(const IndependentPairTiming*)> after_pair_timing;
+    std::function<void(const std::array<ComputeDispatch, 2>&, const IndependentPairTiming*)>
+        after_pair_timing;
     std::optional<double> pair_submit_ms;
     std::function<void(BufferHandle, std::span<std::byte>)> after_read;
     std::function<void(BufferHandle, std::span<std::byte>)> before_write;
@@ -1046,7 +1047,7 @@ class TransferProbeDevice final : public ComputeDevice {
                                         timing->combined.cleanup_ms;
         }
         if (status && after_pair) after_pair();
-        if (status && after_pair_timing) after_pair_timing(timing);
+        if (status && after_pair_timing) after_pair_timing(commands, timing);
         return status;
     }
     sirius::base::Expected<void> Dispatch(KernelHandle kernel,
@@ -3874,7 +3875,7 @@ void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
             }
         FAIL() << "unknown observed stage binding";
     };
-    probe.after_pair_timing = [&](const IndependentPairTiming* host) {
+    probe.after_pair_timing = [&](const auto&, const IndependentPairTiming* host) {
         ASSERT_NE(host, nullptr);
         capture("endpoint+dense", &host->combined);
     };
@@ -4066,6 +4067,16 @@ void RetainedComputeTest::CheckOriginalIntervalTimestamps(bool fp64_products) {
         FAIL() << "unknown current coupled stage";
     };
     using Stage = RetainedCompute::KernelStage;
+    probe.after_pair_timing = [&](const auto& commands, const IndependentPairTiming* host) {
+        ASSERT_NE(host, nullptr);
+        ASSERT_FALSE(commands[0].buffers.empty());
+        ASSERT_FALSE(commands[1].buffers.empty());
+        ASSERT_EQ(commands[0].buffers[0].value, probe.allocations[12].handle.value);
+        ASSERT_EQ(commands[1].buffers[0].value, probe.allocations[4].handle.value);
+        stream.emplace_back(Stage::kDopriPhase, commands[0].groups_x);
+        stream.emplace_back(Stage::kEndpoint, commands[1].groups_x);
+        capture("dopri_phase+endpoint", &host->combined);
+    };
     const std::vector<std::pair<Stage, std::uint32_t>> expected_stream{
         {Stage::kTransport, 12},  {Stage::kEndpoint, 24},   {Stage::kTransport, 12},
         {Stage::kEndpoint, 24},   {Stage::kTransport, 12},  {Stage::kEndpoint, 24},
@@ -6056,7 +6067,7 @@ TEST_F(RetainedComputeTest, Fp64ProductsPreserveIndependentScienceOrDeclineUnsup
             }
         FAIL() << "unknown FP64 observation stage";
     };
-    probe.after_pair_timing = [&](const IndependentPairTiming* host) {
+    probe.after_pair_timing = [&](const auto&, const IndependentPairTiming* host) {
         ASSERT_NE(host, nullptr);
         ASSERT_GE(probe.writes.size(), 2U);
         const auto& endpoint_write = probe.writes[probe.writes.size() - 2];
