@@ -1,0 +1,204 @@
+{
+  "schema": "sirius-e2-and-kerr-detector-v1",
+  "source_revision": "fe00d9eed945ddc031eee0161b46d2edd8cd806c",
+  "exact_e2": {
+    "authority": {
+      "path": "tests/operating_model.json",
+      "bytes": 130827,
+      "sha256": "839a2f5a4dd135cd3066a150333ebfe2355b8c29390477c3c0013e833272e781"
+    },
+    "tests": [
+      {
+        "name": "PolarisationAcceptance.ActualDiskStokesMatchWalkerPenroseReconstruction",
+        "seconds": 0.785
+      },
+      {
+        "name": "PolarisationAcceptance.CommittedOutwardTransportReachesPhysicalEscapeAndObserverIsPassive",
+        "seconds": 0.084
+      },
+      {
+        "name": "WalkerPenroseLivePath.ConservesConstantAndOrthonormality",
+        "seconds": 0.102
+      },
+      {
+        "name": "WalkerPenroseLivePath.AgreesWithOracleAcrossCharts",
+        "seconds": 0.185
+      },
+      {
+        "name": "WalkerPenrose.BoyerLindquistInitialDataAndAxisExitDeclineWithoutSubstitution",
+        "seconds": 0.0
+      },
+      {
+        "name": "WalkerPenrose.SchwarzschildEquatorialPerpendicularTransportsRigidly",
+        "seconds": 0.005
+      },
+      {
+        "name": "ConfigValidation.PolarisationRequiresRepresentedThinBlackHoleDisk",
+        "seconds": 0.0
+      },
+      {
+        "name": "RenderSessionProbe.PolarisedRequestsDeclineAndTwoSheetIsRepresented",
+        "seconds": 0.0
+      },
+      {
+        "name": "RenderSessionProbe.CpuPolarisationModeConsumesTransportedDiskStokes",
+        "seconds": 149.516
+      },
+      {
+        "name": "GeodesicTracerTest.LiveDiskCrossingCarriesTransportedPhysicalStokesOrientation",
+        "seconds": 96.182
+      },
+      {
+        "name": "GeodesicTracerTest.PolarisationGaugeRemainsRegularAtPastHorizonCapture",
+        "seconds": 0.616
+      }
+    ],
+    "counts": {
+      "passed": 11,
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "compilation": "Strict Linux qualification preset. Four render witnesses use the preset-built sirius_render_tests. The other seven are the original translation units compiled with their exact configured flags and linked to the same preset-built libraries and GoogleTest in one focused runner.",
+    "replay": "Run build.py, then e2.py --compile and e2.py from the checkout. The helper reads the E2 authority, runs only its named witnesses, and verifies both XML reports."
+  },
+  "physical_candidate": {
+    "scope": "A private detector overlay. Compare the original 32x32 block (928,608), first refused sample of the original 1920x1080 four-SPP vacuum Kerr scene, with earlier archived scheduler diagnostics.",
+    "scene": {
+      "schema": "sirius-render-scene-v1",
+      "backend": "Vulkan",
+      "metric": "Kerr",
+      "spin": 0.9,
+      "width": 1920,
+      "height": 1080,
+      "samples_per_pixel": 4,
+      "field_of_view": 60,
+      "disk_enabled": false,
+      "ray_bundles": true,
+      "point_starfield": true,
+      "point_star_count": 100000,
+      "point_brightness_scale": 100,
+      "point_seed": 42,
+      "point_min_distance_pc": 1,
+      "point_max_distance_pc": 10000,
+      "camera_beta": [
+        0.1,
+        0.02,
+        -0.01
+      ],
+      "lens": "ThinLens",
+      "focal_length": 50,
+      "aperture": 2.799999952316284,
+      "focus_distance": 30
+    },
+    "policy": "Attempt the existing continuous certificate on a terminal child of a visibility-mixed parent before tracing that child. Complete each of these children before spending on the next. Any spent catalogue visits debit the original shared footprint ledger, and omissions spend the original absolute RGB allowance.",
+    "synthetic_case": {
+      "old_success_probes": 165,
+      "new_success_probes": 45,
+      "both_successful_certificate_visits": 16,
+      "old_refusal_probes": 77,
+      "new_refusal_probes": 54,
+      "both_refusal_certificate_visits": 1,
+      "same_successful_radiance_bounds": true,
+      "arithmetic_and_cancellation_decline": true
+    },
+    "original_detector_tests_passed": 19,
+    "terminal_certificates_attempted_on_affected_footprint": 29,
+    "terminal_certificates_accepted_on_affected_footprint": 28,
+    "affected_footprint_catalogue_visits": 131072,
+    "total_block_probes": 30357,
+    "total_block_cells": 6404,
+    "total_block_catalogue_visits": 777011,
+    "exit_code": 8,
+    "point_detector_failure": "Unresolved",
+    "elapsed_seconds": 121.64,
+    "process_peak_rss_kib": 341040,
+    "adopted": false,
+    "implication": "Earlier certification avoids some ray probes. It still spends the whole catalogue ledger on the affected footprint and the block refuses. The historical grouped 28-cell finite certificate shows why sharing the phase and catalogue work across compatible charts is the next distinct scheduling premise.",
+    "replay": "Run make-overlay.py, link.py --compile, then link.py. Use an executable-adjacent resources symlink to bin/linux-ci/src/sirius/app/resources. Run ./block under the recorded pinned Dozen ICD, SIRIUS_VULKAN_DEVICE=0, SIRIUS_MEMORY_BUDGET_MB=2048, MESA_SHADER_CACHE_DISABLE=true, XDG_CACHE_HOME under scratch, and timeout 150 as in block.log."
+  },
+  "kerr_nonzero_fold": {
+    "inputs": {
+      "path": "attestations/qualification/bb02a1e7/kerr-nonzero-fold/MANIFEST.json",
+      "bytes": 7214,
+      "sha256": "e51717dce2dfd33a2015bb9591b4eb315e78d447450f19e807d0b13d5ad58f36"
+    },
+    "scope": "Original archived star and pupil, the positive and negative signed phase intervals through the polar turn, and the same normalized-log-separation and inverse-radius branch. This is a continuous enclosure for nonzero separation.",
+    "bounds_hex": {
+      "latitude and time determinant": [
+        "0x1.e4f5318ef30f3p-2",
+        "0x1.e539bd4f31c7cp-2"
+      ],
+      "left latitude residual": [
+        "0x1.38c39d6ffffffp-23",
+        "0x1.48ab36f200001p-21"
+      ],
+      "right latitude residual": [
+        "-0x1.0703751700001p-21",
+        "-0x1.912604fffffffp-26"
+      ],
+      "early time residual": [
+        "0x1.30708817b1a5fp-4",
+        "0x1.3549a2e560989p-4"
+      ],
+      "late time residual": [
+        "-0x1.7e7f866b44279p-4",
+        "-0x1.79a99aab872ffp-4"
+      ],
+      "longitude curvature per winding": [
+        "0x1.17c566a8c02f3p+2",
+        "0x1.9efba0f7fc43bp+3"
+      ],
+      "zero-phase longitude slope": [
+        "-0x1.570c3d868ecf6p+2",
+        "-0x1.56ca7ef9e0deep+2"
+      ],
+      "positive fold neighborhood coefficient (divide by winding)": [
+        "0x1.39c867de994dfp+1",
+        "0x1.39c867de994e5p+1"
+      ],
+      "source lift count constant": [
+        "0x1.003699067d846p+0",
+        "0x1.003699067d848p+0"
+      ],
+      "source lift count per winding": [
+        "0x1.082fb3aa1134p-20",
+        "0x1.082fb3aa1134ap-20"
+      ],
+      "negative phase tail density factor (times 2^-2050)": [
+        "0x1.e14c2d2212f7dp-3",
+        "0x1.e14d59a627fb5p-3"
+      ],
+      "positive phase outside fold density factor (times 2^-16388)": [
+        "0x1.e4afe75f593edp-3",
+        "0x1.e4b116013a7d7p-3"
+      ]
+    },
+    "results": [
+      "Positive curvature over the entire signed phase interval bounds the negative-phase slope away from zero at all windings from 1025.",
+      "At every winding from 8194 the positive-phase part above 2.453/winding has positive slope bounded away from zero. Only the narrower positive-phase interval around the fold requires a longitude gap.",
+      "The angular excursion is affine-bounded in winding, hence each monotone part has at most affine-many source lifts. Summing their inverse-Jacobian densities under s <= 2^-n yields invariant-chart density bounds below 0.236 times 2^-2050 on the negative side and 0.237 times 2^-16388 on the positive side outside the fold. These are per-branch bounds for the recorded star."
+    ],
+    "replay": "Compile fold/tail-shoulders.cpp with g++-14 -std=c++2c -O2 -fno-fast-math -ffp-contract=off -frounding-math -Wall -Wextra -Werror -Isrc, link src/sirius/base/contracts.cpp, and run with the default IEEE rounding environment."
+  },
+  "remaining": "The high-winding interval around the fold needs a structural source-longitude gap. Compatible terminal cells need shared catalogue work before attempting either complete physical frame. E2 evidence binds the stated source build. Integrated science, platform and release qualification remain open.",
+  "prior_physical_evidence": [
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/MANIFEST.json",
+      "bytes": 6407,
+      "sha256": "f271cc1f3fcb841a4e9ab99ecfe0641653bb895e33f937a6d6ed96c6bcab78dc"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/MANIFEST.json",
+      "bytes": 11094,
+      "sha256": "473be1d740da334e6fe5869b9432d7ba11f81fc12ef156d2308ec45a9a09e845"
+    }
+  ],
+  "files": [
+    {
+      "path": "attestations/qualification/fe00d9ee/e2-and-kerr-detector/verification.tar.gz",
+      "bytes": 23941,
+      "sha256": "00cec907529cd969c68a90231a3dfce7fd52849d867b2d634850656c58b44d02"
+    }
+  ]
+}
