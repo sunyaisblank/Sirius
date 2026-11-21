@@ -1,0 +1,238 @@
+{
+  "source_revision": "51ae647332dbe1e70dd4fc14dc94252c35917626",
+  "scope": "Original 128×128, one-SPP cold Kerr frame on the source-integrated sealed software Vulkan provider, using the original registered test and process governors.",
+  "accepted": true,
+  "status": "terminal",
+  "child_exit": 0,
+  "stop_reason": null,
+  "wall_seconds": 175.29618808600935,
+  "limits": {
+    "reserve_kib": 2097152,
+    "rss_kib": 4194304,
+    "seconds": 300
+  },
+  "peak_sampled_rss_kib": 1017100,
+  "minimum_sampled_available_kib": 11513796,
+  "completed_tiles_observed": 16384,
+  "exact_registered_test_passed": true,
+  "registration": {
+    "backtrace": 1,
+    "command": [
+      "/usr/bin/cmake",
+      "-DSIRIUS_RENDER_TESTS=/home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/sirius_render_tests",
+      "-P",
+      "/home/astra/.project/Sirius/tests/operational/vulkan_runtime_profile.cmake"
+    ],
+    "config": "Release",
+    "name": "OperationalVulkan.RequiredRuntimeDispatch",
+    "properties": [
+      {
+        "name": "LABELS",
+        "value": [
+          "Mandatory",
+          "Operational"
+        ]
+      },
+      {
+        "name": "RUN_SERIAL",
+        "value": true
+      },
+      {
+        "name": "TIMEOUT",
+        "value": 300.0
+      },
+      {
+        "name": "WORKING_DIRECTORY",
+        "value": "/home/astra/.project/Sirius/bin/linux-ci/tests"
+      }
+    ]
+  },
+  "provider": {
+    "driver": {
+      "path": "bin/linux-ci/src/sirius/app/resources/providers/linux-x86_64/libvulkan_lvp.so",
+      "bytes": 49450264,
+      "sha256": "19d58dbf2227ac60c7adb0f2d7d9fc16369c84425a2522af651b78db3808f6f3"
+    },
+    "llvm": {
+      "path": "/usr/lib/x86_64-linux-gnu/libLLVM.so.21.1",
+      "bytes": 138493144,
+      "sha256": "fd419f2d3eddfbdece987a7757da8f66794ab933dde48fa685c2ad1c9478225e"
+    },
+    "modules": [
+      "module DopriPhase 59508 f26d03f631a22e025b9a20ba700e86ef3093630935817e4611c3552094c1a336",
+      "module Endpoint 97044 e505643b3ec8865702d035f062139a07da73a8e485210fd7ca094e20d2a621c5",
+      "module Transport 86008 1e48f26028368c7b6b20ec5e7fe0b7283ee084327e7a9d6f22b587ec6e3dda4d"
+    ],
+    "observed_process_mappings": [
+      {
+        "maps": [
+          "70d1d7000000-70d1d705c000 r--p 00000000 08:50 997010                     /home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/resources/providers/linux-x86_64/libvulkan_lvp.so",
+          "70d1d705c000-70d1d96d7000 r-xp 0005c000 08:50 997010                     /home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/resources/providers/linux-x86_64/libvulkan_lvp.so",
+          "70d1d96d7000-70d1d9dc7000 r--p 026d7000 08:50 997010                     /home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/resources/providers/linux-x86_64/libvulkan_lvp.so",
+          "70d1d9dc7000-70d1d9e62000 rw-p 02dc6000 08:50 997010                     /home/astra/.project/Sirius/bin/linux-ci/src/sirius/app/resources/providers/linux-x86_64/libvulkan_lvp.so"
+        ],
+        "owned_session": 1387831,
+        "pid": 1387833,
+        "start_ticks": "21231420"
+      }
+    ]
+  },
+  "frozen_inputs_unchanged": true,
+  "frozen_inputs_before": {
+    "path": "out/sealed-cold-readback/packaged-cold/inputs-before.json",
+    "bytes": 1341076,
+    "sha256": "8675d91062f4b31042b2709aaad0d4cc15dc847e82d24f4d9c564926a3d47626"
+  },
+  "frozen_inputs_after": {
+    "path": "out/sealed-cold-readback/packaged-cold/inputs-after.json",
+    "bytes": 1341076,
+    "sha256": "8675d91062f4b31042b2709aaad0d4cc15dc847e82d24f4d9c564926a3d47626"
+  },
+  "owned_processes_remaining": [],
+  "recorded_candidate_changes": {
+    "initialization_compaction": {
+      "path": "attestations/qualification/14819e8a/retained-compact-initialization/MANIFEST.json",
+      "bytes": 3695,
+      "sha256": "54f72d30a2f2005af3a081e8594206b62f2883ee712aa984bea73c364e164166"
+    },
+    "result_prefix_readback": {
+      "path": "attestations/qualification/1f4523ba/retained-result-prefixes/MANIFEST.json",
+      "bytes": 6167,
+      "sha256": "5abfa9c56a0b3ee92e523b6d420c75561f84384fd0a15c4970f74b2f3694be1c"
+    }
+  },
+  "compared_historical_frames": {
+    "prior_accepted_source": {
+      "path": "attestations/qualification/c096156f/exclusive-cold-gate/MANIFEST.json",
+      "bytes": 63429,
+      "sha256": "b2955ce175bb3d4d3ee69569ecc55689ecc8bbccc5a9a7c07bd3f2dadf6ad8bb"
+    },
+    "earlier_packaged_timeout": {
+      "path": "attestations/qualification/b3856642/packaged-cold-runtime/MANIFEST.json",
+      "bytes": 11562,
+      "sha256": "69a3da572ddd76929b799cf887fd181ad19cc126619fd2c70e34ae3353c9ea54"
+    }
+  },
+  "scenes": [
+    {
+      "schema": "sirius-render-scene-v1",
+      "backend": "Vulkan",
+      "metric": "Kerr",
+      "spin": 0,
+      "width": 128,
+      "height": 128,
+      "samples_per_pixel": 1,
+      "field_of_view": 60,
+      "disk_enabled": true,
+      "ray_bundles": false,
+      "point_starfield": false,
+      "point_star_count": 0,
+      "point_brightness_scale": 100,
+      "point_seed": 42,
+      "point_min_distance_pc": 1,
+      "point_max_distance_pc": 10000,
+      "camera_beta": [
+        0,
+        0,
+        0
+      ],
+      "lens": "Pinhole",
+      "focal_length": 50,
+      "aperture": 2.799999952316284,
+      "focus_distance": 50
+    }
+  ],
+  "progress": [
+    {
+      "completed_tiles": 406,
+      "camera_batches": 287,
+      "accepted_intervals": 79934,
+      "rejected_intervals": 3760,
+      "serialized_batch_seconds": 27.9258
+    },
+    {
+      "completed_tiles": 811,
+      "camera_batches": 621,
+      "accepted_intervals": 153979,
+      "rejected_intervals": 4935,
+      "serialized_batch_seconds": 56.289
+    },
+    {
+      "completed_tiles": 1027,
+      "camera_batches": 798,
+      "accepted_intervals": 183193,
+      "rejected_intervals": 5160,
+      "serialized_batch_seconds": 85.2642
+    },
+    {
+      "completed_tiles": 4059,
+      "camera_batches": 1329,
+      "accepted_intervals": 238847,
+      "rejected_intervals": 5622,
+      "serialized_batch_seconds": 113.194
+    },
+    {
+      "completed_tiles": 15081,
+      "camera_batches": 1898,
+      "accepted_intervals": 249866,
+      "rejected_intervals": 5622,
+      "serialized_batch_seconds": 139.573
+    }
+  ],
+  "spherical_continuation": [
+    {
+      "escapes": 15340,
+      "turns": 14906,
+      "panels": 4555008
+    }
+  ],
+  "render_evidence": [
+    {
+      "schema": "sirius-vulkan-render-v1",
+      "route": "retained",
+      "source_owner": "host",
+      "device_name": "llvmpipe (LLVM 21.1.8, 256 bits)",
+      "device_index": 0,
+      "metric": "Kerr",
+      "width": 128,
+      "height": 128,
+      "precision": "fp32",
+      "budget_bytes": 25199562752,
+      "allocated_bytes": 15225372,
+      "work_items": 16384,
+      "work_tile_edge": 1,
+      "ray_capacity": 64,
+      "maximum_dispatch_rays": 64,
+      "dispatches": 58021,
+      "camera_batches": 1963,
+      "accepted_intervals": 251152,
+      "wall_seconds": 174.326535387,
+      "dispatch_seconds": 112.76616652100027,
+      "maximum_dispatch_ms": 48.401507,
+      "target_overshoots": 0,
+      "batch_subdivisions": 0,
+      "safety_fallbacks": 0,
+      "initialization_dispatches": 6,
+      "initialization_seconds": 21.337614070999997,
+      "queue_submissions": 58021
+    }
+  ],
+  "independent_annulus_control": {
+    "source_change": "113136e86f80c3e819f6cf734f8629059cdc7530",
+    "cases": 6,
+    "panel_limit_declined": true,
+    "scope": "Source-level disk-clearance controls for Schwarzschild turns. A separate Decimal orbital-phase quadrature finds disk crossings on the inward and outward legs. It also checks the central hole and turns within and beyond the annulus. The full frame independently exercised the integrated continuation."
+  },
+  "comparison": {
+    "prior_accepted_wall_seconds": 273.120823469013,
+    "prior_accepted_intervals": 649824,
+    "prior_accepted_exterior_turns": 9096,
+    "scope": "The source changes include annulus clearance and host readback and initialization improvements. Whole-frame timing does not isolate the effects of individual changes."
+  },
+  "artifact": {
+    "path": "attestations/qualification/51ae6473/sealed-cold-readback/verification.tar.gz",
+    "bytes": 411589,
+    "sha256": "820cd1adb316e4cc87051c30b18d6f32c68a4823baaf8ea8bdf50a22bcb27f89"
+  },
+  "detailed_render_evidence_archive_member": "packaged-cold/stdout.log"
+}
