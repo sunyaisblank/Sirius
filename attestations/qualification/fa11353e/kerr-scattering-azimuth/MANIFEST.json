@@ -1,0 +1,172 @@
+{
+  "recorded_at": "2026-11-21T05:38:26.401540+00:00",
+  "parent_render_source": "fa11353e2d2ad471af48f1b2ecefc5052eb35cab",
+  "prior_phase_evidence": "c762a750a1480572d258c72f9a2dbea089b3184a",
+  "reused_preset_build": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+  "scope": "Executable interval prototype on the CPU fixed-pupil replay of footprint 544, depth 16 in the failing Radeon 1080p render.",
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-phase/MANIFEST.json",
+      "bytes": 5729,
+      "sha256": "9d1fee9076b29473b1a0512121189bc31813e44f8b32e81c4eb7350a91d907d9"
+    },
+    {
+      "path": "attestations/qualification/3f5ce75c/correlated-kerr-shadow/boundary-replay.log.gz",
+      "bytes": 162,
+      "sha256": "d8919a8ce83c631d065f0d427cdfd23a125f4b9088619c9ffb52a5063d964b06"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  ],
+  "build": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-scattering-azimuth/src",
+      "-Isrc",
+      "out/kerr-scattering-azimuth/phase-cell.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-scattering-azimuth/phase-cell"
+    ],
+    "compiler": "14.2.0",
+    "executable_removed_after_check": {
+      "path": "out/kerr-scattering-azimuth/phase-cell",
+      "bytes": 300464,
+      "sha256": "71b4b60d7b93148858f65d22a0420eb12aacd58a77aa787010685ef25f665cc5"
+    },
+    "overlay": "Use headers changed between the preset and parent render revision. Apply the archived patch against the parent header and unpack the C++ and independent reference files next to the overlay."
+  },
+  "method": "The radial and polar secular azimuth rates are combined with separately bounded residuals. Sixteen adjacent polar phase intervals couple latitude and azimuth for candidate selection. A second-derivative bound encloses composite trapezoid remainders. The complete mixed cell is covered to exclude contact with a catalogue star at a polar turning latitude on the near-critical escaping branch.",
+  "catalogue": {
+    "size": 100000,
+    "seed": 42,
+    "escape_boxes_with_bounded_phase_and_azimuth": 14,
+    "possible_catalogue_counts": {
+      "latitude": [
+        9003,
+        17268
+      ],
+      "latitude_and_azimuth": [
+        1762,
+        4205
+      ],
+      "coupled_phase_union": [
+        907,
+        1637
+      ]
+    }
+  },
+  "mixed_cell_witness": {
+    "polar_turn_abs_mu": [
+      0.8005590875145553,
+      0.800560101718163
+    ],
+    "spherical_radius": [
+      1.826972517970431,
+      1.826999219766936
+    ],
+    "spherical_azimuth_slope": [
+      -4.430445835349008,
+      -4.096694917039691
+    ],
+    "contact_H": [
+      1.863120839661846e-07,
+      1.253523762580165e-06
+    ],
+    "critical_instability_exponent": [
+      2.476552463513566,
+      2.527674710607006
+    ],
+    "only_possible_polar_turn_contact_catalogue_index": 37718,
+    "contact_boxes_visited": 5,
+    "contact_boxes_retained": 1,
+    "latitude_exclusion_margin": 7.450580596923828e-09,
+    "conditioned_escape_polar_speed_lower_bound": 0.0003158902468630616,
+    "azimuth_slope_convention": "Unwrapped radians per polar half-libration differentiated in spherical radius, future-directed E=1."
+  },
+  "independent_point_references": [
+    {
+      "turn": "0.547204728163503628554242381497902805482675902833853242673928803",
+      "inner": "0.547494512976928397126494864065346092148428058292935542677070699",
+      "mino": "7.899135899849876310430520419627594559201436039823994793958826911",
+      "half": "1.0751801190713615",
+      "first": "0.07650518128985392",
+      "source_mu": "0.6071868020838838",
+      "source_phi": "-38.7480305147905",
+      "polar_crossings": 8,
+      "radial_refinement_gap": "1.91094608849525794848174376984864222122487032680357E-13",
+      "radial_azimuth_refinement_gap": "5.936362224247074698665095166654609555024289441861E-14",
+      "absolute_agreement_with_original_unwrapped_azimuth_modulo_2pi": 3.558554340088449e-08
+    },
+    {
+      "turn": "0.547055049327613830117764824412138212563409982515679529791784012",
+      "inner": "0.547643892753785248451715150010950477976509874240209835344704509",
+      "mino": "7.289739282672195762685467302433032627622991771009274636456423464",
+      "half": "1.0751795907706274",
+      "first": "0.07650512288889393",
+      "source_mu": "-0.6318963741497006",
+      "source_phi": "-35.913575161596604",
+      "polar_crossings": 7,
+      "radial_refinement_gap": "1.90704535595041187348237939967226471728414336885563E-13",
+      "radial_azimuth_refinement_gap": "5.924261996687666889799437322657990892247959928218E-14",
+      "absolute_agreement_with_original_unwrapped_azimuth_modulo_2pi": 1.2121034842493827e-08
+    }
+  ],
+  "independent_spherical_slope_reference": {
+    "spherical_azimuth_slope": -4.263446965158124,
+    "refinement_gap": 4.884981308350689e-10
+  },
+  "remaining": "The bounds support the winding-tail proof. Finite image roots, the joint Jacobian and multiplicity bounds including derivatives of near-critical remainders, and a total RGB bound still require validation. Renderer and release qualification remain open.",
+  "references": [
+    "https://arxiv.org/html/1910.12881",
+    "https://arxiv.org/html/1910.12873"
+  ],
+  "artifacts": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/kerr-launch-invariants.patch.gz",
+      "bytes": 490,
+      "sha256": "24d738cdb6693c63da88a2dd7588dd9b942fce42a07a1131795ba8ea6587b6c2"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/scattering-phase.h.gz",
+      "bytes": 5502,
+      "sha256": "d0feb0f912a2c8cbbb502b92c6cbb02dc14d1d89b155051abea31a648b162b4b"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/phase-cell.cpp.gz",
+      "bytes": 3742,
+      "sha256": "a69f471add77778bb2ecc9afd3d056aadb6bba03c3fc77efee20651e3c70b72b"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/reference.py.gz",
+      "bytes": 3025,
+      "sha256": "6942a250f34cb9fe2f7517985375127f7297596bc7f5754882dffaf81bd53450"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/phase.log.gz",
+      "bytes": 4580,
+      "sha256": "68d9c2769585767aab6337d6f90480247d473610b1b92a74cdb0823a123e4a67"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-scattering-azimuth/reference.log.gz",
+      "bytes": 613,
+      "sha256": "b4d530dd1f68bac8ded3ffeafa9c78c018de93c27ed2808072b7789145af561d"
+    }
+  ]
+}
