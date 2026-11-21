@@ -990,7 +990,50 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
         }
     }
 
-    for (int step = 0; step < config_.max_steps; ++step) {
+    // In vacuum the detector needs the infinity map of the launched ray.
+    // If the same certified continuation used at a later handoff can already
+    // resolve the launch, there is no intervening source or boundary to trace.
+    const bool detector_handoff = [&] {
+        if (!detector_capture || !can_handoff_to_infinity || !camera_ray.phase_space ||
+            !family->HasHorizon())
+            return false;
+        const auto parameters = family->GetParams();
+        const double capture_radius = family->OuterHorizonRadius() * config_.horizon_factor;
+        const double minimum_radius =
+            std::max(capture_radius, static_cast<double>(config_.strong_field_radius));
+        const coordinates::Vec4Cart position{ray.position(0), ray.position(1), ray.position(2),
+                                             ray.position(3)};
+        const double radius = coordinates::KerrSchildRadius(position, parameters.a);
+        if (!(radius > minimum_radius && radius < config_.escape_radius)) return false;
+
+        const auto angular = CameraAngularVariations(coupled.variations, camera_ray.phase_space);
+        if (!angular) return false;
+        relativity::KerrInfinityConfig infinity_config;
+        infinity_config.allow_radial_turn = true;
+        infinity_config.minimum_turn_radius = minimum_radius;
+        infinity_config.maximum_attempts =
+            std::min(infinity_config.maximum_attempts, static_cast<unsigned>(config_.max_steps));
+        TraceResult::Beam source;
+        double turn_radius = 0.0;
+        if (!SampleSourceSkyMaps(
+                *metric_, ray.position, ray.velocity,
+                {(*angular)[0].displacement, (*angular)[1].displacement},
+                {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0, outgoing_chart_,
+                source, infinity_config, &turn_radius) ||
+            !source.infinity_source_map)
+            return false;
+        const auto sky = SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
+        if (!sky || (config_.enable_ray_bundles && !read_coupled_bundle(coupled.variations, bundle)))
+            return false;
+        min_r = static_cast<float>(turn_radius > 0 ? turn_radius : radius);
+        admitted_source_maps = std::move(source);
+        result.outcome = TraceResult::Outcome::Escaped;
+        result.final_direction = sky->world_direction;
+        return true;
+    }();
+    if (should_cancel_ && should_cancel_()) return cancelled_result();
+
+    for (int step = 0; !detector_handoff && step < config_.max_steps; ++step) {
         if (should_cancel_ && should_cancel_()) return cancelled_result();
         // The previous iteration has finished rejection and event resolution.
         // Rejected trials retain the same affine value and produce no sample.

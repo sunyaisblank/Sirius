@@ -311,6 +311,21 @@ TEST(SourceSkyInfinityTrace, PointSourceHandoffAvoidsVacuumTravelForMovingPhysic
             const auto reference = tracer.Trace(projection->ray);
             const auto result = tracer.TracePointSource(projection->ray);
             ExpectSameInfinity(result, reference);
+            const auto direct = tracer.TraceDetectorRay(projection->ray);
+            ASSERT_TRUE(direct);
+            ExpectSameInfinity(*direct, reference);
+            EXPECT_EQ(direct->steps_taken, 0);
+            EXPECT_EQ(direct->central_stages, 0U);
+            EXPECT_TRUE(direct->beam.valid);
+            EXPECT_EQ(direct->affine_length, 0.0);
+            auto capped_launch = config;
+            capped_launch.strong_field_radius = 4;
+            capped_launch.strong_field_max_step = .2f;
+            GeodesicTracer capped(&metric, capped_launch);
+            const auto constrained = capped.TraceDetectorRay(projection->ray);
+            ASSERT_TRUE(constrained);
+            ExpectSameInfinity(*constrained, reference);
+            EXPECT_GT(constrained->steps_taken, 0);
             ordinary_attempts += reference.steps_taken;
             probe_attempts += result.steps_taken;
             if (result.beam.infinity_source_map && reference.beam.infinity_source_map) {
