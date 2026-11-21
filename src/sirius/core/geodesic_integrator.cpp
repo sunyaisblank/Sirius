@@ -504,8 +504,12 @@ inline Vec4 EndpointAcceleration(const Vec4& velocity, const RetainedMetricSampl
 }
 
 using WideConnection = std::array<std::array<std::array<Twofold, 4>, 4>, 4>;
-static WideConnection WideChristoffel(const Tensor<Twofold, 4, 4>& inverse,
-                                      const Tensor<Twofold, 4, 4, 4>& dg) {
+#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
+// Dispatch explicit Twofold fma operations while retaining the baseline path.
+__attribute__((target_clones("fma", "default")))
+#endif
+static WideConnection
+WideChristoffel(const Tensor<Twofold, 4, 4>& inverse, const Tensor<Twofold, 4, 4, 4>& dg) {
     // Every raised component uses the same unscaled derivative sums.
     // Keep the factor of one half after the original contraction.
     WideConnection numerator;
@@ -726,6 +730,9 @@ bool EvaluateVariationStage(IMetric& metric, const Vec4& position, const WideVec
     return true;
 }
 
+#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
+__attribute__((target_clones("fma", "default")))
+#endif
 bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
                    const std::array<WideVector, 7>& tangents, const WideVector& initial_tangent,
                    const std::array<RetainedMetricSample, 7>& geometries, double interval,
@@ -894,10 +901,12 @@ static std::optional<NullProjection> ProjectNullTangentWithBranch(const Vec4& ta
 
 namespace {
 
-std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& geometry,
-                                                    const WideVector& unprojected,
-                                                    const NullProjection& projection,
-                                                    const PhaseVariations& phase) {
+#if defined(__GNUC__) && !defined(__clang__) && defined(__linux__) && defined(__x86_64__)
+__attribute__((target_clones("fma", "default")))
+#endif
+std::optional<GeodesicVariations>
+ProjectVariations(const RetainedMetricSample& geometry, const WideVector& unprojected,
+                  const NullProjection& projection, const PhaseVariations& phase) {
     const auto& metric = geometry.metric;
     const auto& inverse = geometry.inverse;
     const auto& derivatives = geometry.derivative;
