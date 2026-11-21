@@ -616,7 +616,7 @@ def run_gate(args: argparse.Namespace) -> None:
     _, registered_names, inventory_digest = read_inventory(args.ctest, build_dir, args.config)
     command = [
         str(args.ctest), "--test-dir", str(build_dir), "--output-on-failure",
-        "--no-tests=error", "-L", "Mandatory", "--output-junit", str(junit),
+        "--no-tests=error", "--stop-on-failure", "-L", "Mandatory", "--output-junit", str(junit),
     ]
     if args.config:
         command.extend(("-C", args.config))
@@ -953,6 +953,8 @@ def self_test_execution_inputs(source: Path, build: Path, tested: dict, products
                 else:
                     require("--output-junit" in command,
                             "unexpected self-test external command")
+                    require(("--stop-on-failure" in command) == (not native),
+                            "unexpected failure policy for the selected CTest gate")
                     executed = True
                     names = (set(NATIVE_BUILD_EVIDENCE_TESTS) if native else
                              {test["name"] for test in inventory["tests"]})
