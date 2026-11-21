@@ -5134,6 +5134,9 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         if (i == static_cast<std::size_t>(RetainedCompute::KernelStage::kRayCamera)) {
             EXPECT_EQ(stage.submissions, cohort.camera_batches);
             EXPECT_EQ(prefixes[1], cohort.camera_rows);
+        } else if (i == static_cast<std::size_t>(RetainedCompute::KernelStage::kInitialize)) {
+            EXPECT_EQ(prefixes[1], cohort.initialized_phases);
+            EXPECT_EQ(stage.completion_flag_counts[1], cohort.initialized_phases);
         }
     }
 

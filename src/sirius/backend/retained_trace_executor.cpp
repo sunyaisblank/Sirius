@@ -417,37 +417,38 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests,
     const auto fail = [&](const base::Error& error) {
         for (auto* request : requests) request->result = std::unexpected(error);
     };
-    bool initialize = false;
-    std::vector<RetainedInitializeInput> packets(requests.size());
-    for (std::size_t row = 0; row < requests.size(); ++row)
-        if (!requests[row]->interval.start.valid) {
-            initialize = true;
-            packets[row] = requests[row]->initialization;
+    std::vector<Request*> initializing;
+    std::vector<RetainedInitializeInput> packets;
+    for (auto* request : requests)
+        if (!request->interval.start.valid) {
+            initializing.push_back(request);
+            packets.push_back(request->initialization);
         }
-    if (initialize) {
+    if (!initializing.empty()) {
         const auto phase = compute_.Initialize(packets);
         if (!phase) {
             fail(phase.error());
             return;
         }
-        std::vector<RetainedEndpointInput> endpoints(requests.size());
-        for (std::size_t row = 0; row < requests.size(); ++row)
+        // The two stages share the compact order. Continuations stay in the
+        // original interval cohort and keep their committed starting state.
+        std::vector<RetainedEndpointInput> endpoints(initializing.size());
+        for (std::size_t row = 0; row < initializing.size(); ++row)
             if ((*phase)[row].valid) {
-                std::copy(requests[row]->interval.metric.begin(),
-                          requests[row]->interval.metric.end(), endpoints[row].values.begin());
+                const auto& interval = initializing[row]->interval;
+                std::copy(interval.metric.begin(), interval.metric.end(),
+                          endpoints[row].values.begin());
                 std::copy((*phase)[row].phase.begin(), (*phase)[row].phase.end(),
                           endpoints[row].values.begin() + 4);
-                endpoints[row].values[44] =
-                    RetainedValue::FromDouble(requests[row]->interval.chart);
+                endpoints[row].values[44] = RetainedValue::FromDouble(interval.chart);
             }
         const auto projected = compute_.Endpoint(endpoints);
         if (!projected) {
             fail(projected.error());
             return;
         }
-        for (std::size_t row = 0; row < requests.size(); ++row)
-            if (!requests[row]->interval.start.valid)
-                requests[row]->interval.start = (*projected)[row];
+        for (std::size_t row = 0; row < initializing.size(); ++row)
+            initializing[row]->interval.start = (*projected)[row];
     }
     std::vector<RetainedIntervalInput> intervals;
     for (const auto* request : requests) intervals.push_back(request->interval);
