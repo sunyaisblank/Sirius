@@ -130,13 +130,13 @@ struct StarfieldConfig {
 // Deterministic latitude/longitude acceleration structure for beam queries.
 // The exact Gaussian and angular cutoff remain in StarfieldGenerator; this
 // index only produces a conservative candidate superset, so it cannot change
-// the represented star field. Its fixed topology is below 1 MiB for a 100k
-// catalogue and avoids the previous O(stars * pixels) IMAX failure mode.
+// the represented star field. A 100,000-star catalogue uses less than 2 MiB
+// for the index, including the grouped direction bounds.
 class StarfieldSpatialIndex {
   public:
     static constexpr int kThetaBins = 256;
     static constexpr int kPhiBins = 512;
-    static constexpr int kBoundsStride = 4;
+    static constexpr int kBoundsStride = 2;
 
     struct DirectionBounds {
         std::array<float, 3> lower;
