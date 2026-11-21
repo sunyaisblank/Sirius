@@ -61,6 +61,7 @@ class AngularCatalogue {
         Range latitude, azimuth;
         Range weighted_temperature;
         double longitude_key;
+        float temperature_kelvin;
     };
 
     struct Row {
@@ -120,6 +121,7 @@ class AngularCatalogue {
         for (std::size_t i = 0; i < stars.size(); ++i) {
             if (i % 256 == 0 && cancelled && cancelled()) return {};
             const auto& star = stars[i];
+            index.maximum_temperature_ = std::max(index.maximum_temperature_, star.temperature_K);
             const auto colour = spectral::BlackbodyBandRgb(star.temperature_K);
             if (!colour || !std::isfinite(colour->r) || !std::isfinite(colour->g) ||
                 !std::isfinite(colour->b))
@@ -147,8 +149,8 @@ class AngularCatalogue {
                                      std::max(row.latitude.hi, latitude.hi));
             row.longitude_error = std::max(row.longitude_error, MidpointError(azimuth));
             row.weighted_temperature = row.weighted_temperature + weighted;
-            row.entries.push_back(
-                {latitude, azimuth, weighted, std::midpoint(azimuth.lo, azimuth.hi)});
+            row.entries.push_back({latitude, azimuth, weighted,
+                                   std::midpoint(azimuth.lo, azimuth.hi), star.temperature_K});
         }
         for (auto& hemisphere : index.rows_)
             for (auto& row : hemisphere) std::ranges::sort(row.entries, {}, &Entry::longitude_key);
@@ -157,8 +159,11 @@ class AngularCatalogue {
 
     std::span<const Row> Rows(bool north) const { return rows_[north ? 1 : 0]; }
 
+    float MaximumTemperature() const { return maximum_temperature_; }
+
   private:
     std::array<std::array<Row, kLatitudeRows>, 2> rows_;
+    float maximum_temperature_ = 0.0f;
 };
 
 }  // namespace sirius::core::relativity::finite_tail_detail

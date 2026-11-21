@@ -221,6 +221,22 @@ Range BoundGaussian(const FilmVector& box) {
     return Range(weight.hi) / Range(6.0);
 }
 
+// For x = C2/(lambda*T*g), the Planck/Rayleigh-Jeans ratio is
+// x/expm1(x). Positive Taylor terms give a lower bound on expm1(x)/x
+// at the least exponent admitted by the physical shift and spectral band.
+Range PlanckFraction(Range shifted_temperature) {
+    using namespace core::constants;
+    if (!shifted_temperature.Finite() || !(shifted_temperature.hi > 0.0)) return Range(1.0);
+    const Range exponent =
+        Range(physical::kPlanckC2) / (Range(spectral::kLambdaMax) * Range(shifted_temperature.hi));
+    if (!exponent.Finite() || !(exponent.lo > 0.0)) return Range(1.0);
+    const Range x(exponent.lo), x2 = Square(x);
+    const Range terms = Range(1.0) + x / Range(2.0) + x2 / Range(6.0) + x2 * x / Range(24.0) +
+                        Square(x2) / Range(120.0);
+    const Range fraction = Range(1.0) / terms;
+    return fraction.Finite() ? Range(std::min(1.0, fraction.hi)) : Range(1.0);
+}
+
 std::optional<Range> ColourEnvelope(Range camera_frequency, Range gaussian, double brightness) {
     // Bound the Rayleigh-Jeans spectrum at the same 32 wavelengths as
     // point-source transfer. Absolute XYZ and D65 coefficients bound each
@@ -506,9 +522,11 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     if (clearance == kInfinity) return std::array<double, 3>{};
     const auto latitude = EncloseLatitudeRootMonotonicity(mass, spin, radius, scale,
                                                           whole->initial_mu, clearance, *phase);
-    const auto colour = ColourEnvelope(Range(1.0) / (Range(0.0) - whole->energy),
-                                       Range(maximum_gaussian), brightness);
+    const Range camera_frequency = Range(1.0) / (Range(0.0) - whole->energy);
+    const auto colour = ColourEnvelope(camera_frequency, Range(maximum_gaussian), brightness);
     if (!latitude || !colour) return {};
+    const Range full_colour =
+        *colour * PlanckFraction(camera_frequency * Range(angular->MaximumTemperature()));
 
     Range upper_bound;
     std::array<unsigned, 3> cutoffs{};
@@ -524,7 +542,7 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
                                determinant, *phase, *latitude, first_tail_winding);
         if (!tail) return {};
         const double factor =
-            (*colour * band.weighted_temperature * Range(tail->tail_prefactor)).hi;
+            (full_colour * band.weighted_temperature * Range(tail->tail_prefactor)).hi;
         const double bound = std::nextafter(std::scalbn(factor, tail->tail_exponent), kInfinity);
         if (!std::isfinite(bound)) return {};
         upper_bound = upper_bound + Range(0.0, bound);
@@ -537,7 +555,7 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const auto screen = ScreenFiniteWindings(
         mass, spin, radius, scale, *whole, *polar, *phase, *angular, cutoffs, amplitude, clearance,
         remaining, cancelled, phases ? &*phases : nullptr, excluded_turns,
-        finite_cutoff ? std::optional(finite_scale) : std::nullopt, *colour / determinant,
+        finite_cutoff ? std::optional(finite_scale) : std::nullopt, full_colour / determinant,
         PointDetectorPolicy{}.absolute_rgb_error * .01);
     if (!screen) return {};
     upper_bound = upper_bound + screen->grouped_rgb;
@@ -547,8 +565,10 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
                                cancelled, remaining, phases ? &*phases : nullptr);
         if (!density) return {};
         if (density->hi == 0.0) continue;
-        const Range contribution =
-            *colour * candidate.source->weighted_temperature * *density / determinant;
+        const Range shifted_temperature =
+            camera_frequency * Range(candidate.source->temperature_kelvin);
+        const Range contribution = *colour * PlanckFraction(shifted_temperature) *
+                                   candidate.source->weighted_temperature * *density / determinant;
         if (!contribution.Finite() || contribution.hi < 0.0) return {};
         upper_bound = upper_bound + Range(0.0, contribution.hi);
     }
