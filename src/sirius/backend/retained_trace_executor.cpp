@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <cstring>
 #include <format>
 
 namespace sirius::backend {
@@ -461,14 +462,14 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests,
     }
 }
 
-std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
-    core::IMetric& metric, double absolute_spin, const core::CameraRay& camera) {
-    const auto* family = dynamic_cast<core::KerrSchildFamily*>(&metric);
-    if (!family || !core::IsRepresentedCameraRay(camera) || !camera.active ||
-        !std::isfinite(absolute_spin))
+namespace {
+constexpr std::size_t kCameraDirection = 22;
+
+std::optional<RetainedRayCameraInput> RayCameraInput(const core::KerrSchildParams& p,
+                                                     double absolute_spin,
+                                                     const core::CameraRay& camera) {
+    if (!core::IsRepresentedCameraRay(camera) || !camera.active || !std::isfinite(absolute_spin))
         return std::nullopt;
-    if (should_cancel_ && should_cancel_()) return std::nullopt;
-    const auto p = family->GetParams();
     const core::coordinates::Vec4Bl origin(camera.origin(0), camera.origin(1), camera.origin(2),
                                            camera.origin(3));
     const auto cart = core::coordinates::BlToKerrSchildCart(origin, absolute_spin);
@@ -508,10 +509,19 @@ std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
             values[37 + column] = camera.phase_space->pupil_right[column];
             values[41 + column] = -camera.phase_space->pupil_up[column];
         }
+    RetainedRayCameraInput input;
+    for (std::size_t i = 0; i < values.size(); ++i)
+        input.values[i] = RetainedValue::FromDouble(values[i]);
+    return input;
+}
+}  // namespace
+
+std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
+    const RetainedRayCameraInput& input) {
+    if (should_cancel_ && should_cancel_()) return std::nullopt;
     Request request;
     request.camera = true;
-    for (std::size_t i = 0; i < values.size(); ++i)
-        request.camera_input.values[i] = RetainedValue::FromDouble(values[i]);
+    request.camera_input = input;
     {
         std::unique_lock lock(mutex_);
         if (error_ || stopping_) return std::nullopt;
@@ -528,7 +538,10 @@ std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
 std::optional<DetectorLaunchFrame> RetainedTraceExecutor::EncloseDetectorLaunchFrame(
     core::IMetric& metric, double absolute_spin, const core::CameraRay& camera) {
     const auto* family = dynamic_cast<const core::KerrSchildFamily*>(&metric);
-    if (!family || !camera.phase_space) return std::nullopt;
+    if (!family || !camera.phase_space ||
+        !core::relativity::finite_tail_detail::RoundingEnvironment() ||
+        (should_cancel_ && should_cancel_()))
+        return std::nullopt;
     const auto parameters = family->GetParams();
     using Range = DetectorLaunchFrame::Range;
     const auto enclosure = [](const RetainedValue& value) {
@@ -542,13 +555,36 @@ std::optional<DetectorLaunchFrame> RetainedTraceExecutor::EncloseDetectorLaunchF
     basis.phase_space->direction = {};
     constexpr std::array<std::array<double, 3>, 4> directions{
         {{1.0, 0.0, 0.0}, {-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}}};
+    for (int axis = 0; axis < 3; ++axis) basis.direction(axis + 1) = directions[0][axis];
+    auto input = RayCameraInput(parameters, absolute_spin, basis);
+    if (!input) return std::nullopt;
+    // The first basis packet captures every fixed-pupil input, including
+    // the sign of zeros. The other packets only replace its direction.
+    const auto key = *input;
+    const auto matches = [&](const auto& entry) {
+        return entry &&
+               std::memcmp(entry->input.values.data(), key.values.data(), sizeof(key.values)) == 0;
+    };
     std::array<DetectorLaunchFrame::Variations, 4> measured;
     DetectorLaunchFrame frame;
     frame.metric = {parameters.M, parameters.a, parameters.Q, parameters.Lambda};
     frame.pupil = camera;
+    {
+        std::lock_guard lock(mutex_);
+        if (error_ || stopping_) return std::nullopt;
+        const auto found = std::ranges::find_if(detector_pupils_, matches);
+        if (found != detector_pupils_.end()) {
+            auto reused = (*found)->frame;
+            reused.metric = frame.metric;
+            reused.pupil = camera;
+            return reused;
+        }
+    }
     for (std::size_t row = 0; row < directions.size(); ++row) {
-        for (int axis = 0; axis < 3; ++axis) basis.direction(axis + 1) = directions[row][axis];
-        const auto result = ReadCameraLaunch(metric, absolute_spin, basis);
+        for (std::size_t axis = 0; axis < 3; ++axis)
+            input->values[kCameraDirection + axis] =
+                RetainedValue::FromDouble(directions[row][axis]);
+        const auto result = ReadCameraLaunch(*input);
         if (!result) return std::nullopt;
         for (int i = 0; i < 4; ++i) {
             if (row == 0) {
@@ -571,13 +607,28 @@ std::optional<DetectorLaunchFrame> RetainedTraceExecutor::EncloseDetectorLaunchF
             frame.covariant[2][col][i] = measured[2][col][i] - constant;
             frame.covariant[3][col][i] = measured[3][col][i] - constant;
         }
+    if (should_cancel_ && should_cancel_()) return std::nullopt;
+    {
+        std::lock_guard lock(mutex_);
+        if (error_ || stopping_) return std::nullopt;
+        // Concurrent misses may finish in either order. An existing entry
+        // for these complete inputs is already sufficient.
+        if (std::ranges::none_of(detector_pupils_, matches)) {
+            detector_pupils_[next_detector_pupil_] = DetectorPupilEntry{key, frame};
+            next_detector_pupil_ = (next_detector_pupil_ + 1) % detector_pupils_.size();
+        }
+    }
     return frame;
 }
 
 std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& metric,
                                                                 double absolute_spin,
                                                                 const core::CameraRay& camera) {
-    const auto result = ReadCameraLaunch(metric, absolute_spin, camera);
+    const auto* family = dynamic_cast<const core::KerrSchildFamily*>(&metric);
+    if (!family || (should_cancel_ && should_cancel_())) return std::nullopt;
+    const auto input = RayCameraInput(family->GetParams(), absolute_spin, camera);
+    if (!input) return std::nullopt;
+    const auto result = ReadCameraLaunch(*input);
     if (!result) return std::nullopt;
     const auto& output = result->values;
     core::CameraLaunch launch;

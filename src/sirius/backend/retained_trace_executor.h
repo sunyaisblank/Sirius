@@ -137,8 +137,11 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
 
   private:
     friend struct RetainedTraceExecutorTestPeer;
-    std::optional<RetainedCameraOutput> ReadCameraLaunch(core::IMetric& metric, double absolute_spin,
-                                                         const core::CameraRay& camera);
+    std::optional<RetainedCameraOutput> ReadCameraLaunch(const RetainedRayCameraInput& input);
+    struct DetectorPupilEntry {
+        RetainedRayCameraInput input;
+        DetectorLaunchFrame frame;
+    };
     struct Snapshot {
         std::array<double, 40> physical{};
         std::array<double, 4> metric{};
@@ -182,6 +185,10 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
     std::condition_variable available_, completed_;
     std::deque<Request*> requests_;
     std::map<std::thread::id, Continuation> continuations_;
+    // The common four pupil samples stay resident across canonical blocks.
+    // Other sample counts use the same insertion and eviction policy.
+    std::array<std::optional<DetectorPupilEntry>, 4> detector_pupils_;
+    std::size_t next_detector_pupil_ = 0;
     // Synchronous Launch/Step/Sample permits at most one queued request per thread.
     // Nesting depth preserves distinct membership across nested trace scopes.
     std::map<std::thread::id, std::size_t> active_traces_;
