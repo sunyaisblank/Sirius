@@ -19,11 +19,11 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
-#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
+#include <memory>
 #include <mutex>
 #include <sstream>
 #include <stdexcept>
@@ -38,9 +38,7 @@ namespace {
 
 struct DisplayFrame {
     std::mutex mutex;
-    std::vector<float> pixels;
-    int width = 0;
-    int height = 0;
+    std::shared_ptr<const InteractiveViewer::FrameSnapshot> completed;
     bool needs_upload = false;
     std::vector<float> preview_pixels;
     int preview_width = 0;
@@ -441,16 +439,12 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         glfwTerminate();
         return 1;
     }
-    viewer.SetFrameCallback([&display_frame, &callback_state, backend = view_config.backend](
-                                const float* data, int width, int height) {
+    viewer.SetFrameCallback([&display_frame, &callback_state, &viewer, backend = view_config.backend](
+                                const float*, int width, int height) {
+        auto completed = viewer.GetCompletedFrame();
         {
             std::lock_guard<std::mutex> lock(display_frame.mutex);
-            const std::size_t size =
-                static_cast<std::size_t>(width) * static_cast<std::size_t>(height) * 4;
-            display_frame.pixels.resize(size);
-            std::memcpy(display_frame.pixels.data(), data, size * sizeof(float));
-            display_frame.width = width;
-            display_frame.height = height;
+            display_frame.completed = std::move(completed);
             display_frame.needs_upload = true;
             display_frame.preview_needs_upload = false;
         }
@@ -559,23 +553,23 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT,
                              pixels);
             };
+            const auto& completed = display_frame.completed;
             if (display_frame.preview_generation != viewer.GetPreviewGeneration()) {
                 display_frame.preview_needs_upload = false;
                 if (display_frame.displaying_preview) {
                     // Restore the last completed frame after a cancelled/restarted
                     // provisional generation; before the first final frame use black.
                     const float black[4] = {0, 0, 0, 1};
-                    if (display_frame.pixels.empty()) {
-                        upload(black, 1, 1);
+                    if (completed) {
+                        upload(completed->pixels.data(), completed->width, completed->height);
                     } else {
-                        upload(display_frame.pixels.data(), display_frame.width,
-                               display_frame.height);
+                        upload(black, 1, 1);
                     }
                     display_frame.displaying_preview = false;
                 }
             }
-            if (display_frame.needs_upload && !display_frame.pixels.empty()) {
-                upload(display_frame.pixels.data(), display_frame.width, display_frame.height);
+            if (display_frame.needs_upload && completed) {
+                upload(completed->pixels.data(), completed->width, completed->height);
                 display_frame.needs_upload = false;
                 display_frame.displaying_preview = false;
             } else if (display_frame.preview_needs_upload &&

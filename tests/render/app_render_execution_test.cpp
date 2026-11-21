@@ -363,17 +363,22 @@ TEST(ViewCommandOperational, CommittedFrameRemainsCoherentDuringRefinementAndRei
     EXPECT_TRUE(viewer.GetFrameBufferSnapshot().empty());
     EXPECT_EQ(viewer.GetFrameWidth(), 0);
     EXPECT_EQ(viewer.GetFrameHeight(), 0);
+    EXPECT_FALSE(viewer.GetCompletedFrame());
     const auto initial_frame = viewer.GetFrameSnapshot();
     EXPECT_TRUE(initial_frame.pixels.empty());
     EXPECT_EQ(initial_frame.width, 0);
     EXPECT_EQ(initial_frame.height, 0);
     std::vector<float> first_frame;
+    std::shared_ptr<const InteractiveViewer::FrameSnapshot> first_owner;
     unsigned completed_frames = 0;
     bool next_pass_seen = false;
     std::promise<void> interrupted;
     auto interruption = interrupted.get_future();
     viewer.SetFrameCallback([&](const float* pixels, int width, int height) {
         ++completed_frames;
+        first_owner = viewer.GetCompletedFrame();
+        ASSERT_TRUE(first_owner);
+        EXPECT_EQ(first_owner->pixels.data(), pixels);
         EXPECT_EQ(width, 64);
         EXPECT_EQ(height, 64);
         first_frame.assign(pixels, pixels + static_cast<std::size_t>(width) * height * 4);
@@ -419,6 +424,8 @@ TEST(ViewCommandOperational, CommittedFrameRemainsCoherentDuringRefinementAndRei
                             [](float value) { return std::isfinite(value); }));
     for (std::size_t alpha = 3; alpha < first_frame.size(); alpha += 4)
         EXPECT_FLOAT_EQ(first_frame[alpha], 1.0f);
+    ASSERT_TRUE(first_owner);
+    EXPECT_EQ(viewer.GetCompletedFrame(), first_owner);
     const auto saved_frame = viewer.GetFrameSnapshot();
     EXPECT_EQ(saved_frame.pixels, first_frame);
     EXPECT_EQ(saved_frame.width, 64);
@@ -434,6 +441,8 @@ TEST(ViewCommandOperational, CommittedFrameRemainsCoherentDuringRefinementAndRei
     EXPECT_TRUE(reset_frame.pixels.empty());
     EXPECT_EQ(reset_frame.width, 0);
     EXPECT_EQ(reset_frame.height, 0);
+    EXPECT_FALSE(viewer.GetCompletedFrame());
+    EXPECT_EQ(first_owner->pixels, first_frame);
     EXPECT_EQ(saved_frame.pixels, first_frame);
     EXPECT_EQ(saved_frame.width, 64);
     EXPECT_EQ(saved_frame.height, 64);

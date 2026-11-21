@@ -330,12 +330,13 @@ RefinementState InteractiveViewer::GetRefinementState() const {
     return refinement_;
 }
 
+auto InteractiveViewer::GetCompletedFrame() const -> std::shared_ptr<const FrameSnapshot> {
+    std::lock_guard<std::mutex> lock(frame_mutex_);
+    return frame_;
+}
+
 InteractiveViewer::FrameSnapshot InteractiveViewer::GetFrameSnapshot() const {
-    std::shared_ptr<const FrameSnapshot> completed;
-    {
-        std::lock_guard<std::mutex> lock(frame_mutex_);
-        completed = frame_;
-    }
+    const auto completed = GetCompletedFrame();
     return completed ? *completed : FrameSnapshot{};
 }
 

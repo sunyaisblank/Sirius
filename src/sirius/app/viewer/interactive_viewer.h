@@ -128,6 +128,8 @@ class InteractiveViewer {
 
     // Copy pixels and geometry from one completed publication. The legacy
     // accessors each read committed state, but separate calls can span frames.
+    // The immutable pixels remain valid while the consumer holds this owner.
+    [[nodiscard]] std::shared_ptr<const FrameSnapshot> GetCompletedFrame() const;
     [[nodiscard]] FrameSnapshot GetFrameSnapshot() const;
     [[nodiscard]] std::vector<float> GetFrameBufferSnapshot() const;
     [[nodiscard]] int GetFrameWidth() const;
