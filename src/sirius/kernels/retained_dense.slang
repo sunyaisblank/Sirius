@@ -49,9 +49,19 @@ bool EvaluateOne(uint index, uint row, uint rowBase, uint programBase, uint regi
          c = inputs[address + 4];
     if (destination >= registers || op > 11) return false;
     RetainedTriple r = RTInvalid();
-    if (op == 0)
+    if (op == 0) {
+#if defined(SIRIUS_RETAINED_FP64) && !defined(SIRIUS_RETAINED_PORTABLE)
+        // A literal occupies only the leading limb. The native-wide
+        // arithmetic pack can leave signed zero in the unused limbs.
+        RPScalar literal = RPFromBits(a);
+        if (RPBounded(literal, 0x7b800000u)) {
+            r.hi = (a & 0x7fffffffu) == 0u ? RPZero() : literal;
+            r.valid = 1;
+        }
+#else
         r = RTConstant(RPFromBits(a));
-    else if (op == 1) {
+#endif
+    } else if (op == 1) {
         if (a >= 112) return false;
         r = ReadOriginal(a, row);
     } else {
