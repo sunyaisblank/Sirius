@@ -1,0 +1,283 @@
+{
+  "schema": "sirius-kerr-polar-turn-v1",
+  "recorded_utc": "2026-11-21T07:49:39.664770+00:00",
+  "production_source": "ed95bfc0ec6a09f4066b5c423e73b1c46aca590b",
+  "preceding_evidence_commit": "cc7ab855dd4a2379e897a04c63707929dea5e32c",
+  "scope": "Proof development for the original 1920x1080 disk-free, beam-filtered, 100000-star moving-ThinLens vacuum Kerr scene on physical Radeon 780M with Mesa Dozen, governed at 2048 MiB. Block (928,608), footprint 704, pixel (928,630), first of four pupil/image samples.",
+  "inputs": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix.log.gz",
+      "bytes": 6037,
+      "sha256": "9f2167fcad38190148710ff5b5678a1208663a77216df71ed996166d0d064c72"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-finite-windings/reference.py.gz",
+      "bytes": 3439,
+      "sha256": "d992c3440a461fab1d8eb184f87413ffd836a1990e982efa15f9fa9ec249cd05"
+    }
+  ],
+  "cell_support": {
+    "cells": 794,
+    "turning_stars_in_rectangular_hull": 3,
+    "turning_stars_over_real_cell_support": 1,
+    "overlap_cells_for_retained_star": 29,
+    "finite_cells_for_retained_star": 28,
+    "critical_cell_index": 396,
+    "strict_gaussian_radius_squared_upper": "0x1.ff88954d47ab3p+3",
+    "meaning": "The represented stellar latitude equals the polar turning amplitude at a real film point on H=0 inside the Gaussian of radius 4. Azimuth was not imposed on that critical ray."
+  },
+  "signed_phase": {
+    "definition": "Polar phase is pi/2 plus the signed displacement. Use the time and latitude equations to solve for stationary radius and log escape scale at fixed displacement. Differentiate the longitude along that solution without dividing by the polar velocity.",
+    "interval": [
+      "-0x1p-12",
+      "0x1p-12"
+    ],
+    "certified_regular_windings": [
+      9,
+      21,
+      69,
+      129
+    ],
+    "independent_decimal_windings": [
+      9,
+      69
+    ],
+    "independent_decimal_points": 4,
+    "decimal_precision": 110,
+    "decimal_observations": [
+      "absolute latitude",
+      "radial minus polar time",
+      "unwrapped longitude"
+    ]
+  },
+  "finite_screen": {
+    "star": 0,
+    "windings": "All 65 odd counts from 1 through 129, the hemisphere allowed by the represented launch",
+    "signed_phase_hull": [
+      "-0x1.7ef13a253ca2bp-10",
+      "0x1.7ef13a253ca2bp-10"
+    ],
+    "excluded_by_radial_depth": 2,
+    "excluded_by_time_latitude_or_azimuth": 63,
+    "unresolved": 0,
+    "initial_result": "One possible winding, 95. The first screen log is supplemental. The archived screen source reproduces the refined log.",
+    "refinement": "Eight adjacent signed phase subintervals with necessary latitude/time preconditioned interval enclosures. Four are excluded before evaluating longitude and four by unwrapped longitude.",
+    "elapsed_seconds": 0.32,
+    "max_rss_kib": 4096
+  },
+  "adoption": "Diagnostic source only. The spectral bound and existing detector scheduling are unchanged.",
+  "remaining": "Bound the high-winding image sum over the critical turning contact. Its finite transversality does not prove a uniform determinant lower bound for the tail. Partition and route the Gaussian rim early enough for the unchanged block probe limit. Reuse the original block for the next end-to-end decision before attempting the full frames.",
+  "execution": {
+    "build_command_cwd": ".",
+    "build_compiler": "g++-14 (Ubuntu 14.2.0-4ubuntu2~24.04.1) 14.2.0",
+    "build_commands": [
+      [
+        "g++-14",
+        "-std=c++2c",
+        "-O3",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-Isrc",
+        "-Ibin/linux-ci/src/sirius/backend/retained",
+        "out/kerr-polar-turn/support.cpp",
+        "bin/linux-ci/src/sirius/render/libsirius_render.a",
+        "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+        "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+        "bin/linux-ci/src/sirius/core/libsirius_core.a",
+        "bin/linux-ci/src/sirius/libsirius_base.a",
+        "-lvulkan",
+        "-ldl",
+        "-lrt",
+        "-pthread",
+        "-o",
+        "out/kerr-polar-turn/support"
+      ],
+      [
+        "g++-14",
+        "-std=c++2c",
+        "-O3",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-Isrc",
+        "-Ibin/linux-ci/src/sirius/backend/retained",
+        "out/kerr-polar-turn/signed_check.cpp",
+        "bin/linux-ci/src/sirius/render/libsirius_render.a",
+        "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+        "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+        "bin/linux-ci/src/sirius/core/libsirius_core.a",
+        "bin/linux-ci/src/sirius/libsirius_base.a",
+        "-lvulkan",
+        "-ldl",
+        "-lrt",
+        "-pthread",
+        "-o",
+        "out/kerr-polar-turn/signed-check"
+      ],
+      [
+        "g++-14",
+        "-std=c++2c",
+        "-O3",
+        "-DNDEBUG",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-DSIRIUS_CONTRACT_MODE=2",
+        "-DSIRIUS_HAS_RETAINED_COMPUTE=1",
+        "-DSIRIUS_RELEASE_RESOURCE_LOCKED=1",
+        "-Isrc",
+        "-Ibin/linux-ci/src/sirius/backend/retained",
+        "out/kerr-polar-turn/screen.cpp",
+        "bin/linux-ci/src/sirius/libsirius_base.a",
+        "-o",
+        "out/kerr-polar-turn/screen"
+      ]
+    ],
+    "reused_archives": [
+      {
+        "path": "bin/linux-ci/src/sirius/render/libsirius_render.a",
+        "bytes": 4544724,
+        "sha256": "4d6e0977e72393ad462d413cc6e768e846e505a1f147e09631a25a76c7ec1d34"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/backend/libsirius_backend_cpu.a",
+        "bytes": 826594,
+        "sha256": "19838541b7a27139d42d89b7225b427f3b828d0a31c478b101a26c663b01539d"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/backend/libsirius_backend.a",
+        "bytes": 6820536,
+        "sha256": "37d57df43f42c8f2b14e0e24985ccc99ede33c8b212abe72ccd925320df59133"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+        "bytes": 478012,
+        "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+      },
+      {
+        "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+        "bytes": 35862,
+        "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+      }
+    ],
+    "vulkan_inputs": [
+      {
+        "path": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+        "bytes": 198,
+        "sha256": "fde51461538211ae38c973644f99f6c6adb4e9d8fcfe16ed172533c9aa9ef392"
+      },
+      {
+        "path": "/home/astra/.local/opt/mesa-dzn/libvulkan_dzn.so",
+        "bytes": 11328704,
+        "sha256": "72de4021c66f994f59a733e643f775c3dd416b566c88b8aedec7efa38c26e071"
+      }
+    ],
+    "resource_symlink_target": "bin/linux-ci/tests/backend/resources",
+    "physical_pupil_environment": {
+      "VK_DRIVER_FILES": "/home/astra/.local/opt/mesa-dzn/dzn_icd.x86_64.json",
+      "SIRIUS_VULKAN_DEVICE": "0",
+      "SIRIUS_MEMORY_BUDGET_MB": "2048",
+      "TMPDIR": "/home/astra/.project/Sirius/out/kerr-polar-turn",
+      "MESA_SHADER_CACHE_DIR": "/home/astra/.project/Sirius/out/kerr-polar-turn/shader-cache"
+    },
+    "terminal_commands": [
+      [
+        "/usr/bin/time",
+        "-v",
+        "/home/astra/.project/Sirius/out/kerr-polar-turn/support"
+      ],
+      [
+        "/usr/bin/time",
+        "-v",
+        "/home/astra/.project/Sirius/out/kerr-polar-turn/signed-check"
+      ],
+      [
+        "/usr/bin/time",
+        "-v",
+        "/home/astra/.project/Sirius/out/kerr-polar-turn/screen"
+      ]
+    ],
+    "independent_reference_command_from_checkout": [
+      "python3",
+      "out/kerr-polar-turn/signed_reference.py"
+    ],
+    "derived_cells_command_from_checkout": [
+      "python3",
+      "-c",
+      "import gzip, re; from pathlib import Path; rows = re.findall(r'^pending_cell lower=([^ ]+) upper=(\\S+)', gzip.open('attestations/qualification/ed95bfc0/kerr-footprint/prefix.log.gz', 'rt').read(), re.M); assert len(rows) == 794; print(''.join('    PointDetectorCell{{' + a + '}, {' + b + '}},\\n' for a, b in rows), end='')"
+    ],
+    "derived_cells_digest": {
+      "path": "out/kerr-polar-turn/cells.inc",
+      "bytes": 61794,
+      "sha256": "8bff4ab9abbd0eda196277fde53419fa090fa9a4712e5905912f034d73b3718e"
+    },
+    "physical_witness_cwd": "out/kerr-polar-turn",
+    "finite_screen_cwd": "."
+  },
+  "files": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/support.cpp.gz",
+      "bytes": 2856,
+      "sha256": "32eeea84e20fad60402a545b706d7013c7f8c558afa3e4049d5e25f69e1cd3b5"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/signed_polar.h.gz",
+      "bytes": 2291,
+      "sha256": "550c4694ba46cf2544f078afbb5b749883246d751794e70ce7b86253ce164d96"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/turn_certificate.h.gz",
+      "bytes": 926,
+      "sha256": "e2661afc8abcd2c48c6c605aaae47780856b9849c80057da5efebbe29bdcf7b8"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/signed_check.cpp.gz",
+      "bytes": 2493,
+      "sha256": "fc0c0b218d02ae22d47347a9a5e00d2abe7d8c4573eaa72a2bdbc9de6f089a25"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/signed_reference.py.gz",
+      "bytes": 1600,
+      "sha256": "ff94a749c0d85f14aba1d9248d363fad22fb51dc845d744d3247c2a4ede2e163"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/screen.cpp.gz",
+      "bytes": 2002,
+      "sha256": "440af9fffbc6d742a5ab4246c9520365c5f714dc976e3ba8da45c1fdae9d8706"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/support-crossing.log.gz",
+      "bytes": 957,
+      "sha256": "3708ca26b82fbd912160d9c1eac8225480b5ea293fd95dc0a0b50ab9c7fde65b"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/signed.log.gz",
+      "bytes": 1639,
+      "sha256": "6eae1a29a17ca8c67626546ed974fdd0a2f6b555ef31a3cff0622b73a67c3a11"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/reference.log.gz",
+      "bytes": 239,
+      "sha256": "67938b3ab5dbe37caa0376a1eeac2dfe8c69140e9502667805f00f532e695128"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/screen.log.gz",
+      "bytes": 565,
+      "sha256": "81ac4b707e6fdf2272a4eadbba0b005b10d4b14efff1148afdf8222d731b1011"
+    },
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-polar-turn/screen-refined.log.gz",
+      "bytes": 567,
+      "sha256": "41550f90908a532ce518cee2efa1d3e711cb4a0094583bd39ad841b63e73a76e"
+    }
+  ]
+}
