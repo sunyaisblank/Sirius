@@ -737,6 +737,11 @@ bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
     constexpr std::array<double, 7> errors{e1, 0.0, e3, e4, e5, e6, e7};
     const auto& g = geometries[0].metric;
     const auto& dg = geometries[0].derivative;
+    WideConnection initial_connection_tangent;
+    for (int mu = 0; mu < 4; ++mu)
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                initial_connection_tangent[mu][a][b] = FirstKind(dg, a, mu, b) * initial_tangent(a);
     PhaseVariations initial;
     for (std::size_t column = 0; column < initial.size(); ++column) {
         initial[column].x = control.variations[column].displacement;
@@ -746,10 +751,12 @@ bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
                 value += g(mu, nu) * control.variations[column].derivative(nu);
             for (int a = 0; a < 4; ++a)
                 for (int b = 0; b < 4; ++b)
-                    value += FirstKind(dg, a, mu, b) * initial_tangent(a) * initial[column].x(b);
+                    value += initial_connection_tangent[mu][a][b] * initial[column].x(b);
             initial[column].p(mu) = value;
         }
     }
+    // Keep the first derivative and each later stage's difference from it.
+    // Every later combination and the embedded estimate reuse those differences.
     std::array<PhaseVariations, 7> derivatives;
     PhaseVariations stage;
     constexpr std::array<double, 7> nodes{0, c2, c3, c4, c5, c6, c7};
@@ -760,10 +767,8 @@ bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
                 WideVector dx = derivatives[0][column].x * nodes[index];
                 WideVector dp = derivatives[0][column].p * nodes[index];
                 for (std::size_t previous = 1; previous < index; ++previous) {
-                    dx += (derivatives[previous][column].x - derivatives[0][column].x) *
-                          weights[index][previous];
-                    dp += (derivatives[previous][column].p - derivatives[0][column].p) *
-                          weights[index][previous];
+                    dx += derivatives[previous][column].x * weights[index][previous];
+                    dp += derivatives[previous][column].p * weights[index][previous];
                 }
                 stage[column].x += dx * interval;
                 stage[column].p += dp * interval;
@@ -772,6 +777,12 @@ bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
         if (!EvaluateVariationStage(metric, positions[index], tangents[index], stage,
                                     derivatives[index], control, geometries[index]))
             return false;
+        if (index > 0) {
+            for (std::size_t column = 0; column < stage.size(); ++column) {
+                derivatives[index][column].x -= derivatives[0][column].x;
+                derivatives[index][column].p -= derivatives[0][column].p;
+            }
+        }
     }
     fifth = stage;
     fourth = fifth;
@@ -779,11 +790,10 @@ bool VariationPair(IMetric& metric, const std::array<Vec4, 7>& positions,
         WideVector increment = derivatives[0][column].x;
         WideVector error_x, error_p;
         for (std::size_t index = 1; index < derivatives.size(); ++index) {
-            const auto dx = derivatives[index][column].x - derivatives[0][column].x;
-            const auto dp = derivatives[index][column].p - derivatives[0][column].p;
-            increment += dx * weights[6][index];
-            error_x += dx * errors[index];
-            error_p += dp * errors[index];
+            const auto& derivative = derivatives[index][column];
+            increment += derivative.x * weights[6][index];
+            error_x += derivative.x * errors[index];
+            error_p += derivative.p * errors[index];
         }
         fifth_increment.displacement[column] = (increment * interval).Rounded();
         fourth[column].x -= error_x * interval;
@@ -905,13 +915,14 @@ std::optional<GeodesicVariations> ProjectVariations(const RetainedMetricSample& 
         return std::nullopt;
     // Each column uses the same geometry and central tangent. Keep the
     // represented products once, then retain each column's accumulation order.
+    WideVector tangent_delta;
+    for (int a = 0; a < 4; ++a) tangent_delta(a) = Twofold(projection.tangent(a)) - unprojected(a);
     WideConnection first_kind_tangent, connection_correction;
     for (int mu = 0; mu < 4; ++mu)
         for (int a = 0; a < 4; ++a)
             for (int b = 0; b < 4; ++b) {
                 first_kind_tangent[mu][a][b] = FirstKind(derivatives, a, mu, b) * unprojected(a);
-                connection_correction[mu][a][b] =
-                    connection[mu][a][b] * (Twofold(projection.tangent(a)) - unprojected(a));
+                connection_correction[mu][a][b] = connection[mu][a][b] * tangent_delta(a);
             }
     GeodesicVariations result;
     for (std::size_t column = 0; column < result.size(); ++column) {
