@@ -1,0 +1,240 @@
+{
+  "recorded_at": "2026-11-21T06:05:06.267195+00:00",
+  "render_source": "fa11353e2d2ad471af48f1b2ecefc5052eb35cab",
+  "parent_remainder_evidence": "ae336529ecc719de1f5b75d711df245d18d4cb0d",
+  "scope": "Certified stationary-coordinate rectangle in the original mixed depth-16 detector cell of footprint 544. Continuous CPU fixed-pupil replay with the original 100000-star catalogue.",
+  "domain": {
+    "stationary_inverse_radius": [
+      0.5473495114065964,
+      0.5473495426004061
+    ],
+    "normalized_stationary_value": [
+      -2.183665847117034e-07,
+      2.183665847117034e-07
+    ],
+    "film_inclusion": [
+      [
+        0.5848118701669405,
+        0.5848292431647824
+      ],
+      [
+        3.956982466430699,
+        3.957014378468312
+      ]
+    ]
+  },
+  "reused_preset_build": "c096156f690f7b9cdbbfc2c7e365c9b484e212dc",
+  "build": {
+    "argv": [
+      "/usr/bin/g++-14",
+      "-O3",
+      "-std=c++2c",
+      "-DNDEBUG",
+      "-DSIRIUS_CONTRACT_MODE=2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Iout/kerr-winding-tail/src",
+      "-Isrc",
+      "out/kerr-winding-tail/chart.cpp",
+      "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bin/linux-ci/src/sirius/libsirius_base.a",
+      "-o",
+      "out/kerr-winding-tail/chart"
+    ],
+    "compiler": "14.2.0",
+    "executable_removed_after_check": {
+      "path": "out/kerr-winding-tail/chart",
+      "bytes": 327216,
+      "sha256": "1f1b23cd16dbd84751159a00d4cc2453f04cd9dd923e8dc754f8850fa38a18ba"
+    },
+    "overlay": "Use headers changed between the reused preset and fa11353e and apply the archived exact-null-launch patch. Unpack radial-remainder.h from the parent evidence and the newer sources from this bundle."
+  },
+  "inputs": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/MANIFEST.json",
+      "bytes": 9113,
+      "sha256": "b51ff7d4e91f9030f474d698597716f0b2f1cf1ec98b69d6bf614c53b40c2714"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-stationary-chart/kerr-exact-null-launch.patch.gz",
+      "bytes": 759,
+      "sha256": "c02925aa91e6e2ae02bf99ad814c21127fea37bf690eca67ec8f1ab0a457dbeb"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/MANIFEST.json",
+      "bytes": 11656,
+      "sha256": "3ea846a1995aa3c9ea8c3d1793daf1ff06889d8865867e0b3d2ec676d774bfad"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-phase-remainder/radial-remainder.h.gz",
+      "bytes": 3899,
+      "sha256": "eb611c281f7bbb2c859f8cdd448bb0961e4c1e49516f948d3cb29c53554e9c4f"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/core/libsirius_core.a",
+      "bytes": 478012,
+      "sha256": "2dde748cfbc88c5f20c6aa22fd5030145f8efb1d1660a4e6f5b54be700649cdf"
+    },
+    {
+      "path": "bin/linux-ci/src/sirius/libsirius_base.a",
+      "bytes": 35862,
+      "sha256": "1fb43165640e4059b46e8cd2802a954e529788cdc17e832fa1c583f920014d76"
+    }
+  ],
+  "catalogue": {
+    "seed": 42,
+    "count": 100000,
+    "reachable_latitudes": 80026,
+    "uncertain_latitudes": 0
+  },
+  "method": {
+    "root_existence": "For each admitted latitude and polar leg, the outer edge has normalized Mino time below m times the half-period for all m at or above the recorded cutoff. The time diverges inward. The parent strict residual slope bound leaves one continuous radial root for every stationary inverse radius.",
+    "azimuth": "At a latitude root, azimuth is m times the sum of half-period polar azimuth and turning drag, plus two partial polar integrals and the finite spin remainder. Differentiate along the implicit latitude root; the transverse correction is bounded by a decreasing quadratic times (19/64)^m. This proves strict tangential monotonicity throughout the chart.",
+    "geometry": "The number of unwrapped azimuth roots modulo 2*pi is at most 1+wrap_count_slope*m on each of the two polar legs. The determinant multiplies source polar velocity, the latitude residual slope, tangential azimuth slope and the original film Jacobian. The latter is transformed from h to log(s) using h=-s\u00b2. The inverse determinant is bounded by inverse_determinant_coefficient*s\u00b2/m.",
+    "flux": "Use the exact represented catalogue intensities, positive Gaussian majorant, Rayleigh-Jeans Planck upper bound, absolute CIE matrix row bound and reduced normalizer floor. The conservative geometric sum covers all later m and both polar legs. The exponent is kept separate until multiplying by the flux envelope."
+  },
+  "radiometry": {
+    "energy": [
+      -0.8189400725580916,
+      -0.8189399709602775
+    ],
+    "camera_over_source_frequency_upper": 2.0,
+    "point_brightness": 100.0,
+    "normalized_gaussian_maximum": [
+      8.333333333333332e-05,
+      8.333333333333334e-05
+    ],
+    "combined_rgb_upper": 5.115766677103703e-10,
+    "sample_absolute_error_allowance": 1e-07,
+    "fraction_of_sample_absolute_allowance": 0.005115766677103704
+  },
+  "groups": [
+    {
+      "band": 0.0,
+      "stars": 78966.0,
+      "clearance": 0.010010714482270198,
+      "max_temperature": 19871.994140625,
+      "first": 24.0,
+      "slope_lower": 5.697729641053217,
+      "slope_upper": 22.735014120840848,
+      "min_polar_speed": 0.3161598283413897,
+      "wrap_count_slope": 1.1287136550126795e-07,
+      "inverse_determinant_coefficient": 42199.251778145146,
+      "response_prefactor": 246816.39055964883,
+      "response_base2_exponent": -84.0,
+      "transfer_flux_upper": 40091874994.53462,
+      "rgb_upper": 5.115766677103701e-10,
+      "intensity": [
+        0.005955203568978535,
+        0.00595520356906021
+      ],
+      "half_azimuth_radial": [
+        13.913511360870736,
+        14.519232401023327
+      ]
+    },
+    {
+      "band": 1.0,
+      "stars": 1050.0,
+      "clearance": 0.00012230730067441795,
+      "max_temperature": 12244.3720703125,
+      "first": 63.0,
+      "slope_lower": 1.1927676594205374,
+      "slope_upper": 27.23997610247353,
+      "min_polar_speed": 0.03494623075776622,
+      "wrap_count_slope": 1.3523692057396356e-07,
+      "inverse_determinant_coefficient": 1823715.462312515,
+      "response_prefactor": 4063493.2477011266,
+      "response_base2_exponent": -220.0,
+      "transfer_flux_upper": 193473092.87404937,
+      "rgb_upper": 4.6657457670031374e-52,
+      "intensity": [
+        4.6640774218227405e-05,
+        4.664077421823612e-05
+      ],
+      "half_azimuth_radial": [
+        13.913511360870736,
+        14.519232401023327
+      ]
+    },
+    {
+      "band": 2.0,
+      "stars": 10.0,
+      "clearance": 5.707512142127945e-06,
+      "max_temperature": 6270.46044921875,
+      "first": 253.0,
+      "slope_lower": 1.0014390099172645,
+      "slope_upper": 27.4313047519768,
+      "min_polar_speed": 0.007549141602120763,
+      "wrap_count_slope": 1.3618680016559977e-07,
+      "inverse_determinant_coefficient": 10055211.253466005,
+      "response_prefactor": 5579110.370139975,
+      "response_base2_exponent": -885.0,
+      "transfer_flux_upper": 561223.5863998546,
+      "rgb_upper": 1.2138211629404982e-254,
+      "intensity": [
+        2.641910959305657e-07,
+        2.641910959305663e-07
+      ],
+      "half_azimuth_radial": [
+        13.913511360870736,
+        14.519232401023327
+      ]
+    }
+  ],
+  "independent_azimuth_checks": {
+    "catalogue_latitude": -0.4040811304550646,
+    "two_polar_legs": [
+      {
+        "winding": 24,
+        "outbound_polar_leg": true,
+        "azimuth_slope_per_winding": "13.61013084228123039239328169971248542761579932663053825029580622070777762728055684",
+        "step_refinement_gap": "0.00000468089378030882113420592086042061075031867651387081545926790043426945312912875"
+      },
+      {
+        "winding": 24,
+        "outbound_polar_leg": false,
+        "azimuth_slope_per_winding": "13.599489108183518848807277911919718802728836927675602146028045967458678053333405298541666667",
+        "step_refinement_gap": "0.000004712246459480618645095085072098502917877462221984950456986096121788137208091666666667"
+      }
+    ]
+  },
+  "remaining": "Isolate finite-winding images below each per-group cutoff. Cover the remaining parts of the mixed cell, then combine errors with the original detector sample budget and qualify production CPU/Vulkan paths.",
+  "references": [
+    "https://arxiv.org/html/1910.12873",
+    "https://arxiv.org/html/1910.12881"
+  ],
+  "artifacts": [
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/stationary-chart.h.gz",
+      "bytes": 2993,
+      "sha256": "4b059b209fb4c034dca5bf7c9591c4fcca0a5b3afccec0819324aac6c974d9ef"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/winding-tail.h.gz",
+      "bytes": 2804,
+      "sha256": "b59b7f6f866cc35561207cc267c622cef6a70a11190c41f028e80d863a81e5f9"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/chart.cpp.gz",
+      "bytes": 5134,
+      "sha256": "b245a4dcf9aa95f4249370c16e0fd164ff1392c64bde3d342c929135474524f7"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/chart.log.gz",
+      "bytes": 2365,
+      "sha256": "ed0d3be3b701367af6c90416317caf2c597d7543f91d362fea81de92e9ef3da1"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/reference.py.gz",
+      "bytes": 3814,
+      "sha256": "74a4b3a118fd1e7eee766372a7cc3a72be75bfc797e1376ac6c34f8ca05c5f96"
+    },
+    {
+      "path": "attestations/qualification/fa11353e/kerr-winding-tail/reference.log.gz",
+      "bytes": 2338,
+      "sha256": "7eba66e58fbde6d6faefae5a49fe3b39c28992b233341864d155ba0faf33f071"
+    }
+  ]
+}
