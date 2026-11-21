@@ -557,19 +557,25 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     // Poll the owner on this thread; device workers consume only the atomic
     // result, so an ordinary stateful cancellation callback is never raced.
     std::atomic<bool> cancelled{false};
-    auto spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Disabled;
+    const auto& info = device.Info();
+    const bool physical = info.kind == backend::DeviceKind::kIntegratedGpu ||
+                          info.kind == backend::DeviceKind::kDiscreteGpu;
+    bool certified_device = physical && !backend::RetainedUsesPortableArithmetic(info);
 #ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
-    if (rung != PrecisionRung::Fp64 && backend::detail::UsesSealedRetainedModules(device.Info()))
-        spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Certified;
+    certified_device = certified_device || backend::detail::UsesSealedRetainedModules(info);
 #endif
+    bool certified_escape = rung != PrecisionRung::Fp64 && certified_device;
 #if !SIRIUS_RELEASE_RESOURCE_LOCKED
     if (const char* cert = std::getenv("SIRIUS_CERTIFIED_SPHERICAL_ESCAPE");
         cert && std::strcmp(cert, "1") == 0)
-        spherical_escape = backend::RetainedTraceExecutor::SphericalEscape::Certified;
+        certified_escape = true;
 #endif
+    // The tracer admits only certified vacuum segments from a matching
+    // committed phase and retains its normal stepping path when they fail.
     backend::RetainedTraceExecutor executor(
         *compute, [&] { return cancelled.load(); }, kDispatchStopMs, ray_capacity,
-        spherical_escape);
+        certified_escape ? backend::RetainedTraceExecutor::SphericalEscape::Certified
+                         : backend::RetainedTraceExecutor::SphericalEscape::Disabled);
     // Host work items are screen blocks or pixels, independent of device residency.
     // Independent detector probes also feed this capacity. Each trace worker
     // has at most one pending interval; device residency stays bounded here.
