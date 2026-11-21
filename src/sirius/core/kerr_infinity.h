@@ -385,25 +385,26 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
 // A dark vacuum detector sample needs only capture classification. Enclose
 // the past null launch and prove the radial potential is strictly positive all
 // the way to the outer horizon. No terminal state is computed here.
-[[nodiscard]] inline bool CertifyKerrDetectorCapture(const KerrSchildParams& parameters,
-                                                     const Vec4& position, const Vec4& tangent,
-                                                     unsigned maximum_panels) {
+[[nodiscard]] inline bool CertifyKerrDetectorCapture(
+    const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
+    const std::array<finite_tail_detail::Range, 4>& tangent, unsigned maximum_panels) {
     using finite_tail_detail::Range;
     using kerr_infinity_detail::RadialCoefficients;
     const auto [mass, spin, charge, cosmological_constant] = parameters;
     if (charge != 0.0 || cosmological_constant != 0.0 || !(mass > std::abs(spin)) ||
-        !std::isfinite(mass) || !IsFinite(position) || !IsFinite(tangent) ||
-        !finite_tail_detail::RoundingEnvironment())
+        !std::isfinite(mass) || !finite_tail_detail::RoundingEnvironment() ||
+        !std::ranges::all_of(position, &Range::Finite) || !std::ranges::all_of(tangent, &Range::Finite))
         return false;
 
+    using finite_tail_detail::Square;
     const Range M(mass), a(spin);
-    const Range x(position(1)), y(position(2)), z(position(3));
-    const Range reduced = x * x + y * y + z * z - a * a;
-    const Range discriminant = sqrt(reduced * reduced + Range(4.0) * a * a * z * z);
+    const Range x = position[1], y = position[2], z = position[3];
+    const Range reduced = Square(x) + Square(y) + Square(z) - Square(a);
+    const Range discriminant = sqrt(Square(reduced) + Range(4.0) * Square(a) * Square(z));
     const Range r = sqrt((reduced + discriminant) * Range(0.5));
     if (!(r.lo > (Range(2.0) * M).hi)) return false;
 
-    const Range kx(tangent(1)), ky(tangent(2)), kz(tangent(3));
+    const Range kx = tangent[1], ky = tangent[2], kz = tangent[3];
     // The denominator of the oblate radius gradient is positive. Its
     // numerator fixes the radial branch before looking for any roots.
     const Range r2_plus_a2 = r * r + a * a;
@@ -414,17 +415,19 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     const auto H = metric_detail::KerrSchildFactor(r, z, parameters);
     const Range spatial = ell[1] * kx + ell[2] * ky + ell[3] * kz;
     const Range B = H * spatial;
-    const Range C = kx * kx + ky * ky + kz * kz + B * spatial;
+    const Range C = Square(kx) + Square(ky) + Square(kz) + H * Square(spatial);
     const Range minus_gtt = Range(1.0) - H;
-    const Range null_time = (B - sqrt(B * B + minus_gtt * C)) / minus_gtt;
-    // Enclose both the represented launch and its exact past null time with
-    // fixed spatial tangent. Large launch discrepancies decline.
-    const double time = tangent(0);
-    if (!null_time.Finite() || !(null_time.hi < 0.0) || !(time < 0.0) ||
-        finite_tail_detail::Magnitude(null_time - Range(time)) >
-            -time * KerrInfinityConfig{}.input_constraint_tolerance)
+    const Range null_time = (B - sqrt(Square(B) + minus_gtt * C)) / minus_gtt;
+    const Range time = tangent[0];
+    if (!null_time.Finite() || !(null_time.hi < 0.0) || !(time.hi < 0.0)) return false;
+    // Point inputs must be close to null. The regional caller constructs
+    // correlated null tangents from a certified observer frame and unit rays.
+    const bool point = std::ranges::all_of(position, [](Range v) { return v.lo == v.hi; }) &&
+                       std::ranges::all_of(tangent, [](Range v) { return v.lo == v.hi; });
+    if (point && finite_tail_detail::Magnitude(null_time - time) >
+                     -time.hi * KerrInfinityConfig{}.input_constraint_tolerance)
         return false;
-    const Range kt(std::min(time, null_time.lo), std::max(time, null_time.hi));
+    const Range kt(std::min(time.lo, null_time.lo), std::max(time.hi, null_time.hi));
     const Range correction = H * (kt + spatial);
     const Range energy = kt - correction;
     if (!(energy.hi < 0.0)) return false;
@@ -440,7 +443,7 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     const Range vx = w[0] - ell[1] * projected + a * energy * ell[2];
     const Range vy = w[1] - ell[2] * projected - a * energy * ell[1];
     const Range vz = w[2] - ell[3] * projected;
-    const Range carter = vx * vx + vy * vy + vz * vz;
+    const Range carter = Square(vx) + Square(vy) + Square(vz);
     const auto coefficients = RadialCoefficients(mass, spin, energy, angular, carter);
     const auto start = Range(1.0) / r;
     const auto horizon = Range(1.0) / (M + sqrt(M * M - a * a));
@@ -450,6 +453,18 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     unsigned budget = std::min(maximum_panels, 64U);
     return kerr_infinity_detail::ProvePositiveRadialPotential(coefficients, {start.lo, horizon.hi},
                                                               budget);
+}
+
+[[nodiscard]] inline bool CertifyKerrDetectorCapture(const KerrSchildParams& parameters,
+                                                     const Vec4& position, const Vec4& tangent,
+                                                     unsigned maximum_panels) {
+    using finite_tail_detail::Range;
+    std::array<Range, 4> position_bounds, tangent_bounds;
+    for (int i = 0; i < 4; ++i) {
+        position_bounds[i] = Range(position(i));
+        tangent_bounds[i] = Range(tangent(i));
+    }
+    return CertifyKerrDetectorCapture(parameters, position_bounds, tangent_bounds, maximum_panels);
 }
 
 // Inputs use the public ingoing Cartesian chart. Displacements are at the

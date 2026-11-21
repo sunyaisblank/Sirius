@@ -2,10 +2,17 @@
 
 #include "sirius/core/camera_launch.h"
 #include "sirius/core/geodesic_integrator.h"
+#include "sirius/core/spherical_continuation/radial_quadrature.h"
 
 #include <functional>
 
 namespace sirius::backend {
+
+struct DetectorLaunchFrame {
+    using Range = core::relativity::finite_tail_detail::Range;
+    std::array<Range, 4> position;
+    std::array<std::array<Range, 4>, 4> tetrad;
+};
 
 struct SphericalEscapeRequest {
     double source_support_radius;
@@ -58,6 +65,12 @@ class TraceStepExecutor {
         return std::nullopt;
     }
     virtual void RecordSphericalEscape(const SphericalEscapeTrial&) {}
+    // The launch event and tetrad stay fixed as the film coordinates vary at
+    // a fixed pupil. Only an executor that encloses both may certify them.
+    virtual std::optional<DetectorLaunchFrame> EncloseDetectorLaunchFrame(
+        core::IMetric&, double, const core::CameraRay&) {
+        return std::nullopt;
+    }
 };
 
 }  // namespace sirius::backend

@@ -442,6 +442,27 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
         const auto outward = CarterEvent(input, 1);
         EXPECT_FALSE(sirius::core::relativity::CertifyKerrDetectorCapture(parameters, outward.x,
                                                                           outward.k, 64));
+        if (impact == 2.0) {
+            using sirius::core::relativity::finite_tail_detail::Range;
+            using sirius::core::relativity::finite_tail_detail::Widen;
+            std::array<Range, 4> position_bounds, tangent_bounds;
+            for (int i = 0; i < 4; ++i) {
+                position_bounds[i] = Widen(event.x(i) - 1e-3, event.x(i) + 1e-3);
+                tangent_bounds[i] = Widen(event.k(i) - 1e-3, event.k(i) + 1e-3);
+            }
+            EXPECT_TRUE(sirius::core::relativity::CertifyKerrDetectorCapture(
+                parameters, position_bounds, tangent_bounds, 64));
+            auto turning_input = input;
+            turning_input.angular_momentum = input.spin == 0 ? 5.4 : -8.0;
+            const auto turning = CarterEvent(turning_input, -1);
+            for (int i = 0; i < 4; ++i) {
+                auto& bounds = tangent_bounds[i];
+                bounds.lo = std::min(bounds.lo, turning.k(i));
+                bounds.hi = std::max(bounds.hi, turning.k(i));
+            }
+            EXPECT_FALSE(sirius::core::relativity::CertifyKerrDetectorCapture(
+                parameters, position_bounds, tangent_bounds, 64));
+        }
     }
 }
 

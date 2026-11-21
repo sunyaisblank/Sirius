@@ -612,6 +612,35 @@ class FisheyeCamera : public ICamera {
 
 namespace camera_detail {
 
+template <class Scalar>
+[[nodiscard]] Scalar FilmPlaneX(Scalar x, const CameraConfig& config) {
+    const double aspect = static_cast<float>(config.width) / config.height;
+    return (Scalar(2.0) * x / Scalar(config.width) - Scalar(1.0)) * Scalar(aspect);
+}
+
+template <class Scalar>
+[[nodiscard]] Scalar FilmPlaneY(Scalar y, const CameraConfig& config) {
+    return Scalar(1.0) - Scalar(2.0) * y / Scalar(config.height);
+}
+
+[[nodiscard]] inline double FilmTangent(const CameraConfig& config) {
+    return std::tan(config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+}
+
+template <class Scalar>
+[[nodiscard]] std::array<Scalar, 3> ThinLensFilmVector(Scalar px, Scalar py, double tangent,
+                                                      double focus, double up, double right) {
+    return {Scalar(-focus), Scalar(up) - py * Scalar(tangent) * Scalar(focus),
+            px * Scalar(tangent) * Scalar(focus) - Scalar(right)};
+}
+
+template <class Scalar>
+[[nodiscard]] Scalar ThinLensFilmLength(const std::array<Scalar, 3>& magnitude, Scalar scale) {
+    using std::sqrt;
+    const Scalar x = magnitude[0] / scale, y = magnitude[1] / scale, z = magnitude[2] / scale;
+    return scale * sqrt(x * x + y * y + z * z);
+}
+
 // Continuous geometry uses the same stored float coefficients and original
 // pupil arithmetic as the nominal projection, but double film evaluation. All
 // derivatives below belong to this same smooth function, including outside the
@@ -635,8 +664,7 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     ray.beta_up = config.beta_y;
     ray.beta_right = config.beta_z;
     const double aspect = static_cast<float>(config.width) / config.height;
-    const double px = (2.0 * film_x / config.width - 1.0) * aspect;
-    const double py = 1.0 - 2.0 * film_y / config.height;
+    const double px = FilmPlaneX(film_x, config), py = FilmPlaneY(film_y, config);
     const double sx = 2.0 * aspect / config.width, sy = -2.0 / config.height;
     if (!std::isfinite(px) || !std::isfinite(py)) return std::unexpected(Failure::Arithmetic);
     Vector q{};
@@ -644,7 +672,7 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     CameraPhaseSpaceDifferential phase_space;
     bool regular = true;
     if (lens == LensType::Pinhole || lens == LensType::ThinLens) {
-        const double t = std::tan(config.fov * static_cast<float>(std::numbers::pi) / 360.0f);
+        const double t = FilmTangent(config);
         if (lens == LensType::ThinLens) {
             // Calling at the image centre retains the existing pupil arithmetic
             // without narrowing the continuous film coordinates.
@@ -653,8 +681,8 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
                                       config.aperture, config.focus_distance, pupil_u, pupil_v);
             ray.aperture_up = pupil.pupil_up;
             ray.aperture_right = pupil.pupil_right;
-            q = {-config.focus_distance, ray.aperture_up - py * t * config.focus_distance,
-                 px * t * config.focus_distance - ray.aperture_right};
+            q = ThinLensFilmVector(px, py, t, config.focus_distance,
+                                   ray.aperture_up, ray.aperture_right);
             dq = {Vector{0, 0, sx * t * config.focus_distance},
                   Vector{0, -sy * t * config.focus_distance, 0}};
             dq[2] = {0, 0, -1};
@@ -699,7 +727,11 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     }
     for (double value : q)
         if (!std::isfinite(value)) return std::unexpected(Failure::Arithmetic);
-    const double length = std::hypot(q[0], q[1], q[2]);
+    const Vector magnitude{std::abs(q[0]), std::abs(q[1]), std::abs(q[2])};
+    const double length = lens == LensType::ThinLens
+                              ? ThinLensFilmLength(magnitude, std::max({magnitude[0], magnitude[1],
+                                                                         magnitude[2]}))
+                              : std::hypot(q[0], q[1], q[2]);
     if (!std::isfinite(length) || !(length > 0)) return std::unexpected(Failure::Arithmetic);
     Vector n{};
     for (unsigned i = 0; i < 3; ++i) ray.direction(i + 1) = n[i] = q[i] / length;

@@ -15,6 +15,7 @@
 #include <format>
 #include <optional>
 #include <string>
+#include <typeinfo>
 
 namespace sirius::render {
 
@@ -156,6 +157,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
     const auto count = static_cast<std::size_t>(width * height);
     footprints.reserve(count);
     indices.reserve(count);
+    std::optional<CameraRay> pupil;
     for (int i = 0; i < width * height; ++i) {
         const int dx = i % width, dy = i / width;
         const auto film = camera.ProjectFilmForObserver(x + dx + double(sample.image_u),
@@ -176,6 +178,35 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
                               {{{sigma * p[1][1] / determinant, -sigma * p[0][1] / determinant},
                                 {-sigma * p[1][0] / determinant, sigma * p[0][0] / determinant}}}});
         indices.push_back(static_cast<std::size_t>(i));
+        if (!pupil) pupil = film->ray;
+    }
+    PointDetectorBatchResult result;
+    result.samples.resize(count);
+    if (footprints.empty()) return result;
+    if (workers && typeid(camera) == typeid(core::ThinLensCamera)) {
+        using backend::DetectorLaunchFrame;
+        using Range = DetectorLaunchFrame::Range;
+        const std::array origin{Range(x + double(sample.image_u)), Range(y + double(sample.image_v))};
+        std::array<Range, 2> bounds;
+        for (std::size_t i = 0; i < footprints.size(); ++i) {
+            const auto& footprint = footprints[i];
+            for (int axis = 0; axis < 2; ++axis) {
+                const auto& row = footprint.chart_from_standard[axis];
+                // Each original Gaussian has |z| <= 4 in its own standard
+                // coordinates. This rectangle covers their union at this pupil.
+                const auto radius = Range(4.0) * (Range(std::abs(row[0])) + Range(std::abs(row[1])));
+                const auto support =
+                    origin[axis] + (Range(footprint.centre[axis]) + Range(-radius.hi, radius.hi));
+                if (!support.Finite()) {
+                    bounds[axis] = support;
+                    continue;
+                }
+                if (i == 0) bounds[axis] = support;
+                else bounds[axis] = {std::min(bounds[axis].lo, support.lo),
+                                     std::max(bounds[axis].hi, support.hi)};
+            }
+        }
+        if (tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *pupil, bounds)) return result;
     }
     const PointDetectorSampler probe = [&](const DetectorCoordinate& q)
         -> std::expected<PointDetectorProbe, PointDetectorFailure> {
@@ -193,9 +224,6 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         }
         return MeasurePointDetector(*film, tracer.TraceDetectorRay(film->ray));
     };
-    PointDetectorBatchResult result;
-    result.samples.resize(count);
-    if (footprints.empty()) return result;
     PointDetectorProbeBatchSampler probe_batch;
     if (workers)
         probe_batch = [&](std::span<const DetectorCoordinate> coordinates) {

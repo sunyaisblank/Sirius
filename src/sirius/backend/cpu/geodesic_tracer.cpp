@@ -16,6 +16,7 @@
 #include <cmath>
 #include <limits>
 #include <numbers>
+#include <numeric>
 #include <optional>
 
 namespace sirius::backend {
@@ -23,6 +24,11 @@ namespace sirius::backend {
 using namespace sirius::core;
 
 namespace {
+bool DetectorCaptureAllowed(const TracerConfig& config) {
+    return !config.enable_disk && !config.enable_volumetric && !config.enable_polarisation &&
+           !config.finite_causal_boundary && config.strong_field_max_step == 0.0f;
+}
+
 bool FiniteVector(const Vec4& value) {
     for (int component = 0; component < 4; ++component)
         if (!std::isfinite(value(component))) return false;
@@ -697,6 +703,65 @@ std::optional<TraceResult> GeodesicTracer::TraceDetectorRay(const CameraRay& cam
     return trace;
 }
 
+bool GeodesicTracer::CertifyThinLensDetectorRegion(
+    const CameraConfig& camera, const CameraRay& pupil,
+    const std::array<DetectorLaunchFrame::Range, 2>& film_bounds) {
+    using namespace relativity::finite_tail_detail;
+    const auto* family = dynamic_cast<const KerrSchildFamily*>(metric_);
+    const auto cancelled = [&] { return should_cancel_ && should_cancel_(); };
+    if (!step_executor_ || !family || !family->HasHorizon() || !DetectorCaptureAllowed(config_) ||
+        !RoundingEnvironment() || !std::ranges::all_of(film_bounds, &Range::Finite) || cancelled())
+        return false;
+    const auto parameters = family->GetParams();
+    if (parameters.Q != 0 || parameters.Lambda != 0 || !(parameters.M > std::abs(parameters.a)))
+        return false;
+    CacheMetricParameters();
+    const auto frame =
+        step_executor_->EncloseDetectorLaunchFrame(*metric_, cached_a_ * cached_m_, pupil);
+    if (!frame || cancelled()) return false;
+
+    const double fov = camera_detail::FilmTangent(camera);
+    const Range focus(camera.focus_distance);
+    const auto prove = [&](const std::array<Range, 2>& box) {
+        const auto q = camera_detail::ThinLensFilmVector(camera_detail::FilmPlaneX(box[0], camera),
+                                                         camera_detail::FilmPlaneY(box[1], camera),
+                                                         fov, camera.focus_distance,
+                                                         pupil.aperture_up, pupil.aperture_right);
+        const std::array magnitude{Abs(q[0]), Abs(q[1]), Abs(q[2])};
+        // Keep the scale fixed across this enclosure. Film near and beyond
+        // the side of a very wide field can use the ordinary detector.
+        if (magnitude[1].hi > focus.lo || magnitude[2].hi > focus.lo) return false;
+        const auto length = camera_detail::ThinLensFilmLength(magnitude, focus);
+        const std::array ray{q[0] / length, q[1] / length, q[2] / length};
+        // RayCamera re-normalizes the represented directions before applying
+        // the fixed observer tetrad. This encloses that same null family.
+        const auto norm = sqrt(Square(ray[0]) + Square(ray[1]) + Square(ray[2]));
+        const std::array n{ray[0] / norm, ray[1] / norm, ray[2] / norm};
+        std::array<Range, 4> tangent;
+        for (int i = 0; i < 4; ++i)
+            tangent[i] = Range(0.0) - frame->tetrad[0][i] + frame->tetrad[1][i] * n[0] +
+                         frame->tetrad[2][i] * n[1] + frame->tetrad[3][i] * n[2];
+        return relativity::CertifyKerrDetectorCapture(
+            parameters, frame->position, tangent, static_cast<unsigned>(config_.max_steps));
+    };
+    // Splitting only the film bounds tightens the enclosure without another
+    // device launch. One unproved box sends the whole sample to the detector.
+    const auto cover = [&](this const auto& self, std::array<Range, 2> box, unsigned depth) -> bool {
+        if (cancelled()) return false;
+        if (prove(box)) return true;
+        if (depth == 0) return false;
+        const int axis = box[0].hi - box[0].lo >= box[1].hi - box[1].lo ? 0 : 1;
+        const auto [low, high] = box[axis];
+        const double middle = std::midpoint(low, high);
+        if (!(low < middle && middle < high)) return false;
+        box[axis].hi = middle;
+        if (!self(box, depth - 1)) return false;
+        box[axis] = Range(middle, high);
+        return self(box, depth - 1);
+    };
+    return cover(film_bounds, 4) && !cancelled();
+}
+
 TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infinity_handoff,
                                     bool* detector_capture) {
     struct ExecutionScope {
@@ -761,9 +826,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
 
     relativity::ObserverFrame launch_frame;
     GeodesicVariations launch_variations;
-    if (config_.enable_disk || config_.enable_volumetric || config_.enable_polarisation ||
-        config_.finite_causal_boundary || config_.strong_field_max_step > 0.0f)
-        detector_capture = nullptr;
+    if (!DetectorCaptureAllowed(config_)) detector_capture = nullptr;
     Lightray ray =
         InitializeLightray(camera_ray, &launch_frame, &launch_variations, detector_capture);
     // Initialization can return a device refusal after cancellation arrives.

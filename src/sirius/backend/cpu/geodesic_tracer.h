@@ -411,6 +411,11 @@ class GeodesicTracer {
     // carry the usual traced state or error, including cancellation.
     std::optional<TraceResult> TraceDetectorRay(const sirius::core::CameraRay& camera_ray);
 
+    // Certify every ray in a continuous film rectangle at one ThinLens pupil.
+    [[nodiscard]] bool CertifyThinLensDetectorRegion(
+        const sirius::core::CameraConfig&, const sirius::core::CameraRay& pupil,
+        const std::array<DetectorLaunchFrame::Range, 2>& film_bounds);
+
     // Non-owning; the executor must outlive this tracer and any active trace.
     void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }
     // Configure before tracing. The owner supplies a thread-safe predicate.

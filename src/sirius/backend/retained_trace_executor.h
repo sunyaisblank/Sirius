@@ -48,6 +48,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
         const core::Rk45CoupledState& coupled, const SphericalEscapeRequest& request,
         const std::function<bool()>& should_cancel) override;
     void RecordSphericalEscape(const SphericalEscapeTrial&) override;
+    std::optional<DetectorLaunchFrame> EncloseDetectorLaunchFrame(
+        core::IMetric& metric, double absolute_spin, const core::CameraRay& camera) override;
     // A submission safety error includes its observed one-row stage and host
     // submit/wait duration; it does not attribute the driver's compilation work.
     // Sticky errors complete queued calls without further device work.
@@ -135,6 +137,8 @@ class RetainedTraceExecutor final : public TraceStepExecutor {
 
   private:
     friend struct RetainedTraceExecutorTestPeer;
+    std::optional<RetainedCameraOutput> ReadCameraLaunch(core::IMetric& metric, double absolute_spin,
+                                                         const core::CameraRay& camera);
     struct Snapshot {
         std::array<double, 40> physical{};
         std::array<double, 4> metric{};

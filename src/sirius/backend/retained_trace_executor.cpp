@@ -461,9 +461,8 @@ void RetainedTraceExecutor::Execute(std::span<Request*> requests,
     }
 }
 
-std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& metric,
-                                                                double absolute_spin,
-                                                                const core::CameraRay& camera) {
+std::optional<RetainedCameraOutput> RetainedTraceExecutor::ReadCameraLaunch(
+    core::IMetric& metric, double absolute_spin, const core::CameraRay& camera) {
     const auto* family = dynamic_cast<core::KerrSchildFamily*>(&metric);
     if (!family || !core::IsRepresentedCameraRay(camera) || !camera.active ||
         !std::isfinite(absolute_spin))
@@ -523,7 +522,33 @@ std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& m
         completed_.wait(lock, [&] { return request.completed; });
     }
     if (!request.camera_result || !request.camera_result->valid) return std::nullopt;
-    const auto& output = request.camera_result->values;
+    return *request.camera_result;
+}
+
+std::optional<DetectorLaunchFrame> RetainedTraceExecutor::EncloseDetectorLaunchFrame(
+    core::IMetric& metric, double absolute_spin, const core::CameraRay& camera) {
+    const auto result = ReadCameraLaunch(metric, absolute_spin, camera);
+    if (!result) return std::nullopt;
+    using Range = DetectorLaunchFrame::Range;
+    const auto enclosure = [](const RetainedValue& value) {
+        return Range(value.high) + Range(value.low) + Range(value.tail) +
+               Range(-value.radius, value.radius);
+    };
+    DetectorLaunchFrame frame;
+    for (int i = 0; i < 4; ++i) {
+        frame.position[i] = enclosure(result->values[i]);
+        for (int axis = 0; axis < 4; ++axis)
+            frame.tetrad[axis][i] = enclosure(result->values[8 + 4 * axis + i]);
+    }
+    return frame;
+}
+
+std::optional<core::CameraLaunch> RetainedTraceExecutor::Launch(core::IMetric& metric,
+                                                                double absolute_spin,
+                                                                const core::CameraRay& camera) {
+    const auto result = ReadCameraLaunch(metric, absolute_spin, camera);
+    if (!result) return std::nullopt;
+    const auto& output = result->values;
     core::CameraLaunch launch;
     for (int mu = 0; mu < 4; ++mu) {
         launch.position(mu) = Rounded(output[mu]);
