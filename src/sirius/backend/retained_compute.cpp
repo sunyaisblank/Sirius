@@ -178,12 +178,16 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(Compute
                                    kTransportPortableFp64Shader));
     status = create(result->transport_, KernelStage::kTransport, transport);
     if (!status) return std::unexpected(status.error());
-    const std::span<const std::uint32_t> endpoint =
+    std::span<const std::uint32_t> endpoint =
         normal_sum ? std::span(kEndpointPortableNormalSumShader)
                    : (fma && kEndpointFmaAvailable
                           ? std::span(kEndpointFmaShader)
                           : shader(kEndpointShader, kEndpointFp64Shader, kEndpointPortableShader,
                                    kEndpointPortableFp64Shader));
+    // Give Dozen one shared projection and interpreter body for both routes.
+    // The normal device admission continues to require native FP32 controls.
+    if (!portable && !fp64_products && device.Info().driver_id == VK_DRIVER_ID_MESA_DOZEN)
+        endpoint = kEndpointDozenShader;
     status = create(result->endpoint_, KernelStage::kEndpoint, endpoint);
     if (!status) return std::unexpected(status.error());
     status = create(
@@ -206,11 +210,6 @@ base::Expected<std::unique_ptr<RetainedCompute>> RetainedCompute::Create(Compute
                             kDopriPhasePortableFp64Shader);
     status = create(result->dopri_phase_, KernelStage::kDopriPhase, dopri_phase);
     if (!status) return std::unexpected(status.error());
-    if (!portable && !fp64_products && device.Info().driver_id == VK_DRIVER_ID_MESA_DOZEN) {
-        auto curved = device.LoadKernel(kEndpointCurvedShader);
-        if (!curved) return std::unexpected(curved.error());
-        result->curved_endpoint_ = *curved;
-    }
     if (stage_seven_owner && normal_sum) {
         const auto started = std::chrono::steady_clock::now();
         StageSevenOwner owner;
@@ -458,8 +457,7 @@ void RetainedCompute::ResetStatistics() {
 }
 
 base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_rows,
-                                               DispatchTiming* timing, bool owned,
-                                               std::optional<KernelHandle> alternate_kernel) {
+                                               DispatchTiming* timing, bool owned) {
     using Clock = std::chrono::steady_clock;
     const auto milliseconds = [](Clock::time_point started, Clock::time_point finished) {
         return std::chrono::duration<double, std::milli>(finished - started).count();
@@ -485,7 +483,7 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
                                    owned ? stage_seven_->buffer : BufferHandle{}};
     const auto kernel = owned ? (stage.kind == KernelStage::kTransport ? stage_seven_->transport
                                                                        : stage_seven_->endpoint)
-                              : alternate_kernel.value_or(stage.kernel);
+                              : stage.kernel;
     status = device_.Dispatch(
         kernel,
         owned ? std::span<const BufferHandle>(owned_buffers)
@@ -632,19 +630,6 @@ base::Expected<std::vector<RetainedStepOutput>> RetainedCompute::Step(
     return result;
 }
 
-KernelHandle RetainedCompute::SelectEndpointKernel(std::span<const RetainedEndpointInput> inputs) const {
-    // A positive normal mass with zero residual limbs stays exactly nonzero
-    // through the native pack. Every active row then takes the curved path.
-    if (curved_endpoint_ && std::ranges::all_of(inputs, [](const auto& row) {
-            const auto [high, low, tail, radius, valid] =
-                std::bit_cast<std::array<std::uint32_t, 5>>(row.values[0]);
-            return valid == 1 && high >= 0x00800000u && high <= 0x7b800000u &&
-                   low == 0 && tail == 0 && radius == 0;
-        }))
-        return *curved_endpoint_;
-    return endpoint_.kernel;
-}
-
 base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
     std::span<const RetainedEndpointInput> inputs, DispatchTiming* timing,
     std::span<const StageSevenToken> owners) {
@@ -658,7 +643,7 @@ base::Expected<std::vector<RetainedEndpointOutput>> RetainedCompute::Endpoint(
     static_assert(sizeof(RetainedEndpointInput) == 225 * sizeof(std::uint32_t));
     std::fill_n(endpoint_.input.begin() + 1, capacity_ * 225, 0U);
     std::memcpy(endpoint_.input.data() + 1, inputs.data(), inputs.size_bytes());
-    auto status = Dispatch(endpoint_, inputs.size(), timing, *owned, SelectEndpointKernel(inputs));
+    auto status = Dispatch(endpoint_, inputs.size(), timing, *owned);
     if (!status) return std::unexpected(status.error());
     std::vector<RetainedEndpointOutput> result(inputs.size());
     for (std::size_t row = 0; row < inputs.size(); ++row) {
@@ -760,8 +745,7 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     const auto endpoint_buffers = *owned ? std::span<const BufferHandle>(owned_buffers)
                                          : std::span<const BufferHandle>(endpoint_.buffers);
     const std::array commands{
-        ComputeDispatch{*owned ? stage_seven_->endpoint : SelectEndpointKernel(endpoints),
-                        endpoint_buffers,
+        ComputeDispatch{*owned ? stage_seven_->endpoint : endpoint_.kernel, endpoint_buffers,
                         static_cast<std::uint32_t>((endpoints.size() + kRetainedGroupRows - 1) /
                                                    kRetainedGroupRows),
                         1, 1},

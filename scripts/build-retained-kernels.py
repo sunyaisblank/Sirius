@@ -288,14 +288,14 @@ def generate_owner_layout(module, directory):
     return references
 
 
-def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, curved_endpoint=False):
+def compile_shader(source, destination, compiler, assembler, disassembler, validator, registers, terms, layers, prefix=0, fp64=False, portable=False, optimizer=None, fma=False, normal_sum32=False, transport_specialized=None, endpoint_specialized=None, stage_seven_owner=False, dozen_endpoint=False):
     raw = destination.with_suffix(".compiler.spv")
     assembly = destination.with_suffix(".spvasm")
     definitions = ["-DSIRIUS_RETAINED_FP64=1"] if fp64 else []
-    if curved_endpoint:
+    if dozen_endpoint:
         if source.stem != "retained_endpoint" or fp64 or portable:
-            raise ValueError("the curved-only module requires native narrow Endpoint")
-        definitions.append("-DSIRIUS_RETAINED_CURVED_ENDPOINT=1")
+            raise ValueError("the Dozen module requires native narrow Endpoint")
+        definitions.append("-DSIRIUS_RETAINED_DOZEN_ENDPOINT=1")
     if transport_specialized is not None:
         if source.stem != "retained_transport":
             raise ValueError("the second transport table belongs only to Transport")
@@ -508,12 +508,12 @@ def main():
             sizes.append(len(code) * 4)
         if kind == "Endpoint":
             code = compile_shader(source / (stem + ".slang"),
-                args.output.parent / (stem + "_curved.spv"),
+                args.output.parent / (stem + "_dozen.spv"),
                 args.compiler, args.assembler, args.disassembler, args.validator,
                 program["registers"], terms, len(program["layer_offsets"]) - 1,
                 program["prefix_instructions"], endpoint_specialized=endpoint_specialized,
-                curved_endpoint=True)
-            array("kEndpointCurvedShader", code)
+                dozen_endpoint=True)
+            array("kEndpointDozenShader", code)
         if kind in ("Transport", "Endpoint", "DopriPhase"):
             # Portable products use the same integer owner in both host modes.
             # Refuse sharing if a future macro change makes their modules differ.

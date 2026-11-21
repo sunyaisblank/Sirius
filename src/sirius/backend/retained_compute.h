@@ -305,10 +305,7 @@ class RetainedCompute {
         std::uint64_t generation = 0;
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
-                                                DispatchTiming* timing, bool owned = false,
-                                                std::optional<KernelHandle> alternate_kernel = {});
-    [[nodiscard]] KernelHandle SelectEndpointKernel(
-        std::span<const RetainedEndpointInput> inputs) const;
+                                                DispatchTiming* timing, bool owned = false);
     void InvalidateStageSevenOwner();
     [[nodiscard]] base::Expected<void> WriteStageSevenControl(Stage& stage);
     [[nodiscard]] base::Expected<bool> AuthorizeStageSevenEndpoint(
@@ -320,7 +317,6 @@ class RetainedCompute {
     SubmissionFeedback submission_feedback_;
     StageStats endpoint_dense_stats_;
     std::optional<StageSevenOwner> stage_seven_;
-    std::optional<KernelHandle> curved_endpoint_;
     double stage_seven_provisioning_ms_ = 0;
     Stage camera_, transport_, endpoint_, dense_, initialize_, ray_camera_, dopri_phase_;
 };

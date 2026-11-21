@@ -712,18 +712,6 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
          prefix = SIRIUS_RETAINED_PREFIX;
     uint rowWords = no / rows, rowBase = row * rowWords;
     if (rowWords < 769) return;
-#ifdef SIRIUS_RETAINED_CURVED_ENDPOINT
-    // Validate the curved-only route before clearing any output.
-    uint base = 1 + 225 * row;
-    RetainedTriple mass = RTPack(RPFromBits(inputs[base]), RPFromBits(inputs[base + 1]),
-                                 RPFromBits(inputs[base + 2]), RPFromBits(inputs[base + 3]));
-    RetainedTriple charge = RTPack(RPFromBits(inputs[base + 10]), RPFromBits(inputs[base + 11]),
-                                   RPFromBits(inputs[base + 12]), RPFromBits(inputs[base + 13]));
-    RetainedTriple ambient = RTPack(RPFromBits(inputs[base + 15]), RPFromBits(inputs[base + 16]),
-                                    RPFromBits(inputs[base + 17]), RPFromBits(inputs[base + 18]));
-    bool flat = RTExact(mass, RPZero()) && RTExact(charge, RPZero()) && RTExact(ambient, RPZero());
-    if (flat) return;
-#endif
     for (uint i = lane; i < rowWords; i += SIRIUS_RETAINED_EXECUTION_LANES) outputs[rowBase + i] = 0;
 #ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
@@ -755,7 +743,68 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
 #ifndef SIRIUS_RETAINED_PORTABLE
     AllMemoryBarrierWithGroupSync();
 #endif
-#ifndef SIRIUS_RETAINED_CURVED_ENDPOINT
+#ifdef SIRIUS_RETAINED_DOZEN_ENDPOINT
+    const bool flat = RTExact(ReadStored(rowBase + 504), RPZero()) &&
+                      RTExact(ReadStored(rowBase + 514), RPZero()) &&
+                      RTExact(ReadStored(rowBase + 519), RPZero());
+    if (flat && lane != 0) return;
+    if (!flat && !SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix))
+        return;
+    uint component = 4;
+    RetainedTriple root;
+    // Keep one native projection and interpreter call site. Curved
+    // groups retain their original join, while flat rows stay with lane zero.
+    [loop] for (uint phase = 0; phase < 3; ++phase) {
+        if (phase == 1) {
+            if (!Project(rowBase, component, root) || (flat && component != 0)) return;
+            if (flat) {
+                for (uint i = 0; i < 40; ++i) {
+                    RetainedTriple projected = ReadStored(rowBase + 504 + 5 * (4 + i));
+                    RetainedTriple physical = i % 8 == 4 ? RTNegate(projected) : projected;
+                    if (i == 4) {
+                        physical = root;
+                        projected = RTNegate(root);
+                    }
+                    if (i >= 8 && i % 8 == 4) {
+                        RetainedTriple constraint = RTConstant(RPZero());
+                        for (uint axis = 1; axis < 4; ++axis)
+                            constraint = RTAdd(constraint,
+                                               RTMultiply(Tangent(rowBase, axis),
+                                                          ReadStored(rowBase + 504 + 5 * (4 + i + axis))));
+                        physical = RTDivide(constraint, root);
+                        projected = RTNegate(physical);
+                    }
+                    if (projected.valid == 0 || physical.valid == 0) return;
+                    WriteStored(rowBase + 104 + i * 5, projected);
+                    WriteStored(rowBase + 304 + i * 5, physical);
+                }
+                outputs[rowBase] = 1;
+                outputs[rowBase + 1] = 0;
+                return;
+            }
+            for (uint i = 0; i < 4; ++i) {
+                if (lane == 0)
+                    WriteStored(rowBase + 504 + 5 * (45 + i), i == component ? root : Tangent(rowBase, i));
+                if (lane == 0)
+                    WriteStored(rowBase + 504 + 5 * (49 + i),
+                                RTConstant(i == component ? RPOne() : RPZero()));
+            }
+#ifndef SIRIUS_RETAINED_PORTABLE
+            AllMemoryBarrierWithGroupSync();
+#endif
+        } else if (flat) {
+            for (uint i = 0; i < 4; ++i) {
+                for (uint j = 0; j < 4; ++j)
+                    WriteStored(rowBase + 4 + 5 * (i * 4 + j),
+                                    RTConstant(i == j ? (i == 0 ? RPScalarNegate(RPOne()) : RPOne())
+                                                      : RPZero()));
+                RetainedTriple p = ReadStored(rowBase + 504 + 5 * (8 + i));
+                WriteStored(rowBase + 4 + 5 * (16 + i), i == 0 ? RTNegate(p) : p);
+            }
+        } else if (!EvaluateProgram(row, rowBase, programBase, count, registers,
+                                    phase == 0 ? 20 : 100, lane, layers, prefix)) return;
+    }
+#else
     if (RTExact(ReadStored(rowBase + 504), RPZero()) &&
         RTExact(ReadStored(rowBase + 514), RPZero()) &&
         RTExact(ReadStored(rowBase + 519), RPZero())) {
@@ -796,30 +845,6 @@ bool SelectEndpointProgram(uint rowBase, inout uint programBase, inout uint coun
         if (lane == 0) outputs[rowBase + 1] = 0;
         return;
     }
-#endif
-#ifdef SIRIUS_RETAINED_CURVED_ENDPOINT
-    if (!SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
-    uint component = 4;
-    RetainedTriple root;
-    // Keep both curved evaluations at one call site for drivers that inline it.
-    [loop] for (uint phase = 0; phase < 2; ++phase) {
-        if (phase == 1) {
-            if (!Project(rowBase, component, root)) return;
-            for (uint i = 0; i < 4; ++i) {
-                if (lane == 0)
-                    WriteStored(rowBase + 504 + 5 * (45 + i), i == component ? root : Tangent(rowBase, i));
-                if (lane == 0)
-                    WriteStored(rowBase + 504 + 5 * (49 + i),
-                                RTConstant(i == component ? RPOne() : RPZero()));
-            }
-#ifndef SIRIUS_RETAINED_PORTABLE
-            AllMemoryBarrierWithGroupSync();
-#endif
-        }
-        if (!EvaluateProgram(row, rowBase, programBase, count, registers,
-                             phase == 0 ? 20 : 100, lane, layers, prefix)) return;
-    }
-#else
     if (!SelectEndpointProgram(rowBase, programBase, count, registers, layers, prefix)) return;
     if (!EvaluateProgram(row, rowBase, programBase, count, registers, 20, lane, layers, prefix)) return;
     uint component;
