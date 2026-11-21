@@ -373,6 +373,39 @@ TEST(PointSourceDetector, BulkFailureAndCancellationNeverPublishPartialRadiance)
     EXPECT_EQ(limited.error().reason, PointDetectorFailure::WorkLimit);
     EXPECT_EQ(calls, 0u);
     EXPECT_EQ(limited.error().statistics.probes, 0u);
+
+    const PointDetectorFootprint footprint{{10, 20}, {{{2, -.5}, {1, 3}}}};
+    const std::array footprints{footprint};
+    const PointDetectorSampler unexpected_probe = [&](DetectorCoordinate) {
+        ++calls;
+        return std::unexpected(PointDetectorFailure::TraceFailed);
+    };
+    bool terminate = false, cancel_when_certified = false;
+    const PointDetectorDarkCell certified_dark = [&](const DetectorCoordinate& lower,
+                                                      const DetectorCoordinate& upper) {
+        // The original circular support is enclosed in [-4,4]^2 before
+        // the rotated/sheared footprint is passed to the prover.
+        EXPECT_LE(lower[0], 0);
+        EXPECT_LE(lower[1], 4);
+        EXPECT_GE(upper[0], 20);
+        EXPECT_GE(upper[1], 36);
+        terminate = cancel_when_certified;
+        return true;
+    };
+    const auto dark = EvaluatePointDetectorGroup(catalogue, 1, footprints, unexpected_probe,
+                                                  {}, policy, {}, certified_dark);
+    ASSERT_TRUE(dark);
+    EXPECT_EQ(dark->samples[0].rgb, (std::array<double, 3>{}));
+    EXPECT_EQ(dark->statistics.probes, 0u);
+    EXPECT_EQ(calls, 0u);
+    cancel_when_certified = true;
+    const auto cancelled_dark = EvaluatePointDetectorGroup(
+        catalogue, 1, footprints, unexpected_probe, [&] { return terminate; }, policy, {},
+        certified_dark);
+    ASSERT_FALSE(cancelled_dark);
+    EXPECT_EQ(cancelled_dark.error().reason, PointDetectorFailure::Cancelled);
+    EXPECT_EQ(calls, 0u);
+
     core::StarfieldSpatialIndex cohort_catalogue(RootCohortStars());
     for (int mode = 0; mode < 7; ++mode) {
         SCOPED_TRACE(mode);

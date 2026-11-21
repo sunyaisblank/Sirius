@@ -85,6 +85,11 @@ struct PointDetectorError {
 
 using PointDetectorSampler = std::function<std::expected<PointDetectorProbe, PointDetectorFailure>(
     const DetectorCoordinate&)>;
+// A positive certificate proves the whole closed chart rectangle dark.
+// Unknown rectangles go through the detector's original refinement.
+using PointDetectorDarkCell =
+    std::function<bool(const DetectorCoordinate&, const DetectorCoordinate&)>;
+
 using PointDetectorProbeBatch =
     std::vector<std::expected<PointDetectorProbe, PointDetectorFailure>>;
 // Optional execution of independent probes. Return exactly one result per
@@ -117,7 +122,8 @@ struct PointDetectorBatchResult {
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
     const PointDetectorPolicy& policy = {},
-    const PointDetectorProbeBatchSampler& sample_batch = {});
+    const PointDetectorProbeBatchSampler& sample_batch = {},
+    const PointDetectorDarkCell& dark_cell = {});
 
 // Shared finite image discovery for up to kPointDetectorBatchCapacity samples. The
 // callback traces actual chart coordinates and returns derivatives per chart
@@ -132,7 +138,8 @@ EvaluatePointDetectorBatch(const core::StarfieldSpatialIndex& catalogue, double 
                            const PointDetectorSampler& sample,
                            const std::function<bool()>& cancelled,
                            const PointDetectorPolicy& policy = {},
-                           const PointDetectorProbeBatchSampler& sample_batch = {});
+                           const PointDetectorProbeBatchSampler& sample_batch = {},
+    const PointDetectorDarkCell& dark_cell = {});
 
 // Try common discovery, bisect declined regions along their widest film axis,
 // and finish unresolved leaves with the original scalar detector. The shared
@@ -145,6 +152,7 @@ EvaluatePointDetectorGroup(const core::StarfieldSpatialIndex& catalogue, double 
                            const PointDetectorSampler& sample,
                            const std::function<bool()>& cancelled,
                            const PointDetectorPolicy& policy = {},
-                           const PointDetectorProbeBatchSampler& sample_batch = {});
+                           const PointDetectorProbeBatchSampler& sample_batch = {},
+    const PointDetectorDarkCell& dark_cell = {});
 
 }  // namespace sirius::render

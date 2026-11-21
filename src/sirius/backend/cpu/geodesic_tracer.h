@@ -417,7 +417,7 @@ class GeodesicTracer {
     // Certify every ray in a continuous film rectangle at one ThinLens pupil.
     [[nodiscard]] bool CertifyThinLensDetectorRegion(
         const sirius::core::CameraConfig&, const DetectorLaunchFrame&,
-        const std::array<DetectorLaunchFrame::Range, 2>& film_bounds);
+        const std::array<DetectorLaunchFrame::Range, 2>& film_bounds, unsigned splits = 4);
 
     // Non-owning; the executor must outlive this tracer and any active trace.
     void SetStepExecutor(TraceStepExecutor* executor) { step_executor_ = executor; }

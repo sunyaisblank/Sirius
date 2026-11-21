@@ -798,7 +798,7 @@ std::optional<DetectorLaunchFrame> GeodesicTracer::PrepareDetectorPupil(const Ca
 
 bool GeodesicTracer::CertifyThinLensDetectorRegion(
     const CameraConfig& camera, const DetectorLaunchFrame& prepared,
-    const std::array<DetectorLaunchFrame::Range, 2>& film_bounds) {
+    const std::array<DetectorLaunchFrame::Range, 2>& film_bounds, unsigned splits) {
     using namespace relativity::finite_tail_detail;
     const auto* family = dynamic_cast<const KerrSchildFamily*>(metric_);
     const auto cancelled = [&] { return should_cancel_ && should_cancel_(); };
@@ -850,7 +850,7 @@ bool GeodesicTracer::CertifyThinLensDetectorRegion(
         box[axis] = Range(middle, high);
         return self(box, depth - 1);
     };
-    return cover(film_bounds, 4) && !cancelled();
+    return cover(film_bounds, std::min(splits, 4U)) && !cancelled();
 }
 
 TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infinity_handoff,

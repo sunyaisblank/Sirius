@@ -235,6 +235,7 @@ struct Estimate {
     std::vector<std::size_t> images;
     bool regular = true;
     bool has_hidden_probe = false;
+    bool certified_dark = false;
 };
 
 class Detector {
@@ -242,13 +243,14 @@ class Detector {
     Detector(const core::StarfieldSpatialIndex& catalogue, double brightness,
              const PointDetectorSampler& sampler, const std::function<bool()>& cancelled,
              const PointDetectorPolicy& policy, const PointDetectorProbeBatchSampler& sample_batch,
-             unsigned minimum_invisible_depth = 0)
+             const PointDetectorDarkCell& dark_cell, unsigned minimum_invisible_depth = 0)
         : catalogue_(catalogue),
           brightness_(brightness),
           sampler_(sampler),
           cancelled_(cancelled),
           policy_(policy),
           sample_batch_(sample_batch),
+          dark_cell_(dark_cell),
           minimum_invisible_depth_(minimum_invisible_depth) {}
 
     std::expected<PointDetectorResult, PointDetectorError> Run(
@@ -694,9 +696,20 @@ class Detector {
 
     Estimate Measure(const Cell& cell) {
         Estimate result;
-        if (!cell.IntersectsSupport()) return result;
+        if (!cell.IntersectsSupport()) {
+            result.certified_dark = true;
+            return result;
+        }
         if (++statistics_.cells > policy_.maximum_cells) Fail(PointDetectorFailure::WorkLimit);
         CheckCancellation();
+        if (dark_cell_) {
+            const bool certified = dark_cell_(cell.lower, cell.upper);
+            CheckCancellation();
+            if (certified) {
+                result.certified_dark = true;
+                return result;
+            }
+        }
         const auto centre = cell.Centre();
         const double half = cell.Width() * .5;
         std::array<Coordinate, kPointDetectorProbeBatchSize> coordinates{};
@@ -947,7 +960,9 @@ class Detector {
 
     static Estimate Sum(const std::array<Estimate, 4>& children) {
         Estimate result;
+        result.certified_dark = true;
         for (const auto& child : children) {
+            result.certified_dark = result.certified_dark && child.certified_dark;
             result.regular = result.regular && child.regular;
             result.has_hidden_probe = result.has_hidden_probe || child.has_hidden_probe;
             result.images.insert(result.images.end(), child.images.begin(), child.images.end());
@@ -982,12 +997,13 @@ class Detector {
         return accepted;
     }
     Estimate Refine(const Cell& cell, const Estimate& coarse) {
-        if (!cell.IntersectsSupport()) return coarse;
+        if (coarse.certified_dark || !cell.IntersectsSupport()) return coarse;
         if (cell.depth >= policy_.maximum_depth) Fail(PointDetectorFailure::Unresolved);
         const auto children = cell.Children();
         std::array<Estimate, 4> estimates;
         for (int i = 0; i < 4; ++i) estimates[i] = Measure(children[i]);
         auto fine = Sum(estimates);
+        if (fine.certified_dark) return fine;
         if (cell.depth >= policy_.minimum_depth &&
             ((!coarse.has_hidden_probe && !fine.has_hidden_probe) ||
              cell.depth >= minimum_invisible_depth_) &&
@@ -1014,6 +1030,7 @@ class Detector {
     const std::function<bool()>& cancelled_;
     const PointDetectorPolicy& policy_;
     const PointDetectorProbeBatchSampler& sample_batch_;
+    const PointDetectorDarkCell& dark_cell_;
     unsigned minimum_invisible_depth_;
     PointDetectorStatistics statistics_;
     std::vector<CachedProbe> probes_;
@@ -1026,15 +1043,17 @@ class Detector {
 std::expected<PointDetectorResult, PointDetectorError> EvaluatePointDetector(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     const PointDetectorSampler& sample, const std::function<bool()>& cancelled,
-    const PointDetectorPolicy& policy, const PointDetectorProbeBatchSampler& sample_batch) {
-    return Detector(catalogue, brightness_scale, sample, cancelled, policy, sample_batch).Run();
+    const PointDetectorPolicy& policy, const PointDetectorProbeBatchSampler& sample_batch,
+    const PointDetectorDarkCell& dark_cell) {
+    return Detector(catalogue, brightness_scale, sample, cancelled, policy, sample_batch,
+                    dark_cell).Run();
 }
 
 std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetectorBatch(
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
     const std::function<bool()>& cancelled, const PointDetectorPolicy& policy,
-    const PointDetectorProbeBatchSampler& sample_batch) {
+    const PointDetectorProbeBatchSampler& sample_batch, const PointDetectorDarkCell& dark_cell) {
     PointDetectorStatistics statistics;
     const auto failure = [&](PointDetectorFailure reason) {
         return std::unexpected(PointDetectorError{reason, statistics});
@@ -1117,9 +1136,19 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                             for (auto& value : row) value *= scale;
                 return values;
             };
+        PointDetectorDarkCell normalized_dark;
+        if (dark_cell)
+            normalized_dark = [&](const Coordinate& lower, const Coordinate& upper) {
+                using finite_tail::Range;
+                std::array<Range, 2> region;
+                for (int i = 0; i < 2; ++i)
+                    region[i] = Range(centre[i]) + Range(scale) * Range(lower[i], upper[i]);
+                return region[0].Finite() && region[1].Finite() &&
+                    dark_cell({region[0].lo, region[1].lo}, {region[0].hi, region[1].hi});
+            };
         std::vector<std::size_t> images;
         Detector engine(catalogue, brightness_scale, normalized, cancelled, discovery_policy,
-                        normalized_batch, policy.minimum_depth + extra_depth);
+                        normalized_batch, normalized_dark, policy.minimum_depth + extra_depth);
         const auto discovery = engine.Run(&images);
         if (!discovery) return std::unexpected(discovery.error());
         statistics = discovery->statistics;
@@ -1215,7 +1244,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
     const core::StarfieldSpatialIndex& catalogue, double brightness_scale,
     std::span<const PointDetectorFootprint> footprints, const PointDetectorSampler& sample,
     const std::function<bool()>& cancelled, const PointDetectorPolicy& policy,
-    const PointDetectorProbeBatchSampler& sample_batch) {
+    const PointDetectorProbeBatchSampler& sample_batch, const PointDetectorDarkCell& dark_cell) {
     PointDetectorStatistics statistics;
     const auto failure = [&](PointDetectorFailure reason) {
         return std::unexpected(PointDetectorError{reason, statistics});
@@ -1274,7 +1303,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                     std::min(policy.maximum_probes, remaining_shared_probes);
                 const auto batch =
                     EvaluatePointDetectorBatch(catalogue, brightness_scale, packets, sample,
-                                               cancelled, shared_policy, sample_batch);
+                                               cancelled, shared_policy, sample_batch, dark_cell);
                 const auto& work = batch ? batch->statistics : batch.error().statistics;
                 account(work);
                 remaining_shared_probes -= std::min(remaining_shared_probes, work.probes);
@@ -1327,8 +1356,22 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                                 }
                             return values;
                         };
+                    PointDetectorDarkCell original_dark;
+                    if (dark_cell)
+                        original_dark = [&](const Coordinate& lower, const Coordinate& upper) {
+                            using finite_tail::Range;
+                            const Range x(lower[0], upper[0]), y(lower[1], upper[1]);
+                            std::array<Range, 2> region;
+                            for (int i = 0; i < 2; ++i)
+                                region[i] = Range(footprint.centre[i]) +
+                                    (Range(m[i][0]) * x + Range(m[i][1]) * y);
+                            return region[0].Finite() && region[1].Finite() &&
+                                dark_cell({region[0].lo, region[1].lo},
+                                          {region[0].hi, region[1].hi});
+                        };
                     const auto leaf = EvaluatePointDetector(catalogue, brightness_scale, original,
-                                                            cancelled, policy, original_batch);
+                                                            cancelled, policy, original_batch,
+                                                            original_dark);
                     account(leaf ? leaf->statistics : leaf.error().statistics);
                     if (!leaf) return leaf.error().reason;
                     result.samples[index] = {leaf->rgb, leaf->estimated_error};
