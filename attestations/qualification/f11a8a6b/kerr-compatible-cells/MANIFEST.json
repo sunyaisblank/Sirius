@@ -1,0 +1,153 @@
+{
+  "schema": "sirius-kerr-compatible-cells-v1",
+  "source_revision": "f11a8a6b8ced819850a9d53c6ddb3f3692f5ee80",
+  "inputs": [
+    {
+      "path": "attestations/qualification/ed95bfc0/kerr-footprint/prefix.log.gz",
+      "bytes": 6037,
+      "sha256": "9f2167fcad38190148710ff5b5678a1208663a77216df71ed996166d0d064c72"
+    },
+    {
+      "path": "attestations/qualification/7fd2aa59/kerr-finite-turn/MANIFEST.json",
+      "bytes": 6407,
+      "sha256": "f271cc1f3fcb841a4e9ab99ecfe0641653bb895e33f937a6d6ed96c6bcab78dc"
+    },
+    {
+      "path": "attestations/qualification/a41e75fd/kerr-detector-integration/block.cpp.gz",
+      "bytes": 957,
+      "sha256": "577b9a9c7894efa4be23eb2298c23e807dff07721077015a532d3fc15e03c628"
+    },
+    {
+      "path": "attestations/qualification/fe00d9ee/e2-and-kerr-detector/MANIFEST.json",
+      "bytes": 8988,
+      "sha256": "737e2f4d1fc48d8b21079821d52b852033a8fe2cd93d45111b33767314b824de"
+    }
+  ],
+  "matched_physical_cells": {
+    "pupil": "First of the original four moving ThinLens camera samples.",
+    "block": [
+      928,
+      608
+    ],
+    "footprint_index": 704,
+    "physical_device": "AMD Radeon 780M through the pinned Mesa Dozen provider",
+    "cases": 28,
+    "individual_catalogue_visits": 75055,
+    "group_catalogue_visits": 5731,
+    "visit_reduction_percent": 92.36426620478316,
+    "individual_sum_rgb_upper_per_channel": 1.6274611104054506e-07,
+    "group_rgb_upper_per_channel": 7.691877300318863e-08,
+    "original_absolute_rgb_allowance": 1e-07,
+    "comparison_scope": "The two calculations process the same cells and start with independent instances of the original visit ledger. The shared film chart proved injective, so the shared certificate bounds image multiplicity across the cells. The wall time covers the complete matched experiment.",
+    "comparison_wall_seconds": 119.7,
+    "prior_contact_time_and_longitude_overlap_control_refused": true
+  },
+  "catalogue_index": {
+    "source_entries": 100000,
+    "archived_cells": 794,
+    "strictly_escaping_cells": 736,
+    "strictly_escaping_without_polar_contact": 708,
+    "contact_group_count": 1,
+    "grouped_cells": [
+      401,
+      402,
+      403,
+      424,
+      425,
+      427,
+      430,
+      432,
+      433,
+      435,
+      481,
+      483,
+      488,
+      489,
+      490,
+      491,
+      511,
+      512,
+      513,
+      514,
+      520,
+      522,
+      643,
+      645,
+      648,
+      650,
+      651,
+      667
+    ],
+    "critical_contact_cell": 396,
+    "indexed_candidate_visits": 29,
+    "exhaustive_row_candidate_visits": 158400,
+    "observed_wall_seconds": 2.63,
+    "oracle": "For each archived cell, the list of identified catalogue entries matches a complete scan of latitude-overlapping catalogue rows. The binary search covers every overlapping interval by subtracting the maximum stored latitude width from its lower cutoff.",
+    "purpose": "Identify compatible polar-turn groups by actual catalogue entry identity. Keep cells with zero, multiple, or critical contacts out of a single finite-contact group. The reported visit counts are diagnostic index comparisons on the archived cells."
+  },
+  "block_experiment": {
+    "scene": {
+      "schema": "sirius-render-scene-v1",
+      "backend": "Vulkan",
+      "metric": "Kerr",
+      "spin": 0.9,
+      "width": 1920,
+      "height": 1080,
+      "samples_per_pixel": 4,
+      "field_of_view": 60,
+      "disk_enabled": false,
+      "ray_bundles": true,
+      "point_starfield": true,
+      "point_star_count": 100000,
+      "point_brightness_scale": 100,
+      "point_seed": 42,
+      "point_min_distance_pc": 1,
+      "point_max_distance_pc": 10000,
+      "camera_beta": [
+        0.1,
+        0.02,
+        -0.01
+      ],
+      "lens": "ThinLens",
+      "focal_length": 50,
+      "aperture": 2.799999952316284,
+      "focus_distance": 30
+    },
+    "dimensions": [
+      32,
+      32
+    ],
+    "origin": [
+      928,
+      608
+    ],
+    "queue_policy": "Queue terminal cells whose contracted radial interval lies strictly on the escaping side, then try their grouped finite-winding certificate. Charge every attempted certificate to the existing single-footprint visit ledger. The experiment uses sign-only selection.",
+    "outer_guard_seconds": 150,
+    "elapsed_seconds": 150.23,
+    "exit_code": 124,
+    "peak_rss_kib": 330464,
+    "completed_footprint_group_report": false,
+    "adopted": false
+  },
+  "controlled_group_tests": {
+    "cases": 5,
+    "successful_group_cells": 16,
+    "successful_single_certificate_visits": 1,
+    "successful_split_certificate_visits": 7,
+    "successful_case_probes": 45,
+    "checks": "Successful grouping, successful post-refusal split with conservative error accumulation, complete proof refusal, cancellation, and invalid visit-ledger growth."
+  },
+  "remaining": "Integrate contact-specific group selection and capture in-place certificate progress before another block diagnostic. Preserve transactional refusal when a group stays unresolved. The critical cell still needs the remaining high-winding clearance proof, and neither original full physical scene is qualified.",
+  "replay": [
+    "Extract verification.tar.gz into out/kerr-compatible-cells on the recorded source. Run build.py, extract-cells.py, make-overlay.py, link.py --compile, and link.py in the checkout.",
+    "Symlink out/kerr-compatible-cells/resources to the stage at bin/linux-ci/src/sirius/app/resources. Run probe-groups for the controlled checks, then compare-finite under timeout 120 and block under timeout 150 in the scratch working directory. Use the pinned Vulkan ICD in runtime.sha256, SIRIUS_VULKAN_DEVICE=0, SIRIUS_MEMORY_BUDGET_MB=2048, MESA_SHADER_CACHE_DISABLE=true, and XDG_CACHE_HOME within scratch. Leave SIRIUS_PACKAGED_SOFTWARE_VULKAN unset.",
+    "Build select-contacts.cpp with g++-14, the same common C++ flags and overlay includes as compare-finite in link-commands.json. Link the strict backend CPU, backend, core, and base archives, then -lvulkan -ldl -lrt -pthread. Run it in scratch under the same physical environment."
+  ],
+  "files": [
+    {
+      "path": "attestations/qualification/f11a8a6b/kerr-compatible-cells/verification.tar.gz",
+      "bytes": 17711,
+      "sha256": "8087ce111794febb746ce4e8da1eab1cceb4f2d39d64c99c20cdb8d1615d54c2"
+    }
+  ]
+}
