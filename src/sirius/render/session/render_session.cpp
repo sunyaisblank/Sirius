@@ -702,36 +702,6 @@ base::Expected<void> RenderSession::Initialise() {
     }
     std::cout << "[Session] Color mode: " << mode_name << std::endl;
 
-    // Multi-threaded rendering setup.
-    if (config_.enable_parallel_rendering || external_step_executor_) {
-        num_threads_ = external_step_executor_ ? device_workers_ : config_.thread_count;
-        if (num_threads_ <= 0) {
-            // Auto-detect: hardware concurrency, leaving one core for the system.
-            num_threads_ = static_cast<int>(std::thread::hardware_concurrency());
-            if (num_threads_ > 1) num_threads_--;
-            if (num_threads_ < 1) num_threads_ = 1;
-        }
-
-        // Per-thread tracers share the metric but keep independent state.
-        thread_tracers_.clear();
-        thread_tracers_.reserve(num_threads_);
-        thread_pixel_blocks_.resize(static_cast<std::size_t>(num_threads_));
-        if (metric_) {
-            for (int i = 0; i < num_threads_; ++i) {
-                thread_tracers_.push_back(
-                    std::make_unique<GeodesicTracer>(metric_.get(), tracer_config));
-                thread_tracers_.back()->SetStepExecutor(external_step_executor_);
-                thread_tracers_.back()->SetCancellationCallback([this] { return IsStopping(); });
-            }
-        }
-
-        std::cout << "[Session] Multi-threaded rendering enabled: " << num_threads_ << " threads"
-                  << std::endl;
-    } else {
-        num_threads_ = 1;
-        std::cout << "[Session] Single-threaded rendering" << std::endl;
-    }
-
     // The background texture is a physics input, not decorative packaging:
     // substituting grey changes every escaped ray. Missing resources
     // therefore fail initialisation instead of quietly changing the scene.
@@ -765,29 +735,72 @@ base::Expected<void> RenderSession::Initialise() {
               << SessionSceneEvidenceJson(config_, star_index_ ? star_index_->Size() : 0)
               << std::endl;
 
+    const bool point_detector = UsesPhysicalPointDetector();
+    // Tile coordinators and probe workers have different jobs. A detector
+    // coordinator can enqueue a whole cell's probe packet while it waits.
+    // Seat enough coordinators to fill the device without spreading the first
+    // packets across one partly discovered tile per resident ray.
+    const int probes_per_cell = static_cast<int>(kPointDetectorProbeBatchSize);
+    const int detector_coordinators = (device_workers_ + probes_per_cell - 1) / probes_per_cell;
+    const bool grouped_device_tiles =
+        external_step_executor_ && point_detector && !config_.enable_disk;
+
+    // Multi-threaded rendering setup.
+    if (config_.enable_parallel_rendering || external_step_executor_) {
+        num_threads_ = external_step_executor_
+                           ? (grouped_device_tiles ? detector_coordinators : device_workers_)
+                           : config_.thread_count;
+        if (num_threads_ <= 0) {
+            // Auto-detect: hardware concurrency, leaving one core for the system.
+            num_threads_ = static_cast<int>(std::thread::hardware_concurrency());
+            if (num_threads_ > 1) num_threads_--;
+            if (num_threads_ < 1) num_threads_ = 1;
+        }
+
+        // Per-thread tracers share the metric but keep independent state.
+        thread_tracers_.clear();
+        thread_tracers_.reserve(num_threads_);
+        thread_pixel_blocks_.resize(static_cast<std::size_t>(num_threads_));
+        if (metric_) {
+            for (int i = 0; i < num_threads_; ++i) {
+                thread_tracers_.push_back(
+                    std::make_unique<GeodesicTracer>(metric_.get(), tracer_config));
+                thread_tracers_.back()->SetStepExecutor(external_step_executor_);
+                thread_tracers_.back()->SetCancellationCallback([this] { return IsStopping(); });
+            }
+        }
+
+        std::cout << "[Session] Multi-threaded rendering enabled: " << num_threads_ << " threads"
+                  << std::endl;
+    } else {
+        num_threads_ = 1;
+        std::cout << "[Session] Single-threaded rendering" << std::endl;
+    }
+
     // Keep requested tile bounds and publication units. Neighboring small
     // point-scene tiles share one worker's completed canonical detector region;
     // larger tiles already contain whole regions without overlap.
     tiles_.Initialise(config_.width, config_.height,
                       external_step_executor_ ? device_tile_edge_ : config_.tile_size,
-                      UsesPhysicalPointDetector() ? kPointDetectorBlockEdge : 0);
+                      point_detector ? kPointDetectorBlockEdge : 0);
     progress_.SetTotals(tiles_.GetTileCount(), config_.samples_per_pixel);
     std::cout << "  Tiles:      " << tiles_.GetTileCount() << " (spiral work groups)" << std::endl;
 
     // Detector coordinators retain sequential root refinement. Independent
     // cell probes use separate tracers so one region can occupy several CPU
     // cores or provide a batch to the retained device executor.
-    if (num_threads_ > 1 && UsesPhysicalPointDetector() &&
+    const int probe_threads = external_step_executor_ ? device_workers_ : num_threads_;
+    if (probe_threads > 1 && point_detector &&
         (config_.backend == RenderBackend::Cpu || external_step_executor_)) {
-        probe_tracers_.reserve(num_threads_);
-        for (int i = 0; i < num_threads_; ++i) {
+        probe_tracers_.reserve(probe_threads);
+        for (int i = 0; i < probe_threads; ++i) {
             auto tracer = std::make_unique<GeodesicTracer>(metric_.get(), tracer_config);
             tracer->SetStepExecutor(external_step_executor_);
             tracer->SetCancellationCallback([this] { return IsStopping(); });
             probe_tracers_.push_back(std::move(tracer));
         }
         probe_workers_ =
-            std::make_unique<RayWorkQueue>(static_cast<std::size_t>(num_threads_),
+            std::make_unique<RayWorkQueue>(static_cast<std::size_t>(probe_threads),
                                            [this](std::size_t worker, const core::CameraRay& ray) {
                                                return probe_tracers_[worker]->TraceDetectorRay(ray);
                                            });
