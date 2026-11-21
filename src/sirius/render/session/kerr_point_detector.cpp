@@ -487,13 +487,13 @@ std::optional<std::array<double, 3>> BoundKerrDetectorCells(
     const auto polar = MakePolarIntegralTable(*shape);
     if (!polar) return {};
     const auto phases = PrepareNearCriticalPhases(mass, spin, radius, scale, *whole);
-    const auto screen = ScreenFiniteWindings(mass, spin, radius, scale, *whole, *polar, *phase,
-                                             *angular, cutoffs, amplitude, clearance, remaining,
-                                             cancelled, phases ? &*phases : nullptr,
-                                             excluded_turns,
-                                             finite_cutoff ? std::optional(finite_scale)
-                                                           : std::nullopt);
+    const auto screen = ScreenFiniteWindings(
+        mass, spin, radius, scale, *whole, *polar, *phase, *angular, cutoffs, amplitude, clearance,
+        remaining, cancelled, phases ? &*phases : nullptr, excluded_turns,
+        finite_cutoff ? std::optional(finite_scale) : std::nullopt, *colour / determinant,
+        PointDetectorPolicy{}.absolute_rgb_error * .01);
     if (!screen) return {};
+    upper_bound = upper_bound + screen->grouped_rgb;
     for (const auto& candidate : screen->candidates) {
         const auto density =
             BoundAzimuthImages(mass, spin, radius, scale, *whole, *screen, *polar, candidate,

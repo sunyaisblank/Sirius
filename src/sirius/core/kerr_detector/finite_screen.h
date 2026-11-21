@@ -284,8 +284,128 @@ inline std::optional<NearCriticalPhases> PrepareNearCriticalPhases(double mass, 
         log_edge.lo};
 }
 
+// Share the differentiated fixed-angle integrals across a strip of small
+// radial turning separations. Each partial then needs only one local panel
+// and the Leibniz boundary term for its moving polar endpoint.
+class PolarDerivativeStrip {
+  public:
+    static std::optional<PolarDerivativeStrip> Prepare(double mass, double spin, Range centre,
+                                                       Range scale, const StationaryChart& chart) {
+        PolarDerivativeStrip result;
+        const Range domain(0.0, std::min(scale.hi, 0x1p-10));
+        const auto radial =
+            EncloseRegularizedRadialPhase(mass, spin, centre, domain, chart.inverse_start, 128);
+        const FilmJet u(centre, {Range(1.0), Range(0.0)}), s(domain, {Range(0.0), Range(1.0)});
+        const auto constants =
+            InvertStationaryScalars(mass, spin, std::array{u, FilmJet(0.0) - Square(s)});
+        if (!radial || !constants) return {};
+        result.radial_ = *radial;
+        result.a2_ = Square(FilmJet(spin));
+        result.angular_ = constants->lambda;
+        const auto p = result.a2_ - constants->eta - Square(result.angular_);
+        result.omega2_ =
+            (sqrt(Square(p) + FilmJet(4.0) * result.a2_ * constants->eta) - p) * FilmJet(.5);
+        result.amplitude2_ = constants->eta / result.omega2_;
+        result.amplitude_ = sqrt(result.amplitude2_);
+        result.maximum_log_scale_ = LogPoint(domain.hi).lo;
+        if (!result.amplitude_.value.Finite() || !std::isfinite(result.maximum_log_scale_))
+            return {};
+        for (unsigned i = 0; i < kPanels; ++i) {
+            const auto sample = result.At({Node(i), Node(i + 1)});
+            const FilmJet width(Range(Node(i + 1)) - Range(Node(i)));
+            for (unsigned j = 0; j < sample.size(); ++j)
+                result.prefix_[i + 1][j] = result.prefix_[i][j] + sample[j] * width;
+        }
+        const auto half = result.Integrate(FilmJet(Range(kPiBounds.lo * .5, kPiBounds.hi * .5)));
+        const auto initial = result.ToLatitude(chart.initial_mu);
+        if (!half || !initial) return {};
+        result.initial_ = *initial;
+        for (unsigned j = 0; j < half->size(); ++j) result.period_[j] = (*half)[j] * FilmJet(2.0);
+        return result;
+    }
+
+    using PolarJet = std::array<FilmJet, 2>;
+
+    std::optional<PolarJet> ToLatitude(Range latitude) const {
+        const FilmJet ratio = FilmJet(latitude) / amplitude_;
+        const Range value = AsinBounds(ratio.value),
+                    divisor = sqrt(Range(1.0) - Square(ratio.value));
+        return Integrate({value, {ratio.derivative[0] / divisor, ratio.derivative[1] / divisor}});
+    }
+
+    bool Covers(Range log_separation) const { return log_separation.hi <= maximum_log_scale_; }
+
+    std::optional<Range> Density(Range latitude, const PolarJet& final, unsigned winding,
+                                 bool approach, Range log_separation, Range separation,
+                                 Range sky) const {
+        if (!sky.Finite()) return {};
+        PolarJet target;
+        for (unsigned j = 0; j < target.size(); ++j)
+            target[j] = period_[j] * FilmJet(winding) + initial_[j] +
+                        (approach ? period_[j] - final[j] : final[j]);
+        const Range radial_u = Range(-2.0) * radial_.leading_gradient[0] * log_separation +
+                               radial_.time_remainder.radial;
+        const Range transverse = separation * target[0].derivative[1] - radial_.time_log_derivative;
+        if (!(transverse.lo > 0.0)) return {};
+        const Range log_s_u = (radial_u - target[0].derivative[0]) / transverse;
+        const Range slope = Abs(
+            target[1].derivative[0] + radial_.spin_remainder.radial +
+            (separation * target[1].derivative[1] + radial_.spin_remainder.log_scale) * log_s_u);
+        if (!(slope.lo > 0.0)) return {};
+        const Range z2 = Square(latitude);
+        const Range speed = sqrt((amplitude2_.value - z2) * (omega2_.value + a2_.value * z2));
+        // Each fixed latitude has one monotone azimuth branch across the
+        // admitted chart. One source can occur at most once per lift in sky.
+        const Range span = (Range(sky.hi) - Range(sky.lo)) / (Range(2.0) * kPiBounds);
+        const Range roots = Range(1.0) + Range(std::floor(span.hi));
+        const Range density =
+            roots * Range(2.0) * Square(separation) / (slope * transverse * speed);
+        return density.Finite() ? std::optional(density) : std::nullopt;
+    }
+
+  private:
+    static constexpr unsigned kPanels = 128;
+    static constexpr double kEnd = kPiBounds.hi * .5;
+    static double Node(unsigned i) { return std::scalbn(double(i) * kEnd, -7); }
+
+    PolarJet At(Range angle) const {
+        const auto sin2 = FilmJet(Square(SineLobe(angle)));
+        const FilmJet time = FilmJet(1.0) / sqrt(omega2_ + a2_ * amplitude2_ * sin2);
+        return {time, time * (angular_ / (FilmJet(1.0) - amplitude2_ * sin2) +
+                              FilmJet(radial_.limiting_drag, radial_.drag_gradient))};
+    }
+
+    std::optional<PolarJet> Integrate(const FilmJet& phase) const {
+        const Range angle = phase.value;
+        if (!angle.Finite() || angle.lo < 0.0 || angle.hi > kEnd) return {};
+        unsigned i = std::min(kPanels, unsigned(angle.lo / kEnd * kPanels));
+        if (Node(i) > angle.lo) --i;
+        const auto sample = At({Node(i), angle.hi});
+        const auto boundary = At(angle);
+        const FilmJet length(angle - Range(Node(i)));
+        PolarJet result;
+        for (unsigned j = 0; j < sample.size(); ++j) {
+            result[j] = prefix_[i][j] + sample[j] * length;
+            for (unsigned axis = 0; axis < 2; ++axis)
+                result[j].derivative[axis] =
+                    result[j].derivative[axis] + boundary[j].value * phase.derivative[axis];
+            if (!result[j].value.Finite() || !result[j].derivative[0].Finite() ||
+                !result[j].derivative[1].Finite())
+                return {};
+        }
+        return result;
+    }
+
+    FilmJet a2_, angular_, omega2_, amplitude2_, amplitude_;
+    RegularizedRadialPhase radial_;
+    double maximum_log_scale_;
+    PolarJet period_, initial_;
+    std::array<PolarJet, kPanels + 1> prefix_{};
+};
+
 struct CatalogueScreen {
     std::vector<FiniteCandidate> candidates;
+    Range grouped_rgb;
     Range edge_time;
     PhasePair period, initial;
 };
@@ -297,7 +417,7 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
     double clearance, std::size_t& remaining, const std::function<bool()>& cancelled,
     const NearCriticalPhases* shared_phases,
     std::span<const AngularCatalogue::Entry* const> excluded_turns,
-    std::optional<Range> finite_scale) {
+    std::optional<Range> finite_scale, Range density_to_rgb, double grouped_allowance) {
     const Range fixed_phi = FixedPupilAzimuth(mass, spin, chart);
     const Range amplitude = sqrt(polar.shape.amplitude2);
     if (!fixed_phi.Finite() ||
@@ -364,15 +484,23 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
         phase.spin_residual = phase.spin_residual + Range(-decay.hi, decay.hi);
         return phase;
     };
+    const unsigned last = *std::ranges::max_element(cutoffs);
+    // At small radial separations an entire row can contribute very
+    // little even when its longitude window contains many sources.
+    constexpr unsigned first_grouped_winding = 12;
+    const auto strip = finite_scale || last <= first_grouped_winding
+                           ? std::nullopt
+                           : PolarDerivativeStrip::Prepare(mass, spin, centre, scale, chart);
     struct ScreenRow {
         const AngularCatalogue::Row* row;
+        Range latitude;
+        std::optional<PolarDerivativeStrip::PolarJet> endpoint;
         std::vector<const AngularCatalogue::Entry*> subset;
         PhasePair equator, critical_equator;
         unsigned cutoff;
     };
     std::array<std::vector<ScreenRow>, 2> screen_rows;
     const double reach = (Range(turn_amplitude.lo) - Range(clearance)).hi;
-    const unsigned last = *std::ranges::max_element(cutoffs);
     for (const bool north : {false, true}) {
         auto& output = screen_rows[north ? 1 : 0];
         for (const auto& row : catalogue.Rows(north)) {
@@ -388,8 +516,10 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                         AsinBounds(clipped / shared_phases->absolute_amplitude));
                     if (partial[0].Finite() && partial[1].Finite()) critical_equator = partial;
                 }
-                output.push_back(
-                    {&row, std::move(entries), equator, critical_equator, cutoffs[group]});
+                const auto endpoint =
+                    strip && entries.empty() ? strip->ToLatitude(latitude) : std::nullopt;
+                output.push_back({&row, latitude, endpoint, std::move(entries), equator,
+                                  critical_equator, cutoffs[group]});
                 return true;
             };
             const Range gap = turn_amplitude - row.latitude;
@@ -427,7 +557,7 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
             }
         }
     }
-    CatalogueScreen result{{}, edge_time, period, initial};
+    CatalogueScreen result{{}, {}, edge_time, period, initial};
     for (unsigned m = 0; m < last; ++m) {
         if (cancelled && cancelled()) return {};
         const Range m_value(m);
@@ -437,6 +567,8 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
         const Range log_branch(log_span.lo, std::min(largest_log.hi, log_span.hi));
         if (!log_span.Finite()) return {};
         if (log_branch.lo > log_branch.hi) continue;
+        const auto grouped_separation =
+            strip && strip->Covers(log_branch) ? ExpBounds(log_branch) : InvalidRange();
         const bool near_critical =
             shared_phases && log_branch.hi <= shared_phases->maximum_log_scale;
         const auto coarse =
@@ -499,6 +631,29 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
                 const Range phi = m_value * active_period[1] + active_initial[1] + part[1];
                 const Range sky = sky_window(phi, tau, *coarse);
                 if (sky.lo > sky.hi) continue;
+                if (m >= first_grouped_winding && grouped_separation.Finite() &&
+                    prepared.endpoint && sky.Finite()) {
+                    const Range full_part =
+                        approach ? period[0] - prepared.equator[0] : prepared.equator[0];
+                    const Range full_target = m_value * period[0] + initial[0] + full_part;
+                    if (full_target.Finite() && full_target.lo > edge_time.hi) {
+                        // The immutable row total already includes every longitude.
+                        // No individual source is examined while applying this bound.
+                        const auto density =
+                            strip->Density(prepared.latitude, *prepared.endpoint, m, approach,
+                                           log_branch, grouped_separation, sky);
+                        if (density) {
+                            const Range contribution =
+                                density_to_rgb * prepared.row->weighted_temperature * *density;
+                            const Range total = result.grouped_rgb + Range(0.0, contribution.hi);
+                            if (contribution.Finite() && contribution.hi >= 0.0 &&
+                                total.hi <= grouped_allowance) {
+                                result.grouped_rgb = total;
+                                continue;
+                            }
+                        }
+                    }
+                }
                 const auto visit = [&](const AngularCatalogue::Entry& entry) {
                     if (remaining == 0 || (cancelled && cancelled())) return false;
                     --remaining;
