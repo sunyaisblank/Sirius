@@ -506,13 +506,19 @@ inline Vec4 EndpointAcceleration(const Vec4& velocity, const RetainedMetricSampl
 using WideConnection = std::array<std::array<std::array<Twofold, 4>, 4>, 4>;
 static WideConnection WideChristoffel(const Tensor<Twofold, 4, 4>& inverse,
                                       const Tensor<Twofold, 4, 4, 4>& dg) {
+    // Every raised component uses the same unscaled derivative sums.
+    // Keep the factor of one half after the original contraction.
+    WideConnection numerator;
+    for (int v = 0; v < 4; ++v)
+        for (int a = 0; a < 4; ++a)
+            for (int b = 0; b < 4; ++b)
+                numerator[v][a][b] = dg(a, v, b) + dg(b, v, a) - dg(v, a, b);
     WideConnection G;
     for (int mu = 0; mu < 4; ++mu)
         for (int a = 0; a < 4; ++a)
             for (int b = 0; b < 4; ++b) {
                 Twofold sum;
-                for (int v = 0; v < 4; ++v)
-                    sum += inverse(mu, v) * (dg(a, v, b) + dg(b, v, a) - dg(v, a, b));
+                for (int v = 0; v < 4; ++v) sum += inverse(mu, v) * numerator[v][a][b];
                 G[mu][a][b] = sum * .5;
             }
     return G;
