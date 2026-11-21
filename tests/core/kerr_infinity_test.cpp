@@ -525,6 +525,22 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
         EXPECT_EQ(CertifyKerrDetectorCapture(KerrSchildParams::Schwarzschild(1), close.x, close.k,
                                              64),
                   1.0 - impact * impact / 27.0 > 0.0);
+        // The stationary-point certificate must resolve either sign and
+        // enclose the analytic minimum without relying on Bernstein panels.
+        using finite_tail_detail::Range;
+        using namespace kerr_infinity_detail;
+        const auto coefficients = RadialCoefficients(
+            1.0, 0.0, Range(-1.0), Range(impact), Square(Range(impact)));
+        const auto minimum = EncloseRadialMinimum(
+            DetectorRadialBounds<Range>{coefficients, Range(0.05), Range(0.5), true});
+        ASSERT_TRUE(minimum);
+        EXPECT_LE(minimum->inverse_radius.lo, 1.0 / 3.0);
+        EXPECT_GE(minimum->inverse_radius.hi, 1.0 / 3.0);
+        const long double exact_value = 1.0L - static_cast<long double>(impact) * impact / 27.0L;
+        EXPECT_LE(minimum->value.lo, exact_value);
+        EXPECT_GE(minimum->value.hi, exact_value);
+        EXPECT_EQ(minimum->value.lo > 0.0, shift < 0.0);
+        EXPECT_EQ(minimum->value.hi < 0.0, shift > 0.0);
     }
 }
 

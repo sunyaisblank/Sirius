@@ -645,6 +645,53 @@ template <typename Scalar>
 
     return DetectorRadialBounds<Scalar>{coefficients, start, horizon, radial_bounds.hi < 0.0};
 }
+// For H(u)=c0+c2*u²+c3*u³+c4*u⁴ with c2<0, H'/u is
+// quadratic and starts negative. Its first sign change, if present, is
+// the only positive local minimum. The second sign change is a maximum.
+struct RadialMinimum {
+    finite_tail_detail::Range inverse_radius;
+    finite_tail_detail::Range value;
+};
+
+template <typename Scalar>
+[[nodiscard]] inline std::optional<RadialMinimum> EncloseRadialMinimum(
+    const DetectorRadialBounds<Scalar>& bounds) {
+    using finite_tail_detail::Enclosure;
+    using finite_tail_detail::Magnitude;
+    using finite_tail_detail::Range;
+    using finite_tail_detail::Square;
+    const auto& c = bounds.coefficients;
+    const Range a = Range(4.0) * Enclosure(c[4]);
+    const Range b = Range(3.0) * Enclosure(c[3]);
+    const Range d = Range(2.0) * Enclosure(c[2]);
+    if (!(d.hi < 0.0) || !(b.lo > 0.0)) return {};
+
+    const Range discriminant = Square(b) - Range(4.0) * a * d;
+    if (!(discriminant.lo > 0.0)) return {};
+    // The root on the increasing branch remains well conditioned when
+    // the quartic coefficient vanishes, including in Schwarzschild.
+    const Range u = Range(-2.0) * d / (b + sqrt(discriminant));
+    if (!u.Finite() || !(u.lo > bounds.start.hi && u.hi < bounds.horizon.lo))
+        return {};
+
+    const Range curvature = Range(2.0) * Enclosure(c[2]) +
+                            u * (Range(6.0) * Enclosure(c[3]) +
+                                 u * Range(12.0) * Enclosure(c[4]));
+    if (!(curvature.lo > 0.0)) return {};
+
+    // Evaluate H at a shared fixed centre, retaining pupil correlation.
+    // The tangent to the convex radial potential bounds the minimum
+    // from below. Using the interval radius inside H directly would
+    // lose cancellation between the radial terms at the minimum.
+    const Scalar centre(std::midpoint(u.lo, u.hi));
+    const Range value = Enclosure(EvaluateRadial(c, centre));
+    const std::array derivative{Scalar{}, c[2] * Scalar(2.0), c[3] * Scalar(3.0),
+                                c[4] * Scalar(4.0)};
+    const Range slope = Enclosure(EvaluateRadial(derivative, centre));
+    const Range lower = value - Range(Magnitude(slope)) * Range(finite_tail_detail::MidpointError(u));
+    if (!value.Finite() || !lower.Finite()) return {};
+    return RadialMinimum{u, Range(lower.lo, value.hi)};
+}
 }  // namespace kerr_infinity_detail
 
 [[nodiscard]] inline bool CertifyKerrDetectorCapture(
@@ -660,20 +707,22 @@ template <typename Scalar>
 // The two transverse components parameterize the physical unit direction.
 // Their shared dependence is kept through the radial polynomial and its
 // Bernstein subdivision.
-[[nodiscard]] inline bool CertifyCorrelatedKerrDetectorCapture(
+namespace kerr_infinity_detail {
+[[nodiscard]] inline std::optional<DetectorRadialBounds<finite_tail_detail::PupilAffine>>
+EncloseCorrelatedKerrDetectorState(
     const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
     const std::array<std::array<finite_tail_detail::Range, 4>, 4>& tetrad,
-    const std::array<finite_tail_detail::Range, 3>& direction, unsigned maximum_panels) {
+    const std::array<finite_tail_detail::Range, 3>& direction) {
     using finite_tail_detail::PupilAffine;
     using finite_tail_detail::Square;
     if (!std::ranges::all_of(direction, &finite_tail_detail::Range::Finite) ||
         !(direction[0].hi < 0.0))
-        return false;
+        return {};
 
     const auto right = PupilAffine::Coordinate(direction[1], true);
     const auto up = PupilAffine::Coordinate(direction[2], false);
     const auto radial = PupilAffine(0.0) - sqrt(PupilAffine(1.0) - Square(right) - Square(up));
-    if (!radial.Bounds().Finite()) return false;
+    if (!radial.Bounds().Finite()) return {};
     std::array<PupilAffine, 4> event, tangent;
     for (int i = 0; i < 4; ++i) {
         event[i] = PupilAffine(position[i]);
@@ -681,10 +730,28 @@ template <typename Scalar>
                      PupilAffine(tetrad[1][i]) * radial + PupilAffine(tetrad[2][i]) * right +
                      PupilAffine(tetrad[3][i]) * up;
     }
-    const auto bounds = kerr_infinity_detail::EncloseDetectorRadialState(parameters, event, tangent);
+    return EncloseDetectorRadialState(parameters, event, tangent);
+}
+}  // namespace kerr_infinity_detail
+
+[[nodiscard]] inline bool CertifyCorrelatedKerrDetectorCapture(
+    const KerrSchildParams& parameters, const std::array<finite_tail_detail::Range, 4>& position,
+    const std::array<std::array<finite_tail_detail::Range, 4>, 4>& tetrad,
+    const std::array<finite_tail_detail::Range, 3>& direction, unsigned maximum_panels) {
+    using namespace kerr_infinity_detail;
+    using finite_tail_detail::PupilAffine;
+    if (maximum_panels == 0) return false;
+    const auto bounds = EncloseCorrelatedKerrDetectorState(parameters, position, tetrad, direction);
     if (!bounds || !bounds->inward) return false;
+    if (const auto minimum = EncloseRadialMinimum(*bounds)) {
+        if (minimum->value.hi < 0.0) return false;
+        if (minimum->value.lo > 0.0 &&
+            EvaluateRadial(bounds->coefficients, PupilAffine(bounds->start.lo)).Bounds().lo > 0.0 &&
+            EvaluateRadial(bounds->coefficients, PupilAffine(bounds->horizon.hi)).Bounds().lo > 0.0)
+            return true;
+    }
     unsigned budget = std::min(maximum_panels, 64U);
-    return kerr_infinity_detail::ProvePositiveRadialPotentialFor(
+    return ProvePositiveRadialPotentialFor(
         bounds->coefficients, {bounds->start.lo, bounds->horizon.hi}, budget);
 }
 
