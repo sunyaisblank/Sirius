@@ -18,6 +18,8 @@ struct KerrInfinityConfig {
     double input_constraint_tolerance = 1e-8;
     unsigned maximum_attempts = 4096;
     bool allow_radial_turn = false;
+    // Keep any skipped inward segment outside an explicitly governed radius.
+    double minimum_turn_radius = 0.0;
 };
 
 enum class KerrInfinityFailure { InvalidInput, RadialUnresolved, WorkLimit, Arithmetic };
@@ -204,23 +206,62 @@ struct RadialTurn {
     std::array<Jet, 4> factor;
 };
 
-inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const Constants& c) {
+inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const Constants& c,
+                                                 double minimum_radius) {
     using finite_tail_detail::Range;
     if (!(mass > 0.0) || !finite_tail_detail::RoundingEnvironment()) return {};
 
     const auto interval_coefficients =
         RadialCoefficients(mass, spin, Range(c.energy.real), Range(c.angular_momentum.real),
                            Range(c.carter_combination.real));
+    const auto coefficients =
+        RadialCoefficients(mass, spin, c.energy, c.angular_momentum, c.carter_combination);
     double lower = c.inverse_radius.real;
-    // Restrict the accelerated branch to turns outside 4M. The full tracer
-    // handles closer or poorly separated turning and capture trajectories.
-    double upper = 0.25 / mass;
-    const auto limit = Range(0.25) / Range(mass);
-    upper = std::min(upper, limit.lo);
-    if (!(0.0 < lower && lower < upper) ||
-        !(EvaluateRadial(interval_coefficients, Range(lower)).lo > 0.0) ||
-        !(EvaluateRadial(interval_coefficients, Range(upper)).hi < 0.0))
+    if (!(lower > 0.0) || !(EvaluateRadial(interval_coefficients, Range(lower)).lo > 0.0))
         return {};
+
+    const auto negative = [&](double candidate) {
+        return lower < candidate &&
+               EvaluateRadial(interval_coefficients, Range(candidate)).hi < 0.0;
+    };
+    const auto search_limit = [&](double inverse_radius_times_mass) {
+        const double exterior = (Range(inverse_radius_times_mass) / Range(mass)).lo;
+        return minimum_radius > 0.0 ? std::min(exterior, (Range(1.0) / Range(minimum_radius)).lo)
+                                    : exterior;
+    };
+    double upper = search_limit(0.25);
+    if (!negative(upper)) {
+        // Outside 2M, the Kerr radial denominator decreases with u. Bound
+        // it at the inner search limit to keep the entire segment regular.
+        if (spin == 0.0) return {};
+        const double limit = search_limit(0.5);
+        const Range u(limit);
+        const Range a(spin);
+        const auto denominator = Range(1.0) - Range(2.0) * Range(mass) * u + a * a * u * u;
+        if (!(lower < limit) || !(denominator.lo > 0.0)) return {};
+        upper = limit;
+        if (!negative(upper)) {
+            // The forbidden interval may be wholly inside the search range.
+            // Roots of H'(u)/u suggest trial points. Interval signs and the
+            // deflated factor below certify the bracket independently.
+            const std::array derivative{2.0 * coefficients[2].real,
+                                        3.0 * coefficients[3].real * limit,
+                                        4.0 * coefficients[4].real * limit * limit};
+            if (!std::ranges::all_of(derivative, [](double x) { return std::isfinite(x); }))
+                return {};
+            const auto extrema =
+                sirius::core::detail::FindPolynomialRootsOnUnitInterval(derivative, 2);
+            upper = lower;
+            for (int i = 0; i < extrema.count; ++i) {
+                const double candidate = extrema.values[static_cast<unsigned>(i)] * limit;
+                if (negative(candidate)) {
+                    upper = candidate;
+                    break;
+                }
+            }
+            if (!(lower < upper)) return {};
+        }
+    }
 
     for (unsigned split = 0; split < 60; ++split) {
         const double mid = std::midpoint(lower, upper);
@@ -249,8 +290,6 @@ inline std::optional<RadialTurn> AdmitRadialTurn(double mass, double spin, const
         if (!bound.Finite() || !(bound.lo > 0.0)) return {};
     }
 
-    const auto coefficients =
-        RadialCoefficients(mass, spin, c.energy, c.angular_momentum, c.carter_combination);
     const double root = std::midpoint(lower, upper);
     const Jet fixed_root(root);
     const auto slope = EvaluateRadial(DeflateRadialTurn(coefficients, fixed_root), fixed_root);
@@ -346,7 +385,8 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
         !std::isfinite(config.absolute_tolerance) || !(config.absolute_tolerance > 0.0) ||
         !std::isfinite(config.relative_tolerance) || config.relative_tolerance < 0.0 ||
         !std::isfinite(config.input_constraint_tolerance) ||
-        config.input_constraint_tolerance < 0.0)
+        config.input_constraint_tolerance < 0.0 || !std::isfinite(config.minimum_turn_radius) ||
+        config.minimum_turn_radius < 0.0)
         return std::unexpected(KerrInfinityFailure::InvalidInput);
     State state{};
     std::array<Constants, 2> constants;
@@ -364,7 +404,8 @@ inline bool Derivative(double mass, double spin, const std::array<Constants, 2>&
     if (through_turn) {
         if (!config.allow_radial_turn) return std::unexpected(KerrInfinityFailure::InvalidInput);
         for (unsigned column = 0; column < constants.size(); ++column) {
-            const auto turn = AdmitRadialTurn(mass, spin, constants[column]);
+            const auto turn =
+                AdmitRadialTurn(mass, spin, constants[column], config.minimum_turn_radius);
             if (!turn) return std::unexpected(KerrInfinityFailure::RadialUnresolved);
             turns[column] = *turn;
         }

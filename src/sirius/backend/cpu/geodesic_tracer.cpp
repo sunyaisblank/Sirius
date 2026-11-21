@@ -1852,6 +1852,7 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 if (try_turn) {
                     tried_inward_handoff = true;
                     infinity_config.allow_radial_turn = true;
+                    infinity_config.minimum_turn_radius = config_.strong_field_radius;
                     infinity_config.maximum_attempts =
                         std::min(infinity_config.maximum_attempts,
                                  static_cast<unsigned>(config_.max_steps - result.steps_taken));

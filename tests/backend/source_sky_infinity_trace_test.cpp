@@ -400,6 +400,26 @@ TEST(SourceSkyInfinityTrace, InwardDiskFreeProbeCrossesAnExteriorKerrTurn) {
     EXPECT_FALSE(probe.volumetric_hit);
     RecordProperty("full_trace_attempts", full.steps_taken);
     RecordProperty("point_probe_attempts", probe.steps_taken);
+
+    // This launched ray turns inside the former 4M search limit. The
+    // continuation must still honour a configured strong-field step cap.
+    const auto strong_ray = PupilRay(30, std::numbers::pi / 2, 0, {-1, -.16, .022});
+    const auto strong_full = tracer.Trace(strong_ray);
+    const auto strong_probe = tracer.TracePointSource(strong_ray);
+    ExpectSameInfinity(strong_probe, strong_full);
+    EXPECT_GE(strong_probe.min_radius, 3.3);
+    EXPECT_LT(strong_probe.min_radius, 3.5);
+    EXPECT_LT(strong_probe.steps_taken * 8, strong_full.steps_taken);
+    RecordProperty("strong_full_trace_attempts", strong_full.steps_taken);
+    RecordProperty("strong_point_probe_attempts", strong_probe.steps_taken);
+
+    config.strong_field_radius = 4.0f;
+    config.strong_field_max_step = .2f;
+    GeodesicTracer capped(&metric, config);
+    const auto capped_probe = capped.TracePointSource(strong_ray);
+    ExpectSameInfinity(capped_probe, strong_full);
+    EXPECT_GT(capped_probe.steps_taken, strong_probe.steps_taken * 8);
+    RecordProperty("strong_capped_probe_attempts", capped_probe.steps_taken);
 }
 
 TEST(SourceSkyInfinityTrace, PointSourceWorkExhaustionAndCancellationHaveNoSourceMap) {

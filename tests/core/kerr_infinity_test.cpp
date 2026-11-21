@@ -343,8 +343,25 @@ TEST(KerrInfinity, RadialTurnMatchesIndependentMinoTimeScatteringAndColumns) {
         std::array<double, 6>{0.3, 0.02, -0.01, 0.03, 0.08, -0.05},
         std::array<double, 6>{-0.4, -0.02, 0.03, -0.02, -0.07, 0.09}};
     constexpr double seed = 1e-3, delta = 1e-4;
-    for (double spin : {-0.9, 0.0, 0.9}) {
-        const CarterInput input{1, spin, 20, 1.2, 1.1, -1, 8, 0.8};
+    struct ScatteringCase {
+        CarterInput input;
+        double minimum_radius, maximum_radius;
+    };
+    const double equator = std::numbers::pi / 2;
+    const std::array cases{
+        ScatteringCase{{1, -0.9, 20, 1.2, 1.1, -1, 8, 0.8}, 4, 20},
+        ScatteringCase{{1, 0, 20, 1.2, 1.1, -1, 8, 0.8}, 4, 20},
+        ScatteringCase{{1, 0.9, 20, 1.2, 1.1, -1, 8, 0.8}, 4, 20},
+        ScatteringCase{{1, 0.9, 20, equator, 1.1, -1, -4, std::sqrt(0.45)}, 2.5, 3.1},
+        ScatteringCase{{1, -0.9, 20, equator, 1.1, -1, 4, std::sqrt(0.45)}, 2.5, 3.1},
+        // The potential is positive at both 2M and 4M and negative between
+        // two roots, so endpoint-only probing will miss this scattering ray.
+        ScatteringCase{{1, 0.7, 20, equator, 1.1, -1, -1, std::sqrt(28.6)}, 3.7, 4},
+    };
+    for (const auto& [input, min_radius, max_radius] : cases) {
+        const double spin = input.spin;
+        SCOPED_TRACE(spin);
+        SCOPED_TRACE(input.angular_momentum);
         const auto event = CarterEvent(input, -1);
         KerrSchildFamily authority(KerrSchildParams::Kerr(1, spin));
         Metric4d metric;
@@ -368,8 +385,8 @@ TEST(KerrInfinity, RadialTurnMatchesIndependentMinoTimeScatteringAndColumns) {
         const auto result = TraceKerrInfinity(1, spin, metric, dg, event.x, event.k, X, K, seed,
                                               config, &turn_radius);
         ASSERT_TRUE(result) << spin << ": " << static_cast<int>(result.error());
-        EXPECT_GT(turn_radius, 4.0);
-        EXPECT_LT(turn_radius, input.radius);
+        EXPECT_GT(turn_radius, min_radius);
+        EXPECT_LT(turn_radius, max_radius);
         const auto reference = ScatteringReference(input, 1e-4L);
         const auto finer = ScatteringReference(input, 5e-5L);
         ASSERT_TRUE(reference && finer);
@@ -395,19 +412,25 @@ TEST(KerrInfinity, RadialTurnMatchesIndependentMinoTimeScatteringAndColumns) {
 }
 
 TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
-    for (const double momentum : {2.0, std::sqrt(27.0), 5.3}) {
-        const CarterInput input{1, 0, 20, std::numbers::pi / 2, 0, -1, momentum, 0};
+    const double equator = std::numbers::pi / 2;
+    const std::array inputs{
+        CarterInput{1, 0, 20, equator, 0, -1, 2.0, 0},
+        CarterInput{1, 0, 20, equator, 0, -1, std::sqrt(27.0), 0},
+        CarterInput{1, 0, 20, equator, 0, -1, 5.3, 0},
+        CarterInput{1, 0.9, 20, equator, 0, -1, -2.0, 0},
+    };
+    for (const auto& input : inputs) {
         const auto event = CarterEvent(input, -1);
-        KerrSchildFamily authority(KerrSchildParams::Schwarzschild(1));
+        KerrSchildFamily authority(KerrSchildParams::Kerr(1, input.spin));
         Metric4d metric;
         Tensor<Dual<double>, 4, 4, 4> dg;
         authority.Evaluate(event.x, metric, dg);
         auto config = Accurate();
         config.allow_radial_turn = true;
         double turn_radius = -1.0;
-        const auto result = TraceKerrInfinity(1, 0, metric, dg, event.x, event.k, {}, {}, 1e-3,
-                                              config, &turn_radius);
-        ASSERT_FALSE(result) << momentum;
+        const auto result = TraceKerrInfinity(1, input.spin, metric, dg, event.x, event.k, {}, {},
+                                              1e-3, config, &turn_radius);
+        ASSERT_FALSE(result) << input.angular_momentum;
         EXPECT_EQ(result.error(), KerrInfinityFailure::RadialUnresolved);
         EXPECT_EQ(turn_radius, -1.0);
     }
