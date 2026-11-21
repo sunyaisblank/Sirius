@@ -1085,23 +1085,20 @@ base::Expected<void> RenderSession::WriteOutput() {
                               "produced a non-finite sample at channel " + std::to_string(*bad));
         }
 
-        const std::vector<float> output = display_.SnapshotFloatData();
-        const float* data = output.data();
-
-        if (!config_.write_output) {
-            // In-memory progressive previews consume the display-linear
-            // buffer directly and must not overwrite the configured output.
-        } else if (ext == "png") {
-            if (!PNGWriter::WriteRgba(config_.output_path, width, height, data)) {
-                return base::Fail(base::ErrorDomain::kIo, "write PNG", config_.output_path);
-            }
-        } else {
-            if (ext != "ppm") {
-                std::cout << "[Session] Unrecognised output extension '" << ext
-                          << "'; writing PPM data" << std::endl;
-            }
-            if (!EXRWriter::WritePpmRgba(config_.output_path, width, height, data)) {
-                return base::Fail(base::ErrorDomain::kIo, "write PPM", config_.output_path);
+        if (config_.write_output) {
+            const auto output = display_.SnapshotFloatData();
+            if (ext == "png") {
+                if (!PNGWriter::WriteRgba(config_.output_path, width, height, output.data())) {
+                    return base::Fail(base::ErrorDomain::kIo, "write PNG", config_.output_path);
+                }
+            } else {
+                if (ext != "ppm") {
+                    std::cout << "[Session] Unrecognised output extension '" << ext
+                              << "'; writing PPM data" << std::endl;
+                }
+                if (!EXRWriter::WritePpmRgba(config_.output_path, width, height, output.data())) {
+                    return base::Fail(base::ErrorDomain::kIo, "write PPM", config_.output_path);
+                }
             }
         }
     }
