@@ -699,6 +699,9 @@ TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPriv
     SessionConfig config;
     sirius::test::ConfigureMovingKerrDetector(config);
     config.width = config.height = 4;
+    // Include escaping rays that need detector probes. The narrow science
+    // fixture can now complete from the fixed-pupil bounds alone.
+    config.camera_fov = 16;
     config.samples_per_pixel = 1;
     config.write_output = false;
     config.backend = sirius::render::RenderBackend::Vulkan;
@@ -710,7 +713,8 @@ TEST(RenderSessionProbe, OnePointRegionFeedsConcurrentDeviceProbesAndCancelsPriv
     const bool cancelled = session.Cancel();
     executor.resume.set_value();
     session.WaitForCompletion();
-    EXPECT_TRUE(active) << "one detector region did not submit concurrent independent rays";
+    EXPECT_TRUE(active) << "one detector region did not submit concurrent independent rays\n"
+                        << capture.output.str();
     EXPECT_TRUE(cancelled);
     EXPECT_EQ(session.GetState(), SessionState::Cancelled);
     EXPECT_EQ(executor.steps.load(), 2);
