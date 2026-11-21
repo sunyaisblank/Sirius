@@ -417,6 +417,8 @@ TEST(RenderSessionProbe, BackendAutoPreservesStrictDeviceAndPrecisionRequests) {
 }
 
 TEST(RenderSessionProbe, BackendAutoUsesCpuWithNoIcdAndKeepsExplicitVulkanIntent) {
+    sirius::test::ScopedEnvironmentVariable packaged_provider("SIRIUS_PACKAGED_SOFTWARE_VULKAN",
+                                                              nullptr);
     sirius::test::ScopedEnvironmentVariable icd("VK_ICD_FILENAMES", "/sirius/missing-icd.json");
     sirius::test::ScopedEnvironmentVariable drivers("VK_DRIVER_FILES", "/sirius/missing-icd.json");
     sirius::test::ScopedEnvironmentVariable additional("VK_ADD_DRIVER_FILES", "");

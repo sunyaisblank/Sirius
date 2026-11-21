@@ -68,6 +68,8 @@ TEST(RenderCommandParse, ExplicitGpuRequestRunsVulkanWhenDevicePresent) {
 }
 
 TEST(RenderSessionProbe, BackendAutoPublishesCpuWithNoIcd) {
+    sirius::test::ScopedEnvironmentVariable packaged_provider("SIRIUS_PACKAGED_SOFTWARE_VULKAN",
+                                                              nullptr);
     sirius::test::ScopedEnvironmentVariable icd("VK_ICD_FILENAMES", "/sirius/missing-icd.json");
     sirius::test::ScopedEnvironmentVariable drivers("VK_DRIVER_FILES", "/sirius/missing-icd.json");
     sirius::test::ScopedEnvironmentVariable additional("VK_ADD_DRIVER_FILES", "");
@@ -127,6 +129,8 @@ TEST(RenderCommandParse, BackendVulkanDeclinesMetricOffTheRenderPath) {
 }
 
 TEST(RenderCommandParse, ReusedCommandDoesNotRetainAnEarlierGpuRequest) {
+    sirius::test::ScopedEnvironmentVariable packaged_provider("SIRIUS_PACKAGED_SOFTWARE_VULKAN",
+                                                              nullptr);
     RenderCommand cmd;
     GlobalOptions globals;
     SiriusConfig first = SiriusConfig::Defaults();
@@ -149,6 +153,8 @@ TEST(RenderCommandParse, ReusedCommandDoesNotRetainAnEarlierGpuRequest) {
 }
 
 TEST(RenderCommandParse, CliCpuOverridesLowerLayerVulkanBackend) {
+    sirius::test::ScopedEnvironmentVariable packaged_provider("SIRIUS_PACKAGED_SOFTWARE_VULKAN",
+                                                              nullptr);
     RenderCommand cmd;
     GlobalOptions globals;
     SiriusConfig config = SiriusConfig::Defaults();

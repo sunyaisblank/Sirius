@@ -7,6 +7,7 @@ endif()
 # same branch into a failure.
 execute_process(
     COMMAND "${CMAKE_COMMAND}" -E env
+        "SIRIUS_PACKAGED_SOFTWARE_VULKAN="
         "VK_ICD_FILENAMES=/sirius/intentional/missing-vulkan-icd.json"
         "VK_DRIVER_FILES=/sirius/intentional/missing-vulkan-driver.json"
         "VK_ADD_DRIVER_FILES="
