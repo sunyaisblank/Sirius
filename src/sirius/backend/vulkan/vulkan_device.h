@@ -124,6 +124,10 @@ class VulkanDevice final : public ComputeDevice {
     [[nodiscard]] base::Expected<void> ReadBuffer(BufferHandle buffer,
                                                   std::span<std::byte> out) override;
 
+    [[nodiscard]] base::Expected<std::size_t> ReadBufferRowPrefixes(
+        BufferHandle buffer, std::span<std::byte> out, std::size_t row_stride,
+        std::size_t prefix_bytes) override;
+
     [[nodiscard]] std::optional<std::uint64_t> BufferMutationEpoch(
         BufferHandle buffer) const noexcept override;
 

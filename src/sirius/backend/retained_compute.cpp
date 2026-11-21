@@ -33,17 +33,23 @@ struct StageLayout {
     std::span<const std::uint32_t> program;
     std::size_t input_words;
     std::size_t row_words;
+    std::size_t result_words;
 };
 // Same order as KernelStage; planning and allocation share these exact spans.
+// The result prefix ends after the last field consumed by the host decoder.
+// The rest of each row remains on the device for the shader's workspace.
 constexpr std::array<StageLayout, RetainedCompute::kStageCount> kStageLayouts{{
-    {kCameraProgram, 160, kCameraRowWords},
-    {kTransportProgram, 230, kTransportRowWords},
-    {kEndpointProgram, 225, kEndpointRowWords},
-    {kDenseProgram, 560, kDenseRowWords},
-    {kInitializeProgram, 225, kInitializeRowWords},
-    {kRayCameraProgram, 225, kRayCameraRowWords},
-    {kDopriPhaseProgram, 1810, kDopriPhaseRowWords},
+    {kCameraProgram, 160, kCameraRowWords, kCameraRowWords},
+    {kTransportProgram, 230, kTransportRowWords, 2404},
+    {kEndpointProgram, 225, kEndpointRowWords, 504},
+    {kDenseProgram, 560, kDenseRowWords, 204},
+    {kInitializeProgram, 225, kInitializeRowWords, 204},
+    {kRayCameraProgram, 225, kRayCameraRowWords, kRayCameraRowWords},
+    {kDopriPhaseProgram, 1810, kDopriPhaseRowWords, 1004},
 }};
+static_assert(std::ranges::all_of(kStageLayouts, [](const auto& layout) {
+    return layout.result_words <= layout.row_words;
+}));
 
 std::array<std::uint64_t, 2> StageBufferBytes(const StageLayout& layout, std::size_t capacity) {
     const auto rows = static_cast<std::uint64_t>(capacity);
@@ -514,16 +520,23 @@ base::Expected<void> RetainedCompute::Dispatch(Stage& stage, std::size_t active_
     }
     if (dispatch_target_ms_ > 0 && observed->submit_wait_ms > dispatch_target_ms_)
         ++stage.stats.target_overshoots;
-    auto output = std::span(stage.output).first(active_rows * (stage.output.size() / capacity_));
-    const auto read_started = Clock::now();
-    status = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
-    const auto read_finished = Clock::now();
-    stage.stats.read_buffer_ms += milliseconds(read_started, read_finished);
-    if (status) {
-        stage.stats.read_buffer_bytes += output.size_bytes();
-        ObserveReadback(stage, active_rows);
-    }
-    return status;
+    return ReadOutput(stage, active_rows);
+}
+
+base::Expected<void> RetainedCompute::ReadOutput(Stage& stage, std::size_t active_rows) {
+    const auto& layout = kStageLayouts[static_cast<std::size_t>(stage.kind)];
+    const auto output = std::span(stage.output).first(active_rows * layout.row_words);
+    const auto started = std::chrono::steady_clock::now();
+    const auto result = device_.ReadBufferRowPrefixes(
+        stage.buffers[1], std::as_writable_bytes(output), layout.row_words * sizeof(std::uint32_t),
+        layout.result_words * sizeof(std::uint32_t));
+    stage.stats.read_buffer_ms +=
+        std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - started)
+            .count();
+    if (!result) return std::unexpected(result.error());
+    stage.stats.read_buffer_bytes += *result;
+    ObserveReadback(stage, active_rows);
+    return {};
 }
 
 void RetainedCompute::ObserveReadback(Stage& stage, std::size_t active_rows) {
@@ -782,18 +795,7 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
     submission_feedback_.maximum_rows = std::max(submission_feedback_.maximum_rows, rows);
     // A pair is reducible even for one logical ray. The caller must retry it
     // through budget-one individual stages, never call it an irreducible stage.
-    const auto read = [&](Stage& stage, std::size_t active) -> base::Expected<void> {
-        auto output = std::span(stage.output).first(active * (stage.output.size() / capacity_));
-        const auto started = Clock::now();
-        auto result = device_.ReadBuffer(stage.buffers[1], std::as_writable_bytes(output));
-        stage.stats.read_buffer_ms += milliseconds(started, Clock::now());
-        if (result) {
-            stage.stats.read_buffer_bytes += output.size_bytes();
-            ObserveReadback(stage, active);
-        }
-        return result;
-    };
-    status = read(endpoint_, endpoints.size());
+    status = ReadOutput(endpoint_, endpoints.size());
     if (!status) return std::unexpected(status.error());
     RetainedEndpointDenseOutput result;
     result.endpoints.reserve(endpoints.size());
@@ -802,7 +804,7 @@ base::Expected<RetainedEndpointDenseOutput> RetainedCompute::EndpointAndDense(
         if (!output) return std::unexpected(output.error());
         result.endpoints.push_back(*output);
     }
-    status = read(dense_, dense.size());
+    status = ReadOutput(dense_, dense.size());
     if (!status) return std::unexpected(status.error());
     result.dense.reserve(dense.size());
     for (std::size_t row = 0; row < dense.size(); ++row)

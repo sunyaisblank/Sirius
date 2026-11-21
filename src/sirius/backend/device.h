@@ -168,6 +168,16 @@ class ComputeDevice {
     [[nodiscard]] virtual base::Expected<void> ReadBuffer(BufferHandle buffer,
                                                           std::span<std::byte> out) = 0;
 
+    // Copy the prefix of each row to the same offset in a strided host buffer.
+    // Bytes after each prefix are unspecified. Return the number of bytes
+    // copied, including any padding read by the contiguous fallback.
+    [[nodiscard]] virtual base::Expected<std::size_t> ReadBufferRowPrefixes(
+        BufferHandle buffer, std::span<std::byte> out, std::size_t, std::size_t) {
+        const auto result = ReadBuffer(buffer, out);
+        if (!result) return std::unexpected(result.error());
+        return out.size();
+    }
+
     // Binds `buffers` to descriptor set 0, bindings 0..N-1 in order, and
     // dispatches the given workgroup counts.
     [[nodiscard]] virtual base::Expected<void> Dispatch(

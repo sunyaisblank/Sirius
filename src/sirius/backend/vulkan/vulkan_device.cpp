@@ -919,20 +919,34 @@ Expected<void> VulkanDevice::WriteBuffer(BufferHandle handle, std::span<const st
 }
 
 Expected<void> VulkanDevice::ReadBuffer(BufferHandle handle, std::span<std::byte> out) {
+    const auto result = ReadBufferRowPrefixes(handle, out, out.size(), out.size());
+    if (!result) return std::unexpected(result.error());
+    return {};
+}
+
+Expected<std::size_t> VulkanDevice::ReadBufferRowPrefixes(BufferHandle handle,
+                                                          std::span<std::byte> out,
+                                                          std::size_t row_stride,
+                                                          std::size_t prefix_bytes) {
     if (pending_dispatch_)
         return Fail(ErrorDomain::kDevice, "read buffer",
                     "earlier submitted work has no confirmed completion");
     SIRIUS_PRE(handle.value < buffers_.size());
     Buffer& buffer = buffers_[handle.value];
     SIRIUS_PRE(out.size_bytes() <= buffer.size_bytes);
+    if (prefix_bytes == 0 || prefix_bytes > row_stride || out.empty() ||
+        out.size() % row_stride != 0)
+        return Fail(ErrorDomain::kDevice, "read buffer", "invalid row span");
     void* mapped = nullptr;
     if (const VkResult r = vkMapMemory(device_, buffer.memory, 0, out.size_bytes(), 0, &mapped);
         r != VK_SUCCESS) {
         return Fail(ErrorDomain::kDevice, "map buffer for read", VkResultText(r));
     }
-    std::memcpy(out.data(), mapped, out.size_bytes());
+    const auto* source = static_cast<const std::byte*>(mapped);
+    for (std::size_t offset = 0; offset < out.size(); offset += row_stride)
+        std::memcpy(out.data() + offset, source + offset, prefix_bytes);
     vkUnmapMemory(device_, buffer.memory);
-    return {};
+    return out.size() / row_stride * prefix_bytes;
 }
 
 Expected<VulkanDevice::Pipeline*> VulkanDevice::GetOrCreatePipeline(

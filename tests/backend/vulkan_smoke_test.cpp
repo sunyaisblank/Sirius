@@ -648,6 +648,16 @@ TEST(VulkanBackend, BufferAllocationLimitCountsActualResidencyAndPreservesExisti
     ASSERT_TRUE(
         device.ReadBuffer(*buffer, std::as_writable_bytes(std::span(received))).has_value());
     EXPECT_EQ(received, sent);
+    constexpr std::uint32_t sentinel = 0x13579bdfu;
+    received.fill(sentinel);
+    const auto copied = device.ReadBufferRowPrefixes(
+        *buffer, std::as_writable_bytes(std::span(received)), 2 * sizeof(sent[0]), sizeof(sent[0]));
+    ASSERT_TRUE(copied);
+    EXPECT_EQ(*copied, 2 * sizeof(sent[0]));
+    EXPECT_EQ(received, (std::array{sent[0], sentinel, sent[2], sentinel}));
+    EXPECT_FALSE(device.ReadBufferRowPrefixes(*buffer, std::as_writable_bytes(std::span(received)),
+                                              3 * sizeof(sent[0]), sizeof(sent[0])));
+    EXPECT_EQ(received, (std::array{sent[0], sentinel, sent[2], sentinel}));
     // Observe this driver's allocation requirement for a one-byte buffer, then
     // make the same request with one fewer byte of actual residency available.
     ASSERT_TRUE(device.SetBufferAllocationLimit(1024 * 1024).has_value());

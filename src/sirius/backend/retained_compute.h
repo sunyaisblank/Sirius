@@ -306,6 +306,7 @@ class RetainedCompute {
     };
     [[nodiscard]] base::Expected<void> Dispatch(Stage& stage, std::size_t active_rows,
                                                 DispatchTiming* timing, bool owned = false);
+    [[nodiscard]] base::Expected<void> ReadOutput(Stage& stage, std::size_t active_rows);
     void InvalidateStageSevenOwner();
     [[nodiscard]] base::Expected<void> WriteStageSevenControl(Stage& stage);
     [[nodiscard]] base::Expected<bool> AuthorizeStageSevenEndpoint(

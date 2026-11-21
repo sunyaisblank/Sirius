@@ -5112,6 +5112,8 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
                    std::to_string(cohort.endpoint_dense_timing.submit_wait_ms));
     RecordProperty("mixed_tracer_shared_endpoint_dense_dispatch_total_ms",
                    std::to_string(cohort.endpoint_dense_timing.dispatch_total_ms));
+    constexpr std::array<std::size_t, RetainedCompute::kStageCount> result_words{
+        0, 2404, 504, 204, 204, 0, 1004};
     for (std::size_t i = 0; i < RetainedCompute::kStageCount; ++i) {
         const auto& stage = cohort.stage_timing[i];
         const std::string key =
@@ -5121,6 +5123,10 @@ TEST_F(RetainedComputeTest, SharedTracerCompletesDeviceIntervalsAndRetainsRollba
         EXPECT_EQ(prefixes[0], stage.submissions);
         EXPECT_EQ(prefixes[1], stage.completion_flag_counts[0] + stage.completion_flag_counts[1] +
                                    stage.completion_flag_counts[2]);
+        if (result_words[i] != 0) {
+            EXPECT_EQ(stage.read_buffer_bytes,
+                      prefixes[1] * result_words[i] * sizeof(std::uint32_t));
+        }
         record_count(key + "_commands", stage.submissions);
         record_count(key + "_prefix_rows", prefixes[1]);
         record_count(key + "_raw_flag_zero", stage.completion_flag_counts[0]);
