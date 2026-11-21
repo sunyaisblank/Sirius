@@ -560,7 +560,9 @@ Expected<VulkanRenderStats> RenderRetained(const SessionConfig& config, DisplayB
     const auto& info = device.Info();
     const bool physical = info.kind == backend::DeviceKind::kIntegratedGpu ||
                           info.kind == backend::DeviceKind::kDiscreteGpu;
-    bool certified_device = physical && !backend::RetainedUsesPortableArithmetic(info);
+    // Both retained arithmetic routes commit the expansion consumed by the
+    // same host continuation certificate.
+    bool certified_device = physical;
 #ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
     certified_device = certified_device || backend::detail::UsesSealedRetainedModules(info);
 #endif
