@@ -31,10 +31,16 @@ struct DetectorCameraLaunch {
     const DetectorLaunchFrame&, const core::CameraRay&);
 
 struct SphericalEscapeRequest {
+    struct ThinDiskClearance {
+        core::relativity::SphericalThinDisk annulus;
+        double minimum_radius;
+    };
+
     double source_support_radius;
     double boundary;
     unsigned maximum_panels;
     bool through_turn;
+    std::optional<ThinDiskClearance> thin_disk = std::nullopt;
 };
 
 struct SphericalEscapeTrial {

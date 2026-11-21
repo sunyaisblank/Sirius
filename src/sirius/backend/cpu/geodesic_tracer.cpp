@@ -983,9 +983,9 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
         family->GetParams().a == 0.0 && family->GetParams().Q == 0.0 &&
         family->GetParams().Lambda == 0.0 && !allow_infinity_handoff &&
         !config_.finite_causal_boundary && !config_.enable_polarisation;
-    const double spherical_inner_limit = std::max(
-        disk_support_radius,
-        config_.strong_field_max_step > 0 ? static_cast<double>(config_.strong_field_radius) : 0.0);
+    const double spherical_strong_limit =
+        config_.strong_field_max_step > 0 ? static_cast<double>(config_.strong_field_radius) : 0.0;
+    const double spherical_inner_limit = std::max(disk_support_radius, spherical_strong_limit);
     double next_spherical_radius = spherical_inner_limit;
     bool first_spherical_interval = true;
     Rk45CoupledState coupled;
@@ -2017,10 +2017,19 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                 if (!try_turn) next_spherical_radius = r * 1.25;
                 const auto remaining =
                     static_cast<unsigned>(config_.max_steps - result.steps_taken);
+                SphericalEscapeRequest request{spherical_inner_limit, config_.escape_radius,
+                                               remaining, try_turn};
+                if (try_turn && config_.enable_disk && !config_.enable_volumetric &&
+                    spherical_strong_limit < disk_support_radius) {
+                    // A radial turn inside the outer edge can still miss an opaque
+                    // thin disk. Keep the strong-field and capture exclusions.
+                    request.thin_disk = {
+                        {config_.disk_inner, config_.disk_outer},
+                        std::max(spherical_strong_limit,
+                                 family->OuterHorizonRadius() * config_.horizon_factor)};
+                }
                 const auto tail = step_executor_->TrySphericalEscape(
-                    *metric_, ray, step_config, coupled,
-                    {spherical_inner_limit, config_.escape_radius, remaining, try_turn},
-                    should_cancel_);
+                    *metric_, ray, step_config, coupled, request, should_cancel_);
                 if (should_cancel_ && should_cancel_()) return cancelled_result();
                 if (tail && tail->panels > 0 && tail->panels <= remaining) {
                     const double terminal_affine = affine_length + tail->affine_length;

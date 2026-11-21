@@ -15,6 +15,11 @@ namespace sirius::core::relativity {
 enum class SphericalKerrSchildChart { Ingoing, Outgoing };
 enum class SphericalTailPath { Outward, ExteriorTurn };
 
+struct SphericalThinDisk {
+    double inner_radius;
+    double outer_radius;
+};
+
 // Derivatives of Cartesian coordinates and coordinate tangent, with respect
 // to one launch parameter at the input event.
 struct SphericalTailVariation {
@@ -151,6 +156,62 @@ inline std::expected<Rotation, FiniteTailFailure> AngularRotation(Jet impact_squ
                     angular_integral * Jet(sinc, sinc_derivative * square.dual)};
 }
 
+// With u² = 1 - r_t/r, t = 1 - u² and B = 2M/(r_t - 2M), the radial
+// potential factors as (1 - t)(1 + t - B t²). The angle from the turn has a
+// regular positive integrand 2b / (r_t sqrt(1 + t - B t²)).
+inline Range AngleFromTurn(Range radius, Range turn, Range impact, double mass,
+                           const SphericalTailControl& control, unsigned& panels) {
+    constexpr unsigned subdivisions = 16;
+    const Range limit = sqrt(Range(1.0) - turn / radius);
+    if (!limit.Finite()) return InvalidRange();
+    const Range gravity = Range(2.0) * Range(mass) / (turn - Range(2.0) * Range(mass));
+    const Range width = limit / Range(subdivisions);
+    const Range coefficient = Range(2.0) * impact * width / turn;
+    Range sum;
+    for (unsigned i = 0; i < subdivisions; ++i) {
+        if (Cancelled(control) || panels >= control.maximum_panels) return InvalidRange();
+        ++panels;
+        const Range t = Range(1.0) - Square(Range(i, i + 1) * width);
+        const Range contribution = coefficient / sqrt(Range(1.0) + t - gravity * Square(t));
+        if (!contribution.Finite()) return InvalidRange();
+        sum = sum + contribution;
+    }
+    return sum;
+}
+
+inline bool ClearsDiskWindow(const Momentum& launch, Range impact, Range entry, Range exit) {
+    if (!entry.Finite() || !exit.Finite() || entry.lo < 0.0 || exit.hi < entry.lo ||
+        !((Range(exit.hi) - Range(entry.lo)).hi < 3.0))
+        return false;
+    // Z/r is sinusoidal. Distinct zeros are π apart, so strict equal signs
+    // at the ends of this window also enclose the uncertain boundary phases.
+    const auto height = [&](double angle) {
+        const auto rotation = AngularRotation(Jet(1.0), Jet(angle));
+        if (!rotation) return InvalidRange();
+        return launch.normal[2].real * rotation->cosine.real +
+               (launch.angular[2].real / impact) * rotation->scaled_sine.real;
+    };
+    const Range first = height(entry.lo), last = height(exit.hi);
+    return first.Finite() && last.Finite() &&
+           ((first.lo > 0.0 && last.lo > 0.0) || (first.hi < 0.0 && last.hi < 0.0));
+}
+
+inline bool ClearsThinDisk(const Momentum& launch, Range turn, double mass,
+                           const SphericalThinDisk& disk, const SphericalTailControl& control,
+                           unsigned& panels) {
+    if (turn.lo > disk.outer_radius) return true;
+    const Range impact = sqrt(launch.impact_squared.real);
+    const Range start = AngleFromTurn(launch.radius.real, turn, impact, mass, control, panels);
+    const Range outer =
+        AngleFromTurn(Range(disk.outer_radius), turn, impact, mass, control, panels);
+    if (turn.hi >= disk.inner_radius)
+        return ClearsDiskWindow(launch, impact, start - outer, start + outer);
+    const Range inner =
+        AngleFromTurn(Range(disk.inner_radius), turn, impact, mass, control, panels);
+    return ClearsDiskWindow(launch, impact, start - outer, start - inner) &&
+           ClearsDiskWindow(launch, impact, start + inner, start + outer);
+}
+
 inline SphericalTailBound Bound(Range value) { return {value.lo, value.hi}; }
 
 inline bool Within(Range value, double absolute, double relative) {
@@ -163,7 +224,7 @@ inline bool Within(Range value, double absolute, double relative) {
 inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
     const Columns& position, const Columns& tangent, double mass, SphericalKerrSchildChart chart,
     double source_support_radius, double boundary, const SphericalTailControl& control,
-    SphericalTailPath path) {
+    SphericalTailPath path, const std::optional<SphericalThinDisk>& thin_disk = std::nullopt) {
     if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
     if (!RoundingEnvironment() || !std::isfinite(mass) || mass < 0.0 ||
         !std::isfinite(source_support_radius) || source_support_radius < 0.0 ||
@@ -197,11 +258,25 @@ inline std::expected<SphericalTailResult, FiniteTailFailure> Continue(
     if (has_turn) {
         const auto turn = VacuumTurnRange(start, b2, mass, source_support_radius);
         if (!turn) return std::unexpected(FiniteTailFailure::Domain);
-        TurnQuadrature quadrature{mass, orientation, b2, start, boundary, *turn, control};
+        if (thin_disk) {
+            if (!(thin_disk->inner_radius > 0.0 &&
+                  thin_disk->outer_radius > thin_disk->inner_radius &&
+                  start.lo > thin_disk->outer_radius && boundary > thin_disk->outer_radius) ||
+                !ClearsThinDisk(momenta[0], *turn, mass, *thin_disk, control, result.panels)) {
+                if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
+                if (result.panels == control.maximum_panels)
+                    return std::unexpected(FiniteTailFailure::WorkLimit);
+                return std::unexpected(FiniteTailFailure::Domain);
+            }
+        }
+        auto remaining = control;
+        remaining.maximum_panels -= result.panels;
+        TurnQuadrature quadrature{mass, orientation, b2, start, boundary, *turn, remaining};
         integrated = quadrature.Run();
-        result.panels = quadrature.panels;
+        result.panels += quadrature.panels;
         result.periapsis = Bound(*turn);
     } else {
+        if (thin_disk) return std::unexpected(FiniteTailFailure::Domain);
         Quadrature quadrature{mass, orientation, b2, start, boundary, control};
         integrated = quadrature.Run();
         result.panels = quadrature.panels;

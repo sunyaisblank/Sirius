@@ -62,8 +62,12 @@ std::optional<SphericalEscapeTrial> RetainedTraceExecutor::TrySphericalEscape(
     control.should_cancel = &cancelled;
     const auto path =
         request.through_turn ? SphericalTailPath::ExteriorTurn : SphericalTailPath::Outward;
-    const auto tail = ContinueCoupled(metric, launch, request.source_support_radius,
-                                      request.boundary, control, path);
+    const double source_support =
+        request.thin_disk ? request.thin_disk->minimum_radius : request.source_support_radius;
+    const auto thin_disk =
+        request.thin_disk ? std::optional(request.thin_disk->annulus) : std::nullopt;
+    const auto tail =
+        ContinueCoupled(metric, launch, source_support, request.boundary, control, path, thin_disk);
     if (!tail || !(SphericalCoupledStateErrorBound(*tail, config, coupled) <= 1.0) || cancelled())
         return {};
     const auto periapsis =

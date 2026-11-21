@@ -80,7 +80,8 @@ inline Four SphericalConnection(const Four& position, const Four& a, const Four&
 
 inline std::expected<SphericalCoupledTail, FiniteTailFailure> ContinueCoupled(
     IMetric& metric, const CoupledLaunch& launch, double source_support_radius, double boundary,
-    const SphericalTailControl& control, SphericalTailPath path) {
+    const SphericalTailControl& control, SphericalTailPath path,
+    const std::optional<SphericalThinDisk>& thin_disk = std::nullopt) {
     if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
     const auto* outgoing = dynamic_cast<const OutgoingKerrSchild*>(&metric);
     const auto* family =
@@ -116,7 +117,7 @@ inline std::expected<SphericalCoupledTail, FiniteTailFailure> ContinueCoupled(
     const auto tail =
         Continue(x, k, parameters.M,
                  outgoing ? SphericalKerrSchildChart::Outgoing : SphericalKerrSchildChart::Ingoing,
-                 source_support_radius, boundary, control, path);
+                 source_support_radius, boundary, control, path, thin_disk);
     if (!tail) return std::unexpected(tail.error());
     if (!metric.IsValidEvent(tail->position)) return std::unexpected(FiniteTailFailure::Domain);
 
