@@ -32,7 +32,8 @@ struct DetectorCameraLaunch {
 
 struct SphericalEscapeRequest {
     struct ThinDiskClearance {
-        core::relativity::SphericalThinDisk annulus;
+        double inner_radius;
+        double outer_radius;
         double minimum_radius;
     };
 

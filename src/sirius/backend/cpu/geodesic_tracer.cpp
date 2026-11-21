@@ -2023,8 +2023,8 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
                     spherical_strong_limit < disk_support_radius) {
                     // A radial turn inside the outer edge can still miss an opaque
                     // thin disk. Keep the strong-field and capture exclusions.
-                    request.thin_disk = {
-                        {config_.disk_inner, config_.disk_outer},
+                    request.thin_disk = SphericalEscapeRequest::ThinDiskClearance{
+                        config_.disk_inner, config_.disk_outer,
                         std::max(spherical_strong_limit,
                                  family->OuterHorizonRadius() * config_.horizon_factor)};
                 }
