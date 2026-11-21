@@ -319,6 +319,10 @@ base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int heig
     std::optional<base::Error> sample_error;
     int sample_index = 0;
     const bool physical_point_detector = UsesPhysicalPointDetector();
+    const bool certify_dark_capture = config_.backend == RenderBackend::Cpu &&
+                                      config_.metric_id == core::MetricId::Schwarzschild &&
+                                      !config_.enable_disk && !config_.ray_bundles &&
+                                      !config_.point_starfield;
     const int samples_taken =
         ForEachCameraSample(config_.samples_per_pixel, [&](const CameraSample& sample) {
             const int current_sample = sample_index++;
@@ -409,6 +413,10 @@ base::Expected<void> RenderSession::ShadeBlock(int x, int y, int width, int heig
                             return;
                         }
                         trace_result = std::move(*traced->front());
+                    } else if (certify_dark_capture) {
+                        auto traced = tracer->TraceImageRay(camera_ray);
+                        if (!traced) return;
+                        trace_result = std::move(*traced);
                     } else {
                         trace_result = physical_point_detector
                                            ? tracer->TracePointSource(camera_ray)

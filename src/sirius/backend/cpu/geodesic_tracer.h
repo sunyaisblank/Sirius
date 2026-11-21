@@ -399,6 +399,11 @@ class GeodesicTracer {
     // result.outcome describes the termination condition.
     TraceResult Trace(const sirius::core::CameraRay& camera_ray);
 
+    // Image shading needs only the absence of radiance for an enclosed
+    // vacuum capture. An empty result certifies that case. Other rays
+    // retain the ordinary trace, including cancellation and error state.
+    std::optional<TraceResult> TraceImageRay(const sirius::core::CameraRay& camera_ray);
+
     // Detector probes consume visibility, transmission and the source map at
     // infinity. Vacuum Kerr probes may finish at an earlier accepted outward
     // event once the radial continuation proves no intervening turning point.

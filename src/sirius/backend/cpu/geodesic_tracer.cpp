@@ -698,6 +698,13 @@ TraceResult GeodesicTracer::Trace(const CameraRay& camera_ray) {
     return TraceTo(camera_ray, false);
 }
 
+std::optional<TraceResult> GeodesicTracer::TraceImageRay(const CameraRay& camera_ray) {
+    bool captured = false;
+    auto trace = TraceTo(camera_ray, false, &captured);
+    if (captured && !trace.cancelled && !trace.numerical_failure) return std::nullopt;
+    return trace;
+}
+
 TraceResult GeodesicTracer::TracePointSource(const CameraRay& camera_ray) {
     return TraceTo(camera_ray, true);
 }
