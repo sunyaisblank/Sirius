@@ -259,13 +259,14 @@ std::expected<PointDetectorBatchResult, PointDetectorError> SharedPointSources(
         };
     PointDetectorDarkCell dark_cell;
     if (prepared) {
-        dark_cell = [&](const DetectorCoordinate& lower, const DetectorCoordinate& upper) {
+        dark_cell = [&](const DetectorCoordinate& lower, const DetectorCoordinate& upper,
+                         unsigned splits) {
             using Range = backend::DetectorLaunchFrame::Range;
             const std::array film_bounds{
                 Range(x + double(sample.image_u)) + Range(lower[0], upper[0]),
                 Range(y + double(sample.image_v)) + Range(lower[1], upper[1])};
             return tracer.CertifyThinLensDetectorRegion(camera.GetConfig(), *prepared, film_bounds,
-                                                       0);
+                                                       splits);
         };
     }
     const auto group = EvaluatePointDetectorGroup(catalogue, brightness, footprints, probe,

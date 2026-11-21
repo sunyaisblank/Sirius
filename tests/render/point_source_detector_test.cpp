@@ -382,7 +382,7 @@ TEST(PointSourceDetector, BulkFailureAndCancellationNeverPublishPartialRadiance)
     };
     bool terminate = false, cancel_when_certified = false;
     const PointDetectorDarkCell certified_dark = [&](const DetectorCoordinate& lower,
-                                                      const DetectorCoordinate& upper) {
+                                                      const DetectorCoordinate& upper, unsigned) {
         // The original circular support is enclosed in [-4,4]^2 before
         // the rotated/sheared footprint is passed to the prover.
         EXPECT_LE(lower[0], 0);

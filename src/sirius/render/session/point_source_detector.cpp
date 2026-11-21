@@ -703,7 +703,7 @@ class Detector {
         if (++statistics_.cells > policy_.maximum_cells) Fail(PointDetectorFailure::WorkLimit);
         CheckCancellation();
         if (dark_cell_) {
-            const bool certified = dark_cell_(cell.lower, cell.upper);
+            const bool certified = dark_cell_(cell.lower, cell.upper, 0);
             CheckCancellation();
             if (certified) {
                 result.certified_dark = true;
@@ -998,7 +998,20 @@ class Detector {
     }
     Estimate Refine(const Cell& cell, const Estimate& coarse) {
         if (coarse.certified_dark || !cell.IntersectsSupport()) return coarse;
-        if (cell.depth >= policy_.maximum_depth) Fail(PointDetectorFailure::Unresolved);
+        if (cell.depth >= policy_.maximum_depth) {
+            // Refine the enclosure, without requesting a deeper detector
+            // sample or extending any of the detector's work limits.
+            if (dark_cell_ && coarse.has_hidden_probe) {
+                const bool certified = dark_cell_(cell.lower, cell.upper, 4);
+                CheckCancellation();
+                if (certified) {
+                    Estimate result;
+                    result.certified_dark = true;
+                    return result;
+                }
+            }
+            Fail(PointDetectorFailure::Unresolved);
+        }
         const auto children = cell.Children();
         std::array<Estimate, 4> estimates;
         for (int i = 0; i < 4; ++i) estimates[i] = Measure(children[i]);
@@ -1138,13 +1151,14 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
             };
         PointDetectorDarkCell normalized_dark;
         if (dark_cell)
-            normalized_dark = [&](const Coordinate& lower, const Coordinate& upper) {
+            normalized_dark = [&](const Coordinate& lower, const Coordinate& upper,
+                                  unsigned splits) {
                 using finite_tail::Range;
                 std::array<Range, 2> region;
                 for (int i = 0; i < 2; ++i)
                     region[i] = Range(centre[i]) + Range(scale) * Range(lower[i], upper[i]);
                 return region[0].Finite() && region[1].Finite() &&
-                    dark_cell({region[0].lo, region[1].lo}, {region[0].hi, region[1].hi});
+                    dark_cell({region[0].lo, region[1].lo}, {region[0].hi, region[1].hi}, splits);
             };
         std::vector<std::size_t> images;
         Detector engine(catalogue, brightness_scale, normalized, cancelled, discovery_policy,
@@ -1358,7 +1372,8 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                         };
                     PointDetectorDarkCell original_dark;
                     if (dark_cell)
-                        original_dark = [&](const Coordinate& lower, const Coordinate& upper) {
+                        original_dark = [&](const Coordinate& lower, const Coordinate& upper,
+                                            unsigned splits) {
                             using finite_tail::Range;
                             const Range x(lower[0], upper[0]), y(lower[1], upper[1]);
                             std::array<Range, 2> region;
@@ -1367,7 +1382,7 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
                                     (Range(m[i][0]) * x + Range(m[i][1]) * y);
                             return region[0].Finite() && region[1].Finite() &&
                                 dark_cell({region[0].lo, region[1].lo},
-                                          {region[0].hi, region[1].hi});
+                                          {region[0].hi, region[1].hi}, splits);
                         };
                     const auto leaf = EvaluatePointDetector(catalogue, brightness_scale, original,
                                                             cancelled, policy, original_batch,

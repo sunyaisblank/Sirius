@@ -88,7 +88,7 @@ using PointDetectorSampler = std::function<std::expected<PointDetectorProbe, Poi
 // A positive certificate proves the whole closed chart rectangle dark.
 // Unknown rectangles go through the detector's original refinement.
 using PointDetectorDarkCell =
-    std::function<bool(const DetectorCoordinate&, const DetectorCoordinate&)>;
+    std::function<bool(const DetectorCoordinate&, const DetectorCoordinate&, unsigned)>;
 
 using PointDetectorProbeBatch =
     std::vector<std::expected<PointDetectorProbe, PointDetectorFailure>>;
