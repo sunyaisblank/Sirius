@@ -948,10 +948,11 @@ class Detector {
                                  2 * residual_by_axis[1] + policy_.root_error},
                                 cell, query_radius, mixed, source_reach),
             [&](std::uint32_t star) {
-                if (++statistics_.candidate_visits > policy_.maximum_candidate_visits) {
+                if (statistics_.candidate_visits == policy_.maximum_candidate_visits) {
                     flush();
                     Fail(PointDetectorFailure::WorkLimit);
                 }
+                ++statistics_.candidate_visits;
                 CheckCancellation();
                 const auto& candidate = catalogue_.Stars()[star];
                 const auto separation = core::relativity::MeasureCelestialSeparation(

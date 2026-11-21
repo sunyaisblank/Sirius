@@ -1133,6 +1133,16 @@ TEST(PointSourceDetector, ExhaustionCancellationAndFailedTracesHaveNoPartialRadi
         EvaluatePointDetector(catalogue, 1, sample, [] { return false; }, policy);
     ASSERT_FALSE(exhausted);
     EXPECT_EQ(exhausted.error().reason, PointDetectorFailure::WorkLimit);
+    const core::StarfieldSpatialIndex crowded(
+        {Star(.2 * kScale, .3 * kScale), Star(.7 * kScale, .2 * kScale)});
+    policy = PointDetectorPolicy{};
+    policy.maximum_candidate_visits = 1;
+    for (const auto& batch : {PointDetectorProbeBatchSampler{}, BulkSampler(sample)}) {
+        const auto capped = EvaluatePointDetector(crowded, 1, sample, {}, policy, batch);
+        ASSERT_FALSE(capped);
+        EXPECT_EQ(capped.error().reason, PointDetectorFailure::WorkLimit);
+        EXPECT_EQ(capped.error().statistics.candidate_visits, policy.maximum_candidate_visits);
+    }
     const auto cancelled = EvaluatePointDetector(catalogue, 1, sample, [] { return true; });
     ASSERT_FALSE(cancelled);
     EXPECT_EQ(cancelled.error().reason, PointDetectorFailure::Cancelled);
