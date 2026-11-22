@@ -2,7 +2,9 @@
 
 #include "radial_quadrature.h"
 
+#include <new>
 #include <optional>
+#include <vector>
 
 namespace sirius::core::relativity::finite_tail_detail {
 
@@ -69,6 +71,15 @@ struct TurnQuadrature {
     }
 
   private:
+    struct Panel {
+        double start, end, absolute_budget;
+    };
+
+    struct Split {
+        Panel right;
+        std::optional<Bounds> left;
+    };
+
     Range turn_derivative_;
 
     template <typename Number>
@@ -103,14 +114,8 @@ struct TurnQuadrature {
         return {affine.real, angle.real, time.real, affine.dual, angle.dual, time.dual};
     }
 
-    Result Integrate(double start, double end, double abs_budget) {
-        if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
-        if (panels >= control.maximum_panels) return std::unexpected(FiniteTailFailure::WorkLimit);
-        ++panels;
-
-        const double middle = std::midpoint(start, end);
-        if (!(start < middle && middle < end))
-            return std::unexpected(FiniteTailFailure::Arithmetic);
+    std::optional<Bounds> Measure(const Panel& panel) const {
+        const auto& [start, end, abs_budget] = panel;
         const Range width = Range(end) - Range(start);
         const Range half = width * Range(0.5);
         const Range center = Range(start) + half;
@@ -144,15 +149,50 @@ struct TurnQuadrature {
                            std::max(abs_budget, control.relative_tolerance * std::abs(value));
         }
         if (accepted) return result;
-        const auto left = Integrate(start, middle, abs_budget * 0.5);
-        if (!left) return left;
-        const auto right = Integrate(middle, end, abs_budget * 0.5);
-        if (!right) return right;
-        for (unsigned i = 0; i < result.size(); ++i) {
-            result[i] = (*left)[i] + (*right)[i];
-            if (!result[i].Finite()) return std::unexpected(FiniteTailFailure::Arithmetic);
+        return std::nullopt;
+    }
+
+    Result Integrate(double start, double end, double abs_budget) {
+        Panel panel{start, end, abs_budget};
+        std::vector<Split> pending;
+        for (;;) {
+            if (Cancelled(control)) return std::unexpected(FiniteTailFailure::Cancelled);
+            if (panels >= control.maximum_panels)
+                return std::unexpected(FiniteTailFailure::WorkLimit);
+            ++panels;
+
+            const double middle = std::midpoint(panel.start, panel.end);
+            if (!(panel.start < middle && middle < panel.end))
+                return std::unexpected(FiniteTailFailure::Arithmetic);
+            auto result = Measure(panel);
+            if (!result) {
+                // Near an endpoint, bisection can outlast the native call
+                // stack. Store pending branches separately and keep the original
+                // left-first traversal and per-panel budget.
+                const double child_budget = panel.absolute_budget * 0.5;
+                try {
+                    pending.push_back({{middle, panel.end, child_budget}, std::nullopt});
+                } catch (const std::bad_alloc&) {
+                    return std::unexpected(FiniteTailFailure::WorkLimit);
+                }
+                panel = {panel.start, middle, child_budget};
+                continue;
+            }
+
+            while (!pending.empty() && pending.back().left) {
+                const auto& left = *pending.back().left;
+                for (unsigned i = 0; i < result->size(); ++i) {
+                    (*result)[i] = left[i] + (*result)[i];
+                    if (!(*result)[i].Finite())
+                        return std::unexpected(FiniteTailFailure::Arithmetic);
+                }
+                pending.pop_back();
+            }
+            if (pending.empty()) return *result;
+            auto& split = pending.back();
+            split.left = *result;
+            panel = split.right;
         }
-        return result;
     }
 
   public:
