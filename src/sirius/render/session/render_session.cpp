@@ -730,8 +730,9 @@ base::Expected<void> RenderSession::Initialise() {
         star_generator_ = std::make_unique<core::StarfieldGenerator>(scfg);
         star_index_ =
             std::make_unique<core::StarfieldSpatialIndex>(star_generator_->GenerateCatalogue());
+        const auto* active_camera = camera_.get();
         if (external_step_executor_ && UsesPhysicalPointDetector() && !config_.enable_disk &&
-            config_.black_hole_spin > 0.0 && typeid(*camera_) == typeid(core::ThinLensCamera))
+            config_.black_hole_spin > 0.0 && typeid(*active_camera) == typeid(core::ThinLensCamera))
             kerr_detector_catalogue_ = PrepareKerrDetectorCatalogue(*star_index_);
         std::cout << "[Session] Point-source star field: " << star_index_->Size() << " stars, "
                   << (star_index_->MemoryBytes() / 1024) << " KiB index, beams "
