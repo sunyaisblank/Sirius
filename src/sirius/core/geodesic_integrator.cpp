@@ -961,13 +961,13 @@ ProjectVariations(const RetainedMetricSample& geometry, const WideVector& unproj
                 for (int b = 0; b < 4; ++b)
                     V[mu] += connection_correction[mu][a][b] * phase[column].x(b);
         }
-        Twofold numerator;
+        Twofold null_numerator;
         for (int mu = 0; mu < 4; ++mu)
-            if (mu != component) numerator += projected_covector[mu] * V[mu];
+            if (mu != component) null_numerator += projected_covector[mu] * V[mu];
         // The coordinate projection changes only its selected component.
         // Other covariant components receive Gamma(delta k, X), then the
         // differentiated null constraint determines the selected component.
-        V[component] = -numerator / projected_covector[component];
+        V[component] = -null_numerator / projected_covector[component];
         result[column].displacement = phase[column].x.Rounded();
         for (int mu = 0; mu < 4; ++mu) result[column].derivative(mu) = V[mu].Rounded();
         if (!FiniteVector(result[column].displacement) || !FiniteVector(result[column].derivative))
