@@ -35,18 +35,15 @@ inline Range Enclosure(Range x) { return x; }
 inline Range Enclosure(const PupilAffine& x) { return x.Bounds(); }
 
 inline PupilAffine operator+(const PupilAffine& a, const PupilAffine& b) {
-    return {a.centre + b.centre, a.first + b.first, a.second + b.second,
-            a.remainder + b.remainder};
+    return {a.centre + b.centre, a.first + b.first, a.second + b.second, a.remainder + b.remainder};
 }
 
 inline PupilAffine operator-(const PupilAffine& a, const PupilAffine& b) {
-    return {a.centre - b.centre, a.first - b.first, a.second - b.second,
-            a.remainder - b.remainder};
+    return {a.centre - b.centre, a.first - b.first, a.second - b.second, a.remainder - b.remainder};
 }
 
 inline PupilAffine operator*(const PupilAffine& a, const PupilAffine& b) {
-    return {a.centre * b.centre,
-            a.centre * b.first + b.centre * a.first,
+    return {a.centre * b.centre, a.centre * b.first + b.centre * a.first,
             a.centre * b.second + b.centre * a.second,
             a.centre * b.remainder + b.centre * a.remainder + a.Variation() * b.Variation()};
 }

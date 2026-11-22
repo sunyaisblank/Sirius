@@ -467,8 +467,8 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
     }
     // The first rejected Radeon launches in the governed 1080p scene.
     // Hexadecimal literals retain the actual public ingoing binary64 state.
-    const auto position = Four(0x1.24a6d18db4p-10,
-                               {0x1.d884a21ad7b96p+4, 0x1.d04c7d7c1169p-1, 0x1.51733439618ap+2});
+    const auto position =
+        Four(0x1.24a6d18db4p-10, {0x1.d884a21ad7b96p+4, 0x1.d04c7d7c1169p-1, 0x1.51733439618ap+2});
     const std::array tangents{
         Four(-0x1.deb0a674e7f3p-1,
              {-0x1.935b61994b898p-1, -0x1.858031d03bdb1p-4, -0x1.9f7b1fe6305p-3}),
@@ -495,7 +495,7 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
              {-0x1.9435b18a1a608p-1, -0x1.9410965fa77dp-4, -0x1.8c4bbc809922p-3}),
     };
     constexpr std::array decimal_radii{2.075103142542746, 1.712572390557077, 1.694091803789609,
-                                      1.689357681104494, 1.686593027729126, 1.682462964901301};
+                                       1.689357681104494, 1.686593027729126, 1.682462964901301};
     auto through_turn = Accurate();
     through_turn.allow_radial_turn = true;
     for (std::size_t i = 0; i < scattering.size(); ++i) {
@@ -503,13 +503,13 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
         EXPECT_FALSE(CertifyKerrDetectorCapture(kerr, position, tangent, 64));
         double radius = 0.0;
         const auto resumed = TraceKerrInfinity(1, 0.9, device_metric, device_derivatives, position,
-                                                tangent, {}, {}, 1e-3, through_turn, &radius);
+                                               tangent, {}, {}, 1e-3, through_turn, &radius);
         ASSERT_TRUE(resumed);
         EXPECT_NEAR(radius, decimal_radii[i], 2e-12);
     }
     through_turn.minimum_turn_radius = 2.0;
     const auto governed = TraceKerrInfinity(1, 0.9, device_metric, device_derivatives, position,
-                                             scattering.back(), {}, {}, 1e-3, through_turn);
+                                            scattering.back(), {}, {}, 1e-3, through_turn);
     ASSERT_FALSE(governed);
     EXPECT_EQ(governed.error(), KerrInfinityFailure::RadialUnresolved);
     for (const auto& tangent : tangents) {
@@ -522,15 +522,15 @@ TEST(KerrInfinity, RadialTurnDeclinesCaptureAndUnresolvedTurns) {
     for (double shift : {-1e-9, 1e-9}) {
         const double impact = std::sqrt(27.0) * (1.0 + shift);
         const auto close = CarterEvent({1, 0, 20, equator, 0, -1, impact, 0}, -1);
-        EXPECT_EQ(CertifyKerrDetectorCapture(KerrSchildParams::Schwarzschild(1), close.x, close.k,
-                                             64),
-                  1.0 - impact * impact / 27.0 > 0.0);
+        EXPECT_EQ(
+            CertifyKerrDetectorCapture(KerrSchildParams::Schwarzschild(1), close.x, close.k, 64),
+            1.0 - impact * impact / 27.0 > 0.0);
         // The stationary-point certificate must resolve either sign and
         // enclose the analytic minimum without relying on Bernstein panels.
         using finite_tail_detail::Range;
         using namespace kerr_infinity_detail;
-        const auto coefficients = RadialCoefficients(
-            1.0, 0.0, Range(-1.0), Range(impact), Square(Range(impact)));
+        const auto coefficients =
+            RadialCoefficients(1.0, 0.0, Range(-1.0), Range(impact), Square(Range(impact)));
         const auto minimum = EncloseRadialMinimum(
             DetectorRadialBounds<Range>{coefficients, Range(0.05), Range(0.5), true});
         ASSERT_TRUE(minimum);
@@ -551,9 +551,9 @@ TEST(KerrInfinity, RejectsHiddenRadialTurningPoint) {
     critical.energy = kerr_infinity_detail::Jet(-1.0);
     // At u=1/4 in Schwarzschild, H=1-C/32. Adjacent binary64 values
     // of C must yield opposite signs, while C=32 gives exactly zero.
-    for (const auto& [carter, sign] : std::array{std::pair{std::nextafter(32.0, 0.0), 1},
-                                               std::pair{32.0, 0},
-                                               std::pair{std::nextafter(32.0, 64.0), -1}}) {
+    for (const auto& [carter, sign] :
+         std::array{std::pair{std::nextafter(32.0, 0.0), 1}, std::pair{32.0, 0},
+                    std::pair{std::nextafter(32.0, 64.0), -1}}) {
         critical.carter_combination = kerr_infinity_detail::Jet(carter);
         EXPECT_EQ(ExactRadialSign(1, 0, critical, .25), sign);
     }

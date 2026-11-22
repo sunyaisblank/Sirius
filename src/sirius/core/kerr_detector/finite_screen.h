@@ -459,9 +459,7 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
     }
     // Screen against the physical escape interval. Root counting below
     // still needs the complete latitude branch over the wider radial chart.
-    const auto can_arrive = [&](Range time) {
-        return !(time.hi < earliest || time.lo > latest);
-    };
+    const auto can_arrive = [&](Range time) { return !(time.hi < earliest || time.lo > latest); };
     const auto sky_window = [&](Range angle, Range time, const FiniteRadialPhase& radial) {
         const Range arrival = std::isfinite(latest) && time.Finite()
                                   ? Range(std::max(time.lo, earliest), std::min(time.hi, latest))
@@ -469,9 +467,8 @@ inline std::optional<CatalogueScreen> ScreenFiniteWindings(
         const Range original =
             fixed_phi - (angle + radial.drag_at_turn * arrival + radial.spin_residual);
         if (!physical_radial) return original;
-        const Range physical = fixed_phi -
-                               (angle + physical_radial->drag_at_turn * arrival +
-                                physical_radial->spin_residual);
+        const Range physical = fixed_phi - (angle + physical_radial->drag_at_turn * arrival +
+                                            physical_radial->spin_residual);
         if (!physical.Finite()) return original;
         if (!original.Finite()) return physical;
         return Range(std::max(original.lo, physical.lo), std::min(original.hi, physical.hi));

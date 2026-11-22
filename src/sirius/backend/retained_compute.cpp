@@ -3,6 +3,7 @@
 #include "retained_kernels.h"
 #include "retained_owner_kernels.h"
 #include "retained_owner_layout.h"
+#include <vulkan/vulkan_core.h>
 
 #include <algorithm>
 #include <bit>
@@ -10,7 +11,6 @@
 #include <cmath>
 #include <cstring>
 #include <limits>
-#include <vulkan/vulkan_core.h>
 
 namespace sirius::backend {
 namespace {

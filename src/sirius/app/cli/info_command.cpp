@@ -513,7 +513,8 @@ int InfoCommand::ShowSystem(const GlobalOptions& globals) {
 #ifdef SIRIUS_HAS_PACKAGED_SOFTWARE_VULKAN
                     if (const auto provider = backend::GetPackagedVulkanProvider()) {
                         const auto file_json = [](const backend::ProviderFileIdentity& file) {
-                            return nlohmann::json{{"path", file.path}, {"bytes", file.bytes},
+                            return nlohmann::json{{"path", file.path},
+                                                  {"bytes", file.bytes},
                                                   {"sha256", file.sha256}};
                         };
                         j["backends"]["vulkan"]["packaged_software"] = {

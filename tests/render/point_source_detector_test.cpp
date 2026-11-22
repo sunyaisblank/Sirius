@@ -483,7 +483,7 @@ TEST(PointSourceDetector, BulkFailureAndCancellationNeverPublishPartialRadiance)
     };
     bool terminate = false, cancel_when_certified = false;
     const PointDetectorDarkCell certified_dark = [&](const DetectorCoordinate& lower,
-                                                      const DetectorCoordinate& upper, unsigned) {
+                                                     const DetectorCoordinate& upper, unsigned) {
         // The original circular support is enclosed in [-4,4]^2 before
         // the rotated/sheared footprint is passed to the prover.
         EXPECT_LE(lower[0], 0);
@@ -493,8 +493,8 @@ TEST(PointSourceDetector, BulkFailureAndCancellationNeverPublishPartialRadiance)
         terminate = cancel_when_certified;
         return true;
     };
-    const auto dark = EvaluatePointDetectorGroup(catalogue, 1, footprints, unexpected_probe,
-                                                  {}, policy, {}, certified_dark);
+    const auto dark = EvaluatePointDetectorGroup(catalogue, 1, footprints, unexpected_probe, {},
+                                                 policy, {}, certified_dark);
     ASSERT_TRUE(dark);
     EXPECT_EQ(dark->samples[0].rgb, (std::array<double, 3>{}));
     EXPECT_EQ(dark->statistics.probes, 0u);

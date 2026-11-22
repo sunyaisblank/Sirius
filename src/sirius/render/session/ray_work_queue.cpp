@@ -20,11 +20,14 @@ struct RayWorkQueue::Batch {
 };
 
 RayWorkQueue::RayWorkQueue(std::size_t workers, TraceFunction trace)
-    : RayWorkQueue(workers, trace ? PupilTraceFunction(
-          [trace = std::move(trace)](std::size_t worker, const core::CameraRay& ray,
-                                     const backend::DetectorLaunchFrame*) {
-              return trace(worker, ray);
-          }) : PupilTraceFunction{}, std::in_place) {}
+    : RayWorkQueue(workers,
+                   trace ? PupilTraceFunction([trace = std::move(trace)](
+                                                  std::size_t worker, const core::CameraRay& ray,
+                                                  const backend::DetectorLaunchFrame*) {
+                       return trace(worker, ray);
+                   })
+                         : PupilTraceFunction{},
+                   std::in_place) {}
 
 RayWorkQueue::RayWorkQueue(std::size_t workers, PupilTraceFunction trace, std::in_place_t)
     : trace_(std::move(trace)) {

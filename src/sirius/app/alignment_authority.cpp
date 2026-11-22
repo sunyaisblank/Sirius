@@ -342,9 +342,9 @@ std::expected<BuildGateAuthority, std::string> ValidateBuildGateReceipt(
 
     const auto& tested = receipt["tested_artifacts"];
     const auto& products = receipt["product_artifacts"];
-    if (!HasExactArtifactNames(tested, kTestedArtifactNames) ||
-        !products.is_object() || products.size() != std::size(kResourceProducts) + 1U ||
-        !products.contains("sirius") || !IsArtifactRecord(products["sirius"]) ||
+    if (!HasExactArtifactNames(tested, kTestedArtifactNames) || !products.is_object() ||
+        products.size() != std::size(kResourceProducts) + 1U || !products.contains("sirius") ||
+        !IsArtifactRecord(products["sirius"]) ||
         !std::ranges::all_of(kResourceProducts, [&products](const auto& product) {
             const auto record = products.find(product.first);
             return record != products.end() && IsArtifactRecord(*record);

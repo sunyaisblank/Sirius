@@ -439,8 +439,8 @@ int ViewCommand::Execute(const std::vector<std::string>& args, const GlobalOptio
         glfwTerminate();
         return 1;
     }
-    viewer.SetFrameCallback([&display_frame, &callback_state, &viewer, backend = view_config.backend](
-                                const float*, int width, int height) {
+    viewer.SetFrameCallback([&display_frame, &callback_state, &viewer,
+                             backend = view_config.backend](const float*, int width, int height) {
         auto completed = viewer.GetCompletedFrame();
         {
             std::lock_guard<std::mutex> lock(display_frame.mutex);

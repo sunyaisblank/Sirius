@@ -461,7 +461,7 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     Lightray ray{};
     IMetric& observer_metric = outgoing_chart_ ? outgoing_chart_->Source() : *metric_;
     const double spin = cached_a_ * cached_m_;
-    auto launch = detector_launch ? std::optional{detector_launch->central}
+    auto launch = detector_launch  ? std::optional{detector_launch->central}
                   : step_executor_ ? step_executor_->Launch(observer_metric, spin, camera_ray)
                                    : LaunchCameraRay(observer_metric, spin, camera_ray);
     if (!launch) {
@@ -471,7 +471,8 @@ Lightray GeodesicTracer::InitializeLightray(const CameraRay& camera_ray,
     if (detector_capture) {
         const auto* family = dynamic_cast<const KerrSchildFamily*>(&observer_metric);
         const auto budget = static_cast<unsigned>(config_.max_steps);
-        *detector_capture = family &&
+        *detector_capture =
+            family &&
             (detector_launch ? relativity::CertifyKerrDetectorCapture(
                                    family->GetParams(), detector_launch->position,
                                    detector_launch->tangent, budget)
@@ -713,9 +714,8 @@ std::optional<DetectorCameraLaunch> ProjectDetectorLaunch(const DetectorLaunchFr
                                                           const CameraRay& ray) {
     using namespace relativity::finite_tail_detail;
     const auto& key = frame.pupil;
-    if (!RoundingEnvironment() || !ray.active || !IsRepresentedCameraRay(ray) ||
-        !ray.phase_space || !key.phase_space ||
-        ray.beta_forward != key.beta_forward || ray.beta_up != key.beta_up ||
+    if (!RoundingEnvironment() || !ray.active || !IsRepresentedCameraRay(ray) || !ray.phase_space ||
+        !key.phase_space || ray.beta_forward != key.beta_forward || ray.beta_up != key.beta_up ||
         ray.beta_right != key.beta_right || ray.aperture_right != key.aperture_right ||
         ray.aperture_up != key.aperture_up ||
         ray.phase_space->pupil_right != key.phase_space->pupil_right ||
@@ -742,19 +742,18 @@ std::optional<DetectorCameraLaunch> ProjectDetectorLaunch(const DetectorLaunchFr
     const auto project = [](Range enclosure, double& value) {
         if (!enclosure.Finite()) return false;
         value = std::midpoint(enclosure.lo, enclosure.hi);
-        return MidpointError(enclosure) <= relativity::KerrInfinityConfig{}.input_constraint_tolerance *
-                                         std::max(1.0, std::abs(value));
+        return MidpointError(enclosure) <=
+               relativity::KerrInfinityConfig{}.input_constraint_tolerance *
+                   std::max(1.0, std::abs(value));
     };
     DetectorCameraLaunch result;
     result.position = frame.position;
     auto& launch = result.central;
     for (int mu = 0; mu < 4; ++mu) {
         Range k = Range(0.0) - frame.tetrad[0][mu];
-        for (int axis = 0; axis < 3; ++axis)
-            k = k + unit[axis] * frame.tetrad[axis + 1][mu];
+        for (int axis = 0; axis < 3; ++axis) k = k + unit[axis] * frame.tetrad[axis + 1][mu];
         result.tangent[mu] = k;
-        if (!project(frame.position[mu], launch.position(mu)) ||
-            !project(k, launch.tangent(mu)) ||
+        if (!project(frame.position[mu], launch.position(mu)) || !project(k, launch.tangent(mu)) ||
             !project(frame.tetrad[0][mu], launch.observer.time(mu)))
             return std::nullopt;
         for (int axis = 0; axis < 3; ++axis)
@@ -774,14 +773,14 @@ std::optional<DetectorCameraLaunch> ProjectDetectorLaunch(const DetectorLaunchFr
 }
 
 std::optional<TraceResult> GeodesicTracer::TraceDetectorRay(const CameraRay& camera_ray,
-                                                           const DetectorLaunchFrame* pupil) {
+                                                            const DetectorLaunchFrame* pupil) {
     std::optional<DetectorCameraLaunch> launch;
     if (pupil && DetectorCaptureAllowed(config_)) {
         const auto* family = dynamic_cast<const KerrSchildFamily*>(metric_);
         if (family) {
             const auto parameters = family->GetParams();
-            if (pupil->metric == std::array{parameters.M, parameters.a, parameters.Q,
-                                           parameters.Lambda})
+            if (pupil->metric ==
+                std::array{parameters.M, parameters.a, parameters.Q, parameters.Lambda})
                 launch = ProjectDetectorLaunch(*pupil, camera_ray);
         }
     }
@@ -821,10 +820,9 @@ bool GeodesicTracer::CertifyThinLensDetectorRegion(
     const double fov = camera_detail::FilmTangent(camera);
     const Range focus(camera.focus_distance);
     const auto prove = [&](const std::array<Range, 2>& box) {
-        const auto q = camera_detail::ThinLensFilmVector(camera_detail::FilmPlaneX(box[0], camera),
-                                                         camera_detail::FilmPlaneY(box[1], camera),
-                                                         fov, camera.focus_distance,
-                                                         pupil.aperture_up, pupil.aperture_right);
+        const auto q = camera_detail::ThinLensFilmVector(
+            camera_detail::FilmPlaneX(box[0], camera), camera_detail::FilmPlaneY(box[1], camera),
+            fov, camera.focus_distance, pupil.aperture_up, pupil.aperture_right);
         const std::array magnitude{Abs(q[0]), Abs(q[1]), Abs(q[2])};
         // Keep the scale fixed across this enclosure. Film near and beyond
         // the side of a very wide field can use the ordinary detector.
@@ -842,14 +840,14 @@ bool GeodesicTracer::CertifyThinLensDetectorRegion(
         const auto budget = static_cast<unsigned>(config_.max_steps);
         if (relativity::CertifyKerrDetectorCapture(parameters, frame->position, tangent, budget))
             return true;
-        if (splits == 0 || !(n[1].hi - n[1].lo < 1e-3 && n[2].hi - n[2].lo < 1e-3))
-            return false;
-        return relativity::CertifyCorrelatedKerrDetectorCapture(
-            parameters, frame->position, frame->tetrad, n, budget);
+        if (splits == 0 || !(n[1].hi - n[1].lo < 1e-3 && n[2].hi - n[2].lo < 1e-3)) return false;
+        return relativity::CertifyCorrelatedKerrDetectorCapture(parameters, frame->position,
+                                                                frame->tetrad, n, budget);
     };
     // Splitting only the film bounds tightens the enclosure without another
     // device launch. One unproved box sends the whole sample to the detector.
-    const auto cover = [&](this const auto& self, std::array<Range, 2> box, unsigned depth) -> bool {
+    const auto cover = [&](this const auto& self, std::array<Range, 2> box,
+                           unsigned depth) -> bool {
         if (cancelled()) return false;
         if (prove(box)) return true;
         if (depth == 0) return false;
@@ -898,12 +896,12 @@ TraceResult GeodesicTracer::TraceTo(const CameraRay& camera_ray, bool allow_infi
         return worker.TraceInCurrentChart(camera_ray, allow_infinity_handoff, detector_capture,
                                           detector_launch);
     }
-    return TraceInCurrentChart(camera_ray, allow_infinity_handoff, detector_capture, detector_launch);
+    return TraceInCurrentChart(camera_ray, allow_infinity_handoff, detector_capture,
+                               detector_launch);
 }
 
 TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
-                                                bool allow_infinity_handoff,
-                                                bool* detector_capture,
+                                                bool allow_infinity_handoff, bool* detector_capture,
                                                 const DetectorCameraLaunch* detector_launch) {
     SIRIUS_PRE(IsRepresentedCameraRay(camera_ray) && camera_ray.active);
     TraceResult result;
@@ -933,8 +931,8 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
     relativity::ObserverFrame launch_frame;
     GeodesicVariations launch_variations;
     if (!DetectorCaptureAllowed(config_)) detector_capture = nullptr;
-    Lightray ray = InitializeLightray(camera_ray, &launch_frame, &launch_variations, detector_capture,
-                                       detector_launch);
+    Lightray ray = InitializeLightray(camera_ray, &launch_frame, &launch_variations,
+                                      detector_capture, detector_launch);
     const auto original_launch = [&] {
         return TraceInCurrentChart(camera_ray, allow_infinity_handoff, detector_capture, nullptr);
     };
@@ -1130,15 +1128,15 @@ TraceResult GeodesicTracer::TraceInCurrentChart(const CameraRay& camera_ray,
             std::min(infinity_config.maximum_attempts, static_cast<unsigned>(config_.max_steps));
         TraceResult::Beam source;
         double turn_radius = 0.0;
-        if (!SampleSourceSkyMaps(
-                *metric_, ray.position, ray.velocity,
-                {(*angular)[0].displacement, (*angular)[1].displacement},
-                {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0, outgoing_chart_,
-                source, infinity_config, &turn_radius) ||
+        if (!SampleSourceSkyMaps(*metric_, ray.position, ray.velocity,
+                                 {(*angular)[0].displacement, (*angular)[1].displacement},
+                                 {(*angular)[0].derivative, (*angular)[1].derivative}, 1.0,
+                                 outgoing_chart_, source, infinity_config, &turn_radius) ||
             !source.infinity_source_map)
             return false;
         const auto sky = SampleSourceSky(*metric_, ray.position, ray.velocity, outgoing_chart_);
-        if (!sky || (config_.enable_ray_bundles && !read_coupled_bundle(coupled.variations, bundle)))
+        if (!sky ||
+            (config_.enable_ray_bundles && !read_coupled_bundle(coupled.variations, bundle)))
             return false;
         min_r = static_cast<float>(turn_radius > 0 ? turn_radius : radius);
         admitted_source_maps = std::move(source);

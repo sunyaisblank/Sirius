@@ -134,7 +134,7 @@ void CheckIndependentMovingKerrFlux(backend::TraceStepExecutor* executor = nullp
     direct_tracer.SetStepExecutor(executor);
     const auto image = [&](const DetectorCoordinate& z) {
         return camera.ProjectFilmForObserver(film_x + sigma_pixels * z[0],
-                                              film_y + sigma_pixels * z[1]);
+                                             film_y + sigma_pixels * z[1]);
     };
     const auto projected = image(specified_image);
     ASSERT_TRUE(projected);
@@ -159,12 +159,13 @@ void CheckIndependentMovingKerrFlux(backend::TraceStepExecutor* executor = nullp
         for (int row = 0; row < 2; ++row) {
             double reference_derivative = 0, actual_derivative = 0;
             for (int axis = 0; axis < 3; ++axis)
-                reference_derivative += static_cast<double>(reference_basis[row][axis]) *
+                reference_derivative +=
+                    static_cast<double>(reference_basis[row][axis]) *
                     static_cast<double>((b.infinity_direction[axis] - a.infinity_direction[axis]) /
                                         (2 * delta));
             for (int angular = 0; angular < 2; ++angular)
                 actual_derivative += sigma_pixels * map.map.jacobian[row][angular] *
-                    projected->differential->angular_jacobian[angular][column];
+                                     projected->differential->angular_jacobian[angular][column];
             EXPECT_NEAR(actual_derivative, reference_derivative, 2e-7);
         }
     }
@@ -466,25 +467,23 @@ TEST(PointSourceDetector, RetainedFixedPupilPreservesFourLaunchColumns) {
         if (sample++ == 0) first_pupil = p;
     });
     const double x = 896 + double(first_pupil.image_u), y = 576 + double(first_pupil.image_v);
-    const auto rim = rim_camera.ProjectFilmForObserver(
-        x, y, first_pupil.pupil_u, first_pupil.pupil_v);
+    const auto rim =
+        rim_camera.ProjectFilmForObserver(x, y, first_pupil.pupil_u, first_pupil.pupil_v);
     ASSERT_TRUE(rim);
     const auto rim_frame = rim_tracer.PrepareDetectorPupil(rim->ray);
     ASSERT_TRUE(rim_frame);
     using Range = backend::DetectorLaunchFrame::Range;
     const Range z0(0x1.2b5p-1, 0x1.2b6p-1), z1(0x1.fa74p+1, 0x1.fa78p+1);
-    const std::array dark{
-        Range(x) + Range(-0x1.d357ebd0e3748p-1) * z1,
-        Range(y) + (Range(17) + (Range(0x1.d30c6a29fa83fp-1) * z0 +
-                                 Range(0x1.e454f19fc15dep-9) * z1))};
+    const std::array dark{Range(x) + Range(-0x1.d357ebd0e3748p-1) * z1,
+                          Range(y) + (Range(17) + (Range(0x1.d30c6a29fa83fp-1) * z0 +
+                                                   Range(0x1.e454f19fc15dep-9) * z1))};
     RecordProperty("rim_independent_interval",
                    rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, dark, 0));
     EXPECT_TRUE(rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, dark));
     const Range mixed_z0(0x1.2b6p-1, 0x1.2b7p-1), mixed_z1(0x1.fa7cp+1, 0x1.fa8p+1);
-    const std::array mixed{
-        Range(x) + Range(-0x1.d357ebd0e3748p-1) * mixed_z1,
-        Range(y) + (Range(17) + (Range(0x1.d30c6a29fa83fp-1) * mixed_z0 +
-                                 Range(0x1.e454f19fc15dep-9) * mixed_z1))};
+    const std::array mixed{Range(x) + Range(-0x1.d357ebd0e3748p-1) * mixed_z1,
+                           Range(y) + (Range(17) + (Range(0x1.d30c6a29fa83fp-1) * mixed_z0 +
+                                                    Range(0x1.e454f19fc15dep-9) * mixed_z1))};
     EXPECT_FALSE(rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, mixed));
     const std::array bright{dark[0], dark[1] + Range(250)};
     EXPECT_FALSE(rim_tracer.CertifyThinLensDetectorRegion(rim_config, *rim_frame, bright));

@@ -27,8 +27,8 @@ struct DetectorCameraLaunch {
     DetectorLaunchFrame::Column tangent;
 };
 
-[[nodiscard]] std::optional<DetectorCameraLaunch> ProjectDetectorLaunch(
-    const DetectorLaunchFrame&, const core::CameraRay&);
+[[nodiscard]] std::optional<DetectorCameraLaunch> ProjectDetectorLaunch(const DetectorLaunchFrame&,
+                                                                        const core::CameraRay&);
 
 struct SphericalEscapeRequest {
     struct ThinDiskClearance {
@@ -90,8 +90,8 @@ class TraceStepExecutor {
     virtual void RecordSphericalEscape(const SphericalEscapeTrial&) {}
     // The launch event and tetrad stay fixed as the film coordinates vary at
     // a fixed pupil. Only an executor that encloses both may certify them.
-    virtual std::optional<DetectorLaunchFrame> EncloseDetectorLaunchFrame(
-        core::IMetric&, double, const core::CameraRay&) {
+    virtual std::optional<DetectorLaunchFrame> EncloseDetectorLaunchFrame(core::IMetric&, double,
+                                                                          const core::CameraRay&) {
         return std::nullopt;
     }
 };

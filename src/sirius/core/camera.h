@@ -629,7 +629,7 @@ template <class Scalar>
 
 template <class Scalar>
 [[nodiscard]] std::array<Scalar, 3> ThinLensFilmVector(Scalar px, Scalar py, double tangent,
-                                                      double focus, double up, double right) {
+                                                       double focus, double up, double right) {
     return {Scalar(-focus), Scalar(up) - py * Scalar(tangent) * Scalar(focus),
             px * Scalar(tangent) * Scalar(focus) - Scalar(right)};
 }
@@ -681,8 +681,8 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
                                       config.aperture, config.focus_distance, pupil_u, pupil_v);
             ray.aperture_up = pupil.pupil_up;
             ray.aperture_right = pupil.pupil_right;
-            q = ThinLensFilmVector(px, py, t, config.focus_distance,
-                                   ray.aperture_up, ray.aperture_right);
+            q = ThinLensFilmVector(px, py, t, config.focus_distance, ray.aperture_up,
+                                   ray.aperture_right);
             dq = {Vector{0, 0, sx * t * config.focus_distance},
                   Vector{0, -sy * t * config.focus_distance, 0}};
             dq[2] = {0, 0, -1};
@@ -728,10 +728,10 @@ ProjectContinuousFilm(const CameraConfig& config, LensType lens, double film_x, 
     for (double value : q)
         if (!std::isfinite(value)) return std::unexpected(Failure::Arithmetic);
     const Vector magnitude{std::abs(q[0]), std::abs(q[1]), std::abs(q[2])};
-    const double length = lens == LensType::ThinLens
-                              ? ThinLensFilmLength(magnitude, std::max({magnitude[0], magnitude[1],
-                                                                         magnitude[2]}))
-                              : std::hypot(q[0], q[1], q[2]);
+    const double length =
+        lens == LensType::ThinLens
+            ? ThinLensFilmLength(magnitude, std::max({magnitude[0], magnitude[1], magnitude[2]}))
+            : std::hypot(q[0], q[1], q[2]);
     if (!std::isfinite(length) || !(length > 0)) return std::unexpected(Failure::Arithmetic);
     Vector n{};
     for (unsigned i = 0; i < 3; ++i) ray.direction(i + 1) = n[i] = q[i] / length;

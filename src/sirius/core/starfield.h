@@ -143,7 +143,6 @@ class StarfieldSpatialIndex {
         std::array<float, 3> upper;
     };
 
-
     explicit StarfieldSpatialIndex(std::vector<StarEntry> stars) : stars_(std::move(stars)) {
         SIRIUS_PRE(stars_.size() <= std::numeric_limits<std::uint32_t>::max());
         SIRIUS_PRE(std::all_of(stars_.begin(), stars_.end(), IsRepresentedStarEntry));
@@ -167,9 +166,9 @@ class StarfieldSpatialIndex {
     template <typename Callback>
     void ForEachCandidateWhile(float dir_x, float dir_y, float dir_z, float sigma,
                                Callback&& callback) const {
-        ForEachCandidateWhile(dir_x, dir_y, dir_z, sigma,
-                              [](const DirectionBounds&) { return true; },
-                              std::forward<Callback>(callback));
+        ForEachCandidateWhile(
+            dir_x, dir_y, dir_z, sigma, [](const DirectionBounds&) { return true; },
+            std::forward<Callback>(callback));
     }
 
     // The cell predicate may skip a whole bin before visiting individual
@@ -274,8 +273,9 @@ class StarfieldSpatialIndex {
         constexpr std::size_t kCells = static_cast<std::size_t>(kThetaBins) * kPhiBins;
         offsets_.assign(kCells + 1, 0);
         const float infinity = std::numeric_limits<float>::infinity();
-        direction_bounds_.assign(kCells / (kBoundsStride * kBoundsStride),
-                                 {{infinity, infinity, infinity}, {-infinity, -infinity, -infinity}});
+        direction_bounds_.assign(
+            kCells / (kBoundsStride * kBoundsStride),
+            {{infinity, infinity, infinity}, {-infinity, -infinity, -infinity}});
         std::vector<std::size_t> cells(stars_.size());
         for (std::size_t i = 0; i < stars_.size(); ++i) {
             const auto& star = stars_[i];
@@ -289,8 +289,9 @@ class StarfieldSpatialIndex {
                 static_cast<int>(std::floor(phi / kStarfieldTwoPi * kPhiBins)), 0, kPhiBins - 1);
             cells[i] = Cell(theta_bin, phi_bin);
             ++offsets_[cells[i] + 1];
-            auto& bounds = direction_bounds_[
-                (theta_bin / kBoundsStride) * (kPhiBins / kBoundsStride) + phi_bin / kBoundsStride];
+            auto& bounds =
+                direction_bounds_[(theta_bin / kBoundsStride) * (kPhiBins / kBoundsStride) +
+                                  phi_bin / kBoundsStride];
             const std::array direction{star.direction_x, star.direction_y, star.direction_z};
             for (std::size_t axis = 0; axis < direction.size(); ++axis) {
                 bounds.lower[axis] = std::min(bounds.lower[axis], direction[axis]);
