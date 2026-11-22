@@ -346,7 +346,7 @@ class RadialExpansion {
 inline int ExactRadialSign(double mass, double spin, const Constants& c, double inverse_radius) {
     // The enclosing solver has already checked rounding and gradual
     // underflow. Error-free transforms also require binary64 evaluation.
-    if (FLT_EVAL_METHOD != 0) return 0;
+    if constexpr (FLT_EVAL_METHOD != 0) return 0;
     const RadialExpansion m(mass), a(spin), e(c.energy.real), l(c.angular_momentum.real);
     const RadialExpansion q(c.carter_combination.real), u(inverse_radius);
     const RadialExpansion one(1.0), two(2.0);
