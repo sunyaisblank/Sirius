@@ -128,8 +128,8 @@ class AngularCatalogue {
             Iterator previous_end = entries.begin();
             for (unsigned i = 0; i < count; ++i) {
                 const auto [lo, hi] = slices[i];
-                const auto first = std::max(lo, previous_end);
-                if (first < hi && !visit(first, hi)) return false;
+                const auto unvisited = std::max(lo, previous_end);
+                if (unvisited < hi && !visit(unvisited, hi)) return false;
                 previous_end = std::max(previous_end, hi);
             }
             return true;

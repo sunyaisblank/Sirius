@@ -45,8 +45,8 @@ TEST(PointSourceDetector, LongitudeWindowWeightPreservesWrappedSourceOwnership) 
     const auto catalogue = detector::AngularCatalogue::Build(stars, {});
     ASSERT_TRUE(catalogue);
     const auto rows = catalogue->Rows(true);
-    const auto row =
-        std::ranges::find_if(rows, [](const auto& row) { return !row.entries.empty(); });
+    const auto row = std::ranges::find_if(
+        rows, [](const auto& candidate) { return !candidate.entries.empty(); });
     ASSERT_NE(row, rows.end());
     ASSERT_EQ(row->entries.size(), stars.size());
 

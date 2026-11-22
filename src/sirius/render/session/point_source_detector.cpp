@@ -1250,12 +1250,12 @@ std::expected<PointDetectorBatchResult, PointDetectorError> EvaluatePointDetecto
             };
         PointDetectorDarkCell normalized_dark;
         if (dark_cell)
-            normalized_dark = [&](const Coordinate& lower, const Coordinate& upper,
+            normalized_dark = [&](const Coordinate& box_lower, const Coordinate& box_upper,
                                   unsigned splits) {
                 using finite_tail::Range;
                 std::array<Range, 2> region;
                 for (int i = 0; i < 2; ++i)
-                    region[i] = Range(centre[i]) + Range(scale) * Range(lower[i], upper[i]);
+                    region[i] = Range(centre[i]) + Range(scale) * Range(box_lower[i], box_upper[i]);
                 return region[0].Finite() && region[1].Finite() &&
                        dark_cell({region[0].lo, region[1].lo}, {region[0].hi, region[1].hi},
                                  splits);
