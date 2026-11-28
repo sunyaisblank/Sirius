@@ -96,6 +96,7 @@ RETIRED_PATHS = (
     SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD005A.frag",
     SOURCE_ROOT / "app" / "viewer" / "shaders" / "RDSD005A.vert",
 )
+WORKSPACE_OUTPUT_DIRECTORIES = ("bin", "out", "renders", "attestations")
 CPP_TOKEN = re.compile(r'(?<![A-Za-z0-9_${])([A-Za-z0-9_./-]+\.cpp)')
 PROJECT_INCLUDE = re.compile(r'^\s*#\s*include\s+"sirius/([^/]+)/[^\"]+"', re.MULTILINE)
 CAMEL_IDENTIFIER = re.compile(r"\b[a-z][a-z0-9_]*[A-Z][A-Za-z0-9_]*\b")
@@ -124,6 +125,13 @@ def cmake_source_owners() -> Counter[Path]:
 
 def verify() -> list[str]:
     errors: list[str] = []
+
+    tracked_outputs = subprocess.check_output(
+        ["git", "ls-files", "-z", "--", *WORKSPACE_OUTPUT_DIRECTORIES], cwd=ROOT
+    ).split(b"\0")
+    output_counts = Counter(path.split(b"/", 1)[0].decode() for path in tracked_outputs if path)
+    for directory, count in sorted(output_counts.items()):
+        errors.append(f"{directory}/ contains {count} tracked workspace outputs")
 
     verify_immutable_input_policy()
     verify_strict_test_volume_policy()

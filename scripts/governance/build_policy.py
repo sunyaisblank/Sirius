@@ -578,7 +578,7 @@ def integration_boundary_errors(workflow: str) -> list[str]:
                                   re.MULTILINE)
                     != [f"sirius-{platform}-native-attestation"]
                     or re.findall(r"^          path: ([^\n]+)$", evidence_uploads[0],
-                                  re.MULTILINE) != ["attestations"]):
+                                  re.MULTILINE) != [f"attestations/native-build/{platform}"]):
                 errors.append(f"native build attestation upload has an unsafe scope: {name}")
             for marker in (
                 "RunNativeBuildEvidence",
@@ -658,7 +658,7 @@ def integration_boundary_errors(workflow: str) -> list[str]:
                     or re.findall(r"^          name: ([^\n]+)$", native_uploads[0], re.MULTILINE)
                     != [f"sirius-{platform}-full-native-attestation"]
                     or re.findall(r"^          path: ([^\n]+)$", native_uploads[0], re.MULTILINE)
-                    != ["attestations"]):
+                    != [f"attestations/native-build/{platform}"]):
                 errors.append(f"CI full native upload must have a distinct bounded artifact: {name}")
         if name == "macos-build":
             steps = workflow_steps(job)
@@ -709,7 +709,7 @@ def verify_integration_boundary_policy() -> None:
         "        uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
         "        with:\n"
         "          name: sirius-{platform}-native-attestation\n"
-        "          path: attestations\n"
+        "          path: attestations/native-build/{platform}\n"
     )
     diagnostics = (
         "      - name: Preserve gate diagnostics\n"
@@ -787,7 +787,7 @@ def verify_integration_boundary_policy() -> None:
                 "      - uses: actions/upload-artifact@0123456789012345678901234567890123456789\n"
                 "        with:\n"
                 f"          name: sirius-{name.removesuffix('-build')}-full-native-attestation\n"
-                "          path: attestations\n"
+                f"          path: attestations/native-build/{name.removesuffix('-build')}\n"
                 if name in {"windows-build", "macos-build"} else ""
             )
             + (macos_diagnostics if name == "macos-build" else

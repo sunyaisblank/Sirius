@@ -258,12 +258,12 @@ jobs:
           --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log
           --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe
           --test-dir bin/windows-msvc
-          --output attestations/windows-build.json
+          --output attestations/native-build/windows/windows-build.json
       - if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-windows-native-attestation
-          path: attestations
+          path: attestations/native-build/windows
       - name: Preserve gate diagnostics
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -331,12 +331,12 @@ jobs:
           --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log
           --qualification-executable bin/macos/src/sirius/app/sirius
           --test-dir bin/macos
-          --output attestations/macos-build.json
+          --output attestations/native-build/macos/macos-build.json
       - if: github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-macos-native-attestation
-          path: attestations
+          path: attestations/native-build/macos
       - name: Preserve gate diagnostics
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -594,11 +594,11 @@ jobs:
           --native-build-gate-log bin/windows-msvc/generated/sirius/native_build_gate_ctest.log
           --qualification-executable bin/windows-msvc/src/sirius/app/Release/sirius.exe
           --test-dir bin/windows-msvc
-          --output attestations/windows-build.json
+          --output attestations/native-build/windows/windows-build.json
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-windows-full-native-attestation
-          path: attestations
+          path: attestations/native-build/windows
       - name: Preserve gate diagnostics
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -685,11 +685,11 @@ jobs:
           --native-build-gate-log bin/macos/generated/sirius/native_build_gate_ctest.log
           --qualification-executable bin/macos/src/sirius/app/sirius
           --test-dir bin/macos
-          --output attestations/macos-build.json
+          --output attestations/native-build/macos/macos-build.json
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sirius-macos-full-native-attestation
-          path: attestations
+          path: attestations/native-build/macos
       - name: Preserve gate diagnostics
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

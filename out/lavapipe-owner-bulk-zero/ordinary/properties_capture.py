@@ -1,1 +1,0 @@
-../../native-cpu-row-ownership/ordinary/properties_capture.py

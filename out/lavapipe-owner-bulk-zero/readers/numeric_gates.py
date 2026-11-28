@@ -1,1 +1,0 @@
-../../native-original-input-ownership/readers/numeric_gates.py

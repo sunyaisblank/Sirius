@@ -1,1 +1,0 @@
-../../native-original-input-ownership/ordinary/properties_capture.py
